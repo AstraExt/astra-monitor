@@ -1,0 +1,35 @@
+{
+    "name": "astra-monitor",
+    "version": "0.1",
+    "description": "Astra Monitor - Resource Monitor for GNOME shell",
+    "main": "extension.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "gnome",
+        "astra",
+        "monitor",
+        "javascript",
+        "gnome-shell"
+    ],
+    "author": "Lju",
+    "license": "GPL-3.0-or-later",
+    "devDependencies": {
+        "@girs/adw-1": "^1.4.0-3.2.6",
+        "@girs/clutter-12": "^12.0.0-3.2.6",
+        "@girs/gdk-4.0": "^4.0.0-3.2.6",
+        "@girs/gio-2.0": "^2.78.0-3.2.6",
+        "@girs/gjs": "^3.2.6",
+        "@girs/glib-2.0": "^2.78.0-3.2.6",
+        "@girs/gnome-shell": "^45.0.0-beta5",
+        "@girs/gobject-2.0": "^2.78.0-3.2.6",
+        "@girs/gtk-4.0": "^4.12.3-3.2.6",
+        "@girs/gtop-2.0": "^2.0.0-3.2.6",
+        "@girs/meta-12": "^12.0.0-3.2.6",
+        "@girs/st-12": "^12.0.0-3.2.6"
+    },
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
+    }
+}

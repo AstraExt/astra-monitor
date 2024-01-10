@@ -1,0 +1,24 @@
+# Ignore usual ignore stuff
+.DS_Store
+Thumbs.db
+
+# Ignore .vscode folder
+.vscode/
+
+# Ignore dist folder
+dist/
+
+# Ignore zip packed extension files
+monitor@astraext*.zip
+
+# Ignore node_modules folder
+node_modules/
+
+# Ignore package-lock.json file
+package-lock.json
+
+# Ignore compiled schemas
+schemas/gschemas.compiled
+
+# Ignore TODOs
+TODOs.txt

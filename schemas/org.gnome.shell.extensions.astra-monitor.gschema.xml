@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions">
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.temperature-unit">
+    <value nick="celsius" value="0"/>
+    <value nick="fahrenheit" value="1"/>
+  </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.panel-box">
+    <value nick="left" value="0"/>
+    <value nick="center" value="1"/>
+    <value nick="right" value="2"/>
+  </enum>
+    
+  <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
+    <!-- GENERAL -->
+    <key name="panel-box" enum="org.gnome.shell.extensions.astra-monitor.enum.panel-box">
+      <default>'right'</default>
+      <summary>Panel Box Position</summary>
+      <description>Which panel box to use to display the monitors</description>
+    </key>
+    <key name="panel-box-order" type="i">
+      <default>0</default>
+      <summary>Panel Box Ordering</summary>
+      <description>Ordering inside the panel box</description>
+      <range min="-10" max="10"/>
+    </key>
+    <key name="monitors-order" type="s">
+      <default>'""'</default>
+      <summary>Order of the monitors</summary>
+      <description>From left to right, the order of the monitors</description>
+    </key>
+    
+    <!-- PROCESSOR -->
+    <key name="processor-update" type="d">
+      <default>1.5</default>
+      <summary>CPU Update Frequency</summary>
+      <description>Seconds between CPU statistics updates</description>
+      <range min="0.1" max="10"/>
+    </key>
+    <key name="processor-header-show" type="b">
+      <default>true</default>
+      <summary>CPU Header</summary>
+      <description>Show the CPU header</description>
+    </key>
+    <key name="processor-header-icon" type="b">
+      <default>true</default>
+      <summary>CPU Header Icon</summary>
+      <description>Show the icon on the header of the CPU monitor</description>
+    </key>
+    <key name="processor-header-percentage" type="b">
+      <default>false</default>
+      <summary>CPU Header Percentage</summary>
+      <description>Show the percentage on the header of the CPU monitor</description>
+    </key>
+    <key name="processor-header-percentage-core" type="b">
+      <default>false</default>
+      <summary>CPU Header Percentage per Single Core</summary>
+      <description>Set the percentage on the header of the CPU monitor to single core</description>
+    </key>
+    <key name="processor-header-graph" type="b">
+      <default>true</default>
+      <summary>Show History Graph</summary>
+      <description>Show a graph of the CPU percentage through time</description>
+    </key>
+    <key name="processor-header-graph-breakdown" type="b">
+      <default>true</default>
+      <summary>Graph Category Breakdown</summary>
+      <description>Color the graph with categories</description>
+    </key>
+    <key name="processor-header-bars" type="b">
+      <default>false</default>
+      <summary>Show CPU Bar</summary>
+      <description>Show realtime bar of CPU usage</description>
+    </key>
+    <key name="processor-header-bars-core" type="b">
+      <default>false</default>
+      <summary>Show CPU per-core Bars</summary>
+      <description>Show realtime bars of each CPU core</description>
+    </key>
+    <key name="processor-header-bars-breakdown" type="b">
+      <default>true</default>
+      <summary>CPU Bars Breakdown</summary>
+      <description>Color the bars with categories</description>
+    </key>
+    
+    <key name="processor-menu-graph-breakdown" type="b">
+      <default>true</default>
+      <summary>Graph Category Breakdown</summary>
+      <description>Color the graph with categories</description>
+    </key>
+    <key name="processor-menu-bars-breakdown" type="b">
+      <default>true</default>
+      <summary>CPU Bars Breakdown</summary>
+      <description>Color the bars with categories</description>
+    </key>
+    <key name="processor-menu-gpu" type="s">
+      <default>'""'</default>
+      <summary>GPU</summary>
+      <description>Show the GPU usage</description>
+    </key>
+    
+    <!-- MEMORY -->
+    <key name="memory-update" type="d">
+      <default>3</default>
+      <summary>Memory Update Frequency</summary>
+      <description>Seconds between memory statistics updates</description>
+      <range min="0.1" max="10"/>
+    </key>
+    <key name="memory-header-show" type="b">
+      <default>true</default>
+      <summary>Memory Header</summary>
+      <description>Show the memory header</description>
+    </key>
+    <key name="memory-header-icon" type="b">
+      <default>true</default>
+      <summary>Memory Header Icon</summary>
+      <description>Show the icon on the header of the memory monitor</description>
+    </key>
+    <key name="memory-header-percentage" type="b">
+      <default>false</default>
+      <summary>Memory Header Percentage</summary>
+      <description>Show the percentage on the header of the memory monitor</description>
+    </key>
+    <key name="memory-header-graph" type="b">
+      <default>false</default>
+      <summary>Show History Graph</summary>
+      <description>Show a graph of the memory percentage through time</description>
+    </key>
+    <key name="memory-header-graph-breakdown" type="b">
+      <default>false</default>
+      <summary>Graph Category Breakdown</summary>
+      <description>Color the graph with categories</description>
+    </key>
+    <key name="memory-header-bars" type="b">
+      <default>true</default>
+      <summary>Show Memory Bar</summary>
+      <description>Show realtime bar of memory usage</description>
+    </key>
+    <key name="memory-header-bars-breakdown" type="b">
+      <default>true</default>
+      <summary>Memory Bars Breakdown</summary>
+      <description>Color the bars with categories</description>
+    </key>
+    
+    <key name="memory-menu-graph-breakdown" type="b">
+      <default>true</default>
+      <summary>Graph Category Breakdown</summary>
+      <description>Color the graph with categories</description>
+    </key>
+    
+    <!-- STORAGE -->
+    <key name="storage-update" type="d">
+      <default>3</default>
+      <summary>Storage IO Update Frequency</summary>
+      <description>Seconds between storage IO statistics updates</description>
+      <range min="0.1" max="10"/>
+    </key>
+    <key name="storage-main" type="s">
+      <default>'[default]'</default>
+      <summary>Main storage</summary>
+      <description>Storage to show on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-show" type="b">
+      <default>true</default>
+      <summary>Storage Header</summary>
+      <description>Show the storage header</description>
+    </key>
+    <key name="storage-header-icon" type="b">
+      <default>true</default>
+      <summary>Storage Header Icon</summary>
+      <description>Show the icon on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-percentage" type="b">
+      <default>false</default>
+      <summary>Storage Header Use Percentage</summary>
+      <description>Show the percentage of storage use on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-bars" type="b">
+      <default>true</default>
+      <summary>Show Storage Usage Bar</summary>
+      <description>Show realtime bar of storage usage</description>
+    </key>
+    <key name="storage-header-graph" type="b">
+      <default>false</default>
+      <summary>Show Storage IO History Graph</summary>
+      <description>Show a graph of the storage IO through time</description>
+    </key>
+    <key name="storage-header-io" type="b">
+      <default>false</default>
+      <summary>Show Storage IO realtime speed</summary>
+      <description>Show the IO speed in realtime as a label</description>
+    </key>
+    
+    <!-- NETWORK -->
+    <key name="network-update" type="d">
+      <default>1.5</default>
+      <summary>Network IO Update Frequency</summary>
+      <description>Seconds between network IO statistics updates</description>
+      <range min="0.1" max="10"/>
+    </key>
+    <key name="network-header-show" type="b">
+      <default>true</default>
+      <summary>Network Header</summary>
+      <description>Show the network header</description>
+    </key>
+    <key name="network-header-icon" type="b">
+      <default>true</default>
+      <summary>Network Header Icon</summary>
+      <description>Show the icon on the header of the network monitor</description>
+    </key>
+    <key name="network-header-bars" type="b">
+      <default>false</default>
+      <summary>Show Network Usage Bar</summary>
+      <description>Show realtime bar of network usage</description>
+    </key>
+    <key name="network-header-graph" type="b">
+      <default>true</default>
+      <summary>Show Network IO History Graph</summary>
+      <description>Show a graph of the network IO through time</description>
+    </key>
+    <key name="network-header-io" type="b">
+      <default>false</default>
+      <summary>Show Network IO realtime speed</summary>
+      <description>Show the IO speed in realtime as a label</description>
+    </key>
+    
+    <!-- SENSORS -->
+    <key name="sensors-update" type="d">
+      <default>3</default>
+      <summary>Sensors Update Frequency</summary>
+      <description>Seconds between sensors statistics updates</description>
+      <range min="1" max="60"/>
+    </key>
+    <key name="sensors-header-show" type="b">
+      <default>false</default>
+      <summary>Sensors Header</summary>
+      <description>Show the sensors header</description>
+    </key>
+    <key name="sensors-temperature-unit" enum="org.gnome.shell.extensions.astra-monitor.enum.temperature-unit">
+      <default>'celsius'</default>
+      <summary>Sensors Temperature Unit</summary>
+      <description>Temperature Unit of measurement for the sensors</description>
+    </key>
+    <key name="sensors-header-icon" type="b">
+      <default>false</default>
+      <summary>Sensors Header Icon</summary>
+      <description>Show the icon on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-sensor1-show" type="b">
+      <default>false</default>
+      <summary>Sensors Header Sensor 1</summary>
+      <description>Show the first sensor on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-sensor1" type="s">
+      <default>'""'</default>
+      <summary>Sensors Header Sensor 1</summary>
+      <description>First sensor to show on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-sensor2-show" type="b">
+      <default>false</default>
+      <summary>Sensors Header Sensor 2</summary>
+      <description>Show the second sensor on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-sensor2" type="s">
+      <default>'""'</default>
+      <summary>Sensors Header Sensor 2</summary>
+      <description>Second sensor to show on the header of the sensors monitor</description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,0 +1,488 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Lju
+# This file is distributed under the same license as the AstraMonitor package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: AstraMonitor 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-10 17:47+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: src/processor/processorMenu.js:38
+msgid "CPU"
+msgstr ""
+
+#: src/processor/processorMenu.js:84
+msgid "CPU info"
+msgstr ""
+
+#: src/processor/processorMenu.js:153 src/memory/memoryMenu.js:55
+#: src/memory/memoryMenu.js:381
+msgid "Total:"
+msgstr ""
+
+#: src/processor/processorMenu.js:159
+msgid "User:"
+msgstr ""
+
+#: src/processor/processorMenu.js:165
+msgid "System:"
+msgstr ""
+
+#: src/processor/processorMenu.js:196
+msgid "CPU Category Usage Raw Info"
+msgstr ""
+
+#: src/processor/processorMenu.js:199
+msgid "User"
+msgstr ""
+
+#: src/processor/processorMenu.js:207
+msgid "Nice"
+msgstr ""
+
+#: src/processor/processorMenu.js:215
+msgid "System"
+msgstr ""
+
+#: src/processor/processorMenu.js:223
+msgid "Idle"
+msgstr ""
+
+#: src/processor/processorMenu.js:231
+msgid "I/O wait"
+msgstr ""
+
+#: src/processor/processorMenu.js:239
+msgid "IRQ"
+msgstr ""
+
+#: src/processor/processorMenu.js:247
+msgid "Soft IRQ"
+msgstr ""
+
+#: src/processor/processorMenu.js:255
+msgid "Steal"
+msgstr ""
+
+#: src/processor/processorMenu.js:325
+msgid "CPU Cores Usage Info"
+msgstr ""
+
+#: src/processor/processorMenu.js:367
+msgid "GHz"
+msgstr ""
+
+#: src/processor/processorMenu.js:384 src/processor/processorMenu.js:437
+#: src/memory/memoryMenu.js:245 src/memory/memoryMenu.js:303
+msgid "Top processes"
+msgstr ""
+
+#: src/processor/processorMenu.js:469 prefs.js:146
+msgid "GPU"
+msgstr ""
+
+#: src/processor/processorMenu.js:481
+msgid "No GPU found"
+msgstr ""
+
+#: src/processor/processorMenu.js:494
+msgid "GPUs"
+msgstr ""
+
+#: src/processor/processorMenu.js:551
+msgid "GPU info"
+msgstr ""
+
+#: src/processor/processorMenu.js:559
+msgid "Name"
+msgstr ""
+
+#: src/processor/processorMenu.js:567
+msgid "Subsystem"
+msgstr ""
+
+#: src/processor/processorMenu.js:578
+msgid "Vendor"
+msgstr ""
+
+#: src/processor/processorMenu.js:587
+msgid "Vendor ID"
+msgstr ""
+
+#: src/processor/processorMenu.js:597
+msgid "Product ID"
+msgstr ""
+
+#: src/processor/processorMenu.js:606
+msgid "Domain"
+msgstr ""
+
+#: src/processor/processorMenu.js:614
+msgid "Bus"
+msgstr ""
+
+#: src/processor/processorMenu.js:622
+msgid "Slot"
+msgstr ""
+
+#: src/processor/processorMenu.js:631
+msgid "Drivers"
+msgstr ""
+
+#: src/processor/processorMenu.js:641
+msgid "Modules"
+msgstr ""
+
+#: src/processor/processorMenu.js:653
+msgid "System uptime"
+msgstr ""
+
+#: src/processor/processorGraph.js:54 src/network/networkGraph.js:62
+#: src/storage/storageGraph.js:63 src/memory/memoryGraph.js:54
+#, javascript-format
+msgid "%d min ago"
+msgid_plural "%d mins ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/processor/processorGraph.js:57 src/network/networkGraph.js:65
+#: src/storage/storageGraph.js:66 src/memory/memoryGraph.js:57
+msgid "now"
+msgstr ""
+
+#: src/sensors/sensorsMenu.js:38 prefs.js:245 prefs.js:248
+msgid "Sensors"
+msgstr ""
+
+#: src/sensors/sensorsMenu.js:42
+msgid "No sensor found"
+msgstr ""
+
+#: src/network/networkMenu.js:32 prefs.js:226 prefs.js:229
+msgid "Network"
+msgstr ""
+
+#: src/network/networkMenu.js:59
+msgid "Global Upload:"
+msgstr ""
+
+#: src/network/networkMenu.js:74
+msgid "Global Download:"
+msgstr ""
+
+#: src/network/networkMenu.js:102
+msgid "Interfaces"
+msgstr ""
+
+#: src/network/networkMenu.js:106
+msgid "No network interface found"
+msgstr ""
+
+#: src/network/networkMenu.js:218
+msgctxt "upload"
+msgid "U"
+msgstr ""
+
+#: src/network/networkMenu.js:248
+msgctxt "download"
+msgid "D"
+msgstr ""
+
+#: src/storage/storageMenu.js:36 prefs.js:180 prefs.js:183
+msgid "Storage"
+msgstr ""
+
+#: src/storage/storageMenu.js:63
+msgid "Global Read:"
+msgstr ""
+
+#: src/storage/storageMenu.js:78
+msgid "Global Write:"
+msgstr ""
+
+#: src/storage/storageMenu.js:106
+msgid "Devices"
+msgstr ""
+
+#: src/storage/storageMenu.js:110
+msgid "No storage device found"
+msgstr ""
+
+#: src/storage/storageMenu.js:260
+msgctxt "read"
+msgid "R"
+msgstr ""
+
+#: src/storage/storageMenu.js:290
+msgctxt "write"
+msgid "W"
+msgstr ""
+
+#: src/storage/storageMenu.js:385
+msgid "Disk"
+msgstr ""
+
+#: src/memory/memoryMenu.js:35 prefs.js:153 prefs.js:156
+msgid "Memory"
+msgstr ""
+
+#: src/memory/memoryMenu.js:61 src/memory/memoryMenu.js:375
+msgid "Used:"
+msgstr ""
+
+#: src/memory/memoryMenu.js:67
+msgid "Active:"
+msgstr ""
+
+#: src/memory/memoryMenu.js:72
+msgid "Free:"
+msgstr ""
+
+#: src/memory/memoryMenu.js:129
+msgid "Memory Usage Raw Info"
+msgstr ""
+
+#: src/memory/memoryMenu.js:133
+msgid "Total"
+msgstr ""
+
+#: src/memory/memoryMenu.js:147
+msgid "Used"
+msgstr ""
+
+#: src/memory/memoryMenu.js:161
+msgid "Free"
+msgstr ""
+
+#: src/memory/memoryMenu.js:175
+msgid "Available"
+msgstr ""
+
+#: src/memory/memoryMenu.js:189
+msgid "Allocatable"
+msgstr ""
+
+#: src/memory/memoryMenu.js:203
+msgid "Active"
+msgstr ""
+
+#: src/memory/memoryMenu.js:217
+msgid "Buffers"
+msgstr ""
+
+#: src/memory/memoryMenu.js:231
+msgid "Cached"
+msgstr ""
+
+#: src/memory/memoryMenu.js:341
+msgid "Swap"
+msgstr ""
+
+#: prefs.js:41
+msgid "General"
+msgstr ""
+
+#: prefs.js:44
+msgid "Dependencies"
+msgstr ""
+
+#: prefs.js:48
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr ""
+
+#: prefs.js:50
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr ""
+
+#: prefs.js:52
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr ""
+
+#: prefs.js:54
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr ""
+
+#: prefs.js:56
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr ""
+
+#: prefs.js:58
+msgid "'sensors' not installed: some features will be disabled!"
+msgstr ""
+
+#: prefs.js:60
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr ""
+
+#: prefs.js:62
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr ""
+
+#: prefs.js:64
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr ""
+
+#: prefs.js:66
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
+msgstr ""
+
+#: prefs.js:68
+msgid "Cannot access 'free': some features will be disabled!"
+msgstr ""
+
+#: prefs.js:86
+msgid "All dependencies are met!"
+msgstr ""
+
+#: prefs.js:89
+msgid "Visualization"
+msgstr ""
+
+#: prefs.js:92
+msgid "Left"
+msgstr ""
+
+#: prefs.js:93
+msgid "Center"
+msgstr ""
+
+#: prefs.js:94
+msgid "Right"
+msgstr ""
+
+#: prefs.js:96
+msgid "Panel Box"
+msgstr ""
+
+#: prefs.js:97
+msgid "Panel Box Ordering"
+msgstr ""
+
+#: prefs.js:101
+msgid "Monitor Ordering"
+msgstr ""
+
+#: prefs.js:108 prefs.js:111
+msgid "Processors"
+msgstr ""
+
+#: prefs.js:112 prefs.js:157 prefs.js:184 prefs.js:230 prefs.js:249
+msgid "Show"
+msgstr ""
+
+#: prefs.js:113 prefs.js:158 prefs.js:185 prefs.js:231 prefs.js:250
+msgid "Update frequency (seconds)"
+msgstr ""
+
+#: prefs.js:117 prefs.js:161 prefs.js:213 prefs.js:259
+msgid "Header"
+msgstr ""
+
+#: prefs.js:118 prefs.js:162 prefs.js:214 prefs.js:235 prefs.js:260
+msgid "Show Icon"
+msgstr ""
+
+#: prefs.js:119 prefs.js:163
+msgid "Show Percentage"
+msgstr ""
+
+#: prefs.js:120
+msgid "Show Percentage Single Core"
+msgstr ""
+
+#: prefs.js:122 prefs.js:165
+msgid "Show History Graph"
+msgstr ""
+
+#: prefs.js:123 prefs.js:131 prefs.js:166 prefs.js:173
+msgid "History Graph Breakdown"
+msgstr ""
+
+#: prefs.js:125 prefs.js:168
+msgid "Show Realtime Bar"
+msgstr ""
+
+#: prefs.js:126
+msgid "Realtime per-core Bars"
+msgstr ""
+
+#: prefs.js:127 prefs.js:169
+msgid "Realtime Bar Breakdown"
+msgstr ""
+
+#: prefs.js:130 prefs.js:172
+msgid "Menu"
+msgstr ""
+
+#: prefs.js:132
+msgid "Core Bars Breakdown"
+msgstr ""
+
+#: prefs.js:135 prefs.js:267
+msgid "None"
+msgstr ""
+
+#: prefs.js:209
+msgid "Main Disk"
+msgstr ""
+
+#: prefs.js:216
+msgid "Show Storage Usage Bar"
+msgstr ""
+
+#: prefs.js:217
+msgid "Show Storage Usage Percentage"
+msgstr ""
+
+#: prefs.js:219 prefs.js:238
+msgid "Show IO History Graph"
+msgstr ""
+
+#: prefs.js:220 prefs.js:239
+msgid "Show IO Speed"
+msgstr ""
+
+#: prefs.js:237
+msgid "Show Network Usage Bar"
+msgstr ""
+
+#: prefs.js:253
+msgid "Celsius"
+msgstr ""
+
+#: prefs.js:254
+msgid "Fahrenheit"
+msgstr ""
+
+#: prefs.js:256
+msgid "Temperature Unit"
+msgstr ""
+
+#: prefs.js:271
+msgid "Show Sensor 1"
+msgstr ""
+
+#: prefs.js:272
+msgid "Sensor 1 Source"
+msgstr ""
+
+#: prefs.js:273
+msgid "Show Sensor 2"
+msgstr ""
+
+#: prefs.js:274
+msgid "Sensor 2 Source"
+msgstr ""

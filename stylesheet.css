@@ -1,0 +1,381 @@
+/*
+ * Copyright (C) 2023 Lju
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.astra-monitor-header-container {
+    
+}
+
+.astra-monitor-header {
+    padding: 0;
+    margin: 0;
+}
+
+.astra-monitor-header-icon {
+    icon-size: 1.3em;
+}
+
+.astra-monitor-header-box {
+    padding: 0 0.3em;
+}
+
+.astra-monitor-header-percentage4 {
+    text-align: right;
+    min-width: 3em;
+    margin-right: 0.3em;
+}
+
+.astra-monitor-header-percentage3 {
+    text-align: right;
+    min-width: 2.5em;
+    margin-right: 0.3em;
+}
+
+.astra-monitor-header-speed-label {
+    font-size: 0.7em;
+    font-weight: lighter;
+    text-align: right;
+    margin-right: 0.3em;
+    min-width: 4.2em;
+}
+
+.astra-monitor-header-sensors-values-label {
+    font-size: 0.7em;
+    font-weight: lighter;
+    text-align: right;
+    margin-right: 0.3em;
+}
+
+.astra-monitor-header-sensors-value-label {
+    font-size: 1em;
+    font-weight: lighter;
+    text-align: right;
+    margin-right: 0.3em;
+}
+
+.astra-monitor-menu-button-box {
+    padding: 1em 0 0 0;
+    spacing: 2em;
+}
+
+.astra-monitor-menu-button-box > StButton {
+    border-radius: 2em;
+    margin: 0;
+    padding: 0.7em;
+    min-height: 0.5em;
+    min-width: 0.5em;
+}
+
+.astra-monitor-menu-button-box > StButton > StIcon {
+    icon-size: 1.25em;
+}
+
+.astra-monitor-bars-vertical {
+    margin: 0.25em;
+    padding: 1px;
+    border-radius: 0.2em;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.astra-monitor-bars-vertical-mini {
+    height: 1.25em;
+    margin: 0.25em;
+    padding: 1px;
+    border-radius: 0.2em;
+    border: solid 1px #333;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.astra-monitor-bars-horizontal {
+    margin: 0.25em;
+    padding: 1px;
+    border-radius: 0.2em;
+    border: solid 1px #333;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.astra-monitor-bars-horizontal-mini {
+    width: 1.25em;
+    margin: 0.25em;
+    padding: 1px;
+    border-radius: 0.2em;
+    border: solid 1px #333;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.astra-monitor-bars-vertical-bar {
+    height: 0;
+    margin: 0;
+}
+
+.astra-monitor-bars-vertical-bar:last-child {
+    margin-right: 0;
+}
+
+.astra-monitor-bars-horizontal-bar {
+    width: 0;
+    margin: 0;
+}
+
+.astra-monitor-bars-horizontal-bar:last-child {
+    margin-top: 0;
+}
+
+.astra-monitor-graph-container {
+    
+}
+
+.astra-monitor-graph-mini {
+    margin: 0.25em;
+    border: solid 1px #333;
+    height: 1.4em;
+    border-radius: 0.2em;
+}
+
+.astra-monitor-graph {
+    margin: 0.5em 0.25em 0.5em 0.5em;
+    border: solid 1px #555;
+    height: 6em;
+}
+
+.astra-monitor-graph-label {
+    font-size: 0.8em;
+    padding: 0.5em 0;
+    color: #999;
+}
+
+.astra-monitor-graph-label-then {
+    font-size: 0.7em;
+    color: #999;
+    text-align: left;
+    padding: 0 0.5em;
+}
+
+.astra-monitor-graph-label-now {
+    font-size: 0.7em;
+    color: #999;
+    text-align: right;
+    padding: 0 0.5em;
+}
+
+.astra-monitor-menu-grid {
+    margin: 0.25em 0.25em 0.25em 0.25em;
+    padding: 0;
+}
+
+.astra-monitor-menu-subgrid {
+    margin-bottom: 0.25em;
+    padding: 0;
+}
+
+.astra-monitor-menu-header-centered {
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 0.5em;
+}
+
+.astra-monitor-menu-subheader {
+    text-align: center;
+    font-size: 0.8em;
+}
+
+.astra-monitor-menu-label {
+    font-size: 1em;
+    padding: 0.05em 0.5em;
+    text-align: left;
+}
+
+.astra-monitor-menu-unmonitored {
+    font-size: 0.9em;
+    padding: 0.05em 0.5em;
+    text-align: left;
+    color: #aaa;
+    font-style: italic;
+}
+
+.astra-monitor-menu-value {
+    font-size: 1em;
+    padding: 0.05em 0.5em;
+    text-align: right;
+}
+
+.astra-monitor-menu-key {
+    font-style: italic;
+    color: #999;
+    margin-right: 0.8em;
+    text-align: right;
+}
+
+.astra-monitor-menu-value-left {
+    font-size: 1em;
+    padding: 0.05em 0.5em;
+    text-align: left;
+}
+
+.astra-monitor-menu-details {
+    font-size: 0.8em;
+}
+
+.astra-monitor-menu-label-warning {
+    font-size: 0.85em;
+    padding: 0 0.5em 0.5em 0.5em;
+    font-style: italic;
+    color: #ddd;
+}
+
+.astra-monitor-menu-section-end {
+    margin-bottom: 0.5em;
+}
+
+.astra-monitor-menu-cmd-name {
+    font-size: 0.8em;
+    font-weight: bold;
+    text-align: left;
+    padding: 0.25em 0.25em 0.25em 0.5em;
+    max-width: 170px;
+}
+
+.astra-monitor-menu-cmd-name-full {
+    font-size: 0.8em;
+    font-weight: bold;
+    text-align: left;
+    padding: 0.25em 0.25em 0 0.25em;
+    min-width: 170px;
+    max-width: 450px;
+}
+
+.astra-monitor-menu-cmd-description {
+    font-size: 0.8em;
+    color: #999;
+    text-align: left;
+    padding: 0 0.25em 0 0.25em;
+    max-width: 450px;
+}
+
+.astra-monitor-menu-cmd-usage {
+    font-size: 0.8em;
+    text-align: right;
+    padding: 0.25em 0.5em 0.25em 0;
+}
+
+.astra-monitor-menu-mem-usage {
+    font-size: 0.8em;
+    text-align: right;
+    padding: 0.25em 0.5em 0.25em 0;
+    width: 4em;
+}
+
+.astra-monitor-menu-disk-activity {
+    font-size: 0.8em;
+    text-align: right;
+    padding: 0.25em 0.5em 0.25em 0;
+    width: 5em;
+}
+
+.astra-monitor-menu-uptime {
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.astra-monitor-menu-details {
+    font-size: 0.8em;
+}
+
+.astra-monitor-menu-sub-header {
+    font-weight: bold;
+    text-align: center;
+}
+
+.astra-monitor-menu-sub-key {
+    font-style: italic;
+    color: #999;
+    margin-right: 0.8em;
+    text-align: right;
+}
+
+.astra-monitor-menu-sub-core {
+    margin: 0.25em;
+    font-size: 0.75em;
+    font-style: italic;
+    color: #999;
+    text-align: center;
+}
+
+.astra-monitor-menu-sub-frequency-value {
+    font-size: 0.8em;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.astra-monitor-menu-sub-frequency-unit {
+    font-size: 0.8em;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.astra-monitor-menu-sub-percentage {
+    font-size: 0.75em;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.astra-monitor-menu-icon {
+    icon-size: 1.3em;
+}
+
+.astra-monitor-menu-icon-mini {
+    margin-top:0.1em;
+    icon-size: 1em;
+    background-size: contain;
+}
+
+.astra-monitor-menu-sensors-name {
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    min-width: 130px;
+}
+
+.astra-monitor-menu-sensors-adapter {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+    font-size: 0.7em;
+    min-width: 130px;
+}
+
+.astra-monitor-menu-sensors-category {
+    text-align: left;
+    font-style: italic;
+}
+
+.astra-monitor-menu-sensors-label {
+    font-size: 1em;
+    padding: 0.05em 0.2em;
+    text-align: left;
+}
+
+.astra-monitor-menu-sensors-key {
+    font-style: italic;
+    color: #999;
+    margin-right: 0.2em;
+    margin-left: 0.5em;
+    text-align: right;
+}
