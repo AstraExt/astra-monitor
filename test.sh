@@ -51,13 +51,16 @@ cleanup() {
 }
 
 # Start gnome-shell and get its PID
-export GI_TYPELIB_PATH=/nix/store/311jq5bizzzj1yk2k7smb7j6lxc9qbin-libgtop-2.41.1/lib/girepository-1.0
+#export GI_TYPELIB_PATH=/nix/store/311jq5bizzzj1yk2k7smb7j6lxc9qbin-libgtop-2.41.1/lib/girepository-1.0
 DISPLAY=:2 gnome-shell --replace --x11 --mode=minimal 2>&1 &
 GNOME_SHELL_PID=$!
-echo "Started gnome-shell with PID $GNOME_SHELL_PID"
+echo "gnome-shell started with PID $GNOME_SHELL_PID"
 
 # Trap bash script exits, and call cleanup function
 trap cleanup EXIT INT
 
 # Wait for gnome-shell process to end
 wait $GNOME_SHELL_PID
+
+rm -rf ./monitor@astraext.github.io.shell-extension.zip
+exit 0
