@@ -40,6 +40,8 @@ export const SensorsHeader = GObject.registerClass({
         const menu = new SensorsMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
+        this.maxWidths = [];
+        
         Config.bind('sensors-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
     }
     
@@ -59,9 +61,8 @@ export const SensorsHeader = GObject.registerClass({
             style_class: 'astra-monitor-header-sensors-values-container',
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER,
-            x_expand: true,
             y_expand: true,
-            vertical: true,
+            vertical: true
         });
         
         this.sensor1 = new St.Label({
@@ -108,7 +109,6 @@ export const SensorsHeader = GObject.registerClass({
         this.insert_child_at_index(this.valuesContainer, 1);
         
         Utils.sensorsMonitor.listen(this.valuesContainer, 'sensorsData', () => {
-            
             if(!Config.get_boolean('sensors-header-sensor1-show') && !Config.get_boolean('sensors-header-sensor2-show'))
                 return;
             
@@ -126,6 +126,8 @@ export const SensorsHeader = GObject.registerClass({
                 const sensor2Source = Config.get_json('sensors-header-sensor2');
                 this.sensor2.text = this.applySource(sensorsData, sensor2Source);
             }
+            
+            this.fixContainerWidth(Math.max(this.sensor1.width, this.sensor2.width));
         });
     }
     
@@ -165,6 +167,19 @@ export const SensorsHeader = GObject.registerClass({
         if(!Utils.isIntOrIntString(value) && Utils.isNumeric(value))
             value = value.toFixed(1);
         return value;
+    }
+    
+    fixContainerWidth(width) {
+        this.maxWidths.push(width);
+        
+        if(this.maxWidths.length > 60)
+            this.maxWidths.shift();
+        
+        const max = Math.max(...this.maxWidths);
+        
+        if(max === this.valuesContainer.width)
+            return;
+        this.valuesContainer.set_width(max);
     }
     
     update() {
