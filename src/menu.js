@@ -16,7 +16,6 @@
  */
 
 // @ts-ignore
-import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import Shell from 'gi://Shell';
@@ -107,8 +106,7 @@ export class MenuBase extends PopupMenu.PopupMenu {
         button.connect('clicked', () => {
             this.close(true);
             try {
-                let obj = Extension.lookupByUUID('monitor@astraext.github.io');
-                obj.openPreferences();
+                Utils.extension.openPreferences();
             } catch (err) {
                 Utils.log(`Error opening settings: ${err}`);
             }

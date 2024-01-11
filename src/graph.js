@@ -17,11 +17,9 @@
 
 import GObject from 'gi://GObject';
 import St from 'gi://St';
-import GLib from 'gi://GLib';
 import Clutter from 'gi://Clutter';
 
 import Utils from './utils/utils.js';
-import Config from './config.js';
 
 export const GraphBase = GObject.registerClass({
     

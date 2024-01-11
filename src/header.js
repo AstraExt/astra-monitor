@@ -23,7 +23,6 @@ import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import Utils from './utils/utils.js';
-import Config from './config.js';
 
 /* global global */
 

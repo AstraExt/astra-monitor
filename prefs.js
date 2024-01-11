@@ -26,17 +26,16 @@ import Utils from './src/utils/utils.js';
 import Config from './src/config.js';
 
 export default class AstraMonitorPrefs extends ExtensionPreferences {
-    defaultSize = {width: 900, height: 650};
-    
-    constructor(metadata) {
-        super(metadata);
-        
-        this.initTranslations('monitor@astraext.github.io');
-    }
+    defaultSize = { width: 900, height: 650 };
     
     fillPreferencesWindow(window) {
         Utils.metadata = this.metadata;
         Config.settings = this.getSettings();
+        
+        window.connect('close-request', () => {
+            Utils.metadata = null;
+            Config.settings = null;
+        });
         
         const generalPage = new Adw.PreferencesPage({title: _('General'), icon_name: 'preferences-system-symbolic'});
         window.add(generalPage);

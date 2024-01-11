@@ -15,9 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GObject from 'gi://GObject';
 import St from 'gi://St';
-import Gio from 'gi://Gio';
 import Clutter from 'gi://Clutter';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';

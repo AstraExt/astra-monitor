@@ -7,6 +7,11 @@ export default class Utils {
     static defaultMonitors = ['processor', 'memory', 'storage', 'network', 'sensors'];
     
     /**
+     * @type {import('resource:///org/gnome/shell/extensions/extension.js').Extension}
+     */
+    static extension;
+    
+    /**
      * @type {import('resource:///org/gnome/shell/extensions/extension.js').ExtensionMetadata}
      */
     static metadata;

@@ -17,7 +17,6 @@
 
 import GLib from 'gi://GLib';
 
-import Config from './config.js';
 import Utils from './utils/utils.js';
 
 export class Monitor {

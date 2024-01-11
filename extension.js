@@ -30,13 +30,8 @@ import { NetworkMonitor } from './src/network/networkMonitor.js';
 import { SensorsMonitor } from './src/sensors/sensorsMonitor.js';
 
 export default class AstraMonitorExtension extends Extension {
-    constructor(metadata) {
-        super(metadata);
-        
-        this.initTranslations('monitor@astraext.github.io');
-    }
-    
     enable() {
+        Utils.extension = this;
         Utils.metadata = this.metadata;
         Config.settings = this.getSettings();
         
@@ -115,5 +110,9 @@ export default class AstraMonitorExtension extends Extension {
         Utils.storageMonitor = null;
         Utils.networkMonitor = null;
         Utils.sensorsMonitor = null;
+        
+        Utils.extension = null;
+        Utils.metadata = null;
+        Config.settings = null;
     }
 }

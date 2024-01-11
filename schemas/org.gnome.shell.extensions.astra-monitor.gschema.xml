@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="gnome-shell-extensions">
+<schemalist gettext-domain="monitor@astraext.github.io">
   <enum id="org.gnome.shell.extensions.astra-monitor.enum.temperature-unit">
     <value nick="celsius" value="0"/>
     <value nick="fahrenheit" value="1"/>

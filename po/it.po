@@ -18,91 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/sensors/sensorsMenu.js:38 prefs.js:244 prefs.js:247
-msgid "Sensors"
-msgstr "Sensori"
-
-#: src/sensors/sensorsMenu.js:42
-msgid "No sensor found"
-msgstr "Nessun sensore trovato"
-
-#: src/network/networkMenu.js:32 prefs.js:225 prefs.js:228
-msgid "Network"
-msgstr "Rete"
-
-#: src/network/networkMenu.js:59
-msgid "Global Upload:"
-msgstr "Upload Globale:"
-
-#: src/network/networkMenu.js:74
-msgid "Global Download:"
-msgstr "Download Globale:"
-
-#: src/network/networkMenu.js:102
-msgid "Interfaces"
-msgstr "Interfacce"
-
-#: src/network/networkMenu.js:106
-msgid "No network interface found"
-msgstr "Nessuna interfaccia di rete trovata"
-
-#: src/network/networkMenu.js:218
-msgctxt "upload"
-msgid "U"
-msgstr "U"
-
-#: src/network/networkMenu.js:248
-msgctxt "download"
-msgid "D"
-msgstr "D"
-
-#: src/network/networkGraph.js:62 src/storage/storageGraph.js:63
-#: src/processor/processorGraph.js:54 src/memory/memoryGraph.js:54
-#, javascript-format
-msgid "%d min ago"
-msgid_plural "%d mins ago"
-msgstr[0] "%d min fa"
-msgstr[1] "%d min fa"
-
-#: src/network/networkGraph.js:65 src/storage/storageGraph.js:66
-#: src/processor/processorGraph.js:57 src/memory/memoryGraph.js:57
-msgid "now"
-msgstr "adesso"
-
-#: src/storage/storageMenu.js:36 prefs.js:179 prefs.js:182
-msgid "Storage"
-msgstr "Archiviazione"
-
-#: src/storage/storageMenu.js:63
-msgid "Global Read:"
-msgstr "Lettura Globale:"
-
-#: src/storage/storageMenu.js:78
-msgid "Global Write:"
-msgstr "Scrittura Globale:"
-
-#: src/storage/storageMenu.js:106
-msgid "Devices"
-msgstr "Dispositivi"
-
-#: src/storage/storageMenu.js:110
-msgid "No storage device found"
-msgstr "Nesun dispositivo di archiviazione trovato"
-
-#: src/storage/storageMenu.js:260
-msgctxt "read"
-msgid "R"
-msgstr "R"
-
-#: src/storage/storageMenu.js:290
-msgctxt "write"
-msgid "W"
-msgstr "W"
-
-#: src/storage/storageMenu.js:385
-msgid "Disk"
-msgstr "Disco"
-
 #: src/processor/processorMenu.js:38
 msgid "CPU"
 msgstr "CPU"
@@ -233,6 +148,91 @@ msgstr "Moduli"
 msgid "System uptime"
 msgstr "Tempo di attività del sistema"
 
+#: src/processor/processorGraph.js:54 src/network/networkGraph.js:62
+#: src/storage/storageGraph.js:62 src/memory/memoryGraph.js:54
+#, javascript-format
+msgid "%d min ago"
+msgid_plural "%d mins ago"
+msgstr[0] "%d min fa"
+msgstr[1] "%d min fa"
+
+#: src/processor/processorGraph.js:57 src/network/networkGraph.js:65
+#: src/storage/storageGraph.js:65 src/memory/memoryGraph.js:57
+msgid "now"
+msgstr "adesso"
+
+#: src/sensors/sensorsMenu.js:36 prefs.js:244 prefs.js:247
+msgid "Sensors"
+msgstr "Sensori"
+
+#: src/sensors/sensorsMenu.js:40
+msgid "No sensor found"
+msgstr "Nessun sensore trovato"
+
+#: src/network/networkMenu.js:32 prefs.js:225 prefs.js:228
+msgid "Network"
+msgstr "Rete"
+
+#: src/network/networkMenu.js:59
+msgid "Global Upload:"
+msgstr "Upload Globale:"
+
+#: src/network/networkMenu.js:74
+msgid "Global Download:"
+msgstr "Download Globale:"
+
+#: src/network/networkMenu.js:102
+msgid "Interfaces"
+msgstr "Interfacce"
+
+#: src/network/networkMenu.js:106
+msgid "No network interface found"
+msgstr "Nessuna interfaccia di rete trovata"
+
+#: src/network/networkMenu.js:218
+msgctxt "upload"
+msgid "U"
+msgstr "U"
+
+#: src/network/networkMenu.js:248
+msgctxt "download"
+msgid "D"
+msgstr "D"
+
+#: src/storage/storageMenu.js:36 prefs.js:179 prefs.js:182
+msgid "Storage"
+msgstr "Archiviazione"
+
+#: src/storage/storageMenu.js:63
+msgid "Global Read:"
+msgstr "Lettura Globale:"
+
+#: src/storage/storageMenu.js:78
+msgid "Global Write:"
+msgstr "Scrittura Globale:"
+
+#: src/storage/storageMenu.js:106
+msgid "Devices"
+msgstr "Dispositivi"
+
+#: src/storage/storageMenu.js:110
+msgid "No storage device found"
+msgstr "Nesun dispositivo di archiviazione trovato"
+
+#: src/storage/storageMenu.js:260
+msgctxt "read"
+msgid "R"
+msgstr "R"
+
+#: src/storage/storageMenu.js:290
+msgctxt "write"
+msgid "W"
+msgstr "W"
+
+#: src/storage/storageMenu.js:385
+msgid "Disk"
+msgstr "Disco"
+
 #: src/memory/memoryMenu.js:35 prefs.js:152 prefs.js:155
 msgid "Memory"
 msgstr "Memoria"
@@ -289,101 +289,101 @@ msgstr "Cache"
 msgid "Swap"
 msgstr "Swap"
 
-#: prefs.js:41
+#: prefs.js:40
 msgid "General"
 msgstr "Generale"
 
-#: prefs.js:44
+#: prefs.js:43
 msgid "Dependencies"
 msgstr "Dipendenze"
 
-#: prefs.js:48
+#: prefs.js:47
 msgid "Cannot access /proc/stat: this extension will not work!"
 msgstr "Impossibile accedere a /proc/stat: questa estensione non funzionerà!"
 
-#: prefs.js:50
+#: prefs.js:49
 msgid "Cannot access /proc/meminfo: this extension will not work!"
 msgstr "Impossibile accedere a /proc/meminfo: questa estensione non funzionerà!"
 
-#: prefs.js:52
+#: prefs.js:51
 msgid "Cannot access /proc/diskstats: this extension will not work!"
 msgstr "Impossibile accedere a /proc/diskstats: questa estensione non funzionerà!"
 
-#: prefs.js:54
+#: prefs.js:53
 msgid "Cannot access /proc/net/dev: this extension will not work!"
 msgstr "Impossibile accedere a /proc/net/dev: questa estensione non funzionerà!"
 
-#: prefs.js:56
+#: prefs.js:55
 msgid "Cannot access 'ps': this extension will not work!"
 msgstr "Impossibile accedere a 'ps': questa estensione non funzionerà!"
 
-#: prefs.js:58
+#: prefs.js:57
 msgid "'sensors' not installed: some features will be disabled!"
 msgstr "'sensors' non è installato: alcune funzionalità saranno disabilitate!"
 
-#: prefs.js:60
+#: prefs.js:59
 msgid "'lscpu' not installed: some features will be disabled!"
 msgstr "'lscpu' non è installato: alcune funzionalità saranno disabilitate!"
 
-#: prefs.js:62
+#: prefs.js:61
 msgid "'lspci' not installed: some features will be disabled!"
 msgstr "'lspci' non è installato: alcune funzionalità saranno disabilitate!"
 
-#: prefs.js:64
+#: prefs.js:63
 msgid "'lsblk' not installed: some features will be disabled!"
 msgstr "'lsblk' non è installato: alcune funzionalità saranno disabilitate!"
 
-#: prefs.js:66
+#: prefs.js:65
 msgid ""
 "Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
 "features will be disabled!"
 msgstr "Impossibile accedere a /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: alcune funzionalità saranno disabilitate!"
 
-#: prefs.js:68
+#: prefs.js:67
 msgid "Cannot access 'free': some features will be disabled!"
 msgstr "Impossibile accedere a 'free': alcune funzionalità saranno disabilitate!"
 
-#: prefs.js:86
+#: prefs.js:85
 msgid "All dependencies are met!"
 msgstr "Tutte le dipendenze sono soddisfatte!"
 
-#: prefs.js:89
+#: prefs.js:88
 msgid "Visualization"
 msgstr "Visualizzazione"
 
-#: prefs.js:92
+#: prefs.js:91
 msgid "Left"
 msgstr "Sinistra"
 
-#: prefs.js:93
+#: prefs.js:92
 msgid "Center"
 msgstr "Centro"
 
-#: prefs.js:94
+#: prefs.js:93
 msgid "Right"
 msgstr "Destra"
 
-#: prefs.js:96
+#: prefs.js:95
 msgid "Panel Box"
 msgstr "Panel Box"
 
-#: prefs.js:97
+#: prefs.js:96
 msgid "Panel Box Ordering"
 msgstr "Ordinamento Panel Box"
 
-#: prefs.js:101
+#: prefs.js:100
 msgid "Monitor Ordering"
 msgstr "Ordinamento dei Monitor"
 
-#: prefs.js:108 prefs.js:111
+#: prefs.js:107 prefs.js:110
 msgid "Processors"
 msgstr "Processori"
 
-#: prefs.js:112 prefs.js:156 prefs.js:183 prefs.js:229 prefs.js:248
+#: prefs.js:111 prefs.js:156 prefs.js:183 prefs.js:229 prefs.js:248
 msgid "Show"
 msgstr "Mostra"
 
-#: prefs.js:113 prefs.js:157 prefs.js:184 prefs.js:230 prefs.js:249
+#: prefs.js:112 prefs.js:157 prefs.js:184 prefs.js:230 prefs.js:249
 msgid "Update frequency (seconds)"
 msgstr "Frequenza di aggiornamento (secondi)"
 
