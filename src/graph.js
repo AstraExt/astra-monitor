@@ -20,6 +20,7 @@ import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
 import Utils from './utils/utils.js';
+import Config from './config.js';
 
 export const GraphBase = GObject.registerClass({
     
@@ -62,6 +63,9 @@ export const GraphBase = GObject.registerClass({
         else {
             this.add_child(this.historyChart);
         }
+        
+        this.setStyle();
+        Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
     }
     
     buildHistoryGrid() {
@@ -70,6 +74,10 @@ export const GraphBase = GObject.registerClass({
     
     repaint() {
         Utils.error('repaint MUST BE OVERWRITTEN');
+    }
+    
+    setStyle() {
+        
     }
     
     setupClipping(ctx, width, height, cornerRadius) {
@@ -139,6 +147,8 @@ export const GraphBase = GObject.registerClass({
     }
     
     destroy() {
+        Config.clear(this);
+        
         super.destroy();
     }
 });

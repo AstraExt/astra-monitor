@@ -66,7 +66,7 @@ export class ProcessorMenu extends MenuBase {
         this.createCPUInfoPopup(hoverButton, cpuInfo, cpuName);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             if(this.cpuInfoPopup)
                 this.cpuInfoPopup.open(true);
         });
@@ -177,7 +177,7 @@ export class ProcessorMenu extends MenuBase {
         this.createPercentagePopup(hoverButton);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             if(this.cpuCategoryUsagePopup)
                 this.cpuCategoryUsagePopup.open(true);
         });
@@ -292,7 +292,7 @@ export class ProcessorMenu extends MenuBase {
         
         const numCores = Utils.processorMonitor.getNumberOfCores();
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             
             if(this.cpuCoresUsagePopup) {
                 this.cpuCoresUsagePopup.open(true);
@@ -419,7 +419,7 @@ export class ProcessorMenu extends MenuBase {
         this.createTopProcessesPopup(hoverButton);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             if(this.topProcessesPopup)
                 this.topProcessesPopup.open(true);
         });
@@ -518,7 +518,7 @@ export class ProcessorMenu extends MenuBase {
             this.gpuInfoPopup.push(gpuInfoPopup);
             
             hoverButton.connect('enter-event', () => {
-                hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+                hoverButton.style = defaultStyle + this.selectionStyle;
                 if(gpuInfoPopup)
                     gpuInfoPopup.open(true);
             });

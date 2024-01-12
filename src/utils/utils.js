@@ -68,6 +68,12 @@ export default class Utils {
         console.error(error, Utils.logHeader + ' ERROR: ' + message);
     }
     
+    static themeStyle() {
+        if(Config.get_string('theme-style') === 'light')
+            return 'light';
+        return 'dark';
+    }
+    
     /**
      * @returns {string[]}
      */
@@ -1154,6 +1160,6 @@ export default class Utils {
     
     static getLocalIcon(icon_name) {
         // @ts-ignore
-        return Gio.icon_new_for_string(`${Utils.metadata.path}/icons/${icon_name}.svg`);
+        return Gio.icon_new_for_string(`${Utils.metadata.path}/icons/hicolor/scalable/actions/${icon_name}.svg`);
     }
 }

@@ -29,6 +29,7 @@ export class SensorsMenu extends MenuBase {
         super(sourceActor, arrowAlignment, arrowSide);
         
         this.createSensorsList();
+        this.addUtilityButtons();
     }
     
     createSensorsList() {
@@ -39,7 +40,8 @@ export class SensorsMenu extends MenuBase {
             this.noSensorsLabel = new St.Label({
                 text: _('No sensor found'),
                 style_class: 'astra-monitor-menu-label-warning',
-                style: 'font-style:italic;'
+                style: 'font-style:italic;',
+                x_expand: true
             });
             this.sensorsSection.addToGrid(this.noSensorsLabel, 2);
             this.sensors = new Map();
@@ -193,7 +195,7 @@ export class SensorsMenu extends MenuBase {
         //}
         
         container.connect('enter-event', () => {
-            container.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            container.style = defaultStyle + this.selectionStyle;
             
             popup.open(true);
         });
@@ -242,22 +244,22 @@ export class SensorsMenu extends MenuBase {
                     let unit = Utils.inferMeasurementUnit(valueName);
                     
                     const icon = {
-                        fallback_icon_name: 'dialog-information-symbolic',
+                        fallback_icon_name: 'am-am-dialog-info-symbolic',
                     };
                     if(unit === '°C') {
-                        icon.gicon = Utils.getLocalIcon('temperature-symbolic');
+                        icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
                         icon.fallback_icon_name = 'temperature-symbolic';
                     }
                     else if(unit === 'RPM') {
-                        icon.gicon = Utils.getLocalIcon('fan-symbolic');
+                        icon.gicon = Utils.getLocalIcon('am-fan-symbolic');
                         icon.fallback_icon_name = 'fan-symbolic';
                     }
                     else if(unit === 'V') {
-                        icon.gicon = Utils.getLocalIcon('voltage-symbolic');
+                        icon.gicon = Utils.getLocalIcon('am-voltage-symbolic');
                         icon.fallback_icon_name = 'battery-symbolic';
                     }
                     else if(unit === 'W') {
-                        icon.gicon = Utils.getLocalIcon('power-symbolic');
+                        icon.gicon = Utils.getLocalIcon('am-power-symbolic');
                         icon.fallback_icon_name = 'plug-symbolic';
                     }
                     

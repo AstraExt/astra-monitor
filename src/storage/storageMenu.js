@@ -89,7 +89,7 @@ export class StorageMenu extends MenuBase {
         grid.addToGrid(this.totalWriteSpeedValueLabel);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             
         });
         
@@ -264,7 +264,8 @@ export class StorageMenu extends MenuBase {
             readContainer.add_child(readLabel);
             
             const readActivityIcon = new St.Icon({
-                icon_name: 'go-up-symbolic',
+                gicon: Utils.getLocalIcon('am-up-symbolic'),
+                fallback_icon_name: 'go-up-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);'
             });
@@ -294,7 +295,8 @@ export class StorageMenu extends MenuBase {
             writeContainer.add_child(writeLabel);
             
             const writeActivityIcon = new St.Icon({
-                icon_name: 'go-down-symbolic',
+                gicon: Utils.getLocalIcon('am-down-symbolic'),
+                fallback_icon_name: 'go-down-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);'
             });
@@ -314,7 +316,7 @@ export class StorageMenu extends MenuBase {
         //}
         
         container.connect('enter-event', () => {
-            container.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            container.style = defaultStyle + this.selectionStyle;
             
         });
         
@@ -344,24 +346,24 @@ export class StorageMenu extends MenuBase {
         device.data = deviceData;
         
         const icon = {
-            gicon: Utils.getLocalIcon('harddisk-symbolic'),
+            gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
             fallback_icon_name: 'drive-harddisk-symbolic'
         };
         
         if(deviceData.removable) {
-            icon.gicon = Utils.getLocalIcon('media-removable-symbolic');
+            icon.gicon = Utils.getLocalIcon('am-media-removable-symbolic');
             icon.fallback_icon_name = 'media-removable-symbolic';
         }
         else if((deviceData.fstype && deviceData.fstype.startsWith('swap')) ||
                 deviceData.mountpoints.includes('/boot') ||
                 deviceData.mountpoints.includes('[SWAP]')) {
-            icon.gicon = Utils.getLocalIcon('linux-symbolic');
+            icon.gicon = Utils.getLocalIcon('am-linux-symbolic');
             icon.fallback_icon_name = 'drive-harddisk-system-symbolic';
         }
         else if(deviceData.type.startsWith('raid') ||
                 deviceData.type.startsWith('lvm') ||
                 deviceData.type.startsWith('md')) {
-            icon.gicon = Utils.getLocalIcon('raid-symbolic');
+            icon.gicon = Utils.getLocalIcon('am-raid-symbolic');
             icon.fallback_icon_name = 'drive-harddisk-raid-symbolic';
         }
         else if(deviceData.type.startsWith('cdrom') || deviceData.type.startsWith('rom') || deviceData.type.endsWith('rom')) {
@@ -414,8 +416,8 @@ export class StorageMenu extends MenuBase {
             if(baobabApp) {
                 let button = new St.Button({style_class: 'button'});
                 button.child = new St.Icon({
-                    icon_name: 'baobab-symbolic',
-                    fallback_icon_name: 'org.gnome.Baobab-symbolic',
+                    gicon: Utils.getLocalIcon('am-pie-symbolic'),
+                    fallback_icon_name: 'baobab-symbolic',
                 });
                 
                 button.connect('clicked', () => {
@@ -430,8 +432,8 @@ export class StorageMenu extends MenuBase {
             if(diskApp) {
                 let button = new St.Button({style_class: 'button'});
                 button.child = new St.Icon({
-                    icon_name: 'utilities-disk-utility-symbolic',
-                    fallback_icon_name: 'org.gnome.DiskUtility-symbolic',
+                    gicon: Utils.getLocalIcon('am-disk-utility-symbolic'),
+                    fallback_icon_name: 'utilities-disk-utility-symbolic',
                 });
 
                 button.connect('clicked', () => {

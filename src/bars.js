@@ -20,6 +20,7 @@ import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
 import Utils from './utils/utils.js';
+import Config from './config.js';
 
 /* global global */
 
@@ -59,18 +60,8 @@ export const BarsBase = GObject.registerClass({
                 style += `width:${params.width}px;`;
         }
         style += params.style;
-        
-        let styleClass;
-        if(params.layout === 'vertical')
-            styleClass = 'astra-monitor-bars-vertical'
-        else
-            styleClass = 'astra-monitor-bars-horizontal';
-        
-        if(params.mini)
-            styleClass += '-mini';
-        
+            
         super({
-            style_class: styleClass,
             style: style,
             x_align: params.x_align,
             x_expand: true,
@@ -83,6 +74,9 @@ export const BarsBase = GObject.registerClass({
         this.colors = params.colors;
         this.breakdownConfig = params.breakdownConfig;
         this.initialWidth = params.width;
+        this.setStyle();
+        
+        Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
         
         const size = this.layout === 'vertical' ? params.width : params.height;
         this.barSize = this.computeBarSize(params.numBars, size);
@@ -147,6 +141,20 @@ export const BarsBase = GObject.registerClass({
         } else {
             this.scaleFactor = 1;
         }
+    }
+    
+    setStyle() {
+        let styleClass;
+        if(this.layout === 'vertical')
+            styleClass = 'astra-monitor-bars-vertical'
+        else
+            styleClass = 'astra-monitor-bars-horizontal';
+        
+        if(this.mini)
+            styleClass += '-mini';
+        
+        const bgStyle = 'astra-monitor-bg-' + Utils.themeStyle();
+        this.style_class = styleClass + ' ' + bgStyle;
     }
     
     setUsage(usage) {
@@ -265,6 +273,7 @@ export const BarsBase = GObject.registerClass({
     }
     
     destroy() {
+        Config.clear(this);
         super.destroy();
     }
 });

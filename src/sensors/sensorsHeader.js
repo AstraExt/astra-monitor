@@ -48,7 +48,7 @@ export const SensorsHeader = GObject.registerClass({
     buildIcon() {
         //TODO: icon should be a setting
         this.icon = new St.Icon({
-            gicon: Utils.getLocalIcon('temperature-symbolic'),
+            gicon: Utils.getLocalIcon('am-temperature-symbolic'),
             fallback_icon_name: 'temperature-symbolic',
             style_class: 'system-status-icon astra-monitor-header-icon',
         });

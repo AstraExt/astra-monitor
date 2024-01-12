@@ -53,7 +53,7 @@ export const ProcessorHeader = GObject.registerClass({
     buildIcon() {
         //TODO: icon should be a setting
         this.icon = new St.Icon({
-            gicon: Utils.getLocalIcon('cpu-symbolic'),
+            gicon: Utils.getLocalIcon('am-cpu-symbolic'),
             fallback_icon_name: 'cpu-symbolic',
             style_class: 'system-status-icon astra-monitor-header-icon',
         });

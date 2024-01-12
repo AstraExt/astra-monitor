@@ -32,7 +32,7 @@ export const MemoryHeader = GObject.registerClass({
     buildIcon() {
         //TODO: icon should be a setting
         this.icon = new St.Icon({
-            gicon: Utils.getLocalIcon('memory-symbolic'),
+            gicon: Utils.getLocalIcon('am-memory-symbolic'),
             fallback_icon_name: 'memory-symbolic',
             style_class: 'system-status-icon astra-monitor-header-icon',
         });

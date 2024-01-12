@@ -9,6 +9,10 @@
     <value nick="center" value="1"/>
     <value nick="right" value="2"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.theme-style">
+    <value nick="dark" value="0"/>
+    <value nick="light" value="1"/>
+  </enum>
     
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- GENERAL -->
@@ -27,6 +31,11 @@
       <default>'""'</default>
       <summary>Order of the monitors</summary>
       <description>From left to right, the order of the monitors</description>
+    </key>
+    <key name="theme-style" enum="org.gnome.shell.extensions.astra-monitor.enum.theme-style">
+      <default>'dark'</default>
+      <summary>Preferred Theme Style</summary>
+      <description>Select the preferred theme style</description>
     </key>
     
     <!-- PROCESSOR -->

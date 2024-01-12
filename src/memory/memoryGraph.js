@@ -34,11 +34,19 @@ export const MemoryGraph = GObject.registerClass({
         //TODO: make them customizable
         this.breakdownConfig = params.breakdownConfig;
         this.historyLimit = params.width;
+    }
+    
+    setStyle() {
         this.colors = [
             Clutter.Color.from_string('rgb(29,172,214)'), // blue
             Clutter.Color.from_string('rgb(214,29,29)') // red
         ];
-        this.bgColor = Clutter.Color.from_string('rgba(0,0,0,0.2)');
+        
+        let bg = 'rgba(0,0,0,0.2)';
+        if(Utils.themeStyle() === 'light')
+            bg = 'rgba(255,255,255,0.2)';
+        
+        this.bgColor = Clutter.Color.from_string(bg);
     }
     
     buildHistoryGrid() {
@@ -63,6 +71,8 @@ export const MemoryGraph = GObject.registerClass({
         
         const [width, height] = this.historyChart.get_surface_size();
         const ctx = this.historyChart.get_context();
+            
+        this.setupClipping(ctx, width, height, 2);
         
         Clutter.cairo_set_source_color(ctx, this.bgColor[1]);
         ctx.rectangle(0, 0, width, height);
@@ -71,8 +81,6 @@ export const MemoryGraph = GObject.registerClass({
         if (this.history && this.history.length > 0) {
             const pointSpacing = width / (this.historyLimit - 1);
             const baseX = (this.historyLimit - historyLength) * pointSpacing;
-            
-            this.setupClipping(ctx, width, height, 2);
             
             if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                 // Draw active graph on top

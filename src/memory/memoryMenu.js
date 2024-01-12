@@ -110,7 +110,7 @@ export class MemoryMenu extends MenuBase {
         this.createUsagePopup(hoverButton);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             if(this.memoryUsagePopup)
                 this.memoryUsagePopup.open(true);
         });
@@ -285,7 +285,7 @@ export class MemoryMenu extends MenuBase {
         this.createTopProcessesPopup(hoverButton);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             if(this.topProcessesPopup)
                 this.topProcessesPopup.open(true);
         });
@@ -387,7 +387,7 @@ export class MemoryMenu extends MenuBase {
         hoverButton.add_actor(grid);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             
         });
         

@@ -49,7 +49,7 @@ export const NetworkHeader = GObject.registerClass({
     buildIcon() {
         //TODO: icon should be a setting
         this.icon = new St.Icon({
-            gicon: Utils.getLocalIcon('network-symbolic'),
+            gicon: Utils.getLocalIcon('am-network-symbolic'),
             fallback_icon_name: 'network-wired-symbolic',
             style_class: 'system-status-icon astra-monitor-header-icon',
         });

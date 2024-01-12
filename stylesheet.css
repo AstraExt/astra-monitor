@@ -83,11 +83,18 @@
     icon-size: 1.25em;
 }
 
+.astra-monitor-bg-dark {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.astra-monitor-bg-light {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 .astra-monitor-bars-vertical {
     margin: 0.25em;
     padding: 1px;
     border-radius: 0.2em;
-    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .astra-monitor-bars-vertical-mini {
@@ -96,7 +103,6 @@
     padding: 1px;
     border-radius: 0.2em;
     border: solid 1px #333;
-    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .astra-monitor-bars-horizontal {
@@ -104,7 +110,6 @@
     padding: 1px;
     border-radius: 0.2em;
     border: solid 1px #333;
-    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .astra-monitor-bars-horizontal-mini {
@@ -113,7 +118,6 @@
     padding: 1px;
     border-radius: 0.2em;
     border: solid 1px #333;
-    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .astra-monitor-bars-vertical-bar {

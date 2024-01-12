@@ -66,8 +66,13 @@ export class MenuBase extends PopupMenu.PopupMenu {
         this.grid.addToGrid(widget, colSpan);
     }
     
+    get selectionStyle() {
+        if(Utils.themeStyle() === 'light')
+            return 'background-color:rgba(0,0,0,0.1);box-shadow: 0 0 2px rgba(255,255,255,0.2);border-radius:0.3em;';
+        return 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+    }
+    
     /**
-     * 
      * @param {(box:St.BoxLayout) => void} addButtons 
      */
     addUtilityButtons(addButtons = null) {
@@ -87,7 +92,7 @@ export class MenuBase extends PopupMenu.PopupMenu {
         if(app) {
             let button = new St.Button({style_class: 'button'});
             button.child = new St.Icon({
-                icon_name: 'utilities-system-monitor-symbolic',
+                gicon: Utils.getLocalIcon('am-system-monitor-symbolic'),
                 fallback_icon_name: 'org.gnome.SystemMonitor-symbolic',
             });
             
@@ -101,7 +106,8 @@ export class MenuBase extends PopupMenu.PopupMenu {
         // Astra Monitor preferences
         let button = new St.Button({style_class: 'button'});
         button.child = new St.Icon({
-            icon_name: 'preferences-system-symbolic',
+            gicon: Utils.getLocalIcon('am-settings-symbolic'),
+            fallback_icon_name: 'preferences-system-symbolic',
         });
         button.connect('clicked', () => {
             this.close(true);

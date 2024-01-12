@@ -85,7 +85,7 @@ export class NetworkMenu extends MenuBase {
         grid.addToGrid(this.totalDownloadSpeedValueLabel);
         
         hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            hoverButton.style = defaultStyle + this.selectionStyle;
             
         });
         
@@ -222,7 +222,8 @@ export class NetworkMenu extends MenuBase {
             uploadContainer.add_child(uploadLabel);
             
             const uploadActivityIcon = new St.Icon({
-                icon_name: 'go-up-symbolic',
+                gicon: Utils.getLocalIcon('am-up-symbolic'),
+                fallback_icon_name: 'network-transmit-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);'
             });
@@ -252,7 +253,8 @@ export class NetworkMenu extends MenuBase {
             downloadContainer.add_child(downloadLabel);
             
             const downloadActivityIcon = new St.Icon({
-                icon_name: 'go-down-symbolic',
+                gicon: Utils.getLocalIcon('am-down-symbolic'),
+                fallback_icon_name: 'network-receive-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);'
             });
@@ -272,7 +274,7 @@ export class NetworkMenu extends MenuBase {
         //}
         
         container.connect('enter-event', () => {
-            container.style = defaultStyle + 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
+            container.style = defaultStyle + this.selectionStyle;
             
         });
         
@@ -298,11 +300,11 @@ export class NetworkMenu extends MenuBase {
         device.data = deviceData;
         
         let icon = {
-            gicon: Utils.getLocalIcon('network-symbolic'),
+            gicon: Utils.getLocalIcon('am-network-symbolic'),
             fallback_icon_name: 'network-wired-symbolic',
         };
         if(deviceData.name.startsWith('wlan') || deviceData.name.startsWith('wl')) {
-            icon.gicon = Utils.getLocalIcon('wireless-symbolic');
+            icon.gicon = Utils.getLocalIcon('am-wireless-symbolic');
             icon.fallback_icon_name = 'network-wireless-symbolic';
         }
         else if(deviceData.name.startsWith('wwan') || deviceData.name.startsWith('ww'))
@@ -334,7 +336,7 @@ export class NetworkMenu extends MenuBase {
         super.addUtilityButtons((box) => {
             let button = new St.Button({style_class: 'button'});
             button.child = new St.Icon({
-                gicon: Utils.getLocalIcon('network-symbolic'),
+                gicon: Utils.getLocalIcon('am-network-symbolic'),
                 fallback_icon_name: 'network-wired-symbolic'
             });
     

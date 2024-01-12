@@ -50,7 +50,7 @@ export const StorageHeader = GObject.registerClass({
     buildIcon() {
         //TODO: icon should be a setting
         this.icon = new St.Icon({
-            gicon: Utils.getLocalIcon('harddisk-symbolic'),
+            gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
             fallback_icon_name: 'drive-harddisk-symbolic',
             style_class: 'system-status-icon astra-monitor-header-icon',
         });

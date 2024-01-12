@@ -18,6 +18,7 @@
 import GObject from 'gi://GObject';
 import Clutter from 'gi://Clutter';
 import St from 'gi://St';
+import Cairo from 'gi://cairo';
 
 import {gettext as _, ngettext} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -33,12 +34,23 @@ export const NetworkGraph = GObject.registerClass({
         
         //TODO: make them customizable
         this.historyLimit = params.width;
+    }
+    
+    setStyle() {
         this.colors = [
             Clutter.Color.from_string('rgb(29,172,214)'),
             Clutter.Color.from_string('rgb(214,29,29)')
         ];
-        this.bgColor = Clutter.Color.from_string('rgba(0,0,0,0.2)');
-        this.midLineColor = Clutter.Color.from_string('rgba(255,255,255,0.2)');
+        
+        let line = 'rgba(255,255,255,0.2)';
+        if(Utils.themeStyle() === 'light')
+            line = 'rgba(0,0,0,0.8)';
+        this.midLineColor = Clutter.Color.from_string(line);
+        
+        let bg = 'rgba(0,0,0,0.2)';
+        if(Utils.themeStyle() === 'light')
+            bg = 'rgba(255,255,255,0.2)';
+        this.bgColor = Clutter.Color.from_string(bg);
     }
     
     buildHistoryGrid() {
@@ -69,6 +81,8 @@ export const NetworkGraph = GObject.registerClass({
     repaint() {
         const [width, height] = this.historyChart.get_surface_size();
         const ctx = this.historyChart.get_context();
+            
+        this.setupClipping(ctx, width, height, 2);
         
         Clutter.cairo_set_source_color(ctx, this.bgColor[1]);
         ctx.rectangle(0, 0, width, height);
@@ -79,8 +93,6 @@ export const NetworkGraph = GObject.registerClass({
             
             let slicedHistory = this.history.slice(0, this.historyLimit);
             const baseX = (this.historyLimit - slicedHistory.length) * pointSpacing;
-            
-            this.setupClipping(ctx, width, height, 2);
             
             const maxUpload = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesUploadedPerSec), 0), 56 * 1024);
             if(this.maxUploadSpeedLabel)
@@ -102,9 +114,18 @@ export const NetworkGraph = GObject.registerClass({
         //draw a line at 50%
         const color = this.midLineColor[1];
         Clutter.cairo_set_source_color(ctx, color);
-        ctx.moveTo(0, height/2);
-        ctx.lineTo(width, height/2);
-        ctx.stroke();
+        
+        if(this.mini) {
+            ctx.moveTo(0, height/2);
+            ctx.setLineCap (Cairo.LineCap.ROUND);
+            ctx.setLineWidth(0.5);
+            ctx.lineTo(width, height/2);
+            ctx.stroke();
+        }
+        else {
+            ctx.rectangle(0, height/2, width, 1);
+            ctx.fill();
+        }
         
         ctx.$dispose();
     }

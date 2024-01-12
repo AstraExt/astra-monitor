@@ -28,66 +28,83 @@ import Config from './src/config.js';
 export default class AstraMonitorPrefs extends ExtensionPreferences {
     defaultSize = { width: 900, height: 650 };
     
+    loadCustomTheme() {
+        try {
+            let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
+            const iconsPath = Utils.metadata.dir.get_child('icons').get_path();
+            iconTheme.add_search_path(iconsPath);
+        }
+        catch(e) {
+            Utils.error(e);
+        }
+    }
+    
     fillPreferencesWindow(window) {
         Utils.metadata = this.metadata;
         Config.settings = this.getSettings();
+        this.loadCustomTheme();
         
         window.connect('close-request', () => {
             Utils.metadata = null;
             Config.settings = null;
         });
         
-        const generalPage = new Adw.PreferencesPage({title: _('General'), icon_name: 'preferences-system-symbolic'});
+        const generalPage = new Adw.PreferencesPage({title: _('General'), iconName: 'am-settings-symbolic'});
         window.add(generalPage);
         
         let group = new Adw.PreferencesGroup({title: _('Dependencies')});
-        
         let check = true;
         if(!Utils.hasProcStat())
-            check = false, this.addStatusLabel(_('Cannot access /proc/stat: this extension will not work!'), "dialog-error-symbolic", group);
+            check = false, this.addStatusLabel(_('Cannot access /proc/stat: this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasProcMeminfo())
-            check = false, this.addStatusLabel(_('Cannot access /proc/meminfo: this extension will not work!'), "dialog-error-symbolic", group);
+            check = false, this.addStatusLabel(_('Cannot access /proc/meminfo: this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasProcDiskstats())
-            check = false, this.addStatusLabel(_('Cannot access /proc/diskstats: this extension will not work!'), "dialog-error-symbolic", group);
+            check = false, this.addStatusLabel(_('Cannot access /proc/diskstats: this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasProcNetDev())
-            check = false, this.addStatusLabel(_('Cannot access /proc/net/dev: this extension will not work!'), "dialog-error-symbolic", group);
+            check = false, this.addStatusLabel(_('Cannot access /proc/net/dev: this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasPs())
-            check = false, this.addStatusLabel(_('Cannot access \'ps\': this extension will not work!'), "dialog-error-symbolic", group);
+            check = false, this.addStatusLabel(_('Cannot access \'ps\': this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasSensors())
-            check = false, this.addStatusLabel(_('\'sensors\' not installed: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('\'sensors\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasLscpu())
-            check = false, this.addStatusLabel(_('\'lscpu\' not installed: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('\'lscpu\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasLspci())
-            check = false, this.addStatusLabel(_('\'lspci\' not installed: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('\'lspci\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasLsblk())
-            check = false, this.addStatusLabel(_('\'lsblk\' not installed: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('\'lsblk\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasCoresFrequency())
-            check = false, this.addStatusLabel(_('Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasFree())
-            check = false, this.addStatusLabel(_('Cannot access \'free\': some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('Cannot access \'free\': some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         
         /*if(Utils.hasAMDGpu() && !Utils.hasAmdGpuTop() && !Utils.hasRadeonTop())
-            check = false, this.addStatusLabel(_('AMD GPU detected but \'amdgpu_top/radeontop\' not installed: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('AMD GPU detected but \'amdgpu_top/radeontop\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(Utils.hasNVidiaGpu() && !Utils.hasNvidiaSmi())
-            check = false, this.addStatusLabel(_('NVidia GPU detected but \'nvidia-smi\' not installed: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('NVidia GPU detected but \'nvidia-smi\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(Utils.hasIntelGpu() && !Utils.hasIntelGpuTop())
-            check = false, this.addStatusLabel(_('Intel GPU detected but \'intel_gpu_top\' not installed: some features will be disabled!'), "dialog-warning-symbolic", group);
+            check = false, this.addStatusLabel(_('Intel GPU detected but \'intel_gpu_top\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         
-        const statusLabel = this.addStatusLabel(_('Checking GTop dependency...'), "dialog-information-symbolic", group);
+        const statusLabel = this.addStatusLabel(_('Checking GTop dependency...'), 'am-dialog-info-symbolic', group);
         Utils.hasGTop().then(gTopAvailable => {
             if(!gTopAvailable) {
                 statusLabel.updateText(_('GTop not installed, some optional features will be disabled!'));
-                statusLabel.updateIcon('dialog-warning-symbolic');
+                statusLabel.updateIcon('am-dialog-warning-symbolic');
             }
         });*/
         
         if(check)
-            this.addStatusLabel(_('All dependencies are met!'), "dialog-ok-symbolic", group);
+            this.addStatusLabel(_('All dependencies are met!'), 'am-dialog-ok-symbolic', group);
         generalPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Visualization')});
         
         let choicesPanel = [
+            {value: 'dark', text: _('Dark')},
+            {value: 'light', text: _('Light')}
+        ];
+        this.addComboRow(_('Shell Theme Style'), choicesPanel, 'theme-style', group, 'string');
+        
+        choicesPanel = [
             {value: 'left', text: _('Left')},
             {value: 'center', text: _('Center')},
             {value: 'right', text: _('Right')},
@@ -104,7 +121,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         /**
          * Processor
          */
-        const processorPage = new Adw.PreferencesPage({title: _('Processors'), icon_name: 'cpu-symbolic'});
+        const processorPage = new Adw.PreferencesPage({title: _('Processors'), icon_name: 'am-cpu-symbolic'});
         window.add(processorPage);
         
         group = new Adw.PreferencesGroup({title: _('Processors')});
@@ -149,7 +166,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         /**
          * Memory
          */
-        const memoryPage = new Adw.PreferencesPage({title: _('Memory'), icon_name: 'memory-symbolic'});
+        const memoryPage = new Adw.PreferencesPage({title: _('Memory'), icon_name: 'am-memory-symbolic'});
         window.add(memoryPage);
         
         group = new Adw.PreferencesGroup({title: _('Memory')});
@@ -176,7 +193,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         /**
          * Storage
          */
-        const storagePage = new Adw.PreferencesPage({title: _('Storage'), icon_name: 'drive-harddisk-symbolic'});
+        const storagePage = new Adw.PreferencesPage({title: _('Storage'), icon_name: 'am-harddisk-symbolic'});
         window.add(storagePage);
         
         group = new Adw.PreferencesGroup({title: _('Storage')});
@@ -222,7 +239,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         /**
          * Network
          */
-        const networkPage = new Adw.PreferencesPage({title: _('Network'), icon_name: 'network-workgroup-symbolic'});
+        const networkPage = new Adw.PreferencesPage({title: _('Network'), icon_name: 'am-network-symbolic'});
         window.add(networkPage);
         
         group = new Adw.PreferencesGroup({title: _('Network')});
@@ -241,7 +258,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         /**
          * Sensors
          */
-        const sensorsPage = new Adw.PreferencesPage({title: _('Sensors'), icon_name: 'temperature-symbolic'});
+        const sensorsPage = new Adw.PreferencesPage({title: _('Sensors'), icon_name: 'am-temperature-symbolic'});
         window.add(sensorsPage);
         
         group = new Adw.PreferencesGroup({title: _('Sensors')});
@@ -273,7 +290,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow(_('Sensor 2 Source'), choicesSource, 'sensors-header-sensor2', group, 'json');
         sensorsPage.add(group);
         
-        /*const aboutPage = new Adw.PreferencesPage({title: 'About', icon_name: 'help-about-symbolic'});
+        /*const aboutPage = new Adw.PreferencesPage({title: 'About', icon_name: 'am-help-about-symbolic'});
         window.add(aboutPage);*/
         
         window.set_default_size(this.defaultSize.width, this.defaultSize.height);
