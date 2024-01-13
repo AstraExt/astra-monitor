@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 01:31+0100\n"
+"POT-Creation-Date: 2024-01-13 13:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,7 +161,7 @@ msgstr[1] ""
 msgid "now"
 msgstr ""
 
-#: src/sensors/sensorsMenu.js:37 prefs.js:261 prefs.js:264
+#: src/sensors/sensorsMenu.js:37 prefs.js:270 prefs.js:273
 msgid "Sensors"
 msgstr ""
 
@@ -169,7 +169,7 @@ msgstr ""
 msgid "No sensor found"
 msgstr ""
 
-#: src/network/networkMenu.js:32 prefs.js:242 prefs.js:245
+#: src/network/networkMenu.js:32 prefs.js:251 prefs.js:254
 msgid "Network"
 msgstr ""
 
@@ -199,7 +199,7 @@ msgctxt "download"
 msgid "D"
 msgstr ""
 
-#: src/storage/storageMenu.js:36 prefs.js:196 prefs.js:199
+#: src/storage/storageMenu.js:36 prefs.js:205 prefs.js:208
 msgid "Storage"
 msgstr ""
 
@@ -237,12 +237,12 @@ msgstr ""
 msgid "Memory"
 msgstr ""
 
-#: src/memory/memoryMenu.js:61 src/memory/memoryMenu.js:375
-msgid "Used:"
+#: src/memory/memoryMenu.js:61
+msgid "Allocated:"
 msgstr ""
 
-#: src/memory/memoryMenu.js:67
-msgid "Active:"
+#: src/memory/memoryMenu.js:67 src/memory/memoryMenu.js:375
+msgid "Used:"
 msgstr ""
 
 #: src/memory/memoryMenu.js:72
@@ -273,7 +273,7 @@ msgstr ""
 msgid "Allocatable"
 msgstr ""
 
-#: src/memory/memoryMenu.js:203
+#: src/memory/memoryMenu.js:203 prefs.js:180
 msgid "Active"
 msgstr ""
 
@@ -407,23 +407,23 @@ msgstr ""
 msgid "Processors"
 msgstr ""
 
-#: prefs.js:128 prefs.js:173 prefs.js:200 prefs.js:246 prefs.js:265
+#: prefs.js:128 prefs.js:173 prefs.js:209 prefs.js:255 prefs.js:274
 msgid "Show"
 msgstr ""
 
-#: prefs.js:129 prefs.js:174 prefs.js:201 prefs.js:247 prefs.js:266
+#: prefs.js:129 prefs.js:174 prefs.js:210 prefs.js:256 prefs.js:275
 msgid "Update frequency (seconds)"
 msgstr ""
 
-#: prefs.js:133 prefs.js:177 prefs.js:229 prefs.js:275
+#: prefs.js:133 prefs.js:186 prefs.js:238 prefs.js:284
 msgid "Header"
 msgstr ""
 
-#: prefs.js:134 prefs.js:178 prefs.js:230 prefs.js:251 prefs.js:276
+#: prefs.js:134 prefs.js:187 prefs.js:239 prefs.js:260 prefs.js:285
 msgid "Show Icon"
 msgstr ""
 
-#: prefs.js:135 prefs.js:179
+#: prefs.js:135 prefs.js:188
 msgid "Show Percentage"
 msgstr ""
 
@@ -431,15 +431,15 @@ msgstr ""
 msgid "Show Percentage Single Core"
 msgstr ""
 
-#: prefs.js:138 prefs.js:181
+#: prefs.js:138 prefs.js:190
 msgid "Show History Graph"
 msgstr ""
 
-#: prefs.js:139 prefs.js:147 prefs.js:182 prefs.js:189
+#: prefs.js:139 prefs.js:147 prefs.js:191 prefs.js:198
 msgid "History Graph Breakdown"
 msgstr ""
 
-#: prefs.js:141 prefs.js:184
+#: prefs.js:141 prefs.js:193
 msgid "Show Realtime Bar"
 msgstr ""
 
@@ -447,11 +447,11 @@ msgstr ""
 msgid "Realtime per-core Bars"
 msgstr ""
 
-#: prefs.js:143 prefs.js:185
+#: prefs.js:143 prefs.js:194
 msgid "Realtime Bar Breakdown"
 msgstr ""
 
-#: prefs.js:146 prefs.js:188
+#: prefs.js:146 prefs.js:197
 msgid "Menu"
 msgstr ""
 
@@ -459,58 +459,74 @@ msgstr ""
 msgid "Core Bars Breakdown"
 msgstr ""
 
-#: prefs.js:151 prefs.js:283
+#: prefs.js:151 prefs.js:292
 msgid "None"
 msgstr ""
 
-#: prefs.js:225
+#: prefs.js:177
+msgid "Total - Free - Buffers - Cached"
+msgstr ""
+
+#: prefs.js:178
+msgid "Total - Free"
+msgstr ""
+
+#: prefs.js:179
+msgid "Total - Available"
+msgstr ""
+
+#: prefs.js:182
+msgid "Used Memory"
+msgstr ""
+
+#: prefs.js:234
 msgid "Main Disk"
 msgstr ""
 
-#: prefs.js:232
+#: prefs.js:241
 msgid "Show Storage Usage Bar"
 msgstr ""
 
-#: prefs.js:233
+#: prefs.js:242
 msgid "Show Storage Usage Percentage"
 msgstr ""
 
-#: prefs.js:235 prefs.js:254
+#: prefs.js:244 prefs.js:263
 msgid "Show IO History Graph"
 msgstr ""
 
-#: prefs.js:236 prefs.js:255
+#: prefs.js:245 prefs.js:264
 msgid "Show IO Speed"
 msgstr ""
 
-#: prefs.js:253
+#: prefs.js:262
 msgid "Show Network Usage Bar"
 msgstr ""
 
-#: prefs.js:269
+#: prefs.js:278
 msgid "Celsius"
 msgstr ""
 
-#: prefs.js:270
+#: prefs.js:279
 msgid "Fahrenheit"
 msgstr ""
 
-#: prefs.js:272
+#: prefs.js:281
 msgid "Temperature Unit"
 msgstr ""
 
-#: prefs.js:287
+#: prefs.js:296
 msgid "Show Sensor 1"
 msgstr ""
 
-#: prefs.js:288
+#: prefs.js:297
 msgid "Sensor 1 Source"
 msgstr ""
 
-#: prefs.js:289
+#: prefs.js:298
 msgid "Show Sensor 2"
 msgstr ""
 
-#: prefs.js:290
+#: prefs.js:299
 msgid "Sensor 2 Source"
 msgstr ""

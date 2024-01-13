@@ -38,9 +38,17 @@ export class MemoryMonitor extends Monitor {
         this.updateTopProcessesTask = new CancellableTaskManager();
         this.updateSwapUsageTask = new CancellableTaskManager();
         
+        this.usedPref = Config.get_string('memory-used');
+        
         const enabled = Config.get_boolean('memory-header-show');
         if(enabled)
             this.start();
+        
+        Config.connect(this, 'changed::memory-used', () => {
+            this.usedPref = Config.get_string('memory-used');
+            this.reset();
+            this.resetData();
+        });
         
         Config.connect(this, 'changed::memory-header-show', () => {
             if(Config.get_boolean('memory-header-show'))
@@ -199,12 +207,22 @@ export class MemoryMonitor extends Monitor {
             }
         }
         
-        //TODO: add option to exclude "Cache" from used memory
-        const used = total - free/* - buffers - cached*/;
+        let used;
+        if(this.usedPref === 'active')
+            used = active;
+        else if(this.usedPref === 'total-available')
+            used = total - available;
+        else if(this.usedPref === 'total-free')
+            used = total - free;
+        else
+            used = total - free - buffers - cached;
+        
+        const allocated = total - free;
         const allocatable = available - free;
         
         const memoryUsage = {
             active,
+            allocated,
             allocatable,
             used,
             total,

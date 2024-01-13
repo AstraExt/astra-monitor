@@ -13,6 +13,12 @@
     <value nick="dark" value="0"/>
     <value nick="light" value="1"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.memory-used">
+    <value nick="total-free-buffers-cached" value="0"/>
+    <value nick="total-free" value="1"/>
+    <value nick="total-available" value="2"/>
+    <value nick="active" value="3"/>
+  </enum>
     
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- GENERAL -->
@@ -113,6 +119,11 @@
       <summary>Memory Update Frequency</summary>
       <description>Seconds between memory statistics updates</description>
       <range min="0.1" max="10"/>
+    </key>
+    <key name="memory-used" enum="org.gnome.shell.extensions.astra-monitor.enum.memory-used">
+      <default>'total-free-buffers-cached'</default>
+      <summary>Preferred Used Memory Calculation</summary>
+      <description>Select the preferred calculation for the used memory value</description>
     </key>
     <key name="memory-header-show" type="b">
       <default>true</default>

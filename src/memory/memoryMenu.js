@@ -57,17 +57,17 @@ export class MemoryMenu extends MenuBase {
         this.memoryTotalQty = new St.Label({text: '', style_class: 'astra-monitor-menu-value', style: 'width:4em;'});
         grid.addToGrid(this.memoryTotalQty);
         
+        // Allocated Memory
+        label = new St.Label({text: _('Allocated:'), style_class: 'astra-monitor-menu-label', x_expand: true});
+        grid.addToGrid(label);
+        this.memoryAllocatedQty = new St.Label({text: '', style_class: 'astra-monitor-menu-value', style: 'width:4em;'});
+        grid.addToGrid(this.memoryAllocatedQty);
+        
         // Used Memory
         label = new St.Label({text: _('Used:'), style_class: 'astra-monitor-menu-label', x_expand: true});
         grid.addToGrid(label);
         this.memoryUsedQty = new St.Label({text: '', style_class: 'astra-monitor-menu-value', style: 'width:4em;'});
         grid.addToGrid(this.memoryUsedQty);
-        
-        // Active Memory
-        label = new St.Label({text: _('Active:'), style_class: 'astra-monitor-menu-label', x_expand: true});
-        grid.addToGrid(label);
-        this.memoryActiveQty = new St.Label({text: '', style_class: 'astra-monitor-menu-value', style: 'width:4em;'});
-        grid.addToGrid(this.memoryActiveQty);
         // Free Memory
         label = new St.Label({text: _('Free:'), style_class: 'astra-monitor-menu-label', x_expand: true});
         grid.addToGrid(label);
@@ -535,7 +535,7 @@ export class MemoryMenu extends MenuBase {
         
         this.memoryTotalQty.text = '';
         this.memoryUsedQty.text = '';
-        this.memoryActiveQty.text = '';
+        this.memoryAllocatedQty.text = '';
         this.memoryFreeQty.text = '';
         
         for(let i = 0; i < this.topProcesses.length; i++) {
@@ -553,17 +553,14 @@ export class MemoryMenu extends MenuBase {
                 this.memoryTotalQty.text = Utils.formatBytes(memoryUsage.total, 3);
                 this.memoryUsagePercLabel.text = Math.round(memoryUsage.used / memoryUsage.total * 100.0) + '%';
                 
-                if(memoryUsage.used && !isNaN(memoryUsage.used)) {
+                if(memoryUsage.used && !isNaN(memoryUsage.used))
                     this.memoryUsedQty.text = Utils.formatBytes(memoryUsage.used, 3);
-                }
                 
-                if(memoryUsage.active && !isNaN(memoryUsage.active)) {
-                    this.memoryActiveQty.text = Utils.formatBytes(memoryUsage.active, 3);
-                }
+                if(memoryUsage.allocated && !isNaN(memoryUsage.allocated))
+                    this.memoryAllocatedQty.text = Utils.formatBytes(memoryUsage.allocated, 3);
                 
-                if(memoryUsage.free && !isNaN(memoryUsage.free)) {
+                if(memoryUsage.free && !isNaN(memoryUsage.free))
                     this.memoryFreeQty.text = Utils.formatBytes(memoryUsage.free, 3);
-                }
                 
                 if(this.memoryUsagePopup) {
                     this.memoryUsagePopup['totalQtyLabel'].text = Utils.formatBytes(memoryUsage.total, 3);
@@ -603,7 +600,7 @@ export class MemoryMenu extends MenuBase {
                 
                 this.memoryTotalQty.text = '';
                 this.memoryUsedQty.text = '';
-                this.memoryActiveQty.text = '';
+                this.memoryAllocatedQty.text = '';
             }
             return;
         }

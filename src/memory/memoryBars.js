@@ -47,14 +47,12 @@ export const MemoryBars = GObject.registerClass({
         for (let i = 0; i < usage.length; i++) {
             if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                 const total = usage[i].total;
-                const active = usage[i].active / total;
-                let inactive = (usage[i].used - usage[i].active) / total;
-                if(active + inactive > 1.0)
-                    inactive = 1.0 - active;
+                const used = usage[i].used / total;
+                const allocated = (usage[i].allocated - usage[i].used) / total;
                 
                 values.push([
-                    { color: 0, value: inactive },
-                    { color: 1, value: active },
+                    { color: 0, value: used },
+                    { color: 1, value: allocated },
                 ]);
             }
             else {

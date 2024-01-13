@@ -172,6 +172,15 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         group = new Adw.PreferencesGroup({title: _('Memory')});
         this.addSwitchRow(_('Show'), 'memory-header-show', group);
         this.addSpinRow(_('Update frequency (seconds)'), 'memory-update', group, 0.1, 10, 1, 0.1, 1, true, true);
+        
+        choicesPanel = [
+            {value: 'total-free-buffers-cached', text: _('Total - Free - Buffers - Cached')},
+            {value: 'total-free', text: _('Total - Free')},
+            {value: 'total-available', text: _('Total - Available')},
+            {value: 'active', text: _('Active')},
+        ];
+        this.addComboRow(_('Used Memory'), choicesPanel, 'memory-used', group, 'string');
+        
         memoryPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});

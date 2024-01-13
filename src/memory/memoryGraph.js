@@ -83,14 +83,14 @@ export const MemoryGraph = GObject.registerClass({
             const baseX = (this.historyLimit - historyLength) * pointSpacing;
             
             if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
-                // Draw active graph on top
+                // Draw allocated graph on top
                 Clutter.cairo_set_source_color(ctx, this.colors[1][1]);
-                const activeFunc = (node) => node.used / node.total;
+                const activeFunc = (node) => node.allocated / node.total;
                 super.drawGraph(ctx, this.history, activeFunc, baseX, 0, height, pointSpacing);
                 
-                // Draw inactive graph on bottom
+                // Draw used graph on bottom
                 Clutter.cairo_set_source_color(ctx, this.colors[0][1]);
-                const inactiveFunc = (node) => (node.used - node.active) / node.total;
+                const inactiveFunc = (node) => node.used / node.total;
                 super.drawGraph(ctx, this.history, inactiveFunc, baseX, 0, height, pointSpacing);
             } else {
                 // Draw single graph for total usage

@@ -55,7 +55,10 @@ export class Monitor {
             GLib.source_remove(this.timerID);
             this.timerID = null;
         }
-        
+        this.resetData();
+    }
+    
+    resetData() {
         this.usageHistory = {};
         this.enqueuedUpdates = [];
     }
