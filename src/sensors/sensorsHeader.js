@@ -172,7 +172,7 @@ export const SensorsHeader = GObject.registerClass({
     fixContainerWidth(width) {
         this.maxWidths.push(width);
         
-        if(this.maxWidths.length > 60)
+        if(this.maxWidths.length > Utils.sensorsMonitor.updateFrequency * 10)
             this.maxWidths.shift();
         
         const max = Math.max(...this.maxWidths);

@@ -142,6 +142,20 @@ export class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(totalPercLabel);
         this.memoryUsagePopup['totalPercLabel'] = totalPercLabel;
         
+        //Allocated Memory
+        this.memoryUsagePopup.addToMenu(new St.Label({
+            text: _('Allocated'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const allocatedQtyLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.memoryUsagePopup.addToMenu(allocatedQtyLabel);
+        this.memoryUsagePopup['allocatedQtyLabel'] = allocatedQtyLabel;
+        
+        const allocatedPercLabel = new St.Label({text: '', style: 'width:4em;text-align:right;'});
+        this.memoryUsagePopup.addToMenu(allocatedPercLabel);
+        this.memoryUsagePopup['allocatedPercLabel'] = allocatedPercLabel;
+        
         //Used Memory
         this.memoryUsagePopup.addToMenu(new St.Label({
             text: _('Used'),
@@ -565,6 +579,10 @@ export class MemoryMenu extends MenuBase {
                 if(this.memoryUsagePopup) {
                     this.memoryUsagePopup['totalQtyLabel'].text = Utils.formatBytes(memoryUsage.total, 3);
                     
+                    if(memoryUsage.allocated && !isNaN(memoryUsage.allocated)) {
+                        this.memoryUsagePopup['allocatedQtyLabel'].text = Utils.formatBytes(memoryUsage.allocated, 3);
+                        this.memoryUsagePopup['allocatedPercLabel'].text = (memoryUsage.allocated / memoryUsage.total * 100).toFixed(1) + '%';
+                    }
                     if(memoryUsage.used && !isNaN(memoryUsage.used)) {
                         this.memoryUsagePopup['usedQtyLabel'].text = Utils.formatBytes(memoryUsage.used, 3);
                         this.memoryUsagePopup['usedPercLabel'].text = (memoryUsage.used / memoryUsage.total * 100).toFixed(1) + '%';
@@ -759,6 +777,8 @@ export class MemoryMenu extends MenuBase {
                 
                 if(this.memorySwapPopup) {
                     this.memorySwapPopup['totalQtyLabel'].text = '';
+                    this.memorySwapPopup['allocatedQtyLabel'].text = '';
+                    this.memorySwapPopup['allocatedPercLabel'].text = '';
                     this.memorySwapPopup['usedQtyLabel'].text = '';
                     this.memorySwapPopup['usedPercLabel'].text = '';
                     this.memorySwapPopup['freeQtyLabel'].text = '';
