@@ -52,6 +52,9 @@ export const SensorsHeader = GObject.registerClass({
     resetMaxWidths() {
         this.maxWidths = [];
         
+        if(!this.sensor1.get_stage())
+            return;
+        
         if(Config.get_boolean('sensors-header-sensor2-show'))
             this.fixContainerWidth(Math.max(this.sensor1.get_width(), this.sensor2.get_width()));
         else

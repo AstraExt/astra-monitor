@@ -187,10 +187,10 @@ export class SensorsMenu extends MenuBase {
                     values.set(valueId, { icon, name, value });
                 }
                 popupGrid.addToGrid(categoryGrid, 2);
-                popup.addToMenu(popupGrid, 2)
                 
                 categories.set(categoryName, { categoryLabel, values });
             }
+            popup.addToMenu(popupGrid, 2);
         //}
         
         container.connect('enter-event', () => {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 14:36+0100\n"
+"POT-Creation-Date: 2024-01-13 16:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -533,4 +533,36 @@ msgstr ""
 
 #: prefs.js:299
 msgid "Sensor 2 Source"
+msgstr ""
+
+#: prefs.js:305
+msgid "Info"
+msgstr ""
+
+#: prefs.js:312
+msgid "Version"
+msgstr ""
+
+#: prefs.js:313
+msgid "Changelog"
+msgstr ""
+
+#: prefs.js:314
+msgid "GitHub"
+msgstr ""
+
+#: prefs.js:315
+msgid "GNOME Extensions page"
+msgstr ""
+
+#: prefs.js:316
+msgid "Report a bug or suggest new feature"
+msgstr ""
+
+#: prefs.js:317
+msgid "Buy us a coffee"
+msgstr ""
+
+#: prefs.js:318
+msgid "Become a patron"
 msgstr ""

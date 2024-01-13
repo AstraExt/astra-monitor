@@ -26,7 +26,7 @@ import Utils from './src/utils/utils.js';
 import Config from './src/config.js';
 
 export default class AstraMonitorPrefs extends ExtensionPreferences {
-    defaultSize = { width: 900, height: 650 };
+    defaultSize = { width: 800, height: 650 };
     
     loadCustomTheme() {
         try {
@@ -299,15 +299,58 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow(_('Sensor 2 Source'), choicesSource, 'sensors-header-sensor2', group, 'json');
         sensorsPage.add(group);
         
-        /*const aboutPage = new Adw.PreferencesPage({title: 'About', icon_name: 'am-help-about-symbolic'});
-        window.add(aboutPage);*/
+        const aboutPage = new Adw.PreferencesPage({title: 'About', icon_name: 'am-dialog-info-symbolic'});
+        window.add(aboutPage);
+        
+        group = new Adw.PreferencesGroup({title: _('Info')});
+        
+        let version;
+        if(this.metadata['version-name'])
+            version = this.metadata['version-name'] + ' (EGOv' + this.metadata['version'] + ')';
+        else
+            version = 'EGOv' + this.metadata['version'];
+        this.addLabelRow(_('Version'), version, group);
+        this.addLinkRow(_('Changelog'), 'https://github.com/AstraExt/astra-monitor/blob/main/RELEASES.md', group);
+        this.addLinkRow(_('GitHub'), 'https://github.com/AstraExt/astra-monitor', group);
+        this.addLinkRow(_('GNOME Extensions page'), 'https://extensions.gnome.org/extension/6682/astra-monitor/', group);
+        this.addLinkRow(_('Report a bug or suggest new feature'), 'https://github.com/AstraExt/astra-monitor/issues/new/choose', group);
+        this.addLinkRow(_('Buy us a coffee'), 'https://www.buymeacoffee.com/astra.ext', group);
+        this.addLinkRow(_('Become a patron'), 'https://www.patreon.com/AstraExt', group);
+        aboutPage.add(group);
         
         window.set_default_size(this.defaultSize.width, this.defaultSize.height);
     }
     
-    addLabelRow(title, group) {
+    addLabelRow(title, label, group) {
         const row = new Adw.ActionRow({title});
         group.add(row);
+        
+        const labelWidget = new Gtk.Label({label});
+        row.add_suffix(labelWidget);
+    }
+    
+    addButtonRow(title, group, callback) {
+        const row = new Adw.ActionRow({title});
+        group.add(row);
+        
+        row.activatable = true;
+        row.connect('activate', callback);
+    }
+    
+    addLinkRow(title, url, group) {
+        const row = new Adw.ActionRow({title});
+        group.add(row);
+        
+        const linkBtn = new Gtk.LinkButton({
+            label: '',
+            uri: url,
+            halign: Gtk.Align.END,
+            widthRequest: 1,
+            opacity: 0,
+            cursor: null
+        });
+        row.add_suffix(linkBtn);
+        row.activatable_widget = linkBtn;
     }
     
     addStatusLabel(title, iconName, group) {

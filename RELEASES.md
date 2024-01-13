@@ -1,10 +1,15 @@
 # Astra Monitor 3 - TO BE RELEASED
 
 ### New features
+- Used Memory customization: now you can choose the formula to calculate used memory
 - Swap Memory info expanded with a popup menu to show more details, including swap devices and usage per device
+- Added About page in the Preferences window with version number and useful links
 
 ### Bug fixes
+- Fixed a bug where the used memory was not being calculated correctly [[#9](https://github.com/AstraExt/astra-monitor/issues/9)] [[#10](https://github.com/AstraExt/astra-monitor/issues/10)]
 - __Swap__-ped from 'free' to '/proc/meminfo' to get swap info. [[#6](https://github.com/AstraExt/astra-monitor/issues/6)]
+- Fixed a bug where the processor name was not being displayed correctly [[#5](https://github.com/AstraExt/astra-monitor/issues/5)]
+- Sensor header should now be more coherent with the rest on the style and width [[#11](https://github.com/AstraExt/astra-monitor/issues/11)]
 
 # Astra Monitor 2 - January 12 2024
 
