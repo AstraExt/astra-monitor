@@ -101,6 +101,15 @@ export default class Utils {
         }
     }
     
+    static hasProcCpuinfo() {
+        try {
+            const fileContents = GLib.file_get_contents('/proc/cpuinfo');
+            return fileContents && fileContents[0];
+        } catch (e) {
+            return false;
+        }
+    }
+    
     static hasProcMeminfo() {
         try {
             const fileContents = GLib.file_get_contents('/proc/meminfo');
@@ -138,11 +147,6 @@ export default class Utils {
     }
     
     static hasLscpu() {
-        // TODO: lscpu should be localized but I couldn't reproduce localized output
-        //       to test how to enforce english / manage localized output.
-        //       possible solutions:
-        //       - use '/proc/cpuinfo' for model name / used data
-        
         try {
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('lscpu -V');
             return result && stdout && !stderr.length;
@@ -335,15 +339,6 @@ export default class Utils {
     static hasPs() {
         try {
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('ps -V');
-            return result && stdout && !stderr.length;
-        } catch (e) {
-            return false;
-        }
-    }
-    
-    static hasFree() {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('free');
             return result && stdout && !stderr.length;
         } catch (e) {
             return false;

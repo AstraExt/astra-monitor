@@ -40,9 +40,22 @@ export const SensorsHeader = GObject.registerClass({
         const menu = new SensorsMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
-        this.maxWidths = [];
+        this.resetMaxWidths();
         
         Config.bind('sensors-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::sensors-header-sensor1-show', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::sensors-header-sensor2-show', this.resetMaxWidths.bind(this));
+    }
+    
+    resetMaxWidths() {
+        this.maxWidths = [];
+        
+        if(Config.get_boolean('sensors-header-sensor2-show'))
+            this.fixContainerWidth(Math.max(this.sensor1.get_width(), this.sensor2.get_width()));
+        else
+            this.fixContainerWidth(this.sensor1.get_width());
     }
     
     buildIcon() {
@@ -125,9 +138,11 @@ export const SensorsHeader = GObject.registerClass({
             if(Config.get_boolean('sensors-header-sensor2-show')) {
                 const sensor2Source = Config.get_json('sensors-header-sensor2');
                 this.sensor2.text = this.applySource(sensorsData, sensor2Source);
+                this.fixContainerWidth(Math.max(this.sensor1.get_width(), this.sensor2.get_width()));
             }
-            
-            this.fixContainerWidth(Math.max(this.sensor1.width, this.sensor2.width));
+            else {
+                this.fixContainerWidth(this.sensor1.get_width());
+            }
         });
     }
     

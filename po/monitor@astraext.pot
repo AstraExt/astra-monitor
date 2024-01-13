@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 13:00+0100\n"
+"POT-Creation-Date: 2024-01-13 14:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "CPU info"
 msgstr ""
 
 #: src/processor/processorMenu.js:153 src/memory/memoryMenu.js:55
-#: src/memory/memoryMenu.js:381
+#: src/memory/memoryMenu.js:395
 msgid "Total:"
 msgstr ""
 
@@ -84,7 +84,7 @@ msgid "GHz"
 msgstr ""
 
 #: src/processor/processorMenu.js:384 src/processor/processorMenu.js:437
-#: src/memory/memoryMenu.js:245 src/memory/memoryMenu.js:303
+#: src/memory/memoryMenu.js:259 src/memory/memoryMenu.js:317
 msgid "Top processes"
 msgstr ""
 
@@ -241,7 +241,7 @@ msgstr ""
 msgid "Allocated:"
 msgstr ""
 
-#: src/memory/memoryMenu.js:67 src/memory/memoryMenu.js:375
+#: src/memory/memoryMenu.js:67 src/memory/memoryMenu.js:389
 msgid "Used:"
 msgstr ""
 
@@ -253,55 +253,59 @@ msgstr ""
 msgid "Memory Usage Raw Info"
 msgstr ""
 
-#: src/memory/memoryMenu.js:133 src/memory/memoryMenu.js:411
+#: src/memory/memoryMenu.js:133 src/memory/memoryMenu.js:425
 msgid "Total"
 msgstr ""
 
-#: src/memory/memoryMenu.js:147 src/memory/memoryMenu.js:425
-msgid "Used"
+#: src/memory/memoryMenu.js:147
+msgid "Allocated"
 msgstr ""
 
 #: src/memory/memoryMenu.js:161 src/memory/memoryMenu.js:439
+msgid "Used"
+msgstr ""
+
+#: src/memory/memoryMenu.js:175 src/memory/memoryMenu.js:453
 msgid "Free"
 msgstr ""
 
-#: src/memory/memoryMenu.js:175
+#: src/memory/memoryMenu.js:189
 msgid "Available"
 msgstr ""
 
-#: src/memory/memoryMenu.js:189
+#: src/memory/memoryMenu.js:203
 msgid "Allocatable"
 msgstr ""
 
-#: src/memory/memoryMenu.js:203 prefs.js:180
+#: src/memory/memoryMenu.js:217 prefs.js:180
 msgid "Active"
 msgstr ""
 
-#: src/memory/memoryMenu.js:217
+#: src/memory/memoryMenu.js:231
 msgid "Buffers"
 msgstr ""
 
-#: src/memory/memoryMenu.js:231 src/memory/memoryMenu.js:453
+#: src/memory/memoryMenu.js:245 src/memory/memoryMenu.js:467
 msgid "Cached"
 msgstr ""
 
-#: src/memory/memoryMenu.js:341
+#: src/memory/memoryMenu.js:355
 msgid "Swap"
 msgstr ""
 
-#: src/memory/memoryMenu.js:407
+#: src/memory/memoryMenu.js:421
 msgid "Swap Info"
 msgstr ""
 
-#: src/memory/memoryMenu.js:467
+#: src/memory/memoryMenu.js:481
 msgid "Zswap"
 msgstr ""
 
-#: src/memory/memoryMenu.js:481
+#: src/memory/memoryMenu.js:495
 msgid "Zswapped"
 msgstr ""
 
-#: src/memory/memoryMenu.js:494
+#: src/memory/memoryMenu.js:508
 msgid "Swap Devices"
 msgstr ""
 
@@ -318,45 +322,45 @@ msgid "Cannot access /proc/stat: this extension will not work!"
 msgstr ""
 
 #: prefs.js:60
-msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
 msgstr ""
 
 #: prefs.js:62
-msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgid "Cannot access /proc/meminfo: this extension will not work!"
 msgstr ""
 
 #: prefs.js:64
-msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgid "Cannot access /proc/diskstats: this extension will not work!"
 msgstr ""
 
 #: prefs.js:66
-msgid "Cannot access 'ps': this extension will not work!"
+msgid "Cannot access /proc/net/dev: this extension will not work!"
 msgstr ""
 
 #: prefs.js:68
-msgid "'sensors' not installed: some features will be disabled!"
+msgid "Cannot access 'ps': this extension will not work!"
 msgstr ""
 
 #: prefs.js:70
-msgid "'lscpu' not installed: some features will be disabled!"
+msgid "'lm-sensors' not installed: some features will be disabled!"
 msgstr ""
 
 #: prefs.js:72
-msgid "'lspci' not installed: some features will be disabled!"
+msgid "'lscpu' not installed: some features will be disabled!"
 msgstr ""
 
 #: prefs.js:74
-msgid "'lsblk' not installed: some features will be disabled!"
+msgid "'lspci' not installed: some features will be disabled!"
 msgstr ""
 
 #: prefs.js:76
-msgid ""
-"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
-"features will be disabled!"
+msgid "'lsblk' not installed: some features will be disabled!"
 msgstr ""
 
 #: prefs.js:78
-msgid "Cannot access 'free': some features will be disabled!"
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
 msgstr ""
 
 #: prefs.js:96

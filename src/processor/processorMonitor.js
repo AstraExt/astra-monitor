@@ -270,6 +270,7 @@ export class ProcessorMonitor extends Monitor {
             return this.cpuInfo;
         
         try {
+            //TODO: switch to lscpu --json!?
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('lscpu');
             if (result && stdout) {
                 const decoder = new TextDecoder("utf-8");
@@ -309,6 +310,25 @@ export class ProcessorMonitor extends Monitor {
                 });
                 
                 this.cpuInfo = cpuInfo;
+                
+                if(!this.cpuInfo['Model name']) {
+                    // lscpu is localized, so we need to fallback to /proc/cpuinfo
+                    // TODO: fix flags too
+                    
+                    const fileContents = GLib.file_get_contents('/proc/cpuinfo');
+                    if(fileContents && fileContents[0]) {
+                        const decoder = new TextDecoder("utf-8");
+                        const lines = decoder.decode(fileContents[1]).split('\n');
+                        
+                        for(const line of lines) {
+                            if(line.startsWith('model name')) {
+                                const [key, value] = line.split(':').map(s => s.trim());
+                                this.cpuInfo['Model name'] = value;
+                                break;
+                            }
+                        }
+                    }
+                }
             } else {
                 this.cpuInfo = {};
             }

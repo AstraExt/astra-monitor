@@ -56,6 +56,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         let check = true;
         if(!Utils.hasProcStat())
             check = false, this.addStatusLabel(_('Cannot access /proc/stat: this extension will not work!'), 'am-dialog-error-symbolic', group);
+        if(!Utils.hasProcCpuinfo())
+            check = false, this.addStatusLabel(_('Cannot access /proc/cpuinfo: this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasProcMeminfo())
             check = false, this.addStatusLabel(_('Cannot access /proc/meminfo: this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasProcDiskstats())
@@ -65,7 +67,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         if(!Utils.hasPs())
             check = false, this.addStatusLabel(_('Cannot access \'ps\': this extension will not work!'), 'am-dialog-error-symbolic', group);
         if(!Utils.hasSensors())
-            check = false, this.addStatusLabel(_('\'sensors\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
+            check = false, this.addStatusLabel(_('\'lm-sensors\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasLscpu())
             check = false, this.addStatusLabel(_('\'lscpu\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasLspci())
@@ -74,8 +76,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             check = false, this.addStatusLabel(_('\'lsblk\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasCoresFrequency())
             check = false, this.addStatusLabel(_('Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
-        if(!Utils.hasFree())
-            check = false, this.addStatusLabel(_('Cannot access \'free\': some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         
         /*if(Utils.hasAMDGpu() && !Utils.hasAmdGpuTop() && !Utils.hasRadeonTop())
             check = false, this.addStatusLabel(_('AMD GPU detected but \'amdgpu_top/radeontop\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
