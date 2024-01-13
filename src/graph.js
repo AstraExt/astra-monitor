@@ -148,7 +148,6 @@ export const GraphBase = GObject.registerClass({
     
     destroy() {
         Config.clear(this);
-        
         super.destroy();
     }
 });

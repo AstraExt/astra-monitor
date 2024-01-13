@@ -146,8 +146,9 @@ export const NetworkHeader = GObject.registerClass({
                 this.download.text = '- B/s';
             }
             else {
-                this.upload.text = Utils.formatBytesPerSec(usage.bytesUploadedPerSec, 2, true);
-                this.download.text = Utils.formatBytesPerSec(usage.bytesDownloadedPerSec, 2, true);
+                const unit = Config.get_string('network-io-unit');
+                this.upload.text = Utils.formatBytesPerSec(usage.bytesUploadedPerSec, unit, 2, true);
+                this.download.text = Utils.formatBytesPerSec(usage.bytesDownloadedPerSec, unit, 2, true);
             }
         });
     }

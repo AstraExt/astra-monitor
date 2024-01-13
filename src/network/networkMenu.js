@@ -24,6 +24,7 @@ import {MenuBase} from '../menu.js';
 import { NetworkGraph } from './networkGraph.js';
 import { Grid } from '../grid.js';
 import Utils from '../utils/utils.js';
+import Config from '../config.js';
 
 export class NetworkMenu extends MenuBase {
     constructor(sourceActor, arrowAlignment, arrowSide) {
@@ -389,13 +390,15 @@ export class NetworkMenu extends MenuBase {
             
             let current = Utils.networkMonitor.getCurrentValue('networkIO');
             if(current) {
+                const unit = Config.get_string('network-io-unit');
+                
                 if(current.bytesUploadedPerSec)
-                    this.totalUploadSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesUploadedPerSec, 3);
+                    this.totalUploadSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesUploadedPerSec, unit, 3);
                 else
                     this.totalUploadSpeedValueLabel.text = '-';
                 
                 if(current.bytesDownloadedPerSec)
-                    this.totalDownloadSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesDownloadedPerSec, 3);
+                    this.totalDownloadSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesDownloadedPerSec, unit, 3);
                 else
                     this.totalDownloadSpeedValueLabel.text = '-';
             }
@@ -413,8 +416,10 @@ export class NetworkMenu extends MenuBase {
                     const data = current.get(id);
                         
                     if(data) {
+                        const unit = Config.get_string('network-io-unit');
+                        
                         if(data.bytesUploadedPerSec) {
-                            device.uploadValueLabel.text = Utils.formatBytesPerSec(data.bytesUploadedPerSec, 3);
+                            device.uploadValueLabel.text = Utils.formatBytesPerSec(data.bytesUploadedPerSec, unit, 3);
                             // TODO: make this color customizable!?
                             device.uploadActivityIcon.style = 'color:rgb(29,172,214);';
                         }
@@ -424,7 +429,7 @@ export class NetworkMenu extends MenuBase {
                         }
                         
                         if(data.bytesDownloadedPerSec) {
-                            device.downloadValueLabel.text = Utils.formatBytesPerSec(data.bytesDownloadedPerSec, 3);
+                            device.downloadValueLabel.text = Utils.formatBytesPerSec(data.bytesDownloadedPerSec, unit, 3);
                             // TODO: make this color customizable!?
                             device.downloadActivityIcon.style = 'color:rgb(214,29,29);';
                         }

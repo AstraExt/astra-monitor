@@ -19,7 +19,20 @@
     <value nick="total-available" value="2"/>
     <value nick="active" value="3"/>
   </enum>
-    
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.data-unit">
+    <value nick="kB/s" value="0"/>
+    <value nick="KiB/s" value="1"/>
+    <value nick="kb/s" value="2"/>
+    <value nick="Kibit/s" value="3"/>
+    <value nick="kBps" value="4"/>
+    <value nick="KiBps" value="5"/>
+    <value nick="Kibps" value="6"/>
+    <value nick="kbps" value="7"/>
+    <value nick="Kibitps" value="8"/>
+    <value nick="k " value="9"/>
+    <value nick="Ki" value="10"/>
+  </enum>
+  
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- GENERAL -->
     <key name="panel-box" enum="org.gnome.shell.extensions.astra-monitor.enum.panel-box">
@@ -179,6 +192,11 @@
       <summary>Main storage</summary>
       <description>Storage to show on the header of the storage monitor</description>
     </key>
+    <key name="storage-io-unit" enum="org.gnome.shell.extensions.astra-monitor.enum.data-unit">
+      <default>'kB/s'</default>
+      <summary>Storage IO Unit</summary>
+      <description>Unit of measurement for the storage IO</description>
+    </key>
     <key name="storage-header-show" type="b">
       <default>true</default>
       <summary>Storage Header</summary>
@@ -216,6 +234,11 @@
       <summary>Network IO Update Frequency</summary>
       <description>Seconds between network IO statistics updates</description>
       <range min="0.1" max="10"/>
+    </key>
+    <key name="network-io-unit" enum="org.gnome.shell.extensions.astra-monitor.enum.data-unit">
+      <default>'kB/s'</default>
+      <summary>Network IO Unit</summary>
+      <description>Unit of measurement for the network IO</description>
     </key>
     <key name="network-header-show" type="b">
       <default>true</default>

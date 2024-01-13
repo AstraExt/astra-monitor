@@ -80,6 +80,23 @@ export const StorageGraph = GObject.registerClass({
         this.historyGrid.attach(label, 0, 3, 1, 1);
         label = new St.Label({text: _('now'), style_class: 'astra-monitor-graph-label-now'});
         this.historyGrid.attach(label, 1, 3, 1, 1);
+        
+        Config.connect(this, 'changed::storage-io-unit', () => {
+            let slicedHistory = this.history.slice(0, this.historyLimit);
+            const maxRead = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesReadPerSec), 0), 1024 * 1024);
+            const maxWrite = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesWrittenPerSec), 0), 1024 * 1024);
+            this.refreshMaxSpeed(maxRead, maxWrite);
+        });
+    }
+    
+    refreshMaxSpeed(maxRead, maxWrite) {
+        const unit = Config.get_string('storage-io-unit');
+            
+        if(this.maxReadSpeedLabel)
+            this.maxReadSpeedLabel.text = Utils.formatBytesPerSec(maxRead, unit, 2);
+
+        if(this.maxWriteSpeedLabel)
+            this.maxWriteSpeedLabel.text = Utils.formatBytesPerSec(maxWrite, unit, 2);
     }
     
     repaint() {
@@ -100,12 +117,9 @@ export const StorageGraph = GObject.registerClass({
             const baseX = (this.historyLimit - slicedHistory.length) * pointSpacing;
             
             const maxRead = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesReadPerSec), 0), 1024 * 1024);
-            if(this.maxReadSpeedLabel)
-                this.maxReadSpeedLabel.text = Utils.formatBytesPerSec(maxRead, 2);
-
             const maxWrite = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesWrittenPerSec), 0), 1024 * 1024);
-            if(this.maxWriteSpeedLabel)
-                this.maxWriteSpeedLabel.text = Utils.formatBytesPerSec(maxWrite, 2);
+            
+            this.refreshMaxSpeed(maxRead, maxWrite);
             
             Clutter.cairo_set_source_color(ctx, this.colors[0][1]);
             const readFunc = (node) => node.bytesReadPerSec / maxRead;

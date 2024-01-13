@@ -76,6 +76,24 @@ export const NetworkGraph = GObject.registerClass({
         this.historyGrid.attach(label, 0, 3, 1, 1);
         label = new St.Label({text: _('now'), style_class: 'astra-monitor-graph-label-now'});
         this.historyGrid.attach(label, 1, 3, 1, 1);
+        
+        Config.connect(this, 'changed::network-io-unit', () => {
+            let slicedHistory = this.history.slice(0, this.historyLimit);
+            const maxUpload = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesUploadedPerSec), 0), 56 * 1024);
+            const maxDownload = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesDownloadedPerSec), 0), 256 * 1024);
+            this.refreshMaxSpeed(maxUpload, maxDownload);
+        });
+    }
+    
+    refreshMaxSpeed(maxUpload, maxDownload) {
+        const unit = Config.get_string('network-io-unit');
+        
+        if(this.maxUploadSpeedLabel)
+            this.maxUploadSpeedLabel.text = Utils.formatBytesPerSec(maxUpload, unit, 2);
+
+        if(this.maxDownloadSpeedLabel)
+            this.maxDownloadSpeedLabel.text = Utils.formatBytesPerSec(maxDownload, unit, 2);
+        
     }
     
     repaint() {
@@ -95,12 +113,9 @@ export const NetworkGraph = GObject.registerClass({
             const baseX = (this.historyLimit - slicedHistory.length) * pointSpacing;
             
             const maxUpload = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesUploadedPerSec), 0), 56 * 1024);
-            if(this.maxUploadSpeedLabel)
-                this.maxUploadSpeedLabel.text = Utils.formatBytesPerSec(maxUpload, 2);
-
             const maxDownload = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesDownloadedPerSec), 0), 256 * 1024);
-            if(this.maxDownloadSpeedLabel)
-                this.maxDownloadSpeedLabel.text = Utils.formatBytesPerSec(maxDownload, 2);
+            
+            this.refreshMaxSpeed(maxUpload, maxDownload);
             
             Clutter.cairo_set_source_color(ctx, this.colors[0][1]);
             const uploadFunc = (node) => node.bytesUploadedPerSec / maxUpload;

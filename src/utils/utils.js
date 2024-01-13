@@ -355,24 +355,41 @@ export default class Utils {
         return paths;
     }
     
-    static formatBytesPerSec(bytes, maxNumbers = 2, padded = false) {
-        if(!bytes || isNaN(bytes))
-            return '-' + (padded ? '   ' : ' ') + 'B/s';
+    static unitMap = {
+        'kB/s': {base: 1000, mult:1, labels: ['B/s', 'kB/s', 'MB/s', 'GB/s', 'TB/s']},
+        'KiB/s': {base: 1024, mult:1, labels: ['B/s', 'KiB/s', 'MiB/s', 'GiB/s', 'TiB/s']},
+        'kb/s': {base: 1000, mult:8, labels: ['b/s', 'kb/s', 'Mb/s', 'Gb/s', 'Tb/s']},
+        'Kibit/s': {base: 1024, mult:8, labels: ['bit/s', 'Kibit/s', 'Mibit/s', 'Gibit/s', 'Tibit/s']},
+        'kBps': {base: 1000, mult:1, labels: ['Bps', 'kBps', 'MBps', 'GBps', 'TBps']},
+        'KiBps': {base: 1024, mult:1, labels: ['Bps', 'KiBps', 'MiBps', 'GiBps', 'TiBps']},
+        'Kibps': {base: 1024, mult:8, labels: ['bps', 'Kibps', 'Mibps', 'Gibps', 'Tibps']},
+        'kbps': {base: 1000, mult:8, labels: ['bps', 'kbps', 'Mbps', 'Gbps', 'Tbps']},
+        'Kibitps': {base: 1024, mult:8, labels: ['bitps', 'Kibitps', 'Mibitps', 'Gibitps', 'Tibitps']},
+        'k ': {base: 1000, mult:1, labels: [' ', 'k', 'M', 'G', 'T']},
+        'Ki': {base: 1024, mult:1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti']},
+    };
+    
+    static formatBytesPerSec(value, unit, maxNumbers = 2, padded = false) {
+        if(!this.unitMap.hasOwnProperty(unit))
+            unit = 'kB/s';
         
-        const units = [(padded ? '  ' : '') + 'B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s'];
+        if(!value || isNaN(value))
+            return '-' + (padded ? '   ' : ' ') + this.unitMap[unit].labels[0];
+        
+        value *= this.unitMap[unit].mult;
+        
         let unitIndex = 0;
-        
-        while (bytes >= Math.pow(10, maxNumbers) && unitIndex < units.length - 1) {
-            bytes /= 1024;
+        while(value >= Math.pow(10, maxNumbers) && unitIndex < this.unitMap[unit].labels.length - 1) {
+            value /= this.unitMap[unit].base;
             unitIndex++;
         }
         
         //fix 100 / 1024 = 0.09765625
-        if(bytes < 0.1)
-            bytes = 0.1;
+        if(value < 0.1)
+            value = 0.1;
         
         // Convert to string and truncate to maxNumbers significant figures
-        let result = bytes.toString();
+        let result = value.toString();
         if (result.indexOf('.') !== -1) {
             let parts = result.split('.');
             if (parts[0].length >= maxNumbers) {
@@ -383,7 +400,7 @@ export default class Utils {
         } else if (result.length > maxNumbers) {
             result = result.substr(0, maxNumbers);
         }
-        return `${result} ${units[unitIndex]}`;
+        return `${result} ${this.unitMap[unit].labels[unitIndex]}`;
     }
     
     static formatBytes(bytes, maxNumbers = 2) {

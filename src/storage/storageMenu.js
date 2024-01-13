@@ -486,13 +486,15 @@ export class StorageMenu extends MenuBase {
             
             let current = Utils.storageMonitor.getCurrentValue('storageIO');
             if(current) {
+                const unit = Config.get_string('storage-io-unit');
+                
                 if(current.bytesReadPerSec)
-                    this.totalReadSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesReadPerSec, 3);
+                    this.totalReadSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesReadPerSec, unit, 3);
                 else
                     this.totalReadSpeedValueLabel.text = '-';
                 
                 if(current.bytesWrittenPerSec)
-                    this.totalWriteSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesWrittenPerSec, 3);
+                    this.totalWriteSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesWrittenPerSec, unit, 3);
                 else
                     this.totalWriteSpeedValueLabel.text = '-';
             }
@@ -514,8 +516,10 @@ export class StorageMenu extends MenuBase {
                         const data = current.get(kname);
                         
                         if(data) {
+                            const unit = Config.get_string('storage-io-unit');
+                            
                             if(data.bytesReadPerSec) {
-                                device.readValueLabel.text = Utils.formatBytesPerSec(data.bytesReadPerSec, 3);
+                                device.readValueLabel.text = Utils.formatBytesPerSec(data.bytesReadPerSec, unit, 3);
                                 // TODO: make this color customizable!?
                                 device.readActivityIcon.style = 'color:rgb(29,172,214);';
                             }
@@ -525,7 +529,7 @@ export class StorageMenu extends MenuBase {
                             }
                             
                             if(data.bytesWrittenPerSec) {
-                                device.writeValueLabel.text = Utils.formatBytesPerSec(data.bytesWrittenPerSec, 3);
+                                device.writeValueLabel.text = Utils.formatBytesPerSec(data.bytesWrittenPerSec, unit, 3);
                                 // TODO: make this color customizable!?
                                 device.writeActivityIcon.style = 'color:rgb(214,29,29);';
                             }

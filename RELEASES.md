@@ -3,7 +3,8 @@
 ### New features
 - Used Memory customization: now you can choose the formula to calculate used memory
 - Swap Memory info expanded with a popup menu to show more details, including swap devices and usage per device
-- Added About page in the Preferences window with version number and useful links
+- Added About page in the Preferences window with version number and useful links [[#8](https://github.com/AstraExt/astra-monitor/issues/8)]
+- Added Data Unit customization for network and storage [[#13](https://github.com/AstraExt/astra-monitor/issues/13)]
 
 ### Bug fixes
 - Fixed a bug where the used memory was not being calculated correctly [[#9](https://github.com/AstraExt/astra-monitor/issues/9)] [[#10](https://github.com/AstraExt/astra-monitor/issues/10)]

@@ -167,8 +167,9 @@ export const StorageHeader = GObject.registerClass({
                 this.write.text = '- B/s';
             }
             else {
-                this.read.text = Utils.formatBytesPerSec(usage.bytesReadPerSec);
-                this.write.text = Utils.formatBytesPerSec(usage.bytesWrittenPerSec);
+                const unit = Config.get_string('storage-io-unit');
+                this.read.text = Utils.formatBytesPerSec(usage.bytesReadPerSec, unit);
+                this.write.text = Utils.formatBytesPerSec(usage.bytesWrittenPerSec, unit);
             }
         });
     }

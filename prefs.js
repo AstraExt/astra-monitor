@@ -209,6 +209,21 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(_('Show'), 'storage-header-show', group);
         this.addSpinRow(_('Update frequency (seconds)'), 'storage-update', group, 0.1, 10, 1, 0.1, 1, true, true);
         
+        choicesPanel = [
+            {value: 'kB/s', text: _('kB/s')},
+            {value: 'KiB/s', text: _('KiB/s')},
+            {value: 'kb/s', text: _('kb/s')},
+            {value: 'Kibit/s', text: _('Kibit/s')},
+            {value: 'kBps', text: _('kBps')},
+            {value: 'KiBps', text: _('KiBps')},
+            {value: 'Kibps', text: _('Kibps')},
+            {value: 'kbps', text: _('kbps')},
+            {value: 'Kibitps', text: _('Kibitps')},
+            {value: 'k ', text: _('k (as kB/s)')},
+            {value: 'Ki', text: _('Ki (as KiB/s)')},
+        ];
+        this.addComboRow(_('Data Unit'), choicesPanel, 'storage-io-unit', group, 'string');
+        
         const storageMain = Config.get_string('storage-main');
         const disks = Utils.listDisksSync();
         
@@ -254,6 +269,22 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         group = new Adw.PreferencesGroup({title: _('Network')});
         this.addSwitchRow(_('Show'), 'network-header-show', group);
         this.addSpinRow(_('Update frequency (seconds)'), 'network-update', group, 0.1, 10, 1, 0.1, 1, true, true);
+        
+        choicesPanel = [
+            {value: 'kB/s', text: _('kB/s')},
+            {value: 'KiB/s', text: _('KiB/s')},
+            {value: 'kb/s', text: _('kb/s')},
+            {value: 'Kibit/s', text: _('Kibit/s')},
+            {value: 'kBps', text: _('kBps')},
+            {value: 'KiBps', text: _('KiBps')},
+            {value: 'Kibps', text: _('Kibps')},
+            {value: 'kbps', text: _('kbps')},
+            {value: 'Kibitps', text: _('Kibitps')},
+            {value: 'k ', text: _('k (as kB/s)')},
+            {value: 'Ki', text: _('Ki (as KiB/s)')},
+        ];
+        this.addComboRow(_('Data Unit'), choicesPanel, 'network-io-unit', group, 'string');
+        
         networkPage.add(group);
         
         group = new Adw.PreferencesGroup({title: 'Header'});
