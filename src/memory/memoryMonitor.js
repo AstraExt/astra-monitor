@@ -86,7 +86,7 @@ export class MemoryMonitor extends Monitor {
             }
             
             if(this.isListeningFor('swapUsage')) {
-                this.runUpdate('swapUsage');
+                this.runUpdate('swapUsage', procMeminfo);
             }
         }
         
@@ -108,7 +108,8 @@ export class MemoryMonitor extends Monitor {
         }
         else if(key === 'swapUsage') {
             if(!this.updateSwapUsageTask.isRunning) {
-                this.runUpdate('swapUsage');
+                const procMeminfo = this.getProcMeminfoAsync();
+                this.runUpdate('swapUsage', procMeminfo);
             }
         }
         super.requestUpdate(key);
@@ -180,9 +181,9 @@ export class MemoryMonitor extends Monitor {
         let procMeminfoValue = await procMeminfo.getValue();
         if(procMeminfoValue.length < 1)
             return false;
-    
+        
         let total = 0, free = 0, buffers = 0, cached = 0, available = 0, active = 0;
-    
+        
         for (let i = 0; i < procMeminfoValue.length; i++) {
             let parts = procMeminfoValue[i].split(/\s+/);
             let key = parts[0].trim();
@@ -290,35 +291,68 @@ export class MemoryMonitor extends Monitor {
     /**
      * @returns {Promise<boolean>}
      */
-    async updateSwapUsage() {
-        //TODO: add cat /proc/swaps support to get swap location
+    async updateSwapUsage(procMeminfo) {
+        let procMeminfoValue = await procMeminfo.getValue();
+        if(procMeminfoValue.length < 1)
+            return false;
         
-        const swapUsage = {};
+        let total = 0, free = 0, cached = 0, zswap = 0, zswapped = 0;
+        
+        for (let i = 0; i < procMeminfoValue.length; i++) {
+            let parts = procMeminfoValue[i].split(/\s+/);
+            
+            let key = parts[0].trim();
+            let value = parseInt(parts[1]);
+            
+            switch (key) {
+                case 'SwapTotal:': total = value * 1024; break;
+                case 'SwapFree:': free = value * 1024; break;
+                case 'SwapCached:': cached = value * 1024; break;
+                case 'Zswap:': zswap = value * 1024; break;
+                case 'Zswapped:': zswapped = value * 1024; break;
+            }
+        }
+        
+        const used = total - free;
+        
+        const swapUsage = {
+            total,
+            used,
+            free,
+            cached,
+            zswap,
+            zswapped
+        };
         
         try {
-            const result = await Utils.executeCommandAsync('free -b');
-            if(result) {
-                const lines = result.split('\n');
+            let fileContent = await Utils.readFileAsync(`/proc/swaps`);
+            if(fileContent) {
+                const lines = fileContent.split('\n');
                 lines.shift(); // Remove the first line (header)
                 
+                const swapDevices = [];
                 for(let line of lines) {
                     if(line.trim() === '')
                         continue;
                     
-                    const [name, total, used, free] = line.split(' ').filter(n => n.trim() !== '');
+                    const [device, type, size, used, priority] = line.split(/\s+/);
                     
-                    if(name === 'Swap:') {
-                        swapUsage.total = parseInt(total);
-                        swapUsage.used = parseInt(used);
-                        swapUsage.free = parseInt(free);
-                        break;
-                    }
-                };
+                    if(!Utils.isNumeric(size) || !Utils.isNumeric(used))
+                        continue;
+                    
+                    swapDevices.push({
+                        device,
+                        type,
+                        size: parseInt(size, 10) * 1024,
+                        used: parseInt(used, 10) * 1024,
+                        priority: parseInt(priority, 10)
+                    });
+                }
+                swapUsage.devices = swapDevices;
             }
         }
         catch(e) {
             Utils.error(e.message);
-            return false;
         }
         
         this.setUsageValue('swapUsage', swapUsage);

@@ -101,7 +101,6 @@ export class SensorsMenu extends MenuBase {
     }
     
     /**
-     * 
      * @param {Map<string[]>} valueTree 
      * @returns 
      */

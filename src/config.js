@@ -29,7 +29,6 @@ export default class Config {
     static connectMap = new Map();
 
     /**
-     * 
      * @param {string} key 
      * @param {*} value 
      * @param {'any'|'boolean'|'string'|'int'|'number'} type 
@@ -48,7 +47,6 @@ export default class Config {
     }
 
     /**
-     * 
      * @param {string} key
      * @returns {GLib.Variant}
      */
@@ -57,7 +55,6 @@ export default class Config {
     }
 
     /**
-     * 
      * @param {string} key 
      * @returns {boolean}
      */
@@ -66,7 +63,6 @@ export default class Config {
     }
 
     /**
-     * 
      * @param {string} key 
      * @returns {string}
      */
@@ -75,7 +71,6 @@ export default class Config {
     }
     
     /**
-     * 
      * @param {string} key 
      * @returns {any}
      */
@@ -89,7 +84,6 @@ export default class Config {
     }
 
     /**
-     * 
      * @param {string} key
      * @returns {number}
      */

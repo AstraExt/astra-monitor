@@ -17,7 +17,6 @@
 
 export default class TopProcessesCache {
     /**
-     * 
      * @param {number} updateTime 
      */
     constructor(updateTime) {
@@ -53,7 +52,6 @@ export default class TopProcessesCache {
     }
     
     /**
-     * 
      * @param {number} pid 
      * @returns {Process}
      */

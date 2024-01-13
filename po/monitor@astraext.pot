@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 20:38+0100\n"
+"POT-Creation-Date: 2024-01-13 01:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -253,15 +253,15 @@ msgstr ""
 msgid "Memory Usage Raw Info"
 msgstr ""
 
-#: src/memory/memoryMenu.js:133
+#: src/memory/memoryMenu.js:133 src/memory/memoryMenu.js:411
 msgid "Total"
 msgstr ""
 
-#: src/memory/memoryMenu.js:147
+#: src/memory/memoryMenu.js:147 src/memory/memoryMenu.js:425
 msgid "Used"
 msgstr ""
 
-#: src/memory/memoryMenu.js:161
+#: src/memory/memoryMenu.js:161 src/memory/memoryMenu.js:439
 msgid "Free"
 msgstr ""
 
@@ -281,12 +281,28 @@ msgstr ""
 msgid "Buffers"
 msgstr ""
 
-#: src/memory/memoryMenu.js:231
+#: src/memory/memoryMenu.js:231 src/memory/memoryMenu.js:453
 msgid "Cached"
 msgstr ""
 
 #: src/memory/memoryMenu.js:341
 msgid "Swap"
+msgstr ""
+
+#: src/memory/memoryMenu.js:407
+msgid "Swap Info"
+msgstr ""
+
+#: src/memory/memoryMenu.js:467
+msgid "Zswap"
+msgstr ""
+
+#: src/memory/memoryMenu.js:481
+msgid "Zswapped"
+msgstr ""
+
+#: src/memory/memoryMenu.js:494
+msgid "Swap Devices"
 msgstr ""
 
 #: prefs.js:52

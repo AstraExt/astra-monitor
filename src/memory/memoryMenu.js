@@ -386,16 +386,123 @@ export class MemoryMenu extends MenuBase {
         
         hoverButton.add_actor(grid);
         
+        this.createSwapPopup(hoverButton);
+        
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            
+            if(this.memorySwapPopup)
+                this.memorySwapPopup.open(true);
         });
         
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            
+            if(this.memorySwapPopup)
+                this.memorySwapPopup.close(true);
         });
         this.addToMenu(hoverButton, 2);
+    }
+    
+    createSwapPopup(sourceActor) {
+        this.memorySwapPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 3 });
+        this.memorySwapPopup.addMenuSection(_('Swap Info'), 'centered');
+        
+        //Total Swap
+        this.memorySwapPopup.addToMenu(new St.Label({
+            text: _('Total'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalQtyLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(totalQtyLabel);
+        this.memorySwapPopup['totalQtyLabel'] = totalQtyLabel;
+        
+        const totalPercLabel = new St.Label({text: '', style: 'width:4em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(totalPercLabel);
+        this.memorySwapPopup['totalPercLabel'] = totalPercLabel;
+        
+        //Used Swap
+        this.memorySwapPopup.addToMenu(new St.Label({
+            text: _('Used'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const usedQtyLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(usedQtyLabel);
+        this.memorySwapPopup['usedQtyLabel'] = usedQtyLabel;
+        
+        const usedPercLabel = new St.Label({text: '', style: 'width:4em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(usedPercLabel);
+        this.memorySwapPopup['usedPercLabel'] = usedPercLabel;
+        
+        //Free Swap
+        this.memorySwapPopup.addToMenu(new St.Label({
+            text: _('Free'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const freeQtyLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(freeQtyLabel);
+        this.memorySwapPopup['freeQtyLabel'] = freeQtyLabel;
+        
+        const freePercLabel = new St.Label({text: '', style: 'width:4em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(freePercLabel);
+        this.memorySwapPopup['freePercLabel'] = freePercLabel;
+        
+        //Cached Swap
+        this.memorySwapPopup.addToMenu(new St.Label({
+            text: _('Cached'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const cachedQtyLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(cachedQtyLabel);
+        this.memorySwapPopup['cachedQtyLabel'] = cachedQtyLabel;
+        
+        const cachedPercLabel = new St.Label({text: '', style: 'width:4em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(cachedPercLabel);
+        this.memorySwapPopup['cachedPercLabel'] = cachedPercLabel;
+        
+        //Zswap Swap
+        this.memorySwapPopup.addToMenu(new St.Label({
+            text: _('Zswap'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const zswapQtyLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(zswapQtyLabel);
+        this.memorySwapPopup['zswapQtyLabel'] = zswapQtyLabel;
+        
+        const zswapPercLabel = new St.Label({text: '', style: 'width:4em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(zswapPercLabel);
+        this.memorySwapPopup['zswapPercLabel'] = zswapPercLabel;
+        
+        //Zswapped Swap
+        this.memorySwapPopup.addToMenu(new St.Label({
+            text: _('Zswapped'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const zswappedQtyLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(zswappedQtyLabel);
+        this.memorySwapPopup['zswappedQtyLabel'] = zswappedQtyLabel;
+        
+        const zswappedPercLabel = new St.Label({text: '', style: 'width:4em;text-align:right;'});
+        this.memorySwapPopup.addToMenu(zswappedPercLabel);
+        this.memorySwapPopup['zswappedPercLabel'] = zswappedPercLabel;
+        
+        //Swap Devices
+        const devicesTitle = this.memorySwapPopup.addMenuSection(_('Swap Devices'), 'centered');
+        this.memorySwapPopup['devicesTitle'] = devicesTitle;
+        
+        const devicesGrid = new Grid({
+            numCols: 1,
+            styleClass: 'astra-monitor-menu-subgrid',
+            x_expand: true
+        });
+        this.memorySwapPopup['devicesGrid'] = devicesGrid;
+        this.memorySwapPopup['devices'] = '';
+        
+        this.memorySwapPopup.addToMenu(devicesGrid, 3);
     }
     
     onOpen() {
@@ -561,6 +668,109 @@ export class MemoryMenu extends MenuBase {
                 
                 this.swapTotalQty.text = Utils.formatBytes(swapUsage.total, 3);
                 this.swapUsedQty.text = Utils.formatBytes(swapUsage.used, 3);
+                
+                if(this.memorySwapPopup) {
+                    this.memorySwapPopup['totalQtyLabel'].text = Utils.formatBytes(swapUsage.total, 3);
+                    
+                    if(swapUsage.used && !isNaN(swapUsage.used)) {
+                        this.memorySwapPopup['usedQtyLabel'].text = Utils.formatBytes(swapUsage.used, 3);
+                        this.memorySwapPopup['usedPercLabel'].text = (swapUsage.used / swapUsage.total * 100).toFixed(1) + '%';
+                    }
+                    else {
+                        this.memorySwapPopup['usedQtyLabel'].text = '-';
+                        this.memorySwapPopup['usedPercLabel'].text = '';
+                    }
+                    
+                    if(swapUsage.free && !isNaN(swapUsage.free)) {
+                        this.memorySwapPopup['freeQtyLabel'].text = Utils.formatBytes(swapUsage.free, 3);
+                        this.memorySwapPopup['freePercLabel'].text = (swapUsage.free / swapUsage.total * 100).toFixed(1) + '%';
+                    }
+                    else {
+                        this.memorySwapPopup['freeQtyLabel'].text = '-';
+                        this.memorySwapPopup['freePercLabel'].text = '';
+                    }
+                    
+                    if(swapUsage.cached && !isNaN(swapUsage.cached)) {
+                        this.memorySwapPopup['cachedQtyLabel'].text = Utils.formatBytes(swapUsage.cached, 3);
+                        this.memorySwapPopup['cachedPercLabel'].text = (swapUsage.cached / swapUsage.total * 100).toFixed(1) + '%';
+                    }
+                    else {
+                        this.memorySwapPopup['cachedQtyLabel'].text = '-';
+                        this.memorySwapPopup['cachedPercLabel'].text = '';
+                    }
+                    
+                    if(swapUsage.zswap && !isNaN(swapUsage.zswap))
+                        this.memorySwapPopup['zswapQtyLabel'].text = Utils.formatBytes(swapUsage.zswap, 3);
+                    else
+                        this.memorySwapPopup['zswapQtyLabel'].text = '-';
+                    
+                    if(swapUsage.zswapped && !isNaN(swapUsage.zswapped))
+                        this.memorySwapPopup['zswappedQtyLabel'].text = Utils.formatBytes(swapUsage.zswapped, 3);
+                    else
+                        this.memorySwapPopup['zswappedQtyLabel'].text = '-';
+                    
+                    if(swapUsage.devices && Array.isArray(swapUsage.devices)) {
+                        const hash = JSON.stringify(swapUsage.devices);
+                        if(this.memorySwapPopup['devices'] !== hash) {
+                            const devicesGrid = this.memorySwapPopup['devicesGrid'];
+                            devicesGrid.remove_all_children();
+                            
+                            for(let i = 0; i < swapUsage.devices.length; i++) {
+                                const device = swapUsage.devices[i];
+                                
+                                const deviceGrid = new Grid({
+                                    numCols: 2,
+                                    styleClass: 'astra-monitor-menu-subgrid',
+                                    x_expand: true
+                                });
+                                
+                                deviceGrid.addToGrid(new St.Label({
+                                    text: device.device,
+                                    style_class: 'astra-monitor-menu-label',
+                                    x_expand: true
+                                }), 2);
+                                
+                                deviceGrid.addToGrid(new St.Label({
+                                    text: Utils.capitalize(device.type),
+                                    style_class: 'astra-monitor-menu-unmonitored',
+                                    x_expand: true
+                                }));
+                                
+                                deviceGrid.addToGrid(new St.Label({
+                                    text: Utils.formatBytes(device.used, 3) + ' / ' + Utils.formatBytes(device.size, 3),
+                                    style_class: 'astra-monitor-menu-value',
+                                    x_expand: true
+                                }));
+                                
+                                devicesGrid.addToGrid(deviceGrid);
+                            }
+                            
+                        }
+                    }
+                    else {
+                        this.memorySwapPopup['devicesTitle'].hide();
+                        this.memorySwapPopup['devicesGrid'].hide();
+                        this.memorySwapPopup['devices'] = '';
+                    }
+                }
+            }
+            else {
+                this.swapBar.setUsage([]);
+                
+                this.swapTotalQty.text = '';
+                this.swapUsedQty.text = '';
+                
+                if(this.memorySwapPopup) {
+                    this.memorySwapPopup['totalQtyLabel'].text = '';
+                    this.memorySwapPopup['usedQtyLabel'].text = '';
+                    this.memorySwapPopup['usedPercLabel'].text = '';
+                    this.memorySwapPopup['freeQtyLabel'].text = '';
+                    this.memorySwapPopup['freePercLabel'].text = '';
+                    this.memorySwapPopup['cachedQtyLabel'].text = '';
+                    this.memorySwapPopup['cachedPercLabel'].text = '';
+                    this.memorySwapPopup['zswapQtyLabel'].text = '';
+                    this.memorySwapPopup['zswappedQtyLabel'].text = '';
+                }
             }
             return;
         }

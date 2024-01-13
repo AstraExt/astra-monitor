@@ -221,7 +221,6 @@ export default class Utils {
     }
     
     /**
-     * 
      * @param {string} lspciOutput 
      * @param {string[]} keywords 
      * @param {number} collect 
@@ -266,7 +265,6 @@ export default class Utils {
     }
     
     /**
-     * 
      * @param {string[]} lspciOutputs 
      * @param {string} gpu 
      * @returns 
