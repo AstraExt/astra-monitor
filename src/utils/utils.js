@@ -508,14 +508,16 @@ export default class Utils {
     }
     
     static inferMeasurementUnit(key) {
-        if (key.startsWith('temp'))
+        if(key.startsWith('temp'))
             return '°C';
-        if (key.startsWith('fan'))
+        if(key.startsWith('fan'))
             return 'RPM';
-        if (key.startsWith('in'))
+        if(key.startsWith('in'))
             return 'V';
-        if (key.startsWith('power'))
+        if(key.startsWith('power'))
             return 'W';
+        if(key.startsWith('curr'))
+            return 'A';
         return '';
     }
     

@@ -261,6 +261,10 @@ export class SensorsMenu extends MenuBase {
                         icon.gicon = Utils.getLocalIcon('am-power-symbolic');
                         icon.fallback_icon_name = 'plug-symbolic';
                     }
+                    else if(unit === 'A') {
+                        icon.gicon = Utils.getLocalIcon('am-current-symbolic');
+                        icon.fallback_icon_name = 'battery-symbolic';
+                    }
                     
                     if(icon.gicon)
                         value.icon.gicon = icon.gicon;
