@@ -125,30 +125,33 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         group = new Adw.PreferencesGroup({title: _('Visualization')});
         
+        const themeSection = this.addExpanderRow(_('Theme'), group);
         let choicesPanel = [
             {value: 'dark', text: _('Dark')},
             {value: 'light', text: _('Light')}
         ];
-        this.addComboRow(_('Shell Theme Style'), choicesPanel, 'theme-style', group, 'string');
+        this.addComboRow(this.tab + _('Shell Theme Style'), choicesPanel, 'theme-style', themeSection, 'string');
         
+        const panelSection = this.addExpanderRow(_('Panel Box'), group);
         choicesPanel = [
             {value: 'left', text: _('Left')},
             {value: 'center', text: _('Center')},
             {value: 'right', text: _('Right')},
         ];
-        this.addComboRow(_('Panel Box'), choicesPanel, 'panel-box', group, 'string');
-        this.addSpinRow({title: _('Panel Box Ordering')}, 'panel-box-order', group, {min: -10, max: 10, digits: 0, step: 1, page: 1}, true);
+        this.addComboRow(this.tab + _('Position'), choicesPanel, 'panel-box', panelSection, 'string');
+        this.addSpinRow({title: this.tab + _('Order')}, 'panel-box-order', panelSection, {min: -10, max: 10, digits: 0, step: 1, page: 1}, true);
         
+        const headersSection = this.addExpanderRow(_('Headers'), group);
         this.addSpinRow({
             title: this.tab + _('Headers Height'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 28'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'headers-height', group, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true);
+        }, 'headers-height', headersSection, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true);
         this.addSpinRow({
             title: this.tab + _('Headers Margins'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 2'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'headers-margins', group, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true);
+        }, 'headers-margins', headersSection, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true);
         
         generalPage.add(group);
         
@@ -327,6 +330,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Show Storage Usage Percentage'), 'storage-header-percentage', barsSection);
         
         const ioSection = this.addExpanderRow(_('IO'), group);
+        this.addSwitchRow(this.tab + _('Show Realtime IO Bar'), 'storage-header-io-bars', ioSection);
         this.addSwitchRow(this.tab + _('Show IO History Graph'), 'storage-header-graph', ioSection);  
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'storage-header-io', ioSection);  
@@ -369,11 +373,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
-
-        const barsSection = this.addExpanderRow(_('Usage Bar'), group);
-        this.addSwitchRow(this.tab + _('Show Network Usage Bar'), 'network-header-bars', barsSection);
         
         const ioSection = this.addExpanderRow(_('IO'), group);
+        this.addSwitchRow(this.tab + _('Show Realtime IO Bar'), 'network-header-bars', ioSection);
         this.addSwitchRow(this.tab + _('Show IO History Graph'), 'network-header-graph', ioSection); 
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'network-header-io', ioSection);
@@ -416,10 +418,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         for(const source of sources)
             choicesSource.push({value: source.value, text: source.text});
         
-        this.addSwitchRow(_('Show Sensor 1'), 'sensors-header-sensor1-show', group);
-        this.addComboRow(_('Sensor 1 Source'), choicesSource, 'sensors-header-sensor1', group, 'json');
-        this.addSwitchRow(_('Show Sensor 2'), 'sensors-header-sensor2-show', group);
-        this.addComboRow(_('Sensor 2 Source'), choicesSource, 'sensors-header-sensor2', group, 'json');
+        const sensor1Section = this.addExpanderRow(_('Sensor 1'), group);
+        this.addSwitchRow(this.tab + _('Show'), 'sensors-header-sensor1-show', sensor1Section);
+        this.addComboRow(this.tab + _('Source'), choicesSource, 'sensors-header-sensor1', sensor1Section, 'json');
+        
+        const sensor2Section = this.addExpanderRow(_('Sensor 2'), group);
+        this.addSwitchRow(this.tab + _('Show'), 'sensors-header-sensor2-show', sensor2Section);
+        this.addComboRow(this.tab + _('Source'), choicesSource, 'sensors-header-sensor2', sensor2Section, 'json');
         sensorsPage.add(group);
         
         return sensorsPage;
@@ -613,10 +618,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         });
         
         const row = new Adw.ActionRow({title});
-        if(group.add)
-            group.add(row);
-        else
-            group.add_row(row);
         
         const select = new Gtk.DropDown({
             model: stringList,
@@ -644,7 +645,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             }
         });
         
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
     }
     
     /**

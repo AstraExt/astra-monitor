@@ -18,26 +18,33 @@
 import GObject from 'gi://GObject';
 
 import { BarsBase } from '../bars.js';
+import Utils from '../utils/utils.js';
 
-export const StorageBars = GObject.registerClass({
+export const StorageIOBars = GObject.registerClass({
     
-}, class StorageBarsBase extends BarsBase {
+}, class StorageBarsIOBase extends BarsBase {
     constructor(params) {
         //TODO: Make these configurable
         if(params.colors === undefined)
-            params.colors = ['rgb(29,172,214)'];
+            params.colors = ['rgb(29,172,214)', 'rgb(214,29,29)'];
         
         super(params);
     }
     
     setUsage(usage) {
-        if(!usage || !usage.hasOwnProperty('usePercentage')) {
+        if(!usage || !Array.isArray(usage)) {
             this.updateBars([]);
             return;
         }
         
+        let readSpeed = usage[0].bytesReadPerSec || 0;
+        let writeSpeed = usage[0].bytesWrittenPerSec || 0;
+        let maxReadSpeed = usage.reduce((max, cur) => Math.max(max, cur.bytesReadPerSec), 0);
+        let maxWriteSpeed = usage.reduce((max, cur) => Math.max(max, cur.bytesWrittenPerSec), 0);
+        
         this.updateBars([
-            [{ color: 0, value: usage.usePercentage / 100.0 }],
+            [{ color: 0, value: readSpeed / maxReadSpeed }],
+            [{ color: 1, value: writeSpeed / maxWriteSpeed }],
         ]);
     }
 });

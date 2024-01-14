@@ -26,6 +26,7 @@ import Utils from '../utils/utils.js';
 import {StorageMenu} from './storageMenu.js';
 import {StorageGraph} from './storageGraph.js';
 import {StorageBars} from './storageBars.js';
+import { StorageIOBars } from './storageIOBars.js';
 
 export const StorageHeader = GObject.registerClass({
     Properties: {
@@ -36,10 +37,11 @@ export const StorageHeader = GObject.registerClass({
         super('Storage Header');
         
         this.buildIcon();
-        this.buildGraph();
-        this.buildSpeed();
         this.buildBars();
         this.buildPercentage();
+        this.buildIOBars();
+        this.buildGraph();
+        this.buildSpeed();
         
         const menu = new StorageMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
@@ -48,12 +50,13 @@ export const StorageHeader = GObject.registerClass({
     }
     
     buildIcon() {
-        //TODO: icon should be a setting
+        let iconSize = Config.get_int('storage-header-icon-size');
+        iconSize = Math.max(8, Math.min(30, iconSize));
         this.icon = new St.Icon({
             gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
             fallback_icon_name: 'drive-harddisk-symbolic',
-            style: 'margin-right: 4px;',
-            icon_size: 18,
+            style: 'margin-left:2px;margin-right:4px;',
+            icon_size: iconSize,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
         });
@@ -106,6 +109,28 @@ export const StorageHeader = GObject.registerClass({
         });
     }
     
+    buildIOBars() {
+        if(this.bars) {
+            this.remove_child(this.bars);
+            Config.clear(this.bars);
+            Utils.storageMonitor.unlisten(this.bars);
+            this.bars.destroy();
+            this.bars = null;
+        }
+        
+        // @ts-ignore
+        this.bars = new StorageIOBars({ numBars: 2, mini: true, width: 0.5 });
+        this.insert_child_at_index(this.bars, 3);
+        Config.bind('storage-header-io-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Utils.storageMonitor.listen(this.bars, 'storageIO', () => {
+            if(!Config.get_boolean('storage-header-io-bars'))
+                return;
+            let usage = Utils.storageMonitor.getUsageHistory('storageIO');
+            this.bars.setUsage(usage);
+        });
+    }
+    
     buildGraph() {
         if(this.graph) {
             this.remove_child(this.graph);
@@ -119,7 +144,7 @@ export const StorageHeader = GObject.registerClass({
         graphWidth = Math.max(10, Math.min(500, graphWidth));
         
         this.graph = new StorageGraph({ width: graphWidth, mini: true });
-        this.insert_child_at_index(this.graph, 3);
+        this.insert_child_at_index(this.graph, 4);
         Config.bind('storage-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this.graph, 'changed::storage-header-graph-width', () => {
@@ -166,7 +191,7 @@ export const StorageHeader = GObject.registerClass({
         this.speedContainer.add_child(this.read);
         this.speedContainer.add_child(this.write);
         
-        this.insert_child_at_index(this.speedContainer, 4);
+        this.insert_child_at_index(this.speedContainer, 5);
         Config.bind('storage-header-io', this.speedContainer, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.storageMonitor.listen(this.speedContainer, 'storageIO', () => {

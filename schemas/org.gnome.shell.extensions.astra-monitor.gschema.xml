@@ -90,6 +90,7 @@
       <default>18</default>
       <summary>Header Icon Size</summary>
       <description>Size in pixel of the icon</description>
+      <range min="8" max="30"/>
     </key>
     <key name="processor-header-percentage" type="b">
       <default>false</default>
@@ -175,6 +176,7 @@
       <default>18</default>
       <summary>Header Icon Size</summary>
       <description>Size in pixel of the icon</description>
+      <range min="8" max="30"/>
     </key>
     <key name="memory-header-percentage" type="b">
       <default>false</default>
@@ -245,6 +247,7 @@
       <default>18</default>
       <summary>Header Icon Size</summary>
       <description>Size in pixel of the icon</description>
+      <range min="8" max="30"/>
     </key>
     <key name="storage-header-percentage" type="b">
       <default>false</default>
@@ -255,6 +258,11 @@
       <default>true</default>
       <summary>Show Storage Usage Bar</summary>
       <description>Show realtime bar of storage usage</description>
+    </key>
+    <key name="storage-header-io-bars" type="b">
+      <default>false</default>
+      <summary>Show Storage Realtime IO Bar</summary>
+      <description>Show realtime bar of IO</description>
     </key>
     <key name="storage-header-graph" type="b">
       <default>false</default>
@@ -299,10 +307,11 @@
       <default>18</default>
       <summary>Header Icon Size</summary>
       <description>Size in pixel of the icon</description>
+      <range min="8" max="30"/>
     </key>
     <key name="network-header-bars" type="b">
       <default>false</default>
-      <summary>Show Network Usage Bar</summary>
+      <summary>Show Network IO Bar</summary>
       <description>Show realtime bar of network usage</description>
     </key>
     <key name="network-header-graph" type="b">
@@ -348,6 +357,7 @@
       <default>18</default>
       <summary>Header Icon Size</summary>
       <description>Size in pixel of the icon</description>
+      <range min="8" max="30"/>
     </key>
     <key name="sensors-header-sensor1-show" type="b">
       <default>false</default>

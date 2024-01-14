@@ -62,12 +62,13 @@ export const SensorsHeader = GObject.registerClass({
     }
     
     buildIcon() {
-        //TODO: icon should be a setting
+        let iconSize = Config.get_int('storage-header-icon-size');
+        iconSize = Math.max(8, Math.min(30, iconSize));
         this.icon = new St.Icon({
             gicon: Utils.getLocalIcon('am-temperature-symbolic'),
             fallback_icon_name: 'temperature-symbolic',
-            style: 'margin-right: 4px;',
-            icon_size: 18,
+            style: 'margin-left:2px;margin-right:4px;',
+            icon_size: iconSize,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
         });

@@ -1,3 +1,15 @@
+# Astra Monitor 4 - TO BE RELEASED
+
+### New features
+- New option for Storage Header: an indicator that shows the global read and write speed through a pair of bars [[#14](https://github.com/AstraExt/astra-monitor/issues/14)]
+- Graph Width customization: now you can choose the width of the header graphs individually
+- Header Height and Margis customization: as experimental feature, you can now change the height of the header's button and its margins to better fit your desktop environment's theme [[#7](https://github.com/AstraExt/astra-monitor/issues/7)]
+- Icon size customization: as experimental feature, now you can choose the size of the icons in the header
+- Preference panel reorganized to better fit more options and to organize them in a more logical way
+
+### Bug fixes
+- Fixes a bug where the icon and the unit was missing in current sensor value [[#16](https://github.com/AstraExt/astra-monitor/issues/16)]
+
 # Astra Monitor 3 - January 14 2024
 
 ### New features
@@ -8,7 +20,7 @@
 
 ### Bug fixes
 - Fixed a bug where the used memory was not being calculated correctly [[#9](https://github.com/AstraExt/astra-monitor/issues/9)] [[#10](https://github.com/AstraExt/astra-monitor/issues/10)]
-- __Swap__-ped from 'free' to '/proc/meminfo' to get swap info. [[#6](https://github.com/AstraExt/astra-monitor/issues/6)]
+- __Swap__-ped from '*free*' to '*/proc/meminfo*' to get swap info. [[#6](https://github.com/AstraExt/astra-monitor/issues/6)]
 - Fixed a bug where the processor name was not being displayed correctly [[#5](https://github.com/AstraExt/astra-monitor/issues/5)]
 - Sensor header should now be more coherent with the rest on the style and width [[#11](https://github.com/AstraExt/astra-monitor/issues/11)]
 - Fixed a graphical bug where the sensor header was not being displayed correctly [[#15](https://github.com/AstraExt/astra-monitor/issues/15)]
