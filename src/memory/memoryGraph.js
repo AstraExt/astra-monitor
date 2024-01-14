@@ -33,7 +33,6 @@ export const MemoryGraph = GObject.registerClass({
         
         //TODO: make them customizable
         this.breakdownConfig = params.breakdownConfig;
-        this.historyLimit = params.width;
     }
     
     setStyle() {

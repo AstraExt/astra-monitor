@@ -34,10 +34,14 @@ export const MemoryHeader = GObject.registerClass({
         this.icon = new St.Icon({
             gicon: Utils.getLocalIcon('am-memory-symbolic'),
             fallback_icon_name: 'memory-symbolic',
-            style_class: 'system-status-icon astra-monitor-header-icon',
+            style: 'margin-right: 4px;',
+            icon_size: 18,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('memory-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
+        Config.bind('memory-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
     }
     
     buildBars() {
@@ -80,10 +84,18 @@ export const MemoryHeader = GObject.registerClass({
             this.graph = null;
         }
         
-        //TODO: make width customizable
-        this.graph = new MemoryGraph({ width: 30, mini: true, breakdownConfig: 'memory-menu-graph-breakdown' });
+        let graphWidth = Config.get_int('memory-header-graph-width');
+        graphWidth = Math.max(10, Math.min(500, graphWidth));
+        
+        this.graph = new MemoryGraph({ width: graphWidth, mini: true, breakdownConfig: 'memory-menu-graph-breakdown' });
         this.insert_child_at_index(this.graph, 2);
         Config.bind('memory-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Config.connect(this.graph, 'changed::memory-header-graph-width', () => {
+            let graphWidth = Config.get_int('memory-header-graph-width');
+            graphWidth = Math.max(10, Math.min(500, graphWidth));
+            this.graph.setWidth(graphWidth);
+        });
         
         Utils.memoryMonitor.listen(this.graph, 'memoryUsage', () => {
             if(!Config.get_boolean('memory-header-graph'))

@@ -26,7 +26,14 @@ export const Grid = GObject.registerClass({
 }, class GridBase extends St.Widget {
     
     /**
-     * @param {{numCols?:number, style?:string, styleClass?:string, x_expand?:boolean}} params
+     * @param {{
+     *     numCols?:number,
+     *     style?:string,
+     *     styleClass?:string,
+     *     x_expand?:boolean,
+     *     y_expand?:boolean,
+     *     orientation?:Clutter.Orientation,
+     * }} params
      */
     constructor(params) {
         //defaultParams
@@ -34,16 +41,20 @@ export const Grid = GObject.registerClass({
             params.styleClass = 'astra-monitor-menu-grid';
         if(params.numCols === undefined)
             params.numCols = 2;
+        if(params.orientation === undefined)
+            params.orientation = Clutter.Orientation.VERTICAL;
         
         const data = {
             style_class: params.styleClass,
             name: 'AstraMonitorGrid',
-            layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.VERTICAL}),
+            layout_manager: new Clutter.GridLayout({orientation: params.orientation}),
         };
         if(params.style)
             data.style = params.style;
         if(params.x_expand)
             data.x_expand = params.x_expand;
+        if(params.y_expand)
+            data.y_expand = params.y_expand;
         super(data);
         
         this.lm = this.layout_manager;

@@ -52,10 +52,14 @@ export const StorageHeader = GObject.registerClass({
         this.icon = new St.Icon({
             gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
             fallback_icon_name: 'drive-harddisk-symbolic',
-            style_class: 'system-status-icon astra-monitor-header-icon',
+            style: 'margin-right: 4px;',
+            icon_size: 18,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('storage-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
+        Config.bind('storage-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
     }
     
     buildBars() {
@@ -111,10 +115,18 @@ export const StorageHeader = GObject.registerClass({
             this.graph = null;
         }
         
-        // @ts-ignore
-        this.graph = new StorageGraph({ width: 30, mini: true });
+        let graphWidth = Config.get_int('storage-header-graph-width');
+        graphWidth = Math.max(10, Math.min(500, graphWidth));
+        
+        this.graph = new StorageGraph({ width: graphWidth, mini: true });
         this.insert_child_at_index(this.graph, 3);
         Config.bind('storage-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Config.connect(this.graph, 'changed::storage-header-graph-width', () => {
+            let graphWidth = Config.get_int('storage-header-graph-width');
+            graphWidth = Math.max(10, Math.min(500, graphWidth));
+            this.graph.setWidth(graphWidth);
+        });
         
         Utils.storageMonitor.listen(this.graph, 'storageIO', () => {
             if(!Config.get_boolean('storage-header-graph'))

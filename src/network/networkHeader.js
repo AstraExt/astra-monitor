@@ -51,10 +51,14 @@ export const NetworkHeader = GObject.registerClass({
         this.icon = new St.Icon({
             gicon: Utils.getLocalIcon('am-network-symbolic'),
             fallback_icon_name: 'network-wired-symbolic',
-            style_class: 'system-status-icon astra-monitor-header-icon',
+            style: 'margin-right: 4px;',
+            icon_size: 18,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('network-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
+        Config.bind('network-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
     }
     
     buildBars() {
@@ -90,10 +94,18 @@ export const NetworkHeader = GObject.registerClass({
             this.graph = null;
         }
         
-        // @ts-ignore
-        this.graph = new NetworkGraph({ width: 30, mini: true });
+        let graphWidth = Config.get_int('network-header-graph-width');
+        graphWidth = Math.max(10, Math.min(500, graphWidth));
+        
+        this.graph = new NetworkGraph({ width: graphWidth, mini: true });
         this.insert_child_at_index(this.graph, 3);
         Config.bind('network-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Config.connect(this.graph, 'changed::network-header-graph-width', () => {
+            let graphWidth = Config.get_int('network-header-graph-width');
+            graphWidth = Math.max(10, Math.min(500, graphWidth));
+            this.graph.setWidth(graphWidth);
+        });
         
         Utils.networkMonitor.listen(this.graph, 'networkIO', () => {
             if(!Config.get_boolean('network-header-graph'))

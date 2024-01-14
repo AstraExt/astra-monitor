@@ -55,10 +55,14 @@ export const ProcessorHeader = GObject.registerClass({
         this.icon = new St.Icon({
             gicon: Utils.getLocalIcon('am-cpu-symbolic'),
             fallback_icon_name: 'cpu-symbolic',
-            style_class: 'system-status-icon astra-monitor-header-icon',
+            style: 'margin-right: 4px;',
+            icon_size: 18,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('processor-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
+        Config.bind('processor-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
     }
     
     buildBars() {
@@ -120,10 +124,18 @@ export const ProcessorHeader = GObject.registerClass({
             this.graph = null;
         }
         
-        //TODO: make width customizable
-        this.graph = new ProcessorGraph({ width: 30, mini: true, breakdownConfig: 'processor-header-graph-breakdown'});
+        let graphWidth = Config.get_int('processor-header-graph-width');
+        graphWidth = Math.max(10, Math.min(500, graphWidth));
+        
+        this.graph = new ProcessorGraph({ width: graphWidth, mini: true, breakdownConfig: 'processor-header-graph-breakdown'});
         this.insert_child_at_index(this.graph, 2);
         Config.bind('processor-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Config.connect(this.graph, 'changed::processor-header-graph-width', () => {
+            let graphWidth = Config.get_int('processor-header-graph-width');
+            graphWidth = Math.max(10, Math.min(500, graphWidth));
+            this.graph.setWidth(graphWidth);
+        });
         
         Utils.processorMonitor.listen(this.graph, 'cpuUsage', () => {
             if(!Config.get_boolean('processor-header-graph'))

@@ -17,6 +17,7 @@
 
 import GObject from 'gi://GObject';
 import St from 'gi://St';
+import Clutter from 'gi://Clutter';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
@@ -38,7 +39,14 @@ class Container extends PanelMenu.Button {
         Utils.container = this;
         
         this.widgets = new Map();
-        this.box = new St.BoxLayout();
+        this.box = new St.BoxLayout({
+            vertical: false,
+            x_expand: true,
+            y_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
+            y_align: Clutter.ActorAlign.FILL,
+        });
+        
         // @ts-ignore
         this.add_child(this.box);
 

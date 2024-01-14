@@ -31,9 +31,6 @@ export const NetworkGraph = GObject.registerClass({
 }, class NetworkGraphBase extends GraphBase {
     constructor(params) {
         super(params);
-        
-        //TODO: make them customizable
-        this.historyLimit = params.width;
     }
     
     setStyle() {

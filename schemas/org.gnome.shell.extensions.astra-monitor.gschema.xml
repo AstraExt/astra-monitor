@@ -56,6 +56,18 @@
       <summary>Preferred Theme Style</summary>
       <description>Select the preferred theme style</description>
     </key>
+    <key name="headers-height" type="i">
+      <default>28</default>
+      <summary>Headers Height</summary>
+      <description>Set the height of the headers</description>
+      <range min="15" max="80"/>
+    </key>
+    <key name="headers-margins" type="i">
+      <default>2</default>
+      <summary>Headers Margins</summary>
+      <description>Set the margins of the headers</description>
+      <range min="0" max="15"/>
+    </key>
     
     <!-- PROCESSOR -->
     <key name="processor-update" type="d">
@@ -74,6 +86,11 @@
       <summary>CPU Header Icon</summary>
       <description>Show the icon on the header of the CPU monitor</description>
     </key>
+    <key name="processor-header-icon-size" type="i">
+      <default>18</default>
+      <summary>Header Icon Size</summary>
+      <description>Size in pixel of the icon</description>
+    </key>
     <key name="processor-header-percentage" type="b">
       <default>false</default>
       <summary>CPU Header Percentage</summary>
@@ -88,6 +105,12 @@
       <default>true</default>
       <summary>Show History Graph</summary>
       <description>Show a graph of the CPU percentage through time</description>
+    </key>
+    <key name="processor-header-graph-width" type="i">
+      <default>30</default>
+      <summary>Graph Width</summary>
+      <description>The width in pixels of the header history graph</description>
+      <range min="10" max="500"/>
     </key>
     <key name="processor-header-graph-breakdown" type="b">
       <default>true</default>
@@ -148,6 +171,11 @@
       <summary>Memory Header Icon</summary>
       <description>Show the icon on the header of the memory monitor</description>
     </key>
+    <key name="memory-header-icon-size" type="i">
+      <default>18</default>
+      <summary>Header Icon Size</summary>
+      <description>Size in pixel of the icon</description>
+    </key>
     <key name="memory-header-percentage" type="b">
       <default>false</default>
       <summary>Memory Header Percentage</summary>
@@ -162,6 +190,12 @@
       <default>false</default>
       <summary>Graph Category Breakdown</summary>
       <description>Color the graph with categories</description>
+    </key>
+    <key name="memory-header-graph-width" type="i">
+      <default>30</default>
+      <summary>Graph Width</summary>
+      <description>The width in pixels of the header history graph</description>
+      <range min="10" max="500"/>
     </key>
     <key name="memory-header-bars" type="b">
       <default>true</default>
@@ -207,6 +241,11 @@
       <summary>Storage Header Icon</summary>
       <description>Show the icon on the header of the storage monitor</description>
     </key>
+    <key name="storage-header-icon-size" type="i">
+      <default>18</default>
+      <summary>Header Icon Size</summary>
+      <description>Size in pixel of the icon</description>
+    </key>
     <key name="storage-header-percentage" type="b">
       <default>false</default>
       <summary>Storage Header Use Percentage</summary>
@@ -221,6 +260,12 @@
       <default>false</default>
       <summary>Show Storage IO History Graph</summary>
       <description>Show a graph of the storage IO through time</description>
+    </key>
+    <key name="storage-header-graph-width" type="i">
+      <default>30</default>
+      <summary>Graph Width</summary>
+      <description>The width in pixels of the header history graph</description>
+      <range min="10" max="500"/>
     </key>
     <key name="storage-header-io" type="b">
       <default>false</default>
@@ -250,6 +295,11 @@
       <summary>Network Header Icon</summary>
       <description>Show the icon on the header of the network monitor</description>
     </key>
+    <key name="network-header-icon-size" type="i">
+      <default>18</default>
+      <summary>Header Icon Size</summary>
+      <description>Size in pixel of the icon</description>
+    </key>
     <key name="network-header-bars" type="b">
       <default>false</default>
       <summary>Show Network Usage Bar</summary>
@@ -259,6 +309,12 @@
       <default>true</default>
       <summary>Show Network IO History Graph</summary>
       <description>Show a graph of the network IO through time</description>
+    </key>
+    <key name="network-header-graph-width" type="i">
+      <default>30</default>
+      <summary>Graph Width</summary>
+      <description>The width in pixels of the header history graph</description>
+      <range min="10" max="500"/>
     </key>
     <key name="network-header-io" type="b">
       <default>false</default>
@@ -287,6 +343,11 @@
       <default>false</default>
       <summary>Sensors Header Icon</summary>
       <description>Show the icon on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-icon-size" type="i">
+      <default>18</default>
+      <summary>Header Icon Size</summary>
+      <description>Size in pixel of the icon</description>
     </key>
     <key name="sensors-header-sensor1-show" type="b">
       <default>false</default>

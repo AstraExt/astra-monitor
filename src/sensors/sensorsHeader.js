@@ -66,10 +66,14 @@ export const SensorsHeader = GObject.registerClass({
         this.icon = new St.Icon({
             gicon: Utils.getLocalIcon('am-temperature-symbolic'),
             fallback_icon_name: 'temperature-symbolic',
-            style_class: 'system-status-icon astra-monitor-header-icon',
+            style: 'margin-right: 4px;',
+            icon_size: 18,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('sensors-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
+        Config.bind('sensors-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
     }
     
     buildValues() {

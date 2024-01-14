@@ -43,14 +43,41 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         Utils.metadata = this.metadata;
         Config.settings = this.getSettings();
         this.loadCustomTheme();
+        this.expanded = null;
+        this.tab = ' '.repeat(5);
         
         window.connect('close-request', () => {
             Utils.metadata = null;
+            Config.clearAll();
             Config.settings = null;
         });
         
-        const generalPage = new Adw.PreferencesPage({title: _('General'), iconName: 'am-settings-symbolic'});
+        const generalPage = this.setupGeneral();
         window.add(generalPage);
+        
+        const processorsPage = this.setupProcessors();
+        window.add(processorsPage);
+        
+        const memoryPage = this.setupMemory();
+        window.add(memoryPage);
+        
+        const storagePage = this.setupStorage();
+        window.add(storagePage);
+        
+        const networkPage = this.setupNetwork();
+        window.add(networkPage);
+        
+        const sensorsPage = this.setupSensors();
+        window.add(sensorsPage);
+        
+        const aboutPage = this.setupAbout();
+        window.add(aboutPage);
+        
+        window.set_default_size(this.defaultSize.width, this.defaultSize.height);
+    }
+    
+    setupGeneral() {
+        const generalPage = new Adw.PreferencesPage({title: _('General'), iconName: 'am-settings-symbolic'});
         
         let group = new Adw.PreferencesGroup({title: _('Dependencies')});
         let check = true;
@@ -110,7 +137,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'right', text: _('Right')},
         ];
         this.addComboRow(_('Panel Box'), choicesPanel, 'panel-box', group, 'string');
-        this.addSpinRow(_('Panel Box Ordering'), 'panel-box-order', group, -10, 10, 0, 1, 1, true);
+        this.addSpinRow({title: _('Panel Box Ordering')}, 'panel-box-order', group, {min: -10, max: 10, digits: 0, step: 1, page: 1}, true);
+        
+        this.addSpinRow({
+            title: this.tab + _('Headers Height'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 28'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'headers-height', group, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true);
+        this.addSpinRow({
+            title: this.tab + _('Headers Margins'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 2'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'headers-margins', group, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true);
         
         generalPage.add(group);
         
@@ -118,37 +156,49 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addMonitorOrderingRow(group);
         generalPage.add(group);
         
-        /**
-         * Processor
-         */
-        const processorPage = new Adw.PreferencesPage({title: _('Processors'), icon_name: 'am-cpu-symbolic'});
-        window.add(processorPage);
-        
-        group = new Adw.PreferencesGroup({title: _('Processors')});
+        return generalPage;
+    }
+    
+    setupProcessors() {
+        const processorsPage = new Adw.PreferencesPage({title: _('Processors'), icon_name: 'am-cpu-symbolic'});
+
+        let group = new Adw.PreferencesGroup({title: _('Processors')});
         this.addSwitchRow(_('Show'), 'processor-header-show', group);
-        this.addSpinRow(_('Update frequency (seconds)'), 'processor-update', group, 0.1, 10, 1, 0.1, 1, true, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'processor-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
         
-        processorPage.add(group);
+        processorsPage.add(group);
 
         group = new Adw.PreferencesGroup({title: _('Header')});
-        this.addSwitchRow(_('Show Icon'), 'processor-header-icon', group);
-        this.addSwitchRow(_('Show Percentage'), 'processor-header-percentage', group);
-        this.addSwitchRow(_('Show Percentage Single Core'), 'processor-header-percentage-core', group);
         
-        this.addSwitchRow(_('Show History Graph'), 'processor-header-graph', group);
-        this.addSwitchRow(_('History Graph Breakdown'), 'processor-header-graph-breakdown', group);
+        const iconSection = this.addExpanderRow(_('Icon'), group);
+        this.addSwitchRow(this.tab + _('Show Icon'), 'processor-header-icon', iconSection);
+        this.addSpinRow({
+            title: this.tab + _('Icon Size'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'processor-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
         
-        this.addSwitchRow(_('Show Realtime Bar'), 'processor-header-bars', group);
-        this.addSwitchRow(_('Realtime per-core Bars'), 'processor-header-bars-core', group);
-        this.addSwitchRow(_('Realtime Bar Breakdown'), 'processor-header-bars-breakdown', group);
-        processorPage.add(group);
+        const percentageSection = this.addExpanderRow(_('Percentage'), group);
+        this.addSwitchRow(this.tab + _('Show Percentage'), 'processor-header-percentage', percentageSection);
+        this.addSwitchRow(this.tab + _('Show Percentage Single Core'), 'processor-header-percentage-core', percentageSection);
+        
+        const graphSection = this.addExpanderRow(_('History Graph'), group);
+        this.addSwitchRow(this.tab + _('Show History Graph'), 'processor-header-graph', graphSection);
+        this.addSwitchRow(this.tab + _('History Graph Breakdown'), 'processor-header-graph-breakdown', graphSection);
+        this.addSpinRow({title: this.tab + _('History Graph Width')}, 'processor-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        
+        const barsSection = this.addExpanderRow(_('Realtime Bar'), group);
+        this.addSwitchRow(this.tab + _('Show Realtime Bar'), 'processor-header-bars', barsSection);
+        this.addSwitchRow(this.tab + _('Realtime per-core Bars'), 'processor-header-bars-core', barsSection);
+        this.addSwitchRow(this.tab + _('Realtime Bar Breakdown'), 'processor-header-bars-breakdown', barsSection);
+        processorsPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Menu')});
         this.addSwitchRow(_('History Graph Breakdown'), 'processor-menu-graph-breakdown', group);
         this.addSwitchRow(_('Core Bars Breakdown'), 'processor-menu-bars-breakdown', group);
         
         const gpus = Utils.getGPUsList();
-        let choicesSource = [{value: '', text: _('None')}]
+        const choicesSource = [{value: '', text: _('None')}]
         for(const gpu of gpus) {
             const keysToKeep = ['domain', 'bus', 'slot', 'vendorId', 'productId'];
             const data = Object.keys(gpu)
@@ -161,19 +211,19 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }
         this.addComboRow(_('GPU'), choicesSource, 'processor-menu-gpu', group, 'json');
         
-        processorPage.add(group);
+        processorsPage.add(group);
         
-        /**
-         * Memory
-         */
+        return processorsPage;
+    }
+    
+    setupMemory() {
         const memoryPage = new Adw.PreferencesPage({title: _('Memory'), icon_name: 'am-memory-symbolic'});
-        window.add(memoryPage);
         
-        group = new Adw.PreferencesGroup({title: _('Memory')});
+        let group = new Adw.PreferencesGroup({title: _('Memory')});
         this.addSwitchRow(_('Show'), 'memory-header-show', group);
-        this.addSpinRow(_('Update frequency (seconds)'), 'memory-update', group, 0.1, 10, 1, 0.1, 1, true, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'memory-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
         
-        choicesPanel = [
+        const choicesPanel = [
             {value: 'total-free-buffers-cached', text: _('Total - Free - Buffers - Cached')},
             {value: 'total-free', text: _('Total - Free')},
             {value: 'total-available', text: _('Total - Available')},
@@ -184,14 +234,26 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         memoryPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
-        this.addSwitchRow(_('Show Icon'), 'memory-header-icon', group);
-        this.addSwitchRow(_('Show Percentage'), 'memory-header-percentage', group);
         
-        this.addSwitchRow(_('Show History Graph'), 'memory-header-graph', group);
-        this.addSwitchRow(_('History Graph Breakdown'), 'memory-header-graph-breakdown', group);
+        const iconSection = this.addExpanderRow(_('Icon'), group);
+        this.addSwitchRow(this.tab + _('Show Icon'), 'memory-header-icon', iconSection);
+        this.addSpinRow({
+            title: this.tab + _('Icon Size'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'memory-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+
+        const percentageSection = this.addExpanderRow(_('Percentage'), group);
+        this.addSwitchRow(this.tab + _('Show Percentage'), 'memory-header-percentage', percentageSection);
         
-        this.addSwitchRow(_('Show Realtime Bar'), 'memory-header-bars', group);
-        this.addSwitchRow(_('Realtime Bar Breakdown'), 'memory-header-bars-breakdown', group);
+        const graphSection = this.addExpanderRow(_('History Graph'), group);
+        this.addSwitchRow(this.tab + _('Show History Graph'), 'memory-header-graph', graphSection);
+        this.addSwitchRow(this.tab + _('History Graph Breakdown'), 'memory-header-graph-breakdown', graphSection);
+        this.addSpinRow({title: this.tab + _('History Graph Width')}, 'memory-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        
+        const barsSection = this.addExpanderRow(_('Realtime Bar'), group);
+        this.addSwitchRow(this.tab + _('Show Realtime Bar'), 'memory-header-bars', barsSection);
+        this.addSwitchRow(this.tab + _('Realtime Bar Breakdown'), 'memory-header-bars-breakdown', barsSection);
         memoryPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Menu')});
@@ -199,17 +261,17 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         memoryPage.add(group);
         
-        /**
-         * Storage
-         */
+        return memoryPage;
+    }
+    
+    setupStorage() {
         const storagePage = new Adw.PreferencesPage({title: _('Storage'), icon_name: 'am-harddisk-symbolic'});
-        window.add(storagePage);
         
-        group = new Adw.PreferencesGroup({title: _('Storage')});
+        let group = new Adw.PreferencesGroup({title: _('Storage')});
         this.addSwitchRow(_('Show'), 'storage-header-show', group);
-        this.addSpinRow(_('Update frequency (seconds)'), 'storage-update', group, 0.1, 10, 1, 0.1, 1, true, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'storage-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
         
-        choicesPanel = [
+        const choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
             {value: 'KiB/s', text: _('KiB/s')},
             {value: 'kb/s', text: _('kb/s')},
@@ -233,7 +295,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 Config.set('storage-main', defaultId, 'string');
         }
         
-        choicesSource = [];
+        const choicesSource = [];
         for(const [id, disk] of disks) {
             let text;
             if(disk.label && disk.name)
@@ -251,26 +313,37 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         storagePage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
-        this.addSwitchRow(_('Show Icon'), 'storage-header-icon', group);
         
-        this.addSwitchRow(_('Show Storage Usage Bar'), 'storage-header-bars', group);
-        this.addSwitchRow(_('Show Storage Usage Percentage'), 'storage-header-percentage', group);
+        const iconSection = this.addExpanderRow(_('Icon'), group);
+        this.addSwitchRow(this.tab + _('Show Icon'), 'storage-header-icon', iconSection);
+        this.addSpinRow({
+            title: this.tab + _('Icon Size'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'storage-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+
+        const barsSection = this.addExpanderRow(_('Main Disk'), group);
+        this.addSwitchRow(this.tab + _('Show Storage Usage Bar'), 'storage-header-bars', barsSection);
+        this.addSwitchRow(this.tab + _('Show Storage Usage Percentage'), 'storage-header-percentage', barsSection);
         
-        this.addSwitchRow(_('Show IO History Graph'), 'storage-header-graph', group);  
-        this.addSwitchRow(_('Show IO Speed'), 'storage-header-io', group);  
+        const ioSection = this.addExpanderRow(_('IO'), group);
+        this.addSwitchRow(this.tab + _('Show IO History Graph'), 'storage-header-graph', ioSection);  
+        this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        this.addSwitchRow(this.tab + _('Show IO Speed'), 'storage-header-io', ioSection);  
+        
         storagePage.add(group);
         
-        /**
-         * Network
-         */
+        return storagePage;
+    }
+    
+    setupNetwork() {
         const networkPage = new Adw.PreferencesPage({title: _('Network'), icon_name: 'am-network-symbolic'});
-        window.add(networkPage);
         
-        group = new Adw.PreferencesGroup({title: _('Network')});
+        let group = new Adw.PreferencesGroup({title: _('Network')});
         this.addSwitchRow(_('Show'), 'network-header-show', group);
-        this.addSpinRow(_('Update frequency (seconds)'), 'network-update', group, 0.1, 10, 1, 0.1, 1, true, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'network-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
         
-        choicesPanel = [
+        const choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
             {value: 'KiB/s', text: _('KiB/s')},
             {value: 'kb/s', text: _('kb/s')},
@@ -288,22 +361,34 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         networkPage.add(group);
         
         group = new Adw.PreferencesGroup({title: 'Header'});
-        this.addSwitchRow(_('Show Icon'), 'network-header-icon', group);
         
-        this.addSwitchRow(_('Show Network Usage Bar'), 'network-header-bars', group);        
-        this.addSwitchRow(_('Show IO History Graph'), 'network-header-graph', group);  
-        this.addSwitchRow(_('Show IO Speed'), 'network-header-io', group);  
+        const iconSection = this.addExpanderRow(_('Icon'), group);
+        this.addSwitchRow(this.tab + _('Show Icon'), 'network-header-icon', iconSection);
+        this.addSpinRow({
+            title: this.tab + _('Icon Size'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+
+        const barsSection = this.addExpanderRow(_('Usage Bar'), group);
+        this.addSwitchRow(this.tab + _('Show Network Usage Bar'), 'network-header-bars', barsSection);
+        
+        const ioSection = this.addExpanderRow(_('IO'), group);
+        this.addSwitchRow(this.tab + _('Show IO History Graph'), 'network-header-graph', ioSection); 
+        this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
+        this.addSwitchRow(this.tab + _('Show IO Speed'), 'network-header-io', ioSection);
+        
         networkPage.add(group);
         
-        /**
-         * Sensors
-         */
+        return networkPage;
+    }
+    
+    setupSensors() {
         const sensorsPage = new Adw.PreferencesPage({title: _('Sensors'), icon_name: 'am-temperature-symbolic'});
-        window.add(sensorsPage);
         
-        group = new Adw.PreferencesGroup({title: _('Sensors')});
+        let group = new Adw.PreferencesGroup({title: _('Sensors')});
         this.addSwitchRow(_('Show'), 'sensors-header-show', group);
-        this.addSpinRow(_('Update frequency (seconds)'), 'sensors-update', group, 1, 60, 1, 0.5, 1, true, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'sensors-update', group, {min: 1, max: 60, digits: 1, step: 0.5, page: 1}, true);
         
         let choicesUnit = [
             {value: 'celsius', text: _('Celsius')},
@@ -313,14 +398,21 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         sensorsPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
-        this.addSwitchRow(_('Show Icon'), 'sensors-header-icon', group);
+        
+        const iconSection = this.addExpanderRow(_('Icon'), group);
+        this.addSwitchRow(this.tab + _('Show Icon'), 'sensors-header-icon', iconSection);
+        this.addSpinRow({
+            title: this.tab + _('Icon Size'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'sensors-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
         
         const sources = Utils.getSensorSources();
         
         /**
          * @type {{value:string, text:string}[]}
          */
-        choicesSource = [{value: '', text: _('None')}]
+        const choicesSource = [{value: '', text: _('None')}]
         for(const source of sources)
             choicesSource.push({value: source.value, text: source.text});
         
@@ -330,10 +422,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow(_('Sensor 2 Source'), choicesSource, 'sensors-header-sensor2', group, 'json');
         sensorsPage.add(group);
         
+        return sensorsPage;
+    }
+    
+    setupAbout() {
         const aboutPage = new Adw.PreferencesPage({title: 'About', icon_name: 'am-dialog-info-symbolic'});
-        window.add(aboutPage);
         
-        group = new Adw.PreferencesGroup({title: _('Info')});
+        let group = new Adw.PreferencesGroup({title: _('Info')});
         
         let version;
         if(this.metadata['version-name'])
@@ -349,12 +444,35 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addLinkRow(_('Become a patron'), 'https://www.patreon.com/AstraExt', group);
         aboutPage.add(group);
         
-        window.set_default_size(this.defaultSize.width, this.defaultSize.height);
+        return aboutPage;
+    }
+    
+    addExpanderRow(title, group, icon_name = null) {
+        const data = { title };
+        if(icon_name)
+            data.icon_name = icon_name;
+        const section = new Adw.ExpanderRow(data);
+        section.connect('notify::expanded', widget => {
+            if(widget.expanded) {
+                if(this.expanded && this.expanded !== widget)
+                    this.expanded.expanded = false;
+                this.expanded = widget;
+            }
+            else {
+                if(this.expanded === widget)
+                    this.expanded = null;
+            }
+        });
+        group.add(section);
+        return section;
     }
     
     addLabelRow(title, label, group) {
         const row = new Adw.ActionRow({title});
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
         
         const labelWidget = new Gtk.Label({label});
         row.add_suffix(labelWidget);
@@ -362,7 +480,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     
     addButtonRow(title, group, callback) {
         const row = new Adw.ActionRow({title});
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
         
         row.activatable = true;
         row.connect('activate', callback);
@@ -370,7 +491,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     
     addLinkRow(title, url, group) {
         const row = new Adw.ActionRow({title});
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
         
         const linkBtn = new Gtk.LinkButton({
             label: '',
@@ -391,7 +515,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         icon.set_margin_end(10);
         box.append(icon);
         row.add_prefix(box);
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
         
         return {
             row: row,
@@ -407,7 +534,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     
     addSwitchRow(title, setting, group) {
         const row = new Adw.ActionRow({title});
-        group.add(row);
+        
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
         
         let toggle = new Gtk.Switch({
             active: Config.get_boolean(setting),
@@ -422,7 +553,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     
     addColorRow(title, setting, group) {
         const row = new Adw.ActionRow({title});
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
         
         const button = new Gtk.ColorButton();
         const rgba = new Gdk.RGBA();
@@ -440,7 +574,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
      * @param {string} title 
      * @param {{value:any, text:string}[]} choices 
      * @param {string} setting 
-     * @param {Adw.PreferencesGroup} group 
+     * @param {*} group 
      * @param {'any'|'boolean'|'string'|'int'|'number'|'json'} type 
      */
     addComboRow(title, choices, setting, group, type = 'int') {
@@ -479,7 +613,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         });
         
         const row = new Adw.ActionRow({title});
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
         
         const select = new Gtk.DropDown({
             model: stringList,
@@ -510,16 +647,24 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         group.add(row);
     }
     
-    addSpinRow(title, setting, group, min, max, digits = 0, step = 1, page = 10, numeric = true, restart = false) {
+    /**
+     * 
+     * @param {{title:string, subtitle?:string, icon_name?:string}} props
+     * @param {string} setting 
+     * @param {*} group 
+     * @param {{min:number, max:number, digits?:number, step?:number, page?:number}} adj 
+     * @param {boolean} numeric
+     */
+    addSpinRow(props, setting, group, adj, numeric = true) {
         const adjustment = new Gtk.Adjustment({
-            lower: min,
-            upper: max,
-            step_increment: step,
-            page_increment: page,
-            value: digits === 0 ? Config.get_int(setting) : Config.get_double(setting)
+            lower: adj.min,
+            upper: adj.max,
+            step_increment: adj.step ?? 1,
+            page_increment: adj.page ?? 10,
+            value: (adj.digits || 0) === 0 ? Config.get_int(setting) : Config.get_double(setting)
         });
         
-        const row = new Adw.ActionRow({title});
+        const row = new Adw.ActionRow(props);
         
         let spinButton = new Gtk.SpinButton({
             halign: Gtk.Align.END,
@@ -528,17 +673,20 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             vexpand: false,
             xalign: 0.5,
             adjustment,
-            digits,
+            digits: adj.digits || 0,
             numeric
         });
         
         spinButton.connect('notify::value', widget => {
-            Config.set(setting, widget.value, digits === 0 ? 'int' : 'number');
+            Config.set(setting, widget.value, (adj.digits || 0) === 0 ? 'int' : 'number');
         });
         row.add_suffix(spinButton);
         row.activatable_widget = spinButton;
         
-        group.add(row);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
     }
     
     addMonitorOrderingRow(group) {

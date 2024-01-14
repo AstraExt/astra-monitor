@@ -23,6 +23,7 @@ import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import Utils from './utils/utils.js';
+import Config from './config.js';
 
 /* global global */
 
@@ -34,68 +35,107 @@ export const Header = GObject.registerClass({
             reactive: true,
             can_focus: true,
             track_hover: true,
-            style_class: 'astra-monitor-header panel-button',
+            style_class: 'panel-button astra-monitor-header',
             accessible_name: name,
             accessible_role: Atk.Role.MENU,
-            x_expand: true
+            x_expand: true,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.name = name;
         
-        let hbox = new St.BoxLayout();
-        hbox.style_class = 'astra-monitor-header-box';
+        const hbox = new St.BoxLayout({ style_class: 'astra-monitor-header-box' });
         this.add_child(hbox);
         this.box = hbox;
         
-        //TODO: add settings for theme padding!?
-        //this.connect('style-changed', this._onStyleChanged.bind(this));
-        this._minHPadding = this._natHPadding = 0.0;
+        this.connect('button-press-event', (widget, event) => {
+            if(this.menu)
+                this.menu.toggle();
+            return Clutter.EVENT_PROPAGATE;
+        });
+        
+        this.connect('touch-event', (widget, event) => {
+            if(this.menu)
+                this.menu.toggle();
+            return Clutter.EVENT_PROPAGATE;
+        });
+        
+        this.connect('hide', () => {
+            if(this.menu)
+                this.menu.close();
+        });
+        
+        Config.connect(this, 'changed::headers-height', this.setStyle.bind(this));
+        Config.connect(this, 'changed::headers-margins', this.setStyle.bind(this));
+        this.setStyle();
     }
     
-    setMenu(menu) {
-        this.menu = menu;
+    vfunc_get_preferred_width(_forHeight) {
+        let child = this.get_first_child();
+        if(child) 
+            return child.get_preferred_width(-1);
+        return [0, 0];
+    }
+    
+    vfunc_get_preferred_height(_forWidth) {
+        let child = this.get_first_child();
+        if(child)
+            return child.get_preferred_height(-1);
+        return [0, 0];
+    }
+    
+    setStyle() {
+        let style = '';
         
-        this.menu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
-        this.menu.actor.connect('key-press-event', this._onMenuKeyPress.bind(this));
+        let margins = Config.get_int('headers-margins');
+        if(margins < 0 || margins > 15)
+            margins = 4;
+        if(margins > 0)
+            style += `margin-top:${margins}px;margin-bottom:${margins}px;`;
+        
+        let height = Config.get_int('headers-height');
+        if(height < 15 || height > 80)
+            height = 32;
+        style += `height:${height}px;`;
+        
+        this.box.set_style(style);
+        //this.box.height = height;
+        this.box.queue_relayout();
     }
     
     add_child(child) {
-        if (this.box) {
+        if(this.box)
             this.box.add_child(child);
-        } else {
+        else
             super.add_child(child);
-        }
     }
     
     insert_child_above(child, sibling) {
-        if (this.box) {
+        if(this.box)
             this.box.insert_child_above(child, sibling);
-        } else {
+        else
             super.insert_child_above(child, sibling);
-        }
     }
     
     insert_child_at_index(child, index) {
-        if (this.box) {
+        if(this.box)
             this.box.insert_child_at_index(child, index);
-        } else {
+        else
             super.insert_child_at_index(child, index);
-        }
     }
     
     insert_child_below(child, sibling) {
-        if (this.box) {
+        if(this.box)
             this.box.insert_child_below(child, sibling);
-        } else {
+        else
             super.insert_child_below(child, sibling);
-        }
     }
     
     remove_child(child) {
-        if (this.box) {
+        if(this.box)
             this.box.remove_child(child);
-        } else {
+        else
             super.remove_child(child);
-        }
     }
     
     update() {
@@ -103,46 +143,20 @@ export const Header = GObject.registerClass({
         Utils.error('update() needs to be overridden');
     }
     
+    setMenu(menu) {
+        this.menu = menu;
+        this.menu.connect('open-state-changed', this.onOpenMenu.bind(this));
+    }
+    
     /**
-     * SET OF FUNCTION FROM TOPHAT: https://github.com/fflewddur/tophat
-     * Some of them are modified to fit the needs of this extension
+     * FUNCTION FROM TOPHAT: https://github.com/fflewddur/tophat
+     * Not really working no my end, it needs a deeper look
+     * Right now it's not a priority, menus are very short
+     * Keep it here for future reference
      */
     
-    vfunc_event(event) {
-        if (this.menu &&
-            (event.type() === Clutter.EventType.TOUCH_BEGIN ||
-             event.type() === Clutter.EventType.BUTTON_PRESS)) {
-            this.menu.toggle();
-        }
-        return Clutter.EVENT_PROPAGATE;
-    }
-    
-    vfunc_hide() {
-        super.vfunc_hide();
-        if (this.menu) {
-            this.menu.close();
-        }
-    }
-    
-    _onMenuKeyPress(actor, event) {
-        if (global.focus_manager.navigate_from_event(event)) {
-            return Clutter.EVENT_STOP;
-        }
-        
-        let symbol = event.get_key_symbol();
-        if (symbol === Clutter.KEY_Left || symbol === Clutter.KEY_Right) {
-            let group = global.focus_manager.get_group(this);
-            if (group) {
-                let direction = symbol === Clutter.KEY_Left ? St.DirectionType.LEFT : St.DirectionType.RIGHT;
-                group.navigate_focus(this, direction, false);
-                return Clutter.EVENT_STOP;
-            }
-        }
-        return Clutter.EVENT_PROPAGATE;
-    }
-    
-    _onOpenStateChanged(menu, open) {
-        if (open) {
+    onOpenMenu(menu, open) {
+        if(open) {
             this.add_style_pseudo_class('active');
             
             if(this.menu)
@@ -169,66 +183,9 @@ export const Header = GObject.registerClass({
         this.menu.actor.style = `max-height: ${maxHeight}px;`;
     }
     
-    /*_onStyleChanged(actor) {
-        let themeNode = actor.get_theme_node();
-        
-        this._minHPadding = themeNode.get_length('-minimum-hpadding');
-        this._natHPadding = themeNode.get_length('-natural-hpadding');
-    }*/
-    
-    vfunc_get_preferred_width(_forHeight) {
-        let child = this.get_first_child();
-        let minimumSize, naturalSize;
-        
-        if (child) {
-            [minimumSize, naturalSize] = child.get_preferred_width(-1);
-        } else {
-            minimumSize = naturalSize = 0;
-        }
-        
-        minimumSize += 2 * this._minHPadding;
-        naturalSize += 2 * this._natHPadding;
-        
-        return [minimumSize, naturalSize];
-    }
-    
-    vfunc_get_preferred_height(_forWidth) {
-        let child = this.get_first_child();
-        if (child) {
-            return child.get_preferred_height(-1);
-        }
-        return [0, 0];
-    }
-    
-    vfunc_allocate(box) {
-        this.set_allocation(box);
-        
-        let child = this.get_first_child();
-        if (!child) {
-            return;
-        }
-        
-        let [, natWidth] = child.get_preferred_width(-1);
-        
-        let availWidth = box.x2 - box.x1;
-        let availHeight = box.y2 - box.y1;
-        
-        let childBox = new Clutter.ActorBox();
-        if (natWidth + 2 * this._natHPadding <= availWidth) {
-            childBox.x1 = this._natHPadding;
-            childBox.x2 = availWidth - this._natHPadding;
-        } else {
-            childBox.x1 = this._minHPadding;
-            childBox.x2 = availWidth - this._minHPadding;
-        }
-        
-        childBox.y1 = 0;
-        childBox.y2 = availHeight;
-        
-        child.allocate(childBox);
-    }
-    
     destroy() {
+        Config.clear(this);
+        
         if(this.menu) {
             this.menu.onClose();
             this.menu.destroy();

@@ -24,10 +24,6 @@
     margin: 0;
 }
 
-.astra-monitor-header-icon {
-    icon-size: 1.3em;
-}
-
 .astra-monitor-header-box {
     padding: 0 0.3em;
 }
@@ -97,7 +93,6 @@
 }
 
 .astra-monitor-bars-vertical-mini {
-    height: 1.25em;
     margin: 0.25em;
     padding: 1px;
     border-radius: 0.2em;

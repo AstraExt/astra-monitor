@@ -31,9 +31,6 @@ export const StorageGraph = GObject.registerClass({
 }, class StorageGraphBase extends GraphBase {
     constructor(params) {
         super(params);
-        
-        //TODO: make them customizable
-        this.historyLimit = params.width;
     }
     
     setStyle() {

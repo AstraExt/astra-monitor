@@ -60,6 +60,9 @@ export const BarsBase = GObject.registerClass({
                 style += `width:${params.width}px;`;
         }
         style += params.style;
+        
+        if(params.mini)
+            params.y_align = Clutter.ActorAlign.FILL;
             
         super({
             style: style,
