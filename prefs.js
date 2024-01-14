@@ -411,6 +411,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         let toggle = new Gtk.Switch({
             active: Config.get_boolean(setting),
+            halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER,
         });
         Config.bind(setting, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
@@ -477,10 +478,23 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 selected = index;
         });
         
-        let row = new Adw.ComboRow({title, model: stringList, selected});
+        const row = new Adw.ActionRow({title});
+        group.add(row);
+        
+        const select = new Gtk.DropDown({
+            model: stringList,
+            selected,
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: true,
+        });
+        
+        row.add_suffix(select);
+        row.activatable_widget = select;
+        
         if(choices[selected] && choices[selected].text)
-            row.set_tooltip_text(choices[selected].text);
-        row.connect('notify::selected', widget => {
+            select.set_tooltip_text(choices[selected].text);
+        select.connect('notify::selected', widget => {
             const selectedIndex = widget.selected;
             const selectedChoice = choices[selectedIndex];
             if(selectedChoice !== undefined) {
@@ -505,22 +519,25 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             value: digits === 0 ? Config.get_int(setting) : Config.get_double(setting)
         });
         
-        //const originalValue = adjustment.value;
+        const row = new Adw.ActionRow({title});
         
-        const row = new Adw.SpinRow({title, adjustment, digits, numeric });
-        row.connect('notify::value', widget => {
-            Config.set(setting, widget.value, digits === 0 ? 'int' : 'number');
-            
-            // Restart should be now handled by the monitor itself
-            /*if(restart) {
-                if(widget.value !== originalValue) {
-                    row.subtitle = _('(Toggle off/on ext. required)');
-                }
-                else {
-                    row.subtitle = '';
-                }
-            }*/
+        let spinButton = new Gtk.SpinButton({
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: true,
+            vexpand: false,
+            xalign: 0.5,
+            adjustment,
+            digits,
+            numeric
         });
+        
+        spinButton.connect('notify::value', widget => {
+            Config.set(setting, widget.value, digits === 0 ? 'int' : 'number');
+        });
+        row.add_suffix(spinButton);
+        row.activatable_widget = spinButton;
+        
         group.add(row);
     }
     
