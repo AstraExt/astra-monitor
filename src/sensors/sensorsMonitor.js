@@ -15,8 +15,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GLib from 'gi://GLib';
-
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
 import { Monitor } from '../monitor.js';

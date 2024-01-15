@@ -46,7 +46,26 @@ export const StorageHeader = GObject.registerClass({
         const menu = new StorageMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
+        this.resetMaxWidths();
+        
         Config.bind('storage-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::storage-header-io', this.resetMaxWidths.bind(this));
+    }
+    
+    resetMaxWidths() {
+        this.maxWidths = [];
+        
+        if(!Config.get_boolean('storage-header-io'))
+            return;
+        
+        if(!this.read.get_stage() || !this.write.get_stage())
+            return;
+        
+        const readWidth = this.read.get_preferred_width(-1);
+        const writeWidth = this.write.get_preferred_width(-1);
+        this.fixSpeedContainerWidth(Math.max(readWidth?readWidth[1]:0, writeWidth?writeWidth[1]:0));
     }
     
     buildIcon() {
@@ -165,11 +184,10 @@ export const StorageHeader = GObject.registerClass({
     buildSpeed() {
         this.speedContainer = new St.BoxLayout({
             style_class: 'astra-monitor-header-speed-container',
-            x_align: Clutter.ActorAlign.CENTER,
-            x_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             vertical: true,
+            width: 1
         });
         
         this.read = new St.Label({
@@ -205,10 +223,30 @@ export const StorageHeader = GObject.registerClass({
             }
             else {
                 const unit = Config.get_string('storage-io-unit');
-                this.read.text = Utils.formatBytesPerSec(usage.bytesReadPerSec, unit);
-                this.write.text = Utils.formatBytesPerSec(usage.bytesWrittenPerSec, unit);
+                let maxFigures = Config.get_int('storage-header-io-figures');
+                maxFigures = Math.max(1, Math.min(4, maxFigures));
+                this.read.text = Utils.formatBytesPerSec(usage.bytesReadPerSec, unit, maxFigures);
+                this.write.text = Utils.formatBytesPerSec(usage.bytesWrittenPerSec, unit, maxFigures);
+                
+                const readWidth = this.read.get_preferred_width(-1);
+                const writeWidth = this.write.get_preferred_width(-1);
+                this.fixSpeedContainerWidth(Math.max(readWidth?readWidth[1]:0, writeWidth?writeWidth[1]:0));
             }
         });
+    }
+    
+    fixSpeedContainerWidth(width) {
+        this.maxWidths.push(width);
+        
+        if(this.maxWidths.length > Utils.storageMonitor.updateFrequency * 30)
+            this.maxWidths.shift();
+        
+        let max = Math.max(...this.maxWidths);
+        if(max === this.speedContainer.width)
+            return;
+        if(max <= 0)
+            max = 1;
+        this.speedContainer.set_width(max);
     }
     
     update() {

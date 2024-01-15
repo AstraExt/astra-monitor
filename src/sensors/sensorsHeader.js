@@ -55,10 +55,11 @@ export const SensorsHeader = GObject.registerClass({
         if(!this.sensor1.get_stage())
             return;
         
+        const sensor1w = this.sensor1.get_preferred_width(-1);
+        let sensor2w = null;
         if(Config.get_boolean('sensors-header-sensor2-show'))
-            this.fixContainerWidth(Math.max(this.sensor1.get_width(), this.sensor2.get_width()));
-        else
-            this.fixContainerWidth(this.sensor1.get_width());
+            this.sensor2.get_preferred_width(-1);
+        this.fixContainerWidth(Math.max(sensor1w?sensor1w[1]:0, sensor2w?sensor2w[1]:0));
     }
     
     buildIcon() {
@@ -142,14 +143,17 @@ export const SensorsHeader = GObject.registerClass({
             
             const sensor1Source = Config.get_json('sensors-header-sensor1');
             this.sensor1.text = this.applySource(sensorsData, sensor1Source);
+            const sensor1w = this.sensor1.get_preferred_width(-1);
             
             if(Config.get_boolean('sensors-header-sensor2-show')) {
                 const sensor2Source = Config.get_json('sensors-header-sensor2');
                 this.sensor2.text = this.applySource(sensorsData, sensor2Source);
-                this.fixContainerWidth(Math.max(this.sensor1.get_width(), this.sensor2.get_width()));
+                const sensor2w = this.sensor2.get_preferred_width(-1);
+                this.fixContainerWidth(Math.max(sensor1w?sensor1w[1]:0, sensor2w?sensor2w[1]:0));
             }
             else {
-                this.fixContainerWidth(this.sensor1.get_width());
+                this.fixContainerWidth(sensor1w?sensor1w[1]:0);
+
             }
         });
     }

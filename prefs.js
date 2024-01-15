@@ -324,7 +324,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'storage-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
-
+        
         const barsSection = this.addExpanderRow(_('Main Disk'), group);
         this.addSwitchRow(this.tab + _('Show Storage Usage Bar'), 'storage-header-bars', barsSection);
         this.addSwitchRow(this.tab + _('Show Storage Usage Percentage'), 'storage-header-percentage', barsSection);
@@ -334,6 +334,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Show IO History Graph'), 'storage-header-graph', ioSection);  
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'storage-header-io', ioSection);  
+        this.addSpinRow({title: this.tab + _('IO Speed Number Max Figures')}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
         
         storagePage.add(group);
         
@@ -379,6 +380,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Show IO History Graph'), 'network-header-graph', ioSection); 
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'network-header-io', ioSection);
+        this.addSpinRow({title: this.tab + _('IO Speed Number Max Figures')}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
         
         networkPage.add(group);
         

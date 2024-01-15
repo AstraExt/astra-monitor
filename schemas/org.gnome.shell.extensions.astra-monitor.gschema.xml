@@ -280,6 +280,12 @@
       <summary>Show Storage IO realtime speed</summary>
       <description>Show the IO speed in realtime as a label</description>
     </key>
+    <key name="storage-header-io-figures" type="i">
+      <default>2</default>
+      <summary>Max Number Figures</summary>
+      <description>Max number of figures to show on the IO label</description>
+      <range min="2" max="4"/>
+    </key>
     
     <!-- NETWORK -->
     <key name="network-update" type="d">
@@ -329,6 +335,12 @@
       <default>false</default>
       <summary>Show Network IO realtime speed</summary>
       <description>Show the IO speed in realtime as a label</description>
+    </key>
+    <key name="network-header-io-figures" type="i">
+      <default>2</default>
+      <summary>Max Number Figures</summary>
+      <description>Max number of figures to show on the IO label</description>
+      <range min="2" max="4"/>
     </key>
     
     <!-- SENSORS -->

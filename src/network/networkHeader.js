@@ -43,7 +43,26 @@ export const NetworkHeader = GObject.registerClass({
         const menu = new NetworkMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
+        this.resetMaxWidths();
+        
         Config.bind('network-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::network-header-io', this.resetMaxWidths.bind(this));
+    }
+    
+    resetMaxWidths() {
+        this.maxWidths = [];
+        
+        if(!Config.get_boolean('network-header-io'))
+            return;
+        
+        if(!this.upload.get_stage() || !this.download.get_stage())
+            return;
+        
+        const uploadWidth = this.upload.get_preferred_width(-1);
+        const downloadWidth = this.download.get_preferred_width(-1);
+        this.fixSpeedContainerWidth(Math.max(uploadWidth?uploadWidth[1]:0, downloadWidth?downloadWidth[1]:0));
     }
     
     buildIcon() {
@@ -121,10 +140,9 @@ export const NetworkHeader = GObject.registerClass({
         this.speedContainer = new St.BoxLayout({
             style_class: 'astra-monitor-header-speed-container',
             x_align: Clutter.ActorAlign.CENTER,
-            x_expand: true,
-            y_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             vertical: true,
+            width: 1
         });
         
         this.upload = new St.Label({
@@ -160,10 +178,30 @@ export const NetworkHeader = GObject.registerClass({
             }
             else {
                 const unit = Config.get_string('network-io-unit');
-                this.upload.text = Utils.formatBytesPerSec(usage.bytesUploadedPerSec, unit, 2, true);
-                this.download.text = Utils.formatBytesPerSec(usage.bytesDownloadedPerSec, unit, 2, true);
+                let maxFigures = Config.get_int('network-header-io-figures');
+                maxFigures = Math.max(1, Math.min(4, maxFigures));
+                this.upload.text = Utils.formatBytesPerSec(usage.bytesUploadedPerSec, unit, maxFigures, true);
+                this.download.text = Utils.formatBytesPerSec(usage.bytesDownloadedPerSec, unit, maxFigures, true);
+                
+                const uploadWidth = this.upload.get_preferred_width(-1);
+                const downloadWidth = this.download.get_preferred_width(-1);
+                this.fixSpeedContainerWidth(Math.max(uploadWidth?uploadWidth[1]:0, downloadWidth?downloadWidth[1]:0));
             }
         });
+    }
+    
+    fixSpeedContainerWidth(width) {
+        this.maxWidths.push(width);
+        
+        if(this.maxWidths.length > Utils.networkMonitor.updateFrequency * 30)
+            this.maxWidths.shift();
+        
+        let max = Math.max(...this.maxWidths);
+        if(max === this.speedContainer.width)
+            return;
+        if(max <= 0)
+            max = 1;
+        this.speedContainer.set_width(max);
     }
     
     update() {

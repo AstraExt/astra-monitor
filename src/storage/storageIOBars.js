@@ -18,7 +18,6 @@
 import GObject from 'gi://GObject';
 
 import { BarsBase } from '../bars.js';
-import Utils from '../utils/utils.js';
 
 export const StorageIOBars = GObject.registerClass({
     
@@ -32,7 +31,7 @@ export const StorageIOBars = GObject.registerClass({
     }
     
     setUsage(usage) {
-        if(!usage || !Array.isArray(usage)) {
+        if(!usage || !Array.isArray(usage) || usage.length === 0) {
             this.updateBars([]);
             return;
         }
