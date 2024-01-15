@@ -1,4 +1,4 @@
-# Astra Monitor 4 - TO BE RELEASED
+# Astra Monitor 4 - January 15 2024
 
 ### New features
 - New option for Storage Header: an indicator that shows the global read and write speed through a pair of bars [[#14](https://github.com/AstraExt/astra-monitor/issues/14)]
