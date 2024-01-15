@@ -518,6 +518,8 @@ export default class Utils {
             return 'W';
         if(key.startsWith('curr'))
             return 'A';
+        if(key.startsWith('energy'))
+            return 'J';
         return '';
     }
     
