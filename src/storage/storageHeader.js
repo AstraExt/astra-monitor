@@ -222,11 +222,22 @@ export const StorageHeader = GObject.registerClass({
                 this.write.text = '- B/s';
             }
             else {
+                let bytesReadPerSec = usage.bytesReadPerSec;
+                let bytesWrittenPerSec = usage.bytesWrittenPerSec;
+                
+                const threshold = Config.get_int('storage-header-io-threshold');
+                
+                if(bytesReadPerSec < threshold*1000)
+                    bytesReadPerSec = 0;
+                
+                if(bytesWrittenPerSec < threshold*1000)
+                    bytesWrittenPerSec = 0;
+                
                 const unit = Config.get_string('storage-io-unit');
                 let maxFigures = Config.get_int('storage-header-io-figures');
                 maxFigures = Math.max(1, Math.min(4, maxFigures));
-                this.read.text = Utils.formatBytesPerSec(usage.bytesReadPerSec, unit, maxFigures);
-                this.write.text = Utils.formatBytesPerSec(usage.bytesWrittenPerSec, unit, maxFigures);
+                this.read.text = Utils.formatBytesPerSec(bytesReadPerSec, unit, maxFigures);
+                this.write.text = Utils.formatBytesPerSec(bytesWrittenPerSec, unit, maxFigures);
                 
                 const readWidth = this.read.get_preferred_width(-1);
                 const writeWidth = this.write.get_preferred_width(-1);

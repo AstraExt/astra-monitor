@@ -31,23 +31,57 @@ export class MenuBase extends PopupMenu.PopupMenu {
     constructor(sourceActor, arrowAlignment, arrowSide, params = {}) {
         super(sourceActor, arrowAlignment, arrowSide);
         
-        this.statusMenu = new PopupMenu.PopupMenuSection();
-        this.grid = new Grid({ numCols: params.numCols || 2 });
-        
-        // @ts-ignore
-        this.statusMenu.box.add_child(this.grid);
-        // @ts-ignore
-        this.addMenuItem(this.statusMenu);
-        
-        // @ts-ignore
-        this.actor.add_style_class_name('panel-menu');
-        //this.connect('open-state-changed', this._onOpenStateChanged.bind(this));
-        //this.actor.connect('key-press-event', this._onMenuKeyPress.bind(this));
-        
-        // @ts-ignore
-        Main.uiGroup.add_actor(this.actor);
-        // @ts-ignore
-        this.actor.hide();
+        if(params.scrollable) {
+            // SCROLLABLE
+            const scrollView = new St.ScrollView({
+                x_expand: true,
+                y_expand: true,
+                y_align: Clutter.ActorAlign.START,
+            });
+            scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
+            
+            const boxLayout = new St.BoxLayout({
+                vertical: true
+            });
+            scrollView.add_actor(boxLayout);
+            
+            this.statusMenu = new PopupMenu.PopupMenuSection();
+            // @ts-ignore
+            this.addMenuItem(this.statusMenu);
+            
+            const scrollActor = new St.Bin({ child: scrollView });
+            // @ts-ignore
+            this.statusMenu.actor.add_actor(scrollActor);
+            
+            this.grid = new Grid({ numCols: params.numCols || 2 });
+            boxLayout.add_child(this.grid);
+            
+            // @ts-ignore
+            this.actor.add_style_class_name('panel-menu');
+            
+            // @ts-ignore
+            Main.uiGroup.add_actor(this.actor);
+            // @ts-ignore
+            this.actor.hide();
+        }
+        else {
+            // NON-SCROLLABLE
+            this.statusMenu = new PopupMenu.PopupMenuSection();
+            this.grid = new Grid({ numCols: params.numCols || 2 });
+            
+            // @ts-ignore
+            this.statusMenu.box.add_child(this.grid);
+            // @ts-ignore
+            this.addMenuItem(this.statusMenu);
+            
+            // @ts-ignore
+            this.actor.add_style_class_name('panel-menu');
+            
+            // @ts-ignore
+            Main.uiGroup.add_actor(this.actor);
+            // @ts-ignore
+            this.actor.hide();
+        }
     }
     
     addMenuSection(text, style = 'default') {

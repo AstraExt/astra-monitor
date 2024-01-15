@@ -335,6 +335,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'storage-header-io', ioSection);  
         this.addSpinRow({title: this.tab + _('IO Speed Number Max Figures')}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSpinRow({title: this.tab + _('IO Speed Threshold'), subtitle: this.tab + _('in kB/s')}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
         
         storagePage.add(group);
         
@@ -381,7 +382,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'network-header-io', ioSection);
         this.addSpinRow({title: this.tab + _('IO Speed Number Max Figures')}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
-        
+        this.addSpinRow({title: this.tab + _('IO Speed Threshold'), subtitle: this.tab + _('in kB/s')}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
+
         networkPage.add(group);
         
         return networkPage;
@@ -438,10 +440,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         let group = new Adw.PreferencesGroup({title: _('Info')});
         
         let version;
-        if(this.metadata['version-name'])
+        if(this.metadata['version-name'] === this.metadata['version'])
+            version = 'v'+this.metadata['version'];
+        else if(this.metadata['version-name'])
             version = this.metadata['version-name'] + ' (EGOv' + this.metadata['version'] + ')';
         else
             version = 'EGOv' + this.metadata['version'];
+        
         this.addLabelRow(_('Version'), version, group);
         this.addLinkRow(_('Changelog'), 'https://github.com/AstraExt/astra-monitor/blob/main/RELEASES.md', group);
         this.addLinkRow(_('GitHub'), 'https://github.com/AstraExt/astra-monitor', group);

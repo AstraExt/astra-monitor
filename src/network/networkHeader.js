@@ -177,11 +177,22 @@ export const NetworkHeader = GObject.registerClass({
                 this.download.text = '- B/s';
             }
             else {
+                let bytesUploadedPerSec = usage.bytesUploadedPerSec;
+                let bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
+                
+                const threshold = Config.get_int('network-header-io-threshold');
+                
+                if(bytesUploadedPerSec < threshold*1000)
+                    bytesUploadedPerSec = 0;
+                
+                if(bytesDownloadedPerSec < threshold*100)
+                    bytesDownloadedPerSec = 0;
+                
                 const unit = Config.get_string('network-io-unit');
                 let maxFigures = Config.get_int('network-header-io-figures');
                 maxFigures = Math.max(1, Math.min(4, maxFigures));
-                this.upload.text = Utils.formatBytesPerSec(usage.bytesUploadedPerSec, unit, maxFigures, true);
-                this.download.text = Utils.formatBytesPerSec(usage.bytesDownloadedPerSec, unit, maxFigures, true);
+                this.upload.text = Utils.formatBytesPerSec(bytesUploadedPerSec, unit, maxFigures, true);
+                this.download.text = Utils.formatBytesPerSec(bytesDownloadedPerSec, unit, maxFigures, true);
                 
                 const uploadWidth = this.upload.get_preferred_width(-1);
                 const downloadWidth = this.download.get_preferred_width(-1);

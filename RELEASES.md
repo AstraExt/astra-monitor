@@ -1,3 +1,12 @@
+# Astra Monitor 5 - TO BE RELEASED
+
+### New features
+- New threshold option for Network and Storage IO Speed: now you can choose a threshold to avoid showing the IO Speed when it's under a certain value [[#19](https://github.com/AstraExt/astra-monitor/issues/19)]
+
+### Bug fixes
+- Fixed a bug where the icon and the unit was missing in energy sensor value [[#17](https://github.com/AstraExt/astra-monitor/issues/17)]
+
+
 # Astra Monitor 4 - January 15 2024
 
 ### New features

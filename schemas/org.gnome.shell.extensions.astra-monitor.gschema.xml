@@ -286,6 +286,12 @@
       <description>Max number of figures to show on the IO label</description>
       <range min="2" max="4"/>
     </key>
+    <key name="storage-header-io-threshold" type="i">
+      <default>0</default>
+      <summary>IO Speed Threshold</summary>
+      <description>Threshold in kB/s to show the IO label</description>
+      <range min="0" max="1000000"/>
+    </key>
     
     <!-- NETWORK -->
     <key name="network-update" type="d">
@@ -341,6 +347,12 @@
       <summary>Max Number Figures</summary>
       <description>Max number of figures to show on the IO label</description>
       <range min="2" max="4"/>
+    </key>
+    <key name="network-header-io-threshold" type="i">
+      <default>0</default>
+      <summary>IO Speed Threshold</summary>
+      <description>Threshold in kB/s to show the IO label</description>
+      <range min="0" max="1000000"/>
     </key>
     
     <!-- SENSORS -->
