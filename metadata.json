@@ -9,8 +9,8 @@
   "settings-schema": "org.gnome.shell.extensions.astra-monitor",
   "gettext-domain": "monitor@astraext.github.io",
   "license": "GPL-3.0-or-later",
-  "version": 6,
-  "version-name": "4",
+  "version": 7,
+  "version-name": "5",
   "donations": {
     "buymeacoffee": "astra.ext",
     "patreon": "AstraExt"

@@ -1,4 +1,4 @@
-# Astra Monitor 5 - TO BE RELEASED
+# Astra Monitor 5 - January 16 2024
 
 ### New features
 - New threshold option for Network and Storage IO Speed: now you can choose a threshold to avoid showing the IO Speed when it's under a certain value [[#19](https://github.com/AstraExt/astra-monitor/issues/19)]
@@ -10,6 +10,8 @@
 ### Bug fixes
 - Fixed a bug where the icon and the unit was missing in energy sensor value [[#17](https://github.com/AstraExt/astra-monitor/issues/17)]
 - Top Processes list in Processors Menu is now more responsive and should be filled faster
+- Cpu Info popup now squeeze to fit shorter screens [[#18](https://github.com/AstraExt/astra-monitor/issues/18)]
+- Set a minimum size for the Preferences window to avoid UI elements to be cut off [[#21](https://github.com/AstraExt/astra-monitor/issues/21)]
 
 # Astra Monitor 4 - January 15 2024
 
