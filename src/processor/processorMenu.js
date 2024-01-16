@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GLib from 'gi://GLib';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
+import Mtk from 'gi://Mtk';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -68,8 +68,35 @@ export class ProcessorMenu extends MenuBase {
         
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.cpuInfoPopup)
+            if(this.cpuInfoPopup) {
                 this.cpuInfoPopup.open(true);
+                
+                const display = global.display;
+                let actorBox = this.cpuInfoPopup.box.get_allocation_box();
+                // @ts-ignore
+                let rect = new Mtk.Rectangle({
+                    x: actorBox.x1,
+                    y:actorBox.y1,
+                    width: actorBox.x2 - actorBox.x1,
+                    height: actorBox.y2 - actorBox.y1
+                });
+                let monitorIndex = display.get_monitor_index_for_rect(rect);
+                if(monitorIndex === -1)
+                    monitorIndex = display.get_primary_monitor();
+                let geometry = display.get_monitor_geometry(monitorIndex);
+                
+                const height = this.cpuInfoPopup.box.get_preferred_height(-1)[1];
+                
+                if(height > geometry.height * 0.8) {
+                    for(const { key, value, reference } of this.cpuInfoPopup['hideable']) {
+                        key.visible = false;
+                        value.visible = false;
+                        
+                        if(reference && reference.value && reference.original)
+                            reference.value.text = reference.original + ' [...]';
+                    }
+                }
+            }
         });
         
         hoverButton.connect('leave-event', () => {
@@ -84,10 +111,14 @@ export class ProcessorMenu extends MenuBase {
         this.cpuInfoPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
         this.cpuInfoPopup.addMenuSection(_('CPU info'), 'centered');
         
+        this.cpuInfoPopup['hideable'] = [];
+        
         this.cpuInfoPopup.addToMenu(new St.Label({
             text: cpuName,
             style_class: 'astra-monitor-menu-sub-header'
         }), 2);
+        
+        let reference = null;
         
         for(let key in cpuInfo) {
             if(key === 'Model name')
@@ -118,17 +149,19 @@ export class ProcessorMenu extends MenuBase {
                     value = '';
                 }
                 
+                let keyLabel;
                 if(i === 0) {
-                    this.cpuInfoPopup.addToMenu(new St.Label({
+                    keyLabel = new St.Label({
                         text: key,
                         style_class: 'astra-monitor-menu-sub-key'
-                    }));
+                    });
                 }
                 else {
-                    this.cpuInfoPopup.addToMenu(new St.Label({
+                    keyLabel = new St.Label({
                         text: ''
-                    }));
+                    });
                 }
+                this.cpuInfoPopup.addToMenu(keyLabel);
                 
                 if(i >= linesLimit - 1 && value.length > 0) {
                     if(current.length > limit - 5)
@@ -137,8 +170,20 @@ export class ProcessorMenu extends MenuBase {
                         current += '[...]';
                     value = '';
                 }
+                const valueLabel = new St.Label({text: current});
+                if(i > 0) {
+                    this.cpuInfoPopup['hideable'].push({
+                        key: keyLabel,
+                        value: valueLabel,
+                        reference
+                    });
+                    reference = null;
+                }
+                else {
+                    reference = { value: valueLabel, original: current };
+                }
+                this.cpuInfoPopup.addToMenu(valueLabel);
                 
-                this.cpuInfoPopup.addToMenu(new St.Label({text: current}));
                 i++;
             }
             while(value.length);
@@ -724,7 +769,7 @@ export class ProcessorMenu extends MenuBase {
             else {
                 this.cpuTotalPerc.text = cpuUsage.total.toFixed(0) + '%';
                 this.processorBar.setUsage([cpuUsage]);
-            }   
+            }
             
             if(!cpuUsage || !cpuUsage.user || isNaN(cpuUsage.user))
                 this.cpuUserPerc.text = '0%';
