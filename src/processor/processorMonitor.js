@@ -598,7 +598,8 @@ export class ProcessorMonitor extends Monitor {
                     cpuTimes.set(pid, { processTime: utime + stime, totalCpuTime });
                 }
                 catch(e) {
-                    Utils.log(e.message);
+                    //Avoid spamming the log with errors for processes that are gone
+                    //Utils.log(e.message);
                     continue;
                 }
             }

@@ -27,6 +27,7 @@ export class Monitor {
         this.listeners = {};
         this.usageHistory = {};
         this.enqueuedUpdates = [];
+        this.nextCallTime = -1;
         
         //TODO: make this configurable (and move it into a function)
         this.usageHistoryLength = 200; // 200 * 1.5 seconds = 5 minutes
@@ -41,10 +42,15 @@ export class Monitor {
         const updateFrequency = this.updateFrequency;
         if(this.timerID === null) {
             if(updateFrequency >= 0.1) {
+                this.nextCallTime = GLib.get_monotonic_time() + (updateFrequency * 1000000);
                 this.timerID = GLib.timeout_add(
                     GLib.PRIORITY_DEFAULT,
                     updateFrequency * 1000,
-                    () => this.update()
+                    () => {
+                        const res = this.update();
+                        this.nextCallTime = GLib.get_monotonic_time() + (updateFrequency * 1000000);
+                        return res;
+                    }
                 );
             }
         }
@@ -54,8 +60,16 @@ export class Monitor {
         if(this.timerID) {
             GLib.source_remove(this.timerID);
             this.timerID = null;
+            this.nextCallTime = -1;
         }
         this.resetData();
+    }
+    
+    get dueIn() {
+        if(this.nextCallTime === -1)
+            return -1;
+        let dueInMicroseconds = this.nextCallTime - GLib.get_monotonic_time();
+        return dueInMicroseconds / 1000;
     }
     
     resetData() {

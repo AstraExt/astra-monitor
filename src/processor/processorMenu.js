@@ -15,6 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import GLib from 'gi://GLib';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
@@ -394,6 +395,7 @@ export class ProcessorMenu extends MenuBase {
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
         
         this.topProcesses = [];
+        this.queueTopProcessesUpdate = false;
         
         //TODO: allow to customize number of processes to show in the menu
         const numProcesses = 5;
@@ -669,8 +671,12 @@ export class ProcessorMenu extends MenuBase {
         this.update('graph');
         Utils.processorMonitor.listen(this.graph, 'cpuUsage', this.update.bind(this, 'graph'));
         
+        
         Utils.processorMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
         Utils.processorMonitor.requestUpdate('topProcesses');
+        
+        if(Utils.processorMonitor.dueIn >= 200)
+            this.queueTopProcessesUpdate = true;
         
         this.menuUptimeTimer = Utils.getUptime((bootTime) => {
             this.menuUptime.text = Utils.formatUptime(bootTime);
@@ -681,6 +687,8 @@ export class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.unlisten(this, 'cpuUsage');
         Utils.processorMonitor.unlisten(this.graph, 'cpuUsage');
         Utils.processorMonitor.unlisten(this, 'topProcesses');
+        
+        this.queueTopProcessesUpdate = false;
         
         if(this.menuUptimeTimer) {
             this.menuUptimeTimer.stop();
@@ -824,6 +832,12 @@ export class ProcessorMenu extends MenuBase {
                         topProcess.percentage.text = cpu.toFixed(1) + '%';
                     }
                 }
+            }
+            
+            if(this.queueTopProcessesUpdate) {
+                this.queueTopProcessesUpdate = false;
+                Utils.processorMonitor.requestUpdate('topProcesses');
+                return;
             }
             return;
         }

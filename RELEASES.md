@@ -9,6 +9,7 @@
 
 ### Bug fixes
 - Fixed a bug where the icon and the unit was missing in energy sensor value [[#17](https://github.com/AstraExt/astra-monitor/issues/17)]
+- Top Processes list in Processors Menu is now more responsive and should be filled faster
 
 # Astra Monitor 4 - January 15 2024
 
