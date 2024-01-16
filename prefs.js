@@ -26,6 +26,7 @@ import Utils from './src/utils/utils.js';
 import Config from './src/config.js';
 
 export default class AstraMonitorPrefs extends ExtensionPreferences {
+    minimumSize = { width: 500, height: 300 };
     defaultSize = { width: 800, height: 650 };
     
     loadCustomTheme() {
@@ -94,6 +95,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }
         
         window.set_default_size(this.defaultSize.width, this.defaultSize.height);
+        window.set_size_request(this.minimumSize.width, this.minimumSize.height);
     }
     
     setupGeneral() {
