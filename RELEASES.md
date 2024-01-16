@@ -5,6 +5,7 @@
 - New option to ignore network interfaces: now you can choose to selectively ignore specific network interfaces to avoid showing them in the Network Menu and to exclude them from IO Speed calculation [[#20](https://github.com/AstraExt/astra-monitor/issues/20)]
 - Now Clicking on the Extension Settings in a specific menu will open the Preferences window with the corresponding tab selected [[#12](https://github.com/AstraExt/astra-monitor/issues/12)]
 - Debug Mode: now you can enable debug mode to see more logs in the console (for future debugging features)
+- Now you can override Header's Font Family and Font Size to suit your personal preferences [[#3](https://github.com/AstraExt/astra-monitor/issues/3)]
 
 ### Bug fixes
 - Fixed a bug where the icon and the unit was missing in energy sensor value [[#17](https://github.com/AstraExt/astra-monitor/issues/17)]

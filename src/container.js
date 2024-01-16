@@ -45,6 +45,7 @@ class Container extends PanelMenu.Button {
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
+            style: this.computeStyle(),
         });
         
         // @ts-ignore
@@ -54,15 +55,30 @@ class Container extends PanelMenu.Button {
         this.add_style_class_name('astra-monitor-header-container');
         this.setup();
         
-        Config.connect(this, 'changed::panel-box', () => {
-            this.updatePanel();
-        });
-        Config.connect(this, 'changed::panel-box-order', () => {
-            this.updatePanel();
-        });
-        Config.connect(this, 'changed::monitors-order', () => {
-            this.reorderWidgets();
-        });
+        Config.connect(this, 'changed::panel-box', this.updatePanel.bind(this));
+        Config.connect(this, 'changed::panel-box-order', this.updatePanel.bind(this));
+        Config.connect(this, 'changed::monitors-order', this.reorderWidgets.bind(this));
+        Config.connect(this, 'changed::headers-font-family', this.updateStyle.bind(this));
+        Config.connect(this, 'changed::headers-font-size', this.updateStyle.bind(this));
+    }
+    
+    computeStyle() {
+        let style = '';
+        
+        const fontFamily = Config.get_string('headers-font-family');
+        if(fontFamily)
+            style += `font-family:"${fontFamily}";`;
+        
+        const fontSize = Config.get_int('headers-font-size');
+        if(fontSize)
+            style += `font-size:${fontSize}pt;`;
+        
+        return style;
+    }
+    
+    updateStyle() {
+        const style = this.computeStyle();
+        this.box.style = style;
     }
     
     addWidget(key, widget) {

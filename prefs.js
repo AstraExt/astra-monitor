@@ -166,12 +166,22 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             title: this.tab + _('Headers Height'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 28'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'headers-height', headersSection, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true);
+        }, 'headers-height', headersSection, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true, 28);
         this.addSpinRow({
             title: this.tab + _('Headers Margins'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 2'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'headers-margins', headersSection, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true);
+        }, 'headers-margins', headersSection, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true, 2);
+        this.addFontRow({
+            title: this.tab + _('Headers Font'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Set to empty to disable font override'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'headers-font-family', headersSection, '');
+        this.addSpinRow({
+            title: this.tab + _('Headers Font Size'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Set to 0 to disable size override'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'headers-font-size', headersSection, {min: 0, max: 30, digits: 0, step: 1, page: 2}, true, 0);
         
         generalPage.add(group);
         
@@ -743,7 +753,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
      * @param {{min:number, max:number, digits?:number, step?:number, page?:number}} adj 
      * @param {boolean} numeric
      */
-    addSpinRow(props, setting, group, adj, numeric = true) {
+    addSpinRow(props, setting, group, adj, numeric = true, reset = null) {
         const adjustment = new Gtk.Adjustment({
             lower: adj.min,
             upper: adj.max,
@@ -752,12 +762,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             value: (adj.digits || 0) === 0 ? Config.get_int(setting) : Config.get_double(setting)
         });
         
-        const row = new Adw.ActionRow(props);
+        const row = new Adw.ActionRow(props);    
         
         let spinButton = new Gtk.SpinButton({
             halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER,
-            hexpand: true,
+            hexpand: false,
             vexpand: false,
             xalign: 0.5,
             adjustment,
@@ -765,11 +775,78 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             numeric
         });
         
+        if(reset !== null) {
+            const resetButton = new Gtk.Button({
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+                hexpand: false,
+                vexpand: false,
+                icon_name: 'edit-undo-symbolic',
+                sensitive: true,
+            });
+            row.add_suffix(resetButton);
+            
+            resetButton.connect('clicked', () => {
+                Config.set(setting, reset, (adj.digits || 0) === 0 ? 'int' : 'number');
+                spinButton.value = reset;
+            });
+        }
+        
         spinButton.connect('notify::value', widget => {
             Config.set(setting, widget.value, (adj.digits || 0) === 0 ? 'int' : 'number');
         });
         row.add_suffix(spinButton);
         row.activatable_widget = spinButton;
+        
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
+    }
+    
+    /**
+     * 
+     * @param {{title:string, subtitle?:string, icon_name?:string}} props
+     * @param {string} setting 
+     * @param {*} group 
+     */
+    addFontRow(props, setting, group, reset = null) {
+        const row = new Adw.ActionRow(props);
+        
+        const fontButton = new Gtk.FontButton({
+            modal: true,
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: false,
+            vexpand: false,
+            use_size: false,
+            level: Gtk.FontChooserLevel.FAMILY,
+            preview_text: 'Astra Monitor v' + Utils.metadata.version,
+            font: Config.get_string(setting),
+        });
+        
+        fontButton.connect('font-set', widget => {
+            Config.set(setting, widget.font_desc.get_family(), 'string');
+        });
+        
+        if(reset !== null) {
+            const resetButton = new Gtk.Button({
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+                hexpand: false,
+                vexpand: false,
+                icon_name: 'edit-undo-symbolic',
+                sensitive: true,
+            });
+            resetButton.connect('clicked', () => {
+                Config.set(setting, reset, 'string');
+                fontButton.font = reset;
+            });
+            row.add_suffix(resetButton);
+        }
+        
+        row.add_suffix(fontButton);
+        row.activatable_widget = fontButton;
         
         if(group.add)
             group.add(row);

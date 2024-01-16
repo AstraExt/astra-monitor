@@ -52,6 +52,8 @@ export const StorageHeader = GObject.registerClass({
         
         Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::storage-header-io', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
     }
     
     resetMaxWidths() {
@@ -184,6 +186,7 @@ export const StorageHeader = GObject.registerClass({
     buildSpeed() {
         this.speedContainer = new St.BoxLayout({
             style_class: 'astra-monitor-header-speed-container',
+            x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             vertical: true,

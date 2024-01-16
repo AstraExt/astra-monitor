@@ -61,7 +61,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
 - **Colors:** Customization of the colors in the preferences panel.
 - **Ordering:** Ability to rearrange the order of the displayed resources.
 - **Sensors:** Support for more sensors sources and better sensor selection UI. (e.g. IPMI, sensor source plugins!?)
-- **History:** Settings for the time range and size of history graphs.
+- **History:** ~~Settings for the time range and size of history graphs~~.
 - **GPU:** Improvement of GPU monitoring.
 - **Network:** Improvement of network monitoring. (e.g. selection of network interface, manual vs automatic max speed detection, VPNs)
 - **Disk:** Improvement of disk monitoring. (e.g. ~~selection of main disk~~, disk health)

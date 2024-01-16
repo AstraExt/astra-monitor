@@ -47,6 +47,8 @@ export const SensorsHeader = GObject.registerClass({
         Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::sensors-header-sensor1-show', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::sensors-header-sensor2-show', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
+        Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
     }
     
     resetMaxWidths() {

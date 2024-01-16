@@ -68,6 +68,17 @@
       <summary>Preferred Theme Style</summary>
       <description>Select the preferred theme style</description>
     </key>
+    <key name="headers-font-family" type="s">
+      <default>''</default>
+      <summary>Headers Font Family</summary>
+      <description>Set the font family of the headers (empty to disable override)</description>
+    </key>
+    <key name="headers-font-size" type="i">
+      <default>0</default>
+      <summary>Headers Font Size</summary>
+      <description>Set the font size of the headers (0 to disable override)</description>
+      <range min="0" max="50"/>
+    </key>
     <key name="headers-height" type="i">
       <default>28</default>
       <summary>Headers Height</summary>
