@@ -29,7 +29,7 @@ export class SensorsMenu extends MenuBase {
         super(sourceActor, arrowAlignment, arrowSide);
         
         this.createSensorsList();
-        this.addUtilityButtons();
+        this.addUtilityButtons('sensors');
     }
     
     createSensorsList() {

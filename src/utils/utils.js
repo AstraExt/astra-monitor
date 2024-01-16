@@ -46,6 +46,10 @@ export default class Utils {
      */
     static sensorsMonitor;
     
+    static init() {
+        this.debug = Config.get_boolean('debug-mode');
+    }
+    
     static get logHeader() {
         if(Utils.debug)
             return '###### ' + Utils.metadata.name + ' ######';

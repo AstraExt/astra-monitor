@@ -345,7 +345,7 @@ export class NetworkMenu extends MenuBase {
     }
     
     addUtilityButtons() {
-        super.addUtilityButtons((box) => {
+        super.addUtilityButtons('network', (box) => {
             let button = new St.Button({style_class: 'button'});
             button.child = new St.Icon({
                 gicon: Utils.getLocalIcon('am-network-symbolic'),

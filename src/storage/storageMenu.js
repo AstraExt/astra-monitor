@@ -406,7 +406,7 @@ export class StorageMenu extends MenuBase {
     }
     
     addUtilityButtons() {
-        super.addUtilityButtons((box) => {
+        super.addUtilityButtons('storage', (box) => {
             const appSys = Shell.AppSystem.get_default();
             
             //TODO: add enable/disable these buttons on the preferences menu!?

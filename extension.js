@@ -34,6 +34,7 @@ export default class AstraMonitorExtension extends Extension {
         Utils.extension = this;
         Utils.metadata = this.metadata;
         Config.settings = this.getSettings();
+        Utils.init();
         
         Utils.log('AstraMonitor enabled');
         

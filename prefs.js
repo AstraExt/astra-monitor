@@ -42,9 +42,14 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         Utils.metadata = this.metadata;
         Config.settings = this.getSettings();
+        Utils.init();
+        
         this.loadCustomTheme();
         this.expanded = null;
         this.tab = ' '.repeat(5);
+        
+        const defaultCategory = Config.get_string('queued-pref-category');
+        Config.set('queued-pref-category', '', 'string');
         
         window.connect('close-request', () => {
             Utils.metadata = null;
@@ -72,6 +77,21 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const aboutPage = this.setupAbout();
         window.add(aboutPage);
+        
+        if(defaultCategory) {
+            if(defaultCategory === 'processors')
+                window.set_visible_page(processorsPage);
+            else if(defaultCategory === 'memory')
+                window.set_visible_page(memoryPage);
+            else if(defaultCategory === 'storage')
+                window.set_visible_page(storagePage);
+            else if(defaultCategory === 'network')
+                window.set_visible_page(networkPage);
+            else if(defaultCategory === 'sensors')
+                window.set_visible_page(sensorsPage);
+            else if(defaultCategory === 'about')
+                window.set_visible_page(aboutPage);
+        }
         
         window.set_default_size(this.defaultSize.width, this.defaultSize.height);
     }
@@ -510,6 +530,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addLinkRow(_('Report a bug or suggest new feature'), 'https://github.com/AstraExt/astra-monitor/issues/new/choose', group);
         this.addLinkRow(_('Buy us a coffee'), 'https://www.buymeacoffee.com/astra.ext', group);
         this.addLinkRow(_('Become a patron'), 'https://www.patreon.com/AstraExt', group);
+        this.addSwitchRow(_('Debug Mode'), 'debug-mode', group);
         aboutPage.add(group);
         
         return aboutPage;

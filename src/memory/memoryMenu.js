@@ -36,7 +36,7 @@ export class MemoryMenu extends MenuBase {
         this.addUsage();
         this.addTopProcesses();
         this.addSwap();
-        this.addUtilityButtons();
+        this.addUtilityButtons('memory');
     }
     
     addUsage() {

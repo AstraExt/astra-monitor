@@ -15,17 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// @ts-ignore
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import Shell from 'gi://Shell';
 
-import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import Utils from './utils/utils.js';
 import {Grid} from './grid.js';
+import Config from './config.js';
 
 export class MenuBase extends PopupMenu.PopupMenu {
     constructor(sourceActor, arrowAlignment, arrowSide, params = {}) {
@@ -107,9 +107,10 @@ export class MenuBase extends PopupMenu.PopupMenu {
     }
     
     /**
+     * @param {string} category
      * @param {(box:St.BoxLayout) => void} addButtons 
      */
-    addUtilityButtons(addButtons = null) {
+    addUtilityButtons(category = null, addButtons = null) {
         this.utilityBox = new St.BoxLayout({
             style_class: 'astra-monitor-menu-button-box',
             x_align: Clutter.ActorAlign.CENTER,
@@ -146,6 +147,8 @@ export class MenuBase extends PopupMenu.PopupMenu {
         button.connect('clicked', () => {
             this.close(true);
             try {
+                if(category)
+                    Config.set('queued-pref-category', category, 'string');
                 Utils.extension.openPreferences();
             } catch (err) {
                 Utils.log(`Error opening settings: ${err}`);

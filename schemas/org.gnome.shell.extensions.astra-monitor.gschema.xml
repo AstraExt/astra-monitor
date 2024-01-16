@@ -34,6 +34,18 @@
   </enum>
   
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
+    <!-- UTILS -->
+    <key name="debug-mode" type="b">
+      <default>false</default>
+      <summary>Debug</summary>
+      <description>Enable debug mode</description>
+    </key>
+    <key name="queued-pref-category" type="s">
+      <default>''</default>
+      <summary>Default prefs category</summary>
+      <description>Default category when open Extension Settings</description>
+    </key>
+      
     <!-- GENERAL -->
     <key name="panel-box" enum="org.gnome.shell.extensions.astra-monitor.enum.panel-box">
       <default>'right'</default>
