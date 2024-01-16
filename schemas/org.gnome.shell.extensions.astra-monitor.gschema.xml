@@ -305,6 +305,11 @@
       <summary>Network IO Unit</summary>
       <description>Unit of measurement for the network IO</description>
     </key>
+    <key name="network-ignored" type="s">
+      <default>'"[]"'</default>
+      <summary>Ignored Network Interfaces</summary>
+      <description>A JSON List of Network interfaces to ignore</description>
+    </key>
     <key name="network-header-show" type="b">
       <default>true</default>
       <summary>Network Header</summary>

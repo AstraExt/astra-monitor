@@ -364,6 +364,62 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         ];
         this.addComboRow(_('Data Unit'), choicesPanel, 'network-io-unit', group, 'string');
         
+        const ignoredSection = this.addExpanderRow(_('Ignored Network Interfaces'), group);
+        
+        const devices = Utils.getNetworkInterfacesSync();
+        let ignoredDevices = Config.get_json('network-ignored');
+        if(ignoredDevices === null || !Array.isArray(ignoredDevices))
+            ignoredDevices = [];
+        
+        for(const [name, device] of devices.entries()) {
+            const status = !ignoredDevices.includes(name);
+            
+            const subtitle = status ? _('Active') : _('Ignored');
+            
+            const row = new Adw.ActionRow({ title: name, subtitle });
+            ignoredSection.add_row(row);
+            
+            const icon_name = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
+            
+            const icon = new Gtk.Image({ icon_name: icon_name });
+            icon.set_margin_start(15);
+            icon.set_margin_end(10);
+            row.add_prefix(icon);
+            
+            const toggle = new Gtk.Switch({
+                active: !status,
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+            });
+            
+            toggle.connect('state-set', (switchObj, state) => {
+                if(state) {
+                    row.subtitle = _('Ignored');
+                    icon.icon_name = 'am-dialog-error-symbolic';
+                    
+                    let ignoredDevices = Config.get_json('network-ignored');
+                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
+                        ignoredDevices = [];
+                    if(!ignoredDevices.includes(name))
+                        ignoredDevices.push(name);
+                    Config.set('network-ignored', JSON.stringify(ignoredDevices), 'string');
+                } else {
+                    row.subtitle = _('Active');
+                    icon.icon_name = 'am-dialog-ok-symbolic';
+                    
+                    let ignoredDevices = Config.get_json('network-ignored');
+                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
+                        ignoredDevices = [];
+                    if(ignoredDevices.includes(name))
+                        ignoredDevices = ignoredDevices.filter(device => device !== name);
+                    Config.set('network-ignored', JSON.stringify(ignoredDevices), 'string');
+                }
+            });
+            
+            row.add_suffix(toggle);
+            row.activatable_widget = toggle;
+        }
+        
         networkPage.add(group);
         
         group = new Adw.PreferencesGroup({title: 'Header'});

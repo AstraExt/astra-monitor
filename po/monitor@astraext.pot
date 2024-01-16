@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-16 00:02+0100\n"
+"POT-Creation-Date: 2024-01-16 01:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,7 +161,7 @@ msgstr[1] ""
 msgid "now"
 msgstr ""
 
-#: src/sensors/sensorsMenu.js:37 prefs.js:393 prefs.js:395
+#: src/sensors/sensorsMenu.js:37 prefs.js:447 prefs.js:449
 msgid "Sensors"
 msgstr ""
 
@@ -189,12 +189,12 @@ msgstr ""
 msgid "No network interface found"
 msgstr ""
 
-#: src/network/networkMenu.js:219
+#: src/network/networkMenu.js:228
 msgctxt "upload"
 msgid "U"
 msgstr ""
 
-#: src/network/networkMenu.js:250
+#: src/network/networkMenu.js:259
 msgctxt "download"
 msgid "D"
 msgstr ""
@@ -277,7 +277,7 @@ msgstr ""
 msgid "Allocatable"
 msgstr ""
 
-#: src/memory/memoryMenu.js:217 prefs.js:233
+#: src/memory/memoryMenu.js:217 prefs.js:233 prefs.js:375 prefs.js:405
 msgid "Active"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgid "Headers Height"
 msgstr ""
 
 #: prefs.js:147 prefs.js:152 prefs.js:180 prefs.js:245 prefs.js:324
-#: prefs.js:375 prefs.js:412
+#: prefs.js:429 prefs.js:466
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr ""
 
@@ -444,32 +444,32 @@ msgstr ""
 msgid "Processors"
 msgstr ""
 
-#: prefs.js:169 prefs.js:226 prefs.js:274 prefs.js:349 prefs.js:396
-#: prefs.js:426 prefs.js:430
+#: prefs.js:169 prefs.js:226 prefs.js:274 prefs.js:349 prefs.js:450
+#: prefs.js:480 prefs.js:484
 msgid "Show"
 msgstr ""
 
-#: prefs.js:170 prefs.js:227 prefs.js:275 prefs.js:350 prefs.js:397
+#: prefs.js:170 prefs.js:227 prefs.js:275 prefs.js:350 prefs.js:451
 msgid "Update frequency (seconds)"
 msgstr ""
 
-#: prefs.js:174 prefs.js:239 prefs.js:318 prefs.js:406
+#: prefs.js:174 prefs.js:239 prefs.js:318 prefs.js:460
 msgid "Header"
 msgstr ""
 
-#: prefs.js:176 prefs.js:241 prefs.js:320 prefs.js:371 prefs.js:408
+#: prefs.js:176 prefs.js:241 prefs.js:320 prefs.js:425 prefs.js:462
 msgid "Icon"
 msgstr ""
 
-#: prefs.js:177 prefs.js:242 prefs.js:321 prefs.js:372 prefs.js:409
+#: prefs.js:177 prefs.js:242 prefs.js:321 prefs.js:426 prefs.js:463
 msgid "Show Icon"
 msgstr ""
 
-#: prefs.js:179 prefs.js:244 prefs.js:323 prefs.js:374 prefs.js:411
+#: prefs.js:179 prefs.js:244 prefs.js:323 prefs.js:428 prefs.js:465
 msgid "Icon Size"
 msgstr ""
 
-#: prefs.js:180 prefs.js:245 prefs.js:324 prefs.js:375 prefs.js:412
+#: prefs.js:180 prefs.js:245 prefs.js:324 prefs.js:429 prefs.js:466
 msgid "Default value is 18"
 msgstr ""
 
@@ -525,7 +525,7 @@ msgstr ""
 msgid "Core Bars Breakdown"
 msgstr ""
 
-#: prefs.js:204 prefs.js:421
+#: prefs.js:204 prefs.js:475
 msgid "None"
 msgstr ""
 
@@ -605,86 +605,98 @@ msgstr ""
 msgid "Show Storage Usage Percentage"
 msgstr ""
 
-#: prefs.js:332 prefs.js:379
+#: prefs.js:332 prefs.js:433
 msgid "IO"
 msgstr ""
 
-#: prefs.js:333 prefs.js:380
+#: prefs.js:333 prefs.js:434
 msgid "Show Realtime IO Bar"
 msgstr ""
 
-#: prefs.js:334 prefs.js:381
+#: prefs.js:334 prefs.js:435
 msgid "Show IO History Graph"
 msgstr ""
 
-#: prefs.js:335 prefs.js:382
+#: prefs.js:335 prefs.js:436
 msgid "IO History Graph Width"
 msgstr ""
 
-#: prefs.js:336 prefs.js:383
+#: prefs.js:336 prefs.js:437
 msgid "Show IO Speed"
 msgstr ""
 
-#: prefs.js:337 prefs.js:384
+#: prefs.js:337 prefs.js:438
 msgid "IO Speed Number Max Figures"
 msgstr ""
 
-#: prefs.js:338 prefs.js:385
+#: prefs.js:338 prefs.js:439
 msgid "IO Speed Threshold"
 msgstr ""
 
-#: prefs.js:400
-msgid "Celsius"
+#: prefs.js:338 prefs.js:439
+msgid "in kB/s"
 msgstr ""
 
-#: prefs.js:401
-msgid "Fahrenheit"
+#: prefs.js:367
+msgid "Ignored Network Interfaces"
 msgstr ""
 
-#: prefs.js:403
-msgid "Temperature Unit"
-msgstr ""
-
-#: prefs.js:425
-msgid "Sensor 1"
-msgstr ""
-
-#: prefs.js:427 prefs.js:431
-msgid "Source"
-msgstr ""
-
-#: prefs.js:429
-msgid "Sensor 2"
-msgstr ""
-
-#: prefs.js:440
-msgid "Info"
-msgstr ""
-
-#: prefs.js:450
-msgid "Version"
-msgstr ""
-
-#: prefs.js:451
-msgid "Changelog"
-msgstr ""
-
-#: prefs.js:452
-msgid "GitHub"
-msgstr ""
-
-#: prefs.js:453
-msgid "GNOME Extensions page"
+#: prefs.js:375 prefs.js:395
+msgid "Ignored"
 msgstr ""
 
 #: prefs.js:454
-msgid "Report a bug or suggest new feature"
+msgid "Celsius"
 msgstr ""
 
 #: prefs.js:455
+msgid "Fahrenheit"
+msgstr ""
+
+#: prefs.js:457
+msgid "Temperature Unit"
+msgstr ""
+
+#: prefs.js:479
+msgid "Sensor 1"
+msgstr ""
+
+#: prefs.js:481 prefs.js:485
+msgid "Source"
+msgstr ""
+
+#: prefs.js:483
+msgid "Sensor 2"
+msgstr ""
+
+#: prefs.js:494
+msgid "Info"
+msgstr ""
+
+#: prefs.js:504
+msgid "Version"
+msgstr ""
+
+#: prefs.js:505
+msgid "Changelog"
+msgstr ""
+
+#: prefs.js:506
+msgid "GitHub"
+msgstr ""
+
+#: prefs.js:507
+msgid "GNOME Extensions page"
+msgstr ""
+
+#: prefs.js:508
+msgid "Report a bug or suggest new feature"
+msgstr ""
+
+#: prefs.js:509
 msgid "Buy us a coffee"
 msgstr ""
 
-#: prefs.js:456
+#: prefs.js:510
 msgid "Become a patron"
 msgstr ""

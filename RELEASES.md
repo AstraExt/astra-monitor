@@ -2,10 +2,10 @@
 
 ### New features
 - New threshold option for Network and Storage IO Speed: now you can choose a threshold to avoid showing the IO Speed when it's under a certain value [[#19](https://github.com/AstraExt/astra-monitor/issues/19)]
+- New option to ignore network interfaces: now you can choose to selectively ignore specific network interfaces to avoid showing them in the Network Menu and to exclude them from IO Speed calculation [[#20](https://github.com/AstraExt/astra-monitor/issues/20)]
 
 ### Bug fixes
 - Fixed a bug where the icon and the unit was missing in energy sensor value [[#17](https://github.com/AstraExt/astra-monitor/issues/17)]
-
 
 # Astra Monitor 4 - January 15 2024
 

@@ -1176,4 +1176,81 @@ export default class Utils {
         // @ts-ignore
         return Gio.icon_new_for_string(`${Utils.metadata.path}/icons/hicolor/scalable/actions/${icon_name}.svg`);
     }
+    
+    /**
+     * @typedef {{}} InterfaceDevice
+     */
+    
+    /**
+     * This function is sync, but it spawns only once the user opens the network menu
+     * May be convered to async but this will introduce a graphical update lag (minor)
+     * Impact measured to be ~15ms: relevant but not a priority
+     * @returns {Map<string, InterfaceDevice>}
+     */
+    static getNetworkInterfacesSync() {
+        const devices = new Map();
+        
+        try {
+            const [result, stdout, stderr] = GLib.spawn_command_line_sync('ip -d -j addr');
+            
+            if (result && stdout) {
+                const decoder = new TextDecoder("utf-8");
+                const output = decoder.decode(stdout);
+                
+                const json = JSON.parse(output);
+                
+                for(const data of json) {
+                    const name = data.ifname;
+                    if(name === 'lo')
+                        continue;
+                    
+                    const flags = data.flags || [];
+                    if(flags.includes('NO-CARRIER') || flags.includes('LOOPBACK'))
+                        continue;
+                    
+                    const ifindex = data.ifindex;
+                    if(data.ifindex === undefined)
+                        continue;
+                    
+                    const device = {
+                        name,
+                        flags,
+                        ifindex
+                    };
+                    
+                    if(data.mtu)
+                        device.mtu = data.mtu;
+                    if(data.qdisc)
+                        device.qdisc = data.qdisc;
+                    if(data.operstate)
+                        device.operstate = data.operstate;
+                    if(data.linkmode)
+                        device.linkmode = data.linkmode;
+                    if(data.group)
+                        device.group = data.group;
+                    if(data.txqlen)
+                        device.txqlen = data.txqlen;
+                    if(data.link_type)
+                        device.link_type = data.link_type;
+                    if(data.address)
+                        device.address = data.address;
+                    if(data.broadcast)
+                        device.broadcast = data.broadcast;
+                    if(data.netmask)
+                        device.netmask = data.netmask;
+                    if(data.altnames)
+                        device.altnames = data.altnames;
+                    if(data.addr_info)
+                        device.addr_info = data.addr_info;
+                        
+                    devices.set(name, device);
+                }
+            }
+        }
+        catch(e) {
+            Utils.error(e.message);
+        }
+        
+        return devices;
+    }
 }

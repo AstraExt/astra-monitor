@@ -111,15 +111,26 @@ export class NetworkMenu extends MenuBase {
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
             this.addToMenu(this.deviceSection, 2);
+            
+            Config.connect(this, 'changed::network-ignored', this.updateDeviceList.bind(this));
         }
     }
     
     updateDeviceList() {
-        const devices = Utils.networkMonitor.getNetworkInterfacesSync();
+        let devices = Utils.getNetworkInterfacesSync();
         if(devices.size > 0)
             this.noDevicesLabel.hide();
         else
             this.noDevicesLabel.show();
+        
+        //filter ignored devices
+        const ignoredDevices = Config.get_json('network-ignored');
+        if(ignoredDevices && Array.isArray(ignoredDevices) && ignoredDevices.length > 0) {
+            for(const id of ignoredDevices) {
+                if(devices.has(id))
+                    devices.delete(id);
+            }
+        }
         
         // remove all devices that are not present anymore
         for(const [id, device] of this.devices.entries()) {

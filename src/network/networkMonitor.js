@@ -52,6 +52,17 @@ export class NetworkMonitor extends Monitor {
         });
         
         Config.connect(this, 'changed::network-update', this.restart.bind(this));
+        
+        this.ignored = Config.get_json('network-ignored');
+        if(this.ignored === null || !Array.isArray(this.ignored))
+            this.ignored = [];
+        Config.connect(this, 'changed::network-ignored', () => {
+            this.reset();
+            
+            this.ignored = Config.get_json('network-ignored');
+            if(this.ignored === null || !Array.isArray(this.ignored))
+                this.ignored = [];
+        });
     }
     
     get updateFrequency() {
@@ -200,6 +211,10 @@ export class NetworkMonitor extends Monitor {
             if (!this.isMonitoredInterface(interfaceName))
                 continue;
             
+                
+            if(this.ignored.includes(interfaceName))
+                continue;
+            
             if(detailed) {
                 devices.set(interfaceName, {
                     bytesUploaded: parseInt(fields[9]),
@@ -274,83 +289,6 @@ export class NetworkMonitor extends Monitor {
             this.pushUsageHistory('detailedNetworkIO', finalData);
         }
         return true;
-    }
-    
-    /**
-     * @typedef {{}} InterfaceDevice
-     */
-    
-    /**
-     * This function is sync, but it spawns only once the user opens the network menu
-     * May be convered to async but this will introduce a graphical update lag (minor)
-     * Impact measured to be ~15ms: relevant but not a priority
-     * @returns {Map<string, InterfaceDevice>}
-     */
-    getNetworkInterfacesSync() {
-        const devices = new Map();
-        
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('ip -d -j addr');
-            
-            if (result && stdout) {
-                const decoder = new TextDecoder("utf-8");
-                const output = decoder.decode(stdout);
-                
-                const json = JSON.parse(output);
-                
-                for(const data of json) {
-                    const name = data.ifname;
-                    if(name === 'lo')
-                        continue;
-                    
-                    const flags = data.flags || [];
-                    if(flags.includes('NO-CARRIER') || flags.includes('LOOPBACK'))
-                        continue;
-                    
-                    const ifindex = data.ifindex;
-                    if(data.ifindex === undefined)
-                        continue;
-                    
-                    const device = {
-                        name,
-                        flags,
-                        ifindex
-                    };
-                    
-                    if(data.mtu)
-                        device.mtu = data.mtu;
-                    if(data.qdisc)
-                        device.qdisc = data.qdisc;
-                    if(data.operstate)
-                        device.operstate = data.operstate;
-                    if(data.linkmode)
-                        device.linkmode = data.linkmode;
-                    if(data.group)
-                        device.group = data.group;
-                    if(data.txqlen)
-                        device.txqlen = data.txqlen;
-                    if(data.link_type)
-                        device.link_type = data.link_type;
-                    if(data.address)
-                        device.address = data.address;
-                    if(data.broadcast)
-                        device.broadcast = data.broadcast;
-                    if(data.netmask)
-                        device.netmask = data.netmask;
-                    if(data.altnames)
-                        device.altnames = data.altnames;
-                    if(data.addr_info)
-                        device.addr_info = data.addr_info;
-                        
-                    devices.set(name, device);
-                }
-            }
-        }
-        catch(e) {
-            Utils.error(e.message);
-        }
-        
-        return devices;
     }
     
     destroy() {
