@@ -43,7 +43,7 @@ export class ProcessorMenu extends MenuBase {
         this.addTopProcesses();
         this.addGPUs();
         this.addSystemUptime();
-        this.addUtilityButtons('processor');
+        this.addUtilityButtons('processors');
     }
     
     addName() {

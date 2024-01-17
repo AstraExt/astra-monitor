@@ -1,14 +1,19 @@
+# Astra Monitor 6 - TO BE RELEASED
+
+### Bug fixes
+- Fixed processor settings menu button going to general settings instead of processor settings [[#23](https://github.com/AstraExt/astra-monitor/issues/23)]
+
 # Astra Monitor 5 - January 16 2024
 
 ### New features
 - New threshold option for Network and Storage IO Speed: now you can choose a threshold to avoid showing the IO Speed when it's under a certain value [[#19](https://github.com/AstraExt/astra-monitor/issues/19)]
 - New option to ignore network interfaces: now you can choose to selectively ignore specific network interfaces to avoid showing them in the Network Menu and to exclude them from IO Speed calculation [[#20](https://github.com/AstraExt/astra-monitor/issues/20)]
-- Now Clicking on the Extension Settings in a specific menu will open the Preferences window with the corresponding tab selected [[#12](https://github.com/AstraExt/astra-monitor/issues/12)]
+- Now clicking on the Extension Settings in a specific menu will open the Preferences window with the corresponding tab selected [[#12](https://github.com/AstraExt/astra-monitor/issues/12)]
 - Debug Mode: now you can enable debug mode to see more logs in the console (for future debugging features)
 - Now you can override Header's Font Family and Font Size to suit your personal preferences [[#3](https://github.com/AstraExt/astra-monitor/issues/3)]
 
 ### Bug fixes
-- Fixed a bug where the icon and the unit was missing in energy sensor value [[#17](https://github.com/AstraExt/astra-monitor/issues/17)]
+- Fixed a bug where the icon and the unit were missing in energy sensor value [[#17](https://github.com/AstraExt/astra-monitor/issues/17)]
 - Top Processes list in Processors Menu is now more responsive and should be filled faster
 - Cpu Info popup now squeeze to fit shorter screens [[#18](https://github.com/AstraExt/astra-monitor/issues/18)]
 - Set a minimum size for the Preferences window to avoid UI elements to be cut off [[#21](https://github.com/AstraExt/astra-monitor/issues/21)]
