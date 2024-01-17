@@ -326,7 +326,8 @@ export class ProcessorMenu extends MenuBase {
             mini:false,
             layout: 'horizontal',
             x_align: Clutter.ActorAlign.START,
-            style: 'margin-left:0.5em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
+            style: 'margin-left:0.5em;margin-bottom:0;margin-right:0;border:solid 1px #555;',
+            breakdownConfig: 'processor-menu-bars-breakdown'
         });
         grid.addGrid(this.processorBar, 0, 0, 2, 1);
         
@@ -394,7 +395,7 @@ export class ProcessorMenu extends MenuBase {
             });
             grid.addGrid(label, col, row, 1, 1);
             
-            const bar = new ProcessorBars({ numBars: 1, mini: true, width: 1, height: 3, breakdownConfig: 'processor-menu-bars-breakdown' });
+            const bar = new ProcessorBars({ numBars: 1, mini: true, width: 1, height: 3, breakdownConfig: 'processor-menu-core-bars-breakdown' });
             grid.addGrid(bar, col, row + 1, 1, 1);
             
             const percentage = new St.Label({

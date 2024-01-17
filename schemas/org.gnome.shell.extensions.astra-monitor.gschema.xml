@@ -157,15 +157,20 @@
       <description>Color the bars with categories</description>
     </key>
     
+    <key name="processor-menu-bars-breakdown" type="b">
+      <default>true</default>
+      <summary>CPU Bars Breakdown</summary>
+      <description>Color the bars with categories</description>
+    </key>
     <key name="processor-menu-graph-breakdown" type="b">
       <default>true</default>
       <summary>Graph Category Breakdown</summary>
       <description>Color the graph with categories</description>
     </key>
-    <key name="processor-menu-bars-breakdown" type="b">
+    <key name="processor-menu-core-bars-breakdown" type="b">
       <default>true</default>
-      <summary>CPU Bars Breakdown</summary>
-      <description>Color the bars with categories</description>
+      <summary>CPU Core Bars Breakdown</summary>
+      <description>Color the core bars with categories</description>
     </key>
     <key name="processor-menu-gpu" type="s">
       <default>'""'</default>

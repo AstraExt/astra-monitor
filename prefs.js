@@ -229,8 +229,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         processorsPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Menu')});
-        this.addSwitchRow(_('History Graph Breakdown'), 'processor-menu-graph-breakdown', group);
-        this.addSwitchRow(_('Core Bars Breakdown'), 'processor-menu-bars-breakdown', group);
+        const cpuSection = this.addExpanderRow(_('CPU'), group);
+        this.addSwitchRow(this.tab + _('Realtime Bars Breakdown'), 'processor-menu-bars-breakdown', cpuSection);
+        this.addSwitchRow(this.tab + _('History Graph Breakdown'), 'processor-menu-graph-breakdown', cpuSection);
+        this.addSwitchRow(this.tab + _('Core Bars Breakdown'), 'processor-menu-core-bars-breakdown', cpuSection);
+        
+        const gpuSection = this.addExpanderRow(_('GPU'), group);
         
         const gpus = Utils.getGPUsList();
         const choicesSource = [{value: '', text: _('None')}]
@@ -242,9 +246,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     obj[key] = gpu[key];
                     return obj;
                 }, {});
-            choicesSource.push({value: data, text: Utils.GPUModelShortify(gpu.model)});
+            choicesSource.push({value: data, text: Utils.getGPUModelName(gpu)});
         }
-        this.addComboRow(_('GPU'), choicesSource, 'processor-menu-gpu', group, 'json');
+        this.addComboRow(_('Main GPU'), choicesSource, 'processor-menu-gpu', gpuSection, 'json');
         
         processorsPage.add(group);
         
