@@ -133,24 +133,24 @@ export const StorageHeader = GObject.registerClass({
     }
     
     buildIOBars() {
-        if(this.bars) {
-            this.remove_child(this.bars);
-            Config.clear(this.bars);
-            Utils.storageMonitor.unlisten(this.bars);
-            this.bars.destroy();
-            this.bars = null;
+        if(this.ioBars) {
+            this.remove_child(this.ioBars);
+            Config.clear(this.ioBars);
+            Utils.storageMonitor.unlisten(this.ioBars);
+            this.ioBars.destroy();
+            this.ioBars = null;
         }
         
         // @ts-ignore
-        this.bars = new StorageIOBars({ numBars: 2, mini: true, width: 0.5 });
-        this.insert_child_at_index(this.bars, 3);
-        Config.bind('storage-header-io-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
+        this.ioBars = new StorageIOBars({ numBars: 2, mini: true, width: 0.5 });
+        this.insert_child_at_index(this.ioBars, 3);
+        Config.bind('storage-header-io-bars', this.ioBars, 'visible', Gio.SettingsBindFlags.GET);
         
-        Utils.storageMonitor.listen(this.bars, 'storageIO', () => {
+        Utils.storageMonitor.listen(this.ioBars, 'storageIO', () => {
             if(!Config.get_boolean('storage-header-io-bars'))
                 return;
             let usage = Utils.storageMonitor.getUsageHistory('storageIO');
-            this.bars.setUsage(usage);
+            this.ioBars.setUsage(usage);
         });
     }
     
@@ -273,6 +273,7 @@ export const StorageHeader = GObject.registerClass({
         Config.clear(this);
         Config.clear(this.icon);
         Config.clear(this.bars);
+        Config.clear(this.ioBars);
         Config.clear(this.graph);
         Config.clear(this.speedContainer);
         Config.clear(this.percentage);
@@ -281,6 +282,8 @@ export const StorageHeader = GObject.registerClass({
         
         if(this.bars)
             Utils.processorMonitor.unlisten(this.bars);
+        if(this.ioBars)
+            Utils.processorMonitor.unlisten(this.ioBars);
         if(this.graph)
             Utils.processorMonitor.unlisten(this.graph);
         if(this.percentage)
