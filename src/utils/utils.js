@@ -588,25 +588,29 @@ export default class Utils {
         }
     }
     
+    /**
+     * @param {string} vendorId 
+     * @returns {string[]}
+     */
     static getVendorName(vendorId) {
         const vendors = {
-            '0x1002': 'AMD',                       // AMD (Advanced Micro Devices, Inc.) - Major GPU and CPU manufacturer
-            '0x10de': 'NVIDIA',                    // NVIDIA Corporation - Prominent GPU manufacturer known for GeForce series
-            '0x8086': 'Intel',                     // Intel Corporation - Renowned CPU manufacturer and maker of integrated graphics
-            '0x102b': 'Matrox',                    // Matrox Electronic Systems Ltd. - Manufacturer of specialized graphics solutions
-            '0x1039': 'SiS',                       // Silicon Integrated Systems (SiS) - Company producing a variety of hardware, including GPUs
-            '0x5333': 'S3 Graphics',               // S3 Graphics, Ltd. - Producer of graphics hardware, known for older video cards
-            '0x1a03': 'ASPEED Technology',         // ASPEED Technology, Inc. - Maker of server management and embedded graphics solutions
-            '0x80ee': 'Oracle (VirtualBox)',       // Oracle VirtualBox - Identifier used for VirtualBox's virtual graphics adapter
-            '0x1234': 'Bochs/QEMU (Virtual Machine)', // Bochs/QEMU - Common ID for virtual GPUs in Bochs or QEMU environments
-            '0x15ad': 'VMware',                    // VMware - Identifier for VMware's virtual graphics devices
-            '0x1414': 'Microsoft (Hyper-V)',       // Microsoft Hyper-V - ID for virtual GPUs in Microsoft's Hyper-V virtualization
-            '0x1013': 'Cirrus Logic',              // Cirrus Logic - A hardware manufacturer known for producing graphics chips in the past
-            '0x12d2': 'NVIDIA (early products)',   // NVIDIA (early products) - Identifier for some of NVIDIA's early graphics products
-            '0x18ca': 'XGI Technology Inc.',       // XGI Technology Inc. - A former graphics chipset manufacturer
-            '0x1de1': 'Tekram Technology Co.,Ltd.', // Tekram Technology Co., Ltd. - A company known for various computer hardware, including graphics
+            '0x1002': ['AMD'],                  // AMD (Advanced Micro Devices, Inc.) - Major GPU and CPU manufacturer
+            '0x10de': ['NVIDIA'],               // NVIDIA Corporation - Prominent GPU manufacturer known for GeForce series
+            '0x8086': ['Intel'],                // Intel Corporation - Renowned CPU manufacturer and maker of integrated graphics
+            '0x102b': ['Matrox'],               // Matrox Electronic Systems Ltd. - Manufacturer of specialized graphics solutions
+            '0x1039': ['SiS'],                  // Silicon Integrated Systems (SiS) - Company producing a variety of hardware, including GPUs
+            '0x5333': ['S3'],                   // S3 Graphics, Ltd. - Producer of graphics hardware, known for older video cards
+            '0x1a03': ['ASPEED'],               // ASPEED Technology, Inc. - Maker of server management and embedded graphics solutions
+            '0x80ee': ['Oracle', 'VirtualBox'], // Oracle VirtualBox - Identifier used for VirtualBox's virtual graphics adapter
+            '0x1234': ['Bochs', 'QEMU'],        // Bochs/QEMU - Common ID for virtual GPUs in Bochs or QEMU environments
+            '0x15ad': ['VMware'],               // VMware - Identifier for VMware's virtual graphics devices
+            '0x1414': ['Microsoft', 'HyperV'],  // Microsoft Hyper-V - ID for virtual GPUs in Microsoft's Hyper-V virtualization
+            '0x1013': ['Cirrus', 'Logic'],      // Cirrus Logic - A hardware manufacturer known for producing graphics chips in the past
+            '0x12d2': ['NVIDIA'],               // NVIDIA (early products) - Identifier for some of NVIDIA's early graphics products
+            '0x18ca': ['XGI'],                  // XGI Technology Inc. - A former graphics chipset manufacturer
+            '0x1de1': ['Tekram'],               // Tekram Technology Co., Ltd. - A company known for various computer hardware, including graphics
         };
-        return vendors[vendorId] || 'Unknown';
+        return vendors[vendorId] || ['Unknown'];
     }
     
     /**
@@ -627,6 +631,7 @@ export default class Utils {
             try {
                 const decoder = new TextDecoder("utf-8");
                 
+                // Cannot use -mm because it doesn't show the driver and module
                 const [result, stdout, stderr] = GLib.spawn_command_line_sync('lspci -nnk');
                 if (!result || !stdout) {
                     const lspciError = decoder.decode(stderr);
@@ -741,6 +746,24 @@ export default class Utils {
         return Utils.lspciCached;
     }
     
+    static getGPUModelName(gpu) {
+        let shortName = Utils.GPUModelShortify(gpu.model);
+        const vendorNames = Utils.getVendorName(gpu.vendorId);
+        
+        if(vendorNames[0] === 'Unknown')
+            return shortName;
+        
+        const normalizedShortName = shortName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        if(!vendorNames.some(vendorName => normalizedShortName.includes(vendorName.toLowerCase()))) {
+            const normalizedVendorName = vendorNames[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            if(gpu.vendor && !vendorNames.some(vendorName => normalizedVendorName.includes(vendorName.toLowerCase())))
+                shortName = Utils.GPUModelShortify(gpu.vendor) + ` [${shortName}]`;
+            else
+                shortName = vendorNames.join(' / ') + ` ${shortName}`;
+        }
+        return shortName;
+    }
+    
     static GPUModelShortify(model) {
         // replace ','
         model = model.replace(',', '');
@@ -750,19 +773,19 @@ export default class Utils {
         
         // replace 'Inc.'
         model = model.replace(/\bInc\./g, '');
-                
+        
         // replace 'Corp.'
         model = model.replace(/\bCorp\./g, '');
-                
+        
         // replace 'Co.'
         model = model.replace(/\bCo\./g, '');
-                
+        
         // replace 'Co'
         model = model.replace(/\bCo\b/g, '');
-                
+        
         // replace 'Corporation'
         model = model.replace(/\bCorporation\b/g, '');
-                
+        
         // replace 'Incorporated'
         model = model.replace(/\bIncorporated\b/g, '');
         
@@ -801,6 +824,12 @@ export default class Utils {
         
         // replace 'Advanced Micro Devices' with 'AMD'
         model = model.replace(/\bAdvanced Micro Devices\b/g, 'AMD');
+        
+        // replace 'Devices'
+        model = model.replace(/\bDevices\b/g, '');
+        
+        // replace 'Device'
+        model = model.replace(/\bDevice\b/g, '');
         
         // replace '[AMD/ATI]'
         model = model.replace('[AMD/ATI]', '');

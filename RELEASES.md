@@ -2,6 +2,7 @@
 
 ### Bug fixes
 - Fixed processor settings menu button going to general settings instead of processor settings [[#23](https://github.com/AstraExt/astra-monitor/issues/23)]
+- Improved GPU detection [[#24](https://github.com/AstraExt/astra-monitor/issues/24)]
 
 # Astra Monitor 5 - January 16 2024
 

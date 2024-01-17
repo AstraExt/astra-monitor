@@ -553,7 +553,7 @@ export class ProcessorMenu extends MenuBase {
             
             const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
             const label = new St.Label({
-                text: Utils.GPUModelShortify(gpu.model)
+                text: Utils.getGPUModelName(gpu)
             });
             grid.addToGrid(label);
             
@@ -598,7 +598,7 @@ export class ProcessorMenu extends MenuBase {
         popup.addMenuSection(_('GPU info'), 'centered');
             
         popup.addToMenu(new St.Label({
-            text: Utils.GPUModelShortify(gpu.model),
+            text: Utils.getGPUModelName(gpu),
             style_class: 'astra-monitor-menu-sub-header'
         }), 2);
         
@@ -619,14 +619,14 @@ export class ProcessorMenu extends MenuBase {
         }));
         
         if(gpu.vendorId) {
-            const vendorName = Utils.getVendorName('0x' + gpu.vendorId);
-            if(vendorName !== 'Unknown') {
+            const vendorNames = Utils.getVendorName('0x' + gpu.vendorId);
+            if(vendorNames[0] !== 'Unknown') {
                 popup.addToMenu(new St.Label({
                     text: _('Vendor'),
                     style_class: 'astra-monitor-menu-sub-key'
                 }));
                 popup.addToMenu(new St.Label({
-                    text: vendorName
+                    text: vendorNames.join(' / ')
                 }));
             }
             
