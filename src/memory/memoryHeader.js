@@ -39,6 +39,7 @@ export const MemoryHeader = GObject.registerClass({
             icon_size: iconSize,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
+            x_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('memory-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);

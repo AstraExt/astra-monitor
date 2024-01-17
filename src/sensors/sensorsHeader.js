@@ -74,6 +74,7 @@ export const SensorsHeader = GObject.registerClass({
             icon_size: iconSize,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
+            x_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('sensors-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
@@ -85,6 +86,7 @@ export const SensorsHeader = GObject.registerClass({
             style_class: 'astra-monitor-header-sensors-values-container',
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER,
+            x_expand: true,
             y_expand: true,
             vertical: true
         });

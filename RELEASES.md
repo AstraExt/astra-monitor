@@ -5,6 +5,7 @@
 - Improved GPU detection [[#24](https://github.com/AstraExt/astra-monitor/issues/24)]
 - Menu Realtime Bars Breakdown setting now works as intended
 - Introduced a new setting to set Realtime Core Bars Breakdown
+- Vertical Topbar (ie: Dash to Panel) UI improvements but still experimental (no graph/bars support)
 
 # Astra Monitor 5 - January 16 2024
 

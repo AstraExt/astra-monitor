@@ -80,6 +80,7 @@ export const StorageHeader = GObject.registerClass({
             icon_size: iconSize,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
+            x_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.icon, 0);
         Config.bind('storage-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
@@ -114,6 +115,7 @@ export const StorageHeader = GObject.registerClass({
             text: '-%',
             style_class: 'astra-monitor-header-percentage3',
             y_align: Clutter.ActorAlign.CENTER,
+            x_align: Clutter.ActorAlign.CENTER,
         });
         this.insert_child_at_index(this.percentage, 2);
         Config.bind('storage-header-percentage', this.percentage, 'visible', Gio.SettingsBindFlags.GET);
