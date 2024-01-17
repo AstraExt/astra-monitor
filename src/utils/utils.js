@@ -54,7 +54,6 @@ export default class Utils {
         if(Utils.debug)
             return '###### ' + Utils.metadata.name + ' ######';
         return Utils.metadata.name;
-        
     }
     
     static log(message) {

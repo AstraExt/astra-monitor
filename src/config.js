@@ -95,7 +95,6 @@ export default class Config {
     }
 
     /**
-     *  
      * @param {string} key
      * @returns {number}
      */

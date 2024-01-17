@@ -22,7 +22,7 @@ import GLib from 'gi://GLib';
 
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
-import { Container } from './src/container.js';
+import { AstraMonitorContainer } from './src/container.js';
 import Utils from './src/utils/utils.js';
 import Config from './src/config.js';
 
@@ -47,7 +47,7 @@ export default class AstraMonitorExtension extends Extension {
         Utils.networkMonitor = new NetworkMonitor();
         Utils.sensorsMonitor = new SensorsMonitor();
         
-        this.container = new Container();
+        this.container = new AstraMonitorContainer();
         this.container.place(this.uuid);
         this.container.visible = false;
         

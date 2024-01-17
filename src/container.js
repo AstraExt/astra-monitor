@@ -33,8 +33,8 @@ import { StorageHeader } from './storage/storageHeader.js';
 import { NetworkHeader } from './network/networkHeader.js';
 import { SensorsHeader } from './sensors/sensorsHeader.js';
 
-export const Container = GObject.registerClass(
-class Container extends PanelMenu.Button {
+export const AstraMonitorContainer = GObject.registerClass(
+class ContainerBase extends PanelMenu.Button {
     constructor() {
         super();
         Utils.log('Initializing container');
