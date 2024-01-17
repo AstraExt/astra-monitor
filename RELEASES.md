@@ -6,6 +6,7 @@
 - Menu Realtime Bars Breakdown setting now works as intended
 - Introduced a new setting to set Realtime Core Bars Breakdown
 - Vertical Topbar (ie: Dash to Panel) UI improvements but still experimental (no graph/bars support)
+- Fixed regression for Storage Usage bar in the header
 
 # Astra Monitor 5 - January 16 2024
 
