@@ -639,6 +639,7 @@ export default class Utils {
                 }
                 
                 const lspciOutput = decoder.decode(stdout);
+                
                 const filteredOutputs = Utils.filterLspciOutput(lspciOutput, ['vga'], 5);
                 
                 for(const filtered of filteredOutputs) {
@@ -747,16 +748,17 @@ export default class Utils {
     
     static getGPUModelName(gpu) {
         let shortName = Utils.GPUModelShortify(gpu.model);
-        const vendorNames = Utils.getVendorName(gpu.vendorId);
+        const vendorNames = Utils.getVendorName('0x' + gpu.vendorId);
         
         if(vendorNames[0] === 'Unknown')
             return shortName;
         
         const normalizedShortName = shortName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
         if(!vendorNames.some(vendorName => normalizedShortName.includes(vendorName.toLowerCase()))) {
-            const normalizedVendorName = vendorNames[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-            if(gpu.vendor && !vendorNames.some(vendorName => normalizedVendorName.includes(vendorName.toLowerCase())))
-                shortName = Utils.GPUModelShortify(gpu.vendor) + ` [${shortName}]`;
+            let shortVendorName = Utils.GPUModelShortify(gpu.vendor)
+            const normalizedVendorName = shortVendorName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();            
+            if(shortVendorName && vendorNames.some(vendorName => normalizedVendorName.includes(vendorName.toLowerCase())))
+                shortName = shortVendorName + ` [${shortName}]`;
             else
                 shortName = vendorNames.join(' / ') + ` ${shortName}`;
         }
@@ -838,6 +840,9 @@ export default class Utils {
         
         // replace 'Hewlett-Packard' with 'HP'
         model = model.replace(/\bHewlett\-Packard\b/g, 'HP');
+        
+        // replace (rev 00)
+        model = model.replace(/\(rev\.?\s?\d+\)/g, '');
         
         // replace multiple spaces with single space
         model = model.replace(/\s+/g, ' ');
