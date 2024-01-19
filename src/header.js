@@ -68,6 +68,16 @@ export const Header = GObject.registerClass({
                 this.menu.close();
         });
         
+        this.connect('enter-event', () => {
+            this.showTooltip();
+        });
+        
+        this.connect('leave-event', () => {
+            this.hideTooltip();
+        });
+        
+        this.createTooltip();
+        
         Config.connect(this, 'changed::headers-height', this.setStyle.bind(this));
         Config.connect(this, 'changed::headers-margins', this.setStyle.bind(this));
         this.setStyle();
@@ -184,6 +194,18 @@ export const Header = GObject.registerClass({
         // factor when computing max-height
         let maxHeight = Math.round((workArea.height - verticalMargins) / scaleFactor);
         this.menu.actor.style = `max-height: ${maxHeight}px;`;
+    }
+    
+    createTooltip() {
+        
+    }
+    
+    showTooltip() {
+        
+    }
+    
+    hideTooltip() {
+        
     }
     
     destroy() {

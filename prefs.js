@@ -216,6 +216,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             icon_name: 'am-dialog-warning-symbolic'
         }, 'processor-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
         
+        const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
+        this.addSwitchRow(this.tab + _('Show Tooltip'), 'processor-header-tooltip', tooltipSection);
+        
         const percentageSection = this.addExpanderRow(_('Percentage'), group);
         this.addSwitchRow(this.tab + _('Show Percentage'), 'processor-header-percentage', percentageSection);
         this.addSwitchRow(this.tab + _('Show Percentage Single Core'), 'processor-header-percentage-core', percentageSection);
@@ -284,7 +287,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'memory-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
-
+        
+        const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
+        this.addSwitchRow(this.tab + _('Show Tooltip'), 'memory-header-tooltip', tooltipSection);
+        
         const percentageSection = this.addExpanderRow(_('Percentage'), group);
         this.addSwitchRow(this.tab + _('Show Percentage'), 'memory-header-percentage', percentageSection);
         
@@ -363,6 +369,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'storage-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+        
+        const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
+        this.addSwitchRow(this.tab + _('Show Tooltip'), 'storage-header-tooltip', tooltipSection);
         
         const barsSection = this.addExpanderRow(_('Main Disk'), group);
         this.addSwitchRow(this.tab + _('Show Storage Usage Bar'), 'storage-header-bars', barsSection);
@@ -471,6 +480,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             icon_name: 'am-dialog-warning-symbolic'
         }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
         
+        const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
+        this.addSwitchRow(this.tab + _('Show Tooltip'), 'network-header-tooltip', tooltipSection);
+        
         const ioSection = this.addExpanderRow(_('IO'), group);
         this.addSwitchRow(this.tab + _('Show Realtime IO Bar'), 'network-header-bars', ioSection);
         this.addSwitchRow(this.tab + _('Show IO History Graph'), 'network-header-graph', ioSection); 
@@ -507,6 +519,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'sensors-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+        
+        const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
+        this.addSwitchRow(this.tab + _('Show Tooltip'), 'sensors-header-tooltip', tooltipSection);
         
         const sources = Utils.getSensorSources();
         

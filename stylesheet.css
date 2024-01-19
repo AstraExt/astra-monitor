@@ -380,3 +380,11 @@
     margin-left: 0.5em;
     text-align: right;
 }
+
+.astra-monitor-tooltip-menu {
+    
+}
+
+.astra-monitor-tooltip-item {
+    font-weight: bold;
+}

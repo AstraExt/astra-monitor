@@ -1,5 +1,8 @@
 # Astra Monitor 6 - TO BE RELEASED
 
+### New features
+- ___Initial___ implementation of Tooltips for Header's buttons [[#25](https://github.com/AstraExt/astra-monitor/issues/23)]
+
 ### Bug fixes
 - Fixed processor settings menu button going to general settings instead of processor settings [[#23](https://github.com/AstraExt/astra-monitor/issues/23)]
 - Improved GPU detection [[#24](https://github.com/AstraExt/astra-monitor/issues/24)]

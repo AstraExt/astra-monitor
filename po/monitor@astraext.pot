@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-18 00:34+0100\n"
+"POT-Creation-Date: 2024-01-19 02:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/processor/processorMenu.js:42 prefs.js:235
+#: src/processor/processorMenu.js:42 prefs.js:238
 msgid "CPU"
 msgstr ""
 
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Top processes"
 msgstr ""
 
-#: src/processor/processorMenu.js:520 prefs.js:240
+#: src/processor/processorMenu.js:520 prefs.js:243
 msgid "GPU"
 msgstr ""
 
@@ -161,7 +161,7 @@ msgstr[1] ""
 msgid "now"
 msgstr ""
 
-#: src/sensors/sensorsMenu.js:40 prefs.js:488 prefs.js:490
+#: src/sensors/sensorsMenu.js:40 prefs.js:500 prefs.js:502
 msgid "Sensors"
 msgstr ""
 
@@ -169,7 +169,7 @@ msgstr ""
 msgid "No sensor found"
 msgstr ""
 
-#: src/network/networkMenu.js:36 prefs.js:385 prefs.js:387
+#: src/network/networkMenu.js:36 prefs.js:394 prefs.js:396
 msgid "Network"
 msgstr ""
 
@@ -199,7 +199,7 @@ msgctxt "download"
 msgid "D"
 msgstr ""
 
-#: src/storage/storageMenu.js:39 prefs.js:310 prefs.js:312
+#: src/storage/storageMenu.js:39 prefs.js:316 prefs.js:318
 msgid "Storage"
 msgstr ""
 
@@ -233,7 +233,7 @@ msgstr ""
 msgid "Disk"
 msgstr ""
 
-#: src/memory/memoryMenu.js:38 prefs.js:262 prefs.js:264
+#: src/memory/memoryMenu.js:38 prefs.js:265 prefs.js:267
 msgid "Memory"
 msgstr ""
 
@@ -277,7 +277,7 @@ msgstr ""
 msgid "Allocatable"
 msgstr ""
 
-#: src/memory/memoryMenu.js:220 prefs.js:272 prefs.js:416 prefs.js:446
+#: src/memory/memoryMenu.js:220 prefs.js:275 prefs.js:425 prefs.js:455
 msgid "Active"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgid "Headers Height"
 msgstr ""
 
 #: prefs.js:172 prefs.js:177 prefs.js:182 prefs.js:187 prefs.js:215
-#: prefs.js:284 prefs.js:363 prefs.js:470 prefs.js:507
+#: prefs.js:287 prefs.js:369 prefs.js:479 prefs.js:519
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr ""
 
@@ -460,271 +460,279 @@ msgstr ""
 msgid "Processors"
 msgstr ""
 
-#: prefs.js:204 prefs.js:265 prefs.js:313 prefs.js:388 prefs.js:491
-#: prefs.js:521 prefs.js:525
+#: prefs.js:204 prefs.js:268 prefs.js:319 prefs.js:397 prefs.js:503
+#: prefs.js:536 prefs.js:540
 msgid "Show"
 msgstr ""
 
-#: prefs.js:205 prefs.js:266 prefs.js:314 prefs.js:389 prefs.js:492
+#: prefs.js:205 prefs.js:269 prefs.js:320 prefs.js:398 prefs.js:504
 msgid "Update frequency (seconds)"
 msgstr ""
 
-#: prefs.js:209 prefs.js:278 prefs.js:357 prefs.js:501
+#: prefs.js:209 prefs.js:281 prefs.js:363 prefs.js:513
 msgid "Header"
 msgstr ""
 
-#: prefs.js:211 prefs.js:280 prefs.js:359 prefs.js:466 prefs.js:503
+#: prefs.js:211 prefs.js:283 prefs.js:365 prefs.js:475 prefs.js:515
 msgid "Icon"
 msgstr ""
 
-#: prefs.js:212 prefs.js:281 prefs.js:360 prefs.js:467 prefs.js:504
+#: prefs.js:212 prefs.js:284 prefs.js:366 prefs.js:476 prefs.js:516
 msgid "Show Icon"
 msgstr ""
 
-#: prefs.js:214 prefs.js:283 prefs.js:362 prefs.js:469 prefs.js:506
+#: prefs.js:214 prefs.js:286 prefs.js:368 prefs.js:478 prefs.js:518
 msgid "Icon Size"
 msgstr ""
 
-#: prefs.js:215 prefs.js:284 prefs.js:363 prefs.js:470 prefs.js:507
+#: prefs.js:215 prefs.js:287 prefs.js:369 prefs.js:479 prefs.js:519
 msgid "Default value is 18"
 msgstr ""
 
-#: prefs.js:219 prefs.js:288
+#: prefs.js:219 prefs.js:291 prefs.js:373 prefs.js:483 prefs.js:523
+msgid "Tooltip"
+msgstr ""
+
+#: prefs.js:220 prefs.js:292 prefs.js:374 prefs.js:484 prefs.js:524
+msgid "Show Tooltip"
+msgstr ""
+
+#: prefs.js:222 prefs.js:294
 msgid "Percentage"
 msgstr ""
 
-#: prefs.js:220 prefs.js:289
+#: prefs.js:223 prefs.js:295
 msgid "Show Percentage"
 msgstr ""
 
-#: prefs.js:221
+#: prefs.js:224
 msgid "Show Percentage Single Core"
 msgstr ""
 
-#: prefs.js:223 prefs.js:291
+#: prefs.js:226 prefs.js:297
 msgid "History Graph"
 msgstr ""
 
-#: prefs.js:224 prefs.js:292
+#: prefs.js:227 prefs.js:298
 msgid "Show History Graph"
 msgstr ""
 
-#: prefs.js:225 prefs.js:237 prefs.js:293 prefs.js:302
+#: prefs.js:228 prefs.js:240 prefs.js:299 prefs.js:308
 msgid "History Graph Breakdown"
 msgstr ""
 
-#: prefs.js:226 prefs.js:294
+#: prefs.js:229 prefs.js:300
 msgid "History Graph Width"
 msgstr ""
 
-#: prefs.js:228 prefs.js:296
+#: prefs.js:231 prefs.js:302
 msgid "Realtime Bar"
 msgstr ""
 
-#: prefs.js:229 prefs.js:297
+#: prefs.js:232 prefs.js:303
 msgid "Show Realtime Bar"
 msgstr ""
 
-#: prefs.js:230
+#: prefs.js:233
 msgid "Realtime per-core Bars"
 msgstr ""
 
-#: prefs.js:231 prefs.js:298
+#: prefs.js:234 prefs.js:304
 msgid "Realtime Bar Breakdown"
 msgstr ""
 
-#: prefs.js:234 prefs.js:301
+#: prefs.js:237 prefs.js:307
 msgid "Menu"
 msgstr ""
 
-#: prefs.js:236
+#: prefs.js:239
 msgid "Realtime Bars Breakdown"
 msgstr ""
 
-#: prefs.js:238
+#: prefs.js:241
 msgid "Core Bars Breakdown"
 msgstr ""
 
-#: prefs.js:243 prefs.js:516
+#: prefs.js:246 prefs.js:531
 msgid "None"
 msgstr ""
 
-#: prefs.js:254
+#: prefs.js:257
 msgid "Main GPU"
 msgstr ""
 
-#: prefs.js:269
+#: prefs.js:272
 msgid "Total - Free - Buffers - Cached"
 msgstr ""
 
-#: prefs.js:270
+#: prefs.js:273
 msgid "Total - Free"
 msgstr ""
 
-#: prefs.js:271
+#: prefs.js:274
 msgid "Total - Available"
 msgstr ""
 
-#: prefs.js:274
+#: prefs.js:277
 msgid "Used Memory"
 msgstr ""
 
-#: prefs.js:317 prefs.js:392
+#: prefs.js:323 prefs.js:401
 msgid "kB/s"
 msgstr ""
 
-#: prefs.js:318 prefs.js:393
+#: prefs.js:324 prefs.js:402
 msgid "KiB/s"
 msgstr ""
 
-#: prefs.js:319 prefs.js:394
+#: prefs.js:325 prefs.js:403
 msgid "kb/s"
 msgstr ""
 
-#: prefs.js:320 prefs.js:395
+#: prefs.js:326 prefs.js:404
 msgid "Kibit/s"
 msgstr ""
 
-#: prefs.js:321 prefs.js:396
+#: prefs.js:327 prefs.js:405
 msgid "kBps"
 msgstr ""
 
-#: prefs.js:322 prefs.js:397
+#: prefs.js:328 prefs.js:406
 msgid "KiBps"
 msgstr ""
 
-#: prefs.js:323 prefs.js:398
+#: prefs.js:329 prefs.js:407
 msgid "Kibps"
 msgstr ""
 
-#: prefs.js:324 prefs.js:399
+#: prefs.js:330 prefs.js:408
 msgid "kbps"
 msgstr ""
 
-#: prefs.js:325 prefs.js:400
+#: prefs.js:331 prefs.js:409
 msgid "Kibitps"
 msgstr ""
 
-#: prefs.js:326 prefs.js:401
+#: prefs.js:332 prefs.js:410
 msgid "k (as kB/s)"
 msgstr ""
 
-#: prefs.js:327 prefs.js:402
+#: prefs.js:333 prefs.js:411
 msgid "Ki (as KiB/s)"
 msgstr ""
 
-#: prefs.js:329 prefs.js:404
+#: prefs.js:335 prefs.js:413
 msgid "Data Unit"
 msgstr ""
 
-#: prefs.js:353 prefs.js:367
+#: prefs.js:359 prefs.js:376
 msgid "Main Disk"
 msgstr ""
 
-#: prefs.js:368
+#: prefs.js:377
 msgid "Show Storage Usage Bar"
 msgstr ""
 
-#: prefs.js:369
+#: prefs.js:378
 msgid "Show Storage Usage Percentage"
 msgstr ""
 
-#: prefs.js:371 prefs.js:474
+#: prefs.js:380 prefs.js:486
 msgid "IO"
 msgstr ""
 
-#: prefs.js:372 prefs.js:475
+#: prefs.js:381 prefs.js:487
 msgid "Show Realtime IO Bar"
 msgstr ""
 
-#: prefs.js:373 prefs.js:476
+#: prefs.js:382 prefs.js:488
 msgid "Show IO History Graph"
 msgstr ""
 
-#: prefs.js:374 prefs.js:477
+#: prefs.js:383 prefs.js:489
 msgid "IO History Graph Width"
 msgstr ""
 
-#: prefs.js:375 prefs.js:478
+#: prefs.js:384 prefs.js:490
 msgid "Show IO Speed"
 msgstr ""
 
-#: prefs.js:376 prefs.js:479
+#: prefs.js:385 prefs.js:491
 msgid "IO Speed Number Max Figures"
 msgstr ""
 
-#: prefs.js:377 prefs.js:480
+#: prefs.js:386 prefs.js:492
 msgid "IO Speed Threshold"
 msgstr ""
 
-#: prefs.js:377 prefs.js:480
+#: prefs.js:386 prefs.js:492
 msgid "in kB/s"
 msgstr ""
 
-#: prefs.js:406
+#: prefs.js:415
 msgid "Ignored Network Interfaces"
 msgstr ""
 
-#: prefs.js:416 prefs.js:436
+#: prefs.js:425 prefs.js:445
 msgid "Ignored"
 msgstr ""
 
-#: prefs.js:495
+#: prefs.js:507
 msgid "Celsius"
 msgstr ""
 
-#: prefs.js:496
+#: prefs.js:508
 msgid "Fahrenheit"
 msgstr ""
 
-#: prefs.js:498
+#: prefs.js:510
 msgid "Temperature Unit"
 msgstr ""
 
-#: prefs.js:520
+#: prefs.js:535
 msgid "Sensor 1"
 msgstr ""
 
-#: prefs.js:522 prefs.js:526
+#: prefs.js:537 prefs.js:541
 msgid "Source"
 msgstr ""
 
-#: prefs.js:524
+#: prefs.js:539
 msgid "Sensor 2"
 msgstr ""
 
-#: prefs.js:535
+#: prefs.js:550
 msgid "Info"
 msgstr ""
 
-#: prefs.js:545
+#: prefs.js:560
 msgid "Version"
 msgstr ""
 
-#: prefs.js:546
+#: prefs.js:561
 msgid "Changelog"
 msgstr ""
 
-#: prefs.js:547
+#: prefs.js:562
 msgid "GitHub"
 msgstr ""
 
-#: prefs.js:548
+#: prefs.js:563
 msgid "GNOME Extensions page"
 msgstr ""
 
-#: prefs.js:549
+#: prefs.js:564
 msgid "Report a bug or suggest new feature"
 msgstr ""
 
-#: prefs.js:550
+#: prefs.js:565
 msgid "Buy us a coffee"
 msgstr ""
 
-#: prefs.js:551
+#: prefs.js:566
 msgid "Become a patron"
 msgstr ""
 
-#: prefs.js:552
+#: prefs.js:567
 msgid "Debug Mode"
 msgstr ""

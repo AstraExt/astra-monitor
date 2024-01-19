@@ -23,6 +23,9 @@ import Gio from 'gi://Gio';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
 import { Header } from '../header.js';
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
@@ -165,7 +168,10 @@ export const ProcessorHeader = GObject.registerClass({
             this.percentage.style_class = useFourDigitStyle ? 'astra-monitor-header-percentage4' : 'astra-monitor-header-percentage3';
         });
         
-        Utils.processorMonitor.listen(this, 'cpuUsage', () => {
+        Utils.processorMonitor.listen(this.percentage, 'cpuUsage', () => {
+            if(!Config.get_boolean('processor-header-percentage'))
+                return;
+            
             const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
             
             if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
@@ -187,20 +193,90 @@ export const ProcessorHeader = GObject.registerClass({
         
     }
     
+    createTooltip() {
+        this.tooltipMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.TOP);
+        
+        Main.uiGroup.add_actor(this.tooltipMenu.actor);
+        this.tooltipMenu.actor.add_style_class_name('astra-monitor-tooltip-menu');
+        this.tooltipMenu.actor.hide();
+        
+        this.tooltipItem = new PopupMenu.PopupMenuItem('', {
+            reactive: true,
+            style_class: 'astra-monitor-tooltip-item'
+        });
+        this.tooltipItem.sensitive = true;
+        this.tooltipMenu.addMenuItem(this.tooltipItem);
+        
+        Config.connect(this.tooltipMenu, 'changed::processor-header-tooltip', () => {
+            if(!Config.get_boolean('processor-header-tooltip'))
+                this.tooltipMenu.close();
+        });
+        
+        Utils.processorMonitor.listen(this.tooltipMenu, 'cpuUsage', () => {
+            if(!Config.get_boolean('processor-header-tooltip'))
+                return;
+            
+            const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
+            
+            if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
+                this.tooltipItem.label.text = '0%';
+                return;
+            }
+            
+            if(Config.get_boolean('processor-header-percentage-core')) {
+                const numberOfCores = Utils.processorMonitor.getNumberOfCores();
+                this.tooltipItem.label.text = (cpuUsage.total * numberOfCores).toFixed(0) + '%';
+            }
+            else {
+                this.tooltipItem.label.text = cpuUsage.total.toFixed(0) + '%';
+            }
+            
+            const width = this.tooltipItem.label.get_preferred_width(-1)[1] + 30;
+            this.tooltipMenu.actor.set_width(width);
+        });
+    }
+    
+    showTooltip() {
+        if(!this.tooltipMenu)
+            return;
+        if(!Config.get_boolean('processor-header-tooltip'))
+            return;
+        
+        this.tooltipMenu.open();
+    }
+    
+    hideTooltip() {
+        if(!this.tooltipMenu)
+            return;
+        if(!Config.get_boolean('processor-header-tooltip'))
+            return;
+        this.tooltipMenu.close();
+    }
+    
     destroy() {
         Config.clear(this);
-        Config.clear(this.icon);
-        Config.clear(this.bars);
-        Config.clear(this.graph);
-        Config.clear(this.percentage);
-        
         Utils.processorMonitor.unlisten(this);
         
-        if(this.bars)
+        Config.clear(this.icon);
+        
+        if(this.percentage) {
+            Config.clear(this.percentage);
+            Utils.processorMonitor.unlisten(this.percentage);
+        }
+        if(this.bars) {
+            Config.clear(this.bars);
             Utils.processorMonitor.unlisten(this.bars);
-        if(this.graph)
+        }
+        if(this.graph) {
+            Config.clear(this.graph);
             Utils.processorMonitor.unlisten(this.graph);
-
+        }
+        if(this.tooltipMenu) {
+            Config.clear(this.tooltipMenu);
+            Utils.processorMonitor.unlisten(this.tooltipMenu);
+            this.tooltipMenu.close();
+        }
+        
         super.destroy();
     }
 });

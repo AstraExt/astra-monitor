@@ -115,6 +115,11 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
+    <key name="processor-header-tooltip" type="b">
+      <default>false</default>
+      <summary>CPU Header Tooltip</summary>
+      <description>Show the tooltip on the header of the CPU monitor</description>
+    </key>
     <key name="processor-header-percentage" type="b">
       <default>false</default>
       <summary>CPU Header Percentage</summary>
@@ -206,6 +211,11 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
+    <key name="memory-header-tooltip" type="b">
+      <default>false</default>
+      <summary>Memory Header Tooltip</summary>
+      <description>Show the tooltip on the header of the memory monitor</description>
+    </key>
     <key name="memory-header-percentage" type="b">
       <default>false</default>
       <summary>Memory Header Percentage</summary>
@@ -276,6 +286,11 @@
       <summary>Header Icon Size</summary>
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
+    </key>
+    <key name="storage-header-tooltip" type="b">
+      <default>false</default>
+      <summary>Storage Header Tooltip</summary>
+      <description>Show the tooltip on the header of the storage monitor</description>
     </key>
     <key name="storage-header-percentage" type="b">
       <default>false</default>
@@ -354,6 +369,11 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
+    <key name="network-header-tooltip" type="b">
+      <default>false</default>
+      <summary>Network Header Tooltip</summary>
+      <description>Show the tooltip on the header of the network monitor</description>
+    </key>
     <key name="network-header-bars" type="b">
       <default>false</default>
       <summary>Show Network IO Bar</summary>
@@ -415,6 +435,11 @@
       <summary>Header Icon Size</summary>
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
+    </key>
+    <key name="sensors-header-tooltip" type="b">
+      <default>false</default>
+      <summary>Sensors Header Tooltip</summary>
+      <description>Show the tooltip on the header of the sensors monitor</description>
     </key>
     <key name="sensors-header-sensor1-show" type="b">
       <default>false</default>

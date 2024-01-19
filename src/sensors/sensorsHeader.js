@@ -24,6 +24,9 @@ import St from 'gi://St';
 import Pango from 'gi://Pango';
 import Clutter from 'gi://Clutter';
 
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
 import { Header } from '../header.js';
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
@@ -160,7 +163,6 @@ export const SensorsHeader = GObject.registerClass({
             }
             else {
                 this.fixContainerWidth(sensor1w?sensor1w[1]:0);
-
             }
         });
     }
@@ -220,13 +222,84 @@ export const SensorsHeader = GObject.registerClass({
         
     }
     
+    createTooltip() {
+        this.tooltipMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.TOP);
+        
+        Main.uiGroup.add_actor(this.tooltipMenu.actor);
+        this.tooltipMenu.actor.add_style_class_name('astra-monitor-tooltip-menu');
+        this.tooltipMenu.actor.hide();
+        
+        this.tooltipItem = new PopupMenu.PopupMenuItem('', {
+            reactive: true,
+            style_class: 'astra-monitor-tooltip-item'
+        });
+        this.tooltipItem.sensitive = true;
+        this.tooltipMenu.addMenuItem(this.tooltipItem);
+        
+        Config.connect(this.tooltipMenu, 'changed::sensors-header-tooltip', () => {
+            if(!Config.get_boolean('sensors-header-tooltip'))
+                this.tooltipMenu.close();
+        });
+        
+        Utils.sensorsMonitor.listen(this.tooltipMenu, 'sensorsData', () => {
+            if(!Config.get_boolean('sensors-header-tooltip'))
+                return;
+            
+            const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
+            if(!sensorsData) {
+                this.tooltipItem.label.text = '- | -';
+                return;
+            }
+            
+            const sensor1Source = Config.get_json('sensors-header-sensor1');
+            const sensor1 = this.applySource(sensorsData, sensor1Source);
+            
+            if(Config.get_boolean('sensors-header-sensor2-show')) {
+                const sensor2Source = Config.get_json('sensors-header-sensor2');
+                const sensor2 = this.applySource(sensorsData, sensor2Source);
+                this.tooltipItem.label.text = `${sensor1} | ${sensor2}`;
+            }
+            else {
+                this.tooltipItem.label.text = sensor1;
+            }
+            
+            const width = this.tooltipItem.label.get_preferred_width(-1)[1] + 30;
+            this.tooltipMenu.actor.set_width(width);
+        });
+    }
+    
+    showTooltip() {
+        if(!this.tooltipMenu)
+            return;
+        if(!Config.get_boolean('sensors-header-tooltip'))
+            return;
+        
+        this.tooltipMenu.open();
+    }
+    
+    hideTooltip() {
+        if(!this.tooltipMenu)
+            return;
+        if(!Config.get_boolean('sensors-header-tooltip'))
+            return;
+        this.tooltipMenu.close();
+    }
+    
     destroy() {
         Config.clear(this);
-        Config.clear(this.icon);
-        Config.clear(this.valuesContainer);
-        
         Utils.sensorsMonitor.unlisten(this);
-        Utils.sensorsMonitor.unlisten(this.valuesContainer, 'sensorsData');
+        
+        Config.clear(this.icon);
+        
+        if(this.valuesContainer) {
+            Config.clear(this.valuesContainer);
+            Utils.sensorsMonitor.unlisten(this.valuesContainer);
+        }
+        if(this.tooltipMenu) {
+            Config.clear(this.tooltipMenu);
+            Utils.sensorsMonitor.unlisten(this.tooltipMenu);
+            this.tooltipMenu.close();
+        }
 
         super.destroy();
     }
