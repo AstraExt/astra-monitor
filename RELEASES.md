@@ -1,4 +1,4 @@
-# Astra Monitor 6 - TO BE RELEASED
+# Astra Monitor 6 - January 19 2024
 
 ### New features
 - ___Initial___ implementation of Tooltips for Header's buttons [[#25](https://github.com/AstraExt/astra-monitor/issues/23)]
