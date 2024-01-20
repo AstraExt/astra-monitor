@@ -414,6 +414,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const ignoredSection = this.addExpanderRow(_('Ignored Network Interfaces'), group);
         
+        this.addTextInputRow({
+            title: this.tab + _('Regex'),
+            subtitle: this.tab + _('Interfaces matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable, example: \'veth\w{7}\''),
+        }, 'network-ignored-regex', ignoredSection, '');
+        
         const devices = Utils.getNetworkInterfacesSync();
         let ignoredDevices = Config.get_json('network-ignored');
         if(ignoredDevices === null || !Array.isArray(ignoredDevices))
@@ -599,6 +604,49 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const labelWidget = new Gtk.Label({label});
         row.add_suffix(labelWidget);
+    }
+    
+    addTextInputRow(props, setting, group, reset = null) {
+        const row = new Adw.ActionRow(props);
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
+        
+        const entry = new Gtk.Entry({
+            text: Config.get_string(setting),
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+        });
+        let timeoutId;
+        
+        entry.connect('changed', widget => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                Config.set(setting, widget.get_text(), 'string');
+            }, 1000);
+        });
+        
+        if(reset) {
+            const resetButton = new Gtk.Button({
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+                hexpand: false,
+                vexpand: false,
+                icon_name: 'edit-undo-symbolic',
+                sensitive: true,
+            });
+            row.add_suffix(resetButton);
+            
+            resetButton.connect('clicked', () => {
+                Config.set(setting, reset, 'string');
+                entry.set_text(reset);
+            });
+            row.add_suffix(resetButton);
+        }
+        
+        row.add_suffix(entry);
+        row.activatable_widget = entry;
     }
     
     addButtonRow(title, group, callback) {

@@ -1215,7 +1215,7 @@ export default class Utils {
     }
     
     /**
-     * @typedef {{}} InterfaceDevice
+     * @typedef {{ name: string, flags: string[], ifindex: number, mtu?: number, qdisc?: string, operstate?: string, linkmode?: string, group?: string, txqlen?: number, link_type?: string, address?: string, broadcast?: string, netmask?: string, altnames?: string[], addr_info?: { local: string, peer: string, family: string, broadcast: string, anycast: string }[] }} InterfaceDevice
      */
     
     /**

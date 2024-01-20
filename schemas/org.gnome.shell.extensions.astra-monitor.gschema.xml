@@ -353,6 +353,11 @@
       <summary>Ignored Network Interfaces</summary>
       <description>A JSON List of Network interfaces to ignore</description>
     </key>
+    <key name="network-ignored-regex" type="s">
+      <default>''</default>
+      <summary>Ignored Network Interfaces Regex</summary>
+      <description>A regex to match network interfaces to ignore</description>
+    </key>
     <key name="network-header-show" type="b">
       <default>true</default>
       <summary>Network Header</summary>

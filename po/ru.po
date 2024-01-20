@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 17:09+0100\n"
+"POT-Creation-Date: 2024-01-20 18:26+0100\n"
 "PO-Revision-Date: 2024-01-20 17:47+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -164,7 +164,7 @@ msgstr[2] "%d минут назад"
 msgid "now"
 msgstr "сейчас"
 
-#: src/sensors/sensorsMenu.js:40 prefs.js:500 prefs.js:502
+#: src/sensors/sensorsMenu.js:40 prefs.js:505 prefs.js:507
 msgid "Sensors"
 msgstr "Датчики"
 
@@ -192,13 +192,13 @@ msgstr "Интерфейсы"
 msgid "No network interface found"
 msgstr "Сетевой интерфейс не найден"
 
-#: src/network/networkMenu.js:233
+#: src/network/networkMenu.js:248
 #, fuzzy
 msgctxt "short for upload"
 msgid "U"
 msgstr "В"
 
-#: src/network/networkMenu.js:264
+#: src/network/networkMenu.js:279
 #, fuzzy
 msgctxt "short for download"
 msgid "D"
@@ -284,7 +284,7 @@ msgstr "Доступно"
 msgid "Allocatable"
 msgstr "Выделяемая"
 
-#: src/memory/memoryMenu.js:220 prefs.js:275 prefs.js:425 prefs.js:455
+#: src/memory/memoryMenu.js:220 prefs.js:275 prefs.js:430 prefs.js:460
 msgid "Active"
 msgstr "Активно"
 
@@ -435,7 +435,7 @@ msgid "Headers Height"
 msgstr "Высота заголовков"
 
 #: prefs.js:172 prefs.js:177 prefs.js:182 prefs.js:187 prefs.js:215
-#: prefs.js:287 prefs.js:369 prefs.js:479 prefs.js:519
+#: prefs.js:287 prefs.js:369 prefs.js:484 prefs.js:524
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr ""
 "Экспериментальная функция: может потребоваться отключить/включить расширение."
@@ -476,40 +476,40 @@ msgstr "Порядок мониторинга"
 msgid "Processors"
 msgstr "Процессоры"
 
-#: prefs.js:204 prefs.js:268 prefs.js:319 prefs.js:397 prefs.js:503
-#: prefs.js:536 prefs.js:540
+#: prefs.js:204 prefs.js:268 prefs.js:319 prefs.js:397 prefs.js:508
+#: prefs.js:541 prefs.js:545
 msgid "Show"
 msgstr "Показать"
 
-#: prefs.js:205 prefs.js:269 prefs.js:320 prefs.js:398 prefs.js:504
+#: prefs.js:205 prefs.js:269 prefs.js:320 prefs.js:398 prefs.js:509
 msgid "Update frequency (seconds)"
 msgstr "Частота обновления (в секундах)"
 
-#: prefs.js:209 prefs.js:281 prefs.js:363 prefs.js:513
+#: prefs.js:209 prefs.js:281 prefs.js:363 prefs.js:518
 msgid "Header"
 msgstr "Заголовок"
 
-#: prefs.js:211 prefs.js:283 prefs.js:365 prefs.js:475 prefs.js:515
+#: prefs.js:211 prefs.js:283 prefs.js:365 prefs.js:480 prefs.js:520
 msgid "Icon"
 msgstr "Значок"
 
-#: prefs.js:212 prefs.js:284 prefs.js:366 prefs.js:476 prefs.js:516
+#: prefs.js:212 prefs.js:284 prefs.js:366 prefs.js:481 prefs.js:521
 msgid "Show Icon"
 msgstr "Показать значок"
 
-#: prefs.js:214 prefs.js:286 prefs.js:368 prefs.js:478 prefs.js:518
+#: prefs.js:214 prefs.js:286 prefs.js:368 prefs.js:483 prefs.js:523
 msgid "Icon Size"
 msgstr "Размер значка"
 
-#: prefs.js:215 prefs.js:287 prefs.js:369 prefs.js:479 prefs.js:519
+#: prefs.js:215 prefs.js:287 prefs.js:369 prefs.js:484 prefs.js:524
 msgid "Default value is 18"
 msgstr "Значение по умолчанию - 18"
 
-#: prefs.js:219 prefs.js:291 prefs.js:373 prefs.js:483 prefs.js:523
+#: prefs.js:219 prefs.js:291 prefs.js:373 prefs.js:488 prefs.js:528
 msgid "Tooltip"
 msgstr "Подсказка"
 
-#: prefs.js:220 prefs.js:292 prefs.js:374 prefs.js:484 prefs.js:524
+#: prefs.js:220 prefs.js:292 prefs.js:374 prefs.js:489 prefs.js:529
 msgid "Show Tooltip"
 msgstr "Показать подсказку"
 
@@ -569,7 +569,7 @@ msgstr "Разбивка панелей в реальном времени"
 msgid "Core Bars Breakdown"
 msgstr "Разбивка панелей ядер"
 
-#: prefs.js:246 prefs.js:531
+#: prefs.js:246 prefs.js:536
 msgid "None"
 msgstr "Нет"
 
@@ -653,35 +653,35 @@ msgstr "Показать панель использования хранили�
 msgid "Show Storage Usage Percentage"
 msgstr "Показать процент использования хранилища"
 
-#: prefs.js:380 prefs.js:486
+#: prefs.js:380 prefs.js:491
 msgid "IO"
 msgstr "Ввод/вывод"
 
-#: prefs.js:381 prefs.js:487
+#: prefs.js:381 prefs.js:492
 msgid "Show Realtime IO Bar"
 msgstr "Показать панель ввода/вывода в реальном времени"
 
-#: prefs.js:382 prefs.js:488
+#: prefs.js:382 prefs.js:493
 msgid "Show IO History Graph"
 msgstr "Показать график истории ввода/вывода"
 
-#: prefs.js:383 prefs.js:489
+#: prefs.js:383 prefs.js:494
 msgid "IO History Graph Width"
 msgstr "Ширина графика истории ввода/вывода"
 
-#: prefs.js:384 prefs.js:490
+#: prefs.js:384 prefs.js:495
 msgid "Show IO Speed"
 msgstr "Показать скорость ввода/вывода"
 
-#: prefs.js:385 prefs.js:491
+#: prefs.js:385 prefs.js:496
 msgid "IO Speed Number Max Figures"
 msgstr "Максимальное значение скорости ввода/вывода"
 
-#: prefs.js:386 prefs.js:492
+#: prefs.js:386 prefs.js:497
 msgid "IO Speed Threshold"
 msgstr "Порог скорости ввода/вывода"
 
-#: prefs.js:386 prefs.js:492
+#: prefs.js:386 prefs.js:497
 msgid "in kB/s"
 msgstr "в кбайт/с"
 
@@ -689,71 +689,83 @@ msgstr "в кбайт/с"
 msgid "Ignored Network Interfaces"
 msgstr "Игнорируемые сетевые интерфейсы"
 
-#: prefs.js:425 prefs.js:445
+#: prefs.js:418
+msgid "Regex"
+msgstr ""
+
+#: prefs.js:419
+msgid "Interfaces matching this regex will be ignored."
+msgstr ""
+
+#: prefs.js:419
+msgid "Leave empty to disable, example: 'vethw{7}'"
+msgstr ""
+
+#: prefs.js:430 prefs.js:450
 msgid "Ignored"
 msgstr "Игнорируется"
 
-#: prefs.js:507
+#: prefs.js:512
 #, fuzzy
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr "Цельсий"
 
-#: prefs.js:508
+#: prefs.js:513
 #, fuzzy
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr "Фаренгейт"
 
-#: prefs.js:510
+#: prefs.js:515
 msgid "Temperature Unit"
 msgstr "Единица измерения температуры"
 
-#: prefs.js:535
+#: prefs.js:540
 msgid "Sensor 1"
 msgstr "Датчик 1"
 
-#: prefs.js:537 prefs.js:541
+#: prefs.js:542 prefs.js:546
 msgid "Source"
 msgstr "Источник"
 
-#: prefs.js:539
+#: prefs.js:544
 msgid "Sensor 2"
 msgstr "Датчик 2"
 
-#: prefs.js:550
+#: prefs.js:555
 msgid "Info"
 msgstr "Информация"
 
-#: prefs.js:560
+#: prefs.js:565
 msgid "Version"
 msgstr "Версия"
 
-#: prefs.js:561
+#: prefs.js:566
 msgid "Changelog"
 msgstr "Изменения"
 
-#: prefs.js:562
+#: prefs.js:567
 msgid "GitHub"
 msgstr "GitHub"
 
-#: prefs.js:563
+#: prefs.js:568
 msgid "GNOME Extensions page"
 msgstr "Страница GNOME Extensions"
 
-#: prefs.js:564
+#: prefs.js:569
 msgid "Report a bug or suggest new feature"
 msgstr "Сообщить об ошибке или предложить новую функцию"
 
-#: prefs.js:565
+#: prefs.js:570
 msgid "Buy us a coffee"
 msgstr "Угостить нас кофе"
 
-#: prefs.js:566
+#: prefs.js:571
 msgid "Become a patron"
 msgstr "Стать меценатом"
 
-#: prefs.js:567
+#: prefs.js:572
 msgid "Debug Mode"
 msgstr "Режим отладки"
 

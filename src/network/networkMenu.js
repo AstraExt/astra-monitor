@@ -116,6 +116,7 @@ export class NetworkMenu extends MenuBase {
             this.addToMenu(this.deviceSection, 2);
             
             Config.connect(this, 'changed::network-ignored', this.updateDeviceList.bind(this));
+            Config.connect(this, 'changed::network-ignored-regex', this.updateDeviceList.bind(this));
         }
     }
     
@@ -132,6 +133,20 @@ export class NetworkMenu extends MenuBase {
             for(const id of ignoredDevices) {
                 if(devices.has(id))
                     devices.delete(id);
+            }
+        }
+        
+        const ignoredRegex = Config.get_string('network-ignored-regex');
+        if(ignoredRegex) {
+            try {
+                const regex = new RegExp(`^${ignoredRegex}$`, 'i');
+                for(const [id, device] of devices.entries()) {
+                    if(regex.test(device.name))
+                        devices.delete(id);
+                }
+            }
+            catch(e) {
+                //Not a valid regex
             }
         }
         

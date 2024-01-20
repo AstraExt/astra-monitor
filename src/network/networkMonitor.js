@@ -56,6 +56,7 @@ export class NetworkMonitor extends Monitor {
         
         Config.connect(this, 'changed::network-update', this.restart.bind(this));
         
+        // Manually ignore interfaces
         this.ignored = Config.get_json('network-ignored');
         if(this.ignored === null || !Array.isArray(this.ignored))
             this.ignored = [];
@@ -65,6 +66,26 @@ export class NetworkMonitor extends Monitor {
             this.ignored = Config.get_json('network-ignored');
             if(this.ignored === null || !Array.isArray(this.ignored))
                 this.ignored = [];
+        });
+        
+        // Regex ignored interfaces
+        
+        const regex = Config.get_string('network-ignored-regex');
+        try {
+            this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+        } catch(e) {
+            this.ignoredRegex = null;
+        }
+        
+        Config.connect(this, 'changed::network-ignored-regex', () => {
+            this.reset();
+            
+            const regex = Config.get_string('network-ignored-regex');
+            try {
+                this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+            } catch(e) {
+                this.ignoredRegex = null;
+            }
         });
     }
     
@@ -216,6 +237,9 @@ export class NetworkMonitor extends Monitor {
             
                 
             if(this.ignored.includes(interfaceName))
+                continue;
+            
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(interfaceName))
                 continue;
             
             if(detailed) {
