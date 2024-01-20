@@ -69,7 +69,6 @@ export class NetworkMonitor extends Monitor {
         });
         
         // Regex ignored interfaces
-        
         const regex = Config.get_string('network-ignored-regex');
         try {
             this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
