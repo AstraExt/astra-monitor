@@ -292,7 +292,7 @@ msgstr ""
 
 #: src/memory/memoryMenu.js:248 src/memory/memoryMenu.js:470
 msgid "Cached"
-msgstr "Zwischengespeicherte Suchdaten lösche"
+msgstr "Cached"
 
 #: src/memory/memoryMenu.js:358
 msgid "Swap"
@@ -701,13 +701,13 @@ msgstr "Ignoriert"
 #, fuzzy
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
-msgstr "Celsius und Fahrenheit bei Temperatursensoren hinzugefügt"
+msgstr "Celsius"
 
 #: prefs.js:508
 #, fuzzy
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
-msgstr "Celsius"
+msgstr "Fahrenheit"
 
 #: prefs.js:510
 msgid "Temperature Unit"
