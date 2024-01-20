@@ -260,7 +260,7 @@ export class StorageMenu extends MenuBase {
             });
             
             const readLabel = new St.Label({
-                text: pgettext('read', 'R'),
+                text: pgettext('short for read', 'R'),
                 style_class: 'astra-monitor-menu-label',
                 style: 'padding-right:0.15em;'
             });
@@ -291,7 +291,7 @@ export class StorageMenu extends MenuBase {
             });
             
             const writeLabel = new St.Label({
-                text: pgettext('write', 'W'),
+                text: pgettext('short for write', 'W'),
                 style_class: 'astra-monitor-menu-label',
                 style: 'padding-right:0.15em;'
             });

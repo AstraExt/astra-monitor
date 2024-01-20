@@ -23,7 +23,7 @@ import Gdk from 'gi://Gdk';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
 
-import { ExtensionPreferences, gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import { ExtensionPreferences, gettext as _, pgettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 import Utils from './src/utils/utils.js';
 import Config from './src/config.js';
@@ -504,8 +504,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'sensors-update', group, {min: 1, max: 60, digits: 1, step: 0.5, page: 1}, true);
         
         let choicesUnit = [
-            {value: 'celsius', text: _('Celsius')},
-            {value: 'fahrenheit', text: _('Fahrenheit')},
+            {value: 'celsius', text: pgettext('Celsius unit measure choice', 'Celsius')},
+            {value: 'fahrenheit', text: pgettext('Fahrenheit unit measure choice', 'Fahrenheit')},
         ];
         this.addComboRow(_('Temperature Unit'), choicesUnit, 'sensors-temperature-unit', group, 'string');
         sensorsPage.add(group);

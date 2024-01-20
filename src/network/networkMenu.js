@@ -230,7 +230,7 @@ export class NetworkMenu extends MenuBase {
             });
             
             const uploadLabel = new St.Label({
-                text: pgettext('upload', 'U'),
+                text: pgettext('short for upload', 'U'),
                 style_class: 'astra-monitor-menu-label',
                 style: 'padding-right:0.15em;'
             });
@@ -261,7 +261,7 @@ export class NetworkMenu extends MenuBase {
             });
             
             const downloadLabel = new St.Label({
-                text: pgettext('download', 'D'),
+                text: pgettext('short for download', 'D'),
                 style_class: 'astra-monitor-menu-label',
                 style: 'padding-right:0.15em;'
             });

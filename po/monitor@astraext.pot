@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 14:37+0100\n"
+"POT-Creation-Date: 2024-01-20 15:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,297 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: src/processor/processorMenu.js:42 prefs.js:238
+msgid "CPU"
+msgstr ""
+
+#: src/processor/processorMenu.js:115
+msgid "CPU info"
+msgstr ""
+
+#: src/processor/processorMenu.js:202 src/memory/memoryMenu.js:58
+#: src/memory/memoryMenu.js:398
+msgid "Total:"
+msgstr ""
+
+#: src/processor/processorMenu.js:208
+msgid "User:"
+msgstr ""
+
+#: src/processor/processorMenu.js:214
+msgid "System:"
+msgstr ""
+
+#: src/processor/processorMenu.js:245
+msgid "CPU Category Usage Raw Info"
+msgstr ""
+
+#: src/processor/processorMenu.js:248
+msgid "User"
+msgstr ""
+
+#: src/processor/processorMenu.js:256
+msgid "Nice"
+msgstr ""
+
+#: src/processor/processorMenu.js:264
+msgid "System"
+msgstr ""
+
+#: src/processor/processorMenu.js:272
+msgid "Idle"
+msgstr ""
+
+#: src/processor/processorMenu.js:280
+msgid "I/O wait"
+msgstr ""
+
+#: src/processor/processorMenu.js:288
+msgid "IRQ"
+msgstr ""
+
+#: src/processor/processorMenu.js:296
+msgid "Soft IRQ"
+msgstr ""
+
+#: src/processor/processorMenu.js:304
+msgid "Steal"
+msgstr ""
+
+#: src/processor/processorMenu.js:375
+msgid "CPU Cores Usage Info"
+msgstr ""
+
+#: src/processor/processorMenu.js:417
+msgid "GHz"
+msgstr ""
+
+#: src/processor/processorMenu.js:434 src/processor/processorMenu.js:488
+#: src/memory/memoryMenu.js:262 src/memory/memoryMenu.js:320
+msgid "Top processes"
+msgstr ""
+
+#: src/processor/processorMenu.js:520 prefs.js:243
+msgid "GPU"
+msgstr ""
+
+#: src/processor/processorMenu.js:532
+msgid "No GPU found"
+msgstr ""
+
+#: src/processor/processorMenu.js:545
+msgid "GPUs"
+msgstr ""
+
+#: src/processor/processorMenu.js:602
+msgid "GPU info"
+msgstr ""
+
+#: src/processor/processorMenu.js:610
+msgid "Name"
+msgstr ""
+
+#: src/processor/processorMenu.js:618
+msgid "Subsystem"
+msgstr ""
+
+#: src/processor/processorMenu.js:629
+msgid "Vendor"
+msgstr ""
+
+#: src/processor/processorMenu.js:638
+msgid "Vendor ID"
+msgstr ""
+
+#: src/processor/processorMenu.js:648
+msgid "Product ID"
+msgstr ""
+
+#: src/processor/processorMenu.js:657
+msgid "Domain"
+msgstr ""
+
+#: src/processor/processorMenu.js:665
+msgid "Bus"
+msgstr ""
+
+#: src/processor/processorMenu.js:673
+msgid "Slot"
+msgstr ""
+
+#: src/processor/processorMenu.js:682
+msgid "Drivers"
+msgstr ""
+
+#: src/processor/processorMenu.js:692
+msgid "Modules"
+msgstr ""
+
+#: src/processor/processorMenu.js:704
+msgid "System uptime"
+msgstr ""
+
+#: src/processor/processorGraph.js:63 src/network/networkGraph.js:74
+#: src/storage/storageGraph.js:78 src/memory/memoryGraph.js:64
+#, javascript-format
+msgid "%d min ago"
+msgid_plural "%d mins ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/processor/processorGraph.js:66 src/network/networkGraph.js:77
+#: src/storage/storageGraph.js:81 src/memory/memoryGraph.js:67
+msgid "now"
+msgstr ""
+
+#: src/sensors/sensorsMenu.js:40 prefs.js:500 prefs.js:502
+msgid "Sensors"
+msgstr ""
+
+#: src/sensors/sensorsMenu.js:44
+msgid "No sensor found"
+msgstr ""
+
+#: src/network/networkMenu.js:36 prefs.js:394 prefs.js:396
+msgid "Network"
+msgstr ""
+
+#: src/network/networkMenu.js:63
+msgid "Global Upload:"
+msgstr ""
+
+#: src/network/networkMenu.js:78
+msgid "Global Download:"
+msgstr ""
+
+#: src/network/networkMenu.js:106
+msgid "Interfaces"
+msgstr ""
+
+#: src/network/networkMenu.js:110
+msgid "No network interface found"
+msgstr ""
+
+#: src/network/networkMenu.js:233
+msgctxt "short for upload"
+msgid "U"
+msgstr ""
+
+#: src/network/networkMenu.js:264
+msgctxt "short for download"
+msgid "D"
+msgstr ""
+
+#: src/storage/storageMenu.js:39 prefs.js:316 prefs.js:318
+msgid "Storage"
+msgstr ""
+
+#: src/storage/storageMenu.js:66
+msgid "Global Read:"
+msgstr ""
+
+#: src/storage/storageMenu.js:81
+msgid "Global Write:"
+msgstr ""
+
+#: src/storage/storageMenu.js:109
+msgid "Devices"
+msgstr ""
+
+#: src/storage/storageMenu.js:113
+msgid "No storage device found"
+msgstr ""
+
+#: src/storage/storageMenu.js:263
+msgctxt "short for read"
+msgid "R"
+msgstr ""
+
+#: src/storage/storageMenu.js:294
+msgctxt "short for write"
+msgid "W"
+msgstr ""
+
+#: src/storage/storageMenu.js:390
+msgid "Disk"
+msgstr ""
+
+#: src/memory/memoryMenu.js:38 prefs.js:265 prefs.js:267
+msgid "Memory"
+msgstr ""
+
+#: src/memory/memoryMenu.js:64
+msgid "Allocated:"
+msgstr ""
+
+#: src/memory/memoryMenu.js:70 src/memory/memoryMenu.js:392
+msgid "Used:"
+msgstr ""
+
+#: src/memory/memoryMenu.js:75
+msgid "Free:"
+msgstr ""
+
+#: src/memory/memoryMenu.js:132
+msgid "Memory Usage Raw Info"
+msgstr ""
+
+#: src/memory/memoryMenu.js:136 src/memory/memoryMenu.js:428
+msgid "Total"
+msgstr ""
+
+#: src/memory/memoryMenu.js:150
+msgid "Allocated"
+msgstr ""
+
+#: src/memory/memoryMenu.js:164 src/memory/memoryMenu.js:442
+msgid "Used"
+msgstr ""
+
+#: src/memory/memoryMenu.js:178 src/memory/memoryMenu.js:456
+msgid "Free"
+msgstr ""
+
+#: src/memory/memoryMenu.js:192
+msgid "Available"
+msgstr ""
+
+#: src/memory/memoryMenu.js:206
+msgid "Allocatable"
+msgstr ""
+
+#: src/memory/memoryMenu.js:220 prefs.js:275 prefs.js:425 prefs.js:455
+msgid "Active"
+msgstr ""
+
+#: src/memory/memoryMenu.js:234
+msgid "Buffers"
+msgstr ""
+
+#: src/memory/memoryMenu.js:248 src/memory/memoryMenu.js:470
+msgid "Cached"
+msgstr ""
+
+#: src/memory/memoryMenu.js:358
+msgid "Swap"
+msgstr ""
+
+#: src/memory/memoryMenu.js:424
+msgid "Swap Info"
+msgstr ""
+
+#: src/memory/memoryMenu.js:484
+msgid "Zswap"
+msgstr ""
+
+#: src/memory/memoryMenu.js:498
+msgid "Zswapped"
+msgstr ""
+
+#: src/memory/memoryMenu.js:511
+msgid "Swap Devices"
+msgstr ""
 
 #: prefs.js:105
 msgid "General"
@@ -254,10 +545,6 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: prefs.js:238 src/processor/processorMenu.js:42
-msgid "CPU"
-msgstr ""
-
 #: prefs.js:239
 msgid "Realtime Bars Breakdown"
 msgstr ""
@@ -266,20 +553,12 @@ msgstr ""
 msgid "Core Bars Breakdown"
 msgstr ""
 
-#: prefs.js:243 src/processor/processorMenu.js:520
-msgid "GPU"
-msgstr ""
-
 #: prefs.js:246 prefs.js:531
 msgid "None"
 msgstr ""
 
 #: prefs.js:257
 msgid "Main GPU"
-msgstr ""
-
-#: prefs.js:265 prefs.js:267 src/memory/memoryMenu.js:38
-msgid "Memory"
 msgstr ""
 
 #: prefs.js:272
@@ -294,16 +573,8 @@ msgstr ""
 msgid "Total - Available"
 msgstr ""
 
-#: prefs.js:275 prefs.js:425 prefs.js:455 src/memory/memoryMenu.js:220
-msgid "Active"
-msgstr ""
-
 #: prefs.js:277
 msgid "Used Memory"
-msgstr ""
-
-#: prefs.js:316 prefs.js:318 src/storage/storageMenu.js:39
-msgid "Storage"
 msgstr ""
 
 #: prefs.js:323 prefs.js:401
@@ -398,10 +669,6 @@ msgstr ""
 msgid "in kB/s"
 msgstr ""
 
-#: prefs.js:394 prefs.js:396 src/network/networkMenu.js:36
-msgid "Network"
-msgstr ""
-
 #: prefs.js:415
 msgid "Ignored Network Interfaces"
 msgstr ""
@@ -410,15 +677,13 @@ msgstr ""
 msgid "Ignored"
 msgstr ""
 
-#: prefs.js:500 prefs.js:502 src/sensors/sensorsMenu.js:40
-msgid "Sensors"
-msgstr ""
-
 #: prefs.js:507
+msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr ""
 
 #: prefs.js:508
+msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr ""
 
@@ -472,267 +737,4 @@ msgstr ""
 
 #: prefs.js:567
 msgid "Debug Mode"
-msgstr ""
-
-#: src/memory/memoryGraph.js:64 src/network/networkGraph.js:74
-#: src/processor/processorGraph.js:63 src/storage/storageGraph.js:78
-#, javascript-format
-msgid "%d min ago"
-msgid_plural "%d mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
-#: src/memory/memoryGraph.js:67 src/network/networkGraph.js:77
-#: src/processor/processorGraph.js:66 src/storage/storageGraph.js:81
-msgid "now"
-msgstr ""
-
-#: src/memory/memoryMenu.js:58 src/memory/memoryMenu.js:398
-#: src/processor/processorMenu.js:202
-msgid "Total:"
-msgstr ""
-
-#: src/memory/memoryMenu.js:64
-msgid "Allocated:"
-msgstr ""
-
-#: src/memory/memoryMenu.js:70 src/memory/memoryMenu.js:392
-msgid "Used:"
-msgstr ""
-
-#: src/memory/memoryMenu.js:75
-msgid "Free:"
-msgstr ""
-
-#: src/memory/memoryMenu.js:132
-msgid "Memory Usage Raw Info"
-msgstr ""
-
-#: src/memory/memoryMenu.js:136 src/memory/memoryMenu.js:428
-msgid "Total"
-msgstr ""
-
-#: src/memory/memoryMenu.js:150
-msgid "Allocated"
-msgstr ""
-
-#: src/memory/memoryMenu.js:164 src/memory/memoryMenu.js:442
-msgid "Used"
-msgstr ""
-
-#: src/memory/memoryMenu.js:178 src/memory/memoryMenu.js:456
-msgid "Free"
-msgstr ""
-
-#: src/memory/memoryMenu.js:192
-msgid "Available"
-msgstr ""
-
-#: src/memory/memoryMenu.js:206
-msgid "Allocatable"
-msgstr ""
-
-#: src/memory/memoryMenu.js:234
-msgid "Buffers"
-msgstr ""
-
-#: src/memory/memoryMenu.js:248 src/memory/memoryMenu.js:470
-msgid "Cached"
-msgstr ""
-
-#: src/memory/memoryMenu.js:262 src/memory/memoryMenu.js:320
-#: src/processor/processorMenu.js:434 src/processor/processorMenu.js:488
-msgid "Top processes"
-msgstr ""
-
-#: src/memory/memoryMenu.js:358
-msgid "Swap"
-msgstr ""
-
-#: src/memory/memoryMenu.js:424
-msgid "Swap Info"
-msgstr ""
-
-#: src/memory/memoryMenu.js:484
-msgid "Zswap"
-msgstr ""
-
-#: src/memory/memoryMenu.js:498
-msgid "Zswapped"
-msgstr ""
-
-#: src/memory/memoryMenu.js:511
-msgid "Swap Devices"
-msgstr ""
-
-#: src/network/networkMenu.js:63
-msgid "Global Upload:"
-msgstr ""
-
-#: src/network/networkMenu.js:78
-msgid "Global Download:"
-msgstr ""
-
-#: src/network/networkMenu.js:106
-msgid "Interfaces"
-msgstr ""
-
-#: src/network/networkMenu.js:110
-msgid "No network interface found"
-msgstr ""
-
-#: src/network/networkMenu.js:233
-msgctxt "upload"
-msgid "U"
-msgstr ""
-
-#: src/network/networkMenu.js:264
-msgctxt "download"
-msgid "D"
-msgstr ""
-
-#: src/processor/processorMenu.js:115
-msgid "CPU info"
-msgstr ""
-
-#: src/processor/processorMenu.js:208
-msgid "User:"
-msgstr ""
-
-#: src/processor/processorMenu.js:214
-msgid "System:"
-msgstr ""
-
-#: src/processor/processorMenu.js:245
-msgid "CPU Category Usage Raw Info"
-msgstr ""
-
-#: src/processor/processorMenu.js:248
-msgid "User"
-msgstr ""
-
-#: src/processor/processorMenu.js:256
-msgid "Nice"
-msgstr ""
-
-#: src/processor/processorMenu.js:264
-msgid "System"
-msgstr ""
-
-#: src/processor/processorMenu.js:272
-msgid "Idle"
-msgstr ""
-
-#: src/processor/processorMenu.js:280
-msgid "I/O wait"
-msgstr ""
-
-#: src/processor/processorMenu.js:288
-msgid "IRQ"
-msgstr ""
-
-#: src/processor/processorMenu.js:296
-msgid "Soft IRQ"
-msgstr ""
-
-#: src/processor/processorMenu.js:304
-msgid "Steal"
-msgstr ""
-
-#: src/processor/processorMenu.js:375
-msgid "CPU Cores Usage Info"
-msgstr ""
-
-#: src/processor/processorMenu.js:417
-msgid "GHz"
-msgstr ""
-
-#: src/processor/processorMenu.js:532
-msgid "No GPU found"
-msgstr ""
-
-#: src/processor/processorMenu.js:545
-msgid "GPUs"
-msgstr ""
-
-#: src/processor/processorMenu.js:602
-msgid "GPU info"
-msgstr ""
-
-#: src/processor/processorMenu.js:610
-msgid "Name"
-msgstr ""
-
-#: src/processor/processorMenu.js:618
-msgid "Subsystem"
-msgstr ""
-
-#: src/processor/processorMenu.js:629
-msgid "Vendor"
-msgstr ""
-
-#: src/processor/processorMenu.js:638
-msgid "Vendor ID"
-msgstr ""
-
-#: src/processor/processorMenu.js:648
-msgid "Product ID"
-msgstr ""
-
-#: src/processor/processorMenu.js:657
-msgid "Domain"
-msgstr ""
-
-#: src/processor/processorMenu.js:665
-msgid "Bus"
-msgstr ""
-
-#: src/processor/processorMenu.js:673
-msgid "Slot"
-msgstr ""
-
-#: src/processor/processorMenu.js:682
-msgid "Drivers"
-msgstr ""
-
-#: src/processor/processorMenu.js:692
-msgid "Modules"
-msgstr ""
-
-#: src/processor/processorMenu.js:704
-msgid "System uptime"
-msgstr ""
-
-#: src/sensors/sensorsMenu.js:44
-msgid "No sensor found"
-msgstr ""
-
-#: src/storage/storageMenu.js:66
-msgid "Global Read:"
-msgstr ""
-
-#: src/storage/storageMenu.js:81
-msgid "Global Write:"
-msgstr ""
-
-#: src/storage/storageMenu.js:109
-msgid "Devices"
-msgstr ""
-
-#: src/storage/storageMenu.js:113
-msgid "No storage device found"
-msgstr ""
-
-#: src/storage/storageMenu.js:263
-msgctxt "read"
-msgid "R"
-msgstr ""
-
-#: src/storage/storageMenu.js:294
-msgctxt "write"
-msgid "W"
-msgstr ""
-
-#: src/storage/storageMenu.js:390
-msgid "Disk"
 msgstr ""

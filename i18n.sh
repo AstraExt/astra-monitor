@@ -31,7 +31,7 @@ log_message "Package version: $PACKAGE_VERSION"
 # Generate pot file from .js files, excluding node_modules directory
 log_message "Generating POT file..."
 JS_FILES=$(find . -name '*.js' -type f -not -path './node_modules/*')
-xgettext --language=JavaScript --from-code=UTF-8 --join-existing --package-name="$PACKAGE_NAME" --package-version="$PACKAGE_VERSION" --copyright-holder="Lju" --output=po/monitor@astraext.pot $JS_FILES
+xgettext --language=JavaScript --from-code=UTF-8 --package-name="$PACKAGE_NAME" --package-version="$PACKAGE_VERSION" --copyright-holder="Lju" --output=po/monitor@astraext.pot $JS_FILES
 if [ $? -ne 0 ]; then
     log_message "Error: Failed to generate POT file"
     exit 1
@@ -40,6 +40,16 @@ log_message "POT file generated successfully"
 
 # Remove duplicate entries from the pot file
 msguniq po/monitor@astraext.pot -o po/monitor@astraext.pot
+
+# Replace charset in the pot file
+sed -i 's/charset=CHARSET/charset=UTF-8/'
+
+# Replace plural forms in the pot file
+sed -i 's/nplurals=INTEGER/nplurals=2/'
+sed -i 's/plural=EXPRESSION/plural=(n != 1)/'
+
+# Replace language in the pot file
+sed -i 's/Language: /Language: en_US/'
 
 # Update all .po files with the new .pot file
 log_message "Updating PO files..."
