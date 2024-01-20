@@ -627,7 +627,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             }, 1000);
         });
         
-        if(reset) {
+        if(reset !== null) {
             const resetButton = new Gtk.Button({
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
