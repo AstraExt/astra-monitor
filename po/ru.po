@@ -1,0 +1,768 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Lju
+# This file is distributed under the same license as the AstraMonitor package.
+# Aleksandr Melman <Alexmelman88@gmail.com>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: AstraMonitor 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-20 14:37+0100\n"
+"PO-Revision-Date: 2024-01-20 17:47+0300\n"
+"Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
+"Language-Team: ru\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: prefs.js:105
+msgid "General"
+msgstr "Общие"
+
+#: prefs.js:107
+msgid "Dependencies"
+msgstr "Зависимости"
+
+#: prefs.js:110
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/stat: это расширение не будет работать!"
+
+#: prefs.js:112
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/cpuinfo: это расширение не будет работать!"
+
+#: prefs.js:114
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/meminfo: это расширение не будет работать!"
+
+#: prefs.js:116
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/diskstats: это расширение не будет "
+"работать!"
+
+#: prefs.js:118
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/net/dev: это расширение не будет работать!"
+
+#: prefs.js:120
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr "Невозможно получить доступ к 'ps': это расширение не будет работать!"
+
+#: prefs.js:122
+msgid "'lm-sensors' not installed: some features will be disabled!"
+msgstr "'lm-sensors' не установлен: некоторые функции будут отключены!"
+
+#: prefs.js:124
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "'lscpu' не установлен: некоторые функции будут отключены!"
+
+#: prefs.js:126
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "'lspci' не установлен: некоторые функции будут отключены!"
+
+#: prefs.js:128
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "'lsblk' не установлен: некоторые функции будут отключены!"
+
+#: prefs.js:130
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
+msgstr ""
+"Невозможно получить доступ к /sys/devices/system/cpu/cpu*/cpufreq/"
+"scaling_cur_freq: некоторые функции будут отключены!"
+
+#: prefs.js:148
+msgid "All dependencies are met!"
+msgstr "Все зависимости удовлетворены!"
+
+#: prefs.js:151
+msgid "Visualization"
+msgstr "Визуализация"
+
+#: prefs.js:153
+msgid "Theme"
+msgstr "Тема"
+
+#: prefs.js:155
+msgid "Dark"
+msgstr "Темный"
+
+#: prefs.js:156
+msgid "Light"
+msgstr "Светлый"
+
+#: prefs.js:158
+msgid "Shell Theme Style"
+msgstr "Стиль темы Shell"
+
+#: prefs.js:160
+msgid "Panel Box"
+msgstr "Блок с панелями"
+
+#: prefs.js:162
+msgid "Left"
+msgstr "Слева"
+
+#: prefs.js:163
+msgid "Center"
+msgstr "По центру"
+
+#: prefs.js:164
+msgid "Right"
+msgstr "Справа"
+
+#: prefs.js:166
+msgid "Position"
+msgstr "Положение"
+
+#: prefs.js:167
+msgid "Order"
+msgstr "Порядок"
+
+#: prefs.js:169
+msgid "Headers"
+msgstr "Заголовки"
+
+#: prefs.js:171
+msgid "Headers Height"
+msgstr "Высота заголовков"
+
+#: prefs.js:172 prefs.js:177 prefs.js:182 prefs.js:187 prefs.js:215
+#: prefs.js:287 prefs.js:369 prefs.js:479 prefs.js:519
+msgid "Experimental feature: may require to disable/enable the extension."
+msgstr ""
+"Экспериментальная функция: может потребоваться отключить/включить расширение."
+
+#: prefs.js:172
+msgid "Default value is 28"
+msgstr "Значение по умолчанию - 28"
+
+#: prefs.js:176
+msgid "Headers Margins"
+msgstr "Поля заголовков"
+
+#: prefs.js:177
+msgid "Default value is 2"
+msgstr "Значение по умолчанию - 2"
+
+#: prefs.js:181
+msgid "Headers Font"
+msgstr "Шрифт заголовков"
+
+#: prefs.js:182
+msgid "Set to empty to disable font override"
+msgstr "Установите пустое значение, чтобы отключить переопределение шрифтов"
+
+#: prefs.js:186
+msgid "Headers Font Size"
+msgstr "Размер шрифта заголовков"
+
+#: prefs.js:187
+msgid "Set to 0 to disable size override"
+msgstr "Установите значение 0, чтобы отключить переопределение размера"
+
+#: prefs.js:193
+msgid "Monitor Ordering"
+msgstr "Порядок мониторинга"
+
+#: prefs.js:201 prefs.js:203
+msgid "Processors"
+msgstr "Процессоры"
+
+#: prefs.js:204 prefs.js:268 prefs.js:319 prefs.js:397 prefs.js:503
+#: prefs.js:536 prefs.js:540
+msgid "Show"
+msgstr "Показать"
+
+#: prefs.js:205 prefs.js:269 prefs.js:320 prefs.js:398 prefs.js:504
+msgid "Update frequency (seconds)"
+msgstr "Частота обновления (в секундах)"
+
+#: prefs.js:209 prefs.js:281 prefs.js:363 prefs.js:513
+msgid "Header"
+msgstr "Заголовок"
+
+#: prefs.js:211 prefs.js:283 prefs.js:365 prefs.js:475 prefs.js:515
+msgid "Icon"
+msgstr "Значок"
+
+#: prefs.js:212 prefs.js:284 prefs.js:366 prefs.js:476 prefs.js:516
+msgid "Show Icon"
+msgstr "Показать значок"
+
+#: prefs.js:214 prefs.js:286 prefs.js:368 prefs.js:478 prefs.js:518
+msgid "Icon Size"
+msgstr "Размер значка"
+
+#: prefs.js:215 prefs.js:287 prefs.js:369 prefs.js:479 prefs.js:519
+msgid "Default value is 18"
+msgstr "Значение по умолчанию - 18"
+
+#: prefs.js:219 prefs.js:291 prefs.js:373 prefs.js:483 prefs.js:523
+msgid "Tooltip"
+msgstr "Подсказка"
+
+#: prefs.js:220 prefs.js:292 prefs.js:374 prefs.js:484 prefs.js:524
+msgid "Show Tooltip"
+msgstr "Показать подсказку"
+
+#: prefs.js:222 prefs.js:294
+msgid "Percentage"
+msgstr "Проценты"
+
+#: prefs.js:223 prefs.js:295
+msgid "Show Percentage"
+msgstr "Показать проценты"
+
+#: prefs.js:224
+msgid "Show Percentage Single Core"
+msgstr "Показать процент одного ядра"
+
+#: prefs.js:226 prefs.js:297
+msgid "History Graph"
+msgstr "График истории"
+
+#: prefs.js:227 prefs.js:298
+msgid "Show History Graph"
+msgstr "Показать график истории"
+
+#: prefs.js:228 prefs.js:240 prefs.js:299 prefs.js:308
+msgid "History Graph Breakdown"
+msgstr "Разбивка графика истории"
+
+#: prefs.js:229 prefs.js:300
+msgid "History Graph Width"
+msgstr "Ширина графика истории"
+
+#: prefs.js:231 prefs.js:302
+msgid "Realtime Bar"
+msgstr "Панель в реальном времени"
+
+#: prefs.js:232 prefs.js:303
+msgid "Show Realtime Bar"
+msgstr "Показать панель в реальном времени"
+
+#: prefs.js:233
+msgid "Realtime per-core Bars"
+msgstr "Панели в реальном времени для каждого ядра"
+
+#: prefs.js:234 prefs.js:304
+msgid "Realtime Bar Breakdown"
+msgstr "Разбивка панели в реальном времени"
+
+#: prefs.js:237 prefs.js:307
+msgid "Menu"
+msgstr "Меню"
+
+#: prefs.js:238 src/processor/processorMenu.js:42
+msgid "CPU"
+msgstr "ЦП"
+
+#: prefs.js:239
+msgid "Realtime Bars Breakdown"
+msgstr "Разбивка панелей в реальном времени"
+
+#: prefs.js:241
+msgid "Core Bars Breakdown"
+msgstr "Разбивка панелей ядер"
+
+#: prefs.js:243 src/processor/processorMenu.js:520
+msgid "GPU"
+msgstr "ГП"
+
+#: prefs.js:246 prefs.js:531
+msgid "None"
+msgstr "Нет"
+
+#: prefs.js:257
+msgid "Main GPU"
+msgstr "Главный ГП"
+
+#: prefs.js:265 prefs.js:267 src/memory/memoryMenu.js:38
+msgid "Memory"
+msgstr "Память"
+
+#: prefs.js:272
+msgid "Total - Free - Buffers - Cached"
+msgstr "Всего - Свободно - Буферы - Кэшировано"
+
+#: prefs.js:273
+msgid "Total - Free"
+msgstr "Всего - Свободно"
+
+#: prefs.js:274
+msgid "Total - Available"
+msgstr "Всего - Доступно"
+
+#: prefs.js:275 prefs.js:425 prefs.js:455 src/memory/memoryMenu.js:220
+msgid "Active"
+msgstr "Активно"
+
+#: prefs.js:277
+msgid "Used Memory"
+msgstr "Используемая память"
+
+#: prefs.js:316 prefs.js:318 src/storage/storageMenu.js:39
+msgid "Storage"
+msgstr "Хранилище"
+
+#: prefs.js:323 prefs.js:401
+msgid "kB/s"
+msgstr "кбайт/с"
+
+#: prefs.js:324 prefs.js:402
+msgid "KiB/s"
+msgstr "Кибайт/с"
+
+#: prefs.js:325 prefs.js:403
+msgid "kb/s"
+msgstr "кбит/с"
+
+#: prefs.js:326 prefs.js:404
+msgid "Kibit/s"
+msgstr "Кибит/с"
+
+#: prefs.js:327 prefs.js:405
+msgid "kBps"
+msgstr "кбайт/с"
+
+#: prefs.js:328 prefs.js:406
+msgid "KiBps"
+msgstr "Кибайт/с"
+
+#: prefs.js:329 prefs.js:407
+msgid "Kibps"
+msgstr "Кибит/с"
+
+#: prefs.js:330 prefs.js:408
+msgid "kbps"
+msgstr "кбит/с"
+
+#: prefs.js:331 prefs.js:409
+msgid "Kibitps"
+msgstr "Кибит/с"
+
+#: prefs.js:332 prefs.js:410
+msgid "k (as kB/s)"
+msgstr "k (как кбайт/с)"
+
+#: prefs.js:333 prefs.js:411
+msgid "Ki (as KiB/s)"
+msgstr "Ki (как Кибайт/с)"
+
+#: prefs.js:335 prefs.js:413
+msgid "Data Unit"
+msgstr "Единица измерения данных"
+
+#: prefs.js:359 prefs.js:376
+msgid "Main Disk"
+msgstr "Главный диск"
+
+#: prefs.js:377
+msgid "Show Storage Usage Bar"
+msgstr "Показать панель использования хранилища"
+
+#: prefs.js:378
+msgid "Show Storage Usage Percentage"
+msgstr "Показать процент использования хранилища"
+
+#: prefs.js:380 prefs.js:486
+msgid "IO"
+msgstr "Ввод/вывод"
+
+#: prefs.js:381 prefs.js:487
+msgid "Show Realtime IO Bar"
+msgstr "Показать панель ввода/вывода в реальном времени"
+
+#: prefs.js:382 prefs.js:488
+msgid "Show IO History Graph"
+msgstr "Показать график истории ввода/вывода"
+
+#: prefs.js:383 prefs.js:489
+msgid "IO History Graph Width"
+msgstr "Ширина графика истории ввода/вывода"
+
+#: prefs.js:384 prefs.js:490
+msgid "Show IO Speed"
+msgstr "Показать скорость ввода/вывода"
+
+#: prefs.js:385 prefs.js:491
+msgid "IO Speed Number Max Figures"
+msgstr "Максимальное значение скорости ввода/вывода"
+
+#: prefs.js:386 prefs.js:492
+msgid "IO Speed Threshold"
+msgstr "Порог скорости ввода/вывода"
+
+#: prefs.js:386 prefs.js:492
+msgid "in kB/s"
+msgstr "в кбайт/с"
+
+#: prefs.js:394 prefs.js:396 src/network/networkMenu.js:36
+msgid "Network"
+msgstr "Сеть"
+
+#: prefs.js:415
+msgid "Ignored Network Interfaces"
+msgstr "Игнорируемые сетевые интерфейсы"
+
+#: prefs.js:425 prefs.js:445
+msgid "Ignored"
+msgstr "Игнорируется"
+
+#: prefs.js:500 prefs.js:502 src/sensors/sensorsMenu.js:40
+msgid "Sensors"
+msgstr "Датчики"
+
+#: prefs.js:507
+msgid "Celsius"
+msgstr "Цельсий"
+
+#: prefs.js:508
+msgid "Fahrenheit"
+msgstr "Фаренгейт"
+
+#: prefs.js:510
+msgid "Temperature Unit"
+msgstr "Единица измерения температуры"
+
+#: prefs.js:535
+msgid "Sensor 1"
+msgstr "Датчик 1"
+
+#: prefs.js:537 prefs.js:541
+msgid "Source"
+msgstr "Источник"
+
+#: prefs.js:539
+msgid "Sensor 2"
+msgstr "Датчик 2"
+
+#: prefs.js:550
+msgid "Info"
+msgstr "Информация"
+
+#: prefs.js:560
+msgid "Version"
+msgstr "Версия"
+
+#: prefs.js:561
+msgid "Changelog"
+msgstr "Изменения"
+
+#: prefs.js:562
+msgid "GitHub"
+msgstr "GitHub"
+
+#: prefs.js:563
+msgid "GNOME Extensions page"
+msgstr "Страница GNOME Extensions"
+
+#: prefs.js:564
+msgid "Report a bug or suggest new feature"
+msgstr "Сообщить об ошибке или предложить новую функцию"
+
+#: prefs.js:565
+msgid "Buy us a coffee"
+msgstr "Угостить нас кофе"
+
+#: prefs.js:566
+msgid "Become a patron"
+msgstr "Стать меценатом"
+
+#: prefs.js:567
+msgid "Debug Mode"
+msgstr "Режим отладки"
+
+#: src/memory/memoryGraph.js:64 src/network/networkGraph.js:74
+#: src/processor/processorGraph.js:63 src/storage/storageGraph.js:78
+#, javascript-format
+msgid "%d min ago"
+msgid_plural "%d mins ago"
+msgstr[0] "%d минута назад"
+msgstr[1] "%d минуты назад"
+msgstr[2] "%d минут назад"
+
+#: src/memory/memoryGraph.js:67 src/network/networkGraph.js:77
+#: src/processor/processorGraph.js:66 src/storage/storageGraph.js:81
+msgid "now"
+msgstr "сейчас"
+
+#: src/memory/memoryMenu.js:58 src/memory/memoryMenu.js:398
+#: src/processor/processorMenu.js:202
+msgid "Total:"
+msgstr "Всего:"
+
+#: src/memory/memoryMenu.js:64
+msgid "Allocated:"
+msgstr "Выделено:"
+
+#: src/memory/memoryMenu.js:70 src/memory/memoryMenu.js:392
+msgid "Used:"
+msgstr "Используется:"
+
+#: src/memory/memoryMenu.js:75
+msgid "Free:"
+msgstr "Свободно:"
+
+#: src/memory/memoryMenu.js:132
+msgid "Memory Usage Raw Info"
+msgstr "Информация об использовании памяти"
+
+#: src/memory/memoryMenu.js:136 src/memory/memoryMenu.js:428
+msgid "Total"
+msgstr "Всего"
+
+#: src/memory/memoryMenu.js:150
+msgid "Allocated"
+msgstr "Выделено"
+
+#: src/memory/memoryMenu.js:164 src/memory/memoryMenu.js:442
+msgid "Used"
+msgstr "Используется"
+
+#: src/memory/memoryMenu.js:178 src/memory/memoryMenu.js:456
+msgid "Free"
+msgstr "Свободно"
+
+#: src/memory/memoryMenu.js:192
+msgid "Available"
+msgstr "Доступно"
+
+#: src/memory/memoryMenu.js:206
+msgid "Allocatable"
+msgstr "Выделяемая"
+
+#: src/memory/memoryMenu.js:234
+msgid "Buffers"
+msgstr "Буферы"
+
+#: src/memory/memoryMenu.js:248 src/memory/memoryMenu.js:470
+msgid "Cached"
+msgstr "Кэшировано"
+
+#: src/memory/memoryMenu.js:262 src/memory/memoryMenu.js:320
+#: src/processor/processorMenu.js:434 src/processor/processorMenu.js:488
+msgid "Top processes"
+msgstr "Наибольшие процессы"
+
+#: src/memory/memoryMenu.js:358
+msgid "Swap"
+msgstr "Подкачка"
+
+#: src/memory/memoryMenu.js:424
+msgid "Swap Info"
+msgstr "Информация о подкачке"
+
+#: src/memory/memoryMenu.js:484
+msgid "Zswap"
+msgstr "Zswap"
+
+#: src/memory/memoryMenu.js:498
+msgid "Zswapped"
+msgstr "Zswapped"
+
+#: src/memory/memoryMenu.js:511
+msgid "Swap Devices"
+msgstr "Устройства подкачки"
+
+#: src/network/networkMenu.js:63
+msgid "Global Upload:"
+msgstr "Глобальная выгрузка:"
+
+#: src/network/networkMenu.js:78
+msgid "Global Download:"
+msgstr "Глобальная загрузка:"
+
+#: src/network/networkMenu.js:106
+msgid "Interfaces"
+msgstr "Интерфейсы"
+
+#: src/network/networkMenu.js:110
+msgid "No network interface found"
+msgstr "Сетевой интерфейс не найден"
+
+#: src/network/networkMenu.js:233
+msgctxt "upload"
+msgid "U"
+msgstr "В"
+
+#: src/network/networkMenu.js:264
+msgctxt "download"
+msgid "D"
+msgstr "З"
+
+#: src/processor/processorMenu.js:115
+msgid "CPU info"
+msgstr "Информация о ЦП"
+
+#: src/processor/processorMenu.js:208
+msgid "User:"
+msgstr "Пользователь:"
+
+#: src/processor/processorMenu.js:214
+msgid "System:"
+msgstr "Система:"
+
+#: src/processor/processorMenu.js:245
+msgid "CPU Category Usage Raw Info"
+msgstr "Информация о категории использования ЦП"
+
+#: src/processor/processorMenu.js:248
+msgid "User"
+msgstr "Пользователь"
+
+#: src/processor/processorMenu.js:256
+msgid "Nice"
+msgstr "Уступчивость"
+
+#: src/processor/processorMenu.js:264
+msgid "System"
+msgstr "Система"
+
+#: src/processor/processorMenu.js:272
+msgid "Idle"
+msgstr "Бездействие"
+
+#: src/processor/processorMenu.js:280
+msgid "I/O wait"
+msgstr "Ожидание ввода/вывода"
+
+#: src/processor/processorMenu.js:288
+msgid "IRQ"
+msgstr "Прерывание"
+
+#: src/processor/processorMenu.js:296
+msgid "Soft IRQ"
+msgstr "Программное прерывание"
+
+#: src/processor/processorMenu.js:304
+msgid "Steal"
+msgstr "Steal"
+
+#: src/processor/processorMenu.js:375
+msgid "CPU Cores Usage Info"
+msgstr "Информация об использовании ядер ЦП"
+
+#: src/processor/processorMenu.js:417
+msgid "GHz"
+msgstr "ГГц"
+
+#: src/processor/processorMenu.js:532
+msgid "No GPU found"
+msgstr "ГП не найден"
+
+#: src/processor/processorMenu.js:545
+msgid "GPUs"
+msgstr "ГП"
+
+#: src/processor/processorMenu.js:602
+msgid "GPU info"
+msgstr "Информация о ГП"
+
+#: src/processor/processorMenu.js:610
+msgid "Name"
+msgstr "Название"
+
+#: src/processor/processorMenu.js:618
+msgid "Subsystem"
+msgstr "Подсистема"
+
+#: src/processor/processorMenu.js:629
+msgid "Vendor"
+msgstr "Производитель"
+
+#: src/processor/processorMenu.js:638
+msgid "Vendor ID"
+msgstr "ID производителя"
+
+#: src/processor/processorMenu.js:648
+msgid "Product ID"
+msgstr "ID товара"
+
+#: src/processor/processorMenu.js:657
+msgid "Domain"
+msgstr "Домен"
+
+#: src/processor/processorMenu.js:665
+msgid "Bus"
+msgstr "Шина"
+
+#: src/processor/processorMenu.js:673
+msgid "Slot"
+msgstr "Слот"
+
+#: src/processor/processorMenu.js:682
+msgid "Drivers"
+msgstr "Драйвера"
+
+#: src/processor/processorMenu.js:692
+msgid "Modules"
+msgstr "Модули"
+
+#: src/processor/processorMenu.js:704
+msgid "System uptime"
+msgstr "Время работы системы"
+
+#: src/sensors/sensorsMenu.js:44
+msgid "No sensor found"
+msgstr "Датчик не найден"
+
+#: src/storage/storageMenu.js:66
+msgid "Global Read:"
+msgstr "Глобальное чтение:"
+
+#: src/storage/storageMenu.js:81
+msgid "Global Write:"
+msgstr "Глобальная запись:"
+
+#: src/storage/storageMenu.js:109
+msgid "Devices"
+msgstr "Устройства"
+
+#: src/storage/storageMenu.js:113
+msgid "No storage device found"
+msgstr "Устройство хранения не найдено"
+
+#: src/storage/storageMenu.js:263
+msgctxt "read"
+msgid "R"
+msgstr "Ч"
+
+#: src/storage/storageMenu.js:294
+msgctxt "write"
+msgid "W"
+msgstr "З"
+
+#: src/storage/storageMenu.js:390
+msgid "Disk"
+msgstr "Диск"
+
+#~ msgid "Panel Box Ordering"
+#~ msgstr "Порядок блока с панелями"
+
+#~ msgid "Show Network Usage Bar"
+#~ msgstr "Показать панель использования сети"
+
+#~ msgid "Show Sensor 1"
+#~ msgstr "Показать датчик 1"
+
+#~ msgid "Sensor 1 Source"
+#~ msgstr "Источник датчика 1"
+
+#~ msgid "Show Sensor 2"
+#~ msgstr "Показать датчик 2"
+
+#~ msgid "Sensor 2 Source"
+#~ msgstr "Источник датчика 2"
