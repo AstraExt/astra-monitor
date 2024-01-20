@@ -96,7 +96,7 @@ Astra Monitor is licensed under the GNU General Public License v3.0 (GPL-3.0), a
 
 # Translations
 
-Astra Monitor is currently available in English and Italian. If you would like to contribute with a translation, please refer to these guidelines:
+Astra Monitor is currently available in English and German. If you would like to contribute with a translation, please refer to these guidelines:
 
 1. **Fork the repository:** Fork the repository and clone it to your local machine.
 2. **Create/Update the translation file:** Create or update the translation file for your language. Translation files are located in po folder. The file name is the language code (e.g. it.po for Italian). You can use Poedit to edit the translation files.
