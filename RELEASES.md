@@ -1,8 +1,12 @@
+# Astra Monitor 7 - TO BE RELEASED
+
+### New features
+- Regex Ignore Network Interfaces: now, in addition to manual selection, you can use regex to ignore network interfaces [[#29](https://github.com/AstraExt/astra-monitor/issues/29)]
+
 # Astra Monitor 6 - January 19 2024
 
 ### New features
 - ___Initial___ implementation of Tooltips for Header's buttons [[#25](https://github.com/AstraExt/astra-monitor/issues/23)]
-- Regex Ignore Nework Interfaces: now, in addition to manual selection, you can use regex to ignore network interfaces [[#29](https://github.com/AstraExt/astra-monitor/issues/29)]
 
 ### Bug fixes
 - Fixed processor settings menu button going to general settings instead of processor settings [[#23](https://github.com/AstraExt/astra-monitor/issues/23)]
