@@ -1,12 +1,12 @@
 # German translation for AstraMonitor.
 # Copyright (C) 2024 Lju
-# This file is distributed under the same license as the AstraMonitor package.
+# This file is distributed under the same license as the Astra Monitor package.
 # Philipp Kiemle <philipp.kiemle@gmail.com>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: AstraMonitor 1\n"
+"Project-Id-Version: Astra Monitor 8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-19 15:00+0100\n"
 "PO-Revision-Date: 2024-01-20 01:04+0100\n"

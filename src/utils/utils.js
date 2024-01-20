@@ -842,7 +842,7 @@ export default class Utils {
         model = model.replace(/\bHewlett\-Packard\b/g, 'HP');
         
         // replace (rev 00)
-        model = model.replace(/\(rev\.?\s?\d+\)/g, '');
+        model = model.replace(/\(rev\.?\s?\w+\)/g, '');
         
         // replace multiple spaces with single space
         model = model.replace(/\s+/g, ' ');

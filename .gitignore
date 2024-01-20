@@ -20,5 +20,9 @@ package-lock.json
 # Ignore compiled schemas
 schemas/gschemas.compiled
 
+# Ignore i18n files
+po/*.mo
+po/*.po~
+
 # Ignore TODOs
 TODOs.txt

@@ -115,7 +115,7 @@ export default class Config {
         if(Config.bindMap.has(widget))
             delete Config.bindMap.get(widget)[property];
     }
-
+    
     static connect(object, signal, callback) {
         const id = Config.settings.connect(signal, callback);
         if(!Config.connectMap.has(object))
@@ -124,11 +124,7 @@ export default class Config {
         return id;
     }
     
-    static disconnect(id) {
-        Config.settings.disconnect(id);
-    }
-    
-    static disconnectAll(object, signal = null) {
+    static disconnect(object, signal) {
         if(!Config.connectMap.has(object))
             return;
         const connections = Config.connectMap.get(object);
@@ -136,7 +132,15 @@ export default class Config {
             if(signal && connection.signal !== signal)
                 continue;
             Config.settings.disconnect(connection.id);
+            
+            const index = connections.indexOf(connection);
+            if(index !== -1)
+                connections.splice(index, 1);
         }
+    }
+    
+    static disconnectAll(object) {
+        this.disconnect(object);
     }
     
     static clear(widget) {
