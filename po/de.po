@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Astra Monitor 8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-20 18:26+0100\n"
-"PO-Revision-Date: 2024-01-20 01:04+0100\n"
+"PO-Revision-Date: 2024-01-21 12:11+0100\n"
 "Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -25,7 +25,7 @@ msgstr "CPU"
 
 #: src/processor/processorMenu.js:115
 msgid "CPU info"
-msgstr ""
+msgstr "CPU-Info"
 
 #: src/processor/processorMenu.js:202 src/memory/memoryMenu.js:58
 #: src/memory/memoryMenu.js:398
@@ -135,7 +135,7 @@ msgstr "Bus"
 
 #: src/processor/processorMenu.js:673
 msgid "Slot"
-msgstr ""
+msgstr "Slot"
 
 #: src/processor/processorMenu.js:682
 msgid "Drivers"
@@ -147,7 +147,7 @@ msgstr "Module"
 
 #: src/processor/processorMenu.js:704
 msgid "System uptime"
-msgstr ""
+msgstr "Systembetriebszeit"
 
 #: src/processor/processorGraph.js:63 src/network/networkGraph.js:74
 #: src/storage/storageGraph.js:78 src/memory/memoryGraph.js:64
@@ -176,11 +176,11 @@ msgstr "Netzwerk"
 
 #: src/network/networkMenu.js:63
 msgid "Global Upload:"
-msgstr ""
+msgstr "Globaler Upload:"
 
 #: src/network/networkMenu.js:78
 msgid "Global Download:"
-msgstr ""
+msgstr "Globaler Download:"
 
 #: src/network/networkMenu.js:106
 msgid "Interfaces"
@@ -191,13 +191,11 @@ msgid "No network interface found"
 msgstr "Keine Netzwerkschnittstelle gefunden"
 
 #: src/network/networkMenu.js:248
-#, fuzzy
 msgctxt "short for upload"
 msgid "U"
 msgstr "U"
 
 #: src/network/networkMenu.js:279
-#, fuzzy
 msgctxt "short for download"
 msgid "D"
 msgstr "D"
@@ -208,11 +206,11 @@ msgstr "Speicher"
 
 #: src/storage/storageMenu.js:66
 msgid "Global Read:"
-msgstr ""
+msgstr "Globaler Read:"
 
 #: src/storage/storageMenu.js:81
 msgid "Global Write:"
-msgstr ""
+msgstr "Globaler Write:"
 
 #: src/storage/storageMenu.js:109
 msgid "Devices"
@@ -223,13 +221,11 @@ msgid "No storage device found"
 msgstr "Kein Speichergerät gefunden"
 
 #: src/storage/storageMenu.js:263
-#, fuzzy
 msgctxt "short for read"
 msgid "R"
 msgstr "R"
 
 #: src/storage/storageMenu.js:294
-#, fuzzy
 msgctxt "short for write"
 msgid "W"
 msgstr "W"
@@ -244,7 +240,7 @@ msgstr "Arbeitsspeicher"
 
 #: src/memory/memoryMenu.js:64
 msgid "Allocated:"
-msgstr ""
+msgstr "Zugewiesen:"
 
 #: src/memory/memoryMenu.js:70 src/memory/memoryMenu.js:392
 msgid "Used:"
@@ -264,7 +260,7 @@ msgstr "Gesamt"
 
 #: src/memory/memoryMenu.js:150
 msgid "Allocated"
-msgstr ""
+msgstr "Zugewiesen"
 
 #: src/memory/memoryMenu.js:164 src/memory/memoryMenu.js:442
 msgid "Used"
@@ -280,7 +276,7 @@ msgstr "Verfügbar"
 
 #: src/memory/memoryMenu.js:206
 msgid "Allocatable"
-msgstr ""
+msgstr "Zuweisbar"
 
 #: src/memory/memoryMenu.js:220 prefs.js:275 prefs.js:430 prefs.js:460
 msgid "Active"
@@ -288,7 +284,7 @@ msgstr "Aktiv"
 
 #: src/memory/memoryMenu.js:234
 msgid "Buffers"
-msgstr ""
+msgstr "Puffer"
 
 #: src/memory/memoryMenu.js:248 src/memory/memoryMenu.js:470
 msgid "Cached"
@@ -300,7 +296,7 @@ msgstr "Auslagerungsspeicher"
 
 #: src/memory/memoryMenu.js:424
 msgid "Swap Info"
-msgstr ""
+msgstr "Swap-Info"
 
 #: src/memory/memoryMenu.js:484
 msgid "Zswap"
@@ -312,7 +308,7 @@ msgstr ""
 
 #: src/memory/memoryMenu.js:511
 msgid "Swap Devices"
-msgstr ""
+msgstr "Swap-Geräte"
 
 #: prefs.js:105
 msgid "General"
@@ -531,11 +527,11 @@ msgstr ""
 
 #: prefs.js:226 prefs.js:297
 msgid "History Graph"
-msgstr ""
+msgstr "Verlaufsdiagramm"
 
 #: prefs.js:227 prefs.js:298
 msgid "Show History Graph"
-msgstr ""
+msgstr "Verlaufsdiagramm anzeigen"
 
 #: prefs.js:228 prefs.js:240 prefs.js:299 prefs.js:308
 msgid "History Graph Breakdown"
@@ -543,15 +539,15 @@ msgstr ""
 
 #: prefs.js:229 prefs.js:300
 msgid "History Graph Width"
-msgstr ""
+msgstr "Breite des Verlaufsdiagramms"
 
 #: prefs.js:231 prefs.js:302
 msgid "Realtime Bar"
-msgstr ""
+msgstr "Echtzeitbalken"
 
 #: prefs.js:232 prefs.js:303
 msgid "Show Realtime Bar"
-msgstr ""
+msgstr "Echtzeitbalken anzeigen"
 
 #: prefs.js:233
 msgid "Realtime per-core Bars"
@@ -695,11 +691,11 @@ msgstr "Ignorierte Netzwerkschnittstellen"
 
 #: prefs.js:418
 msgid "Regex"
-msgstr ""
+msgstr "Regex"
 
 #: prefs.js:419
 msgid "Interfaces matching this regex will be ignored."
-msgstr ""
+msgstr "Schnittstellen, die zu dieser Regex passen, werden ignoriert."
 
 #: prefs.js:419
 msgid "Leave empty to disable, example: 'vethw{7}'"
@@ -710,13 +706,11 @@ msgid "Ignored"
 msgstr "Ignoriert"
 
 #: prefs.js:512
-#, fuzzy
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr "Celsius"
 
 #: prefs.js:513
-#, fuzzy
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr "Fahrenheit"
@@ -755,7 +749,7 @@ msgstr "GitHub"
 
 #: prefs.js:568
 msgid "GNOME Extensions page"
-msgstr ""
+msgstr "GNOME Erweiterungen-Seite"
 
 #: prefs.js:569
 msgid "Report a bug or suggest new feature"
