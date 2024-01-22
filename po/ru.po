@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-20 18:26+0100\n"
-"PO-Revision-Date: 2024-01-20 17:47+0300\n"
+"PO-Revision-Date: 2024-01-22 12:09+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
 "Language: ru\n"
@@ -193,13 +193,11 @@ msgid "No network interface found"
 msgstr "Сетевой интерфейс не найден"
 
 #: src/network/networkMenu.js:248
-#, fuzzy
 msgctxt "short for upload"
 msgid "U"
 msgstr "В"
 
 #: src/network/networkMenu.js:279
-#, fuzzy
 msgctxt "short for download"
 msgid "D"
 msgstr "З"
@@ -225,13 +223,11 @@ msgid "No storage device found"
 msgstr "Устройство хранения не найдено"
 
 #: src/storage/storageMenu.js:263
-#, fuzzy
 msgctxt "short for read"
 msgid "R"
 msgstr "Ч"
 
 #: src/storage/storageMenu.js:294
-#, fuzzy
 msgctxt "short for write"
 msgid "W"
 msgstr "З"
@@ -691,28 +687,26 @@ msgstr "Игнорируемые сетевые интерфейсы"
 
 #: prefs.js:418
 msgid "Regex"
-msgstr ""
+msgstr "Регламент"
 
 #: prefs.js:419
 msgid "Interfaces matching this regex will be ignored."
-msgstr ""
+msgstr "Интерфейсы, соответствующие этому регламенту, будут игнорироваться."
 
 #: prefs.js:419
 msgid "Leave empty to disable, example: 'vethw{7}'"
-msgstr ""
+msgstr "Оставьте пустым, чтобы отключить, пример: 'vethw{7}'"
 
 #: prefs.js:430 prefs.js:450
 msgid "Ignored"
 msgstr "Игнорируется"
 
 #: prefs.js:512
-#, fuzzy
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr "Цельсий"
 
 #: prefs.js:513
-#, fuzzy
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr "Фаренгейт"
