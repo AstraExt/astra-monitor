@@ -140,12 +140,15 @@ export const MemoryHeader = GObject.registerClass({
         
         Main.uiGroup.add_actor(this.tooltipMenu.actor);
         this.tooltipMenu.actor.add_style_class_name('astra-monitor-tooltip-menu');
+        this.tooltipMenu.actor.x_expand = true;
         this.tooltipMenu.actor.hide();
         
         this.tooltipItem = new PopupMenu.PopupMenuItem('', {
             reactive: true,
             style_class: 'astra-monitor-tooltip-item'
         });
+        this.tooltipItem.actor.x_expand = true;
+        this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;
         this.tooltipItem.sensitive = true;
         this.tooltipMenu.addMenuItem(this.tooltipItem);
         
@@ -164,7 +167,7 @@ export const MemoryHeader = GObject.registerClass({
             else
                 this.tooltipItem.label.text = `${Math.round(usage.used / usage.total * 100)}%`;
             
-            const width = this.tooltipItem.label.get_preferred_width(-1)[1] + 30;
+                const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
             this.tooltipMenu.actor.set_width(width);
         });
     }
