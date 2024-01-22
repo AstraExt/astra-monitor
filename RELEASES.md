@@ -8,6 +8,7 @@
 
 ### Bug fixes
 - Top Processes list in Processors Menu is now even more responsive and should be filled faster for both '_GTop_' and '_/proc_' based sources
+- Fixed Memory Header History Graph breakdown [[#32](https://github.com/AstraExt/astra-monitor/issues/32)]
 
 # Astra Monitor 6 - January 19 2024
 

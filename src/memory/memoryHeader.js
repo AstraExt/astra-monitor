@@ -92,7 +92,7 @@ export const MemoryHeader = GObject.registerClass({
         let graphWidth = Config.get_int('memory-header-graph-width');
         graphWidth = Math.max(10, Math.min(500, graphWidth));
         
-        this.graph = new MemoryGraph({ width: graphWidth, mini: true, breakdownConfig: 'memory-menu-graph-breakdown' });
+        this.graph = new MemoryGraph({ width: graphWidth, mini: true, breakdownConfig: 'memory-header-graph-breakdown' });
         this.insert_child_at_index(this.graph, 2);
         Config.bind('memory-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
         
