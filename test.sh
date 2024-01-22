@@ -50,8 +50,19 @@ cleanup() {
     wait $GNOME_SHELL_PID 2>/dev/null
 }
 
+# Check if the system is NixOS
+if [ -f /etc/NIXOS ]; then
+    echo "This is NixOS"
+    
+    # NOTE: This is for testing purpose only, on my personal machine
+    #       Should be handled properly, but I don't have time for that now
+    # Export GI_TYPELIB_PATH
+    export GI_TYPELIB_PATH=/nix/store/311jq5bizzzj1yk2k7smb7j6lxc9qbin-libgtop-2.41.1/lib/girepository-1.0
+else
+    echo "This is not NixOS"
+fi
+
 # Start gnome-shell and get its PID
-#export GI_TYPELIB_PATH=/nix/store/311jq5bizzzj1yk2k7smb7j6lxc9qbin-libgtop-2.41.1/lib/girepository-1.0
 DISPLAY=:2 gnome-shell --replace --x11 --mode=minimal 2>&1 &
 GNOME_SHELL_PID=$!
 echo "gnome-shell started with PID $GNOME_SHELL_PID"

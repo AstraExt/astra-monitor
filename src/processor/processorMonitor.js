@@ -51,6 +51,7 @@ export class ProcessorMonitor extends Monitor {
         this.getCpuInfoSync();
         
         this.reset();
+        this.dataSourcesInit();
         
         const enabled = Config.get_boolean('processor-header-show');
         if(enabled)
@@ -112,6 +113,28 @@ export class ProcessorMonitor extends Monitor {
         this.reset();
     }
     
+    dataSourcesInit() {
+        let topProcesses = Config.get_string('processor-source-top-processes');
+        if(topProcesses !== '/proc' && topProcesses !== 'GTop')
+            topProcesses = '/proc';
+        
+        this.dataSources = {
+            topProcesses
+        };
+        
+        Config.connect(this, 'changed::processor-source-top-processes', () => {
+            let topProcesses = Config.get_string('processor-source-top-processes');
+            if(topProcesses !== '/proc' && topProcesses !== 'GTop')
+                topProcesses = '/proc';
+            
+            this.dataSources.topProcesses = topProcesses;
+            this.topProcessesCache.reset();
+            this.topProcessesTime = -1;
+            this.previousPidsCpuTime = new Map();
+            this.resetUsageHistory('topProcesses');
+        });
+    }
+    
     update() {
         const enabled = Config.get_boolean('processor-header-show');
         if(enabled) {
@@ -122,7 +145,10 @@ export class ProcessorMonitor extends Monitor {
             this.runUpdate('cpuCoresFrequency', procStat);
             
             if(this.isListeningFor('topProcesses')) {
-                this.runUpdate('topProcesses', false, procStat);
+                if(this.dataSources.topProcesses === 'GTop')
+                    this.runUpdate('topProcesses', false);
+                else
+                    this.runUpdate('topProcesses', false, procStat);
             }
             else {
                 this.topProcessesCache.updateNotSeen([]);
@@ -151,8 +177,13 @@ export class ProcessorMonitor extends Monitor {
         }
         else if(key === 'topProcesses') {
             if(!this.updateTopProcessesTask.isRunning) {
-                const procStat = this.getProcStatAsync();
-                this.runUpdate('topProcesses', true, procStat);
+                if(this.dataSources.topProcesses === 'GTop') {
+                    this.runUpdate('topProcesses', true);
+                }
+                else {
+                    const procStat = this.getProcStatAsync();
+                    this.runUpdate('topProcesses', true, procStat);
+                }
                 return; // Don't push to the queue
             }
         }
@@ -201,16 +232,24 @@ export class ProcessorMonitor extends Monitor {
                 });
         }
         else if(key === 'topProcesses') {
+            const forced = params.shift();
+            
             //Top processes should never be called more than twice per second
             //unless it's forced
-            const forced = params.shift();
             const now = GLib.get_monotonic_time();
-            if(!forced && now - this.topProcessesTime < 500000) // 0,5s
+            if(!forced && now - this.topProcessesTime < 500000) // 0.5s
                 return;
-            this.topProcessesTime = now;
+            if(!forced)
+                this.topProcessesTime = now;
+            
+            let updateTopProcessesFunc;
+            if(this.dataSources.topProcesses === 'GTop')
+                updateTopProcessesFunc = this.updateTopProcessesGTop.bind(this, ...params);
+            else
+                updateTopProcessesFunc = this.updateTopProcessesProc.bind(this, ...params); 
             
             this.updateTopProcessesTask
-                .run(this.updateTopProcesses.bind(this, ...params))
+                .run(updateTopProcessesFunc)
                 .then(this.notify.bind(this, 'topProcesses'))
                 .catch(e => {
                     if(e.isCancelled) {
@@ -570,11 +609,11 @@ export class ProcessorMonitor extends Monitor {
      * @param {PromiseValueHolder} procStat 
      * @returns {Promise<boolean>}
      */
-    async updateTopProcesses(procStat) {
+    async updateTopProcessesProc(procStat) {
         let procStatValue = await procStat.getValue();
         if(procStatValue.length < 1)
             return false;
-            
+        
         const topProcesses = [];
         const seenPids = [];
         
@@ -660,6 +699,88 @@ export class ProcessorMonitor extends Monitor {
         catch(e) {
             Utils.error(e.message);
             return false;
+        }
+        
+        topProcesses.sort((a, b) => b.cpu - a.cpu);
+        topProcesses.splice(ProcessorMonitor.TOP_PROCESSES_LIMIT);
+        
+        this.topProcessesCache.updateNotSeen(seenPids);
+        this.setUsageValue('topProcesses', topProcesses);
+        return true;
+    }
+    
+    async updateTopProcessesGTop() {
+        let GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        let buf = new GTop.glibtop_proclist();
+        let pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0); // GLIBTOP_EXCLUDE_IDLE
+        pids.length = buf.number;
+        
+        const topProcesses = [];
+        const seenPids = [];
+        
+        for(const pid of pids) {
+            seenPids.push(pid);
+            
+            let process = this.topProcessesCache.getProcess(pid);
+            if(!process) {
+                const argSize = new GTop.glibtop_proc_args();
+                let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
+                
+                if(!cmd) {
+                    let procState = new GTop.glibtop_proc_state();
+                    GTop.glibtop_get_proc_state(procState, pid);
+                    if(procState && procState.cmd) {
+                        let str = '';
+                        for(let i = 0; i < procState.cmd.length; i++) {
+                            if(procState.cmd[i] === 0)
+                                break;
+                            str += String.fromCharCode(procState.cmd[i]);
+                        }
+                        cmd = str ? `[${str}]` : cmd;
+                    }
+                }
+                
+                if(!cmd) {
+                    //Utils.log('cmd is null for pid: ' + pid);
+                    continue;
+                }
+                
+                process = {
+                    pid: pid,
+                    exec: Utils.extractCommandName(cmd),
+                    cmd: cmd,
+                    notSeen: 0
+                };
+                this.topProcessesCache.setProcess(process);
+            }
+            
+            let cpuData = new GTop.glibtop_cpu();
+            GTop.glibtop_get_cpu(cpuData);
+            let totalCpuTime = cpuData.total;
+            
+            let time = new GTop.glibtop_proc_time();
+            GTop.glibtop_get_proc_time(time, pid);
+            
+            let cpuTime = { processTime: time.utime + time.stime, totalCpuTime };
+            
+            if(!this.previousPidsCpuTime.has(pid)) {
+                this.previousPidsCpuTime.set(pid, cpuTime);
+                continue;
+            }
+            
+            const {
+                processTime: previousProcessTime,
+                totalCpuTime: previousTotalCpuTime
+            } = this.previousPidsCpuTime.get(pid);
+            
+            let totalCpuTimeDiff = totalCpuTime - previousTotalCpuTime;
+            let cpuTimeDiff = cpuTime.processTime - previousProcessTime;
+            let cpuUsagePercent = (cpuTimeDiff / totalCpuTimeDiff) * 100.0;
+            
+            topProcesses.push({ process, cpu: cpuUsagePercent });
         }
         
         topProcesses.sort((a, b) => b.cpu - a.cpu);

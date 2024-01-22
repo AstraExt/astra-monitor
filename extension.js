@@ -34,18 +34,18 @@ import { SensorsMonitor } from './src/sensors/sensorsMonitor.js';
 
 export default class AstraMonitorExtension extends Extension {
     enable() {
-        Utils.extension = this;
-        Utils.metadata = this.metadata;
-        Config.settings = this.getSettings();
-        Utils.init();
-        
+        Utils.init({
+            extension: this,
+            metadata: this.metadata,
+            settings: this.getSettings(),
+            
+            ProcessorMonitor,
+            MemoryMonitor,
+            StorageMonitor,
+            NetworkMonitor,
+            SensorsMonitor,
+        });
         Utils.log('AstraMonitor enabled');
-        
-        Utils.processorMonitor = new ProcessorMonitor();
-        Utils.memoryMonitor = new MemoryMonitor();
-        Utils.storageMonitor = new StorageMonitor();
-        Utils.networkMonitor = new NetworkMonitor();
-        Utils.sensorsMonitor = new SensorsMonitor();
         
         this.container = new AstraMonitorContainer();
         this.container.place(this.uuid);
@@ -69,36 +69,9 @@ export default class AstraMonitorExtension extends Extension {
     disable() {
         Utils.log('AstraMonitor disabled');
         
-        try {
-            Config.clearAll();
-        }
-        catch(e) {
-            Utils.error(e);
-        }
-        
         if(this.timeout) {
             GLib.source_remove(this.timeout);
             this.timeout = null;
-        }
-        
-        try {
-            Utils.processorMonitor?.stop();
-            Utils.processorMonitor?.destroy();
-            
-            Utils.memoryMonitor?.stop();
-            Utils.memoryMonitor?.destroy();
-            
-            Utils.storageMonitor?.stop();
-            Utils.storageMonitor?.destroy();
-            
-            Utils.networkMonitor?.stop();
-            Utils.networkMonitor?.destroy();
-            
-            Utils.sensorsMonitor?.stop();
-            Utils.sensorsMonitor?.destroy();
-        }
-        catch(e) {
-            Utils.error(e);
         }
         
         try {
@@ -109,14 +82,6 @@ export default class AstraMonitorExtension extends Extension {
             Utils.error(e);
         }
         
-        Utils.processorMonitor = null;
-        Utils.memoryMonitor = null;
-        Utils.storageMonitor = null;
-        Utils.networkMonitor = null;
-        Utils.sensorsMonitor = null;
-        
-        Utils.extension = null;
-        Utils.metadata = null;
-        Config.settings = null;
+        Utils.clear();
     }
 }

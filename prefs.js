@@ -30,7 +30,7 @@ import Config from './src/config.js';
 
 export default class AstraMonitorPrefs extends ExtensionPreferences {
     minimumSize = { width: 500, height: 300 };
-    defaultSize = { width: 800, height: 650 };
+    defaultSize = { width: 800, height: 700 };
     
     loadCustomTheme() {
         try {
@@ -44,9 +44,14 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     fillPreferencesWindow(window) {
-        Utils.metadata = this.metadata;
-        Config.settings = this.getSettings();
-        Utils.init();
+        Utils.init({
+            metadata: this.metadata,
+            settings: this.getSettings()
+        });
+        
+        window.connect('close-request', () => {
+            Utils.clear();
+        });
         
         this.loadCustomTheme();
         this.expanded = null;
@@ -54,12 +59,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const defaultCategory = Config.get_string('queued-pref-category');
         Config.set('queued-pref-category', '', 'string');
-        
-        window.connect('close-request', () => {
-            Utils.metadata = null;
-            Config.clearAll();
-            Config.settings = null;
-        });
         
         const generalPage = this.setupGeneral();
         window.add(generalPage);
@@ -135,17 +134,27 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             check = false, this.addStatusLabel(_('NVidia GPU detected but \'nvidia-smi\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(Utils.hasIntelGpu() && !Utils.hasIntelGpuTop())
             check = false, this.addStatusLabel(_('Intel GPU detected but \'intel_gpu_top\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
-        
+        */
+       
         const statusLabel = this.addStatusLabel(_('Checking GTop dependency...'), 'am-dialog-info-symbolic', group);
-        Utils.hasGTop().then(gTopAvailable => {
-            if(!gTopAvailable) {
-                statusLabel.updateText(_('GTop not installed, some optional features will be disabled!'));
+        Utils.hasGTop().then(GTopAvailable => {
+            if(!GTopAvailable) {
+                statusLabel.updateText(_('\'GTop\' not installed, some optional features will be disabled!'));
                 statusLabel.updateIcon('am-dialog-warning-symbolic');
             }
-        });*/
+            else if(check) {
+                statusLabel.updateText(_('\'GTop\' successfully detected and added to Data Sources list.'));
+                statusLabel.updateIcon('am-dialog-ok-symbolic');
+                
+            }
+        }).catch(e => {
+            Utils.error(e);
+            statusLabel.updateText(_('\'GTop\' not installed, some optional features will be disabled!'));
+            statusLabel.updateIcon('am-dialog-warning-symbolic');
+        });
         
         if(check)
-            this.addStatusLabel(_('All dependencies are met!'), 'am-dialog-ok-symbolic', group);
+            this.addStatusLabel(_('All other dependencies are met!'), 'am-dialog-ok-symbolic', group);
         generalPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Visualization')});
@@ -199,13 +208,24 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     
     setupProcessors() {
         const processorsPage = new Adw.PreferencesPage({title: _('Processors'), icon_name: 'am-cpu-symbolic'});
-
+        
+        /* Processors */
         let group = new Adw.PreferencesGroup({title: _('Processors')});
         this.addSwitchRow(_('Show'), 'processor-header-show', group);
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'processor-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
         
+        const sourcesSection = this.addExpanderRow(_('Data Sources'), group);
+        const choicesPanel = [
+            {value: '/proc', text: '/proc'},
+            {value: 'GTop', text: 'GTop'},
+        ];
+        this.addComboRow(this.tab + _('Top Processes'), choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
+        
+        processorsPage.add(group);
+        
         processorsPage.add(group);
 
+        /* Header */
         group = new Adw.PreferencesGroup({title: _('Header')});
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
@@ -234,12 +254,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Realtime Bar Breakdown'), 'processor-header-bars-breakdown', barsSection);
         processorsPage.add(group);
         
+        /* Menu */
         group = new Adw.PreferencesGroup({title: _('Menu')});
         const cpuSection = this.addExpanderRow(_('CPU'), group);
         this.addSwitchRow(this.tab + _('Realtime Bars Breakdown'), 'processor-menu-bars-breakdown', cpuSection);
         this.addSwitchRow(this.tab + _('History Graph Breakdown'), 'processor-menu-graph-breakdown', cpuSection);
         this.addSwitchRow(this.tab + _('Core Bars Breakdown'), 'processor-menu-core-bars-breakdown', cpuSection);
-        
+        this.addSwitchRow(this.tab + _('Top Processes Single Core'), 'processor-menu-top-processes-percentage-core', cpuSection);
         const gpuSection = this.addExpanderRow(_('GPU'), group);
         
         const gpus = Utils.getGPUsList();
@@ -416,7 +437,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         this.addTextInputRow({
             title: this.tab + _('Regex'),
-            subtitle: this.tab + _('Interfaces matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable, example: \'veth\w{7}\''),
+            subtitle: this.tab + _('Interfaces matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable. Use example:') + '\'veth\w{3,16}\'',
         }, 'network-ignored-regex', ignoredSection, '');
         
         const devices = Utils.getNetworkInterfacesSync();

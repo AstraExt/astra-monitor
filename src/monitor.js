@@ -135,6 +135,10 @@ export class Monitor {
         return this.usageHistory[key];
     }
     
+    resetUsageHistory(key) {
+        this.usageHistory[key] = [];
+    }
+    
     /**
      * Temporarily enqueuing the key to be overwritten by the next update to avoid falsing graphs
      * WARNING: When overriden, super.requestUpdate(key) must be called at the end of the function

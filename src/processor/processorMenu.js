@@ -866,19 +866,30 @@ export class ProcessorMenu extends MenuBase {
             else {
                 
                 for(let i = 0; i < topProcesses.length; i++) {
+                    const perCore = Config.get_boolean('processor-menu-top-processes-percentage-core');
+                    
                     const topProcess = topProcesses[i];
                     const process = topProcess.process;
                     const cpu = topProcess.cpu;
                     
                     if(this.topProcesses[i]) {
                         this.topProcesses[i].label.text = process.exec;
-                        this.topProcesses[i].percentage.text = cpu.toFixed(1) + '%';
+                        
+                        if(perCore)
+                            this.topProcesses[i].percentage.text = (cpu * Utils.processorMonitor.getNumberOfCores()).toFixed(1) + '%';
+                        else
+                            this.topProcesses[i].percentage.text = cpu.toFixed(1) + '%';
                     }
                     if(this.topProcessesPopup && this.topProcessesPopup['process' + i]) {
                         const topProcess = this.topProcessesPopup['process' + i];
                         topProcess.label.text = process.exec;
                         topProcess.description.text = process.cmd;
-                        topProcess.percentage.text = cpu.toFixed(1) + '%';
+                        
+                        if(perCore)
+                            topProcess.percentage.text = (cpu * Utils.processorMonitor.getNumberOfCores()).toFixed(1) + '%';
+                        else
+                            topProcess.percentage.text = cpu.toFixed(1) + '%';
+                        
                     }
                 }
             }

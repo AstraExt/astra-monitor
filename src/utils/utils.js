@@ -7,6 +7,11 @@ export default class Utils {
     static defaultMonitors = ['processor', 'memory', 'storage', 'network', 'sensors'];
     
     /**
+     * @type {import('@girs/gtop-2.0') | null | false}
+     */
+    static GTop = null;
+    
+    /**
      * @type {import('resource:///org/gnome/shell/extensions/extension.js').Extension}
      */
     static extension;
@@ -46,8 +51,84 @@ export default class Utils {
      */
     static sensorsMonitor;
     
-    static init() {
-        this.debug = Config.get_boolean('debug-mode');
+    static init({
+        extension = null,
+        metadata,
+        settings,
+        
+        ProcessorMonitor = null,
+        MemoryMonitor = null,
+        StorageMonitor = null,
+        NetworkMonitor = null,
+        SensorsMonitor = null
+    }) {
+        if(extension)
+            Utils.extension = extension;
+        Utils.metadata = metadata;
+        Config.settings = settings;
+        
+        Utils.debug = Config.get_boolean('debug-mode');
+        
+        if(ProcessorMonitor)
+            Utils.processorMonitor = new ProcessorMonitor();
+        if(MemoryMonitor)
+            Utils.memoryMonitor = new MemoryMonitor();
+        if(StorageMonitor)
+            Utils.storageMonitor = new StorageMonitor();
+        if(NetworkMonitor)
+            Utils.networkMonitor = new NetworkMonitor();
+        if(SensorsMonitor)
+            Utils.sensorsMonitor = new SensorsMonitor();
+        
+        Utils.initializeGTop();
+    }
+    
+    static clear() {
+        try {
+            Config.clearAll();
+        }
+        catch(e) {
+            Utils.error(e);
+        }
+        
+        try {
+            Utils.processorMonitor?.stop();
+            Utils.processorMonitor?.destroy();
+            
+            Utils.memoryMonitor?.stop();
+            Utils.memoryMonitor?.destroy();
+            
+            Utils.storageMonitor?.stop();
+            Utils.storageMonitor?.destroy();
+            
+            Utils.networkMonitor?.stop();
+            Utils.networkMonitor?.destroy();
+            
+            Utils.sensorsMonitor?.stop();
+            Utils.sensorsMonitor?.destroy();
+        }
+        catch(e) {
+            Utils.error(e);
+        }
+        
+        Utils.processorMonitor = null;
+        Utils.memoryMonitor = null;
+        Utils.storageMonitor = null;
+        Utils.networkMonitor = null;
+        Utils.sensorsMonitor = null;
+        
+        Utils.extension = null;
+        Utils.metadata = null;
+        Config.settings = null;
+    }
+    
+    static async initializeGTop() {
+        try {
+            const res = await import('gi://GTop');
+            Utils.GTop = res.default;
+        } catch (e) {
+            Utils.GTop = false;
+        }
     }
     
     static get logHeader() {
@@ -176,15 +257,6 @@ export default class Utils {
         }
     }
     
-    /*static async hasGTop() {
-        try {
-            const GTop = await import('gi://GTop');
-            return true;
-        } catch (e) {
-            return false;
-        }
-    }*/
-    
     static hasAMDGpu() {
         try {
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('lspci -nnk');
@@ -225,6 +297,12 @@ export default class Utils {
         } catch (e) {
             return false;
         }
+    }
+    
+    static async hasGTop() {
+        while(Utils.GTop === null)
+            await new Promise(r => setTimeout(r, 100));
+        return Utils.GTop !== false;
     }
     
     /**
@@ -373,17 +451,17 @@ export default class Utils {
     };
     
     static formatBytesPerSec(value, unit, maxNumbers = 2, padded = false) {
-        if(!this.unitMap.hasOwnProperty(unit))
+        if(!Utils.unitMap.hasOwnProperty(unit))
             unit = 'kB/s';
         
         if(!value || isNaN(value))
-            return '-' + (padded ? '   ' : ' ') + this.unitMap[unit].labels[0];
+            return '-' + (padded ? '   ' : ' ') + Utils.unitMap[unit].labels[0];
         
-        value *= this.unitMap[unit].mult;
+        value *= Utils.unitMap[unit].mult;
         
         let unitIndex = 0;
-        while(value >= Math.pow(10, maxNumbers) && unitIndex < this.unitMap[unit].labels.length - 1) {
-            value /= this.unitMap[unit].base;
+        while(value >= Math.pow(10, maxNumbers) && unitIndex < Utils.unitMap[unit].labels.length - 1) {
+            value /= Utils.unitMap[unit].base;
             unitIndex++;
         }
         
@@ -403,7 +481,7 @@ export default class Utils {
         } else if (result.length > maxNumbers) {
             result = result.substr(0, maxNumbers);
         }
-        return `${result} ${this.unitMap[unit].labels[unitIndex]}`;
+        return `${result} ${Utils.unitMap[unit].labels[unitIndex]}`;
     }
     
     static formatBytes(bytes, maxNumbers = 2) {

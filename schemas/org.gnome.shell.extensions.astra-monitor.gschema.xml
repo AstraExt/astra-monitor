@@ -32,7 +32,10 @@
     <value nick="k " value="9"/>
     <value nick="Ki" value="10"/>
   </enum>
-  
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+    <value nick="/proc" value="0"/>
+    <value nick="GTop" value="1"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- UTILS -->
     <key name="debug-mode" type="b">
@@ -98,6 +101,11 @@
       <summary>CPU Update Frequency</summary>
       <description>Seconds between CPU statistics updates</description>
       <range min="0.1" max="10"/>
+    </key>
+    <key name="processor-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+      <default>'/proc'</default>
+      <summary>Top Processes Source</summary>
+      <description>Source of the top processes</description>
     </key>
     <key name="processor-header-show" type="b">
       <default>true</default>
@@ -176,6 +184,11 @@
       <default>true</default>
       <summary>CPU Core Bars Breakdown</summary>
       <description>Color the core bars with categories</description>
+    </key>
+    <key name="processor-menu-top-processes-percentage-core" type="b">
+      <default>false</default>
+      <summary>CPU Top Processes Percentage per Single Core</summary>
+      <description>Set the percentage on the top processes to single core</description>
     </key>
     <key name="processor-menu-gpu" type="s">
       <default>'""'</default>
