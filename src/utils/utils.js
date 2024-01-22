@@ -1357,7 +1357,9 @@ export default class Utils {
                         device.altnames = data.altnames;
                     if(data.addr_info)
                         device.addr_info = data.addr_info;
-                        
+                    if(data.linkinfo)
+                        device.linkinfo = data.linkinfo;
+                    
                     devices.set(name, device);
                 }
             }

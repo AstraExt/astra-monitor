@@ -96,7 +96,7 @@ Astra Monitor is licensed under the GNU General Public License v3.0 (GPL-3.0), a
 
 # Translations
 
-Astra Monitor is currently available in English and German. If you would like to contribute with a translation, please refer to these guidelines:
+Astra Monitor is currently available in English, German and Russian. If you would like to contribute with a translation, please refer to these guidelines:
 
 1. **Fork the repository:** Fork the repository and clone it to your local machine.
 2. **Create/Update the translation file:** Create or update the translation file for your language. Translation files are located in po folder. The file name is the language code (e.g. it.po for Italian). You can use Poedit to edit the translation files.
@@ -113,16 +113,20 @@ tsconfig.json is used to configure TypeScript with the only purpose of enabling 
 Various scrips are provided to facilitate the packing and testing of the extension. These scripts are located in the root directory of the project and can be run from there and are used solely with the scope of facilitating my own development process. Feel free to use or modify them to suit your needs.
 
 ### Scripts
-**test.sh:** This script runs the extension in a Xephyr session with a gnome xwayland session, allowing for quick and easy testing without restarting your own gnome shell session. It can be run with the following command:
-```bash ./test.sh```
+- **test.sh:** This script runs the extension in a Xephyr session with a gnome xwayland session, allowing for a very quick testing without restarting your own gnome shell session. It can be run with the following command:
+```bash ./test.sh```.<br>
+**Note**: this method can cause some issues and should be used only for fast testing on basic functionalities. Use **test_nested.sh** for more reliable testing. 
 
-**schemas.sh:** This script compiles the schemas for the extension. It can be run with the following command:
+- **test_nested.sh:** This script runs the extension in a Xephyr session with a gnome nested wayland session, allowing for easy testing without restarting your own gnome shell session. It can be run with the following command:
+```bash ./test_nested.sh```
+
+- **schemas.sh:** This script compiles the schemas for the extension. It can be run with the following command:
 ```bash ./schemas.sh```
 
-**i18n.sh:** This script create the translations files for the extension. It can be run with the following command:
+- **i18n.sh:** This script create the translations files for the extension. It can be run with the following command:
 ```bash ./i18n.sh```
 
-**pack.sh:** This script packs the extension into a zip file ready for distribution or use. It automatically check dependencies and compiles schemas. It can be run with the following command:
+- **pack.sh:** This script packs the extension into a zip file ready for distribution or use. It automatically check dependencies and compiles schemas. It can be run with the following command:
 ```bash ./pack.sh```
 
 

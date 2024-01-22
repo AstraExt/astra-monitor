@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 18:44+0100\n"
+"POT-Creation-Date: 2024-01-23 00:45+0100\n"
 "PO-Revision-Date: 2024-01-22 12:09+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -589,6 +589,11 @@ msgstr "Разбивка панелей в реальном времени"
 msgid "Core Bars Breakdown"
 msgstr "Разбивка панелей ядер"
 
+#: prefs.js:263
+#, fuzzy
+msgid "Top Processes Single Core"
+msgstr "Наибольшие процессы"
+
 #: prefs.js:267 prefs.js:557
 msgid "None"
 msgstr "Нет"
@@ -787,10 +792,6 @@ msgstr "Стать меценатом"
 #: prefs.js:593
 msgid "Debug Mode"
 msgstr "Режим отладки"
-
-#, fuzzy
-#~ msgid "Top Processes Source"
-#~ msgstr "Наибольшие процессы"
 
 #~ msgid "Panel Box Ordering"
 #~ msgstr "Порядок блока с панелями"

@@ -1,4 +1,4 @@
-# Astra Monitor 7 - TO BE RELEASED
+# Astra Monitor 7 - January 23 2024
 
 ### New features
 - GTop support as _data source_ for Top Processes is now available in CPU Menu [[#33](https://github.com/AstraExt/astra-monitor/issues/33)]
