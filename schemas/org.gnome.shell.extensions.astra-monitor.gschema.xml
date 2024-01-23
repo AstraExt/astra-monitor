@@ -114,6 +114,11 @@
       <summary>CPU Header</summary>
       <description>Show the CPU header</description>
     </key>
+    <key name="processor-indicators-order" type="s">
+      <default>'""'</default>
+      <summary>Order of the indicators</summary>
+      <description>From left to right, the order of the indicators</description>
+    </key>
     <key name="processor-header-icon" type="b">
       <default>true</default>
       <summary>CPU Header Icon</summary>
@@ -225,6 +230,11 @@
       <summary>Memory Header</summary>
       <description>Show the memory header</description>
     </key>
+    <key name="memory-indicators-order" type="s">
+      <default>'""'</default>
+      <summary>Order of the indicators</summary>
+      <description>From left to right, the order of the indicators</description>
+    </key>
     <key name="memory-header-icon" type="b">
       <default>true</default>
       <summary>Memory Header Icon</summary>
@@ -310,6 +320,11 @@
       <default>true</default>
       <summary>Storage Header</summary>
       <description>Show the storage header</description>
+    </key>
+    <key name="storage-indicators-order" type="s">
+      <default>'""'</default>
+      <summary>Order of the indicators</summary>
+      <description>From left to right, the order of the indicators</description>
     </key>
     <key name="storage-header-icon" type="b">
       <default>true</default>
@@ -408,6 +423,11 @@
       <summary>Network Header</summary>
       <description>Show the network header</description>
     </key>
+    <key name="network-indicators-order" type="s">
+      <default>'""'</default>
+      <summary>Order of the indicators</summary>
+      <description>From left to right, the order of the indicators</description>
+    </key>
     <key name="network-header-icon" type="b">
       <default>true</default>
       <summary>Network Header Icon</summary>
@@ -484,6 +504,11 @@
       <default>'celsius'</default>
       <summary>Sensors Temperature Unit</summary>
       <description>Temperature Unit of measurement for the sensors</description>
+    </key>
+    <key name="sensors-indicators-order" type="s">
+      <default>'""'</default>
+      <summary>Order of the indicators</summary>
+      <description>From left to right, the order of the indicators</description>
     </key>
     <key name="sensors-header-icon" type="b">
       <default>false</default>

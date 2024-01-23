@@ -5,6 +5,13 @@ import Config from '../config.js';
 export default class Utils {
     static debug = false;
     static defaultMonitors = ['processor', 'memory', 'storage', 'network', 'sensors'];
+    static defaultIndicators = {
+        processor: ['icon', 'bar', 'graph', 'percentage'],
+        memory: ['icon', 'bar', 'graph', 'percentage'],
+        storage: ['icon', 'bar', 'percentage', 'IO bar', 'IO graph', 'IO speed'],
+        network: ['icon', 'IO bar', 'IO graph', 'IO speed'],
+        sensors: ['icon', 'value']
+    };
     
     /**
      * @type {import('@girs/gtop-2.0') | null | false}
@@ -163,9 +170,8 @@ export default class Utils {
      */
     static getMonitorsOrder() {
         let monitors = Config.get_json('monitors-order');
-        if(!monitors) {
+        if(!monitors)
             monitors = [];
-        }
         if(monitors.length < Utils.defaultMonitors.length) {
             for(const monitor of Utils.defaultMonitors) {
                 if(!monitors.includes(monitor))
@@ -174,6 +180,20 @@ export default class Utils {
             Config.set('monitors-order', JSON.stringify(monitors), 'string');
         }
         return monitors;
+    }
+    
+    static getIndicatorsOrder(category) {
+        let indicators = Config.get_json(category+'-indicators-order');
+        if(!indicators)
+            indicators = [];
+        if(indicators.length < Utils.defaultIndicators[category].length) {
+            for(const indicator of Utils.defaultIndicators[category]) {
+                if(!indicators.includes(indicator))
+                    indicators.push(indicator);
+            }
+            Config.set(category+'-indicators-order', JSON.stringify(indicators), 'string');
+        }
+        return indicators;
     }
     
     static hasProcStat() {
@@ -1021,10 +1041,12 @@ export default class Utils {
         return formattedTime.trim();
     }
     
-    static capitalize(str) {
+    static capitalize(str, lower = true) {
         if(!str)
             return str;
-        return str.toLowerCase().replace(/\b[a-z]/g, (letter) => {
+        if(lower)
+            str = str.toLowerCase();
+        return str.replace(/\b[a-z]/g, (letter) => {
             return letter.toUpperCase();
         });
     }

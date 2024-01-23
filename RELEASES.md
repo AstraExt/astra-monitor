@@ -1,6 +1,7 @@
 # Astra Monitor 8 - TO BE RELEASED
 
 ### New features
+- Indicators ordering on the header is now customizable [[#37](https://github.com/AstraExt/astra-monitor/issues/37)]
 - Add support for custom icon Name and Color for each header
 
 # Astra Monitor 7 - January 23 2024

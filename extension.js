@@ -24,7 +24,6 @@ import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import { AstraMonitorContainer } from './src/container.js';
 import Utils from './src/utils/utils.js';
-import Config from './src/config.js';
 
 import { ProcessorMonitor } from './src/processor/processorMonitor.js';
 import { MemoryMonitor } from './src/memory/memoryMonitor.js';

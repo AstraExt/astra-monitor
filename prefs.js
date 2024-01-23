@@ -200,7 +200,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         generalPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Monitor Ordering')});
-        this.addMonitorOrderingRow(group);
+        Utils.getMonitorsOrder();
+        this.addOrderingRows('monitors-order', group);
         generalPage.add(group);
         
         return generalPage;
@@ -224,11 +225,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow(this.tab + _('Top Processes'), choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
         
         processorsPage.add(group);
-        
-        processorsPage.add(group);
 
         /* Header */
         group = new Adw.PreferencesGroup({title: _('Header')});
+        
+        const orderSection = this.addExpanderRow(_('Indicators Order'), group);
+        Utils.getIndicatorsOrder('processor');
+        this.addOrderingRows('processor-indicators-order', orderSection, this.tab);
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'processor-header-icon', iconSection);
@@ -307,6 +310,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         memoryPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
+        
+        const orderSection = this.addExpanderRow(_('Indicators Order'), group);
+        Utils.getIndicatorsOrder('memory');
+        this.addOrderingRows('memory-indicators-order', orderSection, this.tab);
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'memory-header-icon', iconSection);
@@ -394,6 +401,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         storagePage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
+        
+        const orderSection = this.addExpanderRow(_('Indicators Order'), group);
+        Utils.getIndicatorsOrder('storage');
+        this.addOrderingRows('storage-indicators-order', orderSection, this.tab);
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'storage-header-icon', iconSection);
@@ -515,6 +526,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         group = new Adw.PreferencesGroup({title: 'Header'});
         
+        const orderSection = this.addExpanderRow(_('Indicators Order'), group);
+        Utils.getIndicatorsOrder('network');
+        this.addOrderingRows('network-indicators-order', orderSection, this.tab);
+        
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'network-header-icon', iconSection);
         this.addTextInputRow({
@@ -559,6 +574,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         sensorsPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
+        
+        const orderSection = this.addExpanderRow(_('Indicators Order'), group);
+        Utils.getIndicatorsOrder('sensors');
+        this.addOrderingRows('sensors-indicators-order', orderSection, this.tab);
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'sensors-header-icon', iconSection);
@@ -624,7 +643,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addExpanderRow(title, group, icon_name = null) {
-        const data = { title };
+        const data = {
+            title: `⁝ ${title}`,
+            use_markup: true
+        };
         if(icon_name)
             data.icon_name = icon_name;
         const section = new Adw.ExpanderRow(data);
@@ -1001,30 +1023,31 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             group.add_row(row);
     }
     
-    addMonitorOrderingRow(group) {
-        let monitors = Utils.getMonitorsOrder();
-        
+    /**
+     * 
+     * @param {string} config 
+     * @param {*} group 
+     */
+    addOrderingRows(config, group, tabbing = '') {
+        const monitors = Config.get_json(config);
         for(let index = 0; index < monitors.length; index++) {
-            this.addMonitorOrderingRowItem(group, index);
+            const item = monitors[index] || '';
+            this.OrderingItem(item, index, monitors.length, config, group, tabbing);
         }
     }
     
-    addMonitorOrderingRowItem(group, index) {
-        const monitors = Config.get_json('monitors-order');
-        const monitor = monitors[index] || '';
-        
-        const row = new Adw.ActionRow({ title: `${index+1}. ${Utils.capitalize(monitor)}` });
-        group.add(row);
+    OrderingItem(item, index, count, config, group, tabbing = '') {
+        const row = new Adw.ActionRow({title: `${tabbing}${index+1}. ${Utils.capitalize(item, false)}` });
         
         let buttonUp;
         if(index > 0) {
             buttonUp = new Gtk.Button({label: '↑'});
             buttonUp.connect('clicked', () => {
-                const monitors = Config.get_json('monitors-order');
-                const monitor = monitors[index];
-                monitors.splice(index, 1);
-                monitors.splice(index - 1, 0, monitor);
-                Config.set('monitors-order', JSON.stringify(monitors), 'string');
+                const list = Config.get_json(config);
+                const removed = list[index];
+                list.splice(index, 1);
+                list.splice(index - 1, 0, removed);
+                Config.set(config, JSON.stringify(list), 'string');
             });
         }
         else {
@@ -1032,14 +1055,14 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }
         
         let buttonDown;
-        if(index < monitors.length - 1) {
+        if(index < count - 1) {
             buttonDown = new Gtk.Button({label: '↓'});
             buttonDown.connect('clicked', () => {
-                const monitors = Config.get_json('monitors-order');
-                const monitor = monitors[index];
-                monitors.splice(index, 1);
-                monitors.splice(index + 1, 0, monitor);
-                Config.set('monitors-order', JSON.stringify(monitors), 'string');
+                const list = Config.get_json(config);
+                const removed = list[index];
+                list.splice(index, 1);
+                list.splice(index + 1, 0, removed);
+                Config.set(config, JSON.stringify(list), 'string');
             });
         }
         else {
@@ -1051,10 +1074,15 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         if(buttonUp)
             row.add_suffix(buttonUp);
         
-        Config.connect(this, 'changed::monitors-order', () => {
-            const monitors = Config.get_json('monitors-order');
-            const monitor = monitors[index] || '';
-            row.title = `${index+1}. ${Utils.capitalize(monitor)}`;
+        Config.connect(this, 'changed::'+config, () => {
+            const list = Config.get_json(config);
+            const newItem = list[index] || '';
+            row.title = `${tabbing}${index+1}. ${Utils.capitalize(newItem, false)}`;
         });
+        
+        if(group.add)
+            group.add(row);
+        else
+            group.add_row(row);
     }
 };

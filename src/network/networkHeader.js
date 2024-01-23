@@ -46,17 +46,49 @@ export const NetworkHeader = GObject.registerClass({
         this.buildSpeed();
         this.buildBars();
         
+        this.addOrReorderIndicators();
+        
         const menu = new NetworkMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
         this.resetMaxWidths();
         
+        Config.connect(this, 'changed::network-indicators-order', this.addOrReorderIndicators.bind(this));
         Config.bind('network-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::network-header-io', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
+    }
+    
+    addOrReorderIndicators() {
+        const indicators = Utils.getIndicatorsOrder('network');
+        
+        let position = 0;
+        for(const indicator of indicators) {
+            let widget;
+            switch(indicator) {
+                case 'icon':
+                    widget = this.icon;
+                    break;
+                case 'IO bar':
+                    widget = this.bars;
+                    break;
+                case 'IO graph':
+                    widget = this.graph;
+                    break;
+                case 'IO speed':
+                    widget = this.speedContainer;
+                    break;
+            }
+
+            if(widget) {
+                if(widget.get_parent())
+                    this.remove_child(widget);
+                this.insert_child_at_index(widget, position++);
+            }
+        }
     }
     
     resetMaxWidths() {
@@ -104,7 +136,6 @@ export const NetworkHeader = GObject.registerClass({
         };
         setIconColor();
         
-        this.insert_child_at_index(this.icon, 0);
         Config.bind('network-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('network-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::network-header-icon-custom', setIconName.bind(this));
@@ -122,7 +153,6 @@ export const NetworkHeader = GObject.registerClass({
         
         // @ts-ignore
         this.bars = new NetworkBars({ numBars: 2, mini: true, width: 0.5 });
-        this.insert_child_at_index(this.bars, 1);
         Config.bind('network-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.networkMonitor.listen(this.bars, 'networkIO', () => {
@@ -148,7 +178,6 @@ export const NetworkHeader = GObject.registerClass({
         graphWidth = Math.max(10, Math.min(500, graphWidth));
         
         this.graph = new NetworkGraph({ width: graphWidth, mini: true });
-        this.insert_child_at_index(this.graph, 3);
         Config.bind('network-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this.graph, 'changed::network-header-graph-width', () => {
@@ -195,7 +224,6 @@ export const NetworkHeader = GObject.registerClass({
         this.speedContainer.add_child(this.upload);
         this.speedContainer.add_child(this.download);
         
-        this.insert_child_at_index(this.speedContainer, 4);
         Config.bind('network-header-io', this.speedContainer, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.networkMonitor.listen(this.speedContainer, 'networkIO', () => {

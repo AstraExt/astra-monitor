@@ -42,12 +42,14 @@ export const SensorsHeader = GObject.registerClass({
         
         this.buildIcon();
         this.buildValues();
+        this.addOrReorderIndicators();
         
         const menu = new SensorsMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
         this.resetMaxWidths();
         
+        Config.connect(this, 'changed::sensors-indicators-order', this.addOrReorderIndicators.bind(this));
         Config.bind('sensors-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
@@ -55,6 +57,29 @@ export const SensorsHeader = GObject.registerClass({
         Config.connect(this, 'changed::sensors-header-sensor2-show', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
+    }
+    
+    addOrReorderIndicators() {
+        const indicators = Utils.getIndicatorsOrder('sensors');
+        
+        let position = 0;
+        for(const indicator of indicators) {
+            let widget;
+            switch(indicator) {
+                case 'icon':
+                    widget = this.icon;
+                    break;
+                case 'value':
+                    widget = this.valuesContainer;
+                    break;
+            }
+
+            if(widget) {
+                if(widget.get_parent())
+                    this.remove_child(widget);
+                this.insert_child_at_index(widget, position++);
+            }
+        }
     }
     
     resetMaxWidths() {
@@ -101,7 +126,6 @@ export const SensorsHeader = GObject.registerClass({
         };
         setIconColor();
         
-        this.insert_child_at_index(this.icon, 0);
         Config.bind('sensors-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('sensors-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::sensors-header-icon-custom', setIconName.bind(this));
@@ -158,8 +182,6 @@ export const SensorsHeader = GObject.registerClass({
         Config.connect(this.valuesContainer, 'changed::sensors-header-sensor1-show', rebuild);
         Config.connect(this.valuesContainer, 'changed::sensors-header-sensor2-show', rebuild);
         rebuild();
-        
-        this.insert_child_at_index(this.valuesContainer, 1);
         
         Utils.sensorsMonitor.listen(this.valuesContainer, 'sensorsData', () => {
             if(!Config.get_boolean('sensors-header-sensor1-show') && !Config.get_boolean('sensors-header-sensor2-show'))
@@ -227,6 +249,8 @@ export const SensorsHeader = GObject.registerClass({
     }
     
     fixContainerWidth(width) {
+        if(!this.valuesContainer.get_stage())
+            return;
         this.maxWidths.push(width);
         
         if(this.maxWidths.length > Utils.sensorsMonitor.updateFrequency * 10)

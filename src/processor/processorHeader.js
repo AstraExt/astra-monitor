@@ -46,14 +46,43 @@ export const ProcessorHeader = GObject.registerClass({
         this.buildBars();
         this.buildPercentage();
         
-        Config.connect(this, 'changed::processor-header-bars-core', () => {
-            this.buildBars();
-        });
+        this.addOrReorderIndicators();
         
         const menu = new ProcessorMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
+        Config.connect(this, 'changed::processor-indicators-order', this.addOrReorderIndicators.bind(this));
         Config.bind('processor-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+        Config.connect(this, 'changed::processor-header-bars-core', this.buildBars.bind(this));
+    }
+    
+    addOrReorderIndicators() {
+        const indicators = Utils.getIndicatorsOrder('processor');
+        
+        let position = 0;
+        for(const indicator of indicators) {
+            let widget;
+            switch(indicator) {
+                case 'icon':
+                    widget = this.icon;
+                    break;
+                case 'bar':
+                    widget = this.bars;
+                    break;
+                case 'graph':
+                    widget = this.graph;
+                    break;
+                case 'percentage':
+                    widget = this.percentage;
+                    break;
+            }
+            
+            if(widget) {
+                if(widget.get_parent())
+                    this.remove_child(widget);
+                this.insert_child_at_index(widget, position++);
+            }
+        }
     }
     
     buildIcon() {
@@ -87,7 +116,6 @@ export const ProcessorHeader = GObject.registerClass({
         };
         setIconColor();
         
-        this.insert_child_at_index(this.icon, 0);
         Config.bind('processor-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('processor-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::processor-header-icon-custom', setIconName.bind(this));
@@ -114,7 +142,6 @@ export const ProcessorHeader = GObject.registerClass({
             width: 0.5,
             breakdownConfig: 'processor-header-bars-breakdown'
         });
-        this.insert_child_at_index(this.bars, 1);
         Config.bind('processor-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
         
         if(perCoreBars) {
@@ -157,7 +184,6 @@ export const ProcessorHeader = GObject.registerClass({
         graphWidth = Math.max(10, Math.min(500, graphWidth));
         
         this.graph = new ProcessorGraph({ width: graphWidth, mini: true, breakdownConfig: 'processor-header-graph-breakdown'});
-        this.insert_child_at_index(this.graph, 2);
         Config.bind('processor-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this.graph, 'changed::processor-header-graph-width', () => {
@@ -181,7 +207,6 @@ export const ProcessorHeader = GObject.registerClass({
             style_class: useFourDigitStyle ? 'astra-monitor-header-percentage4' : 'astra-monitor-header-percentage3',
             y_align: Clutter.ActorAlign.CENTER,
         });
-        this.insert_child_at_index(this.percentage, 3);
         Config.bind('processor-header-percentage', this.percentage, 'visible', Gio.SettingsBindFlags.GET);
 
         Config.connect(this.percentage, 'changed::processor-header-percentage-core', () => {

@@ -26,10 +26,42 @@ export const MemoryHeader = GObject.registerClass({
         this.buildBars();
         this.buildPercentage();
         
+        this.addOrReorderIndicators();
+        
         const menu = new MemoryMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
+        Config.connect(this, 'changed::memory-indicators-order', this.addOrReorderIndicators.bind(this));
         Config.bind('memory-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+    }
+    
+    addOrReorderIndicators() {
+        const indicators = Utils.getIndicatorsOrder('memory');
+        
+        let position = 0;
+        for(const indicator of indicators) {
+            let widget;
+            switch(indicator) {
+                case 'icon':
+                    widget = this.icon;
+                    break;
+                case 'bar':
+                    widget = this.bars;
+                    break;
+                case 'graph':
+                    widget = this.graph;
+                    break;
+                case 'percentage':
+                    widget = this.percentage;
+                    break;
+            }
+            
+            if(widget) {
+                if(widget.get_parent())
+                    this.remove_child(widget);
+                this.insert_child_at_index(widget, position++);
+            }
+        }
     }
     
     buildIcon() {
@@ -63,7 +95,6 @@ export const MemoryHeader = GObject.registerClass({
         };
         setIconColor();
         
-        this.insert_child_at_index(this.icon, 0);
         Config.bind('memory-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('memory-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::memory-header-icon-custom', setIconName.bind(this));
@@ -86,7 +117,6 @@ export const MemoryHeader = GObject.registerClass({
             width: 0.5,
             breakdownConfig: 'memory-header-bars-breakdown'
         });
-        this.insert_child_at_index(this.bars, 1);
         Config.bind('memory-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.memoryMonitor.listen(this.bars, 'memoryUsage', () => {
@@ -114,7 +144,6 @@ export const MemoryHeader = GObject.registerClass({
         graphWidth = Math.max(10, Math.min(500, graphWidth));
         
         this.graph = new MemoryGraph({ width: graphWidth, mini: true, breakdownConfig: 'memory-header-graph-breakdown' });
-        this.insert_child_at_index(this.graph, 2);
         Config.bind('memory-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this.graph, 'changed::memory-header-graph-width', () => {
@@ -137,7 +166,6 @@ export const MemoryHeader = GObject.registerClass({
             style_class: 'astra-monitor-header-percentage3',
             y_align: Clutter.ActorAlign.CENTER,
         });
-        this.insert_child_at_index(this.percentage, 3);
         Config.bind('memory-header-percentage', this.percentage, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.memoryMonitor.listen(this.percentage, 'memoryUsage', () => {

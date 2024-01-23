@@ -49,17 +49,55 @@ export const StorageHeader = GObject.registerClass({
         this.buildGraph();
         this.buildSpeed();
         
+        this.addOrReorderIndicators();
+        
         const menu = new StorageMenu(this, 0.5, St.Side.TOP);
         this.setMenu(menu);
         
         this.resetMaxWidths();
         
+        Config.connect(this, 'changed::storage-indicators-order', this.addOrReorderIndicators.bind(this));
         Config.bind('storage-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::storage-header-io', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
+    }
+    
+    addOrReorderIndicators() {
+        const indicators = Utils.getIndicatorsOrder('storage');
+        
+        let position = 0;
+        for(const indicator of indicators) {
+            let widget;
+            switch(indicator) {
+                case 'icon':
+                    widget = this.icon;
+                    break;
+                case 'bar':
+                    widget = this.bars;
+                    break;
+                case 'percentage':
+                    widget = this.percentage;
+                    break;
+                case 'IO bar':
+                    widget = this.ioBars;
+                    break;
+                case 'IO graph':
+                    widget = this.graph;
+                    break;
+                case 'IO speed':
+                    widget = this.speedContainer;
+                    break;
+            }
+
+            if(widget) {
+                if(widget.get_parent())
+                    this.remove_child(widget);
+                this.insert_child_at_index(widget, position++);
+            }
+        }
     }
     
     resetMaxWidths() {
@@ -107,8 +145,6 @@ export const StorageHeader = GObject.registerClass({
         };
         setIconColor();
         
-        
-        this.insert_child_at_index(this.icon, 0);
         Config.bind('storage-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('storage-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::storage-header-icon-custom', setIconName.bind(this));
@@ -126,7 +162,6 @@ export const StorageHeader = GObject.registerClass({
         
         // @ts-ignore
         this.bars = new StorageBars({ numBars: 1, mini: true, width: 0.5 });
-        this.insert_child_at_index(this.bars, 1);
         Config.bind('storage-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.storageMonitor.listen(this.bars, 'storageUsage', () => {
@@ -145,7 +180,6 @@ export const StorageHeader = GObject.registerClass({
             y_align: Clutter.ActorAlign.CENTER,
             x_align: Clutter.ActorAlign.CENTER,
         });
-        this.insert_child_at_index(this.percentage, 2);
         Config.bind('storage-header-percentage', this.percentage, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.storageMonitor.listen(this.percentage, 'storageUsage', () => {
@@ -171,7 +205,6 @@ export const StorageHeader = GObject.registerClass({
         
         // @ts-ignore
         this.ioBars = new StorageIOBars({ numBars: 2, mini: true, width: 0.5 });
-        this.insert_child_at_index(this.ioBars, 3);
         Config.bind('storage-header-io-bars', this.ioBars, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.storageMonitor.listen(this.ioBars, 'storageIO', () => {
@@ -195,7 +228,6 @@ export const StorageHeader = GObject.registerClass({
         graphWidth = Math.max(10, Math.min(500, graphWidth));
         
         this.graph = new StorageGraph({ width: graphWidth, mini: true });
-        this.insert_child_at_index(this.graph, 4);
         Config.bind('storage-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
         
         Config.connect(this.graph, 'changed::storage-header-graph-width', () => {
@@ -242,7 +274,6 @@ export const StorageHeader = GObject.registerClass({
         this.speedContainer.add_child(this.read);
         this.speedContainer.add_child(this.write);
         
-        this.insert_child_at_index(this.speedContainer, 5);
         Config.bind('storage-header-io', this.speedContainer, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.storageMonitor.listen(this.speedContainer, 'storageIO', () => {
