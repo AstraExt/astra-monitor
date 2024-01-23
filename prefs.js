@@ -216,7 +216,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sourcesSection = this.addExpanderRow(_('Data Sources'), group);
         const choicesPanel = [
-            {value: '/proc', text: '/proc'},
+            {value: 'default', text: 'default (auto)'},
+            {value: 'auto', text: 'auto'},
+            {value: 'proc', text: 'proc'},
             {value: 'GTop', text: 'GTop'},
         ];
         this.addComboRow(this.tab + _('Top Processes'), choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');

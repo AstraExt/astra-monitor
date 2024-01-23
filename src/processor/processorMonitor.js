@@ -114,20 +114,12 @@ export class ProcessorMonitor extends Monitor {
     }
     
     dataSourcesInit() {
-        let topProcesses = Config.get_string('processor-source-top-processes');
-        if(topProcesses !== '/proc' && topProcesses !== 'GTop')
-            topProcesses = '/proc';
-        
         this.dataSources = {
-            topProcesses
+            topProcesses: Config.get_string('processor-source-top-processes')
         };
         
         Config.connect(this, 'changed::processor-source-top-processes', () => {
-            let topProcesses = Config.get_string('processor-source-top-processes');
-            if(topProcesses !== '/proc' && topProcesses !== 'GTop')
-                topProcesses = '/proc';
-            
-            this.dataSources.topProcesses = topProcesses;
+            this.dataSources.topProcesses = Config.get_string('processor-source-top-processes');
             this.topProcessesCache.reset();
             this.topProcessesTime = -1;
             this.previousPidsCpuTime = new Map();
@@ -245,8 +237,10 @@ export class ProcessorMonitor extends Monitor {
             let updateTopProcessesFunc;
             if(this.dataSources.topProcesses === 'GTop')
                 updateTopProcessesFunc = this.updateTopProcessesGTop.bind(this, ...params);
+            else if(this.dataSources.topProcesses === 'proc')
+                updateTopProcessesFunc = this.updateTopProcessesProc.bind(this, ...params);
             else
-                updateTopProcessesFunc = this.updateTopProcessesProc.bind(this, ...params); 
+                updateTopProcessesFunc = this.updateTopProcessesAuto.bind(this, ...params);
             
             this.updateTopProcessesTask
                 .run(updateTopProcessesFunc)
@@ -599,6 +593,14 @@ export class ProcessorMonitor extends Monitor {
             frequencies.push(Number.NaN);
         this.pushUsageHistory(`cpuCoresFrequency`, frequencies);
         return true;
+    }
+    
+    async updateTopProcessesAuto(procStat) {
+        //TODO: optimize based off performance
+        //      maybe use a combination of both methods?
+        if(Utils.GTop)
+            return await this.updateTopProcessesGTop();
+        return await this.updateTopProcessesProc(procStat);
     }
     
     /**

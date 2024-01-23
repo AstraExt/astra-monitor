@@ -2,6 +2,7 @@
 
 ### New features
 - GTop support as _data source_ for Top Processes is now available in CPU Menu [[#33](https://github.com/AstraExt/astra-monitor/issues/33)]
+- Auto option for _data source_ (enabled by default) will automatically choose the best source based on the availability of dependencies
 - New option to show cpu percentage on Top Processes list as per-core value [[#33](https://github.com/AstraExt/astra-monitor/issues/33)]
 - Regex Ignore Network Interfaces: now, in addition to manual selection, you can use regex to ignore network interfaces [[#29](https://github.com/AstraExt/astra-monitor/issues/29)]
 - New languages: German and Russian [[#26](https://github.com/AstraExt/astra-monitor/issues/26)] [[#27](https://github.com/AstraExt/astra-monitor/issues/27)]
