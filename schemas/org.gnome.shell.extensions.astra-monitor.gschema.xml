@@ -119,6 +119,16 @@
       <summary>CPU Header Icon</summary>
       <description>Show the icon on the header of the CPU monitor</description>
     </key>
+    <key name="processor-header-icon-custom" type="s">
+      <default>''</default>
+      <summary>CPU Header Custom Icon</summary>
+      <description>Set a custom icon for the CPU monitor</description>
+    </key>
+    <key name="processor-header-icon-color" type="s">
+      <default>''</default>
+      <summary>CPU Header Icon Color</summary>
+      <description>Set a custom color for the CPU monitor icon</description>
+    </key>
     <key name="processor-header-icon-size" type="i">
       <default>18</default>
       <summary>Header Icon Size</summary>
@@ -220,6 +230,16 @@
       <summary>Memory Header Icon</summary>
       <description>Show the icon on the header of the memory monitor</description>
     </key>
+    <key name="memory-header-icon-custom" type="s">
+      <default>''</default>
+      <summary>Memory Header Custom Icon</summary>
+      <description>Set a custom icon for the Memory monitor</description>
+    </key>
+    <key name="memory-header-icon-color" type="s">
+      <default>''</default>
+      <summary>Memory Header Icon Color</summary>
+      <description>Set a custom color for the Memory monitor icon</description>
+    </key>
     <key name="memory-header-icon-size" type="i">
       <default>18</default>
       <summary>Header Icon Size</summary>
@@ -295,6 +315,16 @@
       <default>true</default>
       <summary>Storage Header Icon</summary>
       <description>Show the icon on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-icon-custom" type="s">
+      <default>''</default>
+      <summary>Storage Header Custom Icon</summary>
+      <description>Set a custom icon for the Storage monitor</description>
+    </key>
+    <key name="storage-header-icon-color" type="s">
+      <default>''</default>
+      <summary>Storage Header Icon Color</summary>
+      <description>Set a custom color for the Storage monitor icon</description>
     </key>
     <key name="storage-header-icon-size" type="i">
       <default>18</default>
@@ -383,6 +413,16 @@
       <summary>Network Header Icon</summary>
       <description>Show the icon on the header of the network monitor</description>
     </key>
+    <key name="network-header-icon-custom" type="s">
+      <default>''</default>
+      <summary>Network Header Custom Icon</summary>
+      <description>Set a custom icon for the Network monitor</description>
+    </key>
+    <key name="network-header-icon-color" type="s">
+      <default>''</default>
+      <summary>Network Header Icon Color</summary>
+      <description>Set a custom color for the Network monitor icon</description>
+    </key>
     <key name="network-header-icon-size" type="i">
       <default>18</default>
       <summary>Header Icon Size</summary>
@@ -449,6 +489,16 @@
       <default>false</default>
       <summary>Sensors Header Icon</summary>
       <description>Show the icon on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-icon-custom" type="s">
+      <default>''</default>
+      <summary>Sensors Header Custom Icon</summary>
+      <description>Set a custom icon for the Sensors monitor</description>
+    </key>
+    <key name="sensors-header-icon-color" type="s">
+      <default>''</default>
+      <summary>Sensors Header Icon Color</summary>
+      <description>Set a custom color for the Sensors monitor icon</description>
     </key>
     <key name="sensors-header-icon-size" type="i">
       <default>18</default>

@@ -178,12 +178,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const headersSection = this.addExpanderRow(_('Headers'), group);
         this.addSpinRow({
             title: this.tab + _('Headers Height'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 28'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'headers-height', headersSection, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true, 28);
         this.addSpinRow({
             title: this.tab + _('Headers Margins'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 2'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'headers-margins', headersSection, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true, 2);
         this.addFontRow({
@@ -232,11 +232,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'processor-header-icon', iconSection);
+        this.addTextInputRow({
+            title: this.tab + _('Icon Name'),
+            subtitle:  this.tab + _('Set icon name (ie: \'cpu-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+        }, 'processor-header-icon-custom', iconSection, '');
+        this.addColorRow({ title: this.tab + _('Icon Color') }, 'processor-header-icon-color', iconSection, '');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'processor-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+        }, 'processor-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
         this.addSwitchRow(this.tab + _('Show Tooltip'), 'processor-header-tooltip', tooltipSection);
@@ -305,11 +310,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'memory-header-icon', iconSection);
+        this.addTextInputRow({
+            title: this.tab + _('Icon Name'),
+            subtitle:  this.tab + _('Set icon name (ie: \'memory-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+        }, 'memory-header-icon-custom', iconSection, '');
+        this.addColorRow({ title: this.tab + _('Icon Color') }, 'memory-header-icon-color', iconSection, '');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'memory-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+        }, 'memory-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
         this.addSwitchRow(this.tab + _('Show Tooltip'), 'memory-header-tooltip', tooltipSection);
@@ -387,11 +397,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'storage-header-icon', iconSection);
+        this.addTextInputRow({
+            title: this.tab + _('Icon Name'),
+            subtitle:  this.tab + _('Set icon name (ie: \'drive-harddisk-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+        }, 'storage-header-icon-custom', iconSection, '');
+        this.addColorRow({ title: this.tab + _('Icon Color') }, 'storage-header-icon-color', iconSection, '');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'storage-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+        }, 'storage-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
         this.addSwitchRow(this.tab + _('Show Tooltip'), 'storage-header-tooltip', tooltipSection);
@@ -502,11 +517,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'network-header-icon', iconSection);
+        this.addTextInputRow({
+            title: this.tab + _('Icon Name'),
+            subtitle:  this.tab + _('Set icon name (ie: \'network-wired-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+        }, 'network-header-icon-custom', iconSection, '');
+        this.addColorRow({ title: this.tab + _('Icon Color') }, 'network-header-icon-color', iconSection, '');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+        }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
         this.addSwitchRow(this.tab + _('Show Tooltip'), 'network-header-tooltip', tooltipSection);
@@ -542,11 +562,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const iconSection = this.addExpanderRow(_('Icon'), group);
         this.addSwitchRow(this.tab + _('Show Icon'), 'sensors-header-icon', iconSection);
+        this.addTextInputRow({
+            title: this.tab + _('Icon Name'),
+            subtitle:  this.tab + _('Set icon name (ie: \'temperature-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+        }, 'sensors-header-icon-custom', iconSection, '');
+        this.addColorRow({ title: this.tab + _('Icon Color') }, 'sensors-header-icon-color', iconSection, '');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Default value is 18'),
+            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
-        }, 'sensors-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true);
+        }, 'sensors-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
         this.addSwitchRow(this.tab + _('Show Tooltip'), 'sensors-header-tooltip', tooltipSection);
@@ -745,8 +770,15 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         row.activatable_widget = toggle;
     }
     
-    addColorRow(title, setting, group) {
-        const row = new Adw.ActionRow({title});
+    /**
+     * 
+     * @param {{title}} props 
+     * @param {string} setting 
+     * @param {*} group 
+     * @param {string} reset
+     */
+    addColorRow(props, setting, group, reset = null) {
+        const row = new Adw.ActionRow(props);
         if(group.add)
             group.add(row);
         else
@@ -759,6 +791,26 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         button.connect('color-set', widget => {
             Config.set(setting, widget.get_rgba().to_string(), 'string');
         });
+        
+        if(reset !== null) {
+            const resetButton = new Gtk.Button({
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+                hexpand: false,
+                vexpand: false,
+                icon_name: 'edit-undo-symbolic',
+                sensitive: true,
+            });
+            row.add_suffix(resetButton);
+            
+            resetButton.connect('clicked', () => {
+                Config.set(setting, reset, 'string');
+                const rgba = new Gdk.RGBA();
+                rgba.parse(reset);
+                button.set_rgba(rgba);
+            });
+            row.add_suffix(resetButton);
+        }
         
         row.add_suffix(button);
         row.activatable_widget = button;

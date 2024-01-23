@@ -1,3 +1,8 @@
+# Astra Monitor 8 - TO BE RELEASED
+
+### New features
+- Add support for custom icon Name and Color for each header
+
 # Astra Monitor 7 - January 23 2024
 
 ### New features

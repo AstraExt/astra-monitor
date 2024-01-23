@@ -77,20 +77,42 @@ export const StorageHeader = GObject.registerClass({
     }
     
     buildIcon() {
+        const defaultStyle = 'margin-left:2px;margin-right:4px;';
         let iconSize = Config.get_int('storage-header-icon-size');
         iconSize = Math.max(8, Math.min(30, iconSize));
         this.icon = new St.Icon({
-            gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
-            fallback_icon_name: 'drive-harddisk-symbolic',
-            style: 'margin-left:2px;margin-right:4px;',
+            fallback_gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
+            style: defaultStyle,
             icon_size: iconSize,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
             x_align: Clutter.ActorAlign.CENTER,
         });
+        
+        const setIconName = () => {
+            const iconCustom = Config.get_string('storage-header-icon-custom');
+            if(iconCustom)
+                this.icon.icon_name = iconCustom;
+            else
+                this.icon.gicon = Utils.getLocalIcon('am-harddisk-symbolic');
+        };
+        setIconName();
+        
+        const setIconColor = () => {
+            const iconColor = Config.get_string('storage-header-icon-color');
+            if(iconColor)
+                this.icon.style = defaultStyle + 'color:' + iconColor + ';';
+            else
+                this.icon.style = defaultStyle;
+        };
+        setIconColor();
+        
+        
         this.insert_child_at_index(this.icon, 0);
         Config.bind('storage-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('storage-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
+        Config.connect(this.icon, 'changed::storage-header-icon-custom', setIconName.bind(this));
+        Config.connect(this.icon, 'changed::storage-header-icon-color', setIconColor.bind(this));
     }
     
     buildBars() {
