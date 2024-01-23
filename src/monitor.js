@@ -181,13 +181,18 @@ export class Monitor {
         if(!key) {
             for(const key in this.listeners) {
                 this.listeners[key] = this.listeners[key].filter(listener => listener.subject !== subject);
-                this.stopListeningFor(key);
+                
+                if(this.listeners[key].length === 0)
+                    this.stopListeningFor(key);
             }
             return;
         }
-        if(this.listeners[key])
+        if(this.listeners[key]) {
             this.listeners[key] = this.listeners[key].filter(listener => listener.subject !== subject);
-            this.stopListeningFor(key);
+            
+            if(this.listeners[key].length === 0)
+                this.stopListeningFor(key);
+        }
     }
     
     destroy() {

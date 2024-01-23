@@ -42,6 +42,7 @@ export class MemoryMonitor extends Monitor {
         this.updateSwapUsageTask = new CancellableTaskManager();
         
         this.usedPref = Config.get_string('memory-used');
+        this.dataSourcesInit();
         
         const enabled = Config.get_boolean('memory-header-show');
         if(enabled)
@@ -80,6 +81,19 @@ export class MemoryMonitor extends Monitor {
     stop() {
         super.stop();
         this.reset();
+    }
+    
+    dataSourcesInit() {
+        this.dataSources = {
+            topProcesses: Config.get_string('memory-source-top-processes')
+        };
+        
+        Config.connect(this, 'changed::memory-source-top-processes', () => {
+            this.dataSources.topProcesses = Config.get_string('memory-source-top-processes');
+            this.topProcessesCache.reset();
+            this.topProcessesTime = -1;
+            this.resetUsageHistory('topProcesses');
+        });
     }
     
     update() {
@@ -142,8 +156,16 @@ export class MemoryMonitor extends Monitor {
                 });
         }
         if(key === 'topProcesses') {
+            let updateTopProcessesFunc;
+            if(this.dataSources.topProcesses === 'GTop')
+                updateTopProcessesFunc = this.updateTopProcessesGTop.bind(this, ...params);
+            else if(this.dataSources.topProcesses === 'proc')
+                updateTopProcessesFunc = this.updateTopProcessesProc.bind(this, ...params);
+            else
+                updateTopProcessesFunc = this.updateTopProcessesAuto.bind(this, ...params);
+            
             this.updateTopProcessesTask
-                .run(this.updateTopProcesses.bind(this, ...params))
+                .run(updateTopProcessesFunc)
                 .then(this.notify.bind(this, 'topProcesses'))
                 .catch(e => {
                     if(e.isCancelled) {
@@ -240,9 +262,19 @@ export class MemoryMonitor extends Monitor {
     }
     
     /**
+     * GTop is faster here, use it if available
      * @returns {Promise<boolean>}
      */
-    async updateTopProcesses() {
+    async updateTopProcessesAuto() {
+        if(Utils.GTop)
+            return await this.updateTopProcessesGTop();
+        return await this.updateTopProcessesProc();
+    }
+    
+    /**
+     * @returns {Promise<boolean>}
+     */
+    async updateTopProcessesProc() {
         const topProcesses = [];
         const seenPids = [];
         
@@ -303,6 +335,74 @@ export class MemoryMonitor extends Monitor {
         catch(e) {
             Utils.error(e.message);
         }
+        
+        this.topProcessesCache.updateNotSeen(seenPids);
+        this.setUsageValue('topProcesses', topProcesses);
+        return true;
+    }
+    
+    async updateTopProcessesGTop() {
+        let GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        let buf = new GTop.glibtop_proclist();
+        let pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0); // GLIBTOP_EXCLUDE_IDLE
+        pids.length = buf.number;
+        
+        const topProcesses = [];
+        const seenPids = [];
+        
+        const procMem = new GTop.glibtop_proc_mem();
+        const mem = new GTop.glibtop_mem();
+        
+        GTop.glibtop_get_mem(mem);
+        
+        for(const pid of pids) {
+            seenPids.push(pid);
+            
+            let process = this.topProcessesCache.getProcess(pid);
+            if(!process) {
+                const argSize = new GTop.glibtop_proc_args();
+                let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
+                
+                if(!cmd) {
+                    let procState = new GTop.glibtop_proc_state();
+                    GTop.glibtop_get_proc_state(procState, pid);
+                    if(procState && procState.cmd) {
+                        let str = '';
+                        for(let i = 0; i < procState.cmd.length; i++) {
+                            if(procState.cmd[i] === 0)
+                                break;
+                            str += String.fromCharCode(procState.cmd[i]);
+                        }
+                        cmd = str ? `[${str}]` : cmd;
+                    }
+                }
+                
+                if(!cmd) {
+                    //Utils.log('cmd is null for pid: ' + pid);
+                    continue;
+                }
+                
+                process = {
+                    pid: pid,
+                    exec: Utils.extractCommandName(cmd),
+                    cmd: cmd,
+                    notSeen: 0
+                };
+                this.topProcessesCache.setProcess(process);
+            }
+            
+            GTop.glibtop_get_proc_mem(procMem, pid);
+            const usage = procMem.rss;
+            const percentage = (usage / mem.total) * 100;
+            
+            topProcesses.push({ process, usage, percentage });
+        }
+            
+        topProcesses.sort((a, b) => b.usage - a.usage);
+        topProcesses.splice(MemoryMonitor.TOP_PROCESSES_LIMIT);
         
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);

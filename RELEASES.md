@@ -1,6 +1,7 @@
 # Astra Monitor 8 - TO BE RELEASED
 
 ### New features
+- GTop support as _data source_ for Top Processes is now available in Memory Menu
 - Indicators ordering on the header is now customizable [[#37](https://github.com/AstraExt/astra-monitor/issues/37)]
 - Support for custom icon Name and Color for each header
 - New Indicator for Memory Header: Usage Value in Bytes [[#16](https://github.com/AstraExt/astra-monitor/issues/16)] [[#34](https://github.com/AstraExt/astra-monitor/issues/34)]

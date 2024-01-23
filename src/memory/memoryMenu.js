@@ -559,6 +559,12 @@ export class MemoryMenu extends MenuBase {
             this.topProcesses[i].label.text = '';
             this.topProcesses[i].percentage.text = '';
         }
+        
+        for(let i = 0; i < MemoryMonitor.TOP_PROCESSES_LIMIT; i++) {
+            this.topProcessesPopup['process' + i].label.text = '';
+            this.topProcessesPopup['process' + i].percentage.text = '';
+            this.topProcessesPopup['process' + i].description.text = '';
+        }
     }
     
     update(code) {

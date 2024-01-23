@@ -27,9 +27,8 @@ export class CancellableTaskManager {
     }
     
     run(boundTask) {
-        if(this.currentTask) {
+        if(this.currentTask)
             this.currentTask.cancel();
-        }
         
         this.currentTask = this.makeCancellable(boundTask);
         return this.currentTask.promise
@@ -48,9 +47,8 @@ export class CancellableTaskManager {
     }
     
     cancel() {
-        if(this.currentTask) {
+        if(this.currentTask)
             this.currentTask.cancel();
-        }
     }
     
     get isRunning() {

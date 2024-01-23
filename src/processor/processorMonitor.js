@@ -176,8 +176,9 @@ export class ProcessorMonitor extends Monitor {
                     const procStat = this.getProcStatAsync();
                     this.runUpdate('topProcesses', true, procStat);
                 }
-                return; // Don't push to the queue
             }
+            // Don't push to the queue
+            return;
         }
         
         super.requestUpdate(key);
@@ -596,8 +597,6 @@ export class ProcessorMonitor extends Monitor {
     }
     
     async updateTopProcessesAuto(procStat) {
-        //TODO: optimize based off performance
-        //      maybe use a combination of both methods?
         if(Utils.GTop)
             return await this.updateTopProcessesGTop();
         return await this.updateTopProcessesProc(procStat);

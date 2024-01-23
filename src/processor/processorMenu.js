@@ -720,7 +720,6 @@ export class ProcessorMenu extends MenuBase {
         this.update('graph');
         Utils.processorMonitor.listen(this.graph, 'cpuUsage', this.update.bind(this, 'graph'));
         
-        
         Utils.processorMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
         Utils.processorMonitor.requestUpdate('topProcesses');
         
@@ -757,6 +756,12 @@ export class ProcessorMenu extends MenuBase {
             this.topProcesses[i].percentage.text = '';
         }
         
+        for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
+            this.topProcessesPopup['process' + i].label.text = '';
+            this.topProcessesPopup['process' + i].percentage.text = '';
+            this.topProcessesPopup['process' + i].description.text = '';
+        }
+        
         this.menuUptime.text = '';
     }
     
@@ -765,7 +770,6 @@ export class ProcessorMenu extends MenuBase {
             const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
             
             //TODO: optionally multiply by number of cores
-            
             if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
                 this.cpuTotalPerc.text = '0%';
                 this.processorBar.setUsage([]);
@@ -864,7 +868,6 @@ export class ProcessorMenu extends MenuBase {
                 }
             }
             else {
-                
                 for(let i = 0; i < topProcesses.length; i++) {
                     const perCore = Config.get_boolean('processor-menu-top-processes-percentage-core');
                     
@@ -908,8 +911,6 @@ export class ProcessorMenu extends MenuBase {
         this.removeAll();
         
         Config.clear(this.gpuSection);
-        
-        
         
         if(this.cpuInfoPopup) {
             this.cpuInfoPopup.destroy();
