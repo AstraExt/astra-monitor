@@ -634,8 +634,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addLinkRow(_('GitHub'), 'https://github.com/AstraExt/astra-monitor', group);
         this.addLinkRow(_('GNOME Extensions page'), 'https://extensions.gnome.org/extension/6682/astra-monitor/', group);
         this.addLinkRow(_('Report a bug or suggest new feature'), 'https://github.com/AstraExt/astra-monitor/issues/new/choose', group);
-        this.addLinkRow(_('Buy us a coffee'), 'https://www.buymeacoffee.com/astra.ext', group);
-        this.addLinkRow(_('Become a patron'), 'https://www.patreon.com/AstraExt', group);
+        this.addLinkRow('<span color="#FFC000">★ ' + _('Buy us a coffee') + '</span>', 'https://www.buymeacoffee.com/astra.ext', group);
+        this.addLinkRow('<span color="#FFC000">★ ' + _('Become a patron') + '</span>', 'https://www.patreon.com/AstraExt', group);
         this.addSwitchRow(_('Debug Mode'), 'debug-mode', group);
         aboutPage.add(group);
         
@@ -731,7 +731,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addLinkRow(title, url, group) {
-        const row = new Adw.ActionRow({title});
+        const row = new Adw.ActionRow({
+            title,
+            use_markup: true
+        });
         if(group.add)
             group.add(row);
         else
