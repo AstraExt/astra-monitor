@@ -331,8 +331,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const tooltipSection = this.addExpanderRow(_('Tooltip'), group);
         this.addSwitchRow(this.tab + _('Show Tooltip'), 'memory-header-tooltip', tooltipSection);
         
-        const percentageSection = this.addExpanderRow(_('Percentage'), group);
-        this.addSwitchRow(this.tab + _('Show Percentage'), 'memory-header-percentage', percentageSection);
+        const percentageSection = this.addExpanderRow(_('Usage Percentage'), group);
+        this.addSwitchRow(this.tab + _('Show Usage Percentage'), 'memory-header-percentage', percentageSection);
         
         const valueSection = this.addExpanderRow(_('Usage Value'), group);
         this.addSwitchRow(this.tab + _('Show Usage Value'), 'memory-header-value', valueSection);
