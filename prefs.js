@@ -334,6 +334,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const percentageSection = this.addExpanderRow(_('Percentage'), group);
         this.addSwitchRow(this.tab + _('Show Percentage'), 'memory-header-percentage', percentageSection);
         
+        const valueSection = this.addExpanderRow(_('Usage Value'), group);
+        this.addSwitchRow(this.tab + _('Show Usage Value'), 'memory-header-value', valueSection);
+        this.addSpinRow({title: this.tab + _('Usage Value Number Max Figures')}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        
         const graphSection = this.addExpanderRow(_('History Graph'), group);
         this.addSwitchRow(this.tab + _('Show History Graph'), 'memory-header-graph', graphSection);
         this.addSwitchRow(this.tab + _('History Graph Breakdown'), 'memory-header-graph-breakdown', graphSection);

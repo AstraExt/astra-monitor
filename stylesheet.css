@@ -34,12 +34,21 @@
 .astra-monitor-header-percentage4 {
     text-align: right;
     min-width: 3em;
+    margin-left: 0.3em;
     margin-right: 0.3em;
 }
 
 .astra-monitor-header-percentage3 {
     text-align: right;
     min-width: 2.5em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+}
+
+.astra-monitor-header-value {
+    font-size: 1em;
+    text-align: right;
+    margin-left: 0.3em;
     margin-right: 0.3em;
 }
 

@@ -7,7 +7,7 @@ export default class Utils {
     static defaultMonitors = ['processor', 'memory', 'storage', 'network', 'sensors'];
     static defaultIndicators = {
         processor: ['icon', 'bar', 'graph', 'percentage'],
-        memory: ['icon', 'bar', 'graph', 'percentage'],
+        memory: ['icon', 'bar', 'graph', 'percentage', 'value'],
         storage: ['icon', 'bar', 'percentage', 'IO bar', 'IO graph', 'IO speed'],
         network: ['icon', 'IO bar', 'IO graph', 'IO speed'],
         sensors: ['icon', 'value']

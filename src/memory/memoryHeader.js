@@ -25,6 +25,7 @@ export const MemoryHeader = GObject.registerClass({
         this.buildGraph();
         this.buildBars();
         this.buildPercentage();
+        this.buildValue();
         
         this.addOrReorderIndicators();
         
@@ -53,6 +54,9 @@ export const MemoryHeader = GObject.registerClass({
                     break;
                 case 'percentage':
                     widget = this.percentage;
+                    break;
+                case 'value':
+                    widget = this.value;
                     break;
             }
             
@@ -177,6 +181,28 @@ export const MemoryHeader = GObject.registerClass({
                 this.percentage.text = '';
             else
                 this.percentage.text = `${Math.round(usage.used / usage.total * 100)}%`;
+        });
+    }
+    
+    buildValue() {
+        this.value = new St.Label({
+            text: '-',
+            style_class: 'astra-monitor-header-value',
+            y_align: Clutter.ActorAlign.CENTER,
+        });
+        Config.bind('memory-header-value', this.value, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Utils.memoryMonitor.listen(this.percentage, 'memoryUsage', () => {
+            if(!Config.get_boolean('memory-header-value'))
+                return;
+            
+            const figures = Config.get_int('memory-header-value-figures');
+            
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            if(!usage || !usage.used || isNaN(usage.used))
+                this.value.text = '-';
+            else
+                this.value.text = `${Utils.formatBytes(usage.used, figures)}`;
         });
     }
     

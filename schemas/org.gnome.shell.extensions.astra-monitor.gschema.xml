@@ -266,6 +266,17 @@
       <summary>Memory Header Percentage</summary>
       <description>Show the percentage on the header of the memory monitor</description>
     </key>
+    <key name="memory-header-value" type="b">
+      <default>false</default>
+      <summary>Memory Header Usage Value</summary>
+      <description>Show the usage value on the header of the memory monitor</description>
+    </key>
+    <key name="memory-header-value-figures" type="i">
+      <default>3</default>
+      <summary>Max Number Figures</summary>
+      <description>Max number of figures to show on the usage value</description>
+      <range min="2" max="4"/>
+    </key>
     <key name="memory-header-graph" type="b">
       <default>false</default>
       <summary>Show History Graph</summary>

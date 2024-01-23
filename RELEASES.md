@@ -2,7 +2,8 @@
 
 ### New features
 - Indicators ordering on the header is now customizable [[#37](https://github.com/AstraExt/astra-monitor/issues/37)]
-- Add support for custom icon Name and Color for each header
+- Support for custom icon Name and Color for each header
+- New Indicator for Memory Header: Usage Value in Bytes [[#16](https://github.com/AstraExt/astra-monitor/issues/16)] [[#34](https://github.com/AstraExt/astra-monitor/issues/34)]
 
 # Astra Monitor 7 - January 23 2024
 
