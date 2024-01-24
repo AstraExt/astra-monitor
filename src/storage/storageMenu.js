@@ -31,6 +31,7 @@ import Utils from '../utils/utils.js';
 import { StorageBars } from './storageBars.js';
 import Config from '../config.js';
 import { StorageGraph } from './storageGraph.js';
+import { StorageMonitor } from './storageMonitor.js';
 
 export class StorageMenu extends MenuBase {
     constructor(sourceActor, arrowAlignment, arrowSide) {
@@ -38,6 +39,7 @@ export class StorageMenu extends MenuBase {
         
         this.storageSectionLabel = this.addMenuSection(_('Storage'), 'centered');
         this.createActivitySection();
+        this.addTopProcesses();
         this.createDeviceList();
         
         this.addUtilityButtons();
@@ -102,6 +104,203 @@ export class StorageMenu extends MenuBase {
         });
         
         this.addToMenu(hoverButton, 2);
+    }
+    
+    addTopProcesses() {
+        const separator = this.addMenuSection(_('Top processes'), 'centered');
+        separator.hide();
+        
+        const defaultStyle = '';
+        
+        let hoverButton = new St.Button({
+            reactive: true,
+            track_hover: true,
+            style: defaultStyle
+        });
+        hoverButton.hide();
+        
+        const grid = new Grid({ numCols: 3, styleClass: 'astra-monitor-menu-subgrid' });
+        
+        const labels = [];
+        
+        //TODO: allow to customize number of processes to show in the menu
+        const numProcesses = 5;
+        for(let i = 0; i < numProcesses; i++) {
+            let label = new St.Label({
+                text: '',
+                style_class: 'astra-monitor-menu-cmd-name',
+                x_expand: true
+            });
+            grid.addToGrid(label);
+            
+            // READ
+            const readContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                style: 'margin-left:0;margin-right:0;width:5em;'
+            });
+            
+            const readActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-up-symbolic'),
+                fallback_icon_name: 'go-up-symbolic',
+                style_class: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);'
+            });
+            readContainer.add_child(readActivityIcon);
+            
+            const readValue = new St.Label({
+                text: '',
+                style_class: 'astra-monitor-menu-cmd-usage',
+                x_expand: true
+            });
+            readContainer.add_child(readValue);
+            
+            grid.addToGrid(readContainer);
+            
+            // WRITE
+            const writeContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                style: 'margin-left:0;margin-right:0;width:5em;'
+            });
+            
+            const writeActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-down-symbolic'),
+                fallback_icon_name: 'go-down-symbolic',
+                style_class: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);'
+            });
+            writeContainer.add_child(writeActivityIcon);
+            
+            const writeValue = new St.Label({
+                text: '',
+                style_class: 'astra-monitor-menu-cmd-usage',
+                x_expand: true
+            });
+            writeContainer.add_child(writeValue);
+            
+            grid.addToGrid(writeContainer);
+            
+            labels.push({
+                label,
+                read: {
+                    container: readContainer,
+                    value: readValue,
+                    icon: readActivityIcon
+                },
+                write: {
+                    container: writeContainer,
+                    value: writeValue,
+                    icon: writeActivityIcon
+                },
+                
+            });
+        }
+        
+        hoverButton.add_actor(grid);
+        
+        //this.createTopProcessesPopup(hoverButton);
+        
+        hoverButton.connect('enter-event', () => {
+            hoverButton.style = defaultStyle + this.selectionStyle;
+            //if(this.topProcessesPopup)
+            //    this.topProcessesPopup.open(true);
+        });
+        
+        hoverButton.connect('leave-event', () => {
+            hoverButton.style = defaultStyle;
+            //if(this.topProcessesPopup)
+            //    this.topProcessesPopup.close(true);
+        });
+        this.addToMenu(hoverButton, 2);
+        
+        this.topProcesses = {
+            separator,
+            labels,
+            hoverButton
+        };
+    }
+    
+    createTopProcessesPopup(sourceActor) {
+        this.topProcessesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        this.topProcessesPopup.addMenuSection(_('Top processes'), 'centered');
+        
+        const grid = new Grid({ numCols: 2, styleClass: 'astra-monitor-menu-subgrid' });
+        
+        for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
+            // READ
+            const readContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                style: 'margin-left:0;margin-right:0;width:5em;'
+            });
+            
+            const readActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-up-symbolic'),
+                fallback_icon_name: 'go-up-symbolic',
+                style_class: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);'
+            });
+            readContainer.add_child(readActivityIcon);
+            
+            const readValue = new St.Label({
+                text: '-',
+                style_class: 'astra-monitor-menu-cmd-usage',
+                x_expand: true
+            });
+            readContainer.add_child(readValue);
+            
+            grid.addGrid(readContainer, 0, i*2, 1, 1);
+            
+            // WRITE
+            const writeContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                style: 'margin-left:0;margin-right:0;width:5em;'
+            });
+            
+            const writeActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-down-symbolic'),
+                fallback_icon_name: 'go-down-symbolic',
+                style_class: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);'
+            });
+            writeContainer.add_child(writeActivityIcon);
+            
+            const writeValue = new St.Label({
+                text: '-',
+                style_class: 'astra-monitor-menu-cmd-usage',
+                x_expand: true
+            });
+            writeContainer.add_child(writeValue);
+            
+            grid.addGrid(writeContainer, 0, i*2+1, 1, 1);
+            
+            const label = new St.Label({
+                text: '-',
+                style_class: 'astra-monitor-menu-cmd-name-full'
+            });
+            grid.addGrid(label, 1, i*2, 1, 1);
+            
+            const description = new St.Label({
+                text: '-',
+                style_class: 'astra-monitor-menu-cmd-description'
+            });
+            grid.addGrid(description, 1, i*2+1, 1, 1);
+            
+            this.topProcessesPopup['process' + i] = {
+                label,
+                description,
+                read: {
+                    container: readContainer,
+                    value: readValue,
+                    icon: readActivityIcon
+                },
+                write: {
+                    container: writeContainer,
+                    value: writeValue,
+                    icon: writeActivityIcon
+                }
+            };
+        }
+        
+        this.topProcessesPopup.addToMenu(grid, 2);
     }
     
     createDeviceList() {
@@ -457,6 +656,14 @@ export class StorageMenu extends MenuBase {
         Utils.storageMonitor.listen(this, 'detailedStorageIO', this.update.bind(this, 'detailedStorageIO'));
         Utils.storageMonitor.requestUpdate('detailedStorageIO');
         
+        if(Utils.GTop) {
+            this.topProcesses.separator.show();
+            this.topProcesses.hoverButton.show();
+            
+            Utils.storageMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
+            Utils.storageMonitor.requestUpdate('topProcesses');
+        }
+        
         this.update('deviceList');
         if(!this.updateTimer) {
             this.updateTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
@@ -471,6 +678,7 @@ export class StorageMenu extends MenuBase {
     onClose() {
         Utils.storageMonitor.unlisten(this, 'storageIO');
         Utils.storageMonitor.unlisten(this, 'detailedStorageIO');
+        Utils.processorMonitor.unlisten(this, 'topProcesses');
         
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
@@ -549,6 +757,90 @@ export class StorageMenu extends MenuBase {
                         device.writeActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                     }
                 }
+            }
+            return;
+        }
+        if(code === 'topProcesses') {
+            const topProcesses = Utils.storageMonitor.getCurrentValue('topProcesses');
+            
+            for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
+                if(!topProcesses || !Array.isArray(topProcesses) || !topProcesses[i] || !topProcesses[i].process) {
+                    if(i < 5) {
+                        this.topProcesses.labels[i].label.text = '-';
+                        this.topProcesses.labels[i].read.value.text = '-';
+                        this.topProcesses.labels[i].read.icon.style = 'color:rgba(255,255,255,0.5);';
+                        this.topProcesses.labels[i].write.value.text = '-';
+                        this.topProcesses.labels[i].write.icon.style = 'color:rgba(255,255,255,0.5);';
+                    }
+                    
+                    /*if(this.topProcessesPopup && this.topProcessesPopup['process' + i]) {
+                        const popupElement = this.topProcessesPopup['process' + i];
+                        popupElement.label.hide();
+                        popupElement.description.hide();
+                        popupElement.read.container.hide();
+                        popupElement.write.container.hide();
+                    }*/
+                }
+                else {
+                    const topProcess = topProcesses[i];
+                    const process = topProcess.process;
+                    const read = topProcess.read;
+                    const write = topProcess.write;
+                    
+                    if(i < 5) {
+                        this.topProcesses.labels[i].label.text = process.exec;
+                        
+                        if(read > 0) {
+                            // TODO: make this color customizable!?
+                            this.topProcesses.labels[i].read.icon.style = 'color:rgb(29,172,214);';
+                            this.topProcesses.labels[i].read.value.text = Utils.formatBytesPerSec(read, 3);
+                        }
+                        else {
+                            this.topProcesses.labels[i].read.icon.style = 'color:rgba(255,255,255,0.5);';
+                            this.topProcesses.labels[i].read.value.text = '-';
+                        }
+                        
+                        if(write > 0) {
+                            // TODO: make this color customizable!?
+                            this.topProcesses.labels[i].write.icon.style = 'color:rgb(214,29,29);';
+                            this.topProcesses.labels[i].write.value.text = Utils.formatBytesPerSec(write, 3);
+                        }
+                        else {
+                            this.topProcesses.labels[i].write.icon.style = 'color:rgba(255,255,255,0.5);';
+                            this.topProcesses.labels[i].write.value.text = '-';
+                        }
+                    }
+                    
+                    /*if(this.topProcessesPopup && this.topProcessesPopup['process' + i]) {
+                        const popupElement = this.topProcessesPopup['process' + i];
+                        
+                        popupElement.label.show();
+                        popupElement.label.text = process.exec;
+                        
+                        popupElement.description.show();
+                        popupElement.description.text = process.cmd;
+                        
+                        popupElement.read.container.show();
+                        if(read > 0) {
+                            popupElement.read.icon.style = 'color:rgb(29,172,214);';
+                            popupElement.read.value.text = Utils.formatBytesPerSec(read, 3);
+                        }
+                        else {
+                            popupElement.read.icon.style = 'color:rgba(255,255,255,0.5);';
+                            popupElement.read.value.text = '-';
+                        }
+                        
+                        popupElement.write.container.show();
+                        if(write > 0) {
+                            popupElement.write.icon.style = 'color:rgb(214,29,29);';
+                            popupElement.write.value.text = Utils.formatBytesPerSec(write, 3);
+                        }
+                        else {
+                            popupElement.write.icon.style = 'color:rgba(255,255,255,0.5);';
+                            popupElement.write.value.text = '-';
+                        }
+                    }*/
+                }   
             }
             return;
         }

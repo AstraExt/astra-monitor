@@ -191,7 +191,7 @@ export class ProcessorMonitor extends Monitor {
                 .then(this.notify.bind(this, 'cpuUsage'))
                 .catch(e => {
                     if(e.isCancelled) {
-                        Utils.log('Update canceled: ' + key);
+                        Utils.log('Processor Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
@@ -204,7 +204,7 @@ export class ProcessorMonitor extends Monitor {
                 .then(this.notify.bind(this, 'cpuCoresUsage'))
                 .catch(e => {
                     if(e.isCancelled) {
-                        Utils.log('Update canceled: ' + key);
+                        Utils.log('Processor Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
@@ -217,7 +217,7 @@ export class ProcessorMonitor extends Monitor {
                 .then(this.notify.bind(this, 'cpuCoresFrequency'))
                 .catch(e => {
                     if(e.isCancelled) {
-                        Utils.log('Update canceled: ' + key);
+                        Utils.log('Processor Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
@@ -248,7 +248,7 @@ export class ProcessorMonitor extends Monitor {
                 .then(this.notify.bind(this, 'topProcesses'))
                 .catch(e => {
                     if(e.isCancelled) {
-                        Utils.log('Update canceled: ' + key);
+                        Utils.log('Processor Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
@@ -648,15 +648,16 @@ export class ProcessorMonitor extends Monitor {
             }
             
             for(const [pid, cpuTime] of cpuTimes) {
-                if(!this.previousPidsCpuTime.has(pid)) {
-                    this.previousPidsCpuTime.set(pid, cpuTime);
+                const previous = this.previousPidsCpuTime.get(pid);
+                this.previousPidsCpuTime.set(pid, cpuTime);
+                
+                if(!previous)
                     continue;
-                }
                 
                 const {
                     processTime: previousProcessTime,
                     totalCpuTime: previousTotalCpuTime
-                } = this.previousPidsCpuTime.get(pid);
+                } = previous;
                 
                 let totalCpuTimeDiff = totalCpuTime - previousTotalCpuTime;
                 let cpuTimeDiff = cpuTime.processTime - previousProcessTime;
@@ -704,6 +705,11 @@ export class ProcessorMonitor extends Monitor {
         
         topProcesses.sort((a, b) => b.cpu - a.cpu);
         topProcesses.splice(ProcessorMonitor.TOP_PROCESSES_LIMIT);
+        
+        for(const pid of this.previousPidsCpuTime.keys()) {
+            if(!seenPids.includes(pid))
+                this.previousPidsCpuTime.delete(pid);
+        }
         
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);
@@ -767,15 +773,16 @@ export class ProcessorMonitor extends Monitor {
             
             let cpuTime = { processTime: time.utime + time.stime, totalCpuTime };
             
-            if(!this.previousPidsCpuTime.has(pid)) {
-                this.previousPidsCpuTime.set(pid, cpuTime);
+            const previous = this.previousPidsCpuTime.get(pid);
+            this.previousPidsCpuTime.set(pid, cpuTime);
+            
+            if(!previous)
                 continue;
-            }
             
             const {
                 processTime: previousProcessTime,
                 totalCpuTime: previousTotalCpuTime
-            } = this.previousPidsCpuTime.get(pid);
+            } = previous;
             
             let totalCpuTimeDiff = totalCpuTime - previousTotalCpuTime;
             let cpuTimeDiff = cpuTime.processTime - previousProcessTime;
@@ -786,6 +793,11 @@ export class ProcessorMonitor extends Monitor {
         
         topProcesses.sort((a, b) => b.cpu - a.cpu);
         topProcesses.splice(ProcessorMonitor.TOP_PROCESSES_LIMIT);
+        
+        for(const pid of this.previousPidsCpuTime.keys()) {
+            if(!seenPids.includes(pid))
+                this.previousPidsCpuTime.delete(pid);
+        }
         
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);

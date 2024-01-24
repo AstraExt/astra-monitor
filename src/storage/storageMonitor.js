@@ -25,21 +25,31 @@ import Utils from '../utils/utils.js';
 import { Monitor } from '../monitor.js';
 import { CancellableTaskManager } from '../utils/cancellableTaskManager.js';
 import { PromiseValueHolder } from '../utils/promiseValueHolder.js';
+import TopProcessesCache from '../utils/topProcessesCache.js';
 
 export class StorageMonitor extends Monitor {
+    //TODO: maybe make this configurable
+    static get TOP_PROCESSES_LIMIT() {
+        return 10;
+    }
+    
     constructor() {
         super();
+        
+        this.topProcessesCache = new TopProcessesCache(this.updateFrequency);
         
         this.diskChecks = {};
         this.sectorSizes = {};
         
         // Setup tasks
         this.updateStorageUsageTask = new CancellableTaskManager();
+        this.updateTopProcessesTask = new CancellableTaskManager();
         this.updateStorageIOTask = new CancellableTaskManager();
         
         this.checkMainDisk();
         
         this.reset();
+        this.dataSourcesInit();
         
         const enabled = Config.get_boolean('processor-header-show');
         if(enabled)
@@ -75,7 +85,14 @@ export class StorageMonitor extends Monitor {
             time: -1
         };
         
+        this.topProcessesCache.reset();
+        /**
+         * @type {Map<number, {read: number, write: number, time: number}>}
+         */
+        this.previousPidsIO = new Map();
+        
         this.updateStorageUsageTask.cancel();
+        this.updateTopProcessesTask.cancel();
         this.updateStorageIOTask.cancel();
     }
     
@@ -98,6 +115,19 @@ export class StorageMonitor extends Monitor {
         this.reset();
     }
     
+    dataSourcesInit() {
+        this.dataSources = {
+            topProcesses: Config.get_string('storage-source-top-processes')
+        };
+        
+        Config.connect(this, 'changed::storage-source-top-processes', () => {
+            this.dataSources.topProcesses = Config.get_string('storage-source-top-processes');
+            this.topProcessesCache.reset();
+            this.previousPidsIO = new Map();
+            this.resetUsageHistory('topProcesses');
+        });
+    }
+    
     stopListeningFor(key) {
         super.stopListeningFor(key);
         
@@ -116,6 +146,14 @@ export class StorageMonitor extends Monitor {
             if(this.isListeningFor('detailedStorageIO'))
                 detailed = true;
             
+            if(this.isListeningFor('topProcesses')) {
+                if(Utils.GTop) // Only GTop supports for now
+                    this.runUpdate('topProcesses');
+            }
+            else {
+                this.topProcessesCache.updateNotSeen([]);
+            }
+            
             const procDiskstats = this.getProcDiskStatsAsync();
             this.runUpdate('updateStorageIO', detailed, procDiskstats);
         }
@@ -126,7 +164,7 @@ export class StorageMonitor extends Monitor {
         if(key === 'storageUsage') {
             this.runUpdate('storageUsage');
         }
-        if(key === 'storageIO' || key === 'detailedStorageIO') {
+        else if(key === 'storageIO' || key === 'detailedStorageIO') {
             const procDiskstats = this.getProcDiskStatsAsync();
             let detailed = key === 'detailedStorageIO';
             
@@ -134,6 +172,13 @@ export class StorageMonitor extends Monitor {
             
             if(detailed)
                 super.requestUpdate('storageIO'); // override also the storageIO update
+        }
+        else if(key === 'topProcesses') {
+            if(!this.updateTopProcessesTask.isRunning) {
+                if(Utils.GTop) // Only GTop supports for now
+                    this.runUpdate('topProcesses');
+            }
+            return; // Don't push to the queue
         }
         super.requestUpdate(key);
     }
@@ -145,7 +190,27 @@ export class StorageMonitor extends Monitor {
                 .then(this.notify.bind(this, 'storageUsage'))
                 .catch(e => {
                     if(e.isCancelled) {
-                        Utils.log('Update canceled: ' + key);
+                        Utils.log('Storage Monitor update canceled: ' + key);
+                    }
+                    else {
+                        Utils.error(e.message);
+                    }
+                });
+        }
+        else if(key === 'topProcesses') {
+            let updateTopProcessesFunc;
+            if(this.dataSources.topProcesses === 'GTop')
+                updateTopProcessesFunc = this.updateTopProcessesGTop.bind(this, ...params);
+            else
+                updateTopProcessesFunc = this.updateTopProcessesAuto.bind(this, ...params);
+            
+            this.updateTopProcessesTask
+                .run(updateTopProcessesFunc)
+                .then(this.notify.bind(this, 'topProcesses'))
+                .catch(e => {
+                    if(e.isCancelled) {
+                        //TODO: manage canceled update
+                        Utils.log('Storage Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
@@ -164,7 +229,7 @@ export class StorageMonitor extends Monitor {
                 }.bind(this))
                 .catch(e => {
                     if(e.isCancelled) {
-                        Utils.log('Update canceled: ' + key);
+                        Utils.log('Storage Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
@@ -472,6 +537,107 @@ export class StorageMonitor extends Monitor {
         }
         
         return devices;
+    }
+    
+    /**
+     * GTop is faster here, use it if available
+     * @returns {Promise<boolean>}
+     */
+    async updateTopProcessesAuto() {
+        if(Utils.GTop)
+            return await this.updateTopProcessesGTop();
+        return false;
+    }
+    
+    async updateTopProcessesGTop() {
+        let GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        let buf = new GTop.glibtop_proclist();
+        let pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0); // GLIBTOP_EXCLUDE_IDLE
+        pids.length = buf.number;
+        
+        const topProcesses = [];
+        const seenPids = [];
+        
+        let io = new GTop.glibtop_proc_io();
+        
+        for(const pid of pids) {
+            seenPids.push(pid);
+            
+            let process = this.topProcessesCache.getProcess(pid);
+            if(!process) {
+                const argSize = new GTop.glibtop_proc_args();
+                let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
+                
+                if(!cmd) {
+                    let procState = new GTop.glibtop_proc_state();
+                    GTop.glibtop_get_proc_state(procState, pid);
+                    if(procState && procState.cmd) {
+                        let str = '';
+                        for(let i = 0; i < procState.cmd.length; i++) {
+                            if(procState.cmd[i] === 0)
+                                break;
+                            str += String.fromCharCode(procState.cmd[i]);
+                        }
+                        cmd = str ? `[${str}]` : cmd;
+                    }
+                }
+                
+                if(!cmd) {
+                    //Utils.log('cmd is null for pid: ' + pid);
+                    continue;
+                }
+                
+                process = {
+                    pid: pid,
+                    exec: Utils.extractCommandName(cmd),
+                    cmd: cmd,
+                    notSeen: 0
+                };
+                this.topProcessesCache.setProcess(process);
+            }
+            
+            GTop.glibtop_get_proc_io(io, pid);
+            const currentRead = io.disk_rbytes;
+            const currentWrite = io.disk_wbytes;
+            
+            const previous = this.previousPidsIO.get(pid);
+            this.previousPidsIO.set(pid, {
+                read: currentRead,
+                write: currentWrite,
+                time: GLib.get_monotonic_time()
+            });
+            
+            if(!previous)
+                continue;
+            
+            const {
+                read: previousRead,
+                write: previousWrite,
+                time: previousTime
+            } = previous;
+            
+            const read = Math.round((currentRead - previousRead) / ((GLib.get_monotonic_time() - previousTime) / 1000000));
+            const write = Math.round((currentWrite - previousWrite) / ((GLib.get_monotonic_time() - previousTime) / 1000000));
+            if(read + write === 0)
+                continue;
+            
+            topProcesses.push({ process, read, write });
+        }
+        
+        topProcesses.sort((a, b) => (b.read + b.write) - (a.read + a.write));
+        topProcesses.splice(StorageMonitor.TOP_PROCESSES_LIMIT);
+        
+        for(const pid of this.previousPidsIO.keys()) {
+            if(!seenPids.includes(pid))
+                this.previousPidsIO.delete(pid);
+        }
+        
+        this.topProcessesCache.updateNotSeen(seenPids);
+        this.setUsageValue('topProcesses', topProcesses);
+        return true;
     }
     
     destroy() {

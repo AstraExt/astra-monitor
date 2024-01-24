@@ -69,6 +69,9 @@ export class MemoryMonitor extends Monitor {
     }
     
     reset() {
+        this.topProcessesCache.reset();
+        this.topProcessesTime = -1;
+        
         this.updateMemoryUsageTask.cancel();
         this.updateTopProcessesTask.cancel();
         this.updateSwapUsageTask.cancel();
@@ -148,14 +151,14 @@ export class MemoryMonitor extends Monitor {
                 .catch(e => {
                     if(e.isCancelled) {
                         //TODO: manage canceled update
-                        Utils.log('Canceled update: ' + key);
+                        Utils.log('Memory Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
                     }
                 });
         }
-        if(key === 'topProcesses') {
+        else if(key === 'topProcesses') {
             let updateTopProcessesFunc;
             if(this.dataSources.topProcesses === 'GTop')
                 updateTopProcessesFunc = this.updateTopProcessesGTop.bind(this, ...params);
@@ -170,7 +173,7 @@ export class MemoryMonitor extends Monitor {
                 .catch(e => {
                     if(e.isCancelled) {
                         //TODO: manage canceled update
-                        Utils.log('Canceled update: ' + key);
+                        Utils.log('Memory Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);
@@ -184,7 +187,7 @@ export class MemoryMonitor extends Monitor {
                 .catch(e => {
                     if(e.isCancelled) {
                         //TODO: manage canceled update
-                        Utils.log('Canceled update: ' + key);
+                        Utils.log('Memory Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e.message);

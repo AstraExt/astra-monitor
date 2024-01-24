@@ -88,7 +88,7 @@ export class SensorsMonitor extends Monitor {
                 .then(this.notify.bind(this, 'sensorsData'))
                 .catch(e => {
                     if(e.isCancelled) {
-                        Utils.log('Update canceled: ' + key);
+                        Utils.log('Sensor Monitor update canceled: ' + key);
                     }
                     else {
                         Utils.error(e);

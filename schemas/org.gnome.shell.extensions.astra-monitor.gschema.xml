@@ -38,6 +38,11 @@
     <value nick="proc" value="2"/>
     <value nick="GTop" value="3"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list2">
+    <value nick="default" value="0"/>
+    <value nick="auto" value="1"/>
+    <value nick="GTop" value="2"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- UTILS -->
     <key name="debug-mode" type="b">
@@ -322,15 +327,20 @@
       <description>Seconds between storage IO statistics updates</description>
       <range min="0.1" max="10"/>
     </key>
+    <key name="storage-io-unit" enum="org.gnome.shell.extensions.astra-monitor.enum.data-unit">
+      <default>'kB/s'</default>
+      <summary>Storage IO Unit</summary>
+      <description>Unit of measurement for the storage IO</description>
+    </key>
     <key name="storage-main" type="s">
       <default>'[default]'</default>
       <summary>Main storage</summary>
       <description>Storage to show on the header of the storage monitor</description>
     </key>
-    <key name="storage-io-unit" enum="org.gnome.shell.extensions.astra-monitor.enum.data-unit">
-      <default>'kB/s'</default>
-      <summary>Storage IO Unit</summary>
-      <description>Unit of measurement for the storage IO</description>
+    <key name="storage-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list2">
+      <default>'default'</default>
+      <summary>Top Processes Source</summary>
+      <description>Source of the top processes</description>
     </key>
     <key name="storage-header-show" type="b">
       <default>true</default>

@@ -217,9 +217,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sourcesSection = this.addExpanderRow(_('Data Sources'), group);
         const choicesPanel = [
-            {value: 'default', text: 'default (auto)'},
-            {value: 'auto', text: 'auto'},
-            {value: 'proc', text: 'proc'},
+            {value: 'default', text: _('Default (Auto)')},
+            {value: 'auto', text: _('Auto')},
+            {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
         this.addComboRow(this.tab + _('Top Processes'), choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
@@ -309,9 +309,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sourcesSection = this.addExpanderRow(_('Data Sources'), group);
         choicesPanel = [
-            {value: 'default', text: 'default (auto)'},
-            {value: 'auto', text: 'auto'},
-            {value: 'proc', text: 'proc'},
+            {value: 'default', text: _('Default (Auto)')},
+            {value: 'auto', text: _('Auto')},
+            {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
         this.addComboRow(this.tab + _('Top Processes'), choicesPanel, 'memory-source-top-processes', sourcesSection, 'string');
@@ -372,7 +372,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(_('Show'), 'storage-header-show', group);
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'storage-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
         
-        const choicesPanel = [
+        let choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
             {value: 'KiB/s', text: _('KiB/s')},
             {value: 'kb/s', text: _('kb/s')},
@@ -410,6 +410,14 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             choicesSource.push({value: id, text: text});
         }
         this.addComboRow(_('Main Disk'), choicesSource, 'storage-main', group, 'string');
+        
+        const sourcesSection = this.addExpanderRow(_('Data Sources'), group);
+        choicesPanel = [
+            {value: 'default', text: _('Default (Auto)')},
+            {value: 'auto', text: _('Auto')},
+            {value: 'GTop', text: 'GTop'},
+        ];
+        this.addComboRow(this.tab + _('Top Processes'), choicesPanel, 'storage-source-top-processes', sourcesSection, 'string');
         
         storagePage.add(group);
         
