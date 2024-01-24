@@ -203,7 +203,7 @@
       <description>Color the core bars with categories</description>
     </key>
     <key name="processor-menu-top-processes-percentage-core" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>CPU Top Processes Percentage per Single Core</summary>
       <description>Set the percentage on the top processes to single core</description>
     </key>
