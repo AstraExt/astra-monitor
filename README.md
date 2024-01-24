@@ -58,7 +58,7 @@ _NOTICE: The screenshots below are from an outdated version of the extension and
 
 As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
 
-- **Data Source:** Currently Astra Monitor avoids using GTop, the standard library for system monitoring in GNOME, using a custom implementation through resources close to kernel level such as /proc. We are planning to add support for GTop as a data source, allowing the user to choose between the two.
+- **Data Source:** Astra Monitor is designed with a modular data source system. At present, it utilizes a blend of custom implementations that interface closely with the kernel level (such as through the /proc directory), alongside GTop, which is GNOME's standard library for system monitoring. Our current development efforts are focused on integrating GTop as a data source option for all monitored resources. This integration will enable users to select between our custom implementation and GTop for their data sourcing needs.
 **[IN PROGRESS]**
 - **Icons:** ~~Customization of the icons in the preferences panel~~.
 - **Colors:** Customization of the colors in the preferences panel.
