@@ -25,6 +25,8 @@ Astra Monitor is a cutting-edge, fully customizable, and performance-focused mon
 
 ### Screenshots:
 
+_NOTICE: The screenshots below are from an outdated version of the extension and may not reflect the current release._
+
 #### High Customization Level
 <p align="center">
     Example 1:<br>
@@ -57,9 +59,10 @@ Astra Monitor is a cutting-edge, fully customizable, and performance-focused mon
 As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
 
 - **Data Source:** Currently Astra Monitor avoids using GTop, the standard library for system monitoring in GNOME, using a custom implementation through resources close to kernel level such as /proc. We are planning to add support for GTop as a data source, allowing the user to choose between the two.
-- **Icons:** Customization of the icons in the preferences panel.
+**[IN PROGRESS]**
+- **Icons:** ~~Customization of the icons in the preferences panel~~.
 - **Colors:** Customization of the colors in the preferences panel.
-- **Ordering:** Ability to rearrange the order of the displayed resources.
+- **Ordering:** ~~Ability to rearrange the order of the displayed resources~~.
 - **Sensors:** Support for more sensors sources and better sensor selection UI. (e.g. IPMI, sensor source plugins!?)
 - **History:** ~~Settings for the time range and size of history graphs~~.
 - **GPU:** Improvement of GPU monitoring.
