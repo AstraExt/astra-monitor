@@ -55,7 +55,7 @@ export class StorageMenu extends MenuBase {
         });
         
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         //TODO: make width customizable!?
         this.graph = new StorageGraph({
@@ -195,7 +195,7 @@ export class StorageMenu extends MenuBase {
             });
         }
         
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         //this.createTopProcessesPopup(hoverButton);
         
@@ -378,7 +378,7 @@ export class StorageMenu extends MenuBase {
         const grid = new Grid({
             styleClass: 'astra-monitor-menu-subgrid'
         });
-        container.add_actor(grid);
+        container.set_child(grid);
         
         //Header Grid
         //{

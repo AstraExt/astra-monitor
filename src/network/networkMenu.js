@@ -50,7 +50,7 @@ export class NetworkMenu extends MenuBase {
         });
         
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         //TODO: make width customizable!?
         this.graph = new NetworkGraph({
@@ -199,7 +199,7 @@ export class NetworkMenu extends MenuBase {
             x_expand: true,
             styleClass: 'astra-monitor-menu-subgrid'
         });
-        container.add_actor(grid);
+        container.set_child(grid);
         
         //Header Grid
         //{

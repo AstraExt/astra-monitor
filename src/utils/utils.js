@@ -277,6 +277,15 @@ export default class Utils {
         }
     }
     
+    static hasIp() {
+        try {
+            const [result, stdout, stderr] = GLib.spawn_command_line_sync('ip -V');
+            return result && stdout && !stderr.length;
+        } catch (e) {
+            return false;
+        }
+    }
+    
     static hasAMDGpu() {
         try {
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('lspci -nnk');
@@ -1326,6 +1335,9 @@ export default class Utils {
      */
     static getNetworkInterfacesSync() {
         const devices = new Map();
+        
+        if(!Utils.hasIp())
+            return devices;
         
         try {
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('ip -d -j addr');

@@ -270,7 +270,7 @@ export const SensorsHeader = GObject.registerClass({
     createTooltip() {
         this.tooltipMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.TOP);
         
-        Main.uiGroup.add_actor(this.tooltipMenu.actor);
+        Main.uiGroup.add_child(this.tooltipMenu.actor);
         this.tooltipMenu.actor.add_style_class_name('astra-monitor-tooltip-menu');
         this.tooltipMenu.actor.x_expand = true;
         this.tooltipMenu.actor.hide();

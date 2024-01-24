@@ -65,7 +65,7 @@ export class ProcessorMenu extends MenuBase {
         let hoverLabel = new St.Label({
             text: cpuName
         });
-        hoverButton.add_actor(hoverLabel);
+        hoverButton.set_child(hoverLabel);
         
         this.createCPUInfoPopup(hoverButton, cpuInfo, cpuName);
         
@@ -221,7 +221,7 @@ export class ProcessorMenu extends MenuBase {
             track_hover: true,
             style: defaultStyle
         });
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         this.createPercentagePopup(hoverButton);
         
@@ -319,7 +319,7 @@ export class ProcessorMenu extends MenuBase {
         });
         
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         //TODO: make width customizable!?
         this.processorBar = new ProcessorBars({
@@ -465,7 +465,7 @@ export class ProcessorMenu extends MenuBase {
             this.topProcesses.push({ label, percentage });
         }
         
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         this.createTopProcessesPopup(hoverButton);
         
@@ -563,7 +563,7 @@ export class ProcessorMenu extends MenuBase {
             
             //TODO: Monitor GPU usage
             
-            hoverButton.add_actor(grid);
+            hoverButton.set_child(grid);
             
             const gpuInfoPopup = this.createGPUInfoPopup(hoverButton, gpu);
             this.gpuInfoPopup.push(gpuInfoPopup);

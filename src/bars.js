@@ -132,7 +132,7 @@ export const BarsBase = GObject.registerClass({
                     layer.visible = false;
                 
                 bars[i].push(layer);
-                container.add_actor(layer);
+                container.add_child(layer);
             }
             this.add_child(container);
         }

@@ -120,7 +120,7 @@ export class SensorsMenu extends MenuBase {
             x_expand: true,
             styleClass: 'astra-monitor-menu-subgrid'
         });
-        container.add_actor(grid);
+        container.set_child(grid);
         
         const name = new St.Label({
             text: '',

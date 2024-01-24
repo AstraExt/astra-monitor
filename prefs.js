@@ -127,6 +127,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             check = false, this.addStatusLabel(_('\'lsblk\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         if(!Utils.hasCoresFrequency())
             check = false, this.addStatusLabel(_('Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
+        if(!Utils.hasIp())
+            check = false, this.addStatusLabel(_('\'iproute2\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         
         /*if(Utils.hasAMDGpu() && !Utils.hasAmdGpuTop() && !Utils.hasRadeonTop())
             check = false, this.addStatusLabel(_('AMD GPU detected but \'amdgpu_top/radeontop\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
@@ -135,7 +137,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         if(Utils.hasIntelGpu() && !Utils.hasIntelGpuTop())
             check = false, this.addStatusLabel(_('Intel GPU detected but \'intel_gpu_top\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
         */
-       
+        
         const statusLabel = this.addStatusLabel(_('Checking GTop dependency...'), 'am-dialog-info-symbolic', group);
         Utils.hasGTop().then(GTopAvailable => {
             if(!GTopAvailable) {
@@ -655,8 +657,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addLinkRow(_('GitHub'), 'https://github.com/AstraExt/astra-monitor', group);
         this.addLinkRow(_('GNOME Extensions page'), 'https://extensions.gnome.org/extension/6682/astra-monitor/', group);
         this.addLinkRow(_('Report a bug or suggest new feature'), 'https://github.com/AstraExt/astra-monitor/issues/new/choose', group);
-        this.addLinkRow('<span color="#FFC000">★ ' + _('Buy us a coffee') + '</span>', 'https://www.buymeacoffee.com/astra.ext', group);
-        this.addLinkRow('<span color="#FFC000">★ ' + _('Become a patron') + '</span>', 'https://www.patreon.com/AstraExt', group);
+        this.addLinkRow('<span color="#FFB000">★ ' + _('Buy us a coffee') + '</span>', 'https://www.buymeacoffee.com/astra.ext', group);
+        this.addLinkRow('<span color="#FFB000">★ ' + _('Become a patron') + '</span>', 'https://www.patreon.com/AstraExt', group);
         this.addSwitchRow(_('Debug Mode'), 'debug-mode', group);
         aboutPage.add(group);
         

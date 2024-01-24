@@ -52,7 +52,7 @@ export class MemoryMenu extends MenuBase {
         });
         
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         // Total Memory
         let label = new St.Label({text: _('Total:'), style_class: 'astra-monitor-menu-label', x_expand: true});
@@ -297,7 +297,7 @@ export class MemoryMenu extends MenuBase {
             this.topProcesses.push({ label, usage, percentage });
         }
         
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         this.createTopProcessesPopup(hoverButton);
         
@@ -401,7 +401,7 @@ export class MemoryMenu extends MenuBase {
         this.swapTotalQty = new St.Label({text: '', style_class: 'astra-monitor-menu-value', style: 'width:4em;'});
         grid.addToGrid(this.swapTotalQty);
         
-        hoverButton.add_actor(grid);
+        hoverButton.set_child(grid);
         
         this.createSwapPopup(hoverButton);
         

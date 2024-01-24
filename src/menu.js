@@ -46,7 +46,7 @@ export class MenuBase extends PopupMenu.PopupMenu {
             const boxLayout = new St.BoxLayout({
                 vertical: true
             });
-            scrollView.add_actor(boxLayout);
+            scrollView.add_child(boxLayout);
             
             this.statusMenu = new PopupMenu.PopupMenuSection();
             // @ts-ignore
@@ -54,7 +54,7 @@ export class MenuBase extends PopupMenu.PopupMenu {
             
             const scrollActor = new St.Bin({ child: scrollView });
             // @ts-ignore
-            this.statusMenu.actor.add_actor(scrollActor);
+            this.statusMenu.actor.add_child(scrollActor);
             
             this.grid = new Grid({ numCols: params.numCols || 2 });
             boxLayout.add_child(this.grid);
@@ -63,7 +63,7 @@ export class MenuBase extends PopupMenu.PopupMenu {
             this.actor.add_style_class_name('panel-menu');
             
             // @ts-ignore
-            Main.uiGroup.add_actor(this.actor);
+            Main.uiGroup.add_child(this.actor);
             // @ts-ignore
             this.actor.hide();
         }
@@ -81,7 +81,8 @@ export class MenuBase extends PopupMenu.PopupMenu {
             this.actor.add_style_class_name('panel-menu');
             
             // @ts-ignore
-            Main.uiGroup.add_actor(this.actor);
+            Main.uiGroup.add_child(this.actor);
+            
             // @ts-ignore
             this.actor.hide();
         }
