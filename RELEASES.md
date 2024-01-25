@@ -1,4 +1,4 @@
-# Astra Monitor 8 - TO BE RELEASED
+# Astra Monitor 8 - January 25 2024
 
 ### New features
 - Top Processes for Storage Menu is now available (only for GTop data source)
