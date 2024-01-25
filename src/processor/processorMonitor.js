@@ -648,6 +648,8 @@ export class ProcessorMonitor extends Monitor {
             }
             
             for(const [pid, cpuTime] of cpuTimes) {
+                seenPids.push(pid);
+                
                 const previous = this.previousPidsCpuTime.get(pid);
                 this.previousPidsCpuTime.set(pid, cpuTime);
                 
@@ -687,15 +689,12 @@ export class ProcessorMonitor extends Monitor {
                         }
                         
                         this.topProcessesCache.setProcess(process);
-                        seenPids.push(pid);
                     }
                     catch(e) {
                         continue;
                     }
                 }
                 topProcesses.push({ process, cpu: cpuUsagePercent });
-                
-                this.previousPidsCpuTime.set(pid, cpuTime);
             }
         }
         catch(e) {
