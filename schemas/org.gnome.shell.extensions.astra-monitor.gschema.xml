@@ -139,6 +139,11 @@
       <summary>CPU Header Icon Color</summary>
       <description>Set a custom color for the CPU monitor icon</description>
     </key>
+    <key name="processor-header-icon-alert-color" type="s">
+      <default>'rgba(235, 64, 52, 255)'</default>
+      <summary>Icon Alert Color</summary>
+      <description>Color of the alert icon</description>
+    </key>
     <key name="processor-header-icon-size" type="i">
       <default>18</default>
       <summary>Header Icon Size</summary>
@@ -159,6 +164,12 @@
       <default>false</default>
       <summary>CPU Header Percentage per Single Core</summary>
       <description>Set the percentage on the header of the CPU monitor to single core</description>
+    </key>
+    <key name="processor-header-percentage-icon-alert-threshold" type="i">
+      <default>0</default>
+      <summary>Percentage Icon Alert Threshold</summary>
+      <description>Threshold in percentage to show the alert icon</description>
+      <range min="0" max="100"/>
     </key>
     <key name="processor-header-graph" type="b">
       <default>true</default>
@@ -260,6 +271,11 @@
       <summary>Memory Header Icon Color</summary>
       <description>Set a custom color for the Memory monitor icon</description>
     </key>
+    <key name="memory-header-icon-alert-color" type="s">
+      <default>'rgba(235, 64, 52, 255)'</default>
+      <summary>Icon Alert Color</summary>
+      <description>Color of the alert icon</description>
+    </key>
     <key name="memory-header-icon-size" type="i">
       <default>18</default>
       <summary>Header Icon Size</summary>
@@ -275,6 +291,12 @@
       <default>false</default>
       <summary>Memory Header Percentage</summary>
       <description>Show the percentage on the header of the memory monitor</description>
+    </key>
+    <key name="memory-header-percentage-icon-alert-threshold" type="i">
+      <default>0</default>
+      <summary>Percentage Icon Alert Threshold</summary>
+      <description>Threshold in percentage to show the alert icon</description>
+      <range min="0" max="100"/>
     </key>
     <key name="memory-header-value" type="b">
       <default>false</default>
@@ -367,6 +389,11 @@
       <summary>Storage Header Icon Color</summary>
       <description>Set a custom color for the Storage monitor icon</description>
     </key>
+    <key name="storage-header-icon-alert-color" type="s">
+      <default>'rgba(235, 64, 52, 255)'</default>
+      <summary>Icon Alert Color</summary>
+      <description>Color of the alert icon</description>
+    </key>
     <key name="storage-header-icon-size" type="i">
       <default>18</default>
       <summary>Header Icon Size</summary>
@@ -382,6 +409,12 @@
       <default>false</default>
       <summary>Storage Header Use Percentage</summary>
       <description>Show the percentage of storage use on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-percentage-icon-alert-threshold" type="i">
+      <default>0</default>
+      <summary>Percentage Icon Alert Threshold</summary>
+      <description>Threshold in percentage to show the alert icon</description>
+      <range min="0" max="100"/>
     </key>
     <key name="storage-header-bars" type="b">
       <default>true</default>
@@ -469,6 +502,11 @@
       <summary>Network Header Icon Color</summary>
       <description>Set a custom color for the Network monitor icon</description>
     </key>
+    <key name="network-header-icon-alert-color" type="s">
+      <default>'rgba(235, 64, 52, 255)'</default>
+      <summary>Icon Alert Color</summary>
+      <description>Color of the alert icon</description>
+    </key>
     <key name="network-header-icon-size" type="i">
       <default>18</default>
       <summary>Header Icon Size</summary>
@@ -550,6 +588,11 @@
       <default>''</default>
       <summary>Sensors Header Icon Color</summary>
       <description>Set a custom color for the Sensors monitor icon</description>
+    </key>
+    <key name="sensors-header-icon-alert-color" type="s">
+      <default>'rgba(235, 64, 52, 255)'</default>
+      <summary>Icon Alert Color</summary>
+      <description>Color of the alert icon</description>
     </key>
     <key name="sensors-header-icon-size" type="i">
       <default>18</default>

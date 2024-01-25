@@ -136,19 +136,62 @@ export const StorageHeader = GObject.registerClass({
         };
         setIconName();
         
-        const setIconColor = () => {
-            const iconColor = Config.get_string('storage-header-icon-color');
-            if(iconColor)
-                this.icon.style = defaultStyle + 'color:' + iconColor + ';';
+        let baseColor = '';
+        let alertColor = '';
+        const alerts = new Set();
+        
+        const setIconBaseColor = () => {
+            baseColor = Config.get_string('storage-header-icon-color') || '';
+            updateIconColor();
+        };
+        const setIconAlertColor = () => {
+            alertColor = Config.get_string('storage-header-icon-alert-color') || '';
+            updateIconColor();
+        };
+        const updateIconColor = () => {
+            if(alerts.size > 0)
+                this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+            else if(baseColor)
+                this.icon.style = defaultStyle + 'color:' + baseColor + ';';
             else
                 this.icon.style = defaultStyle;
         };
-        setIconColor();
+        
+        setIconBaseColor();
+        setIconAlertColor();
+        updateIconColor();
         
         Config.bind('storage-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('storage-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::storage-header-icon-custom', setIconName.bind(this));
-        Config.connect(this.icon, 'changed::storage-header-icon-color', setIconColor.bind(this));
+        Config.connect(this.icon, 'changed::storage-header-icon-color', setIconBaseColor.bind(this));
+        Config.connect(this.icon, 'changed::storage-header-icon-alert-color', setIconAlertColor.bind(this));
+        
+        Utils.storageMonitor.listen(this.icon, 'storageUsage', () => {
+            if(!Config.get_boolean('storage-header-icon'))
+                return;
+            
+            const threshold = Config.get_int('storage-header-percentage-icon-alert-threshold') || 0;
+            if(threshold === 0)
+                return;
+            
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
+                return;
+            
+            if(usage.usePercentage < threshold) {
+                if(alerts.has('storageUsage')) {
+                    alerts.delete('storageUsage');
+                    updateIconColor();
+                }
+            }
+            else {
+                if(!alerts.has('storageUsage')) {
+                    alerts.add('storageUsage');
+                    updateIconColor();
+                }
+            }
+        });
     }
     
     buildBars() {

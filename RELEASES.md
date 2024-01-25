@@ -5,6 +5,8 @@
 - GTop support as _data source_ for Top Processes is now available in Memory Menu
 - Indicators ordering on the header is now customizable [[#37](https://github.com/AstraExt/astra-monitor/issues/37)]
 - Support for custom icon Name and Color for each header
+- Support for Icon Alerts: choose what Color the icon should be when an alert is triggered
+- Initial alert support for CPU, Memory and Storage on usage percentage [[#34](https://github.com/AstraExt/astra-monitor/issues/34)]
 - New Indicator for Memory Header: Usage Value in Bytes [[#16](https://github.com/AstraExt/astra-monitor/issues/16)] [[#34](https://github.com/AstraExt/astra-monitor/issues/34)]
 - Initial Gnome 46 support [[#38](https://github.com/AstraExt/astra-monitor/issues/38)]
 

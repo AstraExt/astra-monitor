@@ -90,19 +90,63 @@ export const MemoryHeader = GObject.registerClass({
         };
         setIconName();
         
-        const setIconColor = () => {
-            const iconColor = Config.get_string('memory-header-icon-color');
-            if(iconColor)
-                this.icon.style = defaultStyle + 'color:' + iconColor + ';';
+        let baseColor = '';
+        let alertColor = '';
+        const alerts = new Set();
+        
+        const setIconBaseColor = () => {
+            baseColor = Config.get_string('memory-header-icon-color') || '';
+            updateIconColor();
+        };
+        const setIconAlertColor = () => {
+            alertColor = Config.get_string('memory-header-icon-alert-color') || '';
+            updateIconColor();
+        };
+        const updateIconColor = () => {
+            if(alerts.size > 0)
+                this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+            else if(baseColor)
+                this.icon.style = defaultStyle + 'color:' + baseColor + ';';
             else
                 this.icon.style = defaultStyle;
         };
-        setIconColor();
+        
+        setIconBaseColor();
+        setIconAlertColor();
+        updateIconColor();
         
         Config.bind('memory-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('memory-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::memory-header-icon-custom', setIconName.bind(this));
-        Config.connect(this.icon, 'changed::memory-header-icon-color', setIconColor.bind(this));
+        Config.connect(this.icon, 'changed::memory-header-icon-color', setIconBaseColor.bind(this));
+        Config.connect(this.icon, 'changed::memory-header-icon-alert-color', setIconAlertColor.bind(this));
+        
+        Utils.memoryMonitor.listen(this.icon, 'memoryUsage', () => {
+            if(!Config.get_boolean('memory-header-icon'))
+                return;
+            
+            const threshold = Config.get_int('memory-header-percentage-icon-alert-threshold') || 0;
+            if(threshold === 0)
+                return;
+            
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            if(!usage || !usage.total || isNaN(usage.total) || !usage.used || isNaN(usage.used))
+                return;
+            
+            const perc = Math.round(usage.used / usage.total * 100);
+            if(perc < threshold) {
+                if(alerts.has('memoryUsage')) {
+                    alerts.delete('memoryUsage');
+                    updateIconColor();
+                }
+            }
+            else {
+                if(!alerts.has('memoryUsage')) {
+                    alerts.add('memoryUsage');
+                    updateIconColor();
+                }
+            }
+        });
     }
     
     buildBars() {
@@ -192,7 +236,7 @@ export const MemoryHeader = GObject.registerClass({
         });
         Config.bind('memory-header-value', this.value, 'visible', Gio.SettingsBindFlags.GET);
         
-        Utils.memoryMonitor.listen(this.percentage, 'memoryUsage', () => {
+        Utils.memoryMonitor.listen(this.value, 'memoryUsage', () => {
             if(!Config.get_boolean('memory-header-value'))
                 return;
             

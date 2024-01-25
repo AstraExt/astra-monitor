@@ -107,19 +107,62 @@ export const ProcessorHeader = GObject.registerClass({
         };
         setIconName();
         
-        const setIconColor = () => {
-            const iconColor = Config.get_string('processor-header-icon-color');
-            if(iconColor)
-                this.icon.style = defaultStyle + 'color:' + iconColor + ';';
+        let baseColor = '';
+        let alertColor = '';
+        const alerts = new Set();
+        
+        const setIconBaseColor = () => {
+            baseColor = Config.get_string('processor-header-icon-color') || '';
+            updateIconColor();
+        };
+        const setIconAlertColor = () => {
+            alertColor = Config.get_string('processor-header-icon-alert-color') || '';
+            updateIconColor();
+        };
+        const updateIconColor = () => {
+            if(alerts.size > 0)
+                this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+            else if(baseColor)
+                this.icon.style = defaultStyle + 'color:' + baseColor + ';';
             else
                 this.icon.style = defaultStyle;
         };
-        setIconColor();
+        
+        setIconBaseColor();
+        setIconAlertColor();
+        updateIconColor();
         
         Config.bind('processor-header-icon', this.icon, 'visible', Gio.SettingsBindFlags.GET);
         Config.bind('processor-header-icon-size', this.icon, 'icon_size', Gio.SettingsBindFlags.GET);
         Config.connect(this.icon, 'changed::processor-header-icon-custom', setIconName.bind(this));
-        Config.connect(this.icon, 'changed::processor-header-icon-color', setIconColor.bind(this));
+        Config.connect(this.icon, 'changed::processor-header-icon-color', setIconBaseColor.bind(this));
+        Config.connect(this.icon, 'changed::processor-header-icon-alert-color', setIconAlertColor.bind(this));
+        
+        Utils.processorMonitor.listen(this.icon, 'cpuUsage', () => {
+            if(!Config.get_boolean('processor-header-icon'))
+                return;
+            
+            const threshold = Config.get_int('processor-header-percentage-icon-alert-threshold') || 0;
+            if(threshold === 0)
+                return;
+            
+            const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
+            if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total))
+                return;
+            
+            if(cpuUsage.total < threshold) {
+                if(alerts.has('cpuUsage')) {
+                    alerts.delete('cpuUsage');
+                    updateIconColor();
+                }
+            }
+            else {
+                if(!alerts.has('cpuUsage')) {
+                    alerts.add('cpuUsage');
+                    updateIconColor();
+                }
+            }
+        });
     }
     
     buildBars() {
