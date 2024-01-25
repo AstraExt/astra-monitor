@@ -151,7 +151,7 @@
       <range min="8" max="30"/>
     </key>
     <key name="processor-header-tooltip" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>CPU Header Tooltip</summary>
       <description>Show the tooltip on the header of the CPU monitor</description>
     </key>
@@ -283,7 +283,7 @@
       <range min="8" max="30"/>
     </key>
     <key name="memory-header-tooltip" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Memory Header Tooltip</summary>
       <description>Show the tooltip on the header of the memory monitor</description>
     </key>
@@ -401,7 +401,7 @@
       <range min="8" max="30"/>
     </key>
     <key name="storage-header-tooltip" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Storage Header Tooltip</summary>
       <description>Show the tooltip on the header of the storage monitor</description>
     </key>
@@ -514,7 +514,7 @@
       <range min="8" max="30"/>
     </key>
     <key name="network-header-tooltip" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Network Header Tooltip</summary>
       <description>Show the tooltip on the header of the network monitor</description>
     </key>
@@ -601,7 +601,7 @@
       <range min="8" max="30"/>
     </key>
     <key name="sensors-header-tooltip" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Sensors Header Tooltip</summary>
       <description>Show the tooltip on the header of the sensors monitor</description>
     </key>

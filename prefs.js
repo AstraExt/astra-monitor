@@ -307,10 +307,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'memory-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
         
         let choicesPanel = [
-            {value: 'total-free-buffers-cached', text: _('Total - Free - Buffers - Cached')},
-            {value: 'total-free', text: _('Total - Free')},
-            {value: 'total-available', text: _('Total - Available')},
-            {value: 'active', text: _('Active')},
+            {value: 'total-free-buffers-cached', text: _('Used = Total - Free - Buffers - Cached')},
+            {value: 'total-free', text: _('Used = Total - Free')},
+            {value: 'total-available', text: _('Used = Total - Available')},
+            {value: 'active', text: _('Used = Active')},
         ];
         this.addComboRow(_('Used Memory'), choicesPanel, 'memory-used', group, 'string');
         
