@@ -649,7 +649,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow(this.tab + _('Source'), choicesSource, 'sensors-header-sensor1', sensor1Section, 'json');
         this.addSpinRow({
             title: this.tab + _('Value Digits'),
-            subtitle:  this.tab + _('Set -1 to auto. Value is number of digits after the decimal point.'),
+            subtitle:  this.tab + _('Set -1 to auto. Number of digits after the decimal point.'),
         }, 'sensors-header-sensor1-digits', sensor1Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const sensor2Section = this.addExpanderRow(_('Sensor 2'), group);
@@ -657,7 +657,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow(this.tab + _('Source'), choicesSource, 'sensors-header-sensor2', sensor2Section, 'json');
         this.addSpinRow({
             title: this.tab + _('Value Digits'),
-            subtitle:  this.tab + _('Set -1 to auto. Value is number of digits after the decimal point.'),
+            subtitle:  this.tab + _('Set -1 to auto. Number of digits after the decimal point.'),
         }, 'sensors-header-sensor2-digits', sensor2Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         sensorsPage.add(group);
         

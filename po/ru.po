@@ -856,7 +856,7 @@ msgid "Value Digits"
 msgstr ""
 
 #: prefs.js:652 prefs.js:660
-msgid "Set 0 to disable. Value is number of digits after the decimal point."
+msgid "Set 0 to disable. Number of digits after the decimal point."
 msgstr ""
 
 #: prefs.js:655
