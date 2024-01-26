@@ -195,12 +195,14 @@ export const SensorsHeader = GObject.registerClass({
             }
             
             const sensor1Source = Config.get_json('sensors-header-sensor1');
-            this.sensor1.text = this.applySource(sensorsData, sensor1Source);
+            const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
+            this.sensor1.text = this.applySource(sensorsData, sensor1Source, sensor1Digits);
             const sensor1w = this.sensor1.get_preferred_width(-1);
             
             if(Config.get_boolean('sensors-header-sensor2-show')) {
                 const sensor2Source = Config.get_json('sensors-header-sensor2');
-                this.sensor2.text = this.applySource(sensorsData, sensor2Source);
+                const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
+                this.sensor2.text = this.applySource(sensorsData, sensor2Source, sensor2Digits);
                 const sensor2w = this.sensor2.get_preferred_width(-1);
                 this.fixContainerWidth(Math.max(sensor1w?sensor1w[1]:0, sensor2w?sensor2w[1]:0));
             }
@@ -210,7 +212,7 @@ export const SensorsHeader = GObject.registerClass({
         });
     }
     
-    applySource(sensorsData, sensorSource) {
+    applySource(sensorsData, sensorSource, sensorDigits = -1) {
         if(!sensorSource || !sensorSource.service || !sensorsData[sensorSource.service])
             return '-';
         
@@ -239,8 +241,13 @@ export const SensorsHeader = GObject.registerClass({
                 value = Utils.celsiusToFahrenheit(value)
                 unit = '°F';
             }
-            if(!Utils.isIntOrIntString(value) && Utils.isNumeric(value))
-                value = value.toFixed(1);
+            
+            if(Utils.isNumeric(value)) {
+                if(sensorDigits >= 0)
+                    value = value.toFixed(sensorDigits);
+                else if(!Utils.isIntOrIntString(value))
+                    value = value.toFixed(1);
+            }
             return value + ' ' + unit;
         }
         if(!Utils.isIntOrIntString(value) && Utils.isNumeric(value))
@@ -300,11 +307,13 @@ export const SensorsHeader = GObject.registerClass({
             }
             
             const sensor1Source = Config.get_json('sensors-header-sensor1');
-            const sensor1 = this.applySource(sensorsData, sensor1Source);
+            const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
+            const sensor1 = this.applySource(sensorsData, sensor1Source, sensor1Digits);
             
             if(Config.get_boolean('sensors-header-sensor2-show')) {
                 const sensor2Source = Config.get_json('sensors-header-sensor2');
-                const sensor2 = this.applySource(sensorsData, sensor2Source);
+                const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
+                const sensor2 = this.applySource(sensorsData, sensor2Source, sensor2Digits);
                 this.tooltipItem.label.text = `${sensor1} | ${sensor2}`;
             }
             else {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-25 19:11+0100\n"
+"POT-Creation-Date: 2024-01-26 15:47+0100\n"
 "PO-Revision-Date: 2024-01-22 12:09+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -485,7 +485,7 @@ msgid "Processors"
 msgstr "Процессоры"
 
 #: prefs.js:217 prefs.js:306 prefs.js:384 prefs.js:484 prefs.js:605
-#: prefs.js:648 prefs.js:652
+#: prefs.js:648 prefs.js:656
 msgid "Show"
 msgstr "Показать"
 
@@ -696,7 +696,7 @@ msgstr "Показать панель использования хранили�
 
 #: prefs.js:360
 #, fuzzy
-msgid "Usage Value Number Max Figures"
+msgid "Usage Value Max Number of Figures"
 msgstr "Максимальное значение скорости ввода/вывода"
 
 #: prefs.js:388 prefs.js:488
@@ -789,7 +789,7 @@ msgid "Show IO Speed"
 msgstr "Показать скорость ввода/вывода"
 
 #: prefs.js:472 prefs.js:593
-msgid "IO Speed Number Max Figures"
+msgid "IO Speed Max Number of Figures"
 msgstr "Максимальное значение скорости ввода/вывода"
 
 #: prefs.js:473 prefs.js:594
@@ -847,47 +847,59 @@ msgstr ""
 msgid "Sensor 1"
 msgstr "Датчик 1"
 
-#: prefs.js:649 prefs.js:653
+#: prefs.js:649 prefs.js:657
 msgid "Source"
 msgstr "Источник"
 
-#: prefs.js:651
+#: prefs.js:651 prefs.js:659
+msgid "Value Digits"
+msgstr ""
+
+#: prefs.js:652 prefs.js:660
+msgid "Set 0 to disable. Value is number of digits after the decimal point."
+msgstr ""
+
+#: prefs.js:655
 msgid "Sensor 2"
 msgstr "Датчик 2"
 
-#: prefs.js:662
+#: prefs.js:670
 msgid "Info"
 msgstr "Информация"
 
-#: prefs.js:672
+#: prefs.js:680
 msgid "Version"
 msgstr "Версия"
 
-#: prefs.js:673
+#: prefs.js:681
 msgid "Changelog"
 msgstr "Изменения"
 
-#: prefs.js:674
+#: prefs.js:682
 msgid "GitHub"
 msgstr "GitHub"
 
-#: prefs.js:675
+#: prefs.js:683
 msgid "GNOME Extensions page"
 msgstr "Страница GNOME Extensions"
 
-#: prefs.js:676
+#: prefs.js:684
 msgid "Report a bug or suggest new feature"
 msgstr "Сообщить об ошибке или предложить новую функцию"
 
-#: prefs.js:677
+#: prefs.js:685
+msgid "Support us on Ko-Fi"
+msgstr ""
+
+#: prefs.js:686
 msgid "Buy us a coffee"
 msgstr "Угостить нас кофе"
 
-#: prefs.js:678
+#: prefs.js:687
 msgid "Become a patron"
 msgstr "Стать меценатом"
 
-#: prefs.js:679
+#: prefs.js:688
 msgid "Debug Mode"
 msgstr "Режим отладки"
 

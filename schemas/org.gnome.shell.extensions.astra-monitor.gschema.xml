@@ -615,6 +615,12 @@
       <summary>Sensors Header Sensor 1</summary>
       <description>First sensor to show on the header of the sensors monitor</description>
     </key>
+    <key name="sensors-header-sensor1-digits" type="i">
+      <default>-1</default>
+      <summary>Sensors Header Sensor 1 Digits</summary>
+      <description>First sensor digits to show on the header of the sensors monitor</description>
+      <range min="-1" max="3"/>
+    </key>
     <key name="sensors-header-sensor2-show" type="b">
       <default>false</default>
       <summary>Sensors Header Sensor 2</summary>
@@ -624,6 +630,12 @@
       <default>'""'</default>
       <summary>Sensors Header Sensor 2</summary>
       <description>Second sensor to show on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-sensor2-digits" type="i">
+      <default>-1</default>
+      <summary>Sensors Header Sensor 2 Digits</summary>
+      <description>Second sensor digits to show on the header of the sensors monitor</description>
+      <range min="-1" max="3"/>
     </key>
   </schema>
 </schemalist>

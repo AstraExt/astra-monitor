@@ -357,7 +357,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const valueSection = this.addExpanderRow(_('Usage Value'), group);
         this.addSwitchRow(this.tab + _('Show Usage Value'), 'memory-header-value', valueSection);
-        this.addSpinRow({title: this.tab + _('Usage Value Number Max Figures')}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSpinRow({title: this.tab + _('Usage Value Max Number of Figures')}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
         
         const graphSection = this.addExpanderRow(_('History Graph'), group);
         this.addSwitchRow(this.tab + _('Show History Graph'), 'memory-header-graph', graphSection);
@@ -469,7 +469,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Show IO History Graph'), 'storage-header-graph', ioSection);  
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'storage-header-io', ioSection);  
-        this.addSpinRow({title: this.tab + _('IO Speed Number Max Figures')}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSpinRow({title: this.tab + _('IO Speed Max Number of Figures')}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
         this.addSpinRow({title: this.tab + _('IO Speed Threshold'), subtitle: this.tab + _('in kB/s')}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
         
         storagePage.add(group);
@@ -590,7 +590,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Show IO History Graph'), 'network-header-graph', ioSection); 
         this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
         this.addSwitchRow(this.tab + _('Show IO Speed'), 'network-header-io', ioSection);
-        this.addSpinRow({title: this.tab + _('IO Speed Number Max Figures')}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSpinRow({title: this.tab + _('IO Speed Max Number of Figures')}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
         this.addSpinRow({title: this.tab + _('IO Speed Threshold'), subtitle: this.tab + _('in kB/s')}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
 
         networkPage.add(group);
@@ -647,10 +647,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const sensor1Section = this.addExpanderRow(_('Sensor 1'), group);
         this.addSwitchRow(this.tab + _('Show'), 'sensors-header-sensor1-show', sensor1Section);
         this.addComboRow(this.tab + _('Source'), choicesSource, 'sensors-header-sensor1', sensor1Section, 'json');
+        this.addSpinRow({
+            title: this.tab + _('Value Digits'),
+            subtitle:  this.tab + _('Set -1 to auto. Value is number of digits after the decimal point.'),
+        }, 'sensors-header-sensor1-digits', sensor1Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const sensor2Section = this.addExpanderRow(_('Sensor 2'), group);
         this.addSwitchRow(this.tab + _('Show'), 'sensors-header-sensor2-show', sensor2Section);
         this.addComboRow(this.tab + _('Source'), choicesSource, 'sensors-header-sensor2', sensor2Section, 'json');
+        this.addSpinRow({
+            title: this.tab + _('Value Digits'),
+            subtitle:  this.tab + _('Set -1 to auto. Value is number of digits after the decimal point.'),
+        }, 'sensors-header-sensor2-digits', sensor2Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         sensorsPage.add(group);
         
         return sensorsPage;

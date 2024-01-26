@@ -56,7 +56,7 @@
 ### New features
 - New option for Storage Header: an indicator that shows the global read and write speed through a pair of bars [[#14](https://github.com/AstraExt/astra-monitor/issues/14)]
 - Graph Width customization: now you can choose the width of the header graphs individually
-- Storage and Network Header IO Speed Number Max Figures: now you can choose the maximum number of figures to show in the IO Speed number
+- Storage and Network Header IO Speed Max Number of Figures: now you can choose the maximum number of figures to show in the IO Speed number
 - Header Height and Margis customization: as experimental feature, you can now change the height of the header's button and its margins to better fit your desktop environment's theme [[#7](https://github.com/AstraExt/astra-monitor/issues/7)]
 - Icon size customization: as experimental feature, now you can choose the size of the icons in the header
 - Preference panel reorganized to better fit more options and to organize them in a more logical way
