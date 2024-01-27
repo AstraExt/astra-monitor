@@ -4,7 +4,7 @@
 - Optionally choose the number of digits for sensors header values [[#41](https://github.com/AstraExt/astra-monitor/issues/41)]
 
 ### Bug fixes
-- Fixed graph rendering in Gnome 46 alpha [[#40](https://github.com/AstraExt/astra-monitor/issues/40)]
+- Fixed graph and layout rendering in Gnome 46 alpha [[#40](https://github.com/AstraExt/astra-monitor/issues/40)]
 
 # Astra Monitor 8 - January 25 2024
 

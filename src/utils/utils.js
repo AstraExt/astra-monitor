@@ -1410,8 +1410,6 @@ export default class Utils {
      * @returns {{ red: number, green: number, blue: number, alpha: number }}
      */
     static parseRGBA(colorString) {
-        Utils.log('colorString: ' + JSON.stringify(colorString));
-        
         let color = { red: 0, green: 0, blue: 0, alpha: 1 };
     
         if (colorString.startsWith('#')) {
@@ -1447,7 +1445,6 @@ export default class Utils {
         } else {
             throw new Error('Invalid color format');
         }
-        Utils.log('color: ' + JSON.stringify(color));
         return color;
     }
 }
