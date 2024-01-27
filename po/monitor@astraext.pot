@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 15:47+0100\n"
+"POT-Creation-Date: 2024-01-27 14:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -824,7 +824,7 @@ msgid "Value Digits"
 msgstr ""
 
 #: prefs.js:652 prefs.js:660
-msgid "Set 0 to disable. Number of digits after the decimal point."
+msgid "Set -1 to auto. Number of digits after the decimal point."
 msgstr ""
 
 #: prefs.js:655
