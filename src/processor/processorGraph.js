@@ -40,14 +40,14 @@ export const ProcessorGraph = GObject.registerClass({
     
     setStyle() {
         this.colors = [
-            Clutter.Color.from_string('rgb(29,172,214)'),
-            Clutter.Color.from_string('rgb(214,29,29)')
+            Clutter.Color.from_string('rgb(29,172,214)')[1],
+            Clutter.Color.from_string('rgb(214,29,29)')[1]
         ];
         
         let bg = 'rgba(0,0,0,0.2)';
         if(Utils.themeStyle() === 'light')
             bg = 'rgba(255,255,255,0.2)';
-        this.bgColor = Clutter.Color.from_string(bg);
+        this.bgColor = Clutter.Color.from_string(bg)[1];
     }
     
     buildHistoryGrid() {
@@ -75,7 +75,7 @@ export const ProcessorGraph = GObject.registerClass({
             
         this.setupClipping(ctx, width, height, 2);
         
-        Clutter.cairo_set_source_color(ctx, this.bgColor[1]);
+        ctx.setSourceRGBA(this.bgColor.red / 255.0, this.bgColor.green / 255.0, this.bgColor.blue / 255.0, this.bgColor.alpha / 255.0);
         ctx.rectangle(0, 0, width, height);
         ctx.fill();
         
@@ -85,17 +85,17 @@ export const ProcessorGraph = GObject.registerClass({
             
             if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                 // Draw system usage graph
-                Clutter.cairo_set_source_color(ctx, this.colors[1][1]);
+                ctx.setSourceRGBA(this.colors[1].red / 255.0, this.colors[1].green / 255.0, this.colors[1].blue / 255.0, this.colors[1].alpha / 255.0);
                 const systemFunc = (node) => node.total / 100.0;
                 super.drawGraph(ctx, this.history, systemFunc, baseX, 0, height, pointSpacing);
                 
                 // Draw user usage graph on top
-                Clutter.cairo_set_source_color(ctx, this.colors[0][1]);
+                ctx.setSourceRGBA(this.colors[0].red / 255.0, this.colors[0].green / 255.0, this.colors[0].blue / 255.0, this.colors[0].alpha / 255.0);
                 const userFunc = (node) => node.user / 100.0;
                 super.drawGraph(ctx, this.history, userFunc, baseX, 0, height, pointSpacing);
             } else {
                 // Draw single graph for total usage
-                Clutter.cairo_set_source_color(ctx, this.colors[0][1]);
+                ctx.setSourceRGBA(this.colors[0].red / 255.0, this.colors[0].green / 255.0, this.colors[0].blue / 255.0, this.colors[0].alpha / 255.0);
                 const totalFunc = (node) => node.total / 100.0;
                 this.drawGraph(ctx, this.history, totalFunc, baseX, 0, height, pointSpacing);
             }

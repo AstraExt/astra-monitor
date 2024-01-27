@@ -38,19 +38,19 @@ export const NetworkGraph = GObject.registerClass({
     
     setStyle() {
         this.colors = [
-            Clutter.Color.from_string('rgb(29,172,214)'),
-            Clutter.Color.from_string('rgb(214,29,29)')
+            Clutter.Color.from_string('rgb(29,172,214)')[1],
+            Clutter.Color.from_string('rgb(214,29,29)')[1]
         ];
         
         let line = 'rgba(255,255,255,0.2)';
         if(Utils.themeStyle() === 'light')
             line = 'rgba(0,0,0,0.8)';
-        this.midLineColor = Clutter.Color.from_string(line);
+        this.midLineColor = Clutter.Color.from_string(line)[1];
         
         let bg = 'rgba(0,0,0,0.2)';
         if(Utils.themeStyle() === 'light')
             bg = 'rgba(255,255,255,0.2)';
-        this.bgColor = Clutter.Color.from_string(bg);
+        this.bgColor = Clutter.Color.from_string(bg)[1];
     }
     
     buildHistoryGrid() {
@@ -102,7 +102,7 @@ export const NetworkGraph = GObject.registerClass({
             
         this.setupClipping(ctx, width, height, 2);
         
-        Clutter.cairo_set_source_color(ctx, this.bgColor[1]);
+        ctx.setSourceRGBA(this.bgColor.red / 255, this.bgColor.green / 255, this.bgColor.blue / 255, this.bgColor.alpha / 255);
         ctx.rectangle(0, 0, width, height);
         ctx.fill();
         
@@ -117,18 +117,17 @@ export const NetworkGraph = GObject.registerClass({
             
             this.refreshMaxSpeed(maxUpload, maxDownload);
             
-            Clutter.cairo_set_source_color(ctx, this.colors[0][1]);
+            ctx.setSourceRGBA(this.colors[0].red / 255, this.colors[0].green / 255, this.colors[0].blue / 255, this.colors[0].alpha / 255);
             const uploadFunc = (node) => node.bytesUploadedPerSec / maxUpload;
             super.drawGraph(ctx, slicedHistory, uploadFunc, baseX, 0, height/2, pointSpacing);
             
-            Clutter.cairo_set_source_color(ctx, this.colors[1][1]);
+            ctx.setSourceRGBA(this.colors[1].red / 255, this.colors[1].green / 255, this.colors[1].blue / 255, this.colors[1].alpha / 255);
             const downloadFunc = (node) => node.bytesDownloadedPerSec / maxDownload;
             this.drawGraph(ctx, slicedHistory, downloadFunc, baseX, height/2, height/2, pointSpacing);
         }
         
         //draw a line at 50%
-        const color = this.midLineColor[1];
-        Clutter.cairo_set_source_color(ctx, color);
+        ctx.setSourceRGBA(this.midLineColor.red / 255, this.midLineColor.green / 255, this.midLineColor.blue / 255, this.midLineColor.alpha / 255);
         
         if(this.mini) {
             ctx.moveTo(0, height/2);
