@@ -22,8 +22,6 @@ import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
-import Utils from './utils/utils.js';
-
 export const Grid = GObject.registerClass({
     
 }, class GridBase extends St.Widget {
@@ -56,8 +54,12 @@ export const Grid = GObject.registerClass({
             data.style = params.style;
         if(params.x_expand)
             data.x_expand = params.x_expand;
+        else
+            data.x_expand = true;
         if(params.y_expand)
             data.y_expand = params.y_expand;
+        else
+            data.y_expand = true;
         super(data);
         
         this.lm = this.layout_manager;

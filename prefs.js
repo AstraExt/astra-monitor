@@ -242,7 +242,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Set icon name (ie: \'cpu-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
         }, 'processor-header-icon-custom', iconSection, '');
         this.addColorRow({ title: this.tab + _('Icon Color') }, 'processor-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'processor-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 255)');
+        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'processor-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
@@ -338,7 +338,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Set icon name (ie: \'memory-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
         }, 'memory-header-icon-custom', iconSection, '');
         this.addColorRow({ title: this.tab + _('Icon Color') }, 'memory-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'memory-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 255)');
+        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'memory-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
@@ -446,7 +446,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Set icon name (ie: \'drive-harddisk-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
         }, 'storage-header-icon-custom', iconSection, '');
         this.addColorRow({ title: this.tab + _('Icon Color') }, 'storage-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'storage-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 255)');
+        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'storage-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
@@ -575,7 +575,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Set icon name (ie: \'network-wired-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
         }, 'network-header-icon-custom', iconSection, '');
         this.addColorRow({ title: this.tab + _('Icon Color') }, 'network-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'network-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 255)');
+        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'network-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
@@ -625,7 +625,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  this.tab + _('Set icon name (ie: \'temperature-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
         }, 'sensors-header-icon-custom', iconSection, '');
         this.addColorRow({ title: this.tab + _('Icon Color') }, 'sensors-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'sensors-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 255)');
+        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'sensors-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
             title: this.tab + _('Icon Size'),
             subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),

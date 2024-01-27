@@ -1404,4 +1404,50 @@ export default class Utils {
         
         return devices;
     }
+    
+    /**
+     * @param {string} colorString 
+     * @returns {{ red: number, green: number, blue: number, alpha: number }}
+     */
+    static parseRGBA(colorString) {
+        Utils.log('colorString: ' + JSON.stringify(colorString));
+        
+        let color = { red: 0, green: 0, blue: 0, alpha: 1 };
+    
+        if (colorString.startsWith('#')) {
+            colorString = colorString.substring(1);
+            if (colorString.length === 3) {
+                colorString = colorString.split('').map(char => char + char).join('');
+            }
+            if (colorString.length === 6 || colorString.length === 8) {
+                color.red = parseInt(colorString.substring(0, 2), 16) / 255;
+                color.green = parseInt(colorString.substring(2, 4), 16) / 255;
+                color.blue = parseInt(colorString.substring(4, 6), 16) / 255;
+                if (colorString.length === 8) {
+                    color.alpha = parseInt(colorString.substring(6, 8), 16) / 255;
+                }
+            } else {
+                throw new Error('Invalid hex color format');
+            }
+        } else if (colorString.toLowerCase().startsWith('rgb')) {
+            let values = colorString.match(/\d+(\.\d+)?/g).map(Number);
+            if (values.length === 3 || values.length === 4) {
+                color.red = values[0] / 255;
+                color.green = values[1] / 255;
+                color.blue = values[2] / 255;
+                if (values.length === 4) {
+                    color.alpha = values[3]; // Assuming the alpha value is already between 0 and 1
+                }
+                if (values.some((value, index) => (index < 3 && (value < 0 || value > 255)) || (index === 3 && (value < 0 || value > 1)))) {
+                    throw new Error('RGB values must be between 0 and 255, and alpha value must be between 0 and 1');
+                }
+            } else {
+                throw new Error('Invalid RGB(A) format');
+            }
+        } else {
+            throw new Error('Invalid color format');
+        }
+        Utils.log('color: ' + JSON.stringify(color));
+        return color;
+    }
 }

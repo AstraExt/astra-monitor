@@ -140,7 +140,7 @@
       <description>Set a custom color for the CPU monitor icon</description>
     </key>
     <key name="processor-header-icon-alert-color" type="s">
-      <default>'rgba(235, 64, 52, 255)'</default>
+      <default>'rgba(235, 64, 52, 1)'</default>
       <summary>Icon Alert Color</summary>
       <description>Color of the alert icon</description>
     </key>
@@ -272,7 +272,7 @@
       <description>Set a custom color for the Memory monitor icon</description>
     </key>
     <key name="memory-header-icon-alert-color" type="s">
-      <default>'rgba(235, 64, 52, 255)'</default>
+      <default>'rgba(235, 64, 52, 1)'</default>
       <summary>Icon Alert Color</summary>
       <description>Color of the alert icon</description>
     </key>
@@ -390,7 +390,7 @@
       <description>Set a custom color for the Storage monitor icon</description>
     </key>
     <key name="storage-header-icon-alert-color" type="s">
-      <default>'rgba(235, 64, 52, 255)'</default>
+      <default>'rgba(235, 64, 52, 1)'</default>
       <summary>Icon Alert Color</summary>
       <description>Color of the alert icon</description>
     </key>
@@ -503,7 +503,7 @@
       <description>Set a custom color for the Network monitor icon</description>
     </key>
     <key name="network-header-icon-alert-color" type="s">
-      <default>'rgba(235, 64, 52, 255)'</default>
+      <default>'rgba(235, 64, 52, 1)'</default>
       <summary>Icon Alert Color</summary>
       <description>Color of the alert icon</description>
     </key>
@@ -590,7 +590,7 @@
       <description>Set a custom color for the Sensors monitor icon</description>
     </key>
     <key name="sensors-header-icon-alert-color" type="s">
-      <default>'rgba(235, 64, 52, 255)'</default>
+      <default>'rgba(235, 64, 52, 1)'</default>
       <summary>Icon Alert Color</summary>
       <description>Color of the alert icon</description>
     </key>

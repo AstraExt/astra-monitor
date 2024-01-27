@@ -786,8 +786,6 @@ export class MemoryMenu extends MenuBase {
                 
                 if(this.memorySwapPopup) {
                     this.memorySwapPopup['totalQtyLabel'].text = '';
-                    this.memorySwapPopup['allocatedQtyLabel'].text = '';
-                    this.memorySwapPopup['allocatedPercLabel'].text = '';
                     this.memorySwapPopup['usedQtyLabel'].text = '';
                     this.memorySwapPopup['usedPercLabel'].text = '';
                     this.memorySwapPopup['freeQtyLabel'].text = '';
