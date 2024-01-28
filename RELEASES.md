@@ -5,6 +5,8 @@
 
 ### Bug fixes
 - Fixed graph and layout rendering in Gnome 46 alpha [[#40](https://github.com/AstraExt/astra-monitor/issues/40)]
+- Fixed labels rendering for Dash To Panel and narrow panels [[#30](https://github.com/AstraExt/astra-monitor/issues/30)] [[#42](https://github.com/AstraExt/astra-monitor/issues/42)]
+- Fixed sensors list column split when the list is too long [[#43](https://github.com/AstraExt/astra-monitor/issues/43)]
 
 # Astra Monitor 8 - January 25 2024
 

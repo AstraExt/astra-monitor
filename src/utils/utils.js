@@ -1,5 +1,7 @@
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import Mtk from 'gi://Mtk';
+
 import Config from '../config.js';
 
 export default class Utils {
@@ -1446,5 +1448,37 @@ export default class Utils {
             throw new Error('Invalid color format');
         }
         return color;
+    }
+    
+    /**
+     * 
+     * @param {Map<string[]>} valueTree 
+     */
+    static valueTreeExtimatedHeight(valueTree) {
+        let length = valueTree.size;
+        for(const value of valueTree.values())
+            length += value.length;
+        return length *= 20;
+    }
+    
+    /**
+     * 
+     * @param {import('@girs/clutter-12').ActorBox} actorBox 
+     * @returns {{width: number, height: number}}
+     */
+    static getMonitorSize(actorBox) {
+        const display = global.display;
+        // @ts-ignore
+        let rect = new Mtk.Rectangle({
+            x: actorBox.x1,
+            y:actorBox.y1,
+            width: actorBox.x2 - actorBox.x1,
+            height: actorBox.y2 - actorBox.y1
+        });
+        let monitorIndex = display.get_monitor_index_for_rect(rect);
+        if(monitorIndex === -1)
+            monitorIndex = display.get_primary_monitor();
+        let geometry =  display.get_monitor_geometry(monitorIndex);
+        return {width: geometry.width, height: geometry.height};
     }
 }

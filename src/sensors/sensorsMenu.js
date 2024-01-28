@@ -140,21 +140,37 @@ export class SensorsMenu extends MenuBase {
         //{
             const popup = new MenuBase(container, 0.05, St.Side.RIGHT);
             
+            const valueTreeExtimatedHeight = Utils.valueTreeExtimatedHeight(valueTree);
+            let actorBox = popup.box.get_allocation_box();
+            let monitorSize = Utils.getMonitorSize(actorBox);
+            
+            let cols = 1;
+            if(valueTreeExtimatedHeight > monitorSize.height * 0.8)
+                cols = 2;
+            
             const popupGrid = new Grid({
-                numCols: 2,
+                numCols: cols*2,
                 styleClass: 'astra-monitor-menu-subgrid',
                 x_expand: true,
             });
             
             const categories = new Map();
             
+            let num = 0;
             for(const [categoryName, category] of valueTree.entries()) {
+                let style = '';
+                if(cols === 2) {
+                    if(num % 2 === 0)
+                        style = 'margin-right:1em;';
+                }
+                
                 const categoryGrid = new Grid({
                     numCols: 3,
                     styleClass: 'astra-monitor-menu-subgrid',
+                    style: style,
                     x_expand: true,
                 });
-                 
+                
                 const categoryLabel = new St.Label({
                     text: '',
                     style_class: 'astra-monitor-menu-sensors-category',
@@ -188,6 +204,7 @@ export class SensorsMenu extends MenuBase {
                     categoryGrid.addToGrid(value);
                     
                     values.set(valueId, { icon, name, value });
+                    num++;
                 }
                 popupGrid.addToGrid(categoryGrid, 2);
                 

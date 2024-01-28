@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 14:02+0100\n"
+"POT-Creation-Date: 2024-01-28 16:14+0100\n"
 "PO-Revision-Date: 2024-01-22 12:09+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -20,134 +20,134 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: src/processor/processorMenu.js:42 prefs.js:276
+#: src/processor/processorMenu.js:41 prefs.js:276
 msgid "CPU"
 msgstr "ЦП"
 
-#: src/processor/processorMenu.js:115
+#: src/processor/processorMenu.js:103
 msgid "CPU info"
 msgstr "Информация о ЦП"
 
-#: src/processor/processorMenu.js:202 src/memory/memoryMenu.js:58
+#: src/processor/processorMenu.js:190 src/memory/memoryMenu.js:58
 #: src/memory/memoryMenu.js:398
 msgid "Total:"
 msgstr "Всего:"
 
-#: src/processor/processorMenu.js:208
+#: src/processor/processorMenu.js:196
 msgid "User:"
 msgstr "Пользователь:"
 
-#: src/processor/processorMenu.js:214
+#: src/processor/processorMenu.js:202
 msgid "System:"
 msgstr "Система:"
 
-#: src/processor/processorMenu.js:245
+#: src/processor/processorMenu.js:233
 msgid "CPU Category Usage Raw Info"
 msgstr "Информация о категории использования ЦП"
 
-#: src/processor/processorMenu.js:248
+#: src/processor/processorMenu.js:236
 msgid "User"
 msgstr "Пользователь"
 
-#: src/processor/processorMenu.js:256
+#: src/processor/processorMenu.js:244
 msgid "Nice"
 msgstr "Уступчивость"
 
-#: src/processor/processorMenu.js:264
+#: src/processor/processorMenu.js:252
 msgid "System"
 msgstr "Система"
 
-#: src/processor/processorMenu.js:272
+#: src/processor/processorMenu.js:260
 msgid "Idle"
 msgstr "Бездействие"
 
-#: src/processor/processorMenu.js:280
+#: src/processor/processorMenu.js:268
 msgid "I/O wait"
 msgstr "Ожидание ввода/вывода"
 
-#: src/processor/processorMenu.js:288
+#: src/processor/processorMenu.js:276
 msgid "IRQ"
 msgstr "Прерывание"
 
-#: src/processor/processorMenu.js:296
+#: src/processor/processorMenu.js:284
 msgid "Soft IRQ"
 msgstr "Программное прерывание"
 
-#: src/processor/processorMenu.js:304
+#: src/processor/processorMenu.js:292
 msgid "Steal"
 msgstr "Steal"
 
-#: src/processor/processorMenu.js:375
+#: src/processor/processorMenu.js:363
 msgid "CPU Cores Usage Info"
 msgstr "Информация об использовании ядер ЦП"
 
-#: src/processor/processorMenu.js:417
+#: src/processor/processorMenu.js:405
 msgid "GHz"
 msgstr "ГГц"
 
-#: src/processor/processorMenu.js:434 src/processor/processorMenu.js:488
+#: src/processor/processorMenu.js:422 src/processor/processorMenu.js:476
 #: src/storage/storageMenu.js:110 src/storage/storageMenu.js:224
 #: src/memory/memoryMenu.js:262 src/memory/memoryMenu.js:320
 msgid "Top processes"
 msgstr "Наибольшие процессы"
 
-#: src/processor/processorMenu.js:520 prefs.js:281
+#: src/processor/processorMenu.js:508 prefs.js:281
 msgid "GPU"
 msgstr "ГП"
 
-#: src/processor/processorMenu.js:532
+#: src/processor/processorMenu.js:520
 msgid "No GPU found"
 msgstr "ГП не найден"
 
-#: src/processor/processorMenu.js:545
+#: src/processor/processorMenu.js:533
 msgid "GPUs"
 msgstr "ГП"
 
-#: src/processor/processorMenu.js:602
+#: src/processor/processorMenu.js:590
 msgid "GPU info"
 msgstr "Информация о ГП"
 
-#: src/processor/processorMenu.js:610
+#: src/processor/processorMenu.js:598
 msgid "Name"
 msgstr "Название"
 
-#: src/processor/processorMenu.js:618
+#: src/processor/processorMenu.js:606
 msgid "Subsystem"
 msgstr "Подсистема"
 
-#: src/processor/processorMenu.js:629
+#: src/processor/processorMenu.js:617
 msgid "Vendor"
 msgstr "Производитель"
 
-#: src/processor/processorMenu.js:638
+#: src/processor/processorMenu.js:626
 msgid "Vendor ID"
 msgstr "ID производителя"
 
-#: src/processor/processorMenu.js:648
+#: src/processor/processorMenu.js:636
 msgid "Product ID"
 msgstr "ID товара"
 
-#: src/processor/processorMenu.js:657
+#: src/processor/processorMenu.js:645
 msgid "Domain"
 msgstr "Домен"
 
-#: src/processor/processorMenu.js:665
+#: src/processor/processorMenu.js:653
 msgid "Bus"
 msgstr "Шина"
 
-#: src/processor/processorMenu.js:673
+#: src/processor/processorMenu.js:661
 msgid "Slot"
 msgstr "Слот"
 
-#: src/processor/processorMenu.js:682
+#: src/processor/processorMenu.js:670
 msgid "Drivers"
 msgstr "Драйвера"
 
-#: src/processor/processorMenu.js:692
+#: src/processor/processorMenu.js:680
 msgid "Modules"
 msgstr "Модули"
 
-#: src/processor/processorMenu.js:704
+#: src/processor/processorMenu.js:692
 msgid "System uptime"
 msgstr "Время работы системы"
 

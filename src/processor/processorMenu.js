@@ -20,7 +20,6 @@
 
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
-import Mtk from 'gi://Mtk';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -74,23 +73,12 @@ export class ProcessorMenu extends MenuBase {
             if(this.cpuInfoPopup) {
                 this.cpuInfoPopup.open(true);
                 
-                const display = global.display;
                 let actorBox = this.cpuInfoPopup.box.get_allocation_box();
-                // @ts-ignore
-                let rect = new Mtk.Rectangle({
-                    x: actorBox.x1,
-                    y:actorBox.y1,
-                    width: actorBox.x2 - actorBox.x1,
-                    height: actorBox.y2 - actorBox.y1
-                });
-                let monitorIndex = display.get_monitor_index_for_rect(rect);
-                if(monitorIndex === -1)
-                    monitorIndex = display.get_primary_monitor();
-                let geometry = display.get_monitor_geometry(monitorIndex);
+                let monitorSize = Utils.getMonitorSize(actorBox);
                 
                 const height = this.cpuInfoPopup.box.get_preferred_height(-1)[1];
                 
-                if(height > geometry.height * 0.8) {
+                if(height > monitorSize.height * 0.8) {
                     for(const { key, value, reference } of this.cpuInfoPopup['hideable']) {
                         key.visible = false;
                         value.visible = false;
