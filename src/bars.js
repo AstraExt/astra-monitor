@@ -171,6 +171,9 @@ export const BarsBase = GObject.registerClass({
      * @param {{color: number, value: number}[][]} values 
      */
     updateBars(values) {
+        if(!this.get_stage())
+            return;
+        
         let [width, height] = this.get_size();
         if(this.initialWidth && width > this.initialWidth)
             width = this.initialWidth;

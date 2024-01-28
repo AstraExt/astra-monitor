@@ -47,18 +47,14 @@ export default class AstraMonitorExtension extends Extension {
         Utils.log('AstraMonitor enabled');
         
         this.container = new AstraMonitorContainer();
-        this.container.place(this.uuid);
-        this.container.visible = false;
         
-        // 3 seconds delay to allow the initialization of all monitors
+        // 2 seconds delay to allow the initialization of the monitors
         // avoiding graphical glitches / empty widgets
-        const time = Utils.debug ? 0 : 3000;
         this.timeout = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
-            time,
+            2000,
             () => {
-                if(this.container)
-                    this.container.visible = true;
+                this.container.place(this.uuid);
                 this.timeout = 0;
                 return false;
             }

@@ -86,14 +86,14 @@ export const Header = GObject.registerClass({
     vfunc_get_preferred_width(_forHeight) {
         let child = this.get_first_child();
         if(child) 
-            return child.get_preferred_width(-1);
+            return child.get_preferred_width(_forHeight);
         return [0, 0];
     }
     
     vfunc_get_preferred_height(_forWidth) {
         let child = this.get_first_child();
         if(child)
-            return child.get_preferred_height(-1);
+            return child.get_preferred_height(_forWidth);
         return [0, 0];
     }
     

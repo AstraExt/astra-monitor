@@ -197,7 +197,6 @@ export const NetworkHeader = GObject.registerClass({
     
     buildSpeed() {
         this.speedContainer = new St.BoxLayout({
-            style_class: 'astra-monitor-header-speed-container',
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
