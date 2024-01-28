@@ -1,4 +1,4 @@
-# Astra Monitor 9 - TO BE RELEASED
+# Astra Monitor 9 - January 28 2024
 
 ### New features
 - Optionally choose the number of digits for sensors header values [[#41](https://github.com/AstraExt/astra-monitor/issues/41)]
