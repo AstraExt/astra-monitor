@@ -142,7 +142,7 @@ export class SensorsMenu extends MenuBase {
             
             const valueTreeExtimatedHeight = Utils.valueTreeExtimatedHeight(valueTree);
             let actorBox = popup.box.get_allocation_box();
-            let monitorSize = Utils.getMonitorSize(actorBox);
+            let monitorSize = MenuBase.getMonitorSize(actorBox);
             
             let cols = 1;
             if(valueTreeExtimatedHeight > monitorSize.height * 0.8)

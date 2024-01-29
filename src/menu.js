@@ -21,6 +21,7 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import Shell from 'gi://Shell';
+import Mtk from 'gi://Mtk';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
@@ -86,6 +87,27 @@ export class MenuBase extends PopupMenu.PopupMenu {
             // @ts-ignore
             this.actor.hide();
         }
+    }
+    
+    /**
+     * 
+     * @param {import('@girs/clutter-12').ActorBox} actorBox 
+     * @returns {{width: number, height: number}}
+     */
+    static getMonitorSize(actorBox) {
+        const display = global.display;
+        // @ts-ignore
+        let rect = new Mtk.Rectangle({
+            x: actorBox.x1,
+            y:actorBox.y1,
+            width: actorBox.x2 - actorBox.x1,
+            height: actorBox.y2 - actorBox.y1
+        });
+        let monitorIndex = display.get_monitor_index_for_rect(rect);
+        if(monitorIndex === -1)
+            monitorIndex = display.get_primary_monitor();
+        let geometry =  display.get_monitor_geometry(monitorIndex);
+        return {width: geometry.width, height: geometry.height};
     }
     
     addMenuSection(text, style = 'default') {

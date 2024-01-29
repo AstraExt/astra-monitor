@@ -74,7 +74,7 @@ export class ProcessorMenu extends MenuBase {
                 this.cpuInfoPopup.open(true);
                 
                 let actorBox = this.cpuInfoPopup.box.get_allocation_box();
-                let monitorSize = Utils.getMonitorSize(actorBox);
+                let monitorSize = MenuBase.getMonitorSize(actorBox);
                 
                 const height = this.cpuInfoPopup.box.get_preferred_height(-1)[1];
                 
