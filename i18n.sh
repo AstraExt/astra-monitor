@@ -28,15 +28,39 @@ fi
 
 log_message "Package version: $PACKAGE_VERSION"
 
+# Check if tsc is installed
+command -v tsc >/dev/null 2>&1 || { log_message "Error: tsc is required but it's not installed. Aborting."; exit 1; }
+
+# Compile TypeScript
+log_message "Building typescript files..."
+tsc
+
+# Check for errors
+if [ $? -ne 0 ]; then
+    echo "Failed to compile TypeScript"
+    exit 1
+fi
+
+# Check if there is a build directory
+if [ ! -d build ]; then
+    log_message "Error: build directory not found"
+    exit 1
+fi
+
+# enter build directory
+cd build || { log_message "Error: Failed to change directory to build"; exit 1; }
+
 # Generate pot file from .js files, excluding node_modules directory
 log_message "Generating POT file..."
-JS_FILES=$(find . -name '*.js' -type f -not -path './node_modules/*' -not -path './dist/*')
-xgettext --language=JavaScript --from-code=UTF-8 --package-name="$PACKAGE_NAME" --package-version="$PACKAGE_VERSION" --copyright-holder="Lju" --output=po/monitor@astraext.pot $JS_FILES
+JS_FILES=$(find . -name '*.js' -type f)
+xgettext --language=JavaScript --from-code=UTF-8 --package-name="$PACKAGE_NAME" --package-version="$PACKAGE_VERSION" --copyright-holder="Lju" --output=../po/monitor@astraext.pot $JS_FILES
 if [ $? -ne 0 ]; then
     log_message "Error: Failed to generate POT file"
     exit 1
 fi
 log_message "POT file generated successfully"
+
+cd - || { log_message "Error: Failed to change directory to $EXTENSION_DIR"; exit 1; }
 
 # Remove duplicate entries from the pot file
 msguniq po/monitor@astraext.pot -o po/monitor@astraext.pot

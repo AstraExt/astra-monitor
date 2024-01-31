@@ -107,21 +107,19 @@ Astra Monitor is currently available in English, German and Russian. If you woul
 4. **Test the translation:** Test the translation by running the extension with the ```./test.sh``` script or by packing it with the ```./pack.sh``` script and installing it.
 5. **Submit a pull request:** Submit a pull request with your changes.
 
+*NOTE: Typescript compilation is required to generate javascript files from the source code. Be sure to have Typescript installed or search online how to install it on your system.*
+
 # Building and Testing
 
-Astra Monitor is written in JavaScript and uses the [GNOME Shell Extension API](https://gjs-docs.gnome.org/gnome-shell-extension/stable/).
+Astra Monitor is written in Typescript and uses the [GNOME Shell Extension API](https://gjs-docs.gnome.org/gnome-shell-extension/stable/).
 
-tsconfig.json is used to configure TypeScript with the only purpose of enabling type suggestion and auto-completion in VSCode. You may run ```npm install``` to install all TypeScript dependencies. However, the extension is written in plain JavaScript and does not require typescript compilation.
+You may run ```npm install```, ```yarn install``` with Yarn or ```nnpm install```using NNPM, to install all dependencies.
 
 Various scrips are provided to facilitate the packing and testing of the extension. These scripts are located in the root directory of the project and can be run from there and are used solely with the scope of facilitating my own development process. Feel free to use or modify them to suit your needs.
 
 ### Scripts
-- **test.sh:** This script runs the extension in a Xephyr session with a gnome xwayland session, allowing for a very quick testing without restarting your own gnome shell session. It can be run with the following command:
-```bash ./test.sh```.<br>
-**Note**: this method can cause some issues and should be used only for fast testing on basic functionalities. Use **test_nested.sh** for more reliable testing. 
-
-- **test_nested.sh:** This script runs the extension in a Xephyr session with a gnome nested wayland session, allowing for easy testing without restarting your own gnome shell session. It can be run with the following command:
-```bash ./test_nested.sh```
+- **test.sh:**  This script runs the extension in a Xephyr session with a gnome nested wayland session, allowing for easy testing without restarting your own gnome shell session. It can be run with the following command:
+```bash ./test.sh```
 
 - **schemas.sh:** This script compiles the schemas for the extension. It can be run with the following command:
 ```bash ./schemas.sh```

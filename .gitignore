@@ -5,6 +5,9 @@ Thumbs.db
 # Ignore .vscode folder
 .vscode/
 
+# Ignore build folder
+build/
+
 # Ignore dist folder
 dist/
 

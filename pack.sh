@@ -4,19 +4,11 @@
 # Check for necessary tools
 command -v bash >/dev/null 2>&1 || { echo >&2 "Bash is required but it's not installed. Aborting."; exit 1; }
 command -v glib-compile-schemas >/dev/null 2>&1 || { echo >&2 "glib-compile-schemas is required but it's not installed. Aborting."; exit 1; }
-#command -v zip >/dev/null 2>&1 || { echo >&2 "zip is required but it's not installed. Aborting."; exit 1; }
 
 # Paths and filenames
 EXTENSION_DIR=$(dirname "$0") # Assumes pack.sh is in the main directory
 DIST_DIR="${EXTENSION_DIR}/dist"
-EXTENSION_NAME="AstraMonitor"
-
-# Check if is in debug mode
-# look for 'static debug = true;' inside ./src/utils/utils.js
-if grep -q 'static debug = true;' "${EXTENSION_DIR}/src/utils/utils.js"; then
-    echo "Debug mode is enabled in 'utils.js'. Disable it before packaging. Aborting."
-    exit 1
-fi
+EXTENSION_NAME="monitor@astraext.github.io"
 
 # Read VERSION from metadata.json
 if [ -f "${EXTENSION_DIR}/metadata.json" ]; then
@@ -39,6 +31,25 @@ else
     exit 1
 fi
 
+# Remove the previous build if any
+rm -rf "monitor@astraext.github.io.shell-extension.zip"
+
+# Clean up build directory
+rm -r "build"
+
+# Check if tsc is installed
+command -v tsc >/dev/null 2>&1 || { log_message "Error: tsc is required but it's not installed. Aborting."; exit 1; }
+
+# Compile TypeScript
+log_message "Building typescript files..."
+tsc
+
+# Check for errors
+if [ $? -ne 0 ]; then
+    echo "Failed to compile TypeScript"
+    exit 1
+fi
+
 # Run i18n.sh
 if [ -f "${EXTENSION_DIR}/i18n.sh" ]; then
     echo "Running i18n.sh..."
@@ -48,14 +59,14 @@ else
     exit 1
 fi
 
-# Remove the previous build if any
-rm -rf "monitor@astraext.github.io.shell-extension.zip"
-
 # Create dist directory
 mkdir -p "$DIST_DIR"
 
+# Copy build directory content to dist directory
+cp -r "${EXTENSION_DIR}/build/"* "${DIST_DIR}/"
+
 # Files and directories to include
-INCLUDE_FILES="extension.js prefs.js metadata.json stylesheet.css README.md RELEASES.md LICENSE schemas icons po src"
+INCLUDE_FILES="metadata.json stylesheet.css README.md RELEASES.md LICENSE schemas icons po"
 
 # Copy files to dist directory
 for file in $INCLUDE_FILES; do
@@ -91,7 +102,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Copy the packed extension to the main directory
-mv "monitor@astraext.github.io.shell-extension.zip" "../monitor@astraext.github.io.shell-extension.zip"
+mv "$EXTENSION_NAME.shell-extension.zip" "../$EXTENSION_NAME.shell-extension.zip"
 
 # Return to the main directory
 cd ..
@@ -99,5 +110,5 @@ cd ..
 # Clean up: remove the dist directory
 rm -rf "${DIST_DIR}"
 
-echo "Extension packaged into monitor@astraext.github.io.shell-extension.zip"
+echo "Extension packaged into $EXTENSION_NAME.shell-extension.zip"
 exit 0
