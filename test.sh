@@ -1,6 +1,11 @@
 #!/bin/bash
 clear
 
+# Function to log messages
+log_message() {
+    echo "[`date +"%Y-%m-%d %H:%M:%S"`] $1"
+}
+
 EXTENSION_NAME="monitor@astraext.github.io"
 XEPHYR_DISPLAY=":2"
 RESOLUTION=1867x1050 # this fits my 4th monitor perfectly, change it to your needs
@@ -12,7 +17,7 @@ DIST_DIR="${EXTENSION_DIR}/dist"
 if [ ! -f ./schemas/gschemas.compiled ]; then
     command -v glib-compile-schemas >/dev/null 2>&1 || { echo >&2 "glib-compile-schemas is required but it's not installed. Aborting."; exit 1; }
     
-    echo "Compiling schemas..."
+    log_message "Compiling schemas..."
     glib-compile-schemas ./schemas
 fi
 
@@ -25,7 +30,7 @@ tsc
 
 # Check for errors
 if [ $? -ne 0 ]; then
-    echo "Failed to compile TypeScript"
+    log_message "Failed to compile TypeScript"
     exit 1
 fi
 
@@ -44,7 +49,7 @@ for file in $INCLUDE_FILES; do
     if [ -e "${EXTENSION_DIR}/${file}" ]; then
         cp -r "${EXTENSION_DIR}/${file}" "${DIST_DIR}/"
     else
-        echo "File or directory ${file} not found. Aborting."
+        log_message "File or directory ${file} not found. Aborting."
         rm -rf "$DIST_DIR"
         exit 1
     fi
@@ -65,7 +70,7 @@ gnome-extensions pack --force \
 
 # Check for errors
 if [ $? -ne 0 ]; then
-    echo "Failed to pack the extension"
+    log_message "Failed to pack the extension"
     exit 1
 fi
 
@@ -74,7 +79,7 @@ gnome-extensions install --force "./$EXTENSION_NAME.shell-extension.zip"
 
 # Check for errors
 if [ $? -ne 0 ]; then
-    echo "Failed to install the extension"
+    log_message "Failed to install the extension"
     exit 1
 fi
 
@@ -89,15 +94,15 @@ rm "./$EXTENSION_NAME.shell-extension.zip"
 
 # Check if Xephyr on display :2 is already running
 if ! ps ax | grep -v grep | grep "Xephyr.*$XEPHYR_DISPLAY" > /dev/null; then
-    echo "Starting Xephyr on display $XEPHYR_DISPLAY"
+    log_message "Starting Xephyr on display $XEPHYR_DISPLAY"
     screen -dmS xephyr_session Xephyr -ac -br -noreset -screen $RESOLUTION $XEPHYR_DISPLAY
     sleep 1  # Give Xephyr time to start
 else
-    echo "Xephyr on display $XEPHYR_DISPLAY is already running"
+    log_message "Xephyr on display $XEPHYR_DISPLAY is already running"
 fi
 
 # Enable the extension
-echo "Enabling the extension..."
+log_message "Enabling the extension..."
 extension_status=$(gnome-extensions info "$EXTENSION_NAME" | grep -i "state:")
 if [[ $extension_status == *"DISABLED"* ]]; then
     gnome-extensions enable "$EXTENSION_NAME"
@@ -122,21 +127,21 @@ export ASTRA_MONITOR_NESTED_SESSION=1
 
 # Check if the system is NixOS
 if [ -f /etc/NIXOS ]; then
-    echo "This is NixOS"
+    log_message "This is NixOS"
     
     # NOTE: This is for testing purpose only, on my personal machine
     #       Should be handled properly, but I don't have time for that now
     # Export GI_TYPELIB_PATH
     export GI_TYPELIB_PATH=/nix/store/311jq5bizzzj1yk2k7smb7j6lxc9qbin-libgtop-2.41.1/lib/girepository-1.0
 else
-    echo "This is not NixOS"
+    log_message "This is not NixOS"
 fi
 
 dbus-run-session -- gnome-shell --nested --wayland --mode=minimal &
 sleep 1
 
 cleanup() {
-    echo "Terminating gnome-shell..."
+    log_message "Terminating gnome-shell..."
     pkill -f "gnome-shell --nested --wayland --mode=minimal"
     sleep 0.5
     wait $(pgrep -f "gnome-shell --nested --wayland --mode=minimal")
