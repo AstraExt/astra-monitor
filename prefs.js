@@ -257,7 +257,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Single Core Percentage'), 'processor-header-percentage-core', percentageSection);
         this.addSpinRow({
             title: this.tab + _('Icon Alert'),
-            subtitle:  this.tab + _('Set 0 to disable. Value is % of total cpu.'),
+            subtitle:  this.tab + _('Set 0 to disable. Value is percentage of total cpu.'),
         }, 'processor-header-percentage-icon-alert-threshold', percentageSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
         
         const graphSection = this.addExpanderRow(_('History Graph'), group);
@@ -352,7 +352,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Show Usage Percentage'), 'memory-header-percentage', percentageSection);
         this.addSpinRow({
             title: this.tab + _('Icon Alert'),
-            subtitle:  this.tab + _('Set 0 to disable. Value is % of ram usage.'),
+            subtitle:  this.tab + _('Set 0 to disable. Value is percentage of ram usage.'),
         }, 'memory-header-percentage-icon-alert-threshold', percentageSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
         
         const valueSection = this.addExpanderRow(_('Usage Value'), group);
@@ -461,7 +461,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow(this.tab + _('Show Storage Usage Percentage'), 'storage-header-percentage', barsSection);
         this.addSpinRow({
             title: this.tab + _('Icon Alert'),
-            subtitle:  this.tab + _('Set 0 to disable. Value is % of disk usage.'),
+            subtitle:  this.tab + _('Set 0 to disable. Value is percentage of disk usage.'),
         }, 'storage-header-percentage-icon-alert-threshold', barsSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
         
         const ioSection = this.addExpanderRow(_('IO'), group);

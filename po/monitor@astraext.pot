@@ -560,7 +560,7 @@ msgstr ""
 
 #: prefs.js:260
 #, javascript-format
-msgid "Set 0 to disable. Value is % of total cpu."
+msgid "Set 0 to disable. Value is percentage of total cpu."
 msgstr ""
 
 #: prefs.js:263 prefs.js:362
@@ -653,7 +653,7 @@ msgstr ""
 
 #: prefs.js:355
 #, javascript-format
-msgid "Set 0 to disable. Value is % of ram usage."
+msgid "Set 0 to disable. Value is percentage of ram usage."
 msgstr ""
 
 #: prefs.js:358
@@ -734,7 +734,7 @@ msgstr ""
 
 #: prefs.js:464
 #, javascript-format
-msgid "Set 0 to disable. Value is % of disk usage."
+msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr ""
 
 #: prefs.js:467 prefs.js:588
