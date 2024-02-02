@@ -68,6 +68,18 @@
       <description>Ordering inside the panel box</description>
       <range min="-10" max="10"/>
     </key>
+    <key name="panel-margin-left" type="i">
+      <default>0</default>
+      <summary>Panel Box Left Margin</summary>
+      <description>Add a margin to the left of all headers</description>
+      <range min="0" max="1000"/>
+    </key>
+    <key name="panel-margin-right" type="i">
+      <default>0</default>
+      <summary>Panel Box Right Margin</summary>
+      <description>Add a margin to the right of all headers</description>
+      <range min="0" max="1000"/>
+    </key>
     <key name="monitors-order" type="s">
       <default>'""'</default>
       <summary>Order of the monitors</summary>

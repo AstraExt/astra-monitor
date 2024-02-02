@@ -5,6 +5,7 @@
 
 ### New features
 - Storage Devices can be ignored selectively or with a regex (just like Network Interfaces) [[#45](https://github.com/AstraExt/astra-monitor/issues/45)]
+- New experimental feature to add a left/right margin to the headers panel [[#49](https://github.com/AstraExt/astra-monitor/issues/49)]
 
 ### Bug fixes
 - Fixed a bug where an header bar could be rendered heigher than expected when a fullscreen app is opened [[#50](https://github.com/AstraExt/astra-monitor/issues/50)]

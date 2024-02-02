@@ -198,6 +198,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         ];
         this.addComboRow({title: this.tab + _('Position')}, choicesPanel, 'panel-box', panelSection, 'string');
         this.addSpinRow({title: this.tab + _('Order')}, 'panel-box-order', panelSection, {min: -10, max: 10, digits: 0, step: 1, page: 1}, true);
+        this.addSpinRow({
+            title: this.tab + _('Left Margin'),
+            subtitle:  this.tab + _('Experimental feature: may not function properly.'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'panel-margin-left', panelSection, {min: 0, max: 1000, digits: 0, step: 1, page: 10}, true, 0);
+        this.addSpinRow({
+            title: this.tab + _('Right Margin'),
+            subtitle:  this.tab + _('Experimental feature: may not function properly.'),
+            icon_name: 'am-dialog-warning-symbolic'
+        }, 'panel-margin-right', panelSection, {min: 0, max: 1000, digits: 0, step: 1, page: 10}, true, 0);        
         
         const headersSection = this.addExpanderRow({title: _('Headers')}, group);
         this.addSpinRow({

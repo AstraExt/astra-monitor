@@ -66,10 +66,20 @@ class AstraMonitorContainer extends PanelMenu.Button {
         Config.connect(this, 'changed::monitors-order', this.reorderWidgets.bind(this));
         Config.connect(this, 'changed::headers-font-family', this.updateStyle.bind(this));
         Config.connect(this, 'changed::headers-font-size', this.updateStyle.bind(this));
+        Config.connect(this, 'changed::panel-margin-left', this.updateStyle.bind(this));
+        Config.connect(this, 'changed::panel-margin-right', this.updateStyle.bind(this));
     }
     
     computeStyle() {
         let style = '';
+        
+        const marginLeft = Config.get_int('panel-margin-left');
+        if(marginLeft)
+            style += `margin-left:${marginLeft}px;`;
+        
+        const marginRight = Config.get_int('panel-margin-right');
+        if(marginRight)
+            style += `margin-right:${marginRight}px;`;
         
         const fontFamily = Config.get_string('headers-font-family');
         if(fontFamily)
