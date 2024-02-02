@@ -48,6 +48,7 @@ class BarsBase extends St.BoxLayout {
     protected colors: string[];
     protected breakdownConfig?: string;
     protected initialWidth: number;
+    protected initialHeight: number;
     protected scaleFactor: number;
     protected barSize: number;
     protected bars: St.Widget[][];
@@ -102,6 +103,7 @@ class BarsBase extends St.BoxLayout {
         this.colors = params.colors;
         this.breakdownConfig = params.breakdownConfig;
         this.initialWidth = params.width;
+        this.initialHeight = params.height;
         this.setStyle();
         
         Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
@@ -191,13 +193,19 @@ class BarsBase extends St.BoxLayout {
     }
     
     updateBars(values: {color: number, value: number}[][]) {
-        if(!this.get_stage())
+        if(!this.get_stage() || !this.get_parent())
             return;
         
         // eslint-disable-next-line prefer-const
         let [width, height] = this.get_size();
         if(this.initialWidth && width > this.initialWidth)
             width = this.initialWidth;
+        if(this.initialHeight && height > this.initialHeight)
+            width = this.initialHeight;
+        
+        const parentHeight = this.get_parent()!.get_height();
+        if(this.layout === 'vertical' && height > parentHeight - 6)
+            height = parentHeight - 6;
         
         let size;
         if(this.layout === 'vertical')
