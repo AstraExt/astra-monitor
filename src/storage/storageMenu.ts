@@ -372,15 +372,45 @@ export default class StorageMenu extends MenuBase {
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
             this.addToMenu(this.deviceSection, 2);
+            
+            Config.connect(this, 'changed::storage-ignored', this.updateDeviceList.bind(this));
+            Config.connect(this, 'changed::storage-ignored-regex', this.updateDeviceList.bind(this));
         }
     }
     
     updateDeviceList() {
-        const devices = Utils.storageMonitor.getBlockDevicesSync();
+        const devices = Utils.getBlockDevicesSync();
         if(devices.size > 0)
             this.noDevicesLabel.hide();
         else
             this.noDevicesLabel.show();
+        
+        //filter ignored devices
+        const ignoredDevices = Config.get_json('storage-ignored');
+        if(ignoredDevices && Array.isArray(ignoredDevices) && ignoredDevices.length > 0) {
+            for(const kname of ignoredDevices) {
+                for(const [id, device] of devices.entries()) {
+                    if(device.kname === kname) {
+                        devices.delete(id);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        const ignoredRegex = Config.get_string('storage-ignored-regex');
+        if(ignoredRegex) {
+            try {
+                const regex = new RegExp(`^${ignoredRegex}$`, 'i');
+                for(const [id, device] of devices.entries()) {
+                    if(regex.test(device.kname))
+                        devices.delete(id);
+                }
+            }
+            catch(e) {
+                //Not a valid regex
+            }
+        }
         
         // remove all devices that are not present anymore
         for(const [id, device] of this.devices.entries()) {

@@ -93,6 +93,8 @@ export default class StorageMonitor extends Monitor {
     private topProcessesCache: TopProcessesCache;
     private diskChecks: Record<string, boolean>;
     private sectorSizes: Record<string, number>;
+    private ignored: string[];
+    private ignoredRegex: RegExp|null;
     
     private updateStorageUsageTask: CancellableTaskManager<boolean>;
     private updateTopProcessesTask: CancellableTaskManager<boolean>;
@@ -123,18 +125,49 @@ export default class StorageMonitor extends Monitor {
         this.reset();
         this.dataSourcesInit();
         
-        const enabled = Config.get_boolean('processor-header-show');
+        const enabled = Config.get_boolean('storage-header-show');
         if(enabled)
             this.start();
         
-        Config.connect(this, 'changed::processor-header-show', () => {
-            if(Config.get_boolean('processor-header-show'))
+        Config.connect(this, 'changed::storage-header-show', () => {
+            if(Config.get_boolean('storage-header-show'))
                 this.start();
             else
                 this.stop();
         });
         
-        Config.connect(this, 'changed::processor-update', this.restart.bind(this));
+        Config.connect(this, 'changed::storage-update', this.restart.bind(this));
+        
+        // Manually ignored devices
+        this.ignored = Config.get_json('storage-ignored');
+        if(this.ignored === null || !Array.isArray(this.ignored))
+            this.ignored = [];
+        Config.connect(this, 'changed::storage-ignored', () => {
+            this.reset();
+            
+            this.ignored = Config.get_json('storage-ignored');
+            if(this.ignored === null || !Array.isArray(this.ignored))
+                this.ignored = [];
+        });
+        
+        // Regex ignored devices
+        const regex = Config.get_string('storage-ignored-regex');
+        try {
+            this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+        } catch(e) {
+            this.ignoredRegex = null;
+        }
+        
+        Config.connect(this, 'changed::storage-ignored-regex', () => {
+            this.reset();
+            
+            const regex = Config.get_string('storage-ignored-regex');
+            try {
+                this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+            } catch(e) {
+                this.ignoredRegex = null;
+            }
+        });
     }
     
     get showConfig() {
@@ -413,6 +446,12 @@ export default class StorageMonitor extends Monitor {
             if(deviceName.startsWith('loop'))
                 continue;
             
+            if(this.ignored.includes(deviceName))
+                continue;
+            
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(deviceName))
+                continue;
+            
             const isPartition = !this.isDisk(deviceName);
             
             const readSectors = parseInt(fields[5]);
@@ -490,110 +529,6 @@ export default class StorageMonitor extends Monitor {
             this.pushUsageHistory('detailedStorageIO', finalData);
         }
         return true;
-    }
-    
-    /**
-     * This function is sync, but it spawns only once the user opens the storage menu
-     * May be convered to async but this will introduce a graphical update lag (minor)
-     * Impact measured to be ~25ms: relevant but not a priority
-     */
-    getBlockDevicesSync(): Map<string, BlockDevice> {
-        const devices = new Map();
-        
-        try {
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE');
-            
-            if(result && stdout) {
-                const decoder = new TextDecoder('utf8');
-                const output = decoder.decode(stdout);
-                
-                const json = JSON.parse(output);
-                
-                const processDevice = (device: any, parent: BlockDevice|null = null) => {
-                    const id = device.id;
-                    if(!id)
-                        return;
-                    
-                    if(devices.has(id)) {
-                        if(parent)
-                            devices.get(id).parents.push(parent);
-                        return;
-                    }
-                    
-                    const uuid = device.uuid;
-                    const name = device.name;
-                    const kname = device.kname;
-                    const pkname = device.pkname;
-                    const label = device.label;
-                    const type = device.type;
-                    
-                    if(type === 'loop')
-                        return;
-                    
-                    const subsystems = device.subsystems;
-                    
-                    let mountpoints: string[] = [];
-                    if(device.mountpoints && device.mountpoints.length > 0 && device.mountpoints[0])
-                        mountpoints = device.mountpoints;
-                    
-                    const vendor = device.vendor?.trim();
-                    const model = device.model?.trim();
-                    const path = device.path;
-                    const removable = device.rm;
-                    const readonly = device.ro;
-                    const state = device.state;
-                    const owner = device.owner;
-                    const size = device.size;
-                    const usage = parseInt(device['fsuse%'], 10);
-                    const filesystem = device.fstype;
-                    
-                    const deviceObj: BlockDevice = {
-                        id,
-                        uuid,
-                        name,
-                        kname,
-                        pkname,
-                        label,
-                        type,
-                        subsystems,
-                        mountpoints,
-                        vendor,
-                        model,
-                        path,
-                        removable,
-                        readonly,
-                        state,
-                        owner,
-                        size,
-                        usage,
-                        filesystem,
-                        parents: [],
-                    };
-                    
-                    if(parent) {
-                        deviceObj.parents.push(parent);
-                    }
-                    
-                    if(device.children && device.children.length > 0) {
-                        for(const child of device.children) {
-                            processDevice(child, deviceObj);
-                        }
-                    }
-                    else {
-                        devices.set(id, deviceObj);
-                    }
-                };
-                
-                for(const device of json.blockdevices) {
-                    processDevice(device);
-                }
-            }
-        }
-        catch(e: any) {
-            Utils.error(e);
-        }
-        
-        return devices;
     }
     
     async updateTopProcessesAuto(): Promise<boolean> {

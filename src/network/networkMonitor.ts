@@ -88,7 +88,7 @@ export default class NetworkMonitor extends Monitor {
         
         Config.connect(this, 'changed::network-update', this.restart.bind(this));
         
-        // Manually ignore interfaces
+        // Manually ignored interfaces
         this.ignored = Config.get_json('network-ignored');
         if(this.ignored === null || !Array.isArray(this.ignored))
             this.ignored = [];
@@ -258,7 +258,6 @@ export default class NetworkMonitor extends Monitor {
             if(!this.isMonitoredInterface(interfaceName))
                 continue;
             
-                
             if(this.ignored.includes(interfaceName))
                 continue;
             

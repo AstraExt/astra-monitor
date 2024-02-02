@@ -445,6 +445,79 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }
         this.addComboRow({title: _('Main Disk')}, choicesSource, 'storage-main', group, 'string');
         
+        const ignoredSection = this.addExpanderRow({title: _('Ignored Storage Devices')}, group);
+        
+        this.addTextInputRow({
+            title: this.tab + _('Regex'),
+            subtitle: this.tab + _('Devices matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable. Usage example: ') + '\'md{1,3}\'',
+        }, 'storage-ignored-regex', ignoredSection, '');
+        
+        const devices = Utils.getBlockDevicesSync();
+        let ignoredDevices = Config.get_json('storage-ignored');
+        if(ignoredDevices === null || !Array.isArray(ignoredDevices))
+            ignoredDevices = [];
+        
+        const main = Config.get_string('storage-main');
+        for(const [id, device] of devices.entries()) {
+            const name = device.kname;
+            const status = !ignoredDevices.includes(name);
+            
+            let subtitle = status ? _('Active') : _('Ignored');
+            if(id === main)
+                subtitle = _('Main');
+            
+            const row = new Adw.ActionRow({ title: name, subtitle });
+            ignoredSection.add_row(row);
+            
+            let icon_name = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
+            if(id === main)
+                icon_name = 'am-star-symbolic';
+            
+            const icon = new Gtk.Image({ icon_name: icon_name });
+            icon.set_margin_start(15);
+            icon.set_margin_end(10);
+            row.add_prefix(icon);
+            
+            const toggle = new Gtk.Switch({
+                active: !status,
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+            });
+            
+            if(id === main) {
+                toggle.sensitive = false;
+                toggle.tooltip_text = _('Main disk cannot be ignored');
+            }
+            
+            toggle.connect('state-set', (_switchObj, state) => {
+                if(state) {
+                    row.subtitle = _('Ignored');
+                    icon.icon_name = 'am-dialog-error-symbolic';
+                    
+                    let ignoredDevices = Config.get_json('storage-ignored');
+                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
+                        ignoredDevices = [];
+                    if(!ignoredDevices.includes(name))
+                        ignoredDevices.push(name);
+                    Config.set('storage-ignored', JSON.stringify(ignoredDevices), 'string');
+                }
+                else {
+                    row.subtitle = _('Active');
+                    icon.icon_name = 'am-dialog-ok-symbolic';
+                    
+                    let ignoredDevices = Config.get_json('storage-ignored');
+                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
+                        ignoredDevices = [];
+                    if(ignoredDevices.includes(name))
+                        ignoredDevices = ignoredDevices.filter((device: string) => device !== name);
+                    Config.set('storage-ignored', JSON.stringify(ignoredDevices), 'string');
+                }
+            });
+            
+            row.add_suffix(toggle);
+            row.activatable_widget = toggle;
+        }
+        
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
         choicesPanel = [
             {value: 'default', text: _('Default (Auto)')},
@@ -525,7 +598,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         this.addTextInputRow({
             title: this.tab + _('Regex'),
-            subtitle: this.tab + _('Interfaces matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable. Use example:') + '\'veth\\w{3,16}\'',
+            subtitle: this.tab + _('Interfaces matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable. Usage example: ') + '\'veth\\w{3,16}\'',
         }, 'network-ignored-regex', ignoredSection, '');
         
         const devices = Utils.getNetworkInterfacesSync();

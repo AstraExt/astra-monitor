@@ -359,6 +359,16 @@
       <summary>Main storage</summary>
       <description>Storage to show on the header of the storage monitor</description>
     </key>
+    <key name="storage-ignored" type="s">
+      <default>'"[]"'</default>
+      <summary>Ignored Storage Devices</summary>
+      <description>A JSON List of Storage Devices to ignore</description>
+    </key>
+    <key name="storage-ignored-regex" type="s">
+      <default>''</default>
+      <summary>Ignored Storage Devices Regex</summary>
+      <description>A regex to match Storage Devices to ignore</description>
+    </key>
     <key name="storage-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list2">
       <default>'default'</default>
       <summary>Top Processes Source</summary>
@@ -475,7 +485,7 @@
     <key name="network-ignored-regex" type="s">
       <default>''</default>
       <summary>Ignored Network Interfaces Regex</summary>
-      <description>A regex to match network interfaces to ignore</description>
+      <description>A regex to match Network Interfaces to ignore</description>
     </key>
     <key name="network-header-show" type="b">
       <default>true</default>

@@ -4,7 +4,7 @@ import Gio from 'gi://Gio';
 import Config from '../config.js';
 import ProcessorMonitor from '../processor/processorMonitor.js';
 import MemoryMonitor from '../memory/memoryMonitor.js';
-import StorageMonitor from '../storage/storageMonitor.js';
+import StorageMonitor, { BlockDevice } from '../storage/storageMonitor.js';
 import NetworkMonitor from '../network/networkMonitor.js';
 import SensorsMonitor from '../sensors/sensorsMonitor.js';
 
@@ -1411,6 +1411,110 @@ export default class Utils {
         }
         catch(e: any) {
             Utils.error(e.message);
+        }
+        
+        return devices;
+    }
+    
+    /**
+     * This function is sync, but it spawns only once the user opens the storage menu
+     * May be convered to async but this will introduce a graphical update lag (minor)
+     * Impact measured to be ~25ms: relevant but not a priority
+     */
+    static getBlockDevicesSync(): Map<string, BlockDevice> {
+        const devices = new Map();
+        
+        try {
+            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE');
+            
+            if(result && stdout) {
+                const decoder = new TextDecoder('utf8');
+                const output = decoder.decode(stdout);
+                
+                const json = JSON.parse(output);
+                
+                const processDevice = (device: any, parent: BlockDevice|null = null) => {
+                    const id = device.id;
+                    if(!id)
+                        return;
+                    
+                    if(devices.has(id)) {
+                        if(parent)
+                            devices.get(id).parents.push(parent);
+                        return;
+                    }
+                    
+                    const uuid = device.uuid;
+                    const name = device.name;
+                    const kname = device.kname;
+                    const pkname = device.pkname;
+                    const label = device.label;
+                    const type = device.type;
+                    
+                    if(type === 'loop')
+                        return;
+                    
+                    const subsystems = device.subsystems;
+                    
+                    let mountpoints: string[] = [];
+                    if(device.mountpoints && device.mountpoints.length > 0 && device.mountpoints[0])
+                        mountpoints = device.mountpoints;
+                    
+                    const vendor = device.vendor?.trim();
+                    const model = device.model?.trim();
+                    const path = device.path;
+                    const removable = device.rm;
+                    const readonly = device.ro;
+                    const state = device.state;
+                    const owner = device.owner;
+                    const size = device.size;
+                    const usage = parseInt(device['fsuse%'], 10);
+                    const filesystem = device.fstype;
+                    
+                    const deviceObj: BlockDevice = {
+                        id,
+                        uuid,
+                        name,
+                        kname,
+                        pkname,
+                        label,
+                        type,
+                        subsystems,
+                        mountpoints,
+                        vendor,
+                        model,
+                        path,
+                        removable,
+                        readonly,
+                        state,
+                        owner,
+                        size,
+                        usage,
+                        filesystem,
+                        parents: [],
+                    };
+                    
+                    if(parent) {
+                        deviceObj.parents.push(parent);
+                    }
+                    
+                    if(device.children && device.children.length > 0) {
+                        for(const child of device.children) {
+                            processDevice(child, deviceObj);
+                        }
+                    }
+                    else {
+                        devices.set(id, deviceObj);
+                    }
+                };
+                
+                for(const device of json.blockdevices) {
+                    processDevice(device);
+                }
+            }
+        }
+        catch(e: any) {
+            Utils.error(e);
         }
         
         return devices;
