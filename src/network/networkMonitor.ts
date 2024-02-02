@@ -103,7 +103,10 @@ export default class NetworkMonitor extends Monitor {
         // Regex ignored interfaces
         const regex = Config.get_string('network-ignored-regex');
         try {
-            this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+            if(regex === null || regex === '')
+                this.ignoredRegex = null;
+            else
+                this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
         } catch(e) {
             this.ignoredRegex = null;
         }
@@ -113,7 +116,10 @@ export default class NetworkMonitor extends Monitor {
             
             const regex = Config.get_string('network-ignored-regex');
             try {
-                this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+                if(regex === null || regex === '')
+                    this.ignoredRegex = null;
+                else
+                    this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
             } catch(e) {
                 this.ignoredRegex = null;
             }

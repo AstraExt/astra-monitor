@@ -200,12 +200,15 @@ class BarsBase extends St.BoxLayout {
         let [width, height] = this.get_size();
         if(this.initialWidth && width > this.initialWidth)
             width = this.initialWidth;
-        if(this.initialHeight && height > this.initialHeight)
-            width = this.initialHeight;
         
-        const parentHeight = this.get_parent()!.get_height();
-        if(this.layout === 'vertical' && height > parentHeight - 6)
-            height = parentHeight - 6;
+        if(this.layout === 'vertical') {
+            if(this.initialHeight && height > this.initialHeight)
+                height = this.initialHeight;
+            
+            const parentHeight = this.get_parent()!.get_height();
+            if(height > parentHeight - 6)
+                height = parentHeight - 6;
+        }
         
         let size;
         if(this.layout === 'vertical')
