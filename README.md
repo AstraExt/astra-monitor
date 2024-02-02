@@ -15,10 +15,10 @@
 
 # Overview
 
-Astra Monitor is a cutting-edge, fully customizable, and performance-focused monitoring extension for GNOME's top bar. It's an all-in-one solution for those seeking to keep a close eye on their system's performance metrics like CPU, GPU, RAM, disk usage, network statistics, and sensor readings. Currently in its early stages of development, Astra Monitor is constantly evolving with an eye towards future enhancements and additional features.
+Astra Monitor is a cutting-edge, fully customizable, and performance-focused monitoring extension for GNOME's top bar. It's an all-in-one solution for those seeking to keep a close eye on their system's performance metrics, like CPU, GPU, RAM, disk usage, network statistics, and sensor readings. Currently in its early stages of development, Astra Monitor is constantly evolving with an eye towards future enhancements and additional features.
 
 ### Key Features:
-- **Comprehensive Monitoring:** Track a wide array of system resources. Apart from the wide variety of resources to monitor in the top header bar, inside the menus you can find even more detailed information just hovering over the resource you want to know more about.
+- **Comprehensive Monitoring:** Track a wide array of system resources. Apart from the wide variety of resources to monitor in the top header bar, inside the menus you can find even more detailed information just by hovering over the resource you want to know more about.
 - **Customizable Interface:** Tailor the monitoring experience to suit your preferences. Choose what resources to monitor and how to display them. A lot of customization options are available.
 - **Optimized Performance:** Designed to be lightweight and efficient. Resources are only queried when needed. No polling. No wasted resources. Hidden components are not queried nor rendered.
 - **Effortless Real-Time Updates:** Changes made in the preferences panel are applied instantly, with no need to restart the extension or GNOME Shell. This feature ensures a seamless and interruption-free user experience, allowing for on-the-fly customization and monitoring adjustments.
@@ -58,18 +58,18 @@ _NOTICE: The screenshots below are from an outdated version of the extension and
 
 As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
 
-- **Data Source:** Astra Monitor is designed with a modular data source system. At present, it utilizes a blend of custom implementations that interface closely with the kernel level (such as through the /proc directory), alongside GTop, which is GNOME's standard library for system monitoring. Our current development efforts are focused on integrating GTop as a data source option for all monitored resources. This integration will enable users to select between our custom implementation and GTop for their data sourcing needs.
+- **Data Source:** Astra Monitor is designed with a modular data source system. At present, it utilizes a blend of custom implementations that interface closely with the kernel level (such as through the `/proc` directory), alongside GTop, which is GNOME's standard library for system monitoring. Our current development efforts are focused on integrating GTop as a data source option for all monitored resources. This integration will enable users to select between our custom implementation and GTop for their data sourcing needs.
 **[IN PROGRESS]**
 - **Icons:** ~~Customization of the icons in the preferences panel~~.
 - **Colors:** Customization of the colors in the preferences panel.
 - **Ordering:** ~~Ability to rearrange the order of the displayed resources~~.
-- **Sensors:** Support for more sensors sources and better sensor selection UI. (e.g. IPMI, sensor source plugins!?)
+- **Sensors:** Support for more sensor sources and better sensor selection UI (e.g. IPMI, sensor source plugins!?).
 - **History:** ~~Settings for the time range and size of history graphs~~.
 - **GPU:** Improvement of GPU monitoring.
-- **Network:** Improvement of network monitoring. (e.g. selection of network interface, manual vs automatic max speed detection, VPNs)
-- **Disk:** Improvement of disk monitoring. (e.g. ~~selection of main disk~~, disk health)
+- **Network:** Improvement of network monitoring (e.g. selection of network interface, manual vs automatic max speed detection, VPNs).
+- **Disk:** Improvement of disk monitoring (e.g. ~~selection of main disk~~, disk health).
 - **CPU:** Dual socket CPU support.
-- **Debugging:** Better resources for the final user to debug errors/problems within the preferences panel (e.g. logs, error messages, etc.)
+- **Debugging:** Better resources for the final user to debug errors/problems within the preferences panel (e.g. logs, error messages, etc.).
 
 Your feedback is invaluable in shaping Astra Monitor's development journey. Do you have any new features to suggest? We are very happy to receive suggestions. The best way to see new features become reality as quickly as possible is through direct contributions or donations. Donations will result in more development time dedicated to the project. If you would like to contribute, please refer to the contribution guidelines.
 
@@ -102,33 +102,46 @@ Astra Monitor is licensed under the GNU General Public License v3.0 (GPL-3.0), a
 Astra Monitor is currently available in English, German and Russian. If you would like to contribute with a translation, please refer to these guidelines:
 
 1. **Fork the repository:** Fork the repository and clone it to your local machine.
-2. **Create/Update the translation file:** Create or update the translation file for your language. Translation files are located in po folder. The file name is the language code (e.g. it.po for Italian). You can use Poedit to edit the translation files.
-3. **Compile the translation file:** Compile the translation file using the ```./i18n.sh``` script.
-4. **Test the translation:** Test the translation by running the extension with the ```./test.sh``` script or by packing it with the ```./pack.sh``` script and installing it.
+2. **Create/Update the translation file:** Create or update the translation file for your language. Translation files are located in po folder. The file name is the language code (e.g. `it.po` for Italian). You can use Poedit to edit the translation files.
+3. **Compile the translation file:** Compile the translation file using the `./i18n.sh` script.
+4. **Test the translation:** Test the translation by running the extension with the `./test.sh` script or by packing it with the `./pack.sh` script and installing it.
 5. **Submit a pull request:** Submit a pull request with your changes.
 
-*NOTE: Typescript compilation is required to generate javascript files from the source code. Be sure to have Typescript installed or search online how to install it on your system.*
+*NOTE: TypeScript compilation is required to generate JavaScript files from the source code. Be sure to have TypeScript installed or search online how to install it on your system.*
 
 # Building and Testing
 
-Astra Monitor is written in Typescript and uses the [GNOME Shell Extension API](https://gjs-docs.gnome.org/gnome-shell-extension/stable/).
+Astra Monitor is written in TypeScript and uses the [GNOME Shell Extension API](https://gjs-docs.gnome.org/gnome-shell-extension/stable/).
 
-You may run ```npm install```, ```yarn install``` with Yarn or ```nnpm install```using NNPM, to install all dependencies.
+You may run `npm install`, `yarn install` with Yarn or `nnpm install` using NNPM, to install all dependencies.
 
-Various scrips are provided to facilitate the packing and testing of the extension. These scripts are located in the root directory of the project and can be run from there and are used solely with the scope of facilitating my own development process. Feel free to use or modify them to suit your needs.
+Various scripts are provided to facilitate packing and testing of the extension. These scripts are located in the root directory of the project and can be run from there. They are used solely with the scope of facilitating my own development process. Feel free to use or modify them to suit your needs.
 
 ### Scripts
-- **test.sh:**  This script runs the extension in a Xephyr session with a gnome nested wayland session, allowing for easy testing without restarting your own gnome shell session. It can be run with the following command:
-```bash ./test.sh```
+- **`test.sh`:**  This script runs the extension in a Xephyr session with a GNOME nested Wayland session, allowing for easy testing without restarting your own GNOME Shell session. It can be run with the following command:
 
-- **schemas.sh:** This script compiles the schemas for the extension. It can be run with the following command:
-```bash ./schemas.sh```
+    ```
+    bash ./test.sh
+    ```
 
-- **i18n.sh:** This script create the translations files for the extension. It can be run with the following command:
-```bash ./i18n.sh```
+- **`schemas.sh`:** This script compiles the schemas for the extension. It can be run with the following command:
 
-- **pack.sh:** This script packs the extension into a zip file ready for distribution or use. It automatically check dependencies and compiles schemas. It can be run with the following command:
-```bash ./pack.sh```
+
+    ```
+    bash ./schemas.sh
+    ```
+
+- **`i18n.sh`:** This script creates the translations files for the extension. It can be run with the following command:
+
+    ```
+    bash ./i18n.sh
+    ```
+
+- **`pack.sh`:** This script packs the extension into a zip file ready for distribution or use. It automatically checks dependencies and compiles schemas. It can be run with the following command:
+
+    ```
+    bash ./pack.sh
+    ```
 
 
 # Contributing
@@ -151,7 +164,7 @@ Astra Monitor is a free and open-source project: we rely on the support of our c
 - **Enhanced Project Sustainability**: Your support helps us maintain the project in the long run, ensuring its continual improvement and relevance.
 
 ### How to Donate
-You can donate through your preferred platform, any amount is greatly appreciated and makes a significant impact.
+You can donate through your preferred platform. Any amount is greatly appreciated and makes a significant impact.
 
 **Buy us [a coffee](https://www.buymeacoffee.com/astra.ext), and help us keep Astra Monitor alive and thriving!**
 
@@ -161,4 +174,4 @@ You can donate through your preferred platform, any amount is greatly appreciate
 
 ## Acknowledgments
 
-Astra Monitor is a project inspired by the concepts from [iStat Menus](https://bjango.com/mac/istatmenus/) and [TopHat](https://github.com/fflewddur/tophat) by [Todd Kulesza](https://github.com/fflewddur), adapted and evolved for the GNOME environment. This extension is a tribute to the innovation in system monitoring tools and is driven by the passion and contributions of the open-source community.
+Astra Monitor is a project inspired by the concepts of [iStat Menus](https://bjango.com/mac/istatmenus/) and [TopHat](https://github.com/fflewddur/tophat) by [Todd Kulesza](https://github.com/fflewddur), adapted and evolved for the GNOME environment. This extension is a tribute to the innovation in system monitoring tools and is driven by the passion and contributions of the open-source community.
