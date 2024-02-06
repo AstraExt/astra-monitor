@@ -193,8 +193,14 @@ class StorageHeader extends Header {
                 return;
             
             const threshold = Config.get_int('storage-header-percentage-icon-alert-threshold') || 0;
-            if(threshold === 0)
+            if(threshold === 0) {
+                if(alerts.size > 0) {
+                    alerts.clear();
+                    updateIconColor();
+                }
                 return;
+            }
+            
             
             const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
             if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))

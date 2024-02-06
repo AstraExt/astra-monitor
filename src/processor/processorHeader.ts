@@ -156,8 +156,13 @@ class ProcessorHeader extends Header {
                 return;
             
             const threshold = Config.get_int('processor-header-percentage-icon-alert-threshold') || 0;
-            if(threshold === 0)
+            if(threshold === 0) {
+                if(alerts.size > 0) {
+                    alerts.clear();
+                    updateIconColor();
+                }
                 return;
+            }
             
             const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
             if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total))

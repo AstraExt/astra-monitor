@@ -160,8 +160,13 @@ class MemoryHeader extends Header {
                 return;
             
             const threshold = Config.get_int('memory-header-percentage-icon-alert-threshold') || 0;
-            if(threshold === 0)
+            if(threshold === 0) {
+                if(alerts.size > 0) {
+                    alerts.clear();
+                    updateIconColor();
+                }
                 return;
+            }
             
             const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
             if(!usage || !usage.total || isNaN(usage.total) || !usage.used || isNaN(usage.used))
