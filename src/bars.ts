@@ -39,7 +39,8 @@ export type BarProps = {
     style?:string,
     x_align?:Clutter.ActorAlign,
     y_align?:Clutter.ActorAlign,
-    breakdownConfig?:string
+    breakdownConfig?:string,
+    hideEmpty?:boolean,
 }
 
 export default GObject.registerClass(
@@ -54,6 +55,7 @@ class BarsBase extends St.BoxLayout {
     protected scaleFactor: number;
     protected barSize: number;
     protected bars: St.Widget[][];
+    protected hideEmpty: boolean;
     
     constructor(params: BarProps) {
         //default params
@@ -79,6 +81,8 @@ class BarsBase extends St.BoxLayout {
             params.y_align = Clutter.ActorAlign.CENTER;
         if(params.style === undefined)
             params.style = '';
+        if(params.hideEmpty === undefined)
+            params.hideEmpty = false;
         
         let style = '';
         if(params.height) {
@@ -109,6 +113,7 @@ class BarsBase extends St.BoxLayout {
         this.breakdownConfig = params.breakdownConfig;
         this.initialWidth = params.width;
         this.initialHeight = params.height;
+        this.hideEmpty = params.hideEmpty;
         this.setStyle();
         
         Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
@@ -246,6 +251,13 @@ class BarsBase extends St.BoxLayout {
                 if(l >= value.length) {
                     layer.visible = false;
                     continue;
+                }
+                
+                if(this.hideEmpty) {
+                    for(let l = 0; l < bar.length; l++)
+                        bar[l].visible = value[l].value > 0;
+                    if(value[l].value === 0)
+                        continue;
                 }
                 
                 const normalizedValue = value[l].value * size;

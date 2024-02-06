@@ -458,7 +458,14 @@ export default class ProcessorMenu extends MenuBase {
             });
             grid.addGrid(label, col, row, 1, 1);
             
-            const bar = new ProcessorBars({ numBars: 1, mini: true, width: 1, height: 3, breakdownConfig: 'processor-menu-core-bars-breakdown' });
+            const bar = new ProcessorBars({
+                numBars: 1,
+                mini: true,
+                hideEmpty: true,
+                width: 1,
+                height: 3,
+                breakdownConfig: 'processor-menu-core-bars-breakdown'
+            });
             grid.addGrid(bar, col, row + 1, 1, 1);
             
             const percentage = new St.Label({
