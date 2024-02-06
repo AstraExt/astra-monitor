@@ -193,6 +193,7 @@ class ProcessorHeader extends Header {
         
         this.bars = new ProcessorBars({
             numBars: numBars,
+            header: true,
             mini: true,
             width: 0.5,
             breakdownConfig: 'processor-header-bars-breakdown'

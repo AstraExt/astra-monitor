@@ -6,6 +6,7 @@
 ### New features
 - Storage Devices can be ignored selectively or with a regex (just like Network Interfaces) [[#45](https://github.com/AstraExt/astra-monitor/issues/45)]
 - New experimental feature to add a left/right margin to the headers panel [[#49](https://github.com/AstraExt/astra-monitor/issues/49)]
+- New source selection for Cpu Usage and Cores Usage: now you can choose between GTop and /proc (GTop is the default if available)
 
 ### Bug fixes
 - Fixed a bug where an header bar could be rendered heigher than expected when a fullscreen app is opened [[#50](https://github.com/AstraExt/astra-monitor/issues/50)]

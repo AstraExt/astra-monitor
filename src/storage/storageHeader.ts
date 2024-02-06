@@ -223,7 +223,7 @@ class StorageHeader extends Header {
             this.bars.destroy();
         }
         
-        this.bars = new StorageBars({ numBars: 1, mini: true, width: 0.5 });
+        this.bars = new StorageBars({ numBars: 1, header: true, mini: true, width: 0.5 });
         Config.bind('storage-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.storageMonitor.listen(this.bars, 'storageUsage', () => {
@@ -264,7 +264,7 @@ class StorageHeader extends Header {
             this.ioBars.destroy();
         }
         
-        this.ioBars = new StorageIOBars({ numBars: 2, mini: true, width: 0.5 });
+        this.ioBars = new StorageIOBars({ numBars: 2, header: true, mini: true, width: 0.5 });
         Config.bind('storage-header-io-bars', this.ioBars, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.storageMonitor.listen(this.ioBars, 'storageIO', () => {

@@ -26,7 +26,7 @@ import Monitor from '../monitor.js';
 
 import TopProcessesCache from '../utils/topProcessesCache.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
-import PromiseValueHolder from '../utils/promiseValueHolder.js';
+import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 
 export type ProcessorUsage = {
     idle: number,
@@ -49,7 +49,9 @@ export type ProcessorUsage = {
 type PreviousCpuCoresUsage = Array<ProcessorUsage>;
 
 type ProcessorDataSources = {
-    topProcesses: string|null
+    cpuUsage?: string,
+    cpuCoresUsage?: string,
+    topProcesses?: string
 };
 
 export type CpuInfo = { [key:string]: any };
@@ -152,11 +154,41 @@ export default class ProcessorMonitor extends Monitor {
     
     dataSourcesInit() {
         this.dataSources = {
-            topProcesses: Config.get_string('processor-source-top-processes')
+            cpuUsage: Config.get_string('processor-source-cpu-usage') ?? undefined,
+            cpuCoresUsage: Config.get_string('processor-source-cpu-cores-usage') ?? undefined,
+            topProcesses: Config.get_string('processor-source-top-processes') ?? undefined
         };
         
+        Config.connect(this, 'changed::processor-source-cpu-usage', () => {
+            this.dataSources.cpuUsage = Config.get_string('processor-source-cpu-usage') ?? undefined;
+            this.updateCpuUsageTask.cancel();
+            this.previousCpuUsage = {
+                idle: -1,
+                user: -1,
+                system: -1,
+                total: -1
+            };
+            this.resetUsageHistory('cpuUsage');
+        });
+        
+        Config.connect(this, 'changed::processor-source-cpu-cores-usage', () => {
+            this.dataSources.cpuCoresUsage = Config.get_string('processor-source-cpu-cores-usage') ?? undefined;
+            this.updateCoresUsageTask.cancel();
+            this.previousCpuCoresUsage = new Array(this.coresNum);
+            for(let i = 0; i < this.coresNum; i++) {
+                this.previousCpuCoresUsage[i] = {
+                    idle: -1,
+                    user: -1,
+                    system: -1,
+                    total: -1
+                };
+            }
+            this.resetUsageHistory('cpuCoresUsage');
+        });
+        
         Config.connect(this, 'changed::processor-source-top-processes', () => {
-            this.dataSources.topProcesses = Config.get_string('processor-source-top-processes');
+            this.dataSources.topProcesses = Config.get_string('processor-source-top-processes') ?? undefined;
+            this.updateTopProcessesTask.cancel();
             this.topProcessesCache.reset();
             this.topProcessesTime = -1;
             this.previousPidsCpuTime = new Map();
@@ -167,17 +199,25 @@ export default class ProcessorMonitor extends Monitor {
     update(): boolean {
         const enabled = Config.get_boolean('processor-header-show');
         if(enabled) {
-            const procStat = this.getProcStatAsync();
+            const procStatStore = new PromiseValueHolderStore<string[]>(this.getProcStatAsync.bind(this));
             
-            this.runUpdate('cpuUsage', procStat);
-            this.runUpdate('cpuCoresUsage', procStat);
-            this.runUpdate('cpuCoresFrequency', procStat);
+            if(this.dataSources.cpuUsage === 'GTop')
+                this.runUpdate('cpuUsage');
+            else
+                this.runUpdate('cpuUsage', procStatStore);
+            
+            if(this.dataSources.cpuCoresUsage === 'GTop')
+                this.runUpdate('cpuCoresUsage', procStatStore);
+            else
+                this.runUpdate('cpuCoresUsage', procStatStore);
+            
+            this.runUpdate('cpuCoresFrequency');
             
             if(this.isListeningFor('topProcesses')) {
                 if(this.dataSources.topProcesses === 'GTop')
                     this.runUpdate('topProcesses', false);
                 else
-                    this.runUpdate('topProcesses', false, procStat);
+                    this.runUpdate('topProcesses', false, procStatStore);
             }
             else {
                 this.topProcessesCache.updateNotSeen([]);
@@ -223,28 +263,44 @@ export default class ProcessorMonitor extends Monitor {
     
     runUpdate(key: string, ...params: any[]) {
         if(key === 'cpuUsage') {
+            let run;
+            if(this.dataSources.cpuUsage === 'GTop')
+                run = this.updateCpuUsageGTop.bind(this, ...params);
+            else if(this.dataSources.topProcesses === 'proc')
+                run = this.updateCpuUsageProc.bind(this, ...params);
+            else
+                run = this.updateCpuUsageAuto.bind(this, ...params);
+            
             this.runTask({
-                key: key,
+                key,
                 task: this.updateCpuUsageTask,
-                run: this.updateCpuUsage.bind(this, ...params),
+                run,
                 callback: this.notify.bind(this, 'cpuUsage')
             });
             return;
         }
         if(key === 'cpuCoresUsage') {
+            let run;
+            if(this.dataSources.cpuCoresUsage === 'GTop')
+                run = this.updateCpuCoresUsageGTop.bind(this, ...params);
+            else if(this.dataSources.topProcesses === 'proc')
+                run = this.updateCpuCoresUsageProc.bind(this, ...params);
+            else
+                run = this.updateCpuCoresUsageAuto.bind(this, ...params);
+            
             this.runTask({
-                key: key,
+                key,
                 task: this.updateCoresUsageTask,
-                run: this.updateCpuCoresUsage.bind(this, ...params),
+                run,
                 callback: this.notify.bind(this, 'cpuCoresUsage')
             });
             return;
         }
         if(key === 'cpuCoresFrequency') {
             this.runTask({
-                key: key,
+                key,
                 task: this.updateCoresFrequencyTask,
-                run: this.updateCpuCoresFrequency.bind(this, ...params),
+                run: this.updateCpuCoresFrequencyProc.bind(this, ...params),
                 callback: this.notify.bind(this, 'cpuCoresFrequency')
             });
             return;
@@ -269,9 +325,9 @@ export default class ProcessorMonitor extends Monitor {
                 run = this.updateTopProcessesAuto.bind(this, ...params);
             
             this.runTask({
-                key: key,
+                key,
                 task: this.updateTopProcessesTask,
-                run: run,
+                run,
                 callback: this.notify.bind(this, 'topProcesses')
             });
             return;
@@ -401,7 +457,13 @@ export default class ProcessorMonitor extends Monitor {
         return this.cpuInfo;
     }
     
-    async updateCpuUsage(procStat: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateCpuUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
+        if(Utils.GTop)
+            return await this.updateCpuUsageGTop();
+        return await this.updateCpuUsageProc(procStat);
+    }
+    
+    async updateCpuUsageProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procStatValue = await procStat.getValue();
         if(procStatValue.length < 1)
             return false;
@@ -412,14 +474,48 @@ export default class ProcessorMonitor extends Monitor {
             return false;
         
         // Parse the individual times
-        const user = parseInt(cpuLine[1], 10);
-        const nice = parseInt(cpuLine[2], 10);
-        const system = parseInt(cpuLine[3], 10);
-        const idle = parseInt(cpuLine[4], 10);
-        const iowait = parseInt(cpuLine[5], 10);
-        const irq = parseInt(cpuLine[6], 10);
-        const softirq = parseInt(cpuLine[7], 10);
-        const steal = parseInt(cpuLine[8], 10);
+        return this.updateCpuUsageCommon({
+            user: parseInt(cpuLine[1], 10),
+            nice: parseInt(cpuLine[2], 10),
+            system: parseInt(cpuLine[3], 10),
+            idle: parseInt(cpuLine[4], 10),
+            iowait: parseInt(cpuLine[5], 10),
+            irq: parseInt(cpuLine[6], 10),
+            softirq: parseInt(cpuLine[7], 10),
+            steal: parseInt(cpuLine[8], 10)
+        });
+    }
+    
+    async updateCpuUsageGTop(): Promise<boolean> {
+        const GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        const cpu = new GTop.glibtop_cpu();
+        GTop.glibtop_get_cpu(cpu);
+        
+        return this.updateCpuUsageCommon({
+            user: cpu.user,
+            nice: cpu.nice,
+            system: cpu.sys,
+            idle: cpu.idle,
+            iowait: cpu.iowait,
+            irq: cpu.irq,
+            softirq: cpu.softirq,
+            steal: 0
+        });
+    }
+    
+    updateCpuUsageCommon({user, nice, system, idle, iowait, irq, softirq, steal}: {
+        user: number,
+        nice: number,
+        system: number,
+        idle: number,
+        iowait: number,
+        irq: number,
+        softirq: number,
+        steal: number
+    }): boolean {
         
         // Calculate total time and total idle time
         const totalIdle = idle + iowait + steal;
@@ -512,7 +608,13 @@ export default class ProcessorMonitor extends Monitor {
         return true;
     }
     
-    async updateCpuCoresUsage(procStat: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateCpuCoresUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
+        if(Utils.GTop)
+            return await this.updateCpuCoresUsageGTop();
+        return await this.updateCpuCoresUsageProc(procStat);
+    }
+    
+    async updateCpuCoresUsageProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         let procStatValue = await procStat.getValue();
         if(procStatValue.length < 1)
             return false;
@@ -529,60 +631,110 @@ export default class ProcessorMonitor extends Monitor {
             if(cpuLine.length < 9)
                 continue;
             
-            // Parse the individual times
-            const user = parseInt(cpuLine[1], 10);
-            const nice = parseInt(cpuLine[2], 10);
-            const system = parseInt(cpuLine[3], 10);
-            const idle = parseInt(cpuLine[4], 10);
-            const iowait = parseInt(cpuLine[5], 10);
-            const irq = parseInt(cpuLine[6], 10);
-            const softirq = parseInt(cpuLine[7], 10);
-            const steal = parseInt(cpuLine[8], 10);
-            
-            // Calculate total time and total idle time
-            const totalIdle = idle + iowait + steal;
-            const totalUser = user + nice;
-            const totalSystem = system + irq + softirq;
-            const total = user + nice + system + idle + iowait + irq + softirq + steal;
-            
-            if(this.previousCpuCoresUsage[i].total === -1) {
-                this.previousCpuCoresUsage[i].idle = totalIdle;
-                this.previousCpuCoresUsage[i].user = totalUser;
-                this.previousCpuCoresUsage[i].system = totalSystem;
-                this.previousCpuCoresUsage[i].total = total;
-                continue;
-            }
-            
-            // Calculate the deltas (difference) compared to the previous read
-            const idleDelta = totalIdle - this.previousCpuCoresUsage[i].idle;
-            const userDelta = totalUser - this.previousCpuCoresUsage[i].user;
-            const systemDelta = totalSystem - this.previousCpuCoresUsage[i].system;
-            const totalDelta = total - this.previousCpuCoresUsage[i].total;
-            
-            this.previousCpuCoresUsage[i].idle = totalIdle;
-            this.previousCpuCoresUsage[i].user = totalUser;
-            this.previousCpuCoresUsage[i].system = totalSystem;
-            this.previousCpuCoresUsage[i].total = total;
-            
-            // Calculate the percentage of CPU usage
-            const cpuUsage = (totalDelta - idleDelta) / totalDelta * 100;
-            const userUsage = userDelta / totalDelta * 100;
-            const systemUsage = systemDelta / totalDelta * 100;
-            const idleUsage = idleDelta / totalDelta * 100;
-            
-            cpuCoresUsage.push({
-                total: cpuUsage,
-                user: userUsage,
-                system: systemUsage,
-                idle: idleUsage
+            const cpuCoreUsage = this.updateCpuCoresUsageCommon(i, {
+                user: parseInt(cpuLine[1], 10),
+                nice: parseInt(cpuLine[2], 10),
+                system: parseInt(cpuLine[3], 10),
+                idle: parseInt(cpuLine[4], 10),
+                iowait: parseInt(cpuLine[5], 10),
+                irq: parseInt(cpuLine[6], 10),
+                softirq: parseInt(cpuLine[7], 10),
+                steal: parseInt(cpuLine[8], 10)
             });
+            
+            if(cpuCoreUsage !== null)
+                cpuCoresUsage.push(cpuCoreUsage);
         }
         
         this.pushUsageHistory('cpuCoresUsage', cpuCoresUsage);
         return false;
     }
     
-    async updateCpuCoresFrequency(): Promise<boolean> {
+    async updateCpuCoresUsageGTop(): Promise<boolean> {
+        const GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        const buf = new GTop.glibtop_cpu();
+        GTop.glibtop_get_cpu(buf);
+        
+        const cpuCoresUsage = [];
+        for(let i = 0; i < this.coresNum; i++) {
+            const cpu = new GTop.glibtop_cpu();
+            GTop.glibtop_get_cpu(cpu);
+            
+            if(cpu.xcpu_total.length <= i)
+                break;
+            
+            const cpuCoreUsage = this.updateCpuCoresUsageCommon(i, {
+                user: cpu.xcpu_user[i],
+                nice: cpu.xcpu_nice[i],
+                system: cpu.xcpu_sys[i],
+                idle: cpu.xcpu_idle[i],
+                iowait: cpu.xcpu_iowait[i],
+                irq: cpu.xcpu_irq[i],
+                softirq: cpu.xcpu_softirq[i],
+                steal: 0
+            });
+            
+            if(cpuCoreUsage !== null)
+                cpuCoresUsage.push(cpuCoreUsage);
+        }
+        
+        this.pushUsageHistory('cpuCoresUsage', cpuCoresUsage);
+        return true;
+    }
+    
+    updateCpuCoresUsageCommon(i: number, {user, nice, system, idle, iowait, irq, softirq, steal}: {
+        user: number,
+        nice: number,
+        system: number,
+        idle: number,
+        iowait: number,
+        irq: number,
+        softirq: number,
+        steal: number
+    }): {total: number, user: number, system: number, idle: number} | null {
+        // Calculate total time and total idle time
+        const totalIdle = idle + iowait + steal;
+        const totalUser = user + nice;
+        const totalSystem = system + irq + softirq;
+        const total = user + nice + system + idle + iowait + irq + softirq + steal;
+        
+        if(this.previousCpuCoresUsage[i].total === -1) {
+            this.previousCpuCoresUsage[i].idle = totalIdle;
+            this.previousCpuCoresUsage[i].user = totalUser;
+            this.previousCpuCoresUsage[i].system = totalSystem;
+            this.previousCpuCoresUsage[i].total = total;
+            return null;
+        }
+        
+        // Calculate the deltas (difference) compared to the previous read
+        const idleDelta = totalIdle - this.previousCpuCoresUsage[i].idle;
+        const userDelta = totalUser - this.previousCpuCoresUsage[i].user;
+        const systemDelta = totalSystem - this.previousCpuCoresUsage[i].system;
+        const totalDelta = total - this.previousCpuCoresUsage[i].total;
+        
+        this.previousCpuCoresUsage[i].idle = totalIdle;
+        this.previousCpuCoresUsage[i].user = totalUser;
+        this.previousCpuCoresUsage[i].system = totalSystem;
+        this.previousCpuCoresUsage[i].total = total;
+        
+        // Calculate the percentage of CPU usage
+        const cpuUsage = (totalDelta - idleDelta) / totalDelta * 100;
+        const userUsage = userDelta / totalDelta * 100;
+        const systemUsage = systemDelta / totalDelta * 100;
+        const idleUsage = idleDelta / totalDelta * 100;
+        
+        return {
+            total: cpuUsage,
+            user: userUsage,
+            system: systemUsage,
+            idle: idleUsage
+        };
+    }
+    
+    async updateCpuCoresFrequencyProc(): Promise<boolean> {
         const frequencies = [];
         
         if(this.isListeningFor('cpuCoresFrequency')) {
@@ -612,7 +764,7 @@ export default class ProcessorMonitor extends Monitor {
         return true;
     }
     
-    async updateTopProcessesAuto(procStat: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateTopProcessesAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         if(Utils.GTop)
             return await this.updateTopProcessesGTop();
         return await this.updateTopProcessesProc(procStat);
@@ -624,7 +776,7 @@ export default class ProcessorMonitor extends Monitor {
      * It still can take up to ~150ms, so it shouldn't be called too often.
      * Note: this approach won't show all processes.
      */
-    async updateTopProcessesProc(procStat: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateTopProcessesProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procStatValue = await procStat.getValue();
         if(procStatValue.length < 1)
             return false;

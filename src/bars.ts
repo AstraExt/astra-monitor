@@ -28,6 +28,7 @@ import Config from './config.js';
 declare const global: any;
 
 export type BarProps = {
+    header?:boolean,
     mini?:boolean,
     layout?:'vertical'|'horizontal',
     width?:number,
@@ -44,6 +45,7 @@ export type BarProps = {
 export default GObject.registerClass(
 class BarsBase extends St.BoxLayout {
     protected layout: 'horizontal'|'vertical';
+    protected header: boolean;
     protected mini: boolean;
     protected colors: string[];
     protected breakdownConfig?: string;
@@ -65,6 +67,8 @@ class BarsBase extends St.BoxLayout {
             params.height = 0;
         if(params.layers === undefined)
             params.layers = 1;
+        if(params.header === undefined)
+            params.header = false;
         if(params.mini === undefined)
             params.mini = false;
         if(params.colors === undefined)
@@ -99,6 +103,7 @@ class BarsBase extends St.BoxLayout {
         });
         
         this.layout = params.layout;
+        this.header = params.header;
         this.mini = params.mini;
         this.colors = params.colors;
         this.breakdownConfig = params.breakdownConfig;
@@ -201,7 +206,7 @@ class BarsBase extends St.BoxLayout {
         if(this.initialWidth && width > this.initialWidth)
             width = this.initialWidth;
         
-        if(this.layout === 'vertical') {
+        if(this.layout === 'vertical' && this.header) {
             if(this.initialHeight && height > this.initialHeight)
                 height = this.initialHeight;
             

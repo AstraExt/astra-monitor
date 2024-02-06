@@ -121,6 +121,16 @@
       <description>Seconds between CPU statistics updates</description>
       <range min="0.1" max="10"/>
     </key>
+    <key name="processor-source-cpu-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+      <default>'default'</default>
+      <summary>Cpu Usage Source</summary>
+      <description>Source of the cpu usage</description>
+    </key>
+    <key name="processor-source-cpu-cores-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+      <default>'default'</default>
+      <summary>Cpu Cores Usage Source</summary>
+      <description>Source of the cpu cores usage</description>
+    </key>
     <key name="processor-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
       <default>'default'</default>
       <summary>Top Processes Source</summary>

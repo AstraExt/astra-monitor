@@ -256,6 +256,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
+        this.addComboRow({title: this.tab + _('Cpu Usage')}, choicesPanel, 'processor-source-cpu-usage', sourcesSection, 'string');
+        this.addComboRow({title: this.tab + _('Cpu Cores Usage')}, choicesPanel, 'processor-source-cpu-cores-usage', sourcesSection, 'string');
         this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
         
         processorsPage.add(group);

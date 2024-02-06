@@ -193,6 +193,7 @@ class MemoryHeader extends Header {
         
         this.bars = new MemoryBars({
             numBars: 1,
+            header: true,
             mini: true,
             width: 0.5,
             breakdownConfig: 'memory-header-bars-breakdown'

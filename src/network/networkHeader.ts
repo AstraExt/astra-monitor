@@ -167,7 +167,7 @@ class NetworkHeader extends Header {
             this.bars.destroy();
         }
         
-        this.bars = new NetworkBars({ numBars: 2, mini: true, width: 0.5 });
+        this.bars = new NetworkBars({ numBars: 2, header: true, mini: true, width: 0.5 });
         Config.bind('network-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
         
         Utils.networkMonitor.listen(this.bars, 'networkIO', () => {
