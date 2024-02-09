@@ -89,6 +89,43 @@ Astra Monitor works out of the box with no additional dependencies. However, som
     <img src="./screenshots/screenshot13.jpg" width="600px" alt="Screenshot13" />
 </p>
 
+### Libgtop
+
+If you want to use Libgtop as a data source you may need to install the `libgtop` package. This package is not required for the extension to work, but it is recommended for a better experience.
+
+Here is a non-exhaustive list of how to install `libgtop` on some popular Linux distributions:
+
+#### Ubuntu/Debian
+```bash
+sudo apt install libgtop-2.0-11
+```
+
+#### Fedora
+```bash
+sudo dnf install libgtop2
+```
+
+#### Arch Linux
+```bash
+sudo pacman -S libgtop
+```
+
+#### openSUSE
+```bash
+sudo zypper install libgtop-2_0-11
+```
+
+#### NixOS
+On NixOS, you may need to add the following to your `configuration.nix`:
+```nix
+environment.variables = {
+    GI_TYPELIB_PATH = "/run/current-system/sw/lib/girepository-1.0";
+};
+environment.systemPackages = with pkgs; [
+    libgtop
+];
+```
+
 # Usage
 
 Once installed, Astra Monitor can be accessed and configured directly from the GNOME extensions tool. You can customize what system resources to monitor and how the information is displayed, tailoring the experience to your need.

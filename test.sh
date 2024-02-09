@@ -125,18 +125,6 @@ export DBUS_SESSION_BUS_ADDRESS=$(dbus-daemon --session --fork --print-address)
 export DBUS_SESSION_BUS_PID=$!
 export ASTRA_MONITOR_NESTED_SESSION=1
 
-# Check if the system is NixOS
-if [ -f /etc/NIXOS ]; then
-    log_message "This is NixOS"
-    
-    # NOTE: This is for testing purpose only, on my personal machine
-    #       Should be handled properly, but I don't have time for that now
-    # Export GI_TYPELIB_PATH
-    export GI_TYPELIB_PATH=/nix/store/311jq5bizzzj1yk2k7smb7j6lxc9qbin-libgtop-2.41.1/lib/girepository-1.0
-else
-    log_message "This is not NixOS"
-fi
-
 dbus-run-session -- gnome-shell --nested --wayland --mode=minimal &
 sleep 1
 
