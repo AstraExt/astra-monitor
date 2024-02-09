@@ -201,7 +201,6 @@ class StorageHeader extends Header {
                 return;
             }
             
-            
             const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
             if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
                 return;

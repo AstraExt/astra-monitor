@@ -156,7 +156,6 @@ export default class MemoryMonitor extends Monitor {
                 this.runUpdate('swapUsage', procMeminfo);
             }
         }
-        
         return true;
     }
     

@@ -34,6 +34,7 @@ export default class CancellableTaskManager<T> {
             this.currentTask.cancel();
         
         this.currentTask = this.makeCancellable(boundTask);
+        
         return this.currentTask.promise
             .finally(() => {
                 if(this.currentTask)
@@ -52,19 +53,23 @@ export default class CancellableTaskManager<T> {
     }
     
     private makeCancellable(boundTask: () => Promise<T>): { promise: Promise<T>, cancel: () => void } {
-        let cancel;
+        let rejectFn: (reason?: any) => void;
+        
         const promise = new Promise<T>((resolve, reject) => {
-            cancel = () => {
-                if(this.cancelId) {
-                    this.taskCancellable.cancel();
-                    this.taskCancellable.disconnect(this.cancelId);
-                    this.cancelId = undefined;
-                }
-                reject({ isCancelled: true, message: 'Task cancelled' });
-            };
-            boundTask().then(resolve).catch(reject);
+            rejectFn = reject;
+            setTimeout(() => {
+                boundTask().then(resolve).catch(reject);
+            });
         });
-        // @ts-expect-error cancel type
+        
+        const cancel = () => {
+            if(this.cancelId) {
+                this.taskCancellable.cancel();
+                this.taskCancellable.disconnect(this.cancelId);
+                this.cancelId = undefined;
+            }
+            rejectFn({ isCancelled: true, message: 'Task cancelled' });
+        };
         return { promise, cancel };
     }
     

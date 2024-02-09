@@ -337,10 +337,7 @@ export default class StorageMonitor extends Monitor {
         }
     }
     
-    /**
-     * @returns {PromiseValueHolder}
-     */
-    getProcDiskStatsAsync() {
+    getProcDiskStatsAsync(): PromiseValueHolder<string[]> {
         return new PromiseValueHolder(new Promise((resolve, reject) => {
             Utils.readFileAsync('/proc/diskstats').then(fileContent => {
                 resolve(fileContent.split('\n'));
@@ -350,10 +347,7 @@ export default class StorageMonitor extends Monitor {
         }));
     }
     
-    /**
-     * @returns {Promise<boolean>}
-     */
-    async updateStorageUsage() {
+    async updateStorageUsage(): Promise<boolean> {
         let mainDisk = Config.get_string('storage-main');
         const disks = await Utils.listDisksAsync(this.updateStorageUsageTask);
         

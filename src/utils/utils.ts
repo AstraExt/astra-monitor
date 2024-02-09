@@ -124,6 +124,8 @@ export default class Utils {
     
     static ready = false;
     
+    static performanceMap: Map<string,number>|null = null;
+    
     static init({
         extension,
         metadata,
@@ -143,6 +145,7 @@ export default class Utils {
         
         Utils.debug = Config.get_boolean('debug-mode');
         if(Utils.debug) {
+            Utils.performanceMap = new Map();
             const log = Utils.getLogFile();
             if(log) {
                 if(log.query_exists(null))
@@ -167,6 +170,7 @@ export default class Utils {
     
     static clear() {
         Utils.xmlParser = null;
+        Utils.performanceMap = null;
         
         try {
             Config.clearAll();
@@ -1692,5 +1696,24 @@ export default class Utils {
         if(!Utils.xmlParser)
             return undefined;
         return Utils.xmlParser.parse(xml);
+    }
+    
+    static performanceStart(name: string) {
+        if(!Utils.debug)
+            return;
+        
+        Utils.performanceMap?.set(name, GLib.get_monotonic_time());
+    }
+    
+    static performanceEnd(name: string) {
+        if(!Utils.debug)
+            return;
+        
+        const start = Utils.performanceMap?.get(name);
+        if(start) {
+            const end = GLib.get_monotonic_time();
+            Utils.log(`${name} took ${((end - start) / 1000).toFixed(2)}ms`);
+            Utils.performanceMap?.set(name, 0);
+        }
     }
 }

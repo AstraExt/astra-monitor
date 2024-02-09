@@ -178,7 +178,6 @@ export default class NetworkMonitor extends Monitor {
             
             this.runUpdate('networkIO', detailed, procNetDev);
         }
-        
         return true;
     }
     
