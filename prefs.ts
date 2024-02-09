@@ -152,13 +152,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         if(!Utils.hasIp())
             check = false, this.addStatusLabel({title: _('\'iproute2\' not installed: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
         
-        /*if(Utils.hasAMDGpu() && !Utils.hasAmdGpuTop() && !Utils.hasRadeonTop())
-            check = false, this.addStatusLabel(_('AMD GPU detected but \'amdgpu_top/radeontop\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
+        if(Utils.hasAMDGpu() && !Utils.hasAmdGpuTop())
+            check = false, this.addStatusLabel({title: _('AMD GPU detected but \'amdgpu_top\' not installed: some optional features will be disabled!')}, 'am-dialog-warning-symbolic', group);
         if(Utils.hasNVidiaGpu() && !Utils.hasNvidiaSmi())
-            check = false, this.addStatusLabel(_('NVidia GPU detected but \'nvidia-smi\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
-        if(Utils.hasIntelGpu() && !Utils.hasIntelGpuTop())
-            check = false, this.addStatusLabel(_('Intel GPU detected but \'intel_gpu_top\' not installed: some features will be disabled!'), 'am-dialog-warning-symbolic', group);
-        */
+            check = false, this.addStatusLabel({title: _('NVidia GPU detected but \'nvidia-smi\' not installed: some optional features will be disabled!')}, 'am-dialog-warning-symbolic', group);
+        /*if(Utils.hasIntelGpu() && !Utils.hasIntelGpuTop())
+            check = false, this.addStatusLabel(_('Intel GPU detected but \'intel_gpu_top\' not installed: some optional features will be disabled!'), 'am-dialog-warning-symbolic', group);*/
         
         const statusLabel = this.addStatusLabel({title:_('Checking GTop dependency...')}, 'am-dialog-info-symbolic', group);
         Utils.hasGTop().then((GTopAvailable: boolean) => {
