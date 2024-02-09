@@ -142,6 +142,14 @@ export default class Utils {
         Utils.xmlParser = new XMLParser();
         
         Utils.debug = Config.get_boolean('debug-mode');
+        if(Utils.debug) {
+            const log = Utils.getLogFile();
+            if(log) {
+                if(log.query_exists(null))
+                    log.delete(null);
+                log.create_readwrite(Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+            }
+        }
         
         if(ProcessorMonitor)
             Utils.processorMonitor = new ProcessorMonitor();
@@ -216,16 +224,58 @@ export default class Utils {
     }
     
     static log(message: string) {
+        if(Utils.debug) {
             console.log(Utils.logHeader + ' ' + message);
+            Utils.logToFile(message);
+        }
     }
     
     static warn(message: string) {
         const error = new Error();
+        console.warn(error, Utils.logHeader + ' WARNING: ' + message);
+        
+        if(Utils.debug) {
+            Utils.logToFile('WARNING: ' + message);
+            Utils.logToFile(error.stack ?? '');
+        }
     }
     
     static error(message: string) {
         const error = new Error();
         console.error(error, Utils.logHeader + ' ERROR: ' + message);
+        
+        if(Utils.debug) {
+            Utils.logToFile('ERROR: ' + message);
+            Utils.logToFile(error.stack ?? '');
+        }
+    }
+    
+    static getLogFile(): Gio.File | null {
+        try {
+            const dataDir = GLib.get_user_cache_dir();
+            const destination = GLib.build_filenamev([dataDir, 'astra-monitor', 'debug.log']);
+            const destinationFile = Gio.File.new_for_path(destination);
+            if(destinationFile && GLib.mkdir_with_parents(destinationFile.get_parent()!.get_path()!, 0o755) === 0)
+                return destinationFile;
+        }
+        catch(e: any) {
+            console.error(e);
+        }
+        return null;
+    }
+    
+    static logToFile(message: string) {
+        const log = Utils.getLogFile();
+        if(log) {
+            try {
+                const outputStream = log.append_to(Gio.FileCreateFlags.NONE, null);
+                const buffer: Uint8Array = new TextEncoder().encode(message + '\n');
+                outputStream.write_all(buffer, null);
+            }
+            catch(e: any) {
+                console.error(e);
+            }
+        }
     }
     
     static get themeStyle(): string {
