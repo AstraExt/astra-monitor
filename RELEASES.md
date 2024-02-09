@@ -1,4 +1,4 @@
-# Astra Monitor 10 - TO BE RELEASED
+# Astra Monitor 10 - February 9 2024
 
 ### TYPESCRIPT
 - The extension has been ported to Typescript. This transition enables the writing of better code and fosters a more stable codebase. It also lowers the barrier for new contributors to join the project. This is a major change, so, although thorough testing has been conducted, there are likely still some bugs to address. This significant update marks a milestone, and the assistance in identifying any bugs is greatly appreciated. Reporting discovered issues will be invaluable in enhancing the project. Thank you in advance for your valuable contributions and support.

@@ -106,7 +106,7 @@ export default class ContinuosTaskManager {
         stdout.read_line_async(GLib.PRIORITY_LOW, null, (stream, result) => {
             try {
                 const [line] = stream.read_line_finish_utf8(result);
-    
+                
                 if(line !== null) {
                     if(this.output.length)
                         this.output += '\n' + line;

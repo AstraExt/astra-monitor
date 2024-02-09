@@ -1620,18 +1620,16 @@ export default class Utils {
                     }
                     
                     if(device.children && device.children.length > 0) {
-                        for(const child of device.children) {
+                        for(const child of device.children)
                             processDevice(child, deviceObj);
-                        }
                     }
                     else {
                         devices.set(id, deviceObj);
                     }
                 };
                 
-                for(const device of json.blockdevices) {
+                for(const device of json.blockdevices)
                     processDevice(device);
-                }
             }
         }
         catch(e: any) {
@@ -1646,16 +1644,14 @@ export default class Utils {
     
         if(colorString.startsWith('#')) {
             colorString = colorString.substring(1);
-            if(colorString.length === 3) {
+            if(colorString.length === 3)
                 colorString = colorString.split('').map(char => char + char).join('');
-            }
             if(colorString.length === 6 || colorString.length === 8) {
                 color.red = parseInt(colorString.substring(0, 2), 16) / 255;
                 color.green = parseInt(colorString.substring(2, 4), 16) / 255;
                 color.blue = parseInt(colorString.substring(4, 6), 16) / 255;
-                if(colorString.length === 8) {
+                if(colorString.length === 8)
                     color.alpha = parseInt(colorString.substring(6, 8), 16) / 255;
-                }
             }
             else {
                 throw new Error('Invalid hex color format');
@@ -1670,12 +1666,10 @@ export default class Utils {
                 color.red = values[0] / 255;
                 color.green = values[1] / 255;
                 color.blue = values[2] / 255;
-                if(values.length === 4) {
+                if(values.length === 4)
                     color.alpha = values[3];
-                }
-                if(values.some((value, index) => (index < 3 && (value < 0 || value > 255)) || (index === 3 && (value < 0 || value > 1)))) {
+                if(values.some((value, index) => (index < 3 && (value < 0 || value > 255)) || (index === 3 && (value < 0 || value > 1))))
                     throw new Error('RGB values must be between 0 and 255, and alpha value must be between 0 and 1');
-                }
             }
             else {
                 throw new Error('Invalid RGB(A) format');
