@@ -25,7 +25,7 @@ Astra Monitor is a cutting-edge, fully customizable, and performance-focused mon
 
 ### Screenshots:
 
-_NOTICE: The screenshots below are from an outdated version of the extension and may not reflect the current release._
+_**NOTE**: The screenshots below are from an outdated version of the extension and may not reflect the current release._
 
 #### High Customization Level
 <p align="center">
@@ -69,7 +69,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
 - **Network:** Improvement of network monitoring (e.g. selection of network interface, manual vs automatic max speed detection, VPNs).
 - **Disk:** Improvement of disk monitoring (e.g. ~~selection of main disk~~, disk health).
 - **CPU:** Dual socket CPU support.
-- **Debugging:** Better resources for the final user to debug errors/problems within the preferences panel (e.g. logs, error messages, etc.).
+- **Debugging:** ~~Better resources for the final user to debug errors/problems within the preferences panel (e.g. logs, error messages, etc.)~~.
 
 Your feedback is invaluable in shaping Astra Monitor's development journey. Do you have any new features to suggest? We are very happy to receive suggestions. The best way to see new features become reality as quickly as possible is through direct contributions or donations. Donations will result in more development time dedicated to the project. If you would like to contribute, please refer to the contribution guidelines.
 
@@ -111,14 +111,14 @@ Astra Monitor is currently available in English, German and Russian. If you woul
 
 # Building and Testing
 
-Astra Monitor is written in TypeScript and uses the [GNOME Shell Extension API](https://gjs-docs.gnome.org/gnome-shell-extension/stable/).
+Astra Monitor is written in TypeScript and uses the [GNOME Shell Extension API](https://gjs.guide/).
 
 You may run `npm install`, `yarn install` with Yarn or `nnpm install` using NNPM, to install all dependencies.
 
 Various scripts are provided to facilitate packing and testing of the extension. These scripts are located in the root directory of the project and can be run from there. They are used solely with the scope of facilitating my own development process. Feel free to use or modify them to suit your needs.
 
 ### Scripts
-- **`test.sh`:**  This script runs the extension in a Xephyr session with a GNOME nested Wayland session, allowing for easy testing without restarting your own GNOME Shell session. It can be run with the following command:
+- **`test.sh`:**  Compile, pack, install, and run the extension in a Xephyr session with a GNOME nested Wayland session, allowing for easy testing without restarting your own GNOME Shell session. It can be run with the following command:
 
     ```
     bash ./test.sh
@@ -143,6 +143,11 @@ Various scripts are provided to facilitate packing and testing of the extension.
     bash ./pack.sh
     ```
 
+- **`compile.sh`:** This script compiles the TypeScript source code into JavaScript; the output is placed in the `dist` directory. It can be run with the following command:
+
+    ```
+    bash ./compile.sh
+    ```
 
 # Contributing
 
