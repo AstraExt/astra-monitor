@@ -26,6 +26,7 @@ import Monitor from '../monitor.js';
 
 import TopProcessesCache from '../utils/topProcessesCache.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
+import ContinuosTaskManager, { ContinuosTaskManagerData } from '../utils/continuosTaskManager.js';
 import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 
 export type ProcessorUsage = {
@@ -54,6 +55,41 @@ type ProcessorDataSources = {
     topProcesses?: string
 };
 
+type CpuTime = {
+    processTime: number, totalCpuTime: number
+};
+
+export type GenericGpuInfo = {
+    id: string,
+    family: 'AMD' | 'NVIDIA' | 'Intel',
+    vram: {
+        percent?: number,
+        total?: number,
+        used?: number,
+    },
+    activity: {
+        GFX?: number,
+    }
+    raw: any
+}
+
+export type AmdInfo = GenericGpuInfo & {
+    raw: {
+        GRBM?: any,
+        GRBM2?: any,
+        Info?: any,
+        Sensors?: any,
+        VRAM?: any,
+        fdinfo?: any,
+        gpu_activity?: any,
+        gpu_metrics?: any,
+    }
+};
+
+export type NvidiaInfo = GenericGpuInfo & {
+    raw: any
+};
+
 export type CpuInfo = { [key:string]: any };
 
 export default class ProcessorMonitor extends Monitor {
@@ -69,10 +105,12 @@ export default class ProcessorMonitor extends Monitor {
     private updateCoresUsageTask: CancellableTaskManager<boolean>;
     private updateCoresFrequencyTask: CancellableTaskManager<boolean>;
     private updateTopProcessesTask: CancellableTaskManager<boolean>;
+    private updateAmdGpuTask: ContinuosTaskManager;
+    private updateNvidiaGpuTask: ContinuosTaskManager;
     
     private previousCpuUsage!: ProcessorUsage;
     private previousCpuCoresUsage!: PreviousCpuCoresUsage;
-    private previousPidsCpuTime!:Map<number, {processTime: number, totalCpuTime: number}>;
+    private previousPidsCpuTime!:Map<number, CpuTime>;
     
     private coresNum: number;
     private dataSources!: ProcessorDataSources;
@@ -88,6 +126,12 @@ export default class ProcessorMonitor extends Monitor {
         this.updateCoresUsageTask = new CancellableTaskManager();
         this.updateCoresFrequencyTask = new CancellableTaskManager();
         this.updateTopProcessesTask = new CancellableTaskManager();
+        
+        this.updateAmdGpuTask = new ContinuosTaskManager();
+        this.updateAmdGpuTask.listen(this, this.updateAmdGpu.bind(this));
+        
+        this.updateNvidiaGpuTask = new ContinuosTaskManager();
+        this.updateNvidiaGpuTask.listen(this, this.updateNvidiaGpu.bind(this));
         
         this.coresNum = -1;
         this.getNumberOfCores();
@@ -149,6 +193,7 @@ export default class ProcessorMonitor extends Monitor {
     
     stop() {
         super.stop();
+        this.stopGpuTask();
         this.reset();
     }
     
@@ -194,6 +239,50 @@ export default class ProcessorMonitor extends Monitor {
             this.previousPidsCpuTime = new Map();
             this.resetUsageHistory('topProcesses');
         });
+    }
+    
+    startListeningFor(key: string) {
+        if(key === 'gpuUpdate') {
+            this.startGpuTask();
+        }
+    }
+    
+    stopListeningFor(key: string) {
+        if(key === 'gpuUpdate') {
+            this.stopGpuTask();
+        }
+    }
+    
+    private startGpuTask() {
+        const selectedGpu = Utils.getSelectedGPU();
+        if(!selectedGpu)
+            return;
+        
+        if(Utils.hasAMDGpu() && Utils.hasAmdGpuTop() && Utils.isAmdGpu(selectedGpu)) {
+            // Max 2 updates per second
+            const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
+            this.updateAmdGpuTask.start(`amdgpu_top -J -u ${timer} -s ${timer} -n 0`);
+        }
+        
+        if(Utils.hasNVidiaGpu() && Utils.hasNvidiaSmi() && Utils.isNvidiaGpu(selectedGpu)) {
+            // Max 2 updates per second
+            const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
+            /**
+             * Using -q even though it has a lot of useless info and not -query-gpu because
+             * the latter just gives a snapshot, not the proper values since the last call.
+             * It also doesn't support processes monitoring and other features we might want
+             * to add in the future.
+             */
+            this.updateNvidiaGpuTask.start(`nvidia-smi -q -x -lms ${timer}`, '</nvidia_smi_log>');
+        }
+    }
+    
+    private stopGpuTask() {
+        if(this.updateAmdGpuTask.isRunning)
+            this.updateAmdGpuTask.stop();
+        
+            if(this.updateNvidiaGpuTask.isRunning)
+            this.updateNvidiaGpuTask.stop();
     }
     
     update(): boolean {
@@ -791,10 +880,7 @@ export default class ProcessorMonitor extends Monitor {
             const files = await Utils.readDirAsync('/proc');
             const pids = files.filter(file => /^\d+$/.test(file));
             
-            /**
-             * @type {Map<number, {processTime: number, totalCpuTime: number}>}
-             */
-            const cpuTimes = new Map();
+            const cpuTimes:Map<number, CpuTime> = new Map();
             
             for(const pid of pids) {
                 try {
@@ -804,7 +890,9 @@ export default class ProcessorMonitor extends Monitor {
                     const utime = parseInt(statParts[13], 10);
                     const stime = parseInt(statParts[14], 10);
                     
-                    cpuTimes.set(pid, { processTime: utime + stime, totalCpuTime });
+                    const nPid = parseInt(pid, 10);
+                    if(nPid)
+                        cpuTimes.set(nPid, { processTime: utime + stime, totalCpuTime });
                 }
                 catch(e) {
                     //Avoid spamming the log with errors for processes that are gone
@@ -967,6 +1055,143 @@ export default class ProcessorMonitor extends Monitor {
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);
         return true;
+    }
+    
+    updateAmdGpu(data: ContinuosTaskManagerData) {
+        if(data.exit || !data.result)
+            return;
+        
+        try {
+            const json = JSON.parse(data.result);
+            
+            const gpus = new Map<string, any>();
+            for(const gpuInfo of json.devices) {
+                const id = gpuInfo.Info?.PCI;
+                
+                const gpu:AmdInfo = {
+                    id,
+                    family: 'AMD',
+                    vram: {},
+                    activity: {},
+                    raw: gpuInfo
+                };
+                
+                if(gpuInfo.VRAM) {
+                    const toalData = gpuInfo.VRAM['Total VRAM'];
+                    if(toalData && toalData.value && toalData.unit) {
+                        const total = Utils.convertToBytes(toalData.value, toalData.unit);
+                        if(total >= 0)
+                            gpu.vram.total = total;
+                    }
+                    
+                    const usedData = gpuInfo.VRAM['Total VRAM Usage'];
+                    if(usedData && usedData.value && usedData.unit) {
+                        const used = Utils.convertToBytes(usedData.value, usedData.unit);
+                        if(used >= 0)
+                            gpu.vram.used = used;
+                    }
+                    
+                    if(gpu.vram.total !== undefined && gpu.vram.used !== undefined)
+                        gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
+                }
+                
+                if(gpuInfo.gpu_activity && gpuInfo.gpu_activity.GFX && Object.prototype.hasOwnProperty.call(gpuInfo.gpu_activity.GFX, 'value') && gpuInfo.gpu_activity.GFX.unit === '%') {
+                    const GFX = gpuInfo.gpu_activity.GFX.value;
+                    if(typeof GFX === 'string')
+                        gpu.activity.GFX = parseFloat(GFX);
+                    else
+                        gpu.activity.GFX = GFX;
+                }
+                else if(gpuInfo.GRBM && gpuInfo.GRBM['Graphics Pipe'] && Object.prototype.hasOwnProperty.call(gpuInfo.GRBM['Graphics Pipe'], 'value') && gpuInfo.GRBM['Graphics Pipe'].unit === '%') {
+                    const gfx = gpuInfo.GRBM['Graphics Pipe'].value;
+                    if(typeof gfx === 'string')
+                        gpu.activity.GFX = parseFloat(gfx);
+                    else
+                        gpu.activity.GFX = gfx;
+                }
+                
+                gpus.set(id, gpu);
+            }
+            
+            this.notify('gpuUpdate', gpus);
+        }
+        catch(e: any) {
+            Utils.error(`updateAmdGpu: ${e.message}`);
+        }
+    }
+    
+    updateNvidiaGpu(data: ContinuosTaskManagerData) {
+        if(data.exit || !data.result)
+            return;
+        
+        try {
+            const xml = Utils.xmlParse(data.result);
+            
+            if(!xml.nvidia_smi_log)
+                return;
+            
+            let gpuInfoList = xml.nvidia_smi_log.gpu;
+            if(!gpuInfoList || gpuInfoList.length === 0)
+                return;
+            
+            if(!Array.isArray(gpuInfoList))
+                gpuInfoList = [gpuInfoList];
+            
+            const gpus = new Map<string, any>();
+            
+            for(const gpuInfo of gpuInfoList) {
+                if(!gpuInfo['@id'])
+                    continue;
+                
+                let id = gpuInfo['@id'];
+                if(id.startsWith('00000000:'))
+                    id = id.slice(4);
+                
+                const gpu:NvidiaInfo = {
+                    id,
+                    family: 'NVIDIA',
+                    vram: {},
+                    activity: {},
+                    raw: gpuInfo
+                };
+                
+                if(gpuInfo.fb_memory_usage) {
+                    const toalData = gpuInfo.fb_memory_usage.total;
+                    if(toalData && toalData['#text']) {
+                        const [value, unit] = toalData['#text'].split(' ');
+                        
+                        const total = Utils.convertToBytes(value, unit);
+                        if(total >= 0)
+                            gpu.vram.total = total;
+                    }
+                    
+                    const usedData = gpuInfo.fb_memory_usage.used;
+                    if(usedData && usedData['#text']) {
+                        const [value, unit] = usedData['#text'].split(' ');
+                        
+                        const used = Utils.convertToBytes(value, unit);
+                        if(used >= 0)
+                            gpu.vram.used = used;
+                    }
+                    
+                    if(gpu.vram.total !== undefined && gpu.vram.used !== undefined)
+                        gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
+                }
+                
+                if(gpuInfo.utilization && gpuInfo.utilization.gpu_util && Object.prototype.hasOwnProperty.call(gpuInfo.utilization.gpu_util, '#text')) {
+                    const [value, unit] = gpuInfo.utilization.gpu_util['#text'].split(' ');
+                    if(unit === '%')
+                        gpu.activity.GFX = parseFloat(value);
+                }
+                
+                gpus.set(id, gpu);
+            }
+            
+            this.notify('gpuUpdate', gpus);
+        }
+        catch(e: any) {
+            Utils.error(`updateNvidiaGpu: ${e.message}`);
+        }
     }
     
     destroy() {

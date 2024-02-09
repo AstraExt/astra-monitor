@@ -292,7 +292,7 @@ export default class MemoryMonitor extends Monitor {
         const seenPids = [];
         
         try {
-            const result = await Utils.executeCommandAsync('ps -eo pid,rss,%mem --sort=-%mem');
+            const result = await Utils.executeCommandAsync('ps -eo pid,rss,%mem --sort=-%mem', this.updateTopProcessesTask);
             if(result) {
                 let lines = result.split('\n');
                 lines.shift(); // Remove the first line (header)

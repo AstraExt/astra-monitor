@@ -355,7 +355,7 @@ export default class StorageMonitor extends Monitor {
      */
     async updateStorageUsage() {
         let mainDisk = Config.get_string('storage-main');
-        const disks = await Utils.listDisksAsync();
+        const disks = await Utils.listDisksAsync(this.updateStorageUsageTask);
         
         try {
             if(!mainDisk || mainDisk === '[default]') {
@@ -372,7 +372,7 @@ export default class StorageMonitor extends Monitor {
                 return false;
             
             const path = disk.path.replace(/[^a-zA-Z0-9/-]/g, '');
-            const result = await Utils.executeCommandAsync(`lsblk -Jb -o ID,SIZE,FSUSE% ${path}`);
+            const result = await Utils.executeCommandAsync(`lsblk -Jb -o ID,SIZE,FSUSE% ${path}`, this.updateStorageUsageTask);
             
             if(result) {
                 const json = JSON.parse(result);

@@ -314,6 +314,14 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: this.tab + _('Top Processes Single Core')}, 'processor-menu-top-processes-percentage-core', cpuSection);
         const gpuSection = this.addExpanderRow({title: _('GPU')}, group);
         
+        //Fix GPU domain missing (v9 => v10)
+        //TODO: remove in v12-v13
+        const selectedGpu = Config.get_json('processor-menu-gpu');
+        if(selectedGpu && selectedGpu.domain) {
+            if(!selectedGpu.domain.includes(':'))
+                selectedGpu.domain = '0000:' + selectedGpu.domain;
+        }
+        
         const gpus = Utils.getGPUsList();
         const choicesSource = [{value: '', text: _('None')}];
         for(const gpu of gpus) {
@@ -745,9 +753,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sources = Utils.getSensorSources();
         
-        /**
-         * @type {{value:string, text:string}[]}
-         */
         const choicesSource = [{value: '', text: _('None')}];
         for(const source of sources)
             choicesSource.push({value: source.value, text: source.text});

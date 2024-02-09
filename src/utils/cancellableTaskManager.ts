@@ -18,36 +18,66 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Gio from 'gi://Gio';
+
 export default class CancellableTaskManager<T> {
+    private cancelId?: number;
+    private taskCancellable: Gio.Cancellable;
     private currentTask?: { promise: Promise<T>, cancel: () => void };
     
-    run(boundTask: () => Promise<T>): Promise<T> {
+    constructor() {
+        this.taskCancellable = new Gio.Cancellable();
+    }
+    
+    public run(boundTask: () => Promise<T>): Promise<T> {
         if(this.currentTask)
             this.currentTask.cancel();
         
         this.currentTask = this.makeCancellable(boundTask);
         return this.currentTask.promise
             .finally(() => {
-                this.currentTask = undefined;
+                if(this.currentTask)
+                    this.currentTask = undefined;
+                
+                if(this.cancelId)
+                    this.taskCancellable.disconnect(this.cancelId);
+                    this.cancelId = undefined;
             });
     }
     
-    makeCancellable(boundTask: () => Promise<T>): { promise: Promise<T>, cancel: () => void } {
+    public setSubprocess(subprocess: Gio.Subprocess) {
+        this.cancelId = this.taskCancellable.connect(() => {
+            subprocess.force_exit();
+        });
+    }
+    
+    private makeCancellable(boundTask: () => Promise<T>): { promise: Promise<T>, cancel: () => void } {
         let cancel;
         const promise = new Promise<T>((resolve, reject) => {
-            cancel = () => reject({ isCancelled: true });
+            cancel = () => {
+                if(this.cancelId) {
+                    this.taskCancellable.cancel();
+                    this.taskCancellable.disconnect(this.cancelId);
+                    this.cancelId = undefined;
+                }
+                reject({ isCancelled: true, message: 'Task cancelled' });
+            };
             boundTask().then(resolve).catch(reject);
         });
         // @ts-expect-error cancel type
         return { promise, cancel };
     }
     
-    cancel() {
+    public cancel() {
         if(this.currentTask)
             this.currentTask.cancel();
     }
     
-    get isRunning() {
+    public get isRunning() {
         return !!this.currentTask;
+    }
+    
+    public get cancellable() {
+        return this.taskCancellable;
     }
 }

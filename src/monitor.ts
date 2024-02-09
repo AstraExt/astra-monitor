@@ -217,9 +217,10 @@ export default class Monitor {
             for(const key in this.listeners) {
                 const listeners = this.listeners.get(key);
                 if(listeners) {
-                    this.listeners.set(key, listeners.filter(listener => listener.subject !== subject));
+                    const newListeners = listeners.filter(listener => listener.subject !== subject);
+                    this.listeners.set(key, newListeners);
                     
-                    if(listeners.length === 0)
+                    if(newListeners.length === 0)
                         this.stopListeningFor(key);
                 }
             }
@@ -228,9 +229,10 @@ export default class Monitor {
         
         const listeners = this.listeners.get(key);
         if(listeners) {
-            this.listeners.set(key, listeners.filter(listener => listener.subject !== subject));
+            const newListeners = listeners.filter(listener => listener.subject !== subject);
+            this.listeners.set(key, newListeners);
             
-            if(listeners.length === 0)
+            if(newListeners.length === 0)
                 this.stopListeningFor(key);
         }
     }

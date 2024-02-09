@@ -1,3 +1,23 @@
+/*!
+ * Copyright (C) 2023 Lju
+ *
+ * This file is part of Astra Monitor extension for GNOME Shell.
+ * [https://github.com/AstraExt/astra-monitor]
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
@@ -7,6 +27,8 @@ import MemoryMonitor from '../memory/memoryMonitor.js';
 import StorageMonitor, { BlockDevice } from '../storage/storageMonitor.js';
 import NetworkMonitor from '../network/networkMonitor.js';
 import SensorsMonitor from '../sensors/sensorsMonitor.js';
+import CancellableTaskManager from './cancellableTaskManager.js';
+import XMLParser from './xmlParser.js';
 
 type GTop = typeof import('gi://GTop').default;
 
@@ -98,6 +120,7 @@ export default class Utils {
     static storageMonitor: StorageMonitor;
     static networkMonitor: NetworkMonitor;
     static sensorsMonitor: SensorsMonitor;
+    static xmlParser: XMLParser|null = null;
     
     static ready = false;
     
@@ -116,6 +139,7 @@ export default class Utils {
             Utils.extension = extension;
         Utils.metadata = metadata;
         Config.settings = settings;
+        Utils.xmlParser = new XMLParser();
         
         Utils.debug = Config.get_boolean('debug-mode');
         
@@ -134,6 +158,8 @@ export default class Utils {
     }
     
     static clear() {
+        Utils.xmlParser = null;
+        
         try {
             Config.clearAll();
         }
@@ -190,13 +216,11 @@ export default class Utils {
     }
     
     static log(message: string) {
-        if(Utils.debug)
             console.log(Utils.logHeader + ' ' + message);
     }
     
     static warn(message: string) {
         const error = new Error();
-        console.warn(error,Utils.logHeader + ' WARNING: ' + message);
     }
     
     static error(message: string) {
@@ -329,45 +353,42 @@ export default class Utils {
     }
     
     static hasAMDGpu(): boolean {
-        try {
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('lspci -nnk');
-            if(!result || !stdout)
-                return false;
-            const decoder = new TextDecoder('utf8');
-            const lspciOutput = decoder.decode(stdout);
-            const filtered = Utils.filterLspciOutput(lspciOutput,  ['vga', 'amd'], 3);
-            return Utils.GPUIsInUse(filtered, 'amd');
-        } catch(e: any) {
-            return false;
+        const gpus = Utils.getGPUsList();
+        for(const gpu of gpus) {
+            if(Utils.isAmdGpu(gpu))
+                return true;
         }
+        return false;
     }
     
     static hasNVidiaGpu(): boolean {
-        try {
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('lspci -nnk');
-            if(!result || !stdout)
-                return false;
-            const decoder = new TextDecoder('utf8');
-            const lspciOutput = decoder.decode(stdout);
-            const filtered = Utils.filterLspciOutput(lspciOutput,  ['vga', 'nvidia'], 3);
-            return Utils.GPUIsInUse(filtered, 'nvidia');
-        } catch(e: any) {
-            return false;
+        const gpus = Utils.getGPUsList();
+        for(const gpu of gpus) {
+            if(Utils.isNvidiaGpu(gpu))
+                return true;
         }
+        return false;
     }
     
     static hasIntelGpu(): boolean {
-        try {
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('lspci -nnk');
-            if(!result || !stdout)
-                return false;
-            const decoder = new TextDecoder('utf8');
-            const lspciOutput = decoder.decode(stdout);
-            const filtered = Utils.filterLspciOutput(lspciOutput, ['vga', 'intel'], 3);
-            return Utils.GPUIsInUse(filtered, 'intel');
-        } catch(e: any) {
-            return false;
+        const gpus = Utils.getGPUsList();
+        for(const gpu of gpus) {
+            if(Utils.isIntelGpu(gpu))
+                return true;
         }
+        return false;
+    }
+    
+    static isAmdGpu(gpu:GpuInfo) {
+        return gpu.vendorId === '1002';
+    }
+    
+    static isNvidiaGpu(gpu:GpuInfo) {
+        return gpu.vendorId === '10de' || gpu.vendorId === '12d2';
+    }
+    
+    static isIntelGpu(gpu:GpuInfo) {
+        return gpu.vendorId === '8086';
     }
     
     static async hasGTop(): Promise<boolean> {
@@ -579,6 +600,42 @@ export default class Utils {
         return `${result} ${units[unitIndex]}`;
     }
     
+    static convertToBytes(value: number|string, unit: string): number {
+        if(typeof value === 'string') {
+            value = parseFloat(value);
+            if(isNaN(value))
+                return -1;
+        }
+        
+        if(unit === 'B')
+            return value;
+        if(unit === 'kB' || unit === 'KB')
+            return value * 1024;
+        if(unit === 'MB')
+            return value * 1024 * 1024;
+        if(unit === 'GB')
+            return value * 1024 * 1024 * 1024;
+        if(unit === 'TB')
+            return value * 1024 * 1024 * 1024 * 1024;
+        if(unit === 'kiB' || unit === 'KiB')
+            return value * 1024;
+        if(unit === 'MiB')
+            return value * 1024 * 1024;
+        if(unit === 'GiB')
+            return value * 1024 * 1024 * 1024;
+        if(unit === 'TiB')
+            return value * 1024 * 1024 * 1024 * 1024;
+        if(unit === 'ki' || unit === 'Ki')
+            return value * 1000;
+        if(unit === 'Mi')
+            return value * 1000 * 1000;
+        if(unit === 'Gi')
+            return value * 1000 * 1000 * 1000;
+        if(unit === 'Ti')
+            return value * 1000 * 1000 * 1000 * 1000;
+        return value;
+    }
+    
     static getSensorSources(): {value: any, text: string}[] {
         const sensors = [];
         
@@ -788,13 +845,17 @@ export default class Utils {
                     
                     // parse address
                     let firstLine = lines[0];
-                    const addressRegex = /^([0-9a-fA-F]{2}):([0-9a-fA-F]{2})\.([0-9a-fA-F]) /;
+                    const addressRegex = /^((?:[0-9a-fA-F]{4}:)?[0-9a-fA-F]{2}):([0-9a-fA-F]{2})\.([0-9a-fA-F]) /;
                     const addressMatch = addressRegex.exec(firstLine);
                     if(!addressMatch) {
                         Utils.warn('Error getting GPUs list: ' + firstLine + ' does not match address');
                         continue;
                     }
-                    const [domain, bus, slot] = [addressMatch[1], addressMatch[2], addressMatch[3]];
+                    let domain = addressMatch[1];
+                    if(!domain.includes(':'))
+                        domain = '0000:' + domain;
+                    
+                    const [bus, slot] = [addressMatch[2], addressMatch[3]];
                     firstLine = firstLine.replace(addressRegex, '');
                     
                     // parse vendor and model
@@ -992,6 +1053,13 @@ export default class Utils {
         if(!selected)
             return;
         
+        //Fix GPU domain missing (v9 => v10)
+        //TODO: remove in v12-v13
+        if(selected && selected.domain) {
+            if(!selected.domain.includes(':'))
+                selected.domain = '0000:' + selected.domain;
+        }
+        
         const gpus = Utils.getGPUsList();
         for(const gpu of gpus) {
             if(gpu.domain === selected.domain && gpu.bus === selected.bus && gpu.slot === selected.slot &&
@@ -1115,17 +1183,17 @@ export default class Utils {
                 Utils.log('No disk data found or lsblk command failed');
             }
         } catch(e: any) {
-            Utils.log('Error getting disk list: ' + e);
+            Utils.log('Error getting disk list sync: ' + e);
         }
         
         return disks;
     }
     
-    static async listDisksAsync(): Promise<Map<string, DiskInfo>> {
+    static async listDisksAsync(task: CancellableTaskManager<boolean>): Promise<Map<string, DiskInfo>> {
         const disks = new Map<string, DiskInfo>();
         
         try {
-            const result = await Utils.executeCommandAsync('lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH');
+            const result = await Utils.executeCommandAsync('lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH', task);
             if(result) {
                 const parsedData = JSON.parse(result);
                 
@@ -1149,7 +1217,7 @@ export default class Utils {
                 Utils.error('No disk data found or lsblk command failed');
             }
         } catch(e: any) {
-            Utils.error('Error getting disk list: ' + e);
+            Utils.error('Error getting disk list: ' + e.message);
         }
         return disks;
     }
@@ -1257,7 +1325,7 @@ export default class Utils {
                 reject(new Error(`Error creating file object: ${e.message}`));
                 return;
             }
-
+            
             file.load_contents_async(null, (sourceObject, res) => {
                 try {
                     const [success, fileContent] = sourceObject.load_contents_finish(res);
@@ -1283,7 +1351,7 @@ export default class Utils {
         });
     }
     
-    static executeCommandAsync(command: string): Promise<string> {
+    static executeCommandAsync(command: string, cancellableTaskManager?: CancellableTaskManager<boolean>): Promise<string> {
         return new Promise((resolve, reject) => {
             let argv;
             try {
@@ -1303,15 +1371,18 @@ export default class Utils {
                 argv: argv[1],
                 flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
             });
-    
+            
             // Initialize the subprocess
             try {
-                proc.init(null);
+                proc.init(cancellableTaskManager?.cancellable || null);
             } catch(e: any) {
                 // Handle errors in subprocess initialization
                 reject(new Error(`Failed to initialize subprocess: ${e.message}`));
                 return;
             }
+            
+            if(cancellableTaskManager)
+                cancellableTaskManager.setSubprocess(proc);
     
             // Communicate with the subprocess asynchronously
             proc.communicate_utf8_async(null, null, (proc: Gio.Subprocess, res: Gio.AsyncResult) => {
@@ -1571,5 +1642,11 @@ export default class Utils {
         for(const value of valueTree.values())
             length += value.length;
         return length *= 20;
+    }
+    
+    static xmlParse(xml: string): any {
+        if(!Utils.xmlParser)
+            return undefined;
+        return Utils.xmlParser.parse(xml);
     }
 }

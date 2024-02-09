@@ -121,15 +121,17 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         return {width: geometry.width, height: geometry.height};
     }
     
-    addMenuSection(text: string): St.Label {
+    addMenuSection(text: string, add: boolean = true): St.Label {
         const label = new St.Label({text, style_class: 'astra-monitor-menu-header-centered'});
-        this.addToMenu(label, this.grid.getNumCols());
+        if(add)
+            this.addToMenu(label, this.grid.getNumCols());
         return label;
     }
     
-    addMenuSeparator(text: string): PopupMenu.PopupSeparatorMenuItem {
+    addMenuSeparator(text: string, add: boolean = true): PopupMenu.PopupSeparatorMenuItem {
         const separator = new PopupMenu.PopupSeparatorMenuItem(text);
-        this.addToMenu(separator, this.grid.getNumCols());
+        if(add)
+            this.addToMenu(separator, this.grid.getNumCols());
         return separator;
     }
     

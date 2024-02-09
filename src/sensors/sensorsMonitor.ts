@@ -104,7 +104,7 @@ export default class SensorsMonitor extends Monitor {
     getSensorsDataAsync(): PromiseValueHolder<string> {
         return new PromiseValueHolder(new Promise((resolve, reject) => {
             try {
-                Utils.executeCommandAsync('sensors -j').then(result => {
+                Utils.executeCommandAsync('sensors -j', this.updateSensorsDataTask).then(result => {
                     resolve(result);
                 }).catch(e => {
                     reject(e);

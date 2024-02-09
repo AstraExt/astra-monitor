@@ -768,7 +768,7 @@ export default class MemoryMenu extends MenuBase {
             if(swapUsage && swapUsage.total && !isNaN(swapUsage.total)) {
                 this.swapBar.setUsage(swapUsage);
                 
-                const perc = 100; //swapUsage.used / swapUsage.total * 100.0;
+                const perc = swapUsage.used / swapUsage.total * 100.0;
                 if(!isNaN(perc))
                     this.swapPercLabel.text = Math.round(perc) + '%';
                 else

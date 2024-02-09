@@ -197,6 +197,13 @@
     padding: 0.5em;
 }
 
+.astra-monitor-menu-header-small {
+    font-weight: bold;
+    font-size: 0.7em;
+    padding: 0.1em;
+    padding-left: 1.3em;
+}
+
 .astra-monitor-menu-subheader {
     text-align: center;
     font-size: 0.8em;
