@@ -158,11 +158,9 @@ export default class Config {
     }
     
     static clearAll() {
-        for(const widget of Config.bindMap.keys()) {
+        for(const widget of Config.bindMap.keys())
             Config.clear(widget);
-        }
-        for(const object of Config.connectMap.keys()) {
+        for(const object of Config.connectMap.keys())
             Config.clear(object);
-        }
     }
 }

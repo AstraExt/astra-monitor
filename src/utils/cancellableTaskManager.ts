@@ -19,6 +19,7 @@
  */
 
 import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
 export default class CancellableTaskManager<T> {
     private cancelId?: number;
@@ -54,10 +55,12 @@ export default class CancellableTaskManager<T> {
     
     private makeCancellable(boundTask: () => Promise<T>): { promise: Promise<T>, cancel: () => void } {
         let rejectFn: (reason?: any) => void;
+        let timeoutId: GLib.Source | undefined;
         
         const promise = new Promise<T>((resolve, reject) => {
             rejectFn = reject;
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
+                timeoutId = undefined;
                 boundTask().then(resolve).catch(reject);
             });
         });
@@ -67,6 +70,10 @@ export default class CancellableTaskManager<T> {
                 this.taskCancellable.cancel();
                 this.taskCancellable.disconnect(this.cancelId);
                 this.cancelId = undefined;
+            }
+            if(timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = undefined;
             }
             rejectFn({ isCancelled: true, message: 'Task cancelled' });
         };

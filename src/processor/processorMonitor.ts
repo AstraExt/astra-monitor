@@ -281,7 +281,7 @@ export default class ProcessorMonitor extends Monitor {
         if(this.updateAmdGpuTask.isRunning)
             this.updateAmdGpuTask.stop();
         
-            if(this.updateNvidiaGpuTask.isRunning)
+        if(this.updateNvidiaGpuTask.isRunning)
             this.updateNvidiaGpuTask.stop();
     }
     
