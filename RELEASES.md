@@ -1,3 +1,8 @@
+# Astra Monitor 11 - February 12 2024
+
+### Bug fixes
+- Fixed Graphs not updating [[#54](https://github.com/AstraExt/astra-monitor/issues/54)]
+
 # Astra Monitor 10 - February 9 2024
 
 ### TYPESCRIPT
