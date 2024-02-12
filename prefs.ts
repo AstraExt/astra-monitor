@@ -160,20 +160,20 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             check = false, this.addStatusLabel(_('Intel GPU detected but \'intel_gpu_top\' not installed: some optional features will be disabled!'), 'am-dialog-warning-symbolic', group);*/
         
         const statusLabel = this.addStatusLabel({title:_('Checking GTop dependency...')}, 'am-dialog-info-symbolic', group);
+        
         Utils.hasGTop().then((GTopAvailable: boolean) => {
             if(!GTopAvailable) {
-                statusLabel.updateText(_('\'GTop\' not installed, some optional features will be disabled!'));
-                statusLabel.updateIcon('am-dialog-warning-symbolic');
+                statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled!');
+                statusLabel.icon.set_from_icon_name('am-dialog-warning-symbolic');
             }
-            else if(check) {
-                statusLabel.updateText(_('\'GTop\' successfully detected and added to Data Sources list.'));
-                statusLabel.updateIcon('am-dialog-ok-symbolic');
-                
+            else {
+                statusLabel.row.title = _('\'GTop\' successfully detected and added to Data Sources list.');
+                statusLabel.icon.set_from_icon_name('am-dialog-ok-symbolic');
             }
         }).catch((e: any) => {
             Utils.error(e);
-            statusLabel.updateText(_('\'GTop\' not installed, some optional features will be disabled!'));
-            statusLabel.updateIcon('am-dialog-warning-symbolic');
+            statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled!');
+            statusLabel.icon.set_from_icon_name('am-dialog-warning-symbolic');
         });
         
         if(check)
@@ -933,13 +933,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         return {
             row: row,
-            icon: icon,
-            updateText: function(newTitle: string) {
-                row.title = newTitle;
-            },
-            updateIcon: function(newIconName: string) {
-                icon.set_from_icon_name(newIconName);
-            }
+            icon: icon
         };
     }
     

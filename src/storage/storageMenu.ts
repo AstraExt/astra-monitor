@@ -201,7 +201,7 @@ export default class StorageMenu extends MenuBase {
             // READ
             const readContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
-                style: 'margin-left:0;margin-right:0;width:5em;'
+                style: 'margin-left:0;margin-right:0;width:5.5em;'
             });
             
             const readActivityIcon = new St.Icon({
@@ -224,7 +224,7 @@ export default class StorageMenu extends MenuBase {
             // WRITE
             const writeContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
-                style: 'margin-left:0;margin-right:0;width:5em;'
+                style: 'margin-left:0;margin-right:0;width:5.5em;'
             });
             
             const writeActivityIcon = new St.Icon({
