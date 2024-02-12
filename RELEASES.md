@@ -1,3 +1,8 @@
+# Astra Monitor 12 - TO BE RELEASED
+
+### Bug fixes
+- Light Theme readability improvements [[#53](https://github.com/AstraExt/astra-monitor/issues/53)]
+
 # Astra Monitor 11 - February 12 2024
 
 ### Bug fixes
