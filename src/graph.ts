@@ -187,7 +187,7 @@ class GraphBase<T> extends St.BoxLayout {
     
     setUsageHistory(usageHistory: any[]) {
         this.history = usageHistory;
-        //this.historyChart.queue_repaint();
+        this.historyChart.queue_repaint();
     }
     
     destroy() {
