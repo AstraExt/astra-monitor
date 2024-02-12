@@ -43,19 +43,23 @@ class StorageGraph extends GraphBase<StorageIO> {
     
     private maxReadSpeedLabel?: St.Label;
     private maxWriteSpeedLabel?: St.Label;
+    private thenLabel?: St.Label;
+    private nowLabel?: St.Label;
     
     constructor(params: StorageGraphProps) {
         super(params);
     }
     
     setStyle() {
+        const lightTheme = Utils.themeStyle === 'light';
+        
         this.colors = [
             Utils.parseRGBA('rgb(29,172,214)'),
             Utils.parseRGBA('rgb(214,29,29)')
         ];
         
         let line = 'rgba(255,255,255,0.2)';
-        if(Utils.themeStyle === 'light') {
+        if(lightTheme) {
             if(this.mini)
                 line = 'rgba(0,0,0,0.8)';
             else
@@ -64,9 +68,37 @@ class StorageGraph extends GraphBase<StorageIO> {
         this.midLineColor = Utils.parseRGBA(line);
         
         let bg = 'rgba(0,0,0,0.2)';
-        if(Utils.themeStyle === 'light')
+        if(lightTheme)
             bg = 'rgba(255,255,255,0.2)';
         this.bgColor = Utils.parseRGBA(bg);
+        
+        if(this.maxReadSpeedLabel) {
+            if(lightTheme)
+                this.maxReadSpeedLabel.style_class = 'astra-monitor-graph-label-light';
+            else
+                this.maxReadSpeedLabel.style_class = 'astra-monitor-graph-label';
+        }
+        
+        if(this.maxWriteSpeedLabel) {
+            if(lightTheme)
+                this.maxWriteSpeedLabel.style_class = 'astra-monitor-graph-label-light';
+            else
+                this.maxWriteSpeedLabel.style_class = 'astra-monitor-graph-label';
+        }
+        
+        if(this.thenLabel) {
+            if(lightTheme)
+                this.thenLabel.style_class = 'astra-monitor-graph-label-then-light';
+            else
+                this.thenLabel.style_class = 'astra-monitor-graph-label-then';
+        }
+        
+        if(this.nowLabel) {
+            if(lightTheme)
+                this.nowLabel.style_class = 'astra-monitor-graph-label-now-light';
+            else
+                this.nowLabel.style_class = 'astra-monitor-graph-label-now';
+        }
     }
     
     buildHistoryGrid() {
@@ -75,26 +107,25 @@ class StorageGraph extends GraphBase<StorageIO> {
         
         this.maxReadSpeedLabel = new St.Label({
             text: '-',
-            y_align: Clutter.ActorAlign.START,
-            style_class: 'astra-monitor-graph-label'});
+            y_align: Clutter.ActorAlign.START
+        });
         this.historyGrid.attach(this.maxReadSpeedLabel, 2, 0, 1, 1);
         this.maxWriteSpeedLabel = new St.Label({
             text: '',
             y_align: Clutter.ActorAlign.CENTER,
-            style_class: 'astra-monitor-graph-label',
             style: 'margin-top:10px;'
         });
         this.historyGrid.attach(this.maxWriteSpeedLabel, 2, 1, 1, 1);
-        let label = new St.Label({text: '', y_align: Clutter.ActorAlign.END, style_class: 'astra-monitor-graph-label'});
+        const label = new St.Label({text: '', y_align: Clutter.ActorAlign.END});
         this.historyGrid.attach(label, 2, 2, 1, 1);
         
         const seconds = Utils.memoryMonitor.historyLength * Config.get_double('memory-update');
         const limitInMins = seconds / 60;
         const startLabel = (ngettext('%d min ago', '%d mins ago', limitInMins) as any).format(limitInMins);
-        label = new St.Label({text: startLabel, style_class: 'astra-monitor-graph-label-then'});
-        this.historyGrid.attach(label, 0, 3, 1, 1);
-        label = new St.Label({text: _('now'), style_class: 'astra-monitor-graph-label-now'});
-        this.historyGrid.attach(label, 1, 3, 1, 1);
+        this.thenLabel = new St.Label({text: startLabel});
+        this.historyGrid.attach(this.thenLabel, 0, 3, 1, 1);
+        this.nowLabel = new St.Label({text: _('now')});
+        this.historyGrid.attach(this.nowLabel, 1, 3, 1, 1);
         
         Config.connect(this, 'changed::storage-io-unit', () => {
             if(!this.history)

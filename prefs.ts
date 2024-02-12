@@ -187,7 +187,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'dark', text: _('Dark')},
             {value: 'light', text: _('Light')}
         ];
-        this.addComboRow({title: this.tab + _('Shell Theme Style')}, choicesPanel, 'theme-style', themeSection, 'string');
+        this.addComboRow({
+            title: this.tab + _('Shell Theme Style'),
+            subtitle:  this.tab + _('Set to "Dark" or "Light" based on your shell topbar theme to improve readability.'),
+        }, choicesPanel, 'theme-style', themeSection, 'string');
         
         const panelSection = this.addExpanderRow({title: _('Panel Box')}, group);
         choicesPanel = [

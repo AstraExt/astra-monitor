@@ -753,7 +753,7 @@ export default class ProcessorMenu extends MenuBase {
                     const usedValueLabel = new St.Label({
                         text: '-',
                         x_expand: true,
-                        style_class: 'astra-monitor-menu-key'
+                        style_class: 'astra-monitor-menu-key-mid'
                     });
                     usedContainer.add_child(usedValueLabel);
                     usedContainer.set_width(100);
@@ -776,7 +776,7 @@ export default class ProcessorMenu extends MenuBase {
                     const totalValueLabel = new St.Label({
                         text: '-',
                         x_expand: true,
-                        style_class: 'astra-monitor-menu-key'
+                        style_class: 'astra-monitor-menu-key-mid'
                     });
                     totalContainer.add_child(totalValueLabel);
                     totalContainer.set_width(100);
@@ -816,7 +816,10 @@ export default class ProcessorMenu extends MenuBase {
                     label.style_class = 'astra-monitor-menu-label';
                 }
                 else {
-                    label.style_class = 'astra-monitor-menu-unmonitored';
+                    if(Utils.themeStyle === 'light')
+                        label.style_class = 'astra-monitor-menu-unmonitored-light';
+                    else
+                        label.style_class = 'astra-monitor-menu-unmonitored';
                 }
             };
             updateSelectedGPU();

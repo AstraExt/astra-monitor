@@ -63,6 +63,17 @@ export default class NetworkMenu extends MenuBase {
         this.createDeviceList();
         
         this.addUtilityButtons();
+        
+        this.setStyle();
+        Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
+    }
+    
+    setStyle() {
+        const lightTheme = Utils.themeStyle === 'light';
+        
+        const styleClass = lightTheme ? 'astra-monitor-menu-key-light' : 'astra-monitor-menu-key';
+        this.totalUploadSpeedValueLabel.style_class = styleClass;
+        this.totalDownloadSpeedValueLabel.style_class = styleClass;
     }
     
     createActivitySection() {
@@ -94,8 +105,7 @@ export default class NetworkMenu extends MenuBase {
         
         this.totalUploadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
-            style_class: 'astra-monitor-menu-key'
+            x_expand: true
         });
         grid.addToGrid(this.totalUploadSpeedValueLabel);
         
@@ -108,8 +118,7 @@ export default class NetworkMenu extends MenuBase {
         
         this.totalDownloadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
-            style_class: 'astra-monitor-menu-key'
+            x_expand: true
         });
         grid.addToGrid(this.totalDownloadSpeedValueLabel);
         
@@ -253,7 +262,7 @@ export default class NetworkMenu extends MenuBase {
             const label2 = new St.Label({
                 text: '',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key'
+                style_class: 'astra-monitor-menu-key-mid'
             });
             headerGrid.addToGrid(label2);
             
@@ -292,7 +301,7 @@ export default class NetworkMenu extends MenuBase {
             const uploadValueLabel = new St.Label({
                 text: '-',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key'
+                style_class: 'astra-monitor-menu-key-mid'
             });
             uploadContainer.add_child(uploadValueLabel);
             uploadContainer.set_width(100);
@@ -323,7 +332,7 @@ export default class NetworkMenu extends MenuBase {
             const downloadValueLabel = new St.Label({
                 text: '-',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key'
+                style_class: 'astra-monitor-menu-key-mid'
             });
             downloadContainer.add_child(downloadValueLabel);
             downloadContainer.set_width(100);

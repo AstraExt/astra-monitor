@@ -207,4 +207,9 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     update(_code: string) {
         Utils.error('update() needs to be overridden');
     }
+    
+    destroy(): void {
+        Config.clear(this);
+        super.destroy();
+    }
 }

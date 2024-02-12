@@ -166,6 +166,12 @@
     color: #999;
 }
 
+.astra-monitor-graph-label-light {
+    font-size: 0.8em;
+    padding: 0.5em 0;
+    color: #666;
+}
+
 .astra-monitor-graph-label-then {
     font-size: 0.7em;
     color: #999;
@@ -173,9 +179,23 @@
     padding: 0 0.5em;
 }
 
+.astra-monitor-graph-label-then-light {
+    font-size: 0.7em;
+    color: #666;
+    text-align: left;
+    padding: 0 0.5em;
+}
+
 .astra-monitor-graph-label-now {
     font-size: 0.7em;
     color: #999;
+    text-align: right;
+    padding: 0 0.5em;
+}
+
+.astra-monitor-graph-label-now-light {
+    font-size: 0.7em;
+    color: #666;
     text-align: right;
     padding: 0 0.5em;
 }
@@ -223,6 +243,14 @@
     font-style: italic;
 }
 
+.astra-monitor-menu-unmonitored-light {
+    font-size: 0.9em;
+    padding: 0.05em 0.5em;
+    text-align: left;
+    color: #555;
+    font-style: italic;
+}
+
 .astra-monitor-menu-value {
     font-size: 1em;
     padding: 0.05em 0.5em;
@@ -232,6 +260,20 @@
 .astra-monitor-menu-key {
     font-style: italic;
     color: #999;
+    margin-right: 0.8em;
+    text-align: right;
+}
+
+.astra-monitor-menu-key-light {
+    font-style: italic;
+    color: #666;
+    margin-right: 0.8em;
+    text-align: right;
+}
+
+.astra-monitor-menu-key-mid {
+    font-style: italic;
+    color: #808080;
     margin-right: 0.8em;
     text-align: right;
 }

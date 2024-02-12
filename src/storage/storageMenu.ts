@@ -99,6 +99,17 @@ export default class StorageMenu extends MenuBase {
         this.createDeviceList();
         
         this.addUtilityButtons();
+        
+        this.setStyle();
+        Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
+    }
+    
+    setStyle() {
+        const lightTheme = Utils.themeStyle === 'light';
+        
+        const styleClass = lightTheme ? 'astra-monitor-menu-key-light' : 'astra-monitor-menu-key';
+        this.totalReadSpeedValueLabel.style_class = styleClass;
+        this.totalWriteSpeedValueLabel.style_class = styleClass;
     }
     
     createActivitySection() {
@@ -130,8 +141,7 @@ export default class StorageMenu extends MenuBase {
         
         this.totalReadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
-            style_class: 'astra-monitor-menu-key'
+            x_expand: true
         });
         grid.addToGrid(this.totalReadSpeedValueLabel);
         
@@ -144,8 +154,7 @@ export default class StorageMenu extends MenuBase {
         
         this.totalWriteSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
-            style_class: 'astra-monitor-menu-key'
+            x_expand: true
         });
         grid.addToGrid(this.totalWriteSpeedValueLabel);
         
@@ -495,7 +504,7 @@ export default class StorageMenu extends MenuBase {
             const name = new St.Label({
                 text: '',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key'
+                style_class: 'astra-monitor-menu-key-mid'
             });
             headerGrid.addToGrid(name);
             
@@ -512,7 +521,7 @@ export default class StorageMenu extends MenuBase {
             const sizeLabel = new St.Label({
                 text: '',
                 y_align: Clutter.ActorAlign.CENTER,
-                style_class: 'astra-monitor-menu-key'
+                style_class: 'astra-monitor-menu-key-mid'
             });
             (barGrid.layout_manager as any).attach(sizeLabel, 0, 0, 1, 1);
             
@@ -569,7 +578,7 @@ export default class StorageMenu extends MenuBase {
             const readValueLabel = new St.Label({
                 text: '-',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key'
+                style_class: 'astra-monitor-menu-key-mid'
             });
             readContainer.add_child(readValueLabel);
             readContainer.set_width(100);
@@ -600,7 +609,7 @@ export default class StorageMenu extends MenuBase {
             const writeValueLabel = new St.Label({
                 text: '-',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key'
+                style_class: 'astra-monitor-menu-key-mid'
             });
             writeContainer.add_child(writeValueLabel);
             writeContainer.set_width(100);
