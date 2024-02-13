@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-12 20:30+0100\n"
-"PO-Revision-Date: 2024-01-31 14:34+0300\n"
+"PO-Revision-Date: 2024-02-13 12:28+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
 "Language: ru\n"
@@ -104,13 +104,12 @@ msgid "GPUs"
 msgstr "ГП"
 
 #: src/processor/processorMenu.js:472
-#, fuzzy
 msgid "Activity"
-msgstr "Активно"
+msgstr "Активность"
 
 #: src/processor/processorMenu.js:497
 msgid "VRAM"
-msgstr ""
+msgstr "VRAM"
 
 #: src/processor/processorMenu.js:533 src/memory/memoryMenu.js:56
 #: src/memory/memoryMenu.js:303
@@ -391,18 +390,20 @@ msgid "'iproute2' not installed: some features will be disabled!"
 msgstr "'iproute2' не установлен: некоторые функции будут отключены!"
 
 #: prefs.js:123
-#, fuzzy
 msgid ""
 "AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
 "be disabled!"
-msgstr "'GTop' не установлен: некоторые функции будут отключены!"
+msgstr ""
+"AMD GPU обнаружен, но 'amdgpu_top' не установлен: некоторые дополнительные "
+"функции будут отключены!"
 
 #: prefs.js:125
-#, fuzzy
 msgid ""
 "NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
 "will be disabled!"
-msgstr "'GTop' не установлен: некоторые функции будут отключены!"
+msgstr ""
+"NVidia GPU обнаружен, но 'nvidia-smi' не установлен: некоторые "
+"дополнительные функции будут отключены!"
 
 #: prefs.js:126
 msgid "Checking GTop dependency..."
@@ -445,6 +446,8 @@ msgid ""
 "Set to \"Dark\" or \"Light\" based on your shell topbar theme to improve "
 "readability."
 msgstr ""
+"Установите значение \"Темный\" или \"Светлый\" в зависимости от темы "
+"оболочки верхней панели, чтобы улучшить читаемость."
 
 #: prefs.js:154
 msgid "Panel Box"
@@ -471,17 +474,16 @@ msgid "Order"
 msgstr "Порядок"
 
 #: prefs.js:163
-#, fuzzy
 msgid "Left Margin"
-msgstr "Поля заголовков"
+msgstr "Левый отступ"
 
 #: prefs.js:164 prefs.js:169
 msgid "Experimental feature: may not function properly."
-msgstr ""
+msgstr "Экспериментальная функция: может не работать должным образом."
 
 #: prefs.js:168
 msgid "Right Margin"
-msgstr ""
+msgstr "Правый отступ"
 
 #: prefs.js:172
 msgid "Headers"
@@ -548,12 +550,11 @@ msgstr "Авто"
 
 #: prefs.js:212
 msgid "Cpu Usage"
-msgstr ""
+msgstr "Использование ЦП"
 
 #: prefs.js:213
-#, fuzzy
 msgid "Cpu Cores Usage"
-msgstr "Информация об использовании ядер ЦП"
+msgstr "Использование ядер ЦП"
 
 #: prefs.js:214 prefs.js:298 prefs.js:446
 msgid "Top Processes"
@@ -788,36 +789,32 @@ msgid "Main Disk"
 msgstr "Главный диск"
 
 #: prefs.js:381
-#, fuzzy
 msgid "Ignored Storage Devices"
-msgstr "Игнорируемые сетевые интерфейсы"
+msgstr "Игнорируемые устройства хранения"
 
 #: prefs.js:383 prefs.js:505
 msgid "Regex"
 msgstr "Регламент"
 
 #: prefs.js:384
-#, fuzzy
 msgid "Devices matching this regex will be ignored."
-msgstr "Интерфейсы, соответствующие этому регламенту, будут игнорироваться."
+msgstr "Устройства, соответствующие этому регламенту, будут игнорироваться."
 
 #: prefs.js:384 prefs.js:506
-#, fuzzy
 msgid "Leave empty to disable. Usage example: "
-msgstr "Оставьте пустым, чтобы отключить. Например:"
+msgstr "Оставьте пустым, чтобы отключить. Например: "
 
 #: prefs.js:394 prefs.js:417 prefs.js:514 prefs.js:529
 msgid "Ignored"
 msgstr "Игнорируется"
 
 #: prefs.js:396
-#, fuzzy
 msgid "Main"
-msgstr "Главный ГП"
+msgstr "Главный"
 
 #: prefs.js:413
 msgid "Main disk cannot be ignored"
-msgstr ""
+msgstr "Главный диск нельзя игнорировать"
 
 #: prefs.js:456
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
