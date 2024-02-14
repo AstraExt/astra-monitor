@@ -351,7 +351,7 @@ class ProcessorHeader extends Header {
         if(!Config.get_boolean('processor-header-tooltip'))
             return;
         
-        this.tooltipMenu.open(true);
+        this.tooltipMenu.open(false);
     }
     
     hideTooltip() {
@@ -359,7 +359,7 @@ class ProcessorHeader extends Header {
             return;
         if(!Config.get_boolean('processor-header-tooltip'))
             return;
-        this.tooltipMenu.close(true);
+        this.tooltipMenu.close(false);
     }
     
     destroy() {
@@ -383,7 +383,7 @@ class ProcessorHeader extends Header {
         if(this.tooltipMenu) {
             Config.clear(this.tooltipMenu);
             Utils.processorMonitor.unlisten(this.tooltipMenu);
-            this.tooltipMenu.close(true);
+            this.tooltipMenu.close(false);
         }
         
         super.destroy();

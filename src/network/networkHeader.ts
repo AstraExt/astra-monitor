@@ -346,7 +346,7 @@ class NetworkHeader extends Header {
         if(!Config.get_boolean('network-header-tooltip'))
             return;
         
-        this.tooltipMenu.open(true);
+        this.tooltipMenu.open(false);
     }
     
     hideTooltip() {
@@ -354,7 +354,7 @@ class NetworkHeader extends Header {
             return;
         if(!Config.get_boolean('network-header-tooltip'))
             return;
-        this.tooltipMenu.close(true);
+        this.tooltipMenu.close(false);
     }
     
     destroy() {
@@ -378,7 +378,7 @@ class NetworkHeader extends Header {
         if(this.tooltipMenu) {
             Config.clear(this.tooltipMenu);
             Utils.networkMonitor.unlisten(this.tooltipMenu);
-            this.tooltipMenu.close(true);
+            this.tooltipMenu.close(false);
         }
         
         super.destroy();

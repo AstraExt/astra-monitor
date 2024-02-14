@@ -334,7 +334,7 @@ class MemoryHeader extends Header {
         if(!Config.get_boolean('memory-header-tooltip'))
             return;
         
-        this.tooltipMenu.open(true);
+        this.tooltipMenu.open(false);
     }
     
     hideTooltip() {
@@ -342,7 +342,7 @@ class MemoryHeader extends Header {
             return;
         if(!Config.get_boolean('memory-header-tooltip'))
             return;
-        this.tooltipMenu.close(true);
+        this.tooltipMenu.close(false);
     }
     
     destroy() {
@@ -366,7 +366,7 @@ class MemoryHeader extends Header {
         if(this.tooltipMenu) {
             Config.clear(this.tooltipMenu);
             Utils.memoryMonitor.unlisten(this.tooltipMenu);
-            this.tooltipMenu.close(true);
+            this.tooltipMenu.close(false);
         }
 
         super.destroy();

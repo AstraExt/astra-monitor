@@ -1,7 +1,11 @@
 # Astra Monitor 12 - TO BE RELEASED
 
+### New features
+- New source selection for Memory Usage: now you can choose between GTop and /proc (GTop is the default if available)
+
 ### Bug fixes
 - Light Theme readability improvements [[#53](https://github.com/AstraExt/astra-monitor/issues/53)]
+- Fixed GTop detection label not updating in extension settings
 
 # Astra Monitor 11 - February 12 2024
 

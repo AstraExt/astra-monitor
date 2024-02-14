@@ -288,29 +288,16 @@ export default class ProcessorMonitor extends Monitor {
     update(): boolean {
         const enabled = Config.get_boolean('processor-header-show');
         if(enabled) {
-            const procStatStore = new PromiseValueHolderStore<string[]>(this.getProcStatAsync.bind(this));
+            const procStat = new PromiseValueHolderStore<string[]>(this.getProcStatAsync.bind(this));
             
-            if(this.dataSources.cpuUsage === 'GTop')
-                this.runUpdate('cpuUsage');
-            else
-                this.runUpdate('cpuUsage', procStatStore);
-            
-            if(this.dataSources.cpuCoresUsage === 'GTop')
-                this.runUpdate('cpuCoresUsage', procStatStore);
-            else
-                this.runUpdate('cpuCoresUsage', procStatStore);
-            
+            this.runUpdate('cpuUsage', procStat);
+            this.runUpdate('cpuCoresUsage', procStat);
             this.runUpdate('cpuCoresFrequency');
             
-            if(this.isListeningFor('topProcesses')) {
-                if(this.dataSources.topProcesses === 'GTop')
-                    this.runUpdate('topProcesses', false);
-                else
-                    this.runUpdate('topProcesses', false, procStatStore);
-            }
-            else {
+            if(this.isListeningFor('topProcesses'))
+                this.runUpdate('topProcesses', false, procStat);
+            else
                 this.topProcessesCache.updateNotSeen([]);
-            }
         }
         return true;
     }
@@ -318,14 +305,14 @@ export default class ProcessorMonitor extends Monitor {
     requestUpdate(key: string) {
         if(key === 'cpuUsage') {
             if(!this.updateCpuUsageTask.isRunning) {
-                const procStat = this.getProcStatAsync();
-                this.runUpdate('cpuUsage', procStat);
+                const procStatStore = new PromiseValueHolderStore<string[]>(this.getProcStatAsync.bind(this));
+                this.runUpdate('cpuUsage', procStatStore);
             }
         }
         else if(key === 'cpuCoresUsage') {
             if(!this.updateCoresUsageTask.isRunning) {
-                const procStat = this.getProcStatAsync();
-                this.runUpdate('cpuCoresUsage', procStat);
+                const procStatStore = new PromiseValueHolderStore<string[]>(this.getProcStatAsync.bind(this));
+                this.runUpdate('cpuCoresUsage', procStatStore);
             }
         }
         else if(key === 'cpuCoresFrequency') {
@@ -335,13 +322,8 @@ export default class ProcessorMonitor extends Monitor {
         }
         else if(key === 'topProcesses') {
             if(!this.updateTopProcessesTask.isRunning) {
-                if(this.dataSources.topProcesses === 'GTop') {
-                    this.runUpdate('topProcesses', true);
-                }
-                else {
-                    const procStat = this.getProcStatAsync();
-                    this.runUpdate('topProcesses', true, procStat);
-                }
+                const procStatStore = new PromiseValueHolderStore<string[]>(this.getProcStatAsync.bind(this));
+                this.runUpdate('topProcesses', true, procStatStore);
             }
             // Don't push to the queue
             return;
@@ -595,7 +577,7 @@ export default class ProcessorMonitor extends Monitor {
         });
     }
     
-    updateCpuUsageCommon({user, nice, system, idle, iowait, irq, softirq, steal}: {
+    private updateCpuUsageCommon({user, nice, system, idle, iowait, irq, softirq, steal}: {
         user: number,
         nice: number,
         system: number,
@@ -605,7 +587,6 @@ export default class ProcessorMonitor extends Monitor {
         softirq: number,
         steal: number
     }): boolean {
-        
         // Calculate total time and total idle time
         const totalIdle = idle + iowait + steal;
         const totalUser = user + nice;

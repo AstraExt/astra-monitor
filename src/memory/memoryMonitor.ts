@@ -23,7 +23,7 @@ import Utils from '../utils/utils.js';
 import Monitor from '../monitor.js';
 import TopProcessesCache from '../utils/topProcessesCache.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
-import PromiseValueHolder from '../utils/promiseValueHolder.js';
+import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 
 export type MemoryUsage = {
     active: number;
@@ -54,7 +54,8 @@ export type SwapUsage = {
 };
 
 type MemoryDataSources = {
-    topProcesses: string|null
+    memoryUsage?: string,
+    topProcesses?: string
 };
     
 export default class MemoryMonitor extends Monitor {
@@ -128,11 +129,18 @@ export default class MemoryMonitor extends Monitor {
     
     dataSourcesInit() {
         this.dataSources = {
-            topProcesses: Config.get_string('memory-source-top-processes')
+            memoryUsage: Config.get_string('memory-source-memory-usage') ?? undefined,
+            topProcesses: Config.get_string('memory-source-top-processes') ?? undefined
         };
         
+        Config.connect(this, 'changed::memory-source-memory-usage', () => {
+            this.dataSources.memoryUsage = Config.get_string('memory-source-memory-usage') ?? undefined;
+            this.updateMemoryUsageTask.cancel();
+            this.resetUsageHistory('memoryUsage');
+        });
+        
         Config.connect(this, 'changed::memory-source-top-processes', () => {
-            this.dataSources.topProcesses = Config.get_string('memory-source-top-processes');
+            this.dataSources.topProcesses = Config.get_string('memory-source-top-processes') ?? undefined;
             this.topProcessesCache.reset();
             this.resetUsageHistory('topProcesses');
         });
@@ -141,20 +149,17 @@ export default class MemoryMonitor extends Monitor {
     update() {
         const enabled = Config.get_boolean('memory-header-show');
         if(enabled) {
-            const procMeminfo = this.getProcMeminfoAsync();
+            const procMeminfo = new PromiseValueHolderStore<string[]>(this.getProcMeminfoAsync.bind(this));
             
             this.runUpdate('memoryUsage', procMeminfo);
             
-            if(this.isListeningFor('topProcesses')) {
+            if(this.isListeningFor('topProcesses'))
                 this.runUpdate('topProcesses');
-            }
-            else {
+            else
                 this.topProcessesCache.updateNotSeen([]);
-            }
             
-            if(this.isListeningFor('swapUsage')) {
+            if(this.isListeningFor('swapUsage'))
                 this.runUpdate('swapUsage', procMeminfo);
-            }
         }
         return true;
     }
@@ -162,7 +167,7 @@ export default class MemoryMonitor extends Monitor {
     requestUpdate(key: string) {
         if(key === 'memoryUsage') {
             if(!this.updateMemoryUsageTask.isRunning) {
-                const procMeminfo = this.getProcMeminfoAsync();
+                const procMeminfo = new PromiseValueHolderStore<string[]>(this.getProcMeminfoAsync.bind(this));
                 this.runUpdate('memoryUsage', procMeminfo);
             }
         }
@@ -174,7 +179,7 @@ export default class MemoryMonitor extends Monitor {
         }
         else if(key === 'swapUsage') {
             if(!this.updateSwapUsageTask.isRunning) {
-                const procMeminfo = this.getProcMeminfoAsync();
+                const procMeminfo = new PromiseValueHolderStore<string[]>(this.getProcMeminfoAsync.bind(this));
                 this.runUpdate('swapUsage', procMeminfo);
             }
         }
@@ -183,10 +188,18 @@ export default class MemoryMonitor extends Monitor {
     
     runUpdate(key: string, ...params: any[]) {
         if(key === 'memoryUsage') {
+            let run;
+            if(this.dataSources.memoryUsage === 'GTop')
+                run = this.updateMemoryUsageGTop.bind(this, ...params);
+            else if(this.dataSources.memoryUsage === 'proc')
+                run = this.updateMemoryUsageProc.bind(this, ...params);
+            else
+                run = this.updateMemoryUsageAuto.bind(this, ...params);
+            
             this.runTask({
                 key,
                 task: this.updateMemoryUsageTask,
-                run: this.updateMemoryUsage.bind(this, ...params),
+                run,
                 callback: this.notify.bind(this, 'memoryUsage')
             });
             return;
@@ -212,7 +225,7 @@ export default class MemoryMonitor extends Monitor {
             this.runTask({
                 key,
                 task: this.updateSwapUsageTask,
-                run: this.updateSwapUsage.bind(this, ...params),
+                run: this.updateSwapUsageProc.bind(this, ...params),
                 callback: this.notify.bind(this, 'swapUsage')
             });
             return;
@@ -229,7 +242,13 @@ export default class MemoryMonitor extends Monitor {
         }));
     }
     
-    async updateMemoryUsage(procMeminfo: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateMemoryUsageAuto(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
+        if(Utils.GTop)
+            return await this.updateMemoryUsageGTop();
+        return await this.updateMemoryUsageProc(procMeminfo);
+    }
+    
+    async updateMemoryUsageProc(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procMeminfoValue = await procMeminfo.getValue();
         if(procMeminfoValue.length < 1)
             return false;
@@ -245,12 +264,49 @@ export default class MemoryMonitor extends Monitor {
                 case 'MemTotal:': total = value * 1024; break;
                 case 'MemFree:': free = value * 1024; break;
                 case 'Buffers:': buffers = value * 1024; break;
-                case 'Cached:': cached = value * 1024; break;
+                case 'Cached:': cached += value * 1024; break;
                 case 'MemAvailable:': available = value * 1024; break;
                 case 'Active:': active = value * 1024; break;
+                case 'Slab:': cached += value * 1024; break; // GTop includes Slab in Cached
             }
         }
         
+        return this.updateMemoryUsageCommon({ active, total, available, free, buffers, cached });
+    }
+    
+    async updateMemoryUsageGTop(): Promise<boolean> {
+        const GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        const mem = new GTop.glibtop_mem();
+        GTop.glibtop_get_mem(mem);
+        
+        const total = mem.total;
+        const free = mem.free;
+        const buffers = mem.buffer;
+        const cached = mem.cached;
+        const available = mem.free + mem.buffer + mem.cached;
+        const active = mem.used - (mem.buffer + mem.cached);
+        
+        return this.updateMemoryUsageCommon({
+            active,
+            total,
+            available,
+            free,
+            buffers,
+            cached
+        });
+    }
+    
+    private updateMemoryUsageCommon({ active, total, available, free, buffers, cached }: {
+        active: number,
+        total: number,
+        available: number,
+        free: number,
+        buffers: number,
+        cached: number
+    }): boolean {
         let used;
         if(this.usedPref === 'active')
             used = active;
@@ -264,7 +320,7 @@ export default class MemoryMonitor extends Monitor {
         const allocated = total - free;
         const allocatable = available - free;
         
-        const memoryUsage = {
+        this.pushUsageHistory('memoryUsage', {
             active,
             allocated,
             allocatable,
@@ -274,9 +330,7 @@ export default class MemoryMonitor extends Monitor {
             free,
             buffers,
             cached
-        };
-    
-        this.pushUsageHistory('memoryUsage', memoryUsage);
+        });
         return true;
     }
     
@@ -421,7 +475,7 @@ export default class MemoryMonitor extends Monitor {
         return true;
     }
     
-    async updateSwapUsage(procMeminfo: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateSwapUsageProc(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procMeminfoValue = await procMeminfo.getValue();
         if(procMeminfoValue.length < 1)
             return false;

@@ -263,6 +263,11 @@
       <summary>Preferred Used Memory Calculation</summary>
       <description>Select the preferred calculation for the used memory value</description>
     </key>
+    <key name="memory-source-memory-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+      <default>'default'</default>
+      <summary>Memory Usage Source</summary>
+      <description>Source of the memory usage</description>
+    </key>
     <key name="memory-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
       <default>'default'</default>
       <summary>Top Processes Source</summary>

@@ -351,7 +351,7 @@ class SensorsHeader extends Header {
         if(!Config.get_boolean('sensors-header-tooltip'))
             return;
         
-        this.tooltipMenu.open(true);
+        this.tooltipMenu.open(false);
     }
     
     hideTooltip() {
@@ -359,7 +359,7 @@ class SensorsHeader extends Header {
             return;
         if(!Config.get_boolean('sensors-header-tooltip'))
             return;
-        this.tooltipMenu.close(true);
+        this.tooltipMenu.close(false);
     }
     
     destroy() {
@@ -375,7 +375,7 @@ class SensorsHeader extends Header {
         if(this.tooltipMenu) {
             Config.clear(this.tooltipMenu);
             Utils.sensorsMonitor.unlisten(this.tooltipMenu);
-            this.tooltipMenu.close(true);
+            this.tooltipMenu.close(false);
         }
 
         super.destroy();

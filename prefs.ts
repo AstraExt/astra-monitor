@@ -263,7 +263,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
         
         processorsPage.add(group);
-
+        
         /* Header */
         group = new Adw.PreferencesGroup({title: _('Header')});
         
@@ -365,6 +365,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
+        this.addComboRow({title: this.tab + _('Memory Usage')}, choicesPanel, 'memory-source-memory-usage', sourcesSection, 'string');
         this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel, 'memory-source-top-processes', sourcesSection, 'string');
         
         memoryPage.add(group);
