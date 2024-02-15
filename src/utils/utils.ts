@@ -60,7 +60,7 @@ export type GpuInfo = {
     modules?:string[]
 };
 
-type DiskInfo = {
+export type DiskInfo = {
     id: string,
     name: string,
     label: string,
@@ -214,7 +214,8 @@ export default class Utils {
         try {
             const res = await import('gi://GTop');
             Utils.GTop = res.default as any;
-        } catch(e: any) {
+        }
+        catch(e: any) {
             Utils.GTop = false;
         }
     }
@@ -446,7 +447,7 @@ export default class Utils {
     }
     
     static async hasGTop(): Promise<boolean> {
-        while(Utils.GTop === null)
+        while(Utils.GTop === undefined)
             await new Promise(r => setTimeout(r, 100));
         return Utils.GTop !== false;
     }
@@ -1715,5 +1716,13 @@ export default class Utils {
             Utils.log(`${name} took ${((end - start) / 1000).toFixed(2)}ms`);
             Utils.performanceMap?.set(name, 0);
         }
+    }
+    
+    static convertCharListToString(value: number[]): string {
+        const firstNullIndex = value.indexOf(0);
+        if(firstNullIndex === -1)
+            return String.fromCharCode.apply(null, value);
+        else
+            return String.fromCharCode.apply(null, value.slice(0, firstNullIndex));
     }
 }

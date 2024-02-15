@@ -396,10 +396,20 @@
       <summary>Ignored Storage Devices Regex</summary>
       <description>A regex to match Storage Devices to ignore</description>
     </key>
+    <key name="storage-source-storage-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+      <default>'default'</default>
+      <summary>Storage Usage Source</summary>
+      <description>Source of the storage usage</description>
+    </key>
     <key name="storage-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list2">
       <default>'default'</default>
       <summary>Top Processes Source</summary>
       <description>Source of the top processes</description>
+    </key>
+    <key name="storage-source-storage-io" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+      <default>'default'</default>
+      <summary>Storage IO Source</summary>
+      <description>Source of the storage IO</description>
     </key>
     <key name="storage-header-show" type="b">
       <default>true</default>

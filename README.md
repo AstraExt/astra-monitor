@@ -97,22 +97,7 @@ Here is a non-exhaustive list of how to install `libgtop` on some popular Linux 
 
 #### Ubuntu/Debian
 ```bash
-sudo apt install libgtop-2.0-11
-```
-
-#### Fedora
-```bash
-sudo dnf install libgtop2
-```
-
-#### Arch Linux
-```bash
-sudo pacman -S libgtop
-```
-
-#### openSUSE
-```bash
-sudo zypper install libgtop-2_0-11
+sudo apt install gir1.2-gtop-2.0
 ```
 
 #### NixOS

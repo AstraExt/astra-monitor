@@ -2,6 +2,7 @@
 
 ### New features
 - New source selection for Memory Usage: now you can choose between GTop and /proc (GTop is the default if available)
+- New source selection for Storage Usage: now you can choose between GTop and /proc (GTop is the default if available)
 
 ### Bug fixes
 - Light Theme readability improvements [[#53](https://github.com/AstraExt/astra-monitor/issues/53)]

@@ -545,10 +545,17 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         choicesPanel = [
             {value: 'default', text: _('Default (Auto)')},
             {value: 'auto', text: _('Auto')},
+            {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel, 'storage-source-top-processes', sourcesSection, 'string');
-        
+        this.addComboRow({title: this.tab + _('Storage Usage')}, choicesPanel, 'storage-source-storage-usage', sourcesSection, 'string');
+        const choicesPanel2 = [
+            {value: 'default', text: _('Default (Auto)')},
+            {value: 'auto', text: _('Auto')},
+            {value: 'GTop', text: 'GTop'},
+        ];
+        this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel2, 'storage-source-top-processes', sourcesSection, 'string');
+        this.addComboRow({title: this.tab + _('Storage IO')}, choicesPanel, 'storage-source-storage-io', sourcesSection, 'string');
         storagePage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});

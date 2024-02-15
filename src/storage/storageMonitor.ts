@@ -21,10 +21,10 @@
 import GLib from 'gi://GLib';
 
 import Config from '../config.js';
-import Utils from '../utils/utils.js';
+import Utils, { DiskInfo } from '../utils/utils.js';
 import Monitor from '../monitor.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
-import PromiseValueHolder from '../utils/promiseValueHolder.js';
+import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 import TopProcessesCache from '../utils/topProcessesCache.js';
 
 export type StorageUsage = {
@@ -81,7 +81,9 @@ type PidIO = {
 };
 
 type StorageDataSources = {
-    topProcesses: string|null
+    storageUsage?: string,
+    topProcesses?: string,
+    storageIO?: string
 };
 
 export default class StorageMonitor extends Monitor {
@@ -96,6 +98,8 @@ export default class StorageMonitor extends Monitor {
     private ignored: string[];
     private ignoredRegex: RegExp|null;
     
+    private updateMountpointCache: CancellableTaskManager<boolean>;
+    
     private updateStorageUsageTask: CancellableTaskManager<boolean>;
     private updateTopProcessesTask: CancellableTaskManager<boolean>;
     private updateStorageIOTask: CancellableTaskManager<boolean>;
@@ -106,6 +110,8 @@ export default class StorageMonitor extends Monitor {
     
     private dataSources!: StorageDataSources;
     
+    //private disksCacheFilled: boolean = false;
+    private disksCache: Map<string, DiskInfo> = new Map();
     
     constructor() {
         super('Storage Monitor');
@@ -116,6 +122,8 @@ export default class StorageMonitor extends Monitor {
         this.sectorSizes = {};
         
         // Setup tasks
+        this.updateMountpointCache = new CancellableTaskManager();
+        
         this.updateStorageUsageTask = new CancellableTaskManager();
         this.updateTopProcessesTask = new CancellableTaskManager();
         this.updateStorageIOTask = new CancellableTaskManager();
@@ -199,9 +207,14 @@ export default class StorageMonitor extends Monitor {
         this.topProcessesCache.reset();
         this.previousPidsIO = new Map();
         
+        this.updateMountpointCache.cancel();
+        
         this.updateStorageUsageTask.cancel();
         this.updateTopProcessesTask.cancel();
         this.updateStorageIOTask.cancel();
+        
+        //this.disksCacheFilled = false;
+        this.disksCache.clear();
     }
     
     checkMainDisk(): string|null {
@@ -228,14 +241,40 @@ export default class StorageMonitor extends Monitor {
     
     dataSourcesInit() {
         this.dataSources = {
-            topProcesses: Config.get_string('storage-source-top-processes')
+            storageUsage: Config.get_string('storage-source-storage-usage') ?? undefined,
+            topProcesses: Config.get_string('storage-source-top-processes') ?? undefined,
+            storageIO: Config.get_string('storage-source-storage-io') ?? undefined
         };
         
+        Config.connect(this, 'changed::storage-source-storage-usage', () => {
+            this.dataSources.storageUsage = Config.get_string('storage-source-storage-usage') ?? undefined;
+            //this.disksCacheFilled = false;
+            this.disksCache.clear();
+            this.resetUsageHistory('storageUsage');
+        });
+        
         Config.connect(this, 'changed::storage-source-top-processes', () => {
-            this.dataSources.topProcesses = Config.get_string('storage-source-top-processes');
+            this.dataSources.topProcesses = Config.get_string('storage-source-top-processes') ?? undefined;
             this.topProcessesCache.reset();
             this.previousPidsIO = new Map();
             this.resetUsageHistory('topProcesses');
+        });
+        
+        Config.connect(this, 'changed::storage-source-storage-io', () => {
+            this.dataSources.storageIO = Config.get_string('storage-source-storage-io') ?? undefined;
+            //this.disksCacheFilled = false;
+            this.disksCache.clear();
+            this.previousStorageIO = {
+                bytesRead: -1,
+                bytesWritten: -1,
+                time: -1
+            };
+            this.previousDetailedStorageIO = {
+                devices: null,
+                time: -1
+            };
+            this.resetUsageHistory('storageIO');
+            this.resetUsageHistory('detailedStorageIO');
         });
     }
     
@@ -253,19 +292,16 @@ export default class StorageMonitor extends Monitor {
         if(enabled) {
             this.runUpdate('storageUsage');
             
-            let detailed = false;
-            if(this.isListeningFor('detailedStorageIO'))
-                detailed = true;
-            
-            if(this.isListeningFor('topProcesses')) {
-                if(Utils.GTop) // Only GTop supports for now
+            // Only GTop supports for now
+            if(Utils.GTop) {
+                if(this.isListeningFor('topProcesses'))
                     this.runUpdate('topProcesses');
-            }
-            else {
-                this.topProcessesCache.updateNotSeen([]);
+                else
+                    this.topProcessesCache.updateNotSeen([]);
             }
             
-            const procDiskstats = this.getProcDiskStatsAsync();
+            const detailed = this.isListeningFor('detailedStorageIO');
+            const procDiskstats = new PromiseValueHolderStore<string[]>(this.getProcDiskStatsAsync.bind(this));
             this.runUpdate('updateStorageIO', detailed, procDiskstats);
         }
         return true;
@@ -276,19 +312,16 @@ export default class StorageMonitor extends Monitor {
             this.runUpdate('storageUsage');
         }
         else if(key === 'storageIO' || key === 'detailedStorageIO') {
-            const procDiskstats = this.getProcDiskStatsAsync();
+            const procDiskstats = new PromiseValueHolderStore<string[]>(this.getProcDiskStatsAsync.bind(this));
             const detailed = key === 'detailedStorageIO';
             
             this.runUpdate('updateStorageIO', detailed, procDiskstats);
-            
             if(detailed)
                 super.requestUpdate('storageIO'); // override also the storageIO update
         }
         else if(key === 'topProcesses') {
-            if(!this.updateTopProcessesTask.isRunning) {
-                if(Utils.GTop) // Only GTop supports for now
-                    this.runUpdate('topProcesses');
-            }
+            if(!this.updateTopProcessesTask.isRunning && Utils.GTop) // Only GTop supports for now
+                this.runUpdate('topProcesses');
             return; // Don't push to the queue
         }
         super.requestUpdate(key);
@@ -296,10 +329,18 @@ export default class StorageMonitor extends Monitor {
     
     runUpdate(key: string, ...params: any[]) {
         if(key === 'storageUsage') {
+            let run;
+            if(this.dataSources.storageUsage === 'GTop')
+                run = this.updateStorageUsageGTop.bind(this, ...params);
+            else if(this.dataSources.storageUsage === 'proc')
+                run = this.updateStorageUsageProc.bind(this, ...params);
+            else
+                run = this.updateStorageUsageAuto.bind(this, ...params);
+            
             this.runTask({
                 key,
                 task: this.updateStorageUsageTask,
-                run: this.updateStorageUsage.bind(this, ...params),
+                run,
                 callback: this.notify.bind(this, 'storageUsage')
             });
             return;
@@ -327,10 +368,24 @@ export default class StorageMonitor extends Monitor {
                     this.notify('detailedStorageIO');
             };
             
+            let run;
+            
+            /**!
+             * GTop cannot be used until it's fixed:
+             * check the function content for more info
+             **/
+            // eslint-disable-next-line no-constant-condition
+            if(this.dataSources.storageIO === 'GTop' && false)
+                run = this.updateStorageIOGTop.bind(this, ...params);
+            else if(this.dataSources.storageIO === 'proc')
+                run = this.updateStorageIOProc.bind(this, ...params);
+            else
+                run = this.updateStorageIOAuto.bind(this, ...params);
+            
             this.runTask({
                 key,
                 task: this.updateStorageIOTask,
-                run: this.updateStorageIO.bind(this, ...params),
+                run,
                 callback
             });
             return;
@@ -347,14 +402,19 @@ export default class StorageMonitor extends Monitor {
         }));
     }
     
-    async updateStorageUsage(): Promise<boolean> {
+    async updateStorageUsageAuto(): Promise<boolean> {
+        if(Utils.GTop)
+            return await this.updateStorageUsageGTop();
+        return await this.updateStorageUsageProc();
+    }
+    
+    async updateStorageUsageProc(): Promise<boolean> {
         let mainDisk = Config.get_string('storage-main');
         const disks = await Utils.listDisksAsync(this.updateStorageUsageTask);
         
         try {
-            if(!mainDisk || mainDisk === '[default]') {
+            if(!mainDisk || mainDisk === '[default]')
                 mainDisk = this.checkMainDisk();
-            }
             
             let disk = disks.get(mainDisk || '');
             if(!disk) {
@@ -388,13 +448,48 @@ export default class StorageMonitor extends Monitor {
         return false;
     }
     
+    async updateStorageUsageGTop(): Promise<boolean> {
+        const GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        let mainDisk = Config.get_string('storage-main');
+        try {
+            if(!mainDisk || mainDisk === '[default]')
+                mainDisk = this.checkMainDisk();
+            if(!mainDisk)
+                return false;
+            
+            const disk = await this.getCachedDisk(mainDisk);
+            const mountpoints = disk?.mountpoints;
+            if(!mountpoints || mountpoints.length === 0 || (mountpoints.length === 1 && mountpoints[0] === '[SWAP]'))
+                return false;
+            
+            const buf = new GTop.glibtop_fsusage();
+            let mnt = 0;
+            while(buf.blocks === 0 && mnt <= mountpoints.length)
+                GTop.glibtop_get_fsusage(buf, mountpoints[mnt++]);
+            
+            if(buf.blocks === 0)
+                return false;
+            
+            const size = buf.blocks * buf.block_size;
+            const free = buf.bfree * buf.block_size;
+            
+            this.pushUsageHistory('storageUsage', {
+                size: size,
+                usePercentage: Math.round((size - free) / size * 100)
+            });
+            return true;
+        }
+        catch(e: any) { /* EMPTY */ }
+        return false;
+    }
+    
     /**
-     * This function is Sync but it caches the result, so it's not a problem
+     * This function is Sync but it caches the result
      */
     getSectorSize(device: string): number {
-        //TODO: check this
-        //const diskDevice = device.replace(/[0-9]+$/, '');
-        
         if(this.sectorSizes[device] === undefined) {
             const fileContents = GLib.file_get_contents(`/sys/block/${device}/queue/hw_sector_size`);
             if(fileContents && fileContents[0]) {
@@ -408,6 +503,9 @@ export default class StorageMonitor extends Monitor {
         return this.sectorSizes[device];
     }
     
+    /**
+     * This function is Sync but it caches the result
+     */
     isDisk(deviceName: string): boolean {
         if(this.diskChecks[deviceName] !== undefined)
             return this.diskChecks[deviceName];
@@ -422,7 +520,18 @@ export default class StorageMonitor extends Monitor {
         }
     }
     
-    async updateStorageIO(detailed: boolean, procDiskstats: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateStorageIOAuto(detailed: boolean, procDiskstats: PromiseValueHolder<string[]>): Promise<boolean> {
+        /**!
+         * GTop cannot be used until it's fixed:
+         * check the function content for more info
+         **/
+        // eslint-disable-next-line no-constant-condition
+        if(Utils.GTop && false)
+            return await this.updateStorageIOGTop(detailed);
+        return await this.updateStorageIOProc(detailed, procDiskstats);
+    }
+    
+    async updateStorageIOProc(detailed: boolean, procDiskstats: PromiseValueHolder<string[]>): Promise<boolean> {
         const procDiskstatsValue = await procDiskstats.getValue();
         if(procDiskstatsValue.length < 1)
             return false;
@@ -525,10 +634,114 @@ export default class StorageMonitor extends Monitor {
             
             this.previousDetailedStorageIO.devices = devices;
             this.previousDetailedStorageIO.time = now;
-            
             this.pushUsageHistory('detailedStorageIO', finalData);
         }
         return true;
+    }
+    
+    async updateStorageIOGTop(detailed: boolean): Promise<boolean> {
+        const GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        /**!
+         * TODO:
+         * CANNOT USE GTOP MOUNTPOINTS BECAUSE IT CAUSES A SHELL SIGSEGV
+         * https://gitlab.gnome.org/GNOME/gjs/-/issues/601
+         */
+        /*try {
+            Utils.log('glibtop_mountlist');
+            
+            const buf = new GTop.glibtop_mountlist();
+            const mountlist = GTop.glibtop_get_mountlist(buf, 0);
+            
+            Utils.log('mountlist.length: ' + mountlist.length);
+            Utils.log('buf.number: ' + buf.number);
+            Utils.log('buf.size: ' + buf.size);
+            Utils.log('buf.total: ' + buf.total);
+            
+            for(const mount of mountlist) {
+                const devname = Utils.convertCharListToString(mount.devname);
+                const mountdir = Utils.convertCharListToString(mount.mountdir);
+                const type = Utils.convertCharListToString(mount.type);
+                
+                Utils.log(`devname: ${devname}, mountdir: ${mountdir}, type: ${type}`);
+            }
+        }
+        catch(e: any) {
+            Utils.error(e);
+        }*/
+        
+        /**!
+         * TODO:
+         * glibtop_get_fsusage is broken too for NVMe disks
+         * https://gitlab.gnome.org/GNOME/libgtop/-/issues/43
+         * and
+         * https://bugs.launchpad.net/ubuntu/+source/libgtop2/+bug/2025476
+         */
+        /*let bytesRead = 0;
+        let bytesWritten = 0;
+        
+        for(const disk of this.disksCache.values()) {
+            if(this.ignored.includes(disk.name))
+                continue;
+            
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(disk.name))
+                continue;
+            
+            const mountpoints = disk.mountpoints;
+            if(!mountpoints || mountpoints.length === 0 || (mountpoints.length === 1 && mountpoints[0] === '[SWAP]'))
+                return false;
+            
+            let mnt = 0;
+            const buf = new GTop.glibtop_fsusage();
+            
+            while(buf.blocks === 0 && mnt <= mountpoints.length)
+                GTop.glibtop_get_fsusage(buf, mountpoints[mnt++]);
+            
+            Utils.log('------------');
+            Utils.log('glibtop_get_fsusage: ' + disk.path);
+            Utils.log('buf.blocks: ' + buf.blocks);
+            Utils.log('buf.read: ' + buf.read);
+            Utils.log('buf.write: ' + buf.write);
+            Utils.log('buf.block_size: ' + buf.block_size);
+            
+            if(buf.blocks === 0 || buf.block_size === 0 || (buf.read === 0 && buf.write === 0))
+                continue;
+            
+            bytesRead += buf.read * buf.block_size;
+            bytesWritten += buf.write * buf.block_size;
+        }
+        
+        Utils.log('bytesRead: ' + bytesRead);
+        Utils.log('bytesWritten: ' + bytesWritten);
+        
+        const now = GLib.get_monotonic_time();
+        
+        if(this.previousStorageIO.bytesRead === -1 || this.previousStorageIO.bytesWritten === -1 || this.previousStorageIO.time === -1) {
+            this.previousStorageIO.bytesRead = bytesRead;
+            this.previousStorageIO.bytesWritten = bytesWritten;
+            this.previousStorageIO.time = now;
+            return false;
+        }
+        
+        const interval = (now - this.previousStorageIO.time) / 1000000;
+        const bytesReadPerSec = Math.round((bytesRead - this.previousStorageIO.bytesRead) / interval);
+        const bytesWrittenPerSec = Math.round((bytesWritten - this.previousStorageIO.bytesWritten) / interval);
+        
+        this.previousStorageIO.bytesRead = bytesRead;
+        this.previousStorageIO.bytesWritten = bytesWritten;
+        this.previousStorageIO.time = now;
+        
+        this.pushUsageHistory('storageIO', {
+            bytesReadPerSec,
+            bytesWrittenPerSec
+        });*/
+        
+        if(detailed) {
+            /* TODO: */
+        }
+        return false;
     }
     
     async updateTopProcessesAuto(): Promise<boolean> {
@@ -626,6 +839,20 @@ export default class StorageMonitor extends Monitor {
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);
         return true;
+    }
+    
+    async getCachedDisk(device: string): Promise<DiskInfo|undefined> {
+        if(this.disksCache.has(device))
+            return this.disksCache.get(device);
+        
+        const disks = await Utils.listDisksAsync(this.updateMountpointCache);
+        
+        const disk = disks.get(device);
+        if(!disk || !disk.mountpoints || disk.mountpoints.length === 0)
+            return;
+        
+        this.disksCache.set(device, disk);
+        return disk;
     }
     
     destroy() {

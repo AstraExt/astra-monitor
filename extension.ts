@@ -74,7 +74,6 @@ export default class AstraMonitorExtension extends Extension {
             GLib.source_remove(this.timeout);
             this.timeout = 0;
         }
-        Utils.clear();
         
         try {
             this.container?.destroy();
@@ -83,5 +82,7 @@ export default class AstraMonitorExtension extends Extension {
             Utils.error(e);
         }
         this.container = undefined;
+        
+        Utils.clear();
     }
 }
