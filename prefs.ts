@@ -33,6 +33,7 @@ type RowProps = {
     title: string;
     subtitle?:string;
     icon_name?: string;
+    tabs?: number;
 };
 
 type AdjustamentProps = {
@@ -47,7 +48,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private minimumSize = { width: 500, height: 300 };
     private defaultSize = { width: 800, height: 700 };
     private expanded: any = null;
-    private tab: string = ' '.repeat(5);
     
     private loadCustomTheme() {
         try {
@@ -188,8 +188,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'light', text: _('Light')}
         ];
         this.addComboRow({
-            title: this.tab + _('Shell Theme Style'),
-            subtitle:  this.tab + _('Set to "Dark" or "Light" based on your shell topbar theme to improve readability.'),
+            title: _('Shell Theme Style'),
+            subtitle:  _('Set to "Dark" or "Light" based on your shell topbar theme to improve readability.'),
+            tabs: 1
         }, choicesPanel, 'theme-style', themeSection, 'string');
         
         const panelSection = this.addExpanderRow({title: _('Panel Box')}, group);
@@ -198,39 +199,44 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'center', text: _('Center')},
             {value: 'right', text: _('Right')},
         ];
-        this.addComboRow({title: this.tab + _('Position')}, choicesPanel, 'panel-box', panelSection, 'string');
-        this.addSpinRow({title: this.tab + _('Order')}, 'panel-box-order', panelSection, {min: -10, max: 10, digits: 0, step: 1, page: 1}, true);
+        this.addComboRow({title: _('Position'), tabs: 1}, choicesPanel, 'panel-box', panelSection, 'string');
+        this.addSpinRow({title: _('Order'), tabs: 1}, 'panel-box-order', panelSection, {min: -10, max: 10, digits: 0, step: 1, page: 1}, true);
         this.addSpinRow({
-            title: this.tab + _('Left Margin'),
-            subtitle:  this.tab + _('Experimental feature: may not function properly.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Left Margin'),
+            subtitle:  _('Experimental feature: may not function properly.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'panel-margin-left', panelSection, {min: 0, max: 1000, digits: 0, step: 1, page: 10}, true, 0);
         this.addSpinRow({
-            title: this.tab + _('Right Margin'),
-            subtitle:  this.tab + _('Experimental feature: may not function properly.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Right Margin'),
+            subtitle: _('Experimental feature: may not function properly.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'panel-margin-right', panelSection, {min: 0, max: 1000, digits: 0, step: 1, page: 10}, true, 0);        
         
         const headersSection = this.addExpanderRow({title: _('Headers')}, group);
         this.addSpinRow({
-            title: this.tab + _('Headers Height'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Headers Height'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'headers-height', headersSection, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true, 28);
         this.addSpinRow({
-            title: this.tab + _('Headers Margins'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
+            title: _('Headers Margins'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic'
         }, 'headers-margins', headersSection, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true, 2);
         this.addFontRow({
-            title: this.tab + _('Headers Font'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Set to empty to disable font override'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Headers Font'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.') + '\n' + _('Set to empty to disable font override'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'headers-font-family', headersSection, '');
         this.addSpinRow({
-            title: this.tab + _('Headers Font Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.') + '\n' + this.tab + _('Set to 0 to disable size override'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Headers Font Size'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.') + '\n' + _('Set to 0 to disable size override'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'headers-font-size', headersSection, {min: 0, max: 30, digits: 0, step: 1, page: 2}, true, 0);
         
         generalPage.add(group);
@@ -258,9 +264,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: this.tab + _('Cpu Usage')}, choicesPanel, 'processor-source-cpu-usage', sourcesSection, 'string');
-        this.addComboRow({title: this.tab + _('Cpu Cores Usage')}, choicesPanel, 'processor-source-cpu-cores-usage', sourcesSection, 'string');
-        this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
+        this.addComboRow({title: _('Cpu Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-usage', sourcesSection, 'string');
+        this.addComboRow({title: _('Cpu Cores Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-cores-usage', sourcesSection, 'string');
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
         
         processorsPage.add(group);
         
@@ -269,51 +275,54 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
         Utils.getIndicatorsOrder('processor');
-        this.addOrderingRows('processor-indicators-order', orderSection, this.tab);
+        this.addOrderingRows('processor-indicators-order', orderSection);
         
         const iconSection = this.addExpanderRow({title: _('Icon')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Icon')}, 'processor-header-icon', iconSection);
+        this.addSwitchRow({title: _('Show Icon'), tabs: 1}, 'processor-header-icon', iconSection);
         this.addTextInputRow({
-            title: this.tab + _('Icon Name'),
-            subtitle:  this.tab + _('Set icon name (ie: \'cpu-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+            title: _('Icon Name'),
+            subtitle: _('Set icon name (ie: \'cpu-symbolic\')') + '\n' + _('Set to empty to disable icon override'),
+            tabs: 1
         }, 'processor-header-icon-custom', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Color') }, 'processor-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'processor-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
+        this.addColorRow({ title: _('Icon Color'), tabs: 1 }, 'processor-header-icon-color', iconSection, '');
+        this.addColorRow({ title: _('Icon Alert Color'), tabs: 1 }, 'processor-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
-            title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Icon Size'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'processor-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Tooltip')}, 'processor-header-tooltip', tooltipSection);
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'processor-header-tooltip', tooltipSection);
         
         const percentageSection = this.addExpanderRow({title: _('Percentage')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Percentage')}, 'processor-header-percentage', percentageSection);
-        this.addSwitchRow({title: this.tab + _('Single Core Percentage')}, 'processor-header-percentage-core', percentageSection);
+        this.addSwitchRow({title: _('Show Percentage'), tabs: 1}, 'processor-header-percentage', percentageSection);
+        this.addSwitchRow({title: _('Single Core Percentage'), tabs: 1}, 'processor-header-percentage-core', percentageSection);
         this.addSpinRow({
-            title: this.tab + _('Icon Alert'),
-            subtitle:  this.tab + _('Set 0 to disable. Value is percentage of total cpu.'),
+            title: _('Icon Alert'),
+            subtitle: _('Set 0 to disable. Value is percentage of total cpu.'),
+            tabs: 1
         }, 'processor-header-percentage-icon-alert-threshold', percentageSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
         
         const graphSection = this.addExpanderRow({title: _('History Graph')}, group);
-        this.addSwitchRow({title: this.tab + _('Show History Graph')}, 'processor-header-graph', graphSection);
-        this.addSwitchRow({title: this.tab + _('History Graph Breakdown')}, 'processor-header-graph-breakdown', graphSection);
-        this.addSpinRow({title: this.tab + _('History Graph Width')}, 'processor-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        this.addSwitchRow({title: _('Show History Graph'), tabs: 1}, 'processor-header-graph', graphSection);
+        this.addSwitchRow({title:_('History Graph Breakdown'), tabs: 1}, 'processor-header-graph-breakdown', graphSection);
+        this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'processor-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
         
         const barsSection = this.addExpanderRow({title: _('Realtime Bar')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Realtime Bar')}, 'processor-header-bars', barsSection);
-        this.addSwitchRow({title: this.tab + _('Realtime per-core Bars')}, 'processor-header-bars-core', barsSection);
-        this.addSwitchRow({title: this.tab + _('Realtime Bar Breakdown')}, 'processor-header-bars-breakdown', barsSection);
+        this.addSwitchRow({title: _('Show Realtime Bar'), tabs: 1}, 'processor-header-bars', barsSection);
+        this.addSwitchRow({title: _('Realtime per-core Bars'), tabs: 1}, 'processor-header-bars-core', barsSection);
+        this.addSwitchRow({title: _('Realtime Bar Breakdown'), tabs: 1}, 'processor-header-bars-breakdown', barsSection);
         processorsPage.add(group);
         
         /* Menu */
         group = new Adw.PreferencesGroup({title: _('Menu')});
         const cpuSection = this.addExpanderRow({title: _('CPU')}, group);
-        this.addSwitchRow({title: this.tab + _('Realtime Bars Breakdown')}, 'processor-menu-bars-breakdown', cpuSection);
-        this.addSwitchRow({title: this.tab + _('History Graph Breakdown')}, 'processor-menu-graph-breakdown', cpuSection);
-        this.addSwitchRow({title: this.tab + _('Core Bars Breakdown')}, 'processor-menu-core-bars-breakdown', cpuSection);
-        this.addSwitchRow({title: this.tab + _('Top Processes Single Core')}, 'processor-menu-top-processes-percentage-core', cpuSection);
+        this.addSwitchRow({title: _('Realtime Bars Breakdown'), tabs: 1}, 'processor-menu-bars-breakdown', cpuSection);
+        this.addSwitchRow({title: _('History Graph Breakdown'), tabs: 1}, 'processor-menu-graph-breakdown', cpuSection);
+        this.addSwitchRow({title: _('Core Bars Breakdown'), tabs: 1}, 'processor-menu-core-bars-breakdown', cpuSection);
+        this.addSwitchRow({title: _('Top Processes Single Core'), tabs: 1}, 'processor-menu-top-processes-percentage-core', cpuSection);
         const gpuSection = this.addExpanderRow({title: _('GPU')}, group);
         
         //Fix GPU domain missing (v9 => v10)
@@ -365,8 +374,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: this.tab + _('Memory Usage')}, choicesPanel, 'memory-source-memory-usage', sourcesSection, 'string');
-        this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel, 'memory-source-top-processes', sourcesSection, 'string');
+        this.addComboRow({title: _('Memory Usage'), tabs: 1}, choicesPanel, 'memory-source-memory-usage', sourcesSection, 'string');
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'memory-source-top-processes', sourcesSection, 'string');
         
         memoryPage.add(group);
         
@@ -374,44 +383,47 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
         Utils.getIndicatorsOrder('memory');
-        this.addOrderingRows('memory-indicators-order', orderSection, this.tab);
+        this.addOrderingRows('memory-indicators-order', orderSection);
         
         const iconSection = this.addExpanderRow({title: _('Icon')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Icon')}, 'memory-header-icon', iconSection);
+        this.addSwitchRow({title: _('Show Icon'), tabs: 1}, 'memory-header-icon', iconSection);
         this.addTextInputRow({
-            title: this.tab + _('Icon Name'),
-            subtitle:  this.tab + _('Set icon name (ie: \'memory-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+            title: _('Icon Name'),
+            subtitle: _('Set icon name (ie: \'memory-symbolic\')') + '\n' + _('Set to empty to disable icon override'),
+            tabs: 1
         }, 'memory-header-icon-custom', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Color') }, 'memory-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'memory-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
+        this.addColorRow({title: _('Icon Color'), tabs: 1}, 'memory-header-icon-color', iconSection, '');
+        this.addColorRow({title: _('Icon Alert Color'), tabs: 1}, 'memory-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
-            title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Icon Size'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'memory-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Tooltip')}, 'memory-header-tooltip', tooltipSection);
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'memory-header-tooltip', tooltipSection);
         
         const percentageSection = this.addExpanderRow({title: _('Usage Percentage')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Usage Percentage')}, 'memory-header-percentage', percentageSection);
+        this.addSwitchRow({title: _('Show Usage Percentage'), tabs: 1}, 'memory-header-percentage', percentageSection);
         this.addSpinRow({
-            title: this.tab + _('Icon Alert'),
-            subtitle:  this.tab + _('Set 0 to disable. Value is percentage of ram usage.'),
+            title: _('Icon Alert'),
+            subtitle: _('Set 0 to disable. Value is percentage of ram usage.'),
+            tabs: 1
         }, 'memory-header-percentage-icon-alert-threshold', percentageSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
         
         const valueSection = this.addExpanderRow({title: _('Usage Value')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Usage Value')}, 'memory-header-value', valueSection);
-        this.addSpinRow({title: this.tab + _('Usage Value Max Number of Figures')}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSwitchRow({title: _('Show Usage Value'), tabs: 1}, 'memory-header-value', valueSection);
+        this.addSpinRow({title: _('Usage Value Max Number of Figures'), tabs: 1}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
         
         const graphSection = this.addExpanderRow({title: _('History Graph')}, group);
-        this.addSwitchRow({title: this.tab + _('Show History Graph')}, 'memory-header-graph', graphSection);
-        this.addSwitchRow({title: this.tab + _('History Graph Breakdown')}, 'memory-header-graph-breakdown', graphSection);
-        this.addSpinRow({title: this.tab + _('History Graph Width')}, 'memory-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        this.addSwitchRow({title: _('Show History Graph'), tabs: 1}, 'memory-header-graph', graphSection);
+        this.addSwitchRow({title: _('History Graph Breakdown'), tabs: 1}, 'memory-header-graph-breakdown', graphSection);
+        this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'memory-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
         
         const barsSection = this.addExpanderRow({title: _('Realtime Bar')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Realtime Bar')}, 'memory-header-bars', barsSection);
-        this.addSwitchRow({title: this.tab + _('Realtime Bar Breakdown')}, 'memory-header-bars-breakdown', barsSection);
+        this.addSwitchRow({title: _('Show Realtime Bar'), tabs: 1}, 'memory-header-bars', barsSection);
+        this.addSwitchRow({title: _('Realtime Bar Breakdown'), tabs: 1}, 'memory-header-bars-breakdown', barsSection);
         memoryPage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Menu')});
@@ -471,8 +483,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const ignoredSection = this.addExpanderRow({title: _('Ignored Storage Devices')}, group);
         
         this.addTextInputRow({
-            title: this.tab + _('Regex'),
-            subtitle: this.tab + _('Devices matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable. Usage example: ') + '\'md{1,3}\'',
+            title: _('Regex'),
+            subtitle: _('Devices matching this regex will be ignored.') + '\n' + _('Leave empty to disable. Usage example: ') + '\'md{1,3}\'',
+            tabs: 1
         }, 'storage-ignored-regex', ignoredSection, '');
         
         const devices = Utils.getBlockDevicesSync();
@@ -548,54 +561,57 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: this.tab + _('Storage Usage')}, choicesPanel, 'storage-source-storage-usage', sourcesSection, 'string');
+        this.addComboRow({title: _('Storage Usage'), tabs: 1}, choicesPanel, 'storage-source-storage-usage', sourcesSection, 'string');
         const choicesPanel2 = [
             {value: 'default', text: _('Default (Auto)')},
             {value: 'auto', text: _('Auto')},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: this.tab + _('Top Processes')}, choicesPanel2, 'storage-source-top-processes', sourcesSection, 'string');
-        this.addComboRow({title: this.tab + _('Storage IO')}, choicesPanel, 'storage-source-storage-io', sourcesSection, 'string');
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel2, 'storage-source-top-processes', sourcesSection, 'string');
+        this.addComboRow({title: _('Storage IO'), tabs: 1}, choicesPanel, 'storage-source-storage-io', sourcesSection, 'string');
         storagePage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
         Utils.getIndicatorsOrder('storage');
-        this.addOrderingRows('storage-indicators-order', orderSection, this.tab);
+        this.addOrderingRows('storage-indicators-order', orderSection);
         
         const iconSection = this.addExpanderRow({title: _('Icon')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Icon')}, 'storage-header-icon', iconSection);
+        this.addSwitchRow({title: _('Show Icon'), tabs: 1}, 'storage-header-icon', iconSection);
         this.addTextInputRow({
-            title: this.tab + _('Icon Name'),
-            subtitle:  this.tab + _('Set icon name (ie: \'drive-harddisk-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+            title: _('Icon Name'),
+            subtitle: _('Set icon name (ie: \'drive-harddisk-symbolic\')') + '\n' + _('Set to empty to disable icon override'),
+            tabs: 1
         }, 'storage-header-icon-custom', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Color') }, 'storage-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'storage-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
+        this.addColorRow({title: _('Icon Color'), tabs: 1}, 'storage-header-icon-color', iconSection, '');
+        this.addColorRow({title: _('Icon Alert Color'), tabs: 1}, 'storage-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
-            title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Icon Size'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'storage-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Tooltip')}, 'storage-header-tooltip', tooltipSection);
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'storage-header-tooltip', tooltipSection);
         
         const barsSection = this.addExpanderRow({title: _('Main Disk')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Storage Usage Bar')}, 'storage-header-bars', barsSection);
-        this.addSwitchRow({title: this.tab + _('Show Storage Usage Percentage')}, 'storage-header-percentage', barsSection);
+        this.addSwitchRow({title: _('Show Storage Usage Bar'), tabs: 1}, 'storage-header-bars', barsSection);
+        this.addSwitchRow({title: _('Show Storage Usage Percentage'), tabs: 1}, 'storage-header-percentage', barsSection);
         this.addSpinRow({
-            title: this.tab + _('Icon Alert'),
-            subtitle:  this.tab + _('Set 0 to disable. Value is percentage of disk usage.'),
+            title: _('Icon Alert'),
+            subtitle: _('Set 0 to disable. Value is percentage of disk usage.'),
+            tabs: 1
         }, 'storage-header-percentage-icon-alert-threshold', barsSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
         
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Realtime IO Bar')}, 'storage-header-io-bars', ioSection);
-        this.addSwitchRow({title: this.tab + _('Show IO History Graph')}, 'storage-header-graph', ioSection);  
-        this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
-        this.addSwitchRow({title: this.tab + _('Show IO Speed')}, 'storage-header-io', ioSection);  
-        this.addSpinRow({title: this.tab + _('IO Speed Max Number of Figures')}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
-        this.addSpinRow({title: this.tab + _('IO Speed Threshold'), subtitle: this.tab + _('in kB/s')}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
+        this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'storage-header-io-bars', ioSection);
+        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'storage-header-graph', ioSection);  
+        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'storage-header-io', ioSection);  
+        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
         
         storagePage.add(group);
         
@@ -627,8 +643,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const ignoredSection = this.addExpanderRow({title: _('Ignored Network Interfaces')}, group);
         
         this.addTextInputRow({
-            title: this.tab + _('Regex'),
-            subtitle: this.tab + _('Interfaces matching this regex will be ignored.') + '\n' + this.tab + _('Leave empty to disable. Usage example: ') + '\'veth\\w{3,16}\'',
+            title: _('Regex'),
+            subtitle: _('Interfaces matching this regex will be ignored.') + '\n' + _('Leave empty to disable. Usage example: ') + '\'veth\\w{3,16}\'',
+            tabs: 1
         }, 'network-ignored-regex', ignoredSection, '');
         
         const devices = Utils.getNetworkInterfacesSync();
@@ -692,32 +709,34 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
         Utils.getIndicatorsOrder('network');
-        this.addOrderingRows('network-indicators-order', orderSection, this.tab);
+        this.addOrderingRows('network-indicators-order', orderSection);
         
         const iconSection = this.addExpanderRow({title: _('Icon')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Icon')}, 'network-header-icon', iconSection);
+        this.addSwitchRow({title: _('Show Icon'), tabs: 1}, 'network-header-icon', iconSection);
         this.addTextInputRow({
-            title: this.tab + _('Icon Name'),
-            subtitle:  this.tab + _('Set icon name (ie: \'network-wired-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+            title: _('Icon Name'),
+            subtitle:  _('Set icon name (ie: \'network-wired-symbolic\')') + '\n' + _('Set to empty to disable icon override'),
+            tabs: 1
         }, 'network-header-icon-custom', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Color') }, 'network-header-icon-color', iconSection, '');
-        this.addColorRow({ title: this.tab + _('Icon Alert Color') }, 'network-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
+        this.addColorRow({title: _('Icon Color'), tabs: 1}, 'network-header-icon-color', iconSection, '');
+        this.addColorRow({title: _('Icon Alert Color'), tabs: 1}, 'network-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
-            title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Icon Size'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Tooltip')}, 'network-header-tooltip', tooltipSection);
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'network-header-tooltip', tooltipSection);
         
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Realtime IO Bar')}, 'network-header-bars', ioSection);
-        this.addSwitchRow({title: this.tab + _('Show IO History Graph')}, 'network-header-graph', ioSection); 
-        this.addSpinRow({title: this.tab + _('IO History Graph Width')}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
-        this.addSwitchRow({title: this.tab + _('Show IO Speed')}, 'network-header-io', ioSection);
-        this.addSpinRow({title: this.tab + _('IO Speed Max Number of Figures')}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
-        this.addSpinRow({title: this.tab + _('IO Speed Threshold'), subtitle: this.tab + _('in kB/s')}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
+        this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'network-header-bars', ioSection);
+        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'network-header-graph', ioSection); 
+        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
+        this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'network-header-io', ioSection);
+        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
 
         networkPage.add(group);
         
@@ -742,24 +761,26 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
         Utils.getIndicatorsOrder('sensors');
-        this.addOrderingRows('sensors-indicators-order', orderSection, this.tab);
+        this.addOrderingRows('sensors-indicators-order', orderSection);
         
         const iconSection = this.addExpanderRow({title: _('Icon')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Icon')}, 'sensors-header-icon', iconSection);
+        this.addSwitchRow({title: _('Show Icon'), tabs: 1}, 'sensors-header-icon', iconSection);
         this.addTextInputRow({
-            title: this.tab + _('Icon Name'),
-            subtitle:  this.tab + _('Set icon name (ie: \'temperature-symbolic\')') + '\n' + this.tab + _('Set to empty to disable icon override'),
+            title: _('Icon Name'),
+            subtitle: _('Set icon name (ie: \'temperature-symbolic\')') + '\n' + _('Set to empty to disable icon override'),
+            tabs: 1
         }, 'sensors-header-icon-custom', iconSection, '');
-        this.addColorRow({title: this.tab + _('Icon Color') }, 'sensors-header-icon-color', iconSection, '');
-        this.addColorRow({title: this.tab + _('Icon Alert Color') }, 'sensors-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
+        this.addColorRow({title: _('Icon Color'), tabs: 1}, 'sensors-header-icon-color', iconSection, '');
+        this.addColorRow({title: _('Icon Alert Color'), tabs: 1}, 'sensors-header-icon-alert-color', iconSection, 'rgba(235, 64, 52, 1)');
         this.addSpinRow({
-            title: this.tab + _('Icon Size'),
-            subtitle:  this.tab + _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            title: _('Icon Size'),
+            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'sensors-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: this.tab + _('Show Tooltip')}, 'sensors-header-tooltip', tooltipSection);
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'sensors-header-tooltip', tooltipSection);
         
         const sources = Utils.getSensorSources();
         
@@ -768,19 +789,21 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             choicesSource.push({value: source.value, text: source.text});
         
         const sensor1Section = this.addExpanderRow({title: _('Sensor 1')}, group);
-        this.addSwitchRow({title: this.tab + _('Show')}, 'sensors-header-sensor1-show', sensor1Section);
-        this.addComboRow({title: this.tab + _('Source')}, choicesSource, 'sensors-header-sensor1', sensor1Section, 'json');
+        this.addSwitchRow({title: _('Show'), tabs: 1}, 'sensors-header-sensor1-show', sensor1Section);
+        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-sensor1', sensor1Section, 'json');
         this.addSpinRow({
-            title: this.tab + _('Value Digits'),
-            subtitle:  this.tab + _('Set -1 to auto. Number of digits after the decimal point.'),
+            title: _('Value Digits'),
+            subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
+            tabs: 1
         }, 'sensors-header-sensor1-digits', sensor1Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const sensor2Section = this.addExpanderRow({title: _('Sensor 2')}, group);
-        this.addSwitchRow({title: this.tab + _('Show')}, 'sensors-header-sensor2-show', sensor2Section);
-        this.addComboRow({title: this.tab + _('Source')}, choicesSource, 'sensors-header-sensor2', sensor2Section, 'json');
+        this.addSwitchRow({title: _('Show'), tabs: 1}, 'sensors-header-sensor2-show', sensor2Section);
+        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-sensor2', sensor2Section, 'json');
         this.addSpinRow({
-            title: this.tab + _('Value Digits'),
-            subtitle:  this.tab + _('Set -1 to auto. Number of digits after the decimal point.'),
+            title: _('Value Digits'),
+            subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
+            tabs: 1
         }, 'sensors-header-sensor2-digits', sensor2Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         sensorsPage.add(group);
         
@@ -816,12 +839,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     private addExpanderRow(props: RowProps, group: Adw.PreferencesGroup|Adw.ExpanderRow) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const data: any = {
             ...props,
             use_markup: true
         };
-        data.title = `⁝ ${data.title}`;
+        
         const section = new Adw.ExpanderRow(data);
+        if(tabs)
+            section.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
         section.connect('notify::expanded', widget => {
             if(widget.expanded) {
                 if(this.expanded && this.expanded !== widget)
@@ -841,7 +870,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addLabelRow(props: RowProps, label: string, group: Adw.PreferencesGroup|Adw.ExpanderRow) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
         if((group as any).add)
             (group as Adw.PreferencesGroup).add(row);
         else
@@ -852,7 +887,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addTextInputRow(props: RowProps, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, reset?: string) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
         if((group as any).add)
             (group as Adw.PreferencesGroup).add(row);
         else
@@ -895,7 +936,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addButtonRow(props: RowProps, group: Adw.PreferencesGroup|Adw.ExpanderRow, callback: (...args: any[]) => void) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
         if((group as any).add)
             (group as Adw.PreferencesGroup).add(row);
         else
@@ -906,10 +953,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addLinkRow(props: RowProps, url: string, group: Adw.PreferencesGroup|Adw.ExpanderRow) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const row = new Adw.ActionRow({
             ...props,
             use_markup: true
         });
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
         if((group as any).add)
             (group as Adw.PreferencesGroup).add(row);
         else
@@ -928,12 +981,17 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addStatusLabel(props: RowProps, iconName: string, group: Adw.PreferencesGroup|Adw.ExpanderRow) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const row = new Adw.ActionRow(props);
         const box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
         const icon = new Gtk.Image({ icon_name: iconName });
         icon.set_margin_end(10);
         box.append(icon);
         row.add_prefix(box);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
         if((group as any).add)
             (group as Adw.PreferencesGroup).add(row);
         else
@@ -946,7 +1004,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addSwitchRow(props: RowProps, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
         if((group as any).add)
             (group as Adw.PreferencesGroup).add(row);
         else
@@ -964,7 +1028,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addColorRow(props: RowProps, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, reset?: string) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
         if((group as any).add)
             (group as Adw.PreferencesGroup).add(row);
         else
@@ -1002,6 +1072,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addComboRow(props: RowProps, choices: {value:any, text:string}[], setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, type: TypeEnumStr = 'int') {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
         let selected = -1;
         let savedValue: any;
         
@@ -1037,6 +1110,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         });
         
         const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
         
         const select = new Gtk.DropDown({
             model: stringList,
@@ -1071,6 +1146,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     addSpinRow(props: RowProps, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, adj: AdjustamentProps, numeric: boolean = true, reset?: number) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
+        if(props.icon_name) {
+            if(props.title)
+                props.title = '  ' + props.title;
+            if(props.subtitle)
+                props.subtitle = '  ' + props.subtitle;
+        }
+        
         const adjustment = new Gtk.Adjustment({
             lower: adj.min,
             upper: adj.max,
@@ -1079,7 +1164,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             value: (adj.digits || 0) === 0 ? Config.get_int(setting) : Config.get_double(setting)
         });
         
-        const row = new Adw.ActionRow(props);    
+        const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
         
         const spinButton = new Gtk.SpinButton({
             halign: Gtk.Align.END,
@@ -1125,7 +1212,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         if(!Utils.metadata)
             throw new Error('Metadata not found');
         
+        const tabs = props.tabs;
+        delete props.tabs;
+            
         const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
         
         const fontButton = new Gtk.FontButton({
             modal: true,
@@ -1168,16 +1260,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             (group as Adw.ExpanderRow).add_row(row);
     }
     
-    addOrderingRows(config: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, tabbing: string = '') {
+    addOrderingRows(config: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, tabs: number = 0) {
         const monitors = Config.get_json(config);
         for(let index = 0; index < monitors.length; index++) {
             const item = monitors[index] || '';
-            this.OrderingItem(item, index, monitors.length, config, group, tabbing);
+            this.OrderingItem(item, index, monitors.length, config, group, tabs + 1);
         }
     }
     
-    OrderingItem(item: string, index: number, count: number, config: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, tabbing: string = '') {
-        const row = new Adw.ActionRow({title: `${tabbing}${index+1}. ${Utils.capitalize(item, false)}` });
+    OrderingItem(item: string, index: number, count: number, config: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, tabs: number = 0) {
+        const row = new Adw.ActionRow({title: `${index+1}. ${Utils.capitalize(item, false)}` });
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
         
         let buttonUp;
         if(index > 0) {
@@ -1217,7 +1311,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         Config.connect(this, 'changed::'+config, () => {
             const list = Config.get_json(config);
             const newItem = list[index] || '';
-            row.title = `${tabbing}${index+1}. ${Utils.capitalize(newItem, false)}`;
+            row.title = `${index+1}. ${Utils.capitalize(newItem, false)}`;
         });
         
         if((group as any).add)
