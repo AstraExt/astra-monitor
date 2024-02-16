@@ -224,7 +224,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow({
             title: _('Headers Margins'),
             subtitle: _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic'
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
         }, 'headers-margins', headersSection, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true, 2);
         this.addFontRow({
             title: _('Headers Font'),
@@ -1153,7 +1154,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             if(props.title)
                 props.title = '  ' + props.title;
             if(props.subtitle)
-                props.subtitle = '  ' + props.subtitle;
+                props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
         }
         
         const adjustment = new Gtk.Adjustment({
@@ -1214,6 +1215,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const tabs = props.tabs;
         delete props.tabs;
+        
+        if(props.icon_name) {
+            if(props.title)
+                props.title = '  ' + props.title;
+            if(props.subtitle)
+                props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
+        }
             
         const row = new Adw.ActionRow(props);
         if(tabs)
