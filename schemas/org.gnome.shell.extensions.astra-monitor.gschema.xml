@@ -33,15 +33,13 @@
     <value nick="Ki" value="10"/>
   </enum>
   <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-    <value nick="default" value="0"/>
-    <value nick="auto" value="1"/>
-    <value nick="proc" value="2"/>
-    <value nick="GTop" value="3"/>
+    <value nick="auto" value="0"/>
+    <value nick="proc" value="1"/>
+    <value nick="GTop" value="2"/>
   </enum>
   <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list2">
-    <value nick="default" value="0"/>
-    <value nick="auto" value="1"/>
-    <value nick="GTop" value="2"/>
+    <value nick="auto" value="0"/>
+    <value nick="GTop" value="1"/>
   </enum>
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- UTILS -->
@@ -122,17 +120,17 @@
       <range min="0.1" max="10"/>
     </key>
     <key name="processor-source-cpu-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Cpu Usage Source</summary>
       <description>Source of the cpu usage</description>
     </key>
     <key name="processor-source-cpu-cores-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Cpu Cores Usage Source</summary>
       <description>Source of the cpu cores usage</description>
     </key>
     <key name="processor-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Top Processes Source</summary>
       <description>Source of the top processes</description>
     </key>
@@ -264,12 +262,12 @@
       <description>Select the preferred calculation for the used memory value</description>
     </key>
     <key name="memory-source-memory-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Memory Usage Source</summary>
       <description>Source of the memory usage</description>
     </key>
     <key name="memory-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Top Processes Source</summary>
       <description>Source of the top processes</description>
     </key>
@@ -397,17 +395,17 @@
       <description>A regex to match Storage Devices to ignore</description>
     </key>
     <key name="storage-source-storage-usage" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Storage Usage Source</summary>
       <description>Source of the storage usage</description>
     </key>
     <key name="storage-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list2">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Top Processes Source</summary>
       <description>Source of the top processes</description>
     </key>
     <key name="storage-source-storage-io" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
-      <default>'default'</default>
+      <default>'auto'</default>
       <summary>Storage IO Source</summary>
       <description>Source of the storage IO</description>
     </key>

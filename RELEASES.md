@@ -1,6 +1,7 @@
 # Astra Monitor 12 - TO BE RELEASED
 
 ### New features
+- 'Default' option for _data source_ removal: now all _data sources_ are set at 'Auto' by default. We reccomend to leave them at 'Auto' unless you have a specific need: the best source will automatically be chosen based on the availability of dependencies, performance and reliability
 - New source selection for Memory Usage: now you can choose between GTop and /proc (GTop is the default if available)
 - New source selection for Storage Usage: now you can choose between GTop and /proc (GTop is the default if available)
 

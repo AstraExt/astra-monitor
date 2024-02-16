@@ -256,18 +256,17 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         /* Processors */
         let group = new Adw.PreferencesGroup({title: _('Processors')});
         this.addSwitchRow({title: _('Show')}, 'processor-header-show', group);
-        this.addSpinRow({title: _('Update frequency (seconds)')}, 'processor-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'processor-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 1.5);
         
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
         const choicesPanel = [
-            {value: 'default', text: _('Default (Auto)')},
             {value: 'auto', text: _('Auto')},
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: _('Cpu Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-usage', sourcesSection, 'string');
-        this.addComboRow({title: _('Cpu Cores Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-cores-usage', sourcesSection, 'string');
-        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'processor-source-top-processes', sourcesSection, 'string');
+        this.addComboRow({title: _('Cpu Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-usage', sourcesSection, 'string', 'auto');
+        this.addComboRow({title: _('Cpu Cores Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-cores-usage', sourcesSection, 'string', 'auto');
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'processor-source-top-processes', sourcesSection, 'string', 'auto');
         
         processorsPage.add(group);
         
@@ -358,7 +357,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         let group = new Adw.PreferencesGroup({title: _('Memory')});
         this.addSwitchRow({title: _('Show')}, 'memory-header-show', group);
-        this.addSpinRow({title: _('Update frequency (seconds)')}, 'memory-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'memory-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 3.0);
         
         let choicesPanel = [
             {value: 'total-free-buffers-cached', text: _('Used = Total - Free - Buffers - Cached')},
@@ -366,17 +365,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'total-available', text: _('Used = Total - Available')},
             {value: 'active', text: _('Used = Active')},
         ];
-        this.addComboRow({title: _('Used Memory')}, choicesPanel, 'memory-used', group, 'string');
+        this.addComboRow({title: _('Used Memory')}, choicesPanel, 'memory-used', group, 'string', 'total-free-buffers-cached');
         
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
         choicesPanel = [
-            {value: 'default', text: _('Default (Auto)')},
             {value: 'auto', text: _('Auto')},
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: _('Memory Usage'), tabs: 1}, choicesPanel, 'memory-source-memory-usage', sourcesSection, 'string');
-        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'memory-source-top-processes', sourcesSection, 'string');
+        this.addComboRow({title: _('Memory Usage'), tabs: 1}, choicesPanel, 'memory-source-memory-usage', sourcesSection, 'string', 'auto');
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'memory-source-top-processes', sourcesSection, 'string', 'auto');
         
         memoryPage.add(group);
         
@@ -415,12 +413,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const valueSection = this.addExpanderRow({title: _('Usage Value')}, group);
         this.addSwitchRow({title: _('Show Usage Value'), tabs: 1}, 'memory-header-value', valueSection);
-        this.addSpinRow({title: _('Usage Value Max Number of Figures'), tabs: 1}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
+        this.addSpinRow({title: _('Usage Value Max Number of Figures'), tabs: 1}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
         
         const graphSection = this.addExpanderRow({title: _('History Graph')}, group);
         this.addSwitchRow({title: _('Show History Graph'), tabs: 1}, 'memory-header-graph', graphSection);
         this.addSwitchRow({title: _('History Graph Breakdown'), tabs: 1}, 'memory-header-graph-breakdown', graphSection);
-        this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'memory-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'memory-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
         
         const barsSection = this.addExpanderRow({title: _('Realtime Bar')}, group);
         this.addSwitchRow({title: _('Show Realtime Bar'), tabs: 1}, 'memory-header-bars', barsSection);
@@ -440,7 +438,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         let group = new Adw.PreferencesGroup({title: _('Storage')});
         this.addSwitchRow({title: _('Show')}, 'storage-header-show', group);
-        this.addSpinRow({title: _('Update frequency (seconds)')}, 'storage-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'storage-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 3.0);
         
         let choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
@@ -455,7 +453,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'k ', text: _('k (as kB/s)')},
             {value: 'Ki', text: _('Ki (as KiB/s)')},
         ];
-        this.addComboRow({title: _('Data Unit')}, choicesPanel, 'storage-io-unit', group, 'string');
+        this.addComboRow({title: _('Data Unit')}, choicesPanel, 'storage-io-unit', group, 'string', 'kB/s');
         
         const storageMain = Config.get_string('storage-main');
         const disks = Utils.listDisksSync();
@@ -557,19 +555,22 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
         choicesPanel = [
-            {value: 'default', text: _('Default (Auto)')},
             {value: 'auto', text: _('Auto')},
             {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: _('Storage Usage'), tabs: 1}, choicesPanel, 'storage-source-storage-usage', sourcesSection, 'string');
+        this.addComboRow({title: _('Storage Usage'), tabs: 1}, choicesPanel, 'storage-source-storage-usage', sourcesSection, 'string', 'auto');
         const choicesPanel2 = [
-            {value: 'default', text: _('Default (Auto)')},
             {value: 'auto', text: _('Auto')},
             {value: 'GTop', text: 'GTop'},
         ];
-        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel2, 'storage-source-top-processes', sourcesSection, 'string');
-        this.addComboRow({title: _('Storage IO'), tabs: 1}, choicesPanel, 'storage-source-storage-io', sourcesSection, 'string');
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel2, 'storage-source-top-processes', sourcesSection, 'string', 'auto');
+        
+        const choicesPanel3 = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'proc', text: '/proc'}
+        ];
+        this.addComboRow({title: _('Storage IO'), tabs: 1}, choicesPanel3, 'storage-source-storage-io', sourcesSection, 'string', 'auto');
         storagePage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
@@ -609,10 +610,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
         this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'storage-header-io-bars', ioSection);
         this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'storage-header-graph', ioSection);  
-        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
         this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'storage-header-io', ioSection);  
-        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
-        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
+        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
+        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0); 
         
         storagePage.add(group);
         
@@ -624,7 +625,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         let group = new Adw.PreferencesGroup({title: _('Network')});
         this.addSwitchRow({title: _('Show')}, 'network-header-show', group);
-        this.addSpinRow({title: _('Update frequency (seconds)')}, 'network-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'network-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 1.5);
         
         const choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
@@ -639,7 +640,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'k ', text: _('k (as kB/s)')},
             {value: 'Ki', text: _('Ki (as KiB/s)')},
         ];
-        this.addComboRow({title: _('Data Unit')}, choicesPanel, 'network-io-unit', group, 'string');
+        this.addComboRow({title: _('Data Unit')}, choicesPanel, 'network-io-unit', group, 'string', 'kB/s');
         
         const ignoredSection = this.addExpanderRow({title: _('Ignored Network Interfaces')}, group);
         
@@ -734,10 +735,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
         this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'network-header-bars', ioSection);
         this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'network-header-graph', ioSection); 
-        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true); 
+        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30); 
         this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'network-header-io', ioSection);
-        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true); 
-        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true); 
+        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
+        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0); 
 
         networkPage.add(group);
         
@@ -749,7 +750,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         let group = new Adw.PreferencesGroup({title: _('Sensors')});
         this.addSwitchRow({title: _('Show')}, 'sensors-header-show', group);
-        this.addSpinRow({title: _('Update frequency (seconds)')}, 'sensors-update', group, {min: 1, max: 60, digits: 1, step: 0.5, page: 1}, true);
+        this.addSpinRow({title: _('Update frequency (seconds)')}, 'sensors-update', group, {min: 1, max: 60, digits: 1, step: 0.5, page: 1}, true, 3.0);
         
         const choicesUnit = [
             {value: 'celsius', text: pgettext('Celsius unit measure choice', 'Celsius')},
@@ -1072,7 +1073,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         row.activatable_widget = button;
     }
     
-    addComboRow(props: RowProps, choices: {value:any, text:string}[], setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, type: TypeEnumStr = 'int') {
+    addComboRow(props: RowProps, choices: {value:any, text:string}[], setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, type: TypeEnumStr = 'int', reset?: string) {
         const tabs = props.tabs;
         delete props.tabs;
         
@@ -1119,8 +1120,38 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             selected,
             halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER,
-            hexpand: true,
+            hexpand: false,
+            vexpand: false,
         });
+        
+        if(reset !== undefined) {
+            const resetButton = new Gtk.Button({
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+                hexpand: false,
+                vexpand: false,
+                icon_name: 'edit-undo-symbolic',
+                sensitive: true,
+            });
+            resetButton.connect('clicked', () => {
+                choices.forEach((choice, index) => {
+                    let value = choice.value;
+                    if(type === 'json')
+                        value = JSON.stringify(value);
+                    if(value === savedValue)
+                        selected = index;
+                });
+                select.selected = selected;
+                const selectedChoice = choices[selected];
+                if(selectedChoice !== undefined) {
+                    if(type === 'json')
+                        Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
+                    else
+                        Config.set(setting, selectedChoice.value, type);
+                }
+            });
+            row.add_suffix(resetButton);
+        }
         
         row.add_suffix(select);
         row.activatable_widget = select;
