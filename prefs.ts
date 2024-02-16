@@ -627,7 +627,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show')}, 'network-header-show', group);
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'network-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 1.5);
         
-        const choicesPanel = [
+        let choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
             {value: 'KiB/s', text: _('KiB/s')},
             {value: 'kb/s', text: _('kb/s')},
@@ -704,6 +704,14 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             row.add_suffix(toggle);
             row.activatable_widget = toggle;
         }
+        
+        const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
+        choicesPanel = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'proc', text: '/proc'},
+            {value: 'GTop', text: 'GTop'},
+        ];
+        this.addComboRow({title: _('Network IO'), tabs: 1}, choicesPanel, 'network-source-network-io', sourcesSection, 'string', 'auto');
         
         networkPage.add(group);
         

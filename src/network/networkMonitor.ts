@@ -24,7 +24,7 @@ import Config from '../config.js';
 import Utils from '../utils/utils.js';
 import Monitor from '../monitor.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
-import PromiseValueHolder from '../utils/promiseValueHolder.js';
+import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 
 export type NetworkIO = {
     bytesUploadedPerSec: number;
@@ -47,6 +47,11 @@ type PreviousDetailedNetworkIO = {
     time: number;
 };
 
+type NetworkDataSources = {
+    networkIO?: string
+};
+
+
 export default class NetworkMonitor extends Monitor {
     
     private detectedMaxSpeedsValues: MaxSpeeds;
@@ -58,6 +63,8 @@ export default class NetworkMonitor extends Monitor {
     
     private previousNetworkIO!: PreviousNetworkIO;
     private previousDetailedNetworkIO!: PreviousDetailedNetworkIO;
+    
+    private dataSources!: NetworkDataSources;
     
     constructor() {
         super('Network Monitor');
@@ -74,6 +81,7 @@ export default class NetworkMonitor extends Monitor {
         this.updateNetworkIOTask = new CancellableTaskManager();
         
         this.reset();
+        this.dataSourcesInit();
         
         const enabled = Config.get_boolean('network-header-show');
         if(enabled)
@@ -158,6 +166,28 @@ export default class NetworkMonitor extends Monitor {
         this.reset();
     }
     
+    dataSourcesInit() {
+        this.dataSources = {
+            networkIO: Config.get_string('network-source-network-io') ?? undefined,
+        };
+        
+        Config.connect(this, 'changed::network-source-network-io', () => {
+            this.dataSources.networkIO = Config.get_string('network-source-network-io') ?? undefined;
+            this.updateNetworkIOTask.cancel();
+            this.previousNetworkIO = {
+                bytesUploaded: -1,
+                bytesDownloaded: -1,
+                time: -1
+            };
+            this.previousDetailedNetworkIO = {
+                devices: null,
+                time: -1
+            };
+            this.resetUsageHistory('networkIO');
+            this.resetUsageHistory('detailedNetworkIO');
+        });
+    }
+    
     stopListeningFor(key: string) {
         super.stopListeningFor(key);
         
@@ -170,7 +200,7 @@ export default class NetworkMonitor extends Monitor {
     update(): boolean {
         const enabled = Config.get_boolean('network-header-show');
         if(enabled) {
-            const procNetDev = this.getProNetDevAsync();
+            const procNetDev = new PromiseValueHolderStore<string[]>(this.getProNetDevAsync.bind(this));
             
             let detailed = false;
             if(this.isListeningFor('detailedNetworkIO'))
@@ -183,7 +213,7 @@ export default class NetworkMonitor extends Monitor {
     
     requestUpdate(key: string) {
         if(key === 'networkIO' || key === 'detailedNetworkIO') {
-            const procNetDev = this.getProNetDevAsync();
+            const procNetDev = new PromiseValueHolderStore<string[]>(this.getProNetDevAsync.bind(this));
             
             const detailed = key === 'detailedNetworkIO';
             
@@ -204,20 +234,25 @@ export default class NetworkMonitor extends Monitor {
                     this.notify('detailedNetworkIO');
             };
             
+            let run;
+            if(this.dataSources.networkIO === 'GTop')
+                run = this.updateNetworkIOGTop.bind(this, ...params);
+            else if(this.dataSources.networkIO === 'proc')
+                run = this.updateNetworkIOProc.bind(this, ...params);
+            else
+                run = this.updateNetworkIOAuto.bind(this, ...params);
+            
             this.runTask({
                 key,
                 task: this.updateNetworkIOTask,
-                run: this.updateNetworkIO.bind(this, ...params),
+                run,
                 callback
             });
             return;
         }
     }
     
-    /**
-     * @returns {PromiseValueHolder}
-     */
-    getProNetDevAsync() {
+    getProNetDevAsync(): PromiseValueHolder<string[]> {
         return new PromiseValueHolder(new Promise((resolve, reject) => {
             Utils.readFileAsync('/proc/net/dev').then(fileContent => {
                 resolve(fileContent.split('\n'));
@@ -240,7 +275,13 @@ export default class NetworkMonitor extends Monitor {
         return monitored;
     }
     
-    async updateNetworkIO(detailed: boolean, procNetDev: PromiseValueHolder<string[]>): Promise<boolean> {
+    async updateNetworkIOAuto(detailed: boolean, procNetDev: PromiseValueHolder<string[]>): Promise<boolean> {
+        if(Utils.GTop)
+            return await this.updateNetworkIOGTop(detailed);
+        return await this.updateNetworkIOProc(detailed, procNetDev);
+    }
+    
+    async updateNetworkIOProc(detailed: boolean, procNetDev: PromiseValueHolder<string[]>): Promise<boolean> {
         let procNetDevValue = await procNetDev.getValue();
         if(procNetDevValue.length < 1)
             return false;
@@ -287,6 +328,67 @@ export default class NetworkMonitor extends Monitor {
             bytesDownloaded += parseInt(fields[1]);
         }
         
+        return this.updateNetworkIOCommon({
+            bytesUploaded,
+            bytesDownloaded,
+            detailed,
+            devices
+        });
+    }
+    
+    async updateNetworkIOGTop(detailed: boolean): Promise<boolean> {
+        const GTop = Utils.GTop;
+        if(!GTop)
+            return false;
+        
+        const buf = new GTop.glibtop_netlist();
+        const netlist = GTop.glibtop_get_netlist(buf);
+        
+        let bytesUploaded = 0;
+        let bytesDownloaded = 0;
+        
+        let devices: Map<string, DeviceStauts>|null = null;
+        if(detailed)
+            devices = new Map();
+        
+        for(const interfaceName of netlist) {
+            if(!this.isMonitoredInterface(interfaceName))
+                continue;
+            
+            if(this.ignored.includes(interfaceName))
+                continue;
+            
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(interfaceName))
+                continue;
+            
+            const netload = new GTop.glibtop_netload();
+            GTop.glibtop_get_netload(netload, interfaceName);
+            
+            if(detailed && devices) {
+                devices.set(interfaceName, {
+                    bytesUploaded: netload.bytes_out,
+                    bytesDownloaded: netload.bytes_in,
+                });
+            }
+            
+            bytesUploaded += netload.bytes_out;
+            bytesDownloaded += netload.bytes_in;
+        }
+        
+        return this.updateNetworkIOCommon({
+            bytesUploaded,
+            bytesDownloaded,
+            detailed,
+            devices
+        });
+    }
+    
+    private updateNetworkIOCommon({bytesUploaded, bytesDownloaded, detailed, devices}: {
+        bytesUploaded: number;
+        bytesDownloaded: number;
+        detailed: boolean;
+        devices: Map<string, DeviceStauts>|null;
+    }): boolean {
         const now = GLib.get_monotonic_time();
         
         if(detailed) {

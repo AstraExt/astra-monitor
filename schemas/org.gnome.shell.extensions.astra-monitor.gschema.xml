@@ -522,6 +522,11 @@
       <summary>Ignored Network Interfaces Regex</summary>
       <description>A regex to match Network Interfaces to ignore</description>
     </key>
+    <key name="network-source-network-io" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
+      <default>'auto'</default>
+      <summary>Network IO Source</summary>
+      <description>Source of the network IO</description>
+    </key>
     <key name="network-header-show" type="b">
       <default>true</default>
       <summary>Network Header</summary>
