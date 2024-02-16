@@ -1,7 +1,7 @@
 {
   "name": "Astra Monitor",
   "uuid": "monitor@astraext.github.io",
-  "description": "Astra Monitor is a cutting-edge, fully customizable, and performance-focused monitoring extension for GNOME's top bar. It's an all-in-one solution for those seeking to keep a close eye on their system's performance metrics like CPU, GPU, RAM, disk usage, network statistics, and sensor readings.",
+  "description": "Astra Monitor is a cutting-edge, fully customizable, and performance-focused system monitoring extension for GNOME's top bar. It's an all-in-one solution for those seeking to keep a close eye on their system's performance metrics like CPU, GPU, RAM, disk usage, network statistics, and sensor readings.",
   "shell-version": [
     "45",
     "46"
