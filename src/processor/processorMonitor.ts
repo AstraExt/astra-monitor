@@ -337,7 +337,7 @@ export default class ProcessorMonitor extends Monitor {
             let run;
             if(this.dataSources.cpuUsage === 'GTop')
                 run = this.updateCpuUsageGTop.bind(this, ...params);
-            else if(this.dataSources.topProcesses === 'proc')
+            else if(this.dataSources.cpuUsage === 'proc')
                 run = this.updateCpuUsageProc.bind(this, ...params);
             else
                 run = this.updateCpuUsageAuto.bind(this, ...params);
@@ -354,7 +354,7 @@ export default class ProcessorMonitor extends Monitor {
             let run;
             if(this.dataSources.cpuCoresUsage === 'GTop')
                 run = this.updateCpuCoresUsageGTop.bind(this, ...params);
-            else if(this.dataSources.topProcesses === 'proc')
+            else if(this.dataSources.cpuCoresUsage === 'proc')
                 run = this.updateCpuCoresUsageProc.bind(this, ...params);
             else
                 run = this.updateCpuCoresUsageAuto.bind(this, ...params);

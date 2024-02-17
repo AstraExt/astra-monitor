@@ -2,9 +2,8 @@
 
 ### New features
 - 'Default' option for _data source_ removal: now all _data sources_ are set at 'Auto' by default. We reccomend to leave them at 'Auto' unless you have a specific need: the best source will automatically be chosen based on the availability of dependencies, performance and reliability
-- New source selection for Memory Usage: now you can choose between GTop and /proc (GTop is the default if available)
-- New source selection for Storage Usage: now you can choose between GTop and /proc (GTop is the default if available)
-- New source selection for Network IO: now you can choose between GTop and /proc (GTop is the default if available)
+- In source selection now you better understand what /proc source is used: ie. `/proc/stat` instead of just `/proc`
+- GTop source has been added to the list of sources for Memory Usage, Storage Usage and Network IO (GTop is the default option for all of them if available)
 
 ### Bug fixes
 - Light Theme readability improvements [[#53](https://github.com/AstraExt/astra-monitor/issues/53)]

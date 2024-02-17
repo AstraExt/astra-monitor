@@ -259,14 +259,27 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'processor-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 1.5);
         
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
-        const choicesPanel = [
+        
+        const cpuUsageSources = [
             {value: 'auto', text: _('Auto')},
-            {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
+            {value: 'proc', text: '/proc/stat'},
         ];
-        this.addComboRow({title: _('Cpu Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-usage', sourcesSection, 'string', 'auto');
-        this.addComboRow({title: _('Cpu Cores Usage'), tabs: 1}, choicesPanel, 'processor-source-cpu-cores-usage', sourcesSection, 'string', 'auto');
-        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'processor-source-top-processes', sourcesSection, 'string', 'auto');
+        this.addComboRow({title: _('Cpu Usage'), tabs: 1}, cpuUsageSources, 'processor-source-cpu-usage', sourcesSection, 'string', 'auto');
+        
+        const cpuCoresUsageSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'GTop', text: 'GTop'},
+            {value: 'proc', text: '/proc/stat'},
+        ];
+        this.addComboRow({title: _('Cpu Cores Usage'), tabs: 1}, cpuCoresUsageSources, 'processor-source-cpu-cores-usage', sourcesSection, 'string', 'auto');
+        
+        const cpuTopProcessesSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'GTop', text: 'GTop'},
+            {value: 'proc', text: '/proc/[pid]/stat'},
+        ];
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, cpuTopProcessesSources, 'processor-source-top-processes', sourcesSection, 'string', 'auto');
         
         processorsPage.add(group);
         
@@ -359,7 +372,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show')}, 'memory-header-show', group);
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'memory-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 3.0);
         
-        let choicesPanel = [
+        const choicesPanel = [
             {value: 'total-free-buffers-cached', text: _('Used = Total - Free - Buffers - Cached')},
             {value: 'total-free', text: _('Used = Total - Free')},
             {value: 'total-available', text: _('Used = Total - Available')},
@@ -368,13 +381,20 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow({title: _('Used Memory')}, choicesPanel, 'memory-used', group, 'string', 'total-free-buffers-cached');
         
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
-        choicesPanel = [
+        
+        const memoryUsageSources = [
             {value: 'auto', text: _('Auto')},
-            {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
+            {value: 'proc', text: '/proc/meminfo'},
         ];
-        this.addComboRow({title: _('Memory Usage'), tabs: 1}, choicesPanel, 'memory-source-memory-usage', sourcesSection, 'string', 'auto');
-        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel, 'memory-source-top-processes', sourcesSection, 'string', 'auto');
+        this.addComboRow({title: _('Memory Usage'), tabs: 1}, memoryUsageSources, 'memory-source-memory-usage', sourcesSection, 'string', 'auto');
+        
+        const memoryTopProcessesSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'GTop', text: 'GTop'},
+            {value: 'proc', text: 'ps + /proc/[pid]'},
+        ];
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, memoryTopProcessesSources, 'memory-source-top-processes', sourcesSection, 'string', 'auto');
         
         memoryPage.add(group);
         
@@ -440,7 +460,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show')}, 'storage-header-show', group);
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'storage-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 3.0);
         
-        let choicesPanel = [
+        const choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
             {value: 'KiB/s', text: _('KiB/s')},
             {value: 'kb/s', text: _('kb/s')},
@@ -554,23 +574,26 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }
         
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
-        choicesPanel = [
-            {value: 'auto', text: _('Auto')},
-            {value: 'proc', text: '/proc'},
-            {value: 'GTop', text: 'GTop'},
-        ];
-        this.addComboRow({title: _('Storage Usage'), tabs: 1}, choicesPanel, 'storage-source-storage-usage', sourcesSection, 'string', 'auto');
-        const choicesPanel2 = [
-            {value: 'auto', text: _('Auto')},
-            {value: 'GTop', text: 'GTop'},
-        ];
-        this.addComboRow({title: _('Top Processes'), tabs: 1}, choicesPanel2, 'storage-source-top-processes', sourcesSection, 'string', 'auto');
         
-        const choicesPanel3 = [
+        const storageUsageSources = [
             {value: 'auto', text: _('Auto')},
-            {value: 'proc', text: '/proc'}
+            {value: 'GTop', text: 'GTop'},
+            {value: 'proc', text: 'lsblk'},
         ];
-        this.addComboRow({title: _('Storage IO'), tabs: 1}, choicesPanel3, 'storage-source-storage-io', sourcesSection, 'string', 'auto');
+        this.addComboRow({title: _('Storage Usage'), tabs: 1}, storageUsageSources, 'storage-source-storage-usage', sourcesSection, 'string', 'auto');
+        
+        const storageTopProcessesSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'GTop', text: 'GTop'},
+        ];
+        this.addComboRow({title: _('Top Processes'), tabs: 1}, storageTopProcessesSources, 'storage-source-top-processes', sourcesSection, 'string', 'auto');
+        
+        const storageIOSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'proc', text: '/proc/diskstats'}
+        ];
+        this.addComboRow({title: _('Storage IO'), tabs: 1}, storageIOSources, 'storage-source-storage-io', sourcesSection, 'string', 'auto');
+        
         storagePage.add(group);
         
         group = new Adw.PreferencesGroup({title: _('Header')});
@@ -627,7 +650,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show')}, 'network-header-show', group);
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'network-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 1.5);
         
-        let choicesPanel = [
+        const choicesPanel = [
             {value: 'kB/s', text: _('kB/s')},
             {value: 'KiB/s', text: _('KiB/s')},
             {value: 'kb/s', text: _('kb/s')},
@@ -706,13 +729,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }
         
         const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
-        choicesPanel = [
+        const networkIOSources = [
             {value: 'auto', text: _('Auto')},
-            {value: 'proc', text: '/proc'},
             {value: 'GTop', text: 'GTop'},
+            {value: 'proc', text: '/proc/net/dev'},
         ];
-        this.addComboRow({title: _('Network IO'), tabs: 1}, choicesPanel, 'network-source-network-io', sourcesSection, 'string', 'auto');
-        
+        this.addComboRow({title: _('Network IO'), tabs: 1}, networkIOSources, 'network-source-network-io', sourcesSection, 'string', 'auto');
         networkPage.add(group);
         
         group = new Adw.PreferencesGroup({title: 'Header'});
