@@ -9,6 +9,7 @@
 - Light Theme readability improvements [[#53](https://github.com/AstraExt/astra-monitor/issues/53)]
 - Fixed GTop detection label not updating in extension settings
 - Preference panel proper indentation and alignment and '⁝' removal [[#56](https://github.com/AstraExt/astra-monitor/issues/56)]
+- Graph rendering has been improved fixing a potential misaligned baseline
 
 # Astra Monitor 11 - February 12 2024
 
