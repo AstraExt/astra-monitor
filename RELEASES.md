@@ -1,4 +1,4 @@
-# Astra Monitor 12 - TO BE RELEASED
+# Astra Monitor 12 - February 18 2024
 
 ### New features
 - 'Default' option for _data source_ removal: now all _data sources_ are set at 'Auto' by default. We reccomend to leave them at 'Auto' unless you have a specific need: the best source will automatically be chosen based on the availability of dependencies, performance and reliability

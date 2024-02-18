@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-17 13:46+0100\n"
+"POT-Creation-Date: 2024-02-19 00:43+0100\n"
 "PO-Revision-Date: 2024-02-13 12:28+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: src/processor/processorMenu.js:35 prefs.js:270
+#: src/processor/processorMenu.js:35 prefs.js:276
 msgid "CPU"
 msgstr "ЦП"
 
@@ -91,7 +91,7 @@ msgstr "ГГц"
 msgid "Top processes"
 msgstr "Наибольшие процессы"
 
-#: src/processor/processorMenu.js:424 prefs.js:275
+#: src/processor/processorMenu.js:424 prefs.js:281
 msgid "GPU"
 msgstr "ГП"
 
@@ -178,7 +178,7 @@ msgstr[2] "%d минут назад"
 msgid "now"
 msgstr "сейчас"
 
-#: src/sensors/sensorsMenu.js:35 prefs.js:633 prefs.js:634
+#: src/sensors/sensorsMenu.js:35 prefs.js:660 prefs.js:661
 msgid "Sensors"
 msgstr "Датчики"
 
@@ -186,7 +186,7 @@ msgstr "Датчики"
 msgid "No sensor found"
 msgstr "Датчик не найден"
 
-#: src/network/networkMenu.js:33 prefs.js:525 prefs.js:526
+#: src/network/networkMenu.js:33 prefs.js:552 prefs.js:553
 msgid "Network"
 msgstr "Сеть"
 
@@ -216,7 +216,7 @@ msgctxt "short for download"
 msgid "D"
 msgstr "З"
 
-#: src/storage/storageMenu.js:36 prefs.js:368 prefs.js:369
+#: src/storage/storageMenu.js:36 prefs.js:382 prefs.js:383
 msgid "Storage"
 msgstr "Хранилище"
 
@@ -250,7 +250,7 @@ msgstr "З"
 msgid "Disk"
 msgstr "Диск"
 
-#: src/memory/memoryMenu.js:33 prefs.js:298 prefs.js:299
+#: src/memory/memoryMenu.js:33 prefs.js:304 prefs.js:305
 msgid "Memory"
 msgstr "Память"
 
@@ -290,8 +290,8 @@ msgstr "Доступно"
 msgid "Allocatable"
 msgstr "Выделяемая"
 
-#: src/memory/memoryMenu.js:166 prefs.js:421 prefs.js:454 prefs.js:555
-#: prefs.js:580
+#: src/memory/memoryMenu.js:166 prefs.js:435 prefs.js:468 prefs.js:582
+#: prefs.js:607
 msgid "Active"
 msgstr "Активно"
 
@@ -490,486 +490,547 @@ msgid "Headers"
 msgstr "Заголовки"
 
 #: prefs.js:176
+#, fuzzy
+msgid "Startup Delay (seconds)"
+msgstr "Частота обновления (в секундах)"
+
+#: prefs.js:177
+msgid "Increase if the extension is not properly formatted on startup."
+msgstr ""
+
+#: prefs.js:182
 msgid "Headers Height"
 msgstr "Высота заголовков"
 
-#: prefs.js:177 prefs.js:183 prefs.js:189 prefs.js:195 prefs.js:246
-#: prefs.js:338 prefs.js:500 prefs.js:616 prefs.js:658
+#: prefs.js:183 prefs.js:189 prefs.js:195 prefs.js:201 prefs.js:252
+#: prefs.js:344 prefs.js:514 prefs.js:643 prefs.js:685
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr ""
 "Экспериментальная функция: может потребоваться отключить/включить расширение."
 
-#: prefs.js:182
+#: prefs.js:188
 msgid "Headers Margins"
 msgstr "Поля заголовков"
 
-#: prefs.js:188
+#: prefs.js:194
 msgid "Headers Font"
 msgstr "Шрифт заголовков"
 
-#: prefs.js:189
+#: prefs.js:195
 msgid "Set to empty to disable font override"
 msgstr "Установите пустое значение, чтобы отключить переопределение шрифтов"
 
-#: prefs.js:194
+#: prefs.js:200
 msgid "Headers Font Size"
 msgstr "Размер шрифта заголовков"
 
-#: prefs.js:195
+#: prefs.js:201
 msgid "Set to 0 to disable size override"
 msgstr "Установите значение 0, чтобы отключить переопределение размера"
 
-#: prefs.js:200
+#: prefs.js:206
 msgid "Monitor Ordering"
 msgstr "Порядок мониторинга"
 
-#: prefs.js:207 prefs.js:208
+#: prefs.js:213 prefs.js:214
 msgid "Processors"
 msgstr "Процессоры"
 
-#: prefs.js:209 prefs.js:300 prefs.js:370 prefs.js:527 prefs.js:635
-#: prefs.js:669 prefs.js:677
+#: prefs.js:215 prefs.js:306 prefs.js:384 prefs.js:554 prefs.js:662
+#: prefs.js:696 prefs.js:704
 msgid "Show"
 msgstr "Показать"
 
-#: prefs.js:210 prefs.js:301 prefs.js:371 prefs.js:528 prefs.js:636
+#: prefs.js:216 prefs.js:307 prefs.js:385 prefs.js:555 prefs.js:663
 msgid "Update frequency (seconds)"
 msgstr "Частота обновления (в секундах)"
 
-#: prefs.js:211 prefs.js:309 prefs.js:467 prefs.js:593
+#: prefs.js:217 prefs.js:315 prefs.js:481 prefs.js:620
 msgid "Data Sources"
 msgstr "Источники данных"
 
-#: prefs.js:213 prefs.js:219 prefs.js:225 prefs.js:311 prefs.js:317
-#: prefs.js:469 prefs.js:475 prefs.js:480 prefs.js:595
+#: prefs.js:219 prefs.js:225 prefs.js:231 prefs.js:317 prefs.js:323
+#: prefs.js:483 prefs.js:489 prefs.js:494 prefs.js:622
 msgid "Auto"
 msgstr "Авто"
 
-#: prefs.js:217
+#: prefs.js:223
 msgid "Cpu Usage"
 msgstr "Использование ЦП"
 
-#: prefs.js:223
+#: prefs.js:229
 msgid "Cpu Cores Usage"
 msgstr "Использование ядер ЦП"
 
-#: prefs.js:229 prefs.js:321 prefs.js:478
+#: prefs.js:235 prefs.js:327 prefs.js:492
 msgid "Top Processes"
 msgstr "Наибольшие процессы"
 
-#: prefs.js:231 prefs.js:323 prefs.js:485 prefs.js:643
+#: prefs.js:237 prefs.js:329 prefs.js:499 prefs.js:670
 msgid "Header"
 msgstr "Заголовок"
 
-#: prefs.js:232 prefs.js:324 prefs.js:486 prefs.js:602 prefs.js:644
+#: prefs.js:238 prefs.js:330 prefs.js:500 prefs.js:629 prefs.js:671
 msgid "Indicators Order"
 msgstr "Порядок индикаторов"
 
-#: prefs.js:235 prefs.js:327 prefs.js:489 prefs.js:605 prefs.js:647
+#: prefs.js:241 prefs.js:333 prefs.js:503 prefs.js:632 prefs.js:674
 msgid "Icon"
 msgstr "Значок"
 
-#: prefs.js:236 prefs.js:328 prefs.js:490 prefs.js:606 prefs.js:648
+#: prefs.js:242 prefs.js:334 prefs.js:504 prefs.js:633 prefs.js:675
 msgid "Show Icon"
 msgstr "Показать значок"
 
-#: prefs.js:238 prefs.js:330 prefs.js:492 prefs.js:608 prefs.js:650
+#: prefs.js:244 prefs.js:336 prefs.js:506 prefs.js:635 prefs.js:677
 msgid "Icon Name"
 msgstr "Имя значка"
 
-#: prefs.js:239
+#: prefs.js:245
 msgid "Set icon name (ie: 'cpu-symbolic')"
 msgstr "Установите имя значка (например, 'cpu-symbolic')"
 
-#: prefs.js:239 prefs.js:331 prefs.js:493 prefs.js:609 prefs.js:651
+#: prefs.js:245 prefs.js:337 prefs.js:507 prefs.js:636 prefs.js:678
 msgid "Set to empty to disable icon override"
 msgstr "Установите пустое значение, чтобы отключить переопределение значков"
 
-#: prefs.js:242 prefs.js:334 prefs.js:496 prefs.js:612 prefs.js:654
+#: prefs.js:248 prefs.js:340 prefs.js:510 prefs.js:639 prefs.js:681
 msgid "Icon Color"
 msgstr "Цвет значка"
 
-#: prefs.js:243 prefs.js:335 prefs.js:497 prefs.js:613 prefs.js:655
+#: prefs.js:249 prefs.js:341 prefs.js:511 prefs.js:640 prefs.js:682
 msgid "Icon Alert Color"
 msgstr "Цвет значка предупреждения"
 
-#: prefs.js:245 prefs.js:337 prefs.js:499 prefs.js:615 prefs.js:657
+#: prefs.js:251 prefs.js:343 prefs.js:513 prefs.js:642 prefs.js:684
 msgid "Icon Size"
 msgstr "Размер значка"
 
-#: prefs.js:250 prefs.js:342 prefs.js:504 prefs.js:620 prefs.js:662
+#: prefs.js:256 prefs.js:348 prefs.js:518 prefs.js:647 prefs.js:689
 msgid "Tooltip"
 msgstr "Подсказка"
 
-#: prefs.js:251 prefs.js:343 prefs.js:505 prefs.js:621 prefs.js:663
+#: prefs.js:257 prefs.js:349 prefs.js:519 prefs.js:648 prefs.js:690
 msgid "Show Tooltip"
 msgstr "Показать подсказку"
 
-#: prefs.js:252
+#: prefs.js:258
 msgid "Percentage"
 msgstr "Проценты"
 
-#: prefs.js:253
+#: prefs.js:259
 msgid "Show Percentage"
 msgstr "Показать проценты"
 
-#: prefs.js:254
+#: prefs.js:260
 msgid "Single Core Percentage"
 msgstr "Проценты на одно ядро"
 
-#: prefs.js:256 prefs.js:347 prefs.js:510
+#: prefs.js:262 prefs.js:353 prefs.js:364 prefs.js:526 prefs.js:537
 msgid "Icon Alert"
 msgstr "Значок предупреждения"
 
-#: prefs.js:257
+#: prefs.js:263
 msgid "Set 0 to disable. Value is percentage of total cpu."
 msgstr ""
 "Установите 0, чтобы отключить. Значение - процент от общего использования "
 "процессора."
 
-#: prefs.js:260 prefs.js:354
+#: prefs.js:266 prefs.js:368
 msgid "History Graph"
 msgstr "График истории"
 
-#: prefs.js:261 prefs.js:355
+#: prefs.js:267 prefs.js:369
 msgid "Show History Graph"
 msgstr "Показать график истории"
 
-#: prefs.js:262 prefs.js:272 prefs.js:356 prefs.js:363
+#: prefs.js:268 prefs.js:278 prefs.js:370 prefs.js:377
 msgid "History Graph Breakdown"
 msgstr "Разбивка графика истории"
 
-#: prefs.js:263 prefs.js:357
+#: prefs.js:269 prefs.js:371
 msgid "History Graph Width"
 msgstr "Ширина графика истории"
 
-#: prefs.js:264 prefs.js:358
+#: prefs.js:270 prefs.js:372
 msgid "Realtime Bar"
 msgstr "Панель в реальном времени"
 
-#: prefs.js:265 prefs.js:359
+#: prefs.js:271 prefs.js:373
 msgid "Show Realtime Bar"
 msgstr "Показать панель в реальном времени"
 
-#: prefs.js:266
+#: prefs.js:272
 msgid "Realtime per-core Bars"
 msgstr "Панели в реальном времени для каждого ядра"
 
-#: prefs.js:267 prefs.js:360
+#: prefs.js:273 prefs.js:374
 msgid "Realtime Bar Breakdown"
 msgstr "Разбивка панели в реальном времени"
 
-#: prefs.js:269 prefs.js:362
+#: prefs.js:275 prefs.js:376
 msgid "Menu"
 msgstr "Меню"
 
-#: prefs.js:271
+#: prefs.js:277
 msgid "Realtime Bars Breakdown"
 msgstr "Разбивка панелей в реальном времени"
 
-#: prefs.js:273
+#: prefs.js:279
 msgid "Core Bars Breakdown"
 msgstr "Разбивка панелей ядер"
 
-#: prefs.js:274
+#: prefs.js:280
 msgid "Top Processes Single Core"
 msgstr "Наибольшие процессы на одно ядро"
 
-#: prefs.js:282 prefs.js:665
+#: prefs.js:288 prefs.js:692
 msgid "None"
 msgstr "Нет"
 
-#: prefs.js:293
+#: prefs.js:299
 msgid "Main GPU"
 msgstr "Главный ГП"
 
-#: prefs.js:303
+#: prefs.js:309
 msgid "Used = Total - Free - Buffers - Cached"
 msgstr "Используется = Всего - Свободно - Буферы - Кэшировано"
 
-#: prefs.js:304
+#: prefs.js:310
 msgid "Used = Total - Free"
 msgstr "Используется = Всего - Свободно"
 
-#: prefs.js:305
+#: prefs.js:311
 msgid "Used = Total - Available"
 msgstr "Используется = Всего - Доступно"
 
-#: prefs.js:306
+#: prefs.js:312
 msgid "Used = Active"
 msgstr "Используется = Активно"
 
-#: prefs.js:308
+#: prefs.js:314
 msgid "Used Memory"
 msgstr "Используемая память"
 
-#: prefs.js:315
+#: prefs.js:321
 #, fuzzy
 msgid "Memory Usage"
 msgstr "Информация об использовании памяти"
 
-#: prefs.js:331
+#: prefs.js:337
 msgid "Set icon name (ie: 'memory-symbolic')"
 msgstr "Установите имя значка (например, 'memory-symbolic')"
 
-#: prefs.js:344
+#: prefs.js:350 prefs.js:523
 msgid "Usage Percentage"
 msgstr "Процент использования"
 
-#: prefs.js:345
+#: prefs.js:351
 msgid "Show Usage Percentage"
 msgstr "Показать процент использования"
 
-#: prefs.js:348
+#: prefs.js:354
 msgid "Set 0 to disable. Value is percentage of ram usage."
 msgstr ""
 "Установите 0, чтобы отключить. Значение - процент использования оперативной "
 "памяти."
 
-#: prefs.js:351
+#: prefs.js:357 prefs.js:530
 msgid "Usage Value"
 msgstr "Значение использования"
 
-#: prefs.js:352
+#: prefs.js:358
 msgid "Show Usage Value"
 msgstr "Показать значение использования"
 
-#: prefs.js:353
+#: prefs.js:359 prefs.js:532
 msgid "Usage Value Max Number of Figures"
 msgstr "Максимальное число значения использования"
 
-#: prefs.js:373 prefs.js:530
+#: prefs.js:360 prefs.js:533
+#, fuzzy
+msgid "Free Value"
+msgstr "Значение использования"
+
+#: prefs.js:361
+#, fuzzy
+msgid "Show Free Value"
+msgstr "Показать значение использования"
+
+#: prefs.js:362 prefs.js:535
+#, fuzzy
+msgid "Free Value Max Number of Figures"
+msgstr "Максимальное число значения использования"
+
+#: prefs.js:365
+#, fuzzy
+msgid "Set 0 to disable. Value is free MB of ram."
+msgstr ""
+"Установите 0, чтобы отключить. Значение - процент использования оперативной "
+"памяти."
+
+#: prefs.js:387 prefs.js:557
 msgid "kB/s"
 msgstr "кбайт/с"
 
-#: prefs.js:374 prefs.js:531
+#: prefs.js:388 prefs.js:558
 msgid "KiB/s"
 msgstr "Кибайт/с"
 
-#: prefs.js:375 prefs.js:532
+#: prefs.js:389 prefs.js:559
 msgid "kb/s"
 msgstr "кбит/с"
 
-#: prefs.js:376 prefs.js:533
+#: prefs.js:390 prefs.js:560
 msgid "Kibit/s"
 msgstr "Кибит/с"
 
-#: prefs.js:377 prefs.js:534
+#: prefs.js:391 prefs.js:561
 msgid "kBps"
 msgstr "кбайт/с"
 
-#: prefs.js:378 prefs.js:535
+#: prefs.js:392 prefs.js:562
 msgid "KiBps"
 msgstr "Кибайт/с"
 
-#: prefs.js:379 prefs.js:536
+#: prefs.js:393 prefs.js:563
 msgid "Kibps"
 msgstr "Кибит/с"
 
-#: prefs.js:380 prefs.js:537
+#: prefs.js:394 prefs.js:564
 msgid "kbps"
 msgstr "кбит/с"
 
-#: prefs.js:381 prefs.js:538
+#: prefs.js:395 prefs.js:565
 msgid "Kibitps"
 msgstr "Кибит/с"
 
-#: prefs.js:382 prefs.js:539
+#: prefs.js:396 prefs.js:566
 msgid "k (as kB/s)"
 msgstr "к (как кбайт/с)"
 
-#: prefs.js:383 prefs.js:540
+#: prefs.js:397 prefs.js:567
 msgid "Ki (as KiB/s)"
 msgstr "Ки (как Кибайт/с)"
 
-#: prefs.js:385 prefs.js:542
+#: prefs.js:399 prefs.js:569
 msgid "Data Unit"
 msgstr "Единица измерения данных"
 
-#: prefs.js:406 prefs.js:506
+#: prefs.js:420 prefs.js:520
 msgid "Main Disk"
 msgstr "Главный диск"
 
-#: prefs.js:407
+#: prefs.js:421
 msgid "Ignored Storage Devices"
 msgstr "Игнорируемые устройства хранения"
 
-#: prefs.js:409 prefs.js:545
+#: prefs.js:423 prefs.js:572
 msgid "Regex"
 msgstr "Регламент"
 
-#: prefs.js:410
+#: prefs.js:424
 msgid "Devices matching this regex will be ignored."
 msgstr "Устройства, соответствующие этому регламенту, будут игнорироваться."
 
-#: prefs.js:410 prefs.js:546
+#: prefs.js:424 prefs.js:573
 msgid "Leave empty to disable. Usage example: "
 msgstr "Оставьте пустым, чтобы отключить. Например: "
 
-#: prefs.js:421 prefs.js:444 prefs.js:555 prefs.js:570
+#: prefs.js:435 prefs.js:458 prefs.js:582 prefs.js:597
 msgid "Ignored"
 msgstr "Игнорируется"
 
-#: prefs.js:423
+#: prefs.js:437
 msgid "Main"
 msgstr "Главный"
 
-#: prefs.js:440
+#: prefs.js:454
 msgid "Main disk cannot be ignored"
 msgstr "Главный диск нельзя игнорировать"
 
-#: prefs.js:473
+#: prefs.js:487
 #, fuzzy
 msgid "Storage Usage"
 msgstr "Показать панель использования хранилища"
 
-#: prefs.js:483
+#: prefs.js:497
 #, fuzzy
 msgid "Storage IO"
 msgstr "Хранилище"
 
-#: prefs.js:493
+#: prefs.js:507
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr "Установите имя значка (например, 'drive-harddisk-symbolic')"
 
-#: prefs.js:507
-msgid "Show Storage Usage Bar"
-msgstr "Показать панель использования хранилища"
+#: prefs.js:521
+#, fuzzy
+msgid "Usage Bar"
+msgstr "Значение использования"
 
-#: prefs.js:508
-msgid "Show Storage Usage Percentage"
-msgstr "Показать процент использования хранилища"
+#: prefs.js:522
+#, fuzzy
+msgid "Show Main Disk Usage Bar"
+msgstr "Показать панель использования сети"
 
-#: prefs.js:511
+#: prefs.js:524
+#, fuzzy
+msgid "Show Main Disk Usage Percentage"
+msgstr "Показать процент использования"
+
+#: prefs.js:527
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr "Установите 0, чтобы отключить. Значение - процент использования диска."
 
-#: prefs.js:514 prefs.js:622
+#: prefs.js:531
+#, fuzzy
+msgid "Show Main Disk Usage Value"
+msgstr "Показать значение использования"
+
+#: prefs.js:534
+#, fuzzy
+msgid "Show Main Disk Free Value"
+msgstr "Показать значение использования"
+
+#: prefs.js:538
+#, fuzzy
+msgid "Set 0 to disable. Value is free MB of storage."
+msgstr ""
+"Установите 0, чтобы отключить. Значение - процент использования оперативной "
+"памяти."
+
+#: prefs.js:541 prefs.js:649
 msgid "IO"
 msgstr "Ввод/вывод"
 
-#: prefs.js:515 prefs.js:623
+#: prefs.js:542 prefs.js:650
 msgid "Show Realtime IO Bar"
 msgstr "Показать панель ввода/вывода в реальном времени"
 
-#: prefs.js:516 prefs.js:624
+#: prefs.js:543 prefs.js:651
 msgid "Show IO History Graph"
 msgstr "Показать график истории ввода/вывода"
 
-#: prefs.js:517 prefs.js:625
+#: prefs.js:544 prefs.js:652
 msgid "IO History Graph Width"
 msgstr "Ширина графика истории ввода/вывода"
 
-#: prefs.js:518 prefs.js:626
+#: prefs.js:545 prefs.js:653
 msgid "Show IO Speed"
 msgstr "Показать скорость ввода/вывода"
 
-#: prefs.js:519 prefs.js:627
+#: prefs.js:546 prefs.js:654
 msgid "IO Speed Max Number of Figures"
 msgstr "Максимальное значение скорости ввода/вывода"
 
-#: prefs.js:520 prefs.js:628
+#: prefs.js:547 prefs.js:655
 msgid "IO Speed Threshold"
 msgstr "Порог скорости ввода/вывода"
 
-#: prefs.js:520 prefs.js:628
+#: prefs.js:547 prefs.js:655
 msgid "in kB/s"
 msgstr "в кбайт/с"
 
-#: prefs.js:543
+#: prefs.js:570
 msgid "Ignored Network Interfaces"
 msgstr "Игнорируемые сетевые интерфейсы"
 
-#: prefs.js:546
+#: prefs.js:573
 msgid "Interfaces matching this regex will be ignored."
 msgstr "Интерфейсы, соответствующие этому регламенту, будут игнорироваться."
 
-#: prefs.js:599
+#: prefs.js:626
 #, fuzzy
 msgid "Network IO"
 msgstr "Сеть"
 
-#: prefs.js:609
+#: prefs.js:636
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr "Установите имя значка (например, 'network-wired-symbolic')"
 
-#: prefs.js:638
+#: prefs.js:665
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr "Цельсий"
 
-#: prefs.js:639
+#: prefs.js:666
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr "Фаренгейт"
 
-#: prefs.js:641
+#: prefs.js:668
 msgid "Temperature Unit"
 msgstr "Единица измерения температуры"
 
-#: prefs.js:651
+#: prefs.js:678
 msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "Установите имя значка (например, 'temperature-symbolic')"
 
-#: prefs.js:668
+#: prefs.js:695
 msgid "Sensor 1"
 msgstr "Датчик 1"
 
-#: prefs.js:670 prefs.js:678
+#: prefs.js:697 prefs.js:705
 msgid "Source"
 msgstr "Источник"
 
-#: prefs.js:672 prefs.js:680
+#: prefs.js:699 prefs.js:707
 msgid "Value Digits"
 msgstr "Значения цифр"
 
-#: prefs.js:673 prefs.js:681
+#: prefs.js:700 prefs.js:708
 msgid "Set -1 to auto. Number of digits after the decimal point."
 msgstr "Установите -1 для авто. Количество цифр после десятичной точки."
 
-#: prefs.js:676
+#: prefs.js:703
 msgid "Sensor 2"
 msgstr "Датчик 2"
 
-#: prefs.js:689
+#: prefs.js:716
 msgid "Info"
 msgstr "Информация"
 
-#: prefs.js:698
+#: prefs.js:725
 msgid "Version"
 msgstr "Версия"
 
-#: prefs.js:699
+#: prefs.js:726
 msgid "Changelog"
 msgstr "Изменения"
 
-#: prefs.js:700
+#: prefs.js:727
 msgid "GitHub"
 msgstr "GitHub"
 
-#: prefs.js:701
+#: prefs.js:728
 msgid "GNOME Extensions page"
 msgstr "Страница GNOME Extensions"
 
-#: prefs.js:702
+#: prefs.js:729
 msgid "Report a bug or suggest new feature"
 msgstr "Сообщить об ошибке или предложить новую функцию"
 
-#: prefs.js:703
+#: prefs.js:730
 msgid "Support us on Ko-Fi"
 msgstr "Поддержать нас на Ko-Fi"
 
-#: prefs.js:704
+#: prefs.js:731
 msgid "Buy us a coffee"
 msgstr "Угостить нас кофе"
 
-#: prefs.js:705
+#: prefs.js:732
 msgid "Become a patron"
 msgstr "Стать меценатом"
 
-#: prefs.js:706
+#: prefs.js:733
 msgid "Debug Mode"
 msgstr "Режим отладки"
+
+#~ msgid "Show Storage Usage Bar"
+#~ msgstr "Показать панель использования хранилища"
+
+#~ msgid "Show Storage Usage Percentage"
+#~ msgstr "Показать процент использования хранилища"
 
 #~ msgid "Default (Auto)"
 #~ msgstr "По умолчанию (Авто)"
@@ -988,9 +1049,6 @@ msgstr "Режим отладки"
 
 #~ msgid "Panel Box Ordering"
 #~ msgstr "Порядок блока с панелями"
-
-#~ msgid "Show Network Usage Bar"
-#~ msgstr "Показать панель использования сети"
 
 #~ msgid "Show Sensor 1"
 #~ msgstr "Показать датчик 1"
