@@ -6,6 +6,7 @@
 - GTop source has been added to the list of sources for Memory Usage, Storage Usage and Network IO (GTop is the default option for all of them if available)
 - New indicator for Memory Header: Free Value in Bytes + Icon Alert [[#61](https://github.com/AstraExt/astra-monitor/issues/61)]
 - New indicator for Storage Header: Main Disk Usage and Free Value in Bytes + Icon Alert [[#61](https://github.com/AstraExt/astra-monitor/issues/61)]
+- Add setting to adjust the startup delay in case of formatting glitches at boot [[#30](https://github.com/AstraExt/astra-monitor/issues/30)]
 
 ### Bug fixes
 - Light Theme readability improvements [[#53](https://github.com/AstraExt/astra-monitor/issues/53)]

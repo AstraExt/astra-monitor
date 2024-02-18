@@ -216,6 +216,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const headersSection = this.addExpanderRow({title: _('Headers')}, group);
         this.addSpinRow({
+            title: _('Startup Delay (seconds)'),
+            subtitle: _('Increase if the extension is not properly formatted on startup.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
+        }, 'startup-delay', headersSection, {min: 1, max: 10, digits: 1, step: 0.5, page: 1}, true, 2);
+        this.addSpinRow({
             title: _('Headers Height'),
             subtitle: _('Experimental feature: may require to disable/enable the extension.'),
             icon_name: 'am-dialog-warning-symbolic',

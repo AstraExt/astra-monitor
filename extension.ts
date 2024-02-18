@@ -51,11 +51,11 @@ export default class AstraMonitorExtension extends Extension {
         
         this.container = new AstraMonitorContainer();
         
-        // 2 seconds delay to allow the initialization of the monitors
+        // Startup delay to allow the initialization of the monitors
         // avoiding graphical glitches / empty widgets
         this.timeout = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
-            2000,
+            Utils.startupDelay * 1000,
             () => {
                 if(this.container)
                     this.container.place(this.uuid);

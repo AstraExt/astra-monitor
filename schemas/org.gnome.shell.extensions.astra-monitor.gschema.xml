@@ -55,6 +55,12 @@
     </key>
       
     <!-- GENERAL -->
+    <key name="startup-delay" type="d">
+      <default>2</default>
+      <summary>Startup Delay</summary>
+      <description>Seconds to wait before placing the headers</description>
+      <range min="1" max="10"/>
+    </key>
     <key name="panel-box" enum="org.gnome.shell.extensions.astra-monitor.enum.panel-box">
       <default>'right'</default>
       <summary>Panel Box Position</summary>

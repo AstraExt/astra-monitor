@@ -283,6 +283,13 @@ export default class Utils {
         }
     }
     
+    static get startupDelay(): number {
+        const delay = Config.get_double('startup-delay');
+        if(Number.isNaN(delay) || delay < 1 || delay > 10)
+            return 2;
+        return delay;
+    }
+    
     static get themeStyle(): string {
         if(Config.get_string('theme-style') === 'light')
             return 'light';
