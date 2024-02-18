@@ -4,6 +4,8 @@
 - 'Default' option for _data source_ removal: now all _data sources_ are set at 'Auto' by default. We reccomend to leave them at 'Auto' unless you have a specific need: the best source will automatically be chosen based on the availability of dependencies, performance and reliability
 - In source selection now you better understand what /proc source is used: ie. `/proc/stat` instead of just `/proc`
 - GTop source has been added to the list of sources for Memory Usage, Storage Usage and Network IO (GTop is the default option for all of them if available)
+- New indicator for Memory Header: Free Value in Bytes + Icon Alert [[#61](https://github.com/AstraExt/astra-monitor/issues/61)]
+- New indicator for Storage Header: Main Disk Usage and Free Value in Bytes + Icon Alert [[#61](https://github.com/AstraExt/astra-monitor/issues/61)]
 
 ### Bug fixes
 - Light Theme readability improvements [[#53](https://github.com/AstraExt/astra-monitor/issues/53)]

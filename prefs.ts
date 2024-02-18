@@ -435,6 +435,15 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show Usage Value'), tabs: 1}, 'memory-header-value', valueSection);
         this.addSpinRow({title: _('Usage Value Max Number of Figures'), tabs: 1}, 'memory-header-value-figures', valueSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
         
+        const freeSection = this.addExpanderRow({title: _('Free Value')}, group);
+        this.addSwitchRow({title: _('Show Free Value'), tabs: 1}, 'memory-header-free', freeSection);
+        this.addSpinRow({title: _('Free Value Max Number of Figures'), tabs: 1}, 'memory-header-free-figures', freeSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
+        this.addSpinRow({
+            title: _('Icon Alert'),
+            subtitle: _('Set 0 to disable. Value is free MB of ram.'),
+            tabs: 1
+        }, 'memory-header-free-icon-alert-threshold', freeSection, {min: 0, max: 100000, digits: 0, step: 100, page: 1000}, true, 0);
+        
         const graphSection = this.addExpanderRow({title: _('History Graph')}, group);
         this.addSwitchRow({title: _('Show History Graph'), tabs: 1}, 'memory-header-graph', graphSection);
         this.addSwitchRow({title: _('History Graph Breakdown'), tabs: 1}, 'memory-header-graph-breakdown', graphSection);
@@ -621,14 +630,31 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
         this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'storage-header-tooltip', tooltipSection);
         
-        const barsSection = this.addExpanderRow({title: _('Main Disk')}, group);
-        this.addSwitchRow({title: _('Show Storage Usage Bar'), tabs: 1}, 'storage-header-bars', barsSection);
-        this.addSwitchRow({title: _('Show Storage Usage Percentage'), tabs: 1}, 'storage-header-percentage', barsSection);
+        const mainDiskSection = this.addExpanderRow({title: _('Main Disk')}, group);
+        
+        this.addLabelRow({title: _('Usage Bar'), tabs: 1}, '', mainDiskSection);
+        this.addSwitchRow({title: _('Show Main Disk Usage Bar'), tabs: 2}, 'storage-header-bars', mainDiskSection);
+        
+        this.addLabelRow({title: _('Usage Percentage'), tabs: 1}, '', mainDiskSection);
+        this.addSwitchRow({title: _('Show Main Disk Usage Percentage'), tabs: 2}, 'storage-header-percentage', mainDiskSection);
         this.addSpinRow({
             title: _('Icon Alert'),
             subtitle: _('Set 0 to disable. Value is percentage of disk usage.'),
-            tabs: 1
-        }, 'storage-header-percentage-icon-alert-threshold', barsSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
+            tabs: 2
+        }, 'storage-header-percentage-icon-alert-threshold', mainDiskSection, {min: 0, max: 100, digits: 0, step: 1, page: 10}, true, 0);
+        
+        this.addLabelRow({title: _('Usage Value'), tabs: 1}, '', mainDiskSection);
+        this.addSwitchRow({title: _('Show Main Disk Usage Value'), tabs: 2}, 'storage-header-value', mainDiskSection);
+        this.addSpinRow({title: _('Usage Value Max Number of Figures'), tabs: 2}, 'storage-header-value-figures', mainDiskSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
+        
+        this.addLabelRow({title: _('Free Value'), tabs: 1}, '', mainDiskSection);
+        this.addSwitchRow({title: _('Show Main Disk Free Value'), tabs: 2}, 'storage-header-free', mainDiskSection);
+        this.addSpinRow({title: _('Free Value Max Number of Figures'), tabs: 2}, 'storage-header-free-figures', mainDiskSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
+        this.addSpinRow({
+            title: _('Icon Alert'),
+            subtitle: _('Set 0 to disable. Value is free MB of storage.'),
+            tabs: 2
+        }, 'storage-header-free-icon-alert-threshold', mainDiskSection, {min: 0, max: 100000, digits: 0, step: 100, page: 1000}, true, 0);
         
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
         this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'storage-header-io-bars', ioSection);

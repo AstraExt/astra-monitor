@@ -434,8 +434,11 @@ export default class StorageMonitor extends Monitor {
                 if(json.blockdevices && json.blockdevices.length > 0) {
                     const usage = parseInt(json.blockdevices[0]['fsuse%'], 10);
                     const size = json.blockdevices[0]['size'];
+                    
                     this.pushUsageHistory('storageUsage', {
                         size: size,
+                        used: Math.round(size * usage / 100),
+                        free: Math.round(size * (100 - usage) / 100),
                         usePercentage: usage
                     });
                     return true;
@@ -478,6 +481,8 @@ export default class StorageMonitor extends Monitor {
             
             this.pushUsageHistory('storageUsage', {
                 size: size,
+                used: size - free,
+                free: free,
                 usePercentage: Math.round((size - free) / size * 100)
             });
             return true;

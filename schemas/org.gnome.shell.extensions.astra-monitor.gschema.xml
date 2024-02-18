@@ -334,6 +334,23 @@
       <description>Max number of figures to show on the usage value</description>
       <range min="2" max="4"/>
     </key>
+    <key name="memory-header-free" type="b">
+      <default>false</default>
+      <summary>Memory Header Free Value</summary>
+      <description>Show the free value on the header of the memory monitor</description>
+    </key>
+    <key name="memory-header-free-figures" type="i">
+      <default>3</default>
+      <summary>Max Number Figures</summary>
+      <description>Max number of figures to show on the free value</description>
+      <range min="2" max="4"/>
+    </key>
+    <key name="memory-header-free-icon-alert-threshold" type="i">
+      <default>0</default>
+      <summary>Free Value Icon Alert Threshold</summary>
+      <description>Threshold in MB to show the alert icon</description>
+      <range min="0" max="100000"/>
+    </key>
     <key name="memory-header-graph" type="b">
       <default>false</default>
       <summary>Show History Graph</summary>
@@ -460,6 +477,34 @@
       <summary>Percentage Icon Alert Threshold</summary>
       <description>Threshold in percentage to show the alert icon</description>
       <range min="0" max="100"/>
+    </key>
+    <key name="storage-header-value" type="b">
+      <default>false</default>
+      <summary>Storage Header Usage Value</summary>
+      <description>Show the usage value on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-value-figures" type="i">
+      <default>3</default>
+      <summary>Max Number Figures</summary>
+      <description>Max number of figures to show on the usage value</description>
+      <range min="2" max="4"/>
+    </key>
+    <key name="storage-header-free" type="b">
+      <default>false</default>
+      <summary>Storage Header Free Value</summary>
+      <description>Show the free value on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-free-figures" type="i">
+      <default>3</default>
+      <summary>Max Number Figures</summary>
+      <description>Max number of figures to show on the free value</description>
+      <range min="2" max="4"/>
+    </key>
+    <key name="storage-header-free-icon-alert-threshold" type="i">
+      <default>0</default>
+      <summary>Free Value Icon Alert Threshold</summary>
+      <description>Threshold in MB to show the alert icon</description>
+      <range min="0" max="1000000"/>
     </key>
     <key name="storage-header-bars" type="b">
       <default>true</default>

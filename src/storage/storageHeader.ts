@@ -48,6 +48,8 @@ class StorageHeader extends Header {
     protected icon!: St.Icon;
     protected bars!: InstanceType<typeof StorageBars>;
     protected percentage!: St.Label;
+    protected value!: St.Label;
+    protected free!: St.Label;
     protected ioBars!: InstanceType<typeof StorageIOBars>;
     protected graph!: InstanceType<typeof StorageGraph>;
     protected speedContainer!: St.BoxLayout;
@@ -66,6 +68,8 @@ class StorageHeader extends Header {
         this.buildIcon();
         this.buildBars();
         this.buildPercentage();
+        this.buildValue();
+        this.buildFree();
         this.buildIOBars();
         this.buildGraph();
         this.buildSpeed();
@@ -101,6 +105,12 @@ class StorageHeader extends Header {
                     break;
                 case 'percentage':
                     widget = this.percentage;
+                    break;
+                case 'value':
+                    widget = this.value;
+                    break;
+                case 'free':
+                    widget = this.free;
                     break;
                 case 'IO bar':
                     widget = this.ioBars;
@@ -192,8 +202,10 @@ class StorageHeader extends Header {
             if(!Config.get_boolean('storage-header-icon'))
                 return;
             
-            const threshold = Config.get_int('storage-header-percentage-icon-alert-threshold') || 0;
-            if(threshold === 0) {
+            const percentageThreshold = Config.get_int('storage-header-percentage-icon-alert-threshold') || 0;
+            const freeThreshold = Config.get_int('storage-header-free-icon-alert-threshold') || 0;
+            
+            if(percentageThreshold === 0 && freeThreshold === 0) {
                 if(alerts.size > 0) {
                     alerts.clear();
                     updateIconColor();
@@ -205,16 +217,33 @@ class StorageHeader extends Header {
             if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
                 return;
             
-            if(usage.usePercentage < threshold) {
-                if(alerts.has('storageUsage')) {
-                    alerts.delete('storageUsage');
-                    updateIconColor();
+            if(percentageThreshold > 0) {
+                if(usage.usePercentage < percentageThreshold) {
+                    if(alerts.has('storageUsage')) {
+                        alerts.delete('storageUsage');
+                        updateIconColor();
+                    }
+                }
+                else {
+                    if(!alerts.has('storageUsage')) {
+                        alerts.add('storageUsage');
+                        updateIconColor();
+                    }
                 }
             }
-            else {
-                if(!alerts.has('storageUsage')) {
-                    alerts.add('storageUsage');
-                    updateIconColor();
+            
+            if(freeThreshold > 0) {
+                if(usage.free >= freeThreshold*1000*1000) {
+                    if(alerts.has('storageFree')) {
+                        alerts.delete('storageFree');
+                        updateIconColor();
+                    }
+                }
+                else {
+                    if(!alerts.has('storageFree')) {
+                        alerts.add('storageFree');
+                        updateIconColor();
+                    }
                 }
             }
         });
@@ -258,6 +287,50 @@ class StorageHeader extends Header {
                 this.percentage.text = '';
             else
                 this.percentage.text = `${Math.round(usage.usePercentage)}%`;
+        });
+    }
+    
+    buildValue() {
+        this.value = new St.Label({
+            text: '-',
+            style_class: 'astra-monitor-header-value',
+            y_align: Clutter.ActorAlign.CENTER,
+        });
+        Config.bind('storage-header-value', this.value, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Utils.storageMonitor.listen(this.value, 'storageUsage', () => {
+            if(!Config.get_boolean('storage-header-value'))
+                return;
+            
+            const figures = Config.get_int('storage-header-value-figures');
+            
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            if(!usage || !usage.used || isNaN(usage.used))
+                this.value.text = '-';
+            else
+                this.value.text = `${Utils.formatBytes(usage.used, figures)}`;
+        });
+    }
+    
+    buildFree() {
+        this.free = new St.Label({
+            text: '-',
+            style_class: 'astra-monitor-header-value',
+            y_align: Clutter.ActorAlign.CENTER,
+        });
+        Config.bind('storage-header-free', this.free, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Utils.storageMonitor.listen(this.free, 'storageUsage', () => {
+            if(!Config.get_boolean('storage-header-free'))
+                return;
+            
+            const figures = Config.get_int('storage-header-free-figures');
+            
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            if(!usage || !usage.used || isNaN(usage.used))
+                this.free.text = '-';
+            else
+                this.free.text = `${Utils.formatBytes(usage.free, figures)}`;
         });
     }
     
@@ -455,6 +528,14 @@ class StorageHeader extends Header {
         if(this.percentage) {
             Config.clear(this.percentage);
             Utils.storageMonitor.unlisten(this.percentage);
+        }
+        if(this.value) {
+            Config.clear(this.value);
+            Utils.memoryMonitor.unlisten(this.value);
+        }
+        if(this.free) {
+            Config.clear(this.free);
+            Utils.memoryMonitor.unlisten(this.free);
         }
         if(this.bars) {
             Config.clear(this.bars);

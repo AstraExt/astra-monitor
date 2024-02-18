@@ -48,6 +48,7 @@ class MemoryHeader extends Header {
     protected graph!: InstanceType<typeof MemoryGraph>;
     protected percentage!: St.Label;
     protected value!: St.Label;
+    protected free!: St.Label;
     
     protected tooltipMenu!: TooltipMenu;
     protected tooltipItem!: TooltipItem;
@@ -60,6 +61,7 @@ class MemoryHeader extends Header {
         this.buildBars();
         this.buildPercentage();
         this.buildValue();
+        this.buildFree();
         
         this.addOrReorderIndicators();
         
@@ -91,6 +93,9 @@ class MemoryHeader extends Header {
                     break;
                 case 'value':
                     widget = this.value;
+                    break;
+                case 'free':
+                    widget = this.free;
                     break;
             }
             
@@ -159,8 +164,10 @@ class MemoryHeader extends Header {
             if(!Config.get_boolean('memory-header-icon'))
                 return;
             
-            const threshold = Config.get_int('memory-header-percentage-icon-alert-threshold') || 0;
-            if(threshold === 0) {
+            const percentageThreshold = Config.get_int('memory-header-percentage-icon-alert-threshold') || 0;
+            const freeThreshold = Config.get_int('memory-header-free-icon-alert-threshold') || 0;
+            
+            if(percentageThreshold === 0 && freeThreshold === 0) {
                 if(alerts.size > 0) {
                     alerts.clear();
                     updateIconColor();
@@ -172,17 +179,34 @@ class MemoryHeader extends Header {
             if(!usage || !usage.total || isNaN(usage.total) || !usage.used || isNaN(usage.used))
                 return;
             
-            const perc = Math.round(usage.used / usage.total * 100);
-            if(perc < threshold) {
-                if(alerts.has('memoryUsage')) {
-                    alerts.delete('memoryUsage');
-                    updateIconColor();
+            if(percentageThreshold > 0) {
+                const perc = Math.round(usage.used / usage.total * 100);
+                if(perc < percentageThreshold) {
+                    if(alerts.has('memoryUsage')) {
+                        alerts.delete('memoryUsage');
+                        updateIconColor();
+                    }
+                }
+                else {
+                    if(!alerts.has('memoryUsage')) {
+                        alerts.add('memoryUsage');
+                        updateIconColor();
+                    }
                 }
             }
-            else {
-                if(!alerts.has('memoryUsage')) {
-                    alerts.add('memoryUsage');
-                    updateIconColor();
+            
+            if(freeThreshold > 0) {
+                if(usage.free >= freeThreshold*1000*1000) {
+                    if(alerts.has('memoryFree')) {
+                        alerts.delete('memoryFree');
+                        updateIconColor();
+                    }
+                }
+                else {
+                    if(!alerts.has('memoryFree')) {
+                        alerts.add('memoryFree');
+                        updateIconColor();
+                    }
                 }
             }
         });
@@ -287,6 +311,28 @@ class MemoryHeader extends Header {
         });
     }
     
+    buildFree() {
+        this.free = new St.Label({
+            text: '-',
+            style_class: 'astra-monitor-header-value',
+            y_align: Clutter.ActorAlign.CENTER,
+        });
+        Config.bind('memory-header-free', this.free, 'visible', Gio.SettingsBindFlags.GET);
+        
+        Utils.memoryMonitor.listen(this.free, 'memoryUsage', () => {
+            if(!Config.get_boolean('memory-header-free'))
+                return;
+            
+            const figures = Config.get_int('memory-header-free-figures');
+            
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            if(!usage || !usage.used || isNaN(usage.used))
+                this.free.text = '-';
+            else
+                this.free.text = `${Utils.formatBytes(usage.free, figures)}`;
+        });
+    }
+    
     update() {
         
     }
@@ -354,6 +400,14 @@ class MemoryHeader extends Header {
         if(this.percentage) {
             Config.clear(this.percentage);
             Utils.memoryMonitor.unlisten(this.percentage);
+        }
+        if(this.value) {
+            Config.clear(this.value);
+            Utils.memoryMonitor.unlisten(this.value);
+        }
+        if(this.free) {
+            Config.clear(this.free);
+            Utils.memoryMonitor.unlisten(this.free);
         }
         if(this.bars) {
             Config.clear(this.bars);

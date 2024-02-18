@@ -103,8 +103,8 @@ export default class Utils {
     static defaultMonitors = ['processor', 'memory', 'storage', 'network', 'sensors'];
     static defaultIndicators = {
         processor: ['icon', 'bar', 'graph', 'percentage'],
-        memory: ['icon', 'bar', 'graph', 'percentage', 'value'],
-        storage: ['icon', 'bar', 'percentage', 'IO bar', 'IO graph', 'IO speed'],
+        memory: ['icon', 'bar', 'graph', 'percentage', 'value', 'free'],
+        storage: ['icon', 'bar', 'percentage', 'value', 'free', 'IO bar', 'IO graph', 'IO speed'],
         network: ['icon', 'IO bar', 'IO graph', 'IO speed'],
         sensors: ['icon', 'value']
     };
@@ -630,13 +630,9 @@ export default class Utils {
         let unitIndex = 0;
         
         while(bytes >= Math.pow(10, maxNumbers) && unitIndex < units.length - 1) {
-            bytes /= 1024;
+            bytes /= 1000;
             unitIndex++;
         }
-        
-        //fix 100 / 1024 = 0.09765625
-        if(bytes < 0.1)
-            bytes = 0.1;
         
         // Convert to string and truncate to maxNumbers significant figures
         let result = bytes.toString();
