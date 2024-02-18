@@ -1288,7 +1288,35 @@ export default class Utils {
         return null;
     }
     
-    static movingAverage(points: number[][], size: number) {
+    static movingAverage(values: number[], size: number): number[] {
+        const smoothedPoints = new Array(values.length);
+        let sum = 0;
+        let count = 0;
+        let avg;
+        
+        for(let i = 0; i < values.length; i++) {
+            const value = values[i];
+            
+            sum += value;
+            count++;
+            
+            if(i >= size) {
+                sum -= values[i - size];
+            }
+            else {
+                avg = sum / count;
+                smoothedPoints[i] = avg;
+                continue;
+            }
+            
+            avg = sum / size;
+            smoothedPoints[i] = avg;
+        }
+
+        return smoothedPoints;
+    }
+    
+    static movingAveragePoints(points: number[][], size: number): number[][] {
         const smoothedPoints = new Array(points.length);
         let sum = 0;
         let count = 0;

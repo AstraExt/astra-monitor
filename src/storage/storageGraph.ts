@@ -132,8 +132,13 @@ class StorageGraph extends GraphBase<StorageIO> {
                 return;
             
             const slicedHistory = this.history.slice(0, this.historyLimit);
-            const maxRead = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesReadPerSec), 0), 1024 * 1024);
-            const maxWrite = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesWrittenPerSec), 0), 1024 * 1024);
+            
+            const reads = Utils.movingAverage(slicedHistory.map(storageIO => storageIO.bytesReadPerSec), this.mini ? 2 : 4);
+            const maxRead = Math.max(reads.reduce((max, n) => Math.max(max, n), 0), 1024 * 1024);
+            
+            const writes = Utils.movingAverage(slicedHistory.map(storageIO => storageIO.bytesWrittenPerSec), this.mini ? 2 : 4);
+            const maxWrite = Math.max(writes.reduce((max, n) => Math.max(max, n), 0), 1024 * 1024);
+            
             this.refreshMaxSpeed(maxRead, maxWrite);
         });
     }

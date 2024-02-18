@@ -148,20 +148,21 @@ class GraphBase<T> extends St.BoxLayout {
             let usage = dataFunc(currentNode);
             if(!usage || isNaN(usage))
                 usage = 0;
+            usage = Math.max(0, Math.min(1, usage));
             
-            const x = i * pointSpacing;
-            const y = Math.ceil(usage * height);
+            const x = Math.round(i * pointSpacing);
+            const y = Math.round(usage * (height));
             points.push([x, y]);
         }
         
-        points = Utils.movingAverage(points, this.mini ? 2 : 4);
+        points = Utils.movingAveragePoints(points, this.mini ? 2 : 4);
         this.drawPoints({ctx, points, baseX, baseY, height, pointSpacing});
     }
     
     drawPoints({ctx, points, baseX, baseY, height, pointSpacing}: GraphInfo) {
         if(!ctx)
             return;
-        if(points.length <2)
+        if(points.length < 2)
             return;
         if(height <= 0)
             return;
@@ -169,7 +170,7 @@ class GraphBase<T> extends St.BoxLayout {
             return;
         
         let currentX = baseX + points[0][0];
-        ctx.moveTo(currentX, baseY + height - 1);
+        ctx.moveTo(currentX, baseY + height);
         
         let currentY = baseY + height - points[0][1];
         ctx.lineTo(currentX, currentY);
@@ -180,7 +181,7 @@ class GraphBase<T> extends St.BoxLayout {
             ctx.lineTo(currentX, currentY);
         }
         
-        ctx.lineTo(baseX + (points.length - 1) * pointSpacing, baseY + height - 1);
+        ctx.lineTo(baseX + (points.length - 1) * pointSpacing, baseY + height);
         ctx.closePath();
         ctx.fill();
     }

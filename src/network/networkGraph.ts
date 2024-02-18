@@ -129,8 +129,13 @@ class NetworkGraph extends GraphBase<NetworkIO> {
                 return;
             
             const slicedHistory = this.history.slice(0, this.historyLimit);
-            const maxUpload = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesUploadedPerSec), 0), 56 * 1024);
-            const maxDownload = Math.max(slicedHistory.reduce((max, d) => Math.max(max, d.bytesDownloadedPerSec), 0), 256 * 1024);
+            
+            const uploads = Utils.movingAverage(slicedHistory.map(networkIO => networkIO.bytesUploadedPerSec), this.mini ? 2 : 4);
+            const maxUpload = Math.max(uploads.reduce((max, n) => Math.max(max, n), 0), 56 * 1024);
+            
+            const downloads = Utils.movingAverage(slicedHistory.map(networkIO => networkIO.bytesDownloadedPerSec), this.mini ? 2 : 4);
+            const maxDownload = Math.max(downloads.reduce((max, n) => Math.max(max, n), 0), 256 * 1024);
+            
             this.refreshMaxSpeed(maxUpload, maxDownload);
         });
     }
