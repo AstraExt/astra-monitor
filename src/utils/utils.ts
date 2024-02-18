@@ -608,10 +608,6 @@ export default class Utils {
             unitIndex++;
         }
         
-        //fix 100 / 1024 = 0.09765625
-        if(value < 0.1)
-            value = 0.1;
-        
         // Convert to string and truncate to maxNumbers significant figures
         let result = value.toString();
         if(result.indexOf('.') !== -1) {
@@ -668,13 +664,13 @@ export default class Utils {
         if(unit === 'B')
             return value;
         if(unit === 'kB' || unit === 'KB')
-            return value * 1024;
+            return value * 1000;
         if(unit === 'MB')
-            return value * 1024 * 1024;
+            return value * 1000 * 1000;
         if(unit === 'GB')
-            return value * 1024 * 1024 * 1024;
+            return value * 1000 * 1000 * 1000;
         if(unit === 'TB')
-            return value * 1024 * 1024 * 1024 * 1024;
+            return value * 1000 * 1000 * 1000 * 1000;
         if(unit === 'kiB' || unit === 'KiB')
             return value * 1024;
         if(unit === 'MiB')
@@ -684,13 +680,13 @@ export default class Utils {
         if(unit === 'TiB')
             return value * 1024 * 1024 * 1024 * 1024;
         if(unit === 'ki' || unit === 'Ki')
-            return value * 1000;
+            return value * 1024;
         if(unit === 'Mi')
-            return value * 1000 * 1000;
+            return value * 1024 * 1024;
         if(unit === 'Gi')
-            return value * 1000 * 1000 * 1000;
+            return value * 1024 * 1024 * 1024;
         if(unit === 'Ti')
-            return value * 1000 * 1000 * 1000 * 1000;
+            return value * 1024 * 1024 * 1024 * 1024;
         return value;
     }
     
@@ -839,13 +835,13 @@ export default class Utils {
         
         switch(unit) {
             case 'k':
-                return Math.round(value * 1024);
+                return Math.round(value * 1000);
             case 'm':
-                return Math.round(value * 1024 * 1024);
+                return Math.round(value * 1000 * 1000);
             case 'g':
-                return Math.round(value * 1024 * 1024 * 1024);
+                return Math.round(value * 1000 * 1000 * 1000);
             case 't':
-                return Math.round(value * 1024 * 1024 * 1024 * 1024);
+                return Math.round(value * 1000 * 1000 * 1000 * 1000);
             default:
                 return value;
         }

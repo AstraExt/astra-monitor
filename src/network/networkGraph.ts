@@ -131,10 +131,10 @@ class NetworkGraph extends GraphBase<NetworkIO> {
             const slicedHistory = this.history.slice(0, this.historyLimit);
             
             const uploads = Utils.movingAverage(slicedHistory.map(networkIO => networkIO.bytesUploadedPerSec), this.mini ? 2 : 4);
-            const maxUpload = Math.max(uploads.reduce((max, n) => Math.max(max, n), 0), 56 * 1024);
+            const maxUpload = Math.max(uploads.reduce((max, n) => Math.max(max, n), 0), 56 * 1000);
             
             const downloads = Utils.movingAverage(slicedHistory.map(networkIO => networkIO.bytesDownloadedPerSec), this.mini ? 2 : 4);
-            const maxDownload = Math.max(downloads.reduce((max, n) => Math.max(max, n), 0), 256 * 1024);
+            const maxDownload = Math.max(downloads.reduce((max, n) => Math.max(max, n), 0), 256 * 1000);
             
             this.refreshMaxSpeed(maxUpload, maxDownload);
         });
@@ -167,10 +167,10 @@ class NetworkGraph extends GraphBase<NetworkIO> {
             const baseX = (this.historyLimit - slicedHistory.length) * pointSpacing;
             
             const uploads = Utils.movingAverage(slicedHistory.map(networkIO => networkIO.bytesUploadedPerSec), this.mini ? 2 : 4);
-            const maxUpload = Math.max(uploads.reduce((max, n) => Math.max(max, n), 0), 56 * 1024);
+            const maxUpload = Math.max(uploads.reduce((max, n) => Math.max(max, n), 0), 56 * 1000);
             
             const downloads = Utils.movingAverage(slicedHistory.map(networkIO => networkIO.bytesDownloadedPerSec), this.mini ? 2 : 4);
-            const maxDownload = Math.max(downloads.reduce((max, n) => Math.max(max, n), 0), 256 * 1024);
+            const maxDownload = Math.max(downloads.reduce((max, n) => Math.max(max, n), 0), 256 * 1000);
             
             this.refreshMaxSpeed(maxUpload, maxDownload);
             

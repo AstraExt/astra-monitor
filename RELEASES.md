@@ -1,3 +1,8 @@
+# Astra Monitor 13 - TO BE RELEASED
+
+### Bug fixes
+- Fixed bytes being incorrectly calculated in some cases
+
 # Astra Monitor 12 - February 18 2024
 
 ### New features
