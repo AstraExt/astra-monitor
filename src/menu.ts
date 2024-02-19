@@ -31,6 +31,8 @@ import Utils from './utils/utils.js';
 import Grid from './grid.js';
 import Config from './config.js';
 
+// fix missing global on compilation
+import '@girs/gnome-shell/extensions/global';
 
 type MenuProps = {
     scrollable?: boolean;
@@ -102,10 +104,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         }
     }
     
-    /**
-     * @param {import('@girs/clutter-12').ActorBox} actorBox 
-     */
-    static getMonitorSize(actorBox: any): Size {
+    static getMonitorSize(actorBox: Clutter.ActorBox): Size {
         const display = global.display;
         // @ts-expect-error Mtk types are not up to date
         const rect = new Mtk.Rectangle({
