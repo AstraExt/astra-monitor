@@ -875,7 +875,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
     
     private setupAbout() {
-        const aboutPage = new Adw.PreferencesPage({title: 'About', icon_name: 'am-dialog-info-symbolic'});
+        const aboutPage = new Adw.PreferencesPage({title: _('About'), icon_name: 'am-dialog-info-symbolic'});
         
         const group = new Adw.PreferencesGroup({title: _('Info')});
         

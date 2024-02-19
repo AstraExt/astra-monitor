@@ -945,6 +945,10 @@ msgstr ""
 msgid "Sensor 2"
 msgstr ""
 
+#: prefs.js:715
+msgid "About"
+msgstr ""
+
 #: prefs.js:716
 msgid "Info"
 msgstr ""
