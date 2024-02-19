@@ -1,8 +1,15 @@
+# Czech translation for AstraMonitor.
+# Copyright (C) 2024 Lju
+# This file is distributed under the same license as the Astra Monitor package.
+# Mikulas Stastny <mikusaq@seznam.cz>, 2024.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: AstraMonitor\n"
+"Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 19:09+0100\n"
+"Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
