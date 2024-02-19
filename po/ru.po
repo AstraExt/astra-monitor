@@ -986,6 +986,10 @@ msgstr "Установите -1 для авто. Количество цифр �
 msgid "Sensor 2"
 msgstr "Датчик 2"
 
+#: prefs.js:715
+msgid "About"
+msgstr ""
+
 #: prefs.js:716
 msgid "Info"
 msgstr "Информация"
