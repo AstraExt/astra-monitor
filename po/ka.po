@@ -1,0 +1,979 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Lju
+# This file is distributed under the same license as the AstraMonitor package.
+# Aleksandr Melman <Alexmelman88@gmail.com>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: AstraMonitor\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-13 11:46+0100\n"
+"PO-Revision-Date: 2024-02-19 09:43+0100\n"
+"Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
+"Language-Team: ka\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../src\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: src/processor/processorMenu.js:35 prefs.js:252
+msgid "CPU"
+msgstr "CPU"
+
+#: src/processor/processorMenu.js:87
+msgid "CPU info"
+msgstr "ინფორმაცია CPU-ს შესახებ"
+
+#: src/processor/processorMenu.js:159 src/processor/processorMenu.js:552
+#: src/memory/memoryMenu.js:48 src/memory/memoryMenu.js:307
+msgid "Total:"
+msgstr "სულ:"
+
+#: src/processor/processorMenu.js:163
+msgid "User:"
+msgstr "მომხმარებელი:"
+
+#: src/processor/processorMenu.js:167
+msgid "System:"
+msgstr "სისტემა:"
+
+#: src/processor/processorMenu.js:192
+msgid "CPU Category Usage Raw Info"
+msgstr "ინფორმაცია CPU-ს გამოყენების კატეგორიის შესახებ"
+
+#: src/processor/processorMenu.js:194
+msgid "User"
+msgstr "მომხმარებელი"
+
+#: src/processor/processorMenu.js:201
+msgid "Nice"
+msgstr "თანხმობადობა"
+
+#: src/processor/processorMenu.js:208
+msgid "System"
+msgstr "სისტემა"
+
+#: src/processor/processorMenu.js:215
+msgid "Idle"
+msgstr "უმოქმედო"
+
+#: src/processor/processorMenu.js:222
+msgid "I/O wait"
+msgstr "შეყვანა/გამოყვანის ლოდინი"
+
+#: src/processor/processorMenu.js:229
+msgid "IRQ"
+msgstr "შეწყვეტა"
+
+#: src/processor/processorMenu.js:236
+msgid "Soft IRQ"
+msgstr "პროგრამული შეწყვეტა"
+
+#: src/processor/processorMenu.js:243
+msgid "Steal"
+msgstr "მოპარვა"
+
+#: src/processor/processorMenu.js:295
+msgid "CPU Cores Usage Info"
+msgstr "ინფორმაცია CPU-ს ბირთვების გამოყენების შესახებ"
+
+#: src/processor/processorMenu.js:337
+msgid "GHz"
+msgstr "გჰც"
+
+#: src/processor/processorMenu.js:352 src/processor/processorMenu.js:394
+#: src/storage/storageMenu.js:96 src/storage/storageMenu.js:181
+#: src/memory/memoryMenu.js:197 src/memory/memoryMenu.js:244
+msgid "Top processes"
+msgstr "ტოპ პროცესები"
+
+#: src/processor/processorMenu.js:424 prefs.js:257
+msgid "GPU"
+msgstr "GPU"
+
+#: src/processor/processorMenu.js:433
+msgid "No GPU found"
+msgstr "GPU ვერ მოიძებნა"
+
+#: src/processor/processorMenu.js:446
+msgid "GPUs"
+msgstr "GPU-ები"
+
+#: src/processor/processorMenu.js:472
+msgid "Activity"
+msgstr "აქტივობა"
+
+#: src/processor/processorMenu.js:497
+msgid "VRAM"
+msgstr "ვიდეო ოპერატიული მეხსიერება"
+
+#: src/processor/processorMenu.js:533 src/memory/memoryMenu.js:56
+#: src/memory/memoryMenu.js:303
+msgid "Used:"
+msgstr "გამოყენებული:"
+
+#: src/processor/processorMenu.js:601
+msgid "GPU info"
+msgstr "ინფორმაცია GPU-ს შესახებ"
+
+#: src/processor/processorMenu.js:607
+msgid "Name"
+msgstr "სახელი"
+
+#: src/processor/processorMenu.js:614
+msgid "Subsystem"
+msgstr "ქვე-სისტემა"
+
+#: src/processor/processorMenu.js:624
+msgid "Vendor"
+msgstr "მწარმოებელი"
+
+#: src/processor/processorMenu.js:632
+msgid "Vendor ID"
+msgstr "მწარმოებლის ID"
+
+#: src/processor/processorMenu.js:641
+msgid "Product ID"
+msgstr "პროდუქტის ID"
+
+#: src/processor/processorMenu.js:652
+msgid "Domain"
+msgstr "დომენი"
+
+#: src/processor/processorMenu.js:659
+msgid "Bus"
+msgstr "შინა"
+
+#: src/processor/processorMenu.js:666
+msgid "Slot"
+msgstr "სლოტი"
+
+#: src/processor/processorMenu.js:674
+msgid "Drivers"
+msgstr "დრაივერები"
+
+#: src/processor/processorMenu.js:683
+msgid "Modules"
+msgstr "მოდულები"
+
+#: src/processor/processorMenu.js:693
+msgid "System uptime"
+msgstr "სისტემის მუშაობის დრო"
+
+#: src/processor/processorGraph.js:84 src/network/networkGraph.js:89
+#: src/storage/storageGraph.js:93 src/memory/memoryGraph.js:84
+#, javascript-format
+msgid "%d min ago"
+msgid_plural "%d min ago"
+msgstr[0] "%d წუთის წინ"
+msgstr[1] "%d წუთის წინ"
+
+#: src/processor/processorGraph.js:87 src/network/networkGraph.js:92
+#: src/storage/storageGraph.js:96 src/memory/memoryGraph.js:87
+msgid "now"
+msgstr "ახლა"
+
+#: src/sensors/sensorsMenu.js:35 prefs.js:583 prefs.js:584
+msgid "Sensors"
+msgstr "სენსორები"
+
+#: src/sensors/sensorsMenu.js:38
+msgid "No sensor found"
+msgstr "სენსორი ვერ მოიძებნა"
+
+#: src/network/networkMenu.js:33 prefs.js:485 prefs.js:486
+msgid "Network"
+msgstr "ქსელი"
+
+#: src/network/networkMenu.js:61
+msgid "Global Upload:"
+msgstr "გლობალური ატვირთვა:"
+
+#: src/network/networkMenu.js:73
+msgid "Global Download:"
+msgstr "გლობალური გადმოტვირთვა:"
+
+#: src/network/networkMenu.js:93
+msgid "Interfaces"
+msgstr "ინტერფეისები"
+
+#: src/network/networkMenu.js:96
+msgid "No network interface found"
+msgstr "ქსელური ინტერფეისი ვერ მოიძებნა"
+
+#: src/network/networkMenu.js:207
+msgctxt "short for upload"
+msgid "U"
+msgstr "ატვ"
+
+#: src/network/networkMenu.js:233
+msgctxt "short for download"
+msgid "D"
+msgstr "გადმ"
+
+#: src/storage/storageMenu.js:36 prefs.js:342 prefs.js:343
+msgid "Storage"
+msgstr "მეხსიერება"
+
+#: src/storage/storageMenu.js:65
+msgid "Global Read:"
+msgstr "გლობალური წაკითხვა:"
+
+#: src/storage/storageMenu.js:77
+msgid "Global Write:"
+msgstr "გლობალური ჩაწერა:"
+
+#: src/storage/storageMenu.js:250
+msgid "Devices"
+msgstr "მოწყობილობები"
+
+#: src/storage/storageMenu.js:253
+msgid "No storage device found"
+msgstr "მეხსიერების მოწყობილობა ვერ მოიძებნა"
+
+#: src/storage/storageMenu.js:401
+msgctxt "short for read"
+msgid "R"
+msgstr "წაკ"
+
+#: src/storage/storageMenu.js:427
+msgctxt "short for write"
+msgid "W"
+msgstr "ჩაწ"
+
+#: src/storage/storageMenu.js:508
+msgid "Disk"
+msgstr "დისკი"
+
+#: src/memory/memoryMenu.js:33 prefs.js:280 prefs.js:281
+msgid "Memory"
+msgstr "მეხსიერება"
+
+#: src/memory/memoryMenu.js:52
+msgid "Allocated:"
+msgstr "გამოყოფილი:"
+
+#: src/memory/memoryMenu.js:60
+msgid "Free:"
+msgstr "თავისუფალი:"
+
+#: src/memory/memoryMenu.js:104
+msgid "Memory Usage Raw Info"
+msgstr "ინფორმაცია მეხსიერების გამოყენების შესახებ"
+
+#: src/memory/memoryMenu.js:106 src/memory/memoryMenu.js:329
+msgid "Total"
+msgstr "სულ"
+
+#: src/memory/memoryMenu.js:116
+msgid "Allocated"
+msgstr "გამოყოფილი"
+
+#: src/memory/memoryMenu.js:126 src/memory/memoryMenu.js:339
+msgid "Used"
+msgstr "გამოყენებული"
+
+#: src/memory/memoryMenu.js:136 src/memory/memoryMenu.js:349
+msgid "Free"
+msgstr "თავისუფალი"
+
+#: src/memory/memoryMenu.js:146
+msgid "Available"
+msgstr "ხელმისაწვდომი"
+
+#: src/memory/memoryMenu.js:156
+msgid "Allocatable"
+msgstr "გამოყოფადი"
+
+#: src/memory/memoryMenu.js:166 prefs.js:394 prefs.js:427 prefs.js:514
+#: prefs.js:539
+msgid "Active"
+msgstr "აქტიური"
+
+#: src/memory/memoryMenu.js:176
+msgid "Buffers"
+msgstr "ბუფერები"
+
+#: src/memory/memoryMenu.js:186 src/memory/memoryMenu.js:359
+msgid "Cached"
+msgstr "ქეშირებული"
+
+#: src/memory/memoryMenu.js:279
+msgid "Swap"
+msgstr "Swap"
+
+#: src/memory/memoryMenu.js:327
+msgid "Swap Info"
+msgstr "ინფორმაცია Swap-ის შესახებ"
+
+#: src/memory/memoryMenu.js:369
+msgid "Zswap"
+msgstr "Zswap"
+
+#: src/memory/memoryMenu.js:379
+msgid "Zswapped"
+msgstr "Zswapp-ირებული"
+
+#: src/memory/memoryMenu.js:388
+msgid "Swap Devices"
+msgstr "Swap-ის მოწყობილობები"
+
+#: prefs.js:95
+msgid "General"
+msgstr "საერთო"
+
+#: prefs.js:96
+msgid "Dependencies"
+msgstr "დამოკიდებულებები"
+
+#: prefs.js:99
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr "/proc/stat-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: prefs.js:101
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
+msgstr "/proc/cpuinfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: prefs.js:103
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr "/proc/meminfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: prefs.js:105
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr "/proc/diskstats-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: prefs.js:107
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr "/proc/net/dev-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: prefs.js:109
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr "'ps'-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: prefs.js:111
+msgid "'lm-sensors' not installed: some features will be disabled!"
+msgstr "'lm-sensors' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:113
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "'lscpu' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:115
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "'lspci' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:117
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "'lsblk' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:119
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
+msgstr ""
+"/sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq-ზე წვდომა ვერ "
+"ხერხდებაზოგი ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:121
+msgid "'iproute2' not installed: some features will be disabled!"
+msgstr "'iproute2' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:123
+msgid ""
+"AMD GPU detected but 'amdgpu_top' not installed: some optional features will be "
+"disabled!"
+msgstr ""
+"'AMD GPU იყო აღმოჩენილი, მაგრამ 'amdgpu_top' არ არის დაყენებული: ზოგი "
+"არასავალდებულო ფუქნქცია იქნება გათიშული!"
+
+#: prefs.js:125
+msgid ""
+"NVidia GPU detected but 'nvidia-smi' not installed: some optional features will "
+"be disabled!"
+msgstr ""
+"NVidia GPU იყო აღმოჩენილი, მაგრამ 'nvidia-smi' არ არის დაყენებული: ზოგი "
+"არასავალდებულო ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:126
+msgid "Checking GTop dependency..."
+msgstr "GTop-ის დამოკიდებულების შემოწმება..."
+
+#: prefs.js:129 prefs.js:138
+msgid "'GTop' not installed, some optional features will be disabled!"
+msgstr "'GTop' არ არის დაყენებული, ზოგი არასავალდებულო ფუნქცია იქნება გათიშული!"
+
+#: prefs.js:133
+msgid "'GTop' successfully detected and added to Data Sources list."
+msgstr "'GTop' წარმატებით იქნა აღმოჩენილი და დამატებული მონაცემთა წყაროთა სიაში."
+
+#: prefs.js:142
+msgid "All other dependencies are met!"
+msgstr "ყველა სხვა დამოკიდებულება დაკმაყოფილებულია!"
+
+#: prefs.js:144
+msgid "Visualization"
+msgstr "ვიზუალიზაცია"
+
+#: prefs.js:145
+msgid "Theme"
+msgstr "თემა"
+
+#: prefs.js:147
+msgid "Dark"
+msgstr "მუქი"
+
+#: prefs.js:148
+msgid "Light"
+msgstr "ღია"
+
+#: prefs.js:151
+msgid "Shell Theme Style"
+msgstr "Shell-ის თემის სტილი"
+
+#: prefs.js:152
+msgid ""
+"Set to \"Dark\" or \"Light\" based on your shell topbar theme to improve "
+"readability."
+msgstr ""
+"დააყენეთ \"მუქზე\" ან \"ღიაზე\" თქვენი ინტერფეისის ზედა პანელის თემისმიხედვით "
+"წაკითხვადობის გასაუმჯობესებლად."
+
+#: prefs.js:154
+msgid "Panel Box"
+msgstr "პანელების ყუთი"
+
+#: prefs.js:156
+msgid "Left"
+msgstr "მარცხნივ"
+
+#: prefs.js:157
+msgid "Center"
+msgstr "შუაში"
+
+#: prefs.js:158
+msgid "Right"
+msgstr "მარჯვნივ"
+
+#: prefs.js:160
+msgid "Position"
+msgstr "მდებარეობა"
+
+#: prefs.js:161
+msgid "Order"
+msgstr "რიგი"
+
+#: prefs.js:163
+msgid "Left Margin"
+msgstr "მარცხენა ველი"
+
+#: prefs.js:164 prefs.js:169
+msgid "Experimental feature: may not function properly."
+msgstr "ექსპერიმენტალური ფუნქცია: შეიძლება სწორად არ იმუშაოს."
+
+#: prefs.js:168
+msgid "Right Margin"
+msgstr "მარჯვენა ველი"
+
+#: prefs.js:172
+msgid "Headers"
+msgstr "სათაურები"
+
+#: prefs.js:174
+msgid "Headers Height"
+msgstr "სათაურების სიმაღლე"
+
+#: prefs.js:175 prefs.js:180 prefs.js:185 prefs.js:190 prefs.js:230 prefs.js:314
+#: prefs.js:462 prefs.js:567 prefs.js:607
+msgid "Experimental feature: may require to disable/enable the extension."
+msgstr "ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
+
+#: prefs.js:179
+msgid "Headers Margins"
+msgstr "სათაურების ველები"
+
+#: prefs.js:184
+msgid "Headers Font"
+msgstr "სათაურების შრიფტი"
+
+#: prefs.js:185
+msgid "Set to empty to disable font override"
+msgstr "დააყენებთ ცარიელზე შრიფტის გადაყენების გასათიშად"
+
+#: prefs.js:189
+msgid "Headers Font Size"
+msgstr "სათაურების შრიფტის ზომა"
+
+#: prefs.js:190
+msgid "Set to 0 to disable size override"
+msgstr "დააყენეთ 0-ზე ზომის გადაყენების გასათიშად"
+
+#: prefs.js:194
+msgid "Monitor Ordering"
+msgstr "მონიტორის დალაგება"
+
+#: prefs.js:201 prefs.js:202
+msgid "Processors"
+msgstr "პროცესორები"
+
+#: prefs.js:203 prefs.js:282 prefs.js:344 prefs.js:487 prefs.js:585 prefs.js:617
+#: prefs.js:624
+msgid "Show"
+msgstr "ჩვენება"
+
+#: prefs.js:204 prefs.js:283 prefs.js:345 prefs.js:488 prefs.js:586
+msgid "Update frequency (seconds)"
+msgstr "განახლების სიხშირე (წამები)"
+
+#: prefs.js:205 prefs.js:291 prefs.js:440
+msgid "Data Sources"
+msgstr "მონაცემთა წყაროები"
+
+#: prefs.js:207 prefs.js:293 prefs.js:442
+msgid "Default (Auto)"
+msgstr "ნაგულისხმები (ავტო)"
+
+#: prefs.js:208 prefs.js:294 prefs.js:443
+msgid "Auto"
+msgstr "ავტო"
+
+#: prefs.js:212
+msgid "Cpu Usage"
+msgstr "CPU-ს გამოყენება"
+
+#: prefs.js:213
+msgid "Cpu Cores Usage"
+msgstr "CPU-ს ბირთვების გამოყენება"
+
+#: prefs.js:214 prefs.js:298 prefs.js:446
+msgid "Top Processes"
+msgstr "ტოპ პროცესები"
+
+#: prefs.js:216 prefs.js:300 prefs.js:448 prefs.js:593
+msgid "Header"
+msgstr "სათაური"
+
+#: prefs.js:217 prefs.js:301 prefs.js:449 prefs.js:554 prefs.js:594
+msgid "Indicators Order"
+msgstr "ინდიკატორების განლაგება"
+
+#: prefs.js:220 prefs.js:304 prefs.js:452 prefs.js:557 prefs.js:597
+msgid "Icon"
+msgstr "ხატულა"
+
+#: prefs.js:221 prefs.js:305 prefs.js:453 prefs.js:558 prefs.js:598
+msgid "Show Icon"
+msgstr "ხატულას ჩვენება"
+
+#: prefs.js:223 prefs.js:307 prefs.js:455 prefs.js:560 prefs.js:600
+msgid "Icon Name"
+msgstr "ხატულას სახელი"
+
+#: prefs.js:224
+msgid "Set icon name (ie: 'cpu-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'cpu-symbolic')"
+
+#: prefs.js:224 prefs.js:308 prefs.js:456 prefs.js:561 prefs.js:601
+msgid "Set to empty to disable icon override"
+msgstr "დააყენეთ ცარიელზე ხატულების გადაყენების გასათიშად"
+
+#: prefs.js:226 prefs.js:310 prefs.js:458 prefs.js:563 prefs.js:603
+msgid "Icon Color"
+msgstr "ხატულას ფერი"
+
+#: prefs.js:227 prefs.js:311 prefs.js:459 prefs.js:564 prefs.js:604
+msgid "Icon Alert Color"
+msgstr "ხატულას გაფრთხილების ფერი"
+
+#: prefs.js:229 prefs.js:313 prefs.js:461 prefs.js:566 prefs.js:606
+msgid "Icon Size"
+msgstr "ხატულას ზომა"
+
+#: prefs.js:233 prefs.js:317 prefs.js:465 prefs.js:570 prefs.js:610
+msgid "Tooltip"
+msgstr "მინიშნება"
+
+#: prefs.js:234 prefs.js:318 prefs.js:466 prefs.js:571 prefs.js:611
+msgid "Show Tooltip"
+msgstr "მინიშნების ჩვენება"
+
+#: prefs.js:235
+msgid "Percentage"
+msgstr "პროცენტი"
+
+#: prefs.js:236
+msgid "Show Percentage"
+msgstr "პროცენტის ჩვენება"
+
+#: prefs.js:237
+msgid "Single Core Percentage"
+msgstr "ერთი ბირთვის პროცენტი"
+
+#: prefs.js:239 prefs.js:322 prefs.js:471
+msgid "Icon Alert"
+msgstr "ხატულას გაფღტხილება"
+
+#: prefs.js:240
+msgid "Set 0 to disable. Value is percentage of total cpu."
+msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს პროცენტებში."
+
+#: prefs.js:242 prefs.js:328
+msgid "History Graph"
+msgstr "ისტორიის გრაფიკი"
+
+#: prefs.js:243 prefs.js:329
+msgid "Show History Graph"
+msgstr "ისტორიის გრაფიკის ჩვენება"
+
+#: prefs.js:244 prefs.js:254 prefs.js:330 prefs.js:337
+msgid "History Graph Breakdown"
+msgstr "ისტორიის გრაფიკის დაყოფა"
+
+#: prefs.js:245 prefs.js:331
+msgid "History Graph Width"
+msgstr "ისტორიის გრაფიკის სიგანე"
+
+#: prefs.js:246 prefs.js:332
+msgid "Realtime Bar"
+msgstr "რეალური დროის სვეტი"
+
+#: prefs.js:247 prefs.js:333
+msgid "Show Realtime Bar"
+msgstr "რეალური დროის სვეტის ჩვენება"
+
+#: prefs.js:248
+msgid "Realtime per-core Bars"
+msgstr "რეალური დროის ბირთვის სვეტები"
+
+#: prefs.js:249 prefs.js:334
+msgid "Realtime Bar Breakdown"
+msgstr "რეალური დროის სვეტის დაყოფა"
+
+#: prefs.js:251 prefs.js:336
+msgid "Menu"
+msgstr "მენიუ"
+
+#: prefs.js:253
+msgid "Realtime Bars Breakdown"
+msgstr "რეალური დროის სვეტების დაყოფა"
+
+#: prefs.js:255
+msgid "Core Bars Breakdown"
+msgstr "ბირთვის სვეტების დაყოფა"
+
+#: prefs.js:256
+msgid "Top Processes Single Core"
+msgstr "ტოპ პროცესები ერთ ბირთვზე"
+
+#: prefs.js:264 prefs.js:613
+msgid "None"
+msgstr "არცერთი"
+
+#: prefs.js:275
+msgid "Main GPU"
+msgstr "მთავარი GPU"
+
+#: prefs.js:285
+msgid "Used = Total - Free - Buffers - Cached"
+msgstr "გამოყენებული = ჯამური - თავისუფალი - ბუფერები - ქეშირებული"
+
+#: prefs.js:286
+msgid "Used = Total - Free"
+msgstr "გამოყენებული = ჯამური - თავისუფალი"
+
+#: prefs.js:287
+msgid "Used = Total - Available"
+msgstr "გამოყენებული = ჯამური - ხელმისაწვდომი"
+
+#: prefs.js:288
+msgid "Used = Active"
+msgstr "გამოყენებული = აქტიური"
+
+#: prefs.js:290
+msgid "Used Memory"
+msgstr "გამოყენებული მეხსიერება"
+
+#: prefs.js:308
+msgid "Set icon name (ie: 'memory-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'memory-symbolic')"
+
+#: prefs.js:319
+msgid "Usage Percentage"
+msgstr "გამოყენების პროცენტი"
+
+#: prefs.js:320
+msgid "Show Usage Percentage"
+msgstr "გამოყენების პროცენტის ჩვენება"
+
+#: prefs.js:323
+msgid "Set 0 to disable. Value is percentage of ram usage."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიულიმეხსიერების გამოყენების "
+"პროცენტი."
+
+#: prefs.js:325
+msgid "Usage Value"
+msgstr "გამოყენების მნიშვნელობა"
+
+#: prefs.js:326
+msgid "Show Usage Value"
+msgstr "გამოყენების მნიშვნელობის ჩვენება"
+
+#: prefs.js:327
+msgid "Usage Value Max Number of Figures"
+msgstr "გამოყენების მნიშვნელობის სიმბოლოთამაქსიმალური რაოდენობა"
+
+#: prefs.js:347 prefs.js:490
+msgid "kB/s"
+msgstr "კბ/წმ"
+
+#: prefs.js:348 prefs.js:491
+msgid "KiB/s"
+msgstr "კიბ/წმ"
+
+#: prefs.js:349 prefs.js:492
+msgid "kb/s"
+msgstr "კბიტ/წმ"
+
+#: prefs.js:350 prefs.js:493
+msgid "Kibit/s"
+msgstr "კიბიტ/წმ"
+
+#: prefs.js:351 prefs.js:494
+msgid "kBps"
+msgstr "კბ/წმ"
+
+#: prefs.js:352 prefs.js:495
+msgid "KiBps"
+msgstr "კიბ/წმ"
+
+#: prefs.js:353 prefs.js:496
+msgid "Kibps"
+msgstr "კიბიტ/წმ"
+
+#: prefs.js:354 prefs.js:497
+msgid "kbps"
+msgstr "კბიტ/წმ"
+
+#: prefs.js:355 prefs.js:498
+msgid "Kibitps"
+msgstr "კიბიტ/წმ"
+
+#: prefs.js:356 prefs.js:499
+msgid "k (as kB/s)"
+msgstr "კ (როგორც კბ/წმ)"
+
+#: prefs.js:357 prefs.js:500
+msgid "Ki (as KiB/s)"
+msgstr "კი (როგორც კიბ/წმ)"
+
+#: prefs.js:359 prefs.js:502
+msgid "Data Unit"
+msgstr "მონაცემთა ერთეული"
+
+#: prefs.js:380 prefs.js:467
+msgid "Main Disk"
+msgstr "მთავარი დისკი"
+
+#: prefs.js:381
+msgid "Ignored Storage Devices"
+msgstr "იგნორირებული მეხსიერების მოწყობილობები"
+
+#: prefs.js:383 prefs.js:505
+msgid "Regex"
+msgstr "რეგულარული გამონათქვამი"
+
+#: prefs.js:384
+msgid "Devices matching this regex will be ignored."
+msgstr ""
+"მოწყობილობები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება იგნორირებული."
+
+#: prefs.js:384 prefs.js:506
+msgid "Leave empty to disable. Usage example: "
+msgstr "დატოვეთ ცარიელი გასათიშად. გამოყენების მაგალითი:"
+
+#: prefs.js:394 prefs.js:417 prefs.js:514 prefs.js:529
+msgid "Ignored"
+msgstr "იგნორირებული"
+
+#: prefs.js:396
+msgid "Main"
+msgstr "მთავარი"
+
+#: prefs.js:413
+msgid "Main disk cannot be ignored"
+msgstr "მთავარი დისკი ვერ იქნება იგნორირებული"
+
+#: prefs.js:456
+msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'drive-harddisk-symbolic')"
+
+#: prefs.js:468
+msgid "Show Storage Usage Bar"
+msgstr "მეხსიერების გამოყენების სვეტის ჩვენება"
+
+#: prefs.js:469
+msgid "Show Storage Usage Percentage"
+msgstr "მეხსიერების გამოყენების პროცენტის ჩვენება"
+
+#: prefs.js:472
+msgid "Set 0 to disable. Value is percentage of disk usage."
+msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის დისკის გამოყენების პროცენტი."
+
+#: prefs.js:474 prefs.js:572
+msgid "IO"
+msgstr "შეყვანა/გამოყვანა"
+
+#: prefs.js:475 prefs.js:573
+msgid "Show Realtime IO Bar"
+msgstr "რეალურ დროში შეყვანის/გამოყვანის პანელის სვეტის ჩვენება"
+
+#: prefs.js:476 prefs.js:574
+msgid "Show IO History Graph"
+msgstr "შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
+
+#: prefs.js:477 prefs.js:575
+msgid "IO History Graph Width"
+msgstr "შეყვანა/გამოყვანის ისტორიის გრაფიკის სიგანე"
+
+#: prefs.js:478 prefs.js:576
+msgid "Show IO Speed"
+msgstr "შეყვანა/გამოყვანის სიჩქარის ჩვენება"
+
+#: prefs.js:479 prefs.js:577
+msgid "IO Speed Max Number of Figures"
+msgstr "შეყვანა/გამოყვანის სიმბოლოთა მაქსიმალური რაოდენობა"
+
+#: prefs.js:480 prefs.js:578
+msgid "IO Speed Threshold"
+msgstr "შეყვანა/გამოყვანის სიჩქარის ლიმიტი"
+
+#: prefs.js:480 prefs.js:578
+msgid "in kB/s"
+msgstr "კბ/წმ-ში"
+
+#: prefs.js:503
+msgid "Ignored Network Interfaces"
+msgstr "იგნორირებული ქსლური ინტერფეისები"
+
+#: prefs.js:506
+msgid "Interfaces matching this regex will be ignored."
+msgstr ""
+"ინტერფეისები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება იგნრირებული."
+
+#: prefs.js:561
+msgid "Set icon name (ie: 'network-wired-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'network-wired-symbolic')"
+
+#: prefs.js:588
+msgctxt "Celsius unit measure choice"
+msgid "Celsius"
+msgstr "ცელსიუსი"
+
+#: prefs.js:589
+msgctxt "Fahrenheit unit measure choice"
+msgid "Fahrenheit"
+msgstr "ფარენჰაიტი"
+
+#: prefs.js:591
+msgid "Temperature Unit"
+msgstr "ტემპერატურის ერთეული"
+
+#: prefs.js:601
+msgid "Set icon name (ie: 'temperature-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'temperature-symbolic')"
+
+#: prefs.js:616
+msgid "Sensor 1"
+msgstr "სენსორი 1"
+
+#: prefs.js:618 prefs.js:625
+msgid "Source"
+msgstr "წყარო"
+
+#: prefs.js:620 prefs.js:627
+msgid "Value Digits"
+msgstr "მნიშვნელობის ციფრები"
+
+#: prefs.js:621 prefs.js:628
+msgid "Set -1 to auto. Number of digits after the decimal point."
+msgstr "დააყენეთ -1 ავტომატურისთვის. ციფრთა რაოდენობა ათწილადი გამყოფის შემდეგ ."
+
+#: prefs.js:623
+msgid "Sensor 2"
+msgstr "სენსორი 2"
+
+#: prefs.js:635
+msgid "Info"
+msgstr "ინფო"
+
+#: prefs.js:644
+msgid "Version"
+msgstr "ვერსია"
+
+#: prefs.js:645
+msgid "Changelog"
+msgstr "ცვლილებათა ჟურნალი"
+
+#: prefs.js:646
+msgid "GitHub"
+msgstr "GitHub"
+
+#: prefs.js:647
+msgid "GNOME Extensions page"
+msgstr "GNOME-ს გაფართოებების გვერდი"
+
+#: prefs.js:648
+msgid "Report a bug or suggest new feature"
+msgstr "პრობლემის დასმენა ან ახალი ფუნქციის შეთავაზება"
+
+#: prefs.js:649
+msgid "Support us on Ko-Fi"
+msgstr "დაგვიჭირეთ მხარი Ko-Fi-ზე"
+
+#: prefs.js:650
+msgid "Buy us a coffee"
+msgstr "გვიყიდეთ ყავა"
+
+#: prefs.js:651
+msgid "Become a patron"
+msgstr "გახდით მეცენატი"
+
+#: prefs.js:652
+msgid "Debug Mode"
+msgstr "დებაგის რეჟიმი"
+
+#~ msgid "Show Percentage Single Core"
+#~ msgstr "Показать процент одного ядра"
+
+#~ msgid "Default value is 28"
+#~ msgstr "Значение по умолчанию - 28"
+
+#~ msgid "Default value is 2"
+#~ msgstr "Значение по умолчанию - 2"
+
+#~ msgid "Default value is 18"
+#~ msgstr "Значение по умолчанию - 18"
+
+#~ msgid "Panel Box Ordering"
+#~ msgstr "Порядок блока с панелями"
+
+#~ msgid "Show Network Usage Bar"
+#~ msgstr "Показать панель использования сети"
+
+#~ msgid "Show Sensor 1"
+#~ msgstr "Показать датчик 1"
+
+#~ msgid "Sensor 1 Source"
+#~ msgstr "Источник датчика 1"
+
+#~ msgid "Show Sensor 2"
+#~ msgstr "Показать датчик 2"
+
+#~ msgid "Sensor 2 Source"
+#~ msgstr "Источник датчика 2"
