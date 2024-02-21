@@ -378,7 +378,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show')}, 'memory-header-show', group);
         this.addSpinRow({title: _('Update frequency (seconds)')}, 'memory-update', group, {min: 0.1, max: 10, digits: 1, step: 0.1, page: 1}, true, 3.0);
         
-        const choicesPanel = [
+        let choicesPanel = [
+            {value: 'kB-kiB', text: _('kB (as kiB)')},
+            {value: 'kB-KB', text: _('kB (as KB)')},
+            {value: 'kiB', text: _('kiB')},
+            {value: 'KiB', text: _('KiB')},
+            {value: 'KB', text: _('KB')},
+            {value: 'k ', text: _('k (as kB)')},
+            {value: 'Ki', text: _('Ki (as Ki)')},
+        ];
+        this.addComboRow({title: _('Data Unit')}, choicesPanel, 'memory-unit', group, 'string', 'kB-kiB');
+        
+        choicesPanel = [
             {value: 'total-free-buffers-cached', text: _('Used = Total - Free - Buffers - Cached')},
             {value: 'total-free', text: _('Used = Total - Free')},
             {value: 'total-available', text: _('Used = Total - Available')},

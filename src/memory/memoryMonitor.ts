@@ -261,13 +261,13 @@ export default class MemoryMonitor extends Monitor {
             const value = parseInt(parts[1]);
             
             switch(key) {
-                case 'MemTotal:': total = value * 1000; break;
-                case 'MemFree:': free = value * 1000; break;
-                case 'Buffers:': buffers = value * 1000; break;
-                case 'Cached:': cached += value * 1000; break;
-                case 'MemAvailable:': available = value * 1000; break;
-                case 'Active:': active = value * 1000; break;
-                case 'Slab:': cached += value * 1000; break; // GTop includes Slab in Cached
+                case 'MemTotal:': total = value * 1024; break;
+                case 'MemFree:': free = value * 1024; break;
+                case 'Buffers:': buffers = value * 1024; break;
+                case 'Cached:': cached += value * 1024; break;
+                case 'MemAvailable:': available = value * 1024; break;
+                case 'Active:': active = value * 1024; break;
+                case 'Slab:': cached += value * 1024; break; // GTop includes Slab in Cached
             }
         }
         
@@ -361,7 +361,7 @@ export default class MemoryMonitor extends Monitor {
                     if(!Utils.isIntOrIntString(spid) || !Utils.isNumeric(susage) || !Utils.isNumeric(sperc))
                         continue;
                     const pid = parseInt(spid, 10);
-                    const usage = parseInt(susage) * 1000;
+                    const usage = parseInt(susage) * 1024;
                     const percentage = parseFloat(sperc);
                     
                     seenPids.push(pid);
@@ -489,11 +489,11 @@ export default class MemoryMonitor extends Monitor {
             const value = parseInt(parts[1]);
             
             switch(key) {
-                case 'SwapTotal:': total = value * 1000; break;
-                case 'SwapFree:': free = value * 1000; break;
-                case 'SwapCached:': cached = value * 1000; break;
-                case 'Zswap:': zswap = value * 1000; break;
-                case 'Zswapped:': zswapped = value * 1000; break;
+                case 'SwapTotal:': total = value * 1024; break;
+                case 'SwapFree:': free = value * 1024; break;
+                case 'SwapCached:': cached = value * 1024; break;
+                case 'Zswap:': zswap = value * 1024; break;
+                case 'Zswapped:': zswapped = value * 1024; break;
             }
         }
         
@@ -527,8 +527,8 @@ export default class MemoryMonitor extends Monitor {
                     swapDevices.push({
                         device,
                         type,
-                        size: parseInt(size, 10) * 1000,
-                        used: parseInt(used, 10) * 1000,
+                        size: parseInt(size, 10) * 1024,
+                        used: parseInt(used, 10) * 1024,
                         priority: parseInt(priority, 10)
                     });
                 }

@@ -1,5 +1,8 @@
 # Astra Monitor 13 - TO BE RELEASED
 
+### New features
+- Add memory data unit customization (default is kB as kibibyte as standard) [[#67](https://github.com/AstraExt/astra-monitor/issues/67)]
+
 ### Bug fixes
 - Fixed bytes being incorrectly calculated in some cases
 

@@ -308,7 +308,7 @@ class StorageHeader extends Header {
             if(!usage || !usage.used || isNaN(usage.used))
                 this.value.text = '-';
             else
-                this.value.text = `${Utils.formatBytes(usage.used, figures)}`;
+                this.value.text = `${Utils.formatBytes(usage.used, 'kB-KB', figures)}`;
         });
     }
     
@@ -330,7 +330,7 @@ class StorageHeader extends Header {
             if(!usage || !usage.used || isNaN(usage.used))
                 this.free.text = '-';
             else
-                this.free.text = `${Utils.formatBytes(usage.free, figures)}`;
+                this.free.text = `${Utils.formatBytes(usage.free, 'kB-KB', figures)}`;
         });
     }
     

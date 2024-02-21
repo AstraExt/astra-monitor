@@ -1184,11 +1184,11 @@ export default class ProcessorMenu extends MenuBase {
             }
             
             if(gpu.vram.usedLabel && gpuData.vram.used !== undefined && !Number.isNaN(gpuData.vram.used)) {
-                gpu.vram.usedLabel.text = Utils.formatBytes(gpuData.vram.used, 3);
+                gpu.vram.usedLabel.text = Utils.formatBytes(gpuData.vram.used, 'kB-KB', 3);
             }
             
             if(gpu.vram.totalLabel && gpuData.vram.total !== undefined && !Number.isNaN(gpuData.vram.total)) {
-                gpu.vram.totalLabel.text = Utils.formatBytes(gpuData.vram.total, 3);
+                gpu.vram.totalLabel.text = Utils.formatBytes(gpuData.vram.total, 'kB-KB', 3);
             }
             
             if(gpu.activity.gfxBar && gpuData.activity.GFX !== undefined && !Number.isNaN(gpuData.activity.GFX)) {

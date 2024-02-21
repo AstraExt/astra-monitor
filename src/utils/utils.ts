@@ -593,6 +593,16 @@ export default class Utils {
         'Ki': {base: 1024, mult:1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti']},
     };
     
+    static unit2Map = {
+        'kB-kiB': {base: 1024, mult:1, labels: ['B', 'kB', 'MB', 'GB', 'TB']},
+        'kB-KB': {base: 1000, mult:1, labels: ['B', 'kB', 'MB', 'GB', 'TB']},
+        'kiB': {base: 1024, mult:1, labels: ['B', 'kiB', 'MiB', 'GiB', 'TiB']},
+        'KiB': {base: 1024, mult:1, labels: ['B/s', 'KiB', 'MiB', 'GiB', 'TiB']},
+        'KB': {base: 1000, mult:1, labels: ['B', 'KB', 'MB', 'GB', 'TB']},
+        'k ': {base: 1000, mult:1, labels: [' ', 'k', 'M', 'G', 'T']},
+        'Ki': {base: 1024, mult:1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti']},
+    };
+    
     static formatBytesPerSec(value: number, unit: keyof typeof Utils.unitMap, maxNumbers: number = 2, padded: boolean = false): string {
         if(!Object.prototype.hasOwnProperty.call(Utils.unitMap, unit))
             unit = 'kB/s';
@@ -612,12 +622,10 @@ export default class Utils {
         let result = value.toString();
         if(result.indexOf('.') !== -1) {
             const parts = result.split('.');
-            if(parts[0].length >= maxNumbers) {
+            if(parts[0].length >= maxNumbers)
                 result = parts[0]; // If the integer part is already at max length, ignore decimal part
-            }
-            else {
+            else
                 result = parts[0] + '.' + parts[1].substr(0, maxNumbers - parts[0].length);
-            }
         }
         else if(result.length > maxNumbers) {
             result = result.substr(0, maxNumbers);
@@ -625,15 +633,18 @@ export default class Utils {
         return `${result} ${Utils.unitMap[unit].labels[unitIndex]}`;
     }
     
-    static formatBytes(bytes: number, maxNumbers: number = 2): string {
+    static formatBytes(bytes: number, unit: keyof typeof Utils.unit2Map = 'kB-KB', maxNumbers: number = 2): string {
+        if(!Object.prototype.hasOwnProperty.call(Utils.unit2Map, unit))
+            unit = 'kB-KB';
+        
         if(!bytes || isNaN(bytes))
-            return '-';
+            return '-' + Utils.unit2Map[unit].labels[0];
         
-        const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        bytes *= Utils.unit2Map[unit].mult;
+        
         let unitIndex = 0;
-        
-        while(bytes >= Math.pow(10, maxNumbers) && unitIndex < units.length - 1) {
-            bytes /= 1000;
+        while(bytes >= Math.pow(10, maxNumbers) && unitIndex < Utils.unit2Map[unit].labels.length - 1) {
+            bytes /= Utils.unit2Map[unit].base;
             unitIndex++;
         }
         
@@ -641,17 +652,15 @@ export default class Utils {
         let result = bytes.toString();
         if(result.indexOf('.') !== -1) {
             const parts = result.split('.');
-            if(parts[0].length >= maxNumbers) {
+            if(parts[0].length >= maxNumbers)
                 result = parts[0]; // If the integer part is already at max length, ignore decimal part
-            }
-            else {
+            else
                 result = parts[0] + '.' + parts[1].substr(0, maxNumbers - parts[0].length);
-            }
         }
         else if(result.length > maxNumbers) {
             result = result.substr(0, maxNumbers);
         }
-        return `${result} ${units[unitIndex]}`;
+        return `${result} ${Utils.unit2Map[unit].labels[unitIndex]}`;
     }
     
     static convertToBytes(value: number|string, unit: string): number {

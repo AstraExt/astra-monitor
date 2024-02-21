@@ -30,6 +30,7 @@ import MemoryGraph from './memoryGraph.js';
 import MemoryMonitor from './memoryMonitor.js';
 import MemoryBars from './memoryBars.js';
 import SwapBars from './swapBars.js';
+import Config from '../config.js';
 
 type MemoryUsagePopup = MenuBase & {
     totalQtyLabel?: St.Label,
@@ -649,55 +650,56 @@ export default class MemoryMenu extends MenuBase {
     
     update(code: string) {
         if(code === 'memoryUsage') {
+            const unit = Config.get_string('memory-unit');
             const memoryUsage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
             
             if(memoryUsage && memoryUsage.total && !isNaN(memoryUsage.total)) {
                 this.memoryBar.setUsage([memoryUsage]);
-                this.memoryTotalQty.text = Utils.formatBytes(memoryUsage.total, 3);
+                this.memoryTotalQty.text = Utils.formatBytes(memoryUsage.total, unit as any, 3);
                 this.memoryUsagePercLabel.text = Math.round(memoryUsage.used / memoryUsage.total * 100.0) + '%';
                 
                 if(memoryUsage.used && !isNaN(memoryUsage.used))
-                    this.memoryUsedQty.text = Utils.formatBytes(memoryUsage.used, 3);
+                    this.memoryUsedQty.text = Utils.formatBytes(memoryUsage.used, unit as any, 3);
                 
                 if(memoryUsage.allocated && !isNaN(memoryUsage.allocated))
-                    this.memoryAllocatedQty.text = Utils.formatBytes(memoryUsage.allocated, 3);
+                    this.memoryAllocatedQty.text = Utils.formatBytes(memoryUsage.allocated, unit as any, 3);
                 
                 if(memoryUsage.free && !isNaN(memoryUsage.free))
-                    this.memoryFreeQty.text = Utils.formatBytes(memoryUsage.free, 3);
+                    this.memoryFreeQty.text = Utils.formatBytes(memoryUsage.free, unit as any, 3);
                 
                 if(this.memoryUsagePopup) {
-                    this.memoryUsagePopup.totalQtyLabel!.text = Utils.formatBytes(memoryUsage.total, 3);
+                    this.memoryUsagePopup.totalQtyLabel!.text = Utils.formatBytes(memoryUsage.total, unit as any, 3);
                     
                     if(memoryUsage.allocated && !isNaN(memoryUsage.allocated)) {
-                        this.memoryUsagePopup.allocatedQtyLabel!.text = Utils.formatBytes(memoryUsage.allocated, 3);
+                        this.memoryUsagePopup.allocatedQtyLabel!.text = Utils.formatBytes(memoryUsage.allocated, unit as any, 3);
                         this.memoryUsagePopup.allocatedPercLabel!.text = (memoryUsage.allocated / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                     if(memoryUsage.used && !isNaN(memoryUsage.used)) {
-                        this.memoryUsagePopup.usedQtyLabel!.text = Utils.formatBytes(memoryUsage.used, 3);
+                        this.memoryUsagePopup.usedQtyLabel!.text = Utils.formatBytes(memoryUsage.used, unit as any, 3);
                         this.memoryUsagePopup.usedPercLabel!.text = (memoryUsage.used / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                     if(memoryUsage.free && !isNaN(memoryUsage.free)) {
-                        this.memoryUsagePopup.freeQtyLabel!.text = Utils.formatBytes(memoryUsage.free, 3);
+                        this.memoryUsagePopup.freeQtyLabel!.text = Utils.formatBytes(memoryUsage.free, unit as any, 3);
                         this.memoryUsagePopup.freePercLabel!.text = (memoryUsage.free / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                     if(memoryUsage.available && !isNaN(memoryUsage.available)) {
-                        this.memoryUsagePopup.availableLabel!.text = Utils.formatBytes(memoryUsage.available, 3);
+                        this.memoryUsagePopup.availableLabel!.text = Utils.formatBytes(memoryUsage.available, unit as any, 3);
                         this.memoryUsagePopup.availablePercLabel!.text = (memoryUsage.available / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                     if(memoryUsage.allocatable && !isNaN(memoryUsage.allocatable)) {
-                        this.memoryUsagePopup.allocatableLabel!.text = Utils.formatBytes(memoryUsage.allocatable, 3);
+                        this.memoryUsagePopup.allocatableLabel!.text = Utils.formatBytes(memoryUsage.allocatable, unit as any, 3);
                         this.memoryUsagePopup.allocatablePercLabel!.text = (memoryUsage.allocatable / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                     if(memoryUsage.active && !isNaN(memoryUsage.active)) {
-                        this.memoryUsagePopup.activeQtyLabel!.text = Utils.formatBytes(memoryUsage.active, 3);
+                        this.memoryUsagePopup.activeQtyLabel!.text = Utils.formatBytes(memoryUsage.active, unit as any, 3);
                         this.memoryUsagePopup.activePercLabel!.text = (memoryUsage.active / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                     if(memoryUsage.buffers && !isNaN(memoryUsage.buffers)) {
-                        this.memoryUsagePopup.buffersQtyLabel!.text = Utils.formatBytes(memoryUsage.buffers, 3);
+                        this.memoryUsagePopup.buffersQtyLabel!.text = Utils.formatBytes(memoryUsage.buffers, unit as any, 3);
                         this.memoryUsagePopup.buffersPercLabel!.text = (memoryUsage.buffers / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                     if(memoryUsage.cached && !isNaN(memoryUsage.cached)) {
-                        this.memoryUsagePopup.cachedQtyLabel!.text = Utils.formatBytes(memoryUsage.cached, 3);
+                        this.memoryUsagePopup.cachedQtyLabel!.text = Utils.formatBytes(memoryUsage.cached, unit as any, 3);
                         this.memoryUsagePopup.cachedPercLabel!.text = (memoryUsage.cached / memoryUsage.total * 100).toFixed(1) + '%';
                     }
                 }
@@ -738,6 +740,8 @@ export default class MemoryMenu extends MenuBase {
                 }
             }
             else {
+                const unit = Config.get_string('memory-unit');
+                
                 for(let i = 0; i < topProcesses.length; i++) {
                     const topProcess = topProcesses[i];
                     const process = topProcess.process;
@@ -746,7 +750,7 @@ export default class MemoryMenu extends MenuBase {
                     
                     if(this.topProcesses[i]) {
                         this.topProcesses[i].label.text = process.exec;
-                        this.topProcesses[i].usage.text = Utils.formatBytes(usage, 3);
+                        this.topProcesses[i].usage.text = Utils.formatBytes(usage, unit as any, 3);
                         this.topProcesses[i].percentage.text = percentage.toFixed(1) + '%';
                     }
                     if(this.topProcessesPopup) {
@@ -755,7 +759,7 @@ export default class MemoryMenu extends MenuBase {
                             continue;
                         topProcess.label.text = process.exec;
                         topProcess.description.text = process.cmd;
-                        topProcess.usage.text = Utils.formatBytes(usage, 3);
+                        topProcess.usage.text = Utils.formatBytes(usage, unit as any, 3);
                         topProcess.percentage.text = percentage.toFixed(1) + '%';
                     }
                 }
@@ -766,6 +770,8 @@ export default class MemoryMenu extends MenuBase {
             const swapUsage = Utils.memoryMonitor.getCurrentValue('swapUsage');
             
             if(swapUsage && swapUsage.total && !isNaN(swapUsage.total)) {
+                const unit = Config.get_string('memory-unit');
+                
                 this.swapBar.setUsage(swapUsage);
                 
                 const perc = swapUsage.used / swapUsage.total * 100.0;
@@ -774,14 +780,14 @@ export default class MemoryMenu extends MenuBase {
                 else
                     this.swapPercLabel.text = '0%';
                 
-                this.swapTotalQty.text = Utils.formatBytes(swapUsage.total, 3);
-                this.swapUsedQty.text = Utils.formatBytes(swapUsage.used, 3);
+                this.swapTotalQty.text = Utils.formatBytes(swapUsage.total, unit as any, 3);
+                this.swapUsedQty.text = Utils.formatBytes(swapUsage.used, unit as any, 3);
                 
                 if(this.memorySwapPopup) {
-                    this.memorySwapPopup.totalQtyLabel!.text = Utils.formatBytes(swapUsage.total, 3);
+                    this.memorySwapPopup.totalQtyLabel!.text = Utils.formatBytes(swapUsage.total, unit as any, 3);
                     
                     if(swapUsage.used && !isNaN(swapUsage.used)) {
-                        this.memorySwapPopup.usedQtyLabel!.text = Utils.formatBytes(swapUsage.used, 3);
+                        this.memorySwapPopup.usedQtyLabel!.text = Utils.formatBytes(swapUsage.used, unit as any, 3);
                         this.memorySwapPopup.usedPercLabel!.text = (swapUsage.used / swapUsage.total * 100).toFixed(1) + '%';
                     }
                     else {
@@ -790,7 +796,7 @@ export default class MemoryMenu extends MenuBase {
                     }
                     
                     if(swapUsage.free && !isNaN(swapUsage.free)) {
-                        this.memorySwapPopup.freeQtyLabel!.text = Utils.formatBytes(swapUsage.free, 3);
+                        this.memorySwapPopup.freeQtyLabel!.text = Utils.formatBytes(swapUsage.free, unit as any, 3);
                         this.memorySwapPopup.freePercLabel!.text = (swapUsage.free / swapUsage.total * 100).toFixed(1) + '%';
                     }
                     else {
@@ -799,7 +805,7 @@ export default class MemoryMenu extends MenuBase {
                     }
                     
                     if(swapUsage.cached && !isNaN(swapUsage.cached)) {
-                        this.memorySwapPopup.cachedQtyLabel!.text = Utils.formatBytes(swapUsage.cached, 3);
+                        this.memorySwapPopup.cachedQtyLabel!.text = Utils.formatBytes(swapUsage.cached, unit as any, 3);
                         this.memorySwapPopup.cachedPercLabel!.text = (swapUsage.cached / swapUsage.total * 100).toFixed(1) + '%';
                     }
                     else {
@@ -808,12 +814,12 @@ export default class MemoryMenu extends MenuBase {
                     }
                     
                     if(swapUsage.zswap && !isNaN(swapUsage.zswap))
-                        this.memorySwapPopup.zswapQtyLabel!.text = Utils.formatBytes(swapUsage.zswap, 3);
+                        this.memorySwapPopup.zswapQtyLabel!.text = Utils.formatBytes(swapUsage.zswap, unit as any, 3);
                     else
                         this.memorySwapPopup.zswapQtyLabel!.text = '-';
                     
                     if(swapUsage.zswapped && !isNaN(swapUsage.zswapped))
-                        this.memorySwapPopup.zswappedQtyLabel!.text = Utils.formatBytes(swapUsage.zswapped, 3);
+                        this.memorySwapPopup.zswappedQtyLabel!.text = Utils.formatBytes(swapUsage.zswapped, unit as any, 3);
                     else
                         this.memorySwapPopup.zswappedQtyLabel!.text = '-';
                     
@@ -846,7 +852,7 @@ export default class MemoryMenu extends MenuBase {
                                     }));
                                     
                                     deviceGrid.addToGrid(new St.Label({
-                                        text: Utils.formatBytes(device.used, 3) + ' / ' + Utils.formatBytes(device.size, 3),
+                                        text: Utils.formatBytes(device.used, unit as any, 3) + ' / ' + Utils.formatBytes(device.size, unit as any, 3),
                                         style_class: 'astra-monitor-menu-value',
                                         x_expand: true
                                     }));

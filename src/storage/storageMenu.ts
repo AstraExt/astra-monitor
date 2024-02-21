@@ -704,7 +704,7 @@ export default class StorageMenu extends MenuBase {
         
         const size = deviceData.size;
         if(size)
-            device.sizeLabel.text = Utils.formatBytes(size, 3);
+            device.sizeLabel.text = Utils.formatBytes(size, 'kB-KB', 3);
         else
             device.sizeLabel.text = '-';
     }

@@ -32,6 +32,15 @@
     <value nick="k " value="9"/>
     <value nick="Ki" value="10"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.data-unit2">
+    <value nick="kB-kiB" value="0"/>
+    <value nick="kB-KB" value="1"/>
+    <value nick="kiB" value="2"/>
+    <value nick="KiB" value="3"/>
+    <value nick="KB" value="4"/>
+    <value nick="k " value="5"/>
+    <value nick="Ki" value="6"/>
+  </enum>
   <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
     <value nick="auto" value="0"/>
     <value nick="proc" value="1"/>
@@ -53,7 +62,7 @@
       <summary>Default prefs category</summary>
       <description>Default category when open Extension Settings</description>
     </key>
-      
+    
     <!-- GENERAL -->
     <key name="startup-delay" type="d">
       <default>2</default>
@@ -261,6 +270,11 @@
       <summary>Memory Update Frequency</summary>
       <description>Seconds between memory statistics updates</description>
       <range min="0.1" max="10"/>
+    </key>
+    <key name="memory-unit" enum="org.gnome.shell.extensions.astra-monitor.enum.data-unit2">
+      <default>'kB-kiB'</default>
+      <summary>Memory Unit</summary>
+      <description>Unit of measurement for the memory</description>
     </key>
     <key name="memory-used" enum="org.gnome.shell.extensions.astra-monitor.enum.memory-used">
       <default>'total-free-buffers-cached'</default>

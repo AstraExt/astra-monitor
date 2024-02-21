@@ -31,9 +31,6 @@ import Utils from './utils/utils.js';
 import Grid from './grid.js';
 import Config from './config.js';
 
-// fix missing global on compilation
-import '@girs/gnome-shell/extensions/global';
-
 type MenuProps = {
     scrollable?: boolean;
     numCols?: number;

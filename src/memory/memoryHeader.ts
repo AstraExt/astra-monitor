@@ -301,13 +301,14 @@ class MemoryHeader extends Header {
             if(!Config.get_boolean('memory-header-value'))
                 return;
             
+            const unit = Config.get_string('memory-unit');
             const figures = Config.get_int('memory-header-value-figures');
             
             const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
             if(!usage || !usage.used || isNaN(usage.used))
                 this.value.text = '-';
             else
-                this.value.text = `${Utils.formatBytes(usage.used, figures)}`;
+                this.value.text = `${Utils.formatBytes(usage.used, unit as any, figures)}`;
         });
     }
     
@@ -323,13 +324,14 @@ class MemoryHeader extends Header {
             if(!Config.get_boolean('memory-header-free'))
                 return;
             
+            const unit = Config.get_string('memory-unit');
             const figures = Config.get_int('memory-header-free-figures');
             
             const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
             if(!usage || !usage.used || isNaN(usage.used))
                 this.free.text = '-';
             else
-                this.free.text = `${Utils.formatBytes(usage.free, figures)}`;
+                this.free.text = `${Utils.formatBytes(usage.free, unit as any, figures)}`;
         });
     }
     
