@@ -5,6 +5,7 @@
 
 ### Bug fixes
 - Fixed bytes being incorrectly calculated in some cases
+- Fixed prefs indentation and alignment [[#68](https://github.com/AstraExt/astra-monitor/issues/68)]
 
 # Astra Monitor 12 - February 18 2024
 

@@ -250,7 +250,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         group = new Adw.PreferencesGroup({title: _('Monitor Ordering')});
         Utils.getMonitorsOrder();
-        this.addOrderingRows('monitors-order', group);
+        this.addOrderingRows('monitors-order', group, -1);
         generalPage.add(group);
         
         return generalPage;
@@ -364,7 +364,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 }, {});
             choicesSource.push({value: data, text: Utils.getGPUModelName(gpu)});
         }
-        this.addComboRow({title: _('Main GPU')}, choicesSource, 'processor-menu-gpu', gpuSection, 'json');
+        this.addComboRow({title: _('Main GPU'), tabs: 1}, choicesSource, 'processor-menu-gpu', gpuSection, 'json');
         
         processorsPage.add(group);
         
