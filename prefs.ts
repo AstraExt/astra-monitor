@@ -327,7 +327,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const graphSection = this.addExpanderRow({title: _('History Graph')}, group);
         this.addSwitchRow({title: _('Show History Graph'), tabs: 1}, 'processor-header-graph', graphSection);
         this.addSwitchRow({title:_('History Graph Breakdown'), tabs: 1}, 'processor-header-graph-breakdown', graphSection);
-        this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'processor-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true);
+        this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'processor-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
         
         const barsSection = this.addExpanderRow({title: _('Realtime Bar')}, group);
         this.addSwitchRow({title: _('Show Realtime Bar'), tabs: 1}, 'processor-header-bars', barsSection);

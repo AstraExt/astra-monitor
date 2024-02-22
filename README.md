@@ -58,17 +58,17 @@ _**NOTE**: The screenshots below are from an outdated version of the extension a
 
 As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
 
-- **Data Source:** ~~Astra Monitor is designed with a modular data source system. At present, it utilizes a blend of custom implementations that interface closely with the kernel level (such as through the `/proc` directory), alongside GTop, which is GNOME's standard library for system monitoring. Our current development efforts are focused on integrating GTop as a data source option for all monitored resources. This integration will enable users to select between our custom implementation and GTop for their data sourcing needs~~.
-- **Icons:** ~~Customization of the icons in the preferences panel~~.
-- **Colors:** Customization of the colors in the preferences panel.
-- **Ordering:** ~~Ability to rearrange the order of the displayed resources~~.
-- **Sensors:** Support for more sensor sources and better sensor selection UI (e.g. IPMI, sensor source plugins!?).
-- **History:** ~~Settings for the time range and size of history graphs~~.
-- **GPU:** Improvement of GPU monitoring.
-- **Network:** Improvement of network monitoring (e.g. selection of network interface, manual vs automatic max speed detection, VPNs).
-- **Disk:** Improvement of disk monitoring (e.g. ~~selection of main disk~~, disk health).
-- **CPU:** Dual socket CPU support.
-- **Debugging:** ~~Better resources for the final user to debug errors/problems within the preferences panel (e.g. logs, error messages, etc.)~~.
+```mermaid
+timeline
+  section Alpha
+    Late February 2024: Graph Customization: Tooltips Customization
+  section Beta
+    Early March 2024: Advanced Network Monitoring: Advanced Disk Monitoring
+    Late March 2024: Advanced GPU Monitoring: Battery Monitoring
+    Early April 2024: User Custom Commands: Continuos Monitoring Mode
+  section Release
+    Late April 2024
+```
 
 Your feedback is invaluable in shaping Astra Monitor's development journey. Do you have any new features to suggest? We are very happy to receive suggestions. The best way to see new features become reality as quickly as possible is through direct contributions or donations. Donations will result in more development time dedicated to the project. If you would like to contribute, please refer to the contribution guidelines.
 
