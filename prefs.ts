@@ -188,8 +188,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'light', text: _('Light')}
         ];
         this.addComboRow({
-            title: _('Shell Theme Style'),
-            subtitle:  _('Set to "Dark" or "Light" based on your shell topbar theme to improve readability.'),
+            title: _('Shell TOPBAR Theme Style'),
+            subtitle:  _('Set to "Dark" or "Light" based on your shell TOPBAR theme to improve readability.'),
             tabs: 1
         }, choicesPanel, 'theme-style', themeSection, 'string');
         

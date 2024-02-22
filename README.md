@@ -202,3 +202,13 @@ You can donate through your preferred platform. Any amount is greatly appreciate
 ## Acknowledgments
 
 Astra Monitor is a project inspired by the concepts of [iStat Menus](https://bjango.com/mac/istatmenus/) and [TopHat](https://github.com/fflewddur/tophat) by [Todd Kulesza](https://github.com/fflewddur), adapted and evolved for the GNOME environment. This extension is a tribute to the innovation in system monitoring tools and is driven by the passion and contributions of the open-source community.
+
+## Star History
+
+<a href="https://star-history.com/#AstraExt/astra-monitor&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=AstraExt/astra-monitor&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=AstraExt/astra-monitor&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=AstraExt/astra-monitor&type=Date" />
+  </picture>
+</a>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-19 21:59+0100\n"
+"POT-Creation-Date: 2024-02-22 12:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "CPU info"
 msgstr ""
 
 #: src/processor/processorMenu.js:159 src/processor/processorMenu.js:552
-#: src/memory/memoryMenu.js:48 src/memory/memoryMenu.js:307
+#: src/memory/memoryMenu.js:49 src/memory/memoryMenu.js:308
 msgid "Total:"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 
 #: src/processor/processorMenu.js:352 src/processor/processorMenu.js:394
 #: src/storage/storageMenu.js:96 src/storage/storageMenu.js:181
-#: src/memory/memoryMenu.js:197 src/memory/memoryMenu.js:244
+#: src/memory/memoryMenu.js:198 src/memory/memoryMenu.js:245
 msgid "Top processes"
 msgstr ""
 
@@ -109,8 +109,8 @@ msgstr ""
 msgid "VRAM"
 msgstr ""
 
-#: src/processor/processorMenu.js:533 src/memory/memoryMenu.js:56
-#: src/memory/memoryMenu.js:303
+#: src/processor/processorMenu.js:533 src/memory/memoryMenu.js:57
+#: src/memory/memoryMenu.js:304
 msgid "Used:"
 msgstr ""
 
@@ -175,7 +175,7 @@ msgstr[1] ""
 msgid "now"
 msgstr ""
 
-#: src/sensors/sensorsMenu.js:35 prefs.js:660 prefs.js:661
+#: src/sensors/sensorsMenu.js:35 prefs.js:670 prefs.js:671
 msgid "Sensors"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "No sensor found"
 msgstr ""
 
-#: src/network/networkMenu.js:33 prefs.js:552 prefs.js:553
+#: src/network/networkMenu.js:33 prefs.js:562 prefs.js:563
 msgid "Network"
 msgstr ""
 
@@ -213,7 +213,7 @@ msgctxt "short for download"
 msgid "D"
 msgstr ""
 
-#: src/storage/storageMenu.js:36 prefs.js:382 prefs.js:383
+#: src/storage/storageMenu.js:36 prefs.js:392 prefs.js:393
 msgid "Storage"
 msgstr ""
 
@@ -247,76 +247,76 @@ msgstr ""
 msgid "Disk"
 msgstr ""
 
-#: src/memory/memoryMenu.js:33 prefs.js:304 prefs.js:305
+#: src/memory/memoryMenu.js:34 prefs.js:304 prefs.js:305
 msgid "Memory"
 msgstr ""
 
-#: src/memory/memoryMenu.js:52
+#: src/memory/memoryMenu.js:53
 msgid "Allocated:"
 msgstr ""
 
-#: src/memory/memoryMenu.js:60
+#: src/memory/memoryMenu.js:61
 msgid "Free:"
 msgstr ""
 
-#: src/memory/memoryMenu.js:104
+#: src/memory/memoryMenu.js:105
 msgid "Memory Usage Raw Info"
 msgstr ""
 
-#: src/memory/memoryMenu.js:106 src/memory/memoryMenu.js:329
+#: src/memory/memoryMenu.js:107 src/memory/memoryMenu.js:330
 msgid "Total"
 msgstr ""
 
-#: src/memory/memoryMenu.js:116
+#: src/memory/memoryMenu.js:117
 msgid "Allocated"
 msgstr ""
 
-#: src/memory/memoryMenu.js:126 src/memory/memoryMenu.js:339
+#: src/memory/memoryMenu.js:127 src/memory/memoryMenu.js:340
 msgid "Used"
 msgstr ""
 
-#: src/memory/memoryMenu.js:136 src/memory/memoryMenu.js:349
+#: src/memory/memoryMenu.js:137 src/memory/memoryMenu.js:350
 msgid "Free"
 msgstr ""
 
-#: src/memory/memoryMenu.js:146
+#: src/memory/memoryMenu.js:147
 msgid "Available"
 msgstr ""
 
-#: src/memory/memoryMenu.js:156
+#: src/memory/memoryMenu.js:157
 msgid "Allocatable"
 msgstr ""
 
-#: src/memory/memoryMenu.js:166 prefs.js:435 prefs.js:468 prefs.js:582
-#: prefs.js:607
+#: src/memory/memoryMenu.js:167 prefs.js:445 prefs.js:478 prefs.js:592
+#: prefs.js:617
 msgid "Active"
 msgstr ""
 
-#: src/memory/memoryMenu.js:176
+#: src/memory/memoryMenu.js:177
 msgid "Buffers"
 msgstr ""
 
-#: src/memory/memoryMenu.js:186 src/memory/memoryMenu.js:359
+#: src/memory/memoryMenu.js:187 src/memory/memoryMenu.js:360
 msgid "Cached"
 msgstr ""
 
-#: src/memory/memoryMenu.js:279
+#: src/memory/memoryMenu.js:280
 msgid "Swap"
 msgstr ""
 
-#: src/memory/memoryMenu.js:327
+#: src/memory/memoryMenu.js:328
 msgid "Swap Info"
 msgstr ""
 
-#: src/memory/memoryMenu.js:369
+#: src/memory/memoryMenu.js:370
 msgid "Zswap"
 msgstr ""
 
-#: src/memory/memoryMenu.js:379
+#: src/memory/memoryMenu.js:380
 msgid "Zswapped"
 msgstr ""
 
-#: src/memory/memoryMenu.js:388
+#: src/memory/memoryMenu.js:389
 msgid "Swap Devices"
 msgstr ""
 
@@ -423,12 +423,12 @@ msgid "Light"
 msgstr ""
 
 #: prefs.js:150
-msgid "Shell Theme Style"
+msgid "Shell TOPBAR Theme Style"
 msgstr ""
 
 #: prefs.js:151
 msgid ""
-"Set to \"Dark\" or \"Light\" based on your shell topbar theme to improve "
+"Set to \"Dark\" or \"Light\" based on your shell TOPBAR theme to improve "
 "readability."
 msgstr ""
 
@@ -485,7 +485,7 @@ msgid "Headers Height"
 msgstr ""
 
 #: prefs.js:183 prefs.js:189 prefs.js:195 prefs.js:201 prefs.js:252
-#: prefs.js:344 prefs.js:514 prefs.js:643 prefs.js:685
+#: prefs.js:354 prefs.js:524 prefs.js:653 prefs.js:695
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr ""
 
@@ -517,21 +517,21 @@ msgstr ""
 msgid "Processors"
 msgstr ""
 
-#: prefs.js:215 prefs.js:306 prefs.js:384 prefs.js:554 prefs.js:662
-#: prefs.js:696 prefs.js:704
+#: prefs.js:215 prefs.js:306 prefs.js:394 prefs.js:564 prefs.js:672
+#: prefs.js:706 prefs.js:714
 msgid "Show"
 msgstr ""
 
-#: prefs.js:216 prefs.js:307 prefs.js:385 prefs.js:555 prefs.js:663
+#: prefs.js:216 prefs.js:307 prefs.js:395 prefs.js:565 prefs.js:673
 msgid "Update frequency (seconds)"
 msgstr ""
 
-#: prefs.js:217 prefs.js:315 prefs.js:481 prefs.js:620
+#: prefs.js:217 prefs.js:325 prefs.js:491 prefs.js:630
 msgid "Data Sources"
 msgstr ""
 
-#: prefs.js:219 prefs.js:225 prefs.js:231 prefs.js:317 prefs.js:323
-#: prefs.js:483 prefs.js:489 prefs.js:494 prefs.js:622
+#: prefs.js:219 prefs.js:225 prefs.js:231 prefs.js:327 prefs.js:333
+#: prefs.js:493 prefs.js:499 prefs.js:504 prefs.js:632
 msgid "Auto"
 msgstr ""
 
@@ -543,27 +543,27 @@ msgstr ""
 msgid "Cpu Cores Usage"
 msgstr ""
 
-#: prefs.js:235 prefs.js:327 prefs.js:492
+#: prefs.js:235 prefs.js:337 prefs.js:502
 msgid "Top Processes"
 msgstr ""
 
-#: prefs.js:237 prefs.js:329 prefs.js:499 prefs.js:670
+#: prefs.js:237 prefs.js:339 prefs.js:509 prefs.js:680
 msgid "Header"
 msgstr ""
 
-#: prefs.js:238 prefs.js:330 prefs.js:500 prefs.js:629 prefs.js:671
+#: prefs.js:238 prefs.js:340 prefs.js:510 prefs.js:639 prefs.js:681
 msgid "Indicators Order"
 msgstr ""
 
-#: prefs.js:241 prefs.js:333 prefs.js:503 prefs.js:632 prefs.js:674
+#: prefs.js:241 prefs.js:343 prefs.js:513 prefs.js:642 prefs.js:684
 msgid "Icon"
 msgstr ""
 
-#: prefs.js:242 prefs.js:334 prefs.js:504 prefs.js:633 prefs.js:675
+#: prefs.js:242 prefs.js:344 prefs.js:514 prefs.js:643 prefs.js:685
 msgid "Show Icon"
 msgstr ""
 
-#: prefs.js:244 prefs.js:336 prefs.js:506 prefs.js:635 prefs.js:677
+#: prefs.js:244 prefs.js:346 prefs.js:516 prefs.js:645 prefs.js:687
 msgid "Icon Name"
 msgstr ""
 
@@ -571,27 +571,27 @@ msgstr ""
 msgid "Set icon name (ie: 'cpu-symbolic')"
 msgstr ""
 
-#: prefs.js:245 prefs.js:337 prefs.js:507 prefs.js:636 prefs.js:678
+#: prefs.js:245 prefs.js:347 prefs.js:517 prefs.js:646 prefs.js:688
 msgid "Set to empty to disable icon override"
 msgstr ""
 
-#: prefs.js:248 prefs.js:340 prefs.js:510 prefs.js:639 prefs.js:681
+#: prefs.js:248 prefs.js:350 prefs.js:520 prefs.js:649 prefs.js:691
 msgid "Icon Color"
 msgstr ""
 
-#: prefs.js:249 prefs.js:341 prefs.js:511 prefs.js:640 prefs.js:682
+#: prefs.js:249 prefs.js:351 prefs.js:521 prefs.js:650 prefs.js:692
 msgid "Icon Alert Color"
 msgstr ""
 
-#: prefs.js:251 prefs.js:343 prefs.js:513 prefs.js:642 prefs.js:684
+#: prefs.js:251 prefs.js:353 prefs.js:523 prefs.js:652 prefs.js:694
 msgid "Icon Size"
 msgstr ""
 
-#: prefs.js:256 prefs.js:348 prefs.js:518 prefs.js:647 prefs.js:689
+#: prefs.js:256 prefs.js:358 prefs.js:528 prefs.js:657 prefs.js:699
 msgid "Tooltip"
 msgstr ""
 
-#: prefs.js:257 prefs.js:349 prefs.js:519 prefs.js:648 prefs.js:690
+#: prefs.js:257 prefs.js:359 prefs.js:529 prefs.js:658 prefs.js:700
 msgid "Show Tooltip"
 msgstr ""
 
@@ -607,7 +607,7 @@ msgstr ""
 msgid "Single Core Percentage"
 msgstr ""
 
-#: prefs.js:262 prefs.js:353 prefs.js:364 prefs.js:526 prefs.js:537
+#: prefs.js:262 prefs.js:363 prefs.js:374 prefs.js:536 prefs.js:547
 msgid "Icon Alert"
 msgstr ""
 
@@ -615,27 +615,27 @@ msgstr ""
 msgid "Set 0 to disable. Value is percentage of total cpu."
 msgstr ""
 
-#: prefs.js:266 prefs.js:368
+#: prefs.js:266 prefs.js:378
 msgid "History Graph"
 msgstr ""
 
-#: prefs.js:267 prefs.js:369
+#: prefs.js:267 prefs.js:379
 msgid "Show History Graph"
 msgstr ""
 
-#: prefs.js:268 prefs.js:278 prefs.js:370 prefs.js:377
+#: prefs.js:268 prefs.js:278 prefs.js:380 prefs.js:387
 msgid "History Graph Breakdown"
 msgstr ""
 
-#: prefs.js:269 prefs.js:371
+#: prefs.js:269 prefs.js:381
 msgid "History Graph Width"
 msgstr ""
 
-#: prefs.js:270 prefs.js:372
+#: prefs.js:270 prefs.js:382
 msgid "Realtime Bar"
 msgstr ""
 
-#: prefs.js:271 prefs.js:373
+#: prefs.js:271 prefs.js:383
 msgid "Show Realtime Bar"
 msgstr ""
 
@@ -643,11 +643,11 @@ msgstr ""
 msgid "Realtime per-core Bars"
 msgstr ""
 
-#: prefs.js:273 prefs.js:374
+#: prefs.js:273 prefs.js:384
 msgid "Realtime Bar Breakdown"
 msgstr ""
 
-#: prefs.js:275 prefs.js:376
+#: prefs.js:275 prefs.js:386
 msgid "Menu"
 msgstr ""
 
@@ -663,7 +663,7 @@ msgstr ""
 msgid "Top Processes Single Core"
 msgstr ""
 
-#: prefs.js:288 prefs.js:692
+#: prefs.js:288 prefs.js:702
 msgid "None"
 msgstr ""
 
@@ -672,319 +672,347 @@ msgid "Main GPU"
 msgstr ""
 
 #: prefs.js:309
-msgid "Used = Total - Free - Buffers - Cached"
+msgid "kB (as kiB)"
 msgstr ""
 
 #: prefs.js:310
-msgid "Used = Total - Free"
+msgid "kB (as KB)"
 msgstr ""
 
 #: prefs.js:311
-msgid "Used = Total - Available"
+msgid "kiB"
 msgstr ""
 
 #: prefs.js:312
-msgid "Used = Active"
+msgid "KiB"
+msgstr ""
+
+#: prefs.js:313
+msgid "KB"
 msgstr ""
 
 #: prefs.js:314
-msgid "Used Memory"
+msgid "k (as kB)"
 msgstr ""
 
-#: prefs.js:321
-msgid "Memory Usage"
+#: prefs.js:315
+msgid "Ki (as Ki)"
 msgstr ""
 
-#: prefs.js:337
-msgid "Set icon name (ie: 'memory-symbolic')"
-msgstr ""
-
-#: prefs.js:350 prefs.js:523
-msgid "Usage Percentage"
-msgstr ""
-
-#: prefs.js:351
-msgid "Show Usage Percentage"
-msgstr ""
-
-#: prefs.js:354
-msgid "Set 0 to disable. Value is percentage of ram usage."
-msgstr ""
-
-#: prefs.js:357 prefs.js:530
-msgid "Usage Value"
-msgstr ""
-
-#: prefs.js:358
-msgid "Show Usage Value"
-msgstr ""
-
-#: prefs.js:359 prefs.js:532
-msgid "Usage Value Max Number of Figures"
-msgstr ""
-
-#: prefs.js:360 prefs.js:533
-msgid "Free Value"
-msgstr ""
-
-#: prefs.js:361
-msgid "Show Free Value"
-msgstr ""
-
-#: prefs.js:362 prefs.js:535
-msgid "Free Value Max Number of Figures"
-msgstr ""
-
-#: prefs.js:365
-msgid "Set 0 to disable. Value is free MB of ram."
-msgstr ""
-
-#: prefs.js:387 prefs.js:557
-msgid "kB/s"
-msgstr ""
-
-#: prefs.js:388 prefs.js:558
-msgid "KiB/s"
-msgstr ""
-
-#: prefs.js:389 prefs.js:559
-msgid "kb/s"
-msgstr ""
-
-#: prefs.js:390 prefs.js:560
-msgid "Kibit/s"
-msgstr ""
-
-#: prefs.js:391 prefs.js:561
-msgid "kBps"
-msgstr ""
-
-#: prefs.js:392 prefs.js:562
-msgid "KiBps"
-msgstr ""
-
-#: prefs.js:393 prefs.js:563
-msgid "Kibps"
-msgstr ""
-
-#: prefs.js:394 prefs.js:564
-msgid "kbps"
-msgstr ""
-
-#: prefs.js:395 prefs.js:565
-msgid "Kibitps"
-msgstr ""
-
-#: prefs.js:396 prefs.js:566
-msgid "k (as kB/s)"
-msgstr ""
-
-#: prefs.js:397 prefs.js:567
-msgid "Ki (as KiB/s)"
-msgstr ""
-
-#: prefs.js:399 prefs.js:569
+#: prefs.js:317 prefs.js:409 prefs.js:579
 msgid "Data Unit"
 msgstr ""
 
-#: prefs.js:420 prefs.js:520
+#: prefs.js:319
+msgid "Used = Total - Free - Buffers - Cached"
+msgstr ""
+
+#: prefs.js:320
+msgid "Used = Total - Free"
+msgstr ""
+
+#: prefs.js:321
+msgid "Used = Total - Available"
+msgstr ""
+
+#: prefs.js:322
+msgid "Used = Active"
+msgstr ""
+
+#: prefs.js:324
+msgid "Used Memory"
+msgstr ""
+
+#: prefs.js:331
+msgid "Memory Usage"
+msgstr ""
+
+#: prefs.js:347
+msgid "Set icon name (ie: 'memory-symbolic')"
+msgstr ""
+
+#: prefs.js:360 prefs.js:533
+msgid "Usage Percentage"
+msgstr ""
+
+#: prefs.js:361
+msgid "Show Usage Percentage"
+msgstr ""
+
+#: prefs.js:364
+msgid "Set 0 to disable. Value is percentage of ram usage."
+msgstr ""
+
+#: prefs.js:367 prefs.js:540
+msgid "Usage Value"
+msgstr ""
+
+#: prefs.js:368
+msgid "Show Usage Value"
+msgstr ""
+
+#: prefs.js:369 prefs.js:542
+msgid "Usage Value Max Number of Figures"
+msgstr ""
+
+#: prefs.js:370 prefs.js:543
+msgid "Free Value"
+msgstr ""
+
+#: prefs.js:371
+msgid "Show Free Value"
+msgstr ""
+
+#: prefs.js:372 prefs.js:545
+msgid "Free Value Max Number of Figures"
+msgstr ""
+
+#: prefs.js:375
+msgid "Set 0 to disable. Value is free MB of ram."
+msgstr ""
+
+#: prefs.js:397 prefs.js:567
+msgid "kB/s"
+msgstr ""
+
+#: prefs.js:398 prefs.js:568
+msgid "KiB/s"
+msgstr ""
+
+#: prefs.js:399 prefs.js:569
+msgid "kb/s"
+msgstr ""
+
+#: prefs.js:400 prefs.js:570
+msgid "Kibit/s"
+msgstr ""
+
+#: prefs.js:401 prefs.js:571
+msgid "kBps"
+msgstr ""
+
+#: prefs.js:402 prefs.js:572
+msgid "KiBps"
+msgstr ""
+
+#: prefs.js:403 prefs.js:573
+msgid "Kibps"
+msgstr ""
+
+#: prefs.js:404 prefs.js:574
+msgid "kbps"
+msgstr ""
+
+#: prefs.js:405 prefs.js:575
+msgid "Kibitps"
+msgstr ""
+
+#: prefs.js:406 prefs.js:576
+msgid "k (as kB/s)"
+msgstr ""
+
+#: prefs.js:407 prefs.js:577
+msgid "Ki (as KiB/s)"
+msgstr ""
+
+#: prefs.js:430 prefs.js:530
 msgid "Main Disk"
 msgstr ""
 
-#: prefs.js:421
+#: prefs.js:431
 msgid "Ignored Storage Devices"
 msgstr ""
 
-#: prefs.js:423 prefs.js:572
+#: prefs.js:433 prefs.js:582
 msgid "Regex"
 msgstr ""
 
-#: prefs.js:424
+#: prefs.js:434
 msgid "Devices matching this regex will be ignored."
 msgstr ""
 
-#: prefs.js:424 prefs.js:573
+#: prefs.js:434 prefs.js:583
 msgid "Leave empty to disable. Usage example: "
 msgstr ""
 
-#: prefs.js:435 prefs.js:458 prefs.js:582 prefs.js:597
+#: prefs.js:445 prefs.js:468 prefs.js:592 prefs.js:607
 msgid "Ignored"
 msgstr ""
 
-#: prefs.js:437
+#: prefs.js:447
 msgid "Main"
 msgstr ""
 
-#: prefs.js:454
+#: prefs.js:464
 msgid "Main disk cannot be ignored"
 msgstr ""
 
-#: prefs.js:487
+#: prefs.js:497
 msgid "Storage Usage"
 msgstr ""
 
-#: prefs.js:497
+#: prefs.js:507
 msgid "Storage IO"
 msgstr ""
 
-#: prefs.js:507
+#: prefs.js:517
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr ""
 
-#: prefs.js:521
+#: prefs.js:531
 msgid "Usage Bar"
 msgstr ""
 
-#: prefs.js:522
+#: prefs.js:532
 msgid "Show Main Disk Usage Bar"
 msgstr ""
 
-#: prefs.js:524
+#: prefs.js:534
 msgid "Show Main Disk Usage Percentage"
 msgstr ""
 
-#: prefs.js:527
+#: prefs.js:537
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr ""
 
-#: prefs.js:531
+#: prefs.js:541
 msgid "Show Main Disk Usage Value"
 msgstr ""
 
-#: prefs.js:534
+#: prefs.js:544
 msgid "Show Main Disk Free Value"
 msgstr ""
 
-#: prefs.js:538
+#: prefs.js:548
 msgid "Set 0 to disable. Value is free MB of storage."
 msgstr ""
 
-#: prefs.js:541 prefs.js:649
+#: prefs.js:551 prefs.js:659
 msgid "IO"
 msgstr ""
 
-#: prefs.js:542 prefs.js:650
+#: prefs.js:552 prefs.js:660
 msgid "Show Realtime IO Bar"
 msgstr ""
 
-#: prefs.js:543 prefs.js:651
+#: prefs.js:553 prefs.js:661
 msgid "Show IO History Graph"
 msgstr ""
 
-#: prefs.js:544 prefs.js:652
+#: prefs.js:554 prefs.js:662
 msgid "IO History Graph Width"
 msgstr ""
 
-#: prefs.js:545 prefs.js:653
+#: prefs.js:555 prefs.js:663
 msgid "Show IO Speed"
 msgstr ""
 
-#: prefs.js:546 prefs.js:654
+#: prefs.js:556 prefs.js:664
 msgid "IO Speed Max Number of Figures"
 msgstr ""
 
-#: prefs.js:547 prefs.js:655
+#: prefs.js:557 prefs.js:665
 msgid "IO Speed Threshold"
 msgstr ""
 
-#: prefs.js:547 prefs.js:655
+#: prefs.js:557 prefs.js:665
 msgid "in kB/s"
 msgstr ""
 
-#: prefs.js:570
+#: prefs.js:580
 msgid "Ignored Network Interfaces"
 msgstr ""
 
-#: prefs.js:573
+#: prefs.js:583
 msgid "Interfaces matching this regex will be ignored."
 msgstr ""
 
-#: prefs.js:626
+#: prefs.js:636
 msgid "Network IO"
 msgstr ""
 
-#: prefs.js:636
+#: prefs.js:646
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr ""
 
-#: prefs.js:665
+#: prefs.js:675
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr ""
 
-#: prefs.js:666
+#: prefs.js:676
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr ""
 
-#: prefs.js:668
+#: prefs.js:678
 msgid "Temperature Unit"
 msgstr ""
 
-#: prefs.js:678
+#: prefs.js:688
 msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr ""
 
-#: prefs.js:695
+#: prefs.js:705
 msgid "Sensor 1"
 msgstr ""
 
-#: prefs.js:697 prefs.js:705
+#: prefs.js:707 prefs.js:715
 msgid "Source"
 msgstr ""
 
-#: prefs.js:699 prefs.js:707
+#: prefs.js:709 prefs.js:717
 msgid "Value Digits"
 msgstr ""
 
-#: prefs.js:700 prefs.js:708
+#: prefs.js:710 prefs.js:718
 msgid "Set -1 to auto. Number of digits after the decimal point."
 msgstr ""
 
-#: prefs.js:703
+#: prefs.js:713
 msgid "Sensor 2"
 msgstr ""
 
-#: prefs.js:715
+#: prefs.js:725
 msgid "About"
 msgstr ""
 
-#: prefs.js:716
+#: prefs.js:726
 msgid "Info"
 msgstr ""
 
-#: prefs.js:725
+#: prefs.js:735
 msgid "Version"
 msgstr ""
 
-#: prefs.js:726
+#: prefs.js:736
 msgid "Changelog"
 msgstr ""
 
-#: prefs.js:727
+#: prefs.js:737
 msgid "GitHub"
 msgstr ""
 
-#: prefs.js:728
+#: prefs.js:738
 msgid "GNOME Extensions page"
 msgstr ""
 
-#: prefs.js:729
+#: prefs.js:739
 msgid "Report a bug or suggest new feature"
 msgstr ""
 
-#: prefs.js:730
+#: prefs.js:740
 msgid "Support us on Ko-Fi"
 msgstr ""
 
-#: prefs.js:731
+#: prefs.js:741
 msgid "Buy us a coffee"
 msgstr ""
 
-#: prefs.js:732
+#: prefs.js:742
 msgid "Become a patron"
 msgstr ""
 
-#: prefs.js:733
+#: prefs.js:743
 msgid "Debug Mode"
 msgstr ""
