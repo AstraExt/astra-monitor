@@ -58,8 +58,7 @@ _**NOTE**: The screenshots below are from an outdated version of the extension a
 
 As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
 
-- **Data Source:** Astra Monitor is designed with a modular data source system. At present, it utilizes a blend of custom implementations that interface closely with the kernel level (such as through the `/proc` directory), alongside GTop, which is GNOME's standard library for system monitoring. Our current development efforts are focused on integrating GTop as a data source option for all monitored resources. This integration will enable users to select between our custom implementation and GTop for their data sourcing needs.
-**[IN PROGRESS]**
+- **Data Source:** ~~Astra Monitor is designed with a modular data source system. At present, it utilizes a blend of custom implementations that interface closely with the kernel level (such as through the `/proc` directory), alongside GTop, which is GNOME's standard library for system monitoring. Our current development efforts are focused on integrating GTop as a data source option for all monitored resources. This integration will enable users to select between our custom implementation and GTop for their data sourcing needs~~.
 - **Icons:** ~~Customization of the icons in the preferences panel~~.
 - **Colors:** Customization of the colors in the preferences panel.
 - **Ordering:** ~~Ability to rearrange the order of the displayed resources~~.
@@ -75,11 +74,32 @@ Your feedback is invaluable in shaping Astra Monitor's development journey. Do y
 
 # Installation
 
-Astra Monitor can be installed on any Linux distribution supporting GNOME version 45.0 or higher. Follow these simple steps:
+Astra Monitor can be installed on any Linux distribution supporting GNOME version 45.0 or higher.
+
+### GNOME Extensions Manager
+
+Most distributions with GNOME support the installation of extensions directly from the GNOME Extensions website. Check if your distro already has the GNOME Extensions Manager app installed. If not, you can install it from your package manager / software center.
+
+### Using the GNOME Extensions Website
+Follow these simple steps:
 
 1. Visit the [GNOME Shell Extensions page](https://extensions.gnome.org/).
 2. Search for "Astra Monitor".
 3. Click on the extension and follow the on-screen instructions to install.
+
+### NixOS
+
+If you are using NixOS, you can install Astra Monitor adding the following to your `configuration.nix`:
+
+```nix
+{ config, pkgs, ... }:
+
+{
+  environment.systemPackages = with pkgs; [
+    gnomeExtensions.astra-monitor
+  ];
+}
+```
 
 # Requirements
 
@@ -100,6 +120,21 @@ Here is a non-exhaustive list of how to install `libgtop` on some popular Linux 
 sudo apt install gir1.2-gtop-2.0
 ```
 
+#### Fedora
+```bash
+sudo dnf install libgtop2-devel
+```
+
+#### Arch / Manjaro
+```bash
+sudo pacman -Syu libgtop
+```
+
+#### openSUSE
+```bash
+sudo zypper install libgtop-devel
+```
+
 #### NixOS
 On NixOS, you may need to add the following to your `configuration.nix`:
 ```nix
@@ -108,6 +143,40 @@ environment.variables = {
 };
 environment.systemPackages = with pkgs; [
     libgtop
+];
+```
+
+### Sensors
+
+If you want to use the sensors data source you may need to install the `lm_sensors` package. This package is not required for the extension to work, but it is recommended for a better experience.
+
+Here is a non-exhaustive list of how to install `lm_sensors` on some popular Linux distributions:
+
+#### Ubuntu/Debian
+```bash
+sudo apt install lm-sensors
+```
+
+#### Fedora
+```bash
+sudo dnf install lm_sensors
+```
+
+#### Arch / Manjaro
+```bash
+sudo pacman -Syu lm_sensors
+```
+
+#### openSUSE
+```bash
+sudo zypper install lm_sensors
+```
+
+#### NixOS
+On NixOS, you may need to add the following to your `configuration.nix`:
+```nix
+environment.systemPackages = with pkgs; [
+    lm_sensors
 ];
 ```
 
