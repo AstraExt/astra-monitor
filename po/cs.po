@@ -1,0 +1,1018 @@
+# Czech translation for AstraMonitor.
+# Copyright (C) 2024 Lju
+# This file is distributed under the same license as the Astra Monitor package.
+# Mikulas Stastny <mikusaq@seznam.cz>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Astra Monitor 19\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-19 19:09+0100\n"
+"Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: src/network/networkMenu.js:33 prefs.js:552 prefs.js:553
+msgid "Network"
+msgstr "Síť"
+
+#: src/network/networkMenu.js:61
+msgid "Global Upload:"
+msgstr "Globální rychlost nahrávání:"
+
+#: src/network/networkMenu.js:73
+msgid "Global Download:"
+msgstr "Globální rychlost stahování:"
+
+#: src/network/networkMenu.js:93
+msgid "Interfaces"
+msgstr "Rozhraní"
+
+#: src/network/networkMenu.js:96
+msgid "No network interface found"
+msgstr "Nenalezena žádná síťová rozhraní"
+
+#: src/network/networkMenu.js:207
+msgctxt "short for upload"
+msgid "U"
+msgstr ""
+
+#: src/network/networkMenu.js:233
+msgctxt "short for download"
+msgid "D"
+msgstr ""
+
+#: src/network/networkGraph.js:89 src/memory/memoryGraph.js:84
+#: src/processor/processorGraph.js:84 src/storage/storageGraph.js:93
+#, javascript-format
+msgid "%d min ago"
+msgid_plural "%d mins ago"
+msgstr[0] "před %d minutou"
+msgstr[1] "před %d minutami"
+msgstr[2] "před %d minutami"
+msgstr[3] "před %d minutami"
+
+#: src/network/networkGraph.js:92 src/memory/memoryGraph.js:87
+#: src/processor/processorGraph.js:87 src/storage/storageGraph.js:96
+msgid "now"
+msgstr "teď"
+
+#: src/memory/memoryMenu.js:33 prefs.js:304 prefs.js:305
+msgid "Memory"
+msgstr "Paměť"
+
+#: src/memory/memoryMenu.js:48 src/memory/memoryMenu.js:307
+#: src/processor/processorMenu.js:159 src/processor/processorMenu.js:552
+msgid "Total:"
+msgstr "Celkem:"
+
+#: src/memory/memoryMenu.js:52
+msgid "Allocated:"
+msgstr "Alokováno:"
+
+#: src/memory/memoryMenu.js:56 src/memory/memoryMenu.js:303
+#: src/processor/processorMenu.js:533
+msgid "Used:"
+msgstr "Použito:"
+
+#: src/memory/memoryMenu.js:60
+msgid "Free:"
+msgstr "Volná:"
+
+#: src/memory/memoryMenu.js:104
+msgid "Memory Usage Raw Info"
+msgstr "Využití paměti"
+
+#: src/memory/memoryMenu.js:106 src/memory/memoryMenu.js:329
+msgid "Total"
+msgstr "Celkem"
+
+#: src/memory/memoryMenu.js:116
+msgid "Allocated"
+msgstr "Alokováno"
+
+#: src/memory/memoryMenu.js:126 src/memory/memoryMenu.js:339
+msgid "Used"
+msgstr "Použito"
+
+#: src/memory/memoryMenu.js:136 src/memory/memoryMenu.js:349
+msgid "Free"
+msgstr "Volná"
+
+#: src/memory/memoryMenu.js:146
+msgid "Available"
+msgstr "Dostupná"
+
+#: src/memory/memoryMenu.js:156
+msgid "Allocatable"
+msgstr "Alokovatelná"
+
+#: src/memory/memoryMenu.js:166 prefs.js:435 prefs.js:468 prefs.js:582
+#: prefs.js:607
+msgid "Active"
+msgstr "Aktivní"
+
+#: src/memory/memoryMenu.js:176
+msgid "Buffers"
+msgstr "Vyrovnávací"
+
+#: src/memory/memoryMenu.js:186 src/memory/memoryMenu.js:359
+msgid "Cached"
+msgstr "V mezipaměti"
+
+#: src/memory/memoryMenu.js:197 src/memory/memoryMenu.js:244
+#: src/processor/processorMenu.js:352 src/processor/processorMenu.js:394
+#: src/storage/storageMenu.js:96 src/storage/storageMenu.js:181
+msgid "Top processes"
+msgstr "Procesy"
+
+#: src/memory/memoryMenu.js:279
+msgid "Swap"
+msgstr "SWAP paměť"
+
+#: src/memory/memoryMenu.js:327
+msgid "Swap Info"
+msgstr "Informace o SWAP paměti"
+
+#: src/memory/memoryMenu.js:369
+msgid "Zswap"
+msgstr ""
+
+#: src/memory/memoryMenu.js:379
+msgid "Zswapped"
+msgstr ""
+
+#: src/memory/memoryMenu.js:388
+msgid "Swap Devices"
+msgstr "SWAP zařízení"
+
+#: src/processor/processorMenu.js:35 prefs.js:276
+msgid "CPU"
+msgstr "CPU"
+
+#: src/processor/processorMenu.js:87
+msgid "CPU info"
+msgstr "Informace o CPU"
+
+#: src/processor/processorMenu.js:163
+msgid "User:"
+msgstr "Uživatel:"
+
+#: src/processor/processorMenu.js:167
+msgid "System:"
+msgstr "Systém:"
+
+#: src/processor/processorMenu.js:192
+msgid "CPU Category Usage Raw Info"
+msgstr "Vytížení CPU"
+
+#: src/processor/processorMenu.js:194
+msgid "User"
+msgstr "Uživatel"
+
+#: src/processor/processorMenu.js:201
+msgid "Nice"
+msgstr ""
+
+#: src/processor/processorMenu.js:208
+msgid "System"
+msgstr "Systém"
+
+#: src/processor/processorMenu.js:215
+msgid "Idle"
+msgstr "Nevyužito"
+
+#: src/processor/processorMenu.js:222
+msgid "I/O wait"
+msgstr "I/O čekání"
+
+#: src/processor/processorMenu.js:229
+msgid "IRQ"
+msgstr ""
+
+#: src/processor/processorMenu.js:236
+msgid "Soft IRQ"
+msgstr ""
+
+#: src/processor/processorMenu.js:243
+msgid "Steal"
+msgstr ""
+
+#: src/processor/processorMenu.js:295
+msgid "CPU Cores Usage Info"
+msgstr "Vytížení jader procesoru"
+
+#: src/processor/processorMenu.js:337
+msgid "GHz"
+msgstr ""
+
+#: src/processor/processorMenu.js:424 prefs.js:281
+msgid "GPU"
+msgstr ""
+
+#: src/processor/processorMenu.js:433
+msgid "No GPU found"
+msgstr "Nenalezeno žádné GPU"
+
+#: src/processor/processorMenu.js:446
+msgid "GPUs"
+msgstr ""
+
+#: src/processor/processorMenu.js:472
+msgid "Activity"
+msgstr "Aktivita"
+
+#: src/processor/processorMenu.js:497
+msgid "VRAM"
+msgstr "VRAM"
+
+#: src/processor/processorMenu.js:604
+msgid "GPU info"
+msgstr "Informace o GPU"
+
+#: src/processor/processorMenu.js:610
+msgid "Name"
+msgstr "Jméno"
+
+#: src/processor/processorMenu.js:617
+msgid "Subsystem"
+msgstr "Subsystém"
+
+#: src/processor/processorMenu.js:627
+msgid "Vendor"
+msgstr "Výrobce"
+
+#: src/processor/processorMenu.js:635
+msgid "Vendor ID"
+msgstr "ID výrobce"
+
+#: src/processor/processorMenu.js:644
+msgid "Product ID"
+msgstr "ID produktu"
+
+#: src/processor/processorMenu.js:655
+msgid "Domain"
+msgstr "Doména"
+
+#: src/processor/processorMenu.js:662
+msgid "Bus"
+msgstr "Sběrnice"
+
+#: src/processor/processorMenu.js:669
+msgid "Slot"
+msgstr ""
+
+#: src/processor/processorMenu.js:677
+msgid "Drivers"
+msgstr "Ovladače"
+
+#: src/processor/processorMenu.js:686
+msgid "Modules"
+msgstr "Moduly"
+
+#: src/processor/processorMenu.js:696
+msgid "System uptime"
+msgstr "Doba běhu systému"
+
+#: src/storage/storageMenu.js:36 prefs.js:382 prefs.js:383
+msgid "Storage"
+msgstr "Uložiště"
+
+#: src/storage/storageMenu.js:65
+msgid "Global Read:"
+msgstr "Globální rychlost čtení:"
+
+#: src/storage/storageMenu.js:77
+msgid "Global Write:"
+msgstr "Globální rychlost zápisu:"
+
+#: src/storage/storageMenu.js:250
+msgid "Devices"
+msgstr "Zařízení"
+
+#: src/storage/storageMenu.js:253
+msgid "No storage device found"
+msgstr "Nenalezeno žádné uložiště"
+
+#: src/storage/storageMenu.js:401
+msgctxt "short for read"
+msgid "R"
+msgstr ""
+
+#: src/storage/storageMenu.js:427
+msgctxt "short for write"
+msgid "W"
+msgstr ""
+
+#: src/storage/storageMenu.js:508
+msgid "Disk"
+msgstr "Disk"
+
+#: src/sensors/sensorsMenu.js:35 prefs.js:660 prefs.js:661
+msgid "Sensors"
+msgstr "Sensory"
+
+#: src/sensors/sensorsMenu.js:38
+msgid "No sensor found"
+msgstr "Nenalezeny žádné sensory"
+
+#: prefs.js:94
+msgid "General"
+msgstr "Obecné"
+
+#: prefs.js:95
+msgid "Dependencies"
+msgstr "Závislosti"
+
+#: prefs.js:98
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/stat: rozšíření nebude fungovat!"
+
+#: prefs.js:100
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/cpuinfo: rozšíření nebude fungovat!"
+
+#: prefs.js:102
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/meminfo: rozšíření nebude fungovat!"
+
+#: prefs.js:104
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/diskstats: rozšíření nebude fungovat!"
+
+#: prefs.js:106
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/net/dev: rozšíření nebude fungovat!"
+
+#: prefs.js:108
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr "Nelze přistoupit k 'ps': rozšíření nebude fungovat!"
+
+#: prefs.js:110
+msgid "'lm-sensors' not installed: some features will be disabled!"
+msgstr "'lm-sensors' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: prefs.js:112
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "'lscpu' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: prefs.js:114
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "'lspci' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: prefs.js:116
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "'lsblk' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: prefs.js:118
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
+msgstr ""
+"Nelze přistoupit k /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: "
+"některé funkce jsou vypnuté!"
+
+#: prefs.js:120
+msgid "'iproute2' not installed: some features will be disabled!"
+msgstr "'iproute2' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: prefs.js:122
+msgid ""
+"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
+"be disabled!"
+msgstr ""
+"AMD GPU detekováno, ale 'amdgpu_top' nenainstalováno: některé volitelné "
+"funkce jsou vypnuté!"
+
+#: prefs.js:124
+msgid ""
+"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
+"will be disabled!"
+msgstr ""
+"NVidia GPU detekováno, ale 'nvidia-smi' nenainstalováno: některé volitelné "
+"funkce jsou vypnuté!"
+
+#: prefs.js:125
+msgid "Checking GTop dependency..."
+msgstr "Kontrola GTop závislosti..."
+
+#: prefs.js:128 prefs.js:137
+msgid "'GTop' not installed, some optional features will be disabled!"
+msgstr "'GTop' nenainstalováno, některé volitelné funkce jsou vypnuté!"
+
+#: prefs.js:132
+msgid "'GTop' successfully detected and added to Data Sources list."
+msgstr "'Gtop' úspěšně nalezen a přidán ke zdrojům dat."
+
+#: prefs.js:141
+msgid "All other dependencies are met!"
+msgstr "Všechny ostatní závislosti jsou splněny!"
+
+#: prefs.js:143
+msgid "Visualization"
+msgstr "Vizualizace"
+
+#: prefs.js:144
+msgid "Theme"
+msgstr "Vzhled a umístění"
+
+#: prefs.js:146
+msgid "Dark"
+msgstr "Tmavý"
+
+#: prefs.js:147
+msgid "Light"
+msgstr "Světlý"
+
+#: prefs.js:150
+msgid "Shell Theme Style"
+msgstr "Styl"
+
+#: prefs.js:151
+msgid ""
+"Set to \"Dark\" or \"Light\" based on your shell topbar theme to improve "
+"readability."
+msgstr ""
+"Nastavte na \"Tmavý\" nebo \"Světlý\" podle barvy vrchní lišty pro zlepšení "
+"čitelnosti."
+
+#: prefs.js:154
+msgid "Panel Box"
+msgstr "Modul rozšíření"
+
+#: prefs.js:156
+msgid "Left"
+msgstr "Vlevo"
+
+#: prefs.js:157
+msgid "Center"
+msgstr "Uprostřed"
+
+#: prefs.js:158
+msgid "Right"
+msgstr "Vpravo"
+
+#: prefs.js:160
+msgid "Position"
+msgstr "Pozice"
+
+#: prefs.js:161
+msgid "Order"
+msgstr "Pořadí"
+
+#: prefs.js:163
+msgid "Left Margin"
+msgstr "Odsazení zleva"
+
+#: prefs.js:164 prefs.js:170
+msgid "Experimental feature: may not function properly."
+msgstr "Experimentální funkce: nemusí fungovat správně."
+
+#: prefs.js:169
+msgid "Right Margin"
+msgstr "Odsazení zprava"
+
+#: prefs.js:174
+msgid "Headers"
+msgstr "Záhlaví"
+
+#: prefs.js:176
+#, fuzzy
+msgid "Startup Delay (seconds)"
+msgstr "Frekvence aktualizace (sekundy)"
+
+#: prefs.js:177
+msgid "Increase if the extension is not properly formatted on startup."
+msgstr ""
+
+#: prefs.js:182
+msgid "Headers Height"
+msgstr "Výška záhlaví"
+
+#: prefs.js:183 prefs.js:189 prefs.js:195 prefs.js:201 prefs.js:252
+#: prefs.js:344 prefs.js:514 prefs.js:643 prefs.js:685
+msgid "Experimental feature: may require to disable/enable the extension."
+msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
+
+#: prefs.js:188
+msgid "Headers Margins"
+msgstr "Odsazení záhlaví"
+
+#: prefs.js:194
+msgid "Headers Font"
+msgstr "Font záhlaví"
+
+#: prefs.js:195
+msgid "Set to empty to disable font override"
+msgstr "Pro výchozí font nastavte na 'Žádné'"
+
+#: prefs.js:200
+msgid "Headers Font Size"
+msgstr "Velikost fontu v záhlaví"
+
+#: prefs.js:201
+msgid "Set to 0 to disable size override"
+msgstr "Pro výchozí velikost fontu nastavte na 0"
+
+#: prefs.js:206
+msgid "Monitor Ordering"
+msgstr "Pořadí"
+
+#: prefs.js:213 prefs.js:214
+msgid "Processors"
+msgstr "Procesory"
+
+#: prefs.js:215 prefs.js:306 prefs.js:384 prefs.js:554 prefs.js:662
+#: prefs.js:696 prefs.js:704
+msgid "Show"
+msgstr "Zobrazit"
+
+#: prefs.js:216 prefs.js:307 prefs.js:385 prefs.js:555 prefs.js:663
+msgid "Update frequency (seconds)"
+msgstr "Frekvence aktualizace (sekundy)"
+
+#: prefs.js:217 prefs.js:315 prefs.js:481 prefs.js:620
+msgid "Data Sources"
+msgstr "Zdroje dat"
+
+#: prefs.js:219 prefs.js:225 prefs.js:231 prefs.js:317 prefs.js:323
+#: prefs.js:483 prefs.js:489 prefs.js:494 prefs.js:622
+msgid "Auto"
+msgstr "Automaticky"
+
+#: prefs.js:223
+msgid "Cpu Usage"
+msgstr "Využití CPU"
+
+#: prefs.js:229
+msgid "Cpu Cores Usage"
+msgstr "Využití jader CPU"
+
+#: prefs.js:235 prefs.js:327 prefs.js:492
+msgid "Top Processes"
+msgstr "Procesy"
+
+#: prefs.js:237 prefs.js:329 prefs.js:499 prefs.js:670
+msgid "Header"
+msgstr "Záhlaví"
+
+#: prefs.js:238 prefs.js:330 prefs.js:500 prefs.js:629 prefs.js:671
+msgid "Indicators Order"
+msgstr "Pořadí indikátorů"
+
+#: prefs.js:241 prefs.js:333 prefs.js:503 prefs.js:632 prefs.js:674
+msgid "Icon"
+msgstr "Ikona"
+
+#: prefs.js:242 prefs.js:334 prefs.js:504 prefs.js:633 prefs.js:675
+msgid "Show Icon"
+msgstr "Zobrazit ikonu"
+
+#: prefs.js:244 prefs.js:336 prefs.js:506 prefs.js:635 prefs.js:677
+msgid "Icon Name"
+msgstr "Název ikony"
+
+#: prefs.js:245
+msgid "Set icon name (ie: 'cpu-symbolic')"
+msgstr "Nastavit název ikony (např. 'cpu-symbolic')"
+
+#: prefs.js:245 prefs.js:337 prefs.js:507 prefs.js:636 prefs.js:678
+msgid "Set to empty to disable icon override"
+msgstr "Pro výchozí název ponechejte prázdné"
+
+#: prefs.js:248 prefs.js:340 prefs.js:510 prefs.js:639 prefs.js:681
+msgid "Icon Color"
+msgstr "Barva ikony"
+
+#: prefs.js:249 prefs.js:341 prefs.js:511 prefs.js:640 prefs.js:682
+msgid "Icon Alert Color"
+msgstr "Barva ikony při výstraze"
+
+#: prefs.js:251 prefs.js:343 prefs.js:513 prefs.js:642 prefs.js:684
+msgid "Icon Size"
+msgstr "Velikost ikony"
+
+#: prefs.js:256 prefs.js:348 prefs.js:518 prefs.js:647 prefs.js:689
+msgid "Tooltip"
+msgstr "Nápověda"
+
+#: prefs.js:257 prefs.js:349 prefs.js:519 prefs.js:648 prefs.js:690
+msgid "Show Tooltip"
+msgstr "Zobrazit nápovědu"
+
+#: prefs.js:258
+msgid "Percentage"
+msgstr "Procenta"
+
+#: prefs.js:259
+msgid "Show Percentage"
+msgstr "Zobrazit procenta"
+
+#: prefs.js:260
+msgid "Single Core Percentage"
+msgstr "Procenta jednoho jádra"
+
+#: prefs.js:262 prefs.js:353 prefs.js:364 prefs.js:526 prefs.js:537
+msgid "Icon Alert"
+msgstr "Ikona výstrahy"
+
+#: prefs.js:263
+msgid "Set 0 to disable. Value is percentage of total cpu."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je procento využití CPU."
+
+#: prefs.js:266 prefs.js:368
+msgid "History Graph"
+msgstr "Graf historie"
+
+#: prefs.js:267 prefs.js:369
+msgid "Show History Graph"
+msgstr "Zobrazit graf historie"
+
+#: prefs.js:268 prefs.js:278 prefs.js:370 prefs.js:377
+msgid "History Graph Breakdown"
+msgstr "Členění grafu historie"
+
+#: prefs.js:269 prefs.js:371
+msgid "History Graph Width"
+msgstr "Šířka grafu historie"
+
+#: prefs.js:270 prefs.js:372
+msgid "Realtime Bar"
+msgstr "Aktuální stav"
+
+#: prefs.js:271 prefs.js:373
+msgid "Show Realtime Bar"
+msgstr "Zobrazit aktuální stav"
+
+#: prefs.js:272
+msgid "Realtime per-core Bars"
+msgstr "Aktuální stav jednotlivých jader"
+
+#: prefs.js:273 prefs.js:374
+msgid "Realtime Bar Breakdown"
+msgstr "Členění aktuálního stavu"
+
+#: prefs.js:275 prefs.js:376
+msgid "Menu"
+msgstr ""
+
+#: prefs.js:277
+msgid "Realtime Bars Breakdown"
+msgstr "Členění aktuálních stavů"
+
+#: prefs.js:279
+msgid "Core Bars Breakdown"
+msgstr "Členění grafu jednotlivých jader"
+
+#: prefs.js:280
+msgid "Top Processes Single Core"
+msgstr "Jednojádrové procesy"
+
+#: prefs.js:288 prefs.js:692
+msgid "None"
+msgstr "Žádné"
+
+#: prefs.js:299
+msgid "Main GPU"
+msgstr "Hlavní GPU"
+
+#: prefs.js:309
+msgid "Used = Total - Free - Buffers - Cached"
+msgstr "Použito = Celkem - Volná - Vyrovnávací - V mezipaměti"
+
+#: prefs.js:310
+msgid "Used = Total - Free"
+msgstr "Použito = Celkem - Volno"
+
+#: prefs.js:311
+msgid "Used = Total - Available"
+msgstr "Použito = Celkem - Dostupná"
+
+#: prefs.js:312
+msgid "Used = Active"
+msgstr "Použito = Aktivní"
+
+#: prefs.js:314
+msgid "Used Memory"
+msgstr "Použitá paměť"
+
+#: prefs.js:321
+msgid "Memory Usage"
+msgstr "Využití paměti"
+
+#: prefs.js:337
+msgid "Set icon name (ie: 'memory-symbolic')"
+msgstr "Nastavit jméno ikony (např. 'memory-symbolic')"
+
+#: prefs.js:350 prefs.js:523
+msgid "Usage Percentage"
+msgstr "Procenta využití"
+
+#: prefs.js:351
+msgid "Show Usage Percentage"
+msgstr "Zobrazit procenta využití"
+
+#: prefs.js:354
+msgid "Set 0 to disable. Value is percentage of ram usage."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je procento využití RAM."
+
+#: prefs.js:357 prefs.js:530
+msgid "Usage Value"
+msgstr "Hodnota využití"
+
+#: prefs.js:358
+msgid "Show Usage Value"
+msgstr "Zobrazit hodnotu využití"
+
+#: prefs.js:359 prefs.js:532
+msgid "Usage Value Max Number of Figures"
+msgstr "Maximální počet číslic hodnoty využití"
+
+#: prefs.js:360 prefs.js:533
+#, fuzzy
+msgid "Free Value"
+msgstr "Hodnota využití"
+
+#: prefs.js:361
+#, fuzzy
+msgid "Show Free Value"
+msgstr "Zobrazit hodnotu využití"
+
+#: prefs.js:362 prefs.js:535
+#, fuzzy
+msgid "Free Value Max Number of Figures"
+msgstr "Maximální počet číslic hodnoty využití"
+
+#: prefs.js:365
+#, fuzzy
+msgid "Set 0 to disable. Value is free MB of ram."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je procento využití RAM."
+
+#: prefs.js:387 prefs.js:557
+msgid "kB/s"
+msgstr "kB/s"
+
+#: prefs.js:388 prefs.js:558
+msgid "KiB/s"
+msgstr "KiB/s"
+
+#: prefs.js:389 prefs.js:559
+msgid "kb/s"
+msgstr "kb/s"
+
+#: prefs.js:390 prefs.js:560
+msgid "Kibit/s"
+msgstr "Kibit/s"
+
+#: prefs.js:391 prefs.js:561
+msgid "kBps"
+msgstr "kBps"
+
+#: prefs.js:392 prefs.js:562
+msgid "KiBps"
+msgstr ""
+
+#: prefs.js:393 prefs.js:563
+msgid "Kibps"
+msgstr ""
+
+#: prefs.js:394 prefs.js:564
+msgid "kbps"
+msgstr ""
+
+#: prefs.js:395 prefs.js:565
+msgid "Kibitps"
+msgstr ""
+
+#: prefs.js:396 prefs.js:566
+msgid "k (as kB/s)"
+msgstr "k (jako kB/s)"
+
+#: prefs.js:397 prefs.js:567
+msgid "Ki (as KiB/s)"
+msgstr "Ki (jako KiB/s)"
+
+#: prefs.js:399 prefs.js:569
+msgid "Data Unit"
+msgstr "Datová jednotka"
+
+#: prefs.js:420 prefs.js:520
+msgid "Main Disk"
+msgstr "Hlavní disk"
+
+#: prefs.js:421
+msgid "Ignored Storage Devices"
+msgstr "Ignorovaná zařízení uložiště"
+
+#: prefs.js:423 prefs.js:572
+msgid "Regex"
+msgstr "Regulární výraz"
+
+#: prefs.js:424
+msgid "Devices matching this regex will be ignored."
+msgstr "Zařízení odpovídající tomuto regulárnímu výrazu budou ignorována."
+
+#: prefs.js:424 prefs.js:573
+msgid "Leave empty to disable. Usage example: "
+msgstr "Nechte prázdné pro vypnutí. Příklad použití: "
+
+#: prefs.js:435 prefs.js:458 prefs.js:582 prefs.js:597
+msgid "Ignored"
+msgstr "Ignorovat"
+
+#: prefs.js:437
+msgid "Main"
+msgstr "Hlavní"
+
+#: prefs.js:454
+msgid "Main disk cannot be ignored"
+msgstr "Hlavní disk nelze ignorovat"
+
+#: prefs.js:487
+msgid "Storage Usage"
+msgstr "Využití uložiště"
+
+#: prefs.js:497
+msgid "Storage IO"
+msgstr "IO uložiště"
+
+#: prefs.js:507
+msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
+msgstr "Nastavit název ikony (např. 'drive-harddisk-symbolic')"
+
+#: prefs.js:521
+#, fuzzy
+msgid "Usage Bar"
+msgstr "Hodnota využití"
+
+#: prefs.js:522
+#, fuzzy
+msgid "Show Main Disk Usage Bar"
+msgstr "Zobrazit graf využití uložiště"
+
+#: prefs.js:524
+#, fuzzy
+msgid "Show Main Disk Usage Percentage"
+msgstr "Zobrazit procenta využití"
+
+#: prefs.js:527
+msgid "Set 0 to disable. Value is percentage of disk usage."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je procento využití RAM."
+
+#: prefs.js:531
+#, fuzzy
+msgid "Show Main Disk Usage Value"
+msgstr "Zobrazit hodnotu využití"
+
+#: prefs.js:534
+#, fuzzy
+msgid "Show Main Disk Free Value"
+msgstr "Zobrazit hodnotu využití"
+
+#: prefs.js:538
+#, fuzzy
+msgid "Set 0 to disable. Value is free MB of storage."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je procento využití RAM."
+
+#: prefs.js:541 prefs.js:649
+msgid "IO"
+msgstr "IO"
+
+#: prefs.js:542 prefs.js:650
+msgid "Show Realtime IO Bar"
+msgstr "Zobrazit aktuální stav IO rychlosti"
+
+#: prefs.js:543 prefs.js:651
+msgid "Show IO History Graph"
+msgstr "Zobrazit IO graf historie"
+
+#: prefs.js:544 prefs.js:652
+msgid "IO History Graph Width"
+msgstr "Šířka IO grafu historie"
+
+#: prefs.js:545 prefs.js:653
+msgid "Show IO Speed"
+msgstr "Zobrazit rychlost IO"
+
+#: prefs.js:546 prefs.js:654
+msgid "IO Speed Max Number of Figures"
+msgstr "Maximální počet číslic IO rychlosti"
+
+#: prefs.js:547 prefs.js:655
+msgid "IO Speed Threshold"
+msgstr "Hranice IO rychlosti"
+
+#: prefs.js:547 prefs.js:655
+msgid "in kB/s"
+msgstr "v kB/s"
+
+#: prefs.js:570
+msgid "Ignored Network Interfaces"
+msgstr "Ignorovaná síťová rozhraní"
+
+#: prefs.js:573
+msgid "Interfaces matching this regex will be ignored."
+msgstr "Rozhraní odpovídající tomuto regulárnímu výrazu budou ignorována."
+
+#: prefs.js:626
+#, fuzzy
+msgid "Network IO"
+msgstr "Síť"
+
+#: prefs.js:636
+msgid "Set icon name (ie: 'network-wired-symbolic')"
+msgstr "Nastavit název ikony (např. 'network-wired-symbolic')"
+
+#: prefs.js:665
+msgctxt "Celsius unit measure choice"
+msgid "Celsius"
+msgstr ""
+
+#: prefs.js:666
+msgctxt "Fahrenheit unit measure choice"
+msgid "Fahrenheit"
+msgstr ""
+
+#: prefs.js:668
+msgid "Temperature Unit"
+msgstr "Jednotka teploty"
+
+#: prefs.js:678
+msgid "Set icon name (ie: 'temperature-symbolic')"
+msgstr "Nastavit jméno ikony (např. 'temperature-symbolic')"
+
+#: prefs.js:695
+msgid "Sensor 1"
+msgstr ""
+
+#: prefs.js:697 prefs.js:705
+msgid "Source"
+msgstr "Zdroj"
+
+#: prefs.js:699 prefs.js:707
+msgid "Value Digits"
+msgstr "Počet číslic za desetinnou čárkou"
+
+#: prefs.js:700 prefs.js:708
+msgid "Set -1 to auto. Number of digits after the decimal point."
+msgstr ""
+"Pro automatické nastavení nastavte na -1. Počet číslic za desetinnou čárkou."
+
+#: prefs.js:703
+msgid "Sensor 2"
+msgstr ""
+
+#: prefs.js:715
+msgid "About"
+msgstr "O rozšíření"
+
+#: prefs.js:716
+msgid "Info"
+msgstr ""
+
+#: prefs.js:725
+msgid "Version"
+msgstr "Verze"
+
+#: prefs.js:726
+msgid "Changelog"
+msgstr ""
+
+#: prefs.js:727
+msgid "GitHub"
+msgstr ""
+
+#: prefs.js:728
+msgid "GNOME Extensions page"
+msgstr "Stránka GNOME rozšíření"
+
+#: prefs.js:729
+msgid "Report a bug or suggest new feature"
+msgstr "Náhlasit chybu nebo navrhnout novou funkci"
+
+#: prefs.js:730
+msgid "Support us on Ko-Fi"
+msgstr "Podpořit na Ko-Fi"
+
+#: prefs.js:731
+msgid "Buy us a coffee"
+msgstr "Podpořit na Buy me a coffee"
+
+#: prefs.js:732
+msgid "Become a patron"
+msgstr "Podpořit na Patreonu"
+
+#: prefs.js:733
+msgid "Debug Mode"
+msgstr "Režim ladění (Debug)"
+
+#~ msgid "Default (Auto)"
+#~ msgstr "Výchozí (Automaticky)"
+
+#~ msgid "Show Storage Usage Percentage"
+#~ msgstr "Zobrazit procento využití uložiště"
