@@ -30,6 +30,10 @@ export type SensorDevice = {
     [key: string]: any;
 };
 
+type SensorsData = {
+    sensors: any;
+};
+
 export default class SensorsMonitor extends Monitor {
     private updateSensorsDataTask: CancellableTaskManager<boolean>;
     
@@ -117,17 +121,19 @@ export default class SensorsMonitor extends Monitor {
     }
     
     async updateSensorsData(sensorsData: PromiseValueHolder<string>): Promise<boolean> {
-        const sensorsDataValue = await sensorsData.getValue();
-        if(sensorsDataValue.length < 1)
-            return false;
-        
-        let sensors = {};
+        const data:SensorsData = {
+            sensors: {}
+        };
         
         // "sensors" provider
         try {
+            const sensorsDataValue = await sensorsData.getValue();
+            if(sensorsDataValue.length < 1)
+                return false;
+            
             const parsedData = JSON.parse(sensorsDataValue);
             if(parsedData)
-                sensors = parsedData;
+            data.sensors = parsedData;
         }
         catch(e: any) {
             Utils.error(e.message);
@@ -135,9 +141,7 @@ export default class SensorsMonitor extends Monitor {
         
         //TODO add other providers
         
-        this.pushUsageHistory('sensorsData', {
-            sensors
-        });
+        this.pushUsageHistory('sensorsData', data);
         return true;
     }
     
