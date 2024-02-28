@@ -49,14 +49,17 @@ class NetworkGraph extends GraphBase<NetworkIO> {
     
     constructor(params: NetworkGraphProps) {
         super(params);
+        
+        Config.connect(this, 'changed::network-header-io-graph-color1', this.setStyle.bind(this));
+        Config.connect(this, 'changed::network-header-io-graph-color2', this.setStyle.bind(this));
     }
     
     setStyle() {
         const lightTheme = Utils.themeStyle === 'light';
         
         this.colors = [
-            Utils.parseRGBA('rgb(29,172,214)'),
-            Utils.parseRGBA('rgb(214,29,29)')
+            Utils.parseRGBA(Config.get_string('network-header-io-graph-color1'), 'rgba(29,172,214,1.0)'),
+            Utils.parseRGBA(Config.get_string('network-header-io-graph-color2'), 'rgba(214,29,29,1.0)')
         ];
         
         let line = 'rgba(255,255,255,0.2)';

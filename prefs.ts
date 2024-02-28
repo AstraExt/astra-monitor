@@ -323,13 +323,33 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const graphSection = this.addExpanderRow({title: _('History Graph')}, group);
         this.addSwitchRow({title: _('Show History Graph'), tabs: 1}, 'processor-header-graph', graphSection);
+        this.addColorRow({
+            title: _('Main Color'),
+            subtitle: _('<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled).'),
+            tabs: 1
+        }, 'processor-header-graph-color1', graphSection, 'rgba(29,172,214,1.0)');
         this.addSwitchRow({title:_('History Graph Breakdown'), tabs: 1}, 'processor-header-graph-breakdown', graphSection);
+        this.addColorRow({
+            title: _('Secondary Color'),
+            subtitle: _('<b>System usage</b> color.'),
+            tabs: 1
+        }, 'processor-header-graph-color2', graphSection, 'rgba(214,29,29,1.0)');
         this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'processor-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
         
         const barsSection = this.addExpanderRow({title: _('Realtime Bar')}, group);
         this.addSwitchRow({title: _('Show Realtime Bar'), tabs: 1}, 'processor-header-bars', barsSection);
         this.addSwitchRow({title: _('Realtime per-core Bars'), tabs: 1}, 'processor-header-bars-core', barsSection);
+        this.addColorRow({
+            title: _('Main Color'),
+            subtitle: _('<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled).'),
+            tabs: 1
+        }, 'processor-header-bars-color1', barsSection, 'rgba(29,172,214,1.0)');
         this.addSwitchRow({title: _('Realtime Bar Breakdown'), tabs: 1}, 'processor-header-bars-breakdown', barsSection);
+        this.addColorRow({
+            title: _('Secondary Color'),
+            subtitle: _('<b>System usage</b> color.'),
+            tabs: 1
+        }, 'processor-header-bars-color2', barsSection, 'rgba(214,29,29,1.0)');
         processorsPage.add(group);
         
         /* Tooltip */
@@ -369,6 +389,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             choicesSource.push({value: data, text: Utils.getGPUModelName(gpu)});
         }
         this.addComboRow({title: _('Main GPU'), tabs: 1}, choicesSource, 'processor-menu-gpu', gpuSection, 'json');
+        this.addColorRow({
+            title: _('Bars Color'),
+            subtitle: _('GPU bars main color.'),
+            tabs: 1
+        }, 'processor-menu-gpu-color', gpuSection, 'rgba(29,172,214,1.0)');
         
         processorsPage.add(group);
         
@@ -465,12 +490,32 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const graphSection = this.addExpanderRow({title: _('History Graph')}, group);
         this.addSwitchRow({title: _('Show History Graph'), tabs: 1}, 'memory-header-graph', graphSection);
+        this.addColorRow({
+            title: _('Main Color'),
+            subtitle: _('<b>Used</b> memory color.'),
+            tabs: 1
+        }, 'memory-header-graph-color1', graphSection, 'rgba(29,172,214,1.0)');
         this.addSwitchRow({title: _('History Graph Breakdown'), tabs: 1}, 'memory-header-graph-breakdown', graphSection);
+        this.addColorRow({
+            title: _('Secondary Color'),
+            subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
+            tabs: 1
+        }, 'memory-header-graph-color2', graphSection, 'rgba(214,29,29,1.0)');
         this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'memory-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
         
         const barsSection = this.addExpanderRow({title: _('Realtime Bar')}, group);
         this.addSwitchRow({title: _('Show Realtime Bar'), tabs: 1}, 'memory-header-bars', barsSection);
+        this.addColorRow({
+            title: _('Main Color'),
+            subtitle: _('<b>Used</b> memory color.'),
+            tabs: 1
+        }, 'memory-header-bars-color1', barsSection, 'rgba(29,172,214,1.0)');
         this.addSwitchRow({title: _('Realtime Bar Breakdown'), tabs: 1}, 'memory-header-bars-breakdown', barsSection);
+        this.addColorRow({
+            title: _('Secondary Color'),
+            subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
+            tabs: 1
+        }, 'memory-header-bars-color2', barsSection, 'rgba(214,29,29,1.0)');
         memoryPage.add(group);
         
         /* Tooltip */
@@ -483,7 +528,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         /* Menu */
         group = new Adw.PreferencesGroup({title: _('Menu')});
-        this.addSwitchRow({title: _('History Graph Breakdown')}, 'memory-menu-graph-breakdown', group);
+        
+        const memorySection = this.addExpanderRow({title: _('Memory')}, group);
+        this.addSwitchRow({title: _('History Graph Breakdown'), tabs: 1}, 'memory-menu-graph-breakdown', memorySection);
+        
+        const swapSection = this.addExpanderRow({title: _('Swap')}, group);
+        this.addColorRow({
+            title: _('Swap Bar Color'),
+            subtitle: _('Swap bar main color.'),
+            tabs: 1
+        }, 'memory-menu-swap-color', swapSection, 'rgba(29,172,214,1.0)');
         
         memoryPage.add(group);
         
@@ -659,7 +713,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const mainDiskSection = this.addExpanderRow({title: _('Main Disk')}, group);
         
         this.addLabelRow({title: _('Usage Bar'), tabs: 1}, '', mainDiskSection);
-        this.addSwitchRow({title: _('Show Main Disk Usage Bar'), tabs: 2}, 'storage-header-bars', mainDiskSection);
+        this.addSwitchRow({title: _('Show Main Disk Usage Bar'), tabs: 2}, 'storage-header-bars', mainDiskSection);this.addColorRow({
+            title: _('Main Color'),
+            subtitle: _('<b>Used</b> storage color.'),
+            tabs: 2
+        }, 'storage-header-bars-color1', mainDiskSection, 'rgba(29,172,214,1.0)');
         
         this.addLabelRow({title: _('Usage Percentage'), tabs: 1}, '', mainDiskSection);
         this.addSwitchRow({title: _('Show Main Disk Usage Percentage'), tabs: 2}, 'storage-header-percentage', mainDiskSection);
@@ -683,12 +741,38 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'storage-header-free-icon-alert-threshold', mainDiskSection, {min: 0, max: 100000, digits: 0, step: 100, page: 1000}, true, 0);
         
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
-        this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'storage-header-io-bars', ioSection);
-        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'storage-header-graph', ioSection);
-        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
-        this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'storage-header-io', ioSection);
-        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3);
-        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0);
+        
+        this.addLabelRow({title: _('Realtime IO Bar'), tabs: 1}, '', ioSection);
+        this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 2}, 'storage-header-io-bars', ioSection);
+        this.addColorRow({
+            title: _('Read Color'),
+            subtitle: _('<b>Read</b> IO Bar color.'),
+            tabs: 2
+        }, 'storage-header-io-bars-color1', ioSection, 'rgba(29,172,214,1.0)');
+        this.addColorRow({
+            title: _('Write Color'),
+            subtitle: _('<b>Write</b> IO Bar color.'),
+            tabs: 2
+        }, 'storage-header-io-bars-color2', ioSection, 'rgba(214,29,29,1.0)');
+        
+        this.addLabelRow({title: _('IO History Graph'), tabs: 1}, '', ioSection);
+        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 2}, 'storage-header-graph', ioSection);
+        this.addColorRow({
+            title: _('Read Color'),
+            subtitle: _('<b>Read</b> IO History Graph color.'),
+            tabs: 2
+        }, 'storage-header-io-graph-color1', ioSection, 'rgba(29,172,214,1.0)');
+        this.addColorRow({
+            title: _('Write Color'),
+            subtitle: _('<b>Write</b> IO History Graph color.'),
+            tabs: 2
+        }, 'storage-header-io-graph-color2', ioSection, 'rgba(214,29,29,1.0)');
+        this.addSpinRow({title: _('IO History Graph Width'), tabs: 2}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
+        
+        this.addLabelRow({title: _('IO Speed'), tabs: 1}, '', ioSection);
+        this.addSwitchRow({title: _('Show IO Speed'), tabs: 2}, 'storage-header-io', ioSection);
+        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 2}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3);
+        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 2}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0);
         
         storagePage.add(group);
         
@@ -699,6 +783,29 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Main Disk Usage Value'), tabs: 0}, 'storage-header-tooltip-value', group);
         this.addSwitchRow({title: _('Main Disk Free Value'), tabs: 0}, 'storage-header-tooltip-free', group);
         this.addSwitchRow({title: _('IO Speed'), tabs: 0}, 'storage-header-tooltip-io', group);
+        storagePage.add(group);
+        
+        /* Menu */
+        group = new Adw.PreferencesGroup({title: _('Menu')});
+        
+        const ioArrows = this.addExpanderRow({title: _('IO Arrows')}, group);
+        this.addColorRow({
+            title: _('Read Color'),
+            subtitle: _('<b>Read</b> IO arrow color.'),
+            tabs: 2
+        }, 'storage-menu-arrow-color1', ioArrows, 'rgba(29,172,214,1.0)');
+        this.addColorRow({
+            title: _('Write Color'),
+            subtitle: _('<b>Write</b> IO arrow color.'),
+            tabs: 2
+        }, 'storage-menu-arrow-color2', ioArrows, 'rgba(214,29,29,1.0)');
+        
+        const devicesSection = this.addExpanderRow({title: _('Devices')}, group);
+        this.addColorRow({
+            title: _('Device Usage Bar Color'),
+            tabs: 1
+        }, 'storage-menu-device-color', devicesSection, 'rgba(29,172,214,1.0)');
+        
         storagePage.add(group);
         
         return storagePage;
@@ -822,12 +929,38 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
-        this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'network-header-bars', ioSection);
-        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'network-header-graph', ioSection); 
-        this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30); 
-        this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'network-header-io', ioSection);
-        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
-        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0); 
+        
+        this.addLabelRow({title: _('Realtime IO Bar'), tabs: 1}, '', ioSection);
+        this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 2}, 'network-header-bars', ioSection);
+        this.addColorRow({
+            title: _('Upload Color'),
+            subtitle: _('<b>Upload</b> IO Bar color.'),
+            tabs: 2
+        }, 'network-header-io-bars-color1', ioSection, 'rgba(29,172,214,1.0)');
+        this.addColorRow({
+            title: _('Download Color'),
+            subtitle: _('<b>Download</b> IO Bar color.'),
+            tabs: 2
+        }, 'network-header-io-bars-color2', ioSection, 'rgba(214,29,29,1.0)');
+        
+        this.addLabelRow({title: _('IO History Graph'), tabs: 1}, '', ioSection);
+        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 2}, 'network-header-graph', ioSection); 
+        this.addColorRow({
+            title: _('Upload Color'),
+            subtitle: _('<b>Upload</b> IO History Graph color.'),
+            tabs: 2
+        }, 'network-header-io-graph-color1', ioSection, 'rgba(29,172,214,1.0)');
+        this.addColorRow({
+            title: _('Download Color'),
+            subtitle: _('<b>Download</b> IO History Graph color.'),
+            tabs: 2
+        }, 'network-header-io-graph-color2', ioSection, 'rgba(214,29,29,1.0)');
+        this.addSpinRow({title: _('IO History Graph Width'), tabs: 2}, 'network-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30); 
+        
+        this.addLabelRow({title: _('IO Speed'), tabs: 1}, '', ioSection);
+        this.addSwitchRow({title: _('Show IO Speed'), tabs: 2}, 'network-header-io', ioSection);
+        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 2}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
+        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 2}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0); 
         
         networkPage.add(group);
         
@@ -835,6 +968,23 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         group = new Adw.PreferencesGroup({title: _('Tooltip')});
         this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'network-header-tooltip', group);
         this.addSwitchRow({title: _('IO Speed'), tabs: 0}, 'network-header-tooltip-io', group);
+        networkPage.add(group);
+        
+        /* Menu */
+        group = new Adw.PreferencesGroup({title: _('Menu')});
+        
+        const ioArrows = this.addExpanderRow({title: _('IO Arrows')}, group);
+        this.addColorRow({
+            title: _('Upload Color'),
+            subtitle: _('<b>Upload</b> IO arrow color.'),
+            tabs: 2
+        }, 'network-menu-arrow-color1', ioArrows, 'rgba(29,172,214,1.0)');
+        this.addColorRow({
+            title: _('Download Color'),
+            subtitle: _('<b>Download</b> IO arrow color.'),
+            tabs: 2
+        }, 'network-menu-arrow-color2', ioArrows, 'rgba(214,29,29,1.0)');
+        
         networkPage.add(group);
         
         return networkPage;
@@ -1209,6 +1359,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const button = new Gtk.ColorButton();
         const rgba = new Gdk.RGBA();
         rgba.parse(Config.get_string(setting) || '#000000');
+        button.useAlpha = true;
         button.set_rgba(rgba);
         button.connect('color-set', widget => {
             Config.set(setting, widget.get_rgba().to_string(), 'string');

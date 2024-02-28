@@ -48,16 +48,18 @@ class MemoryGraph extends GraphBase<MemoryUsage> {
     constructor(params: MemoryGraphProps) {
         super(params);
         
-        //TODO: make them customizable
         this.breakdownConfig = params.breakdownConfig;
+        
+        Config.connect(this, 'changed::memory-header-graph-color1', this.setStyle.bind(this));
+        Config.connect(this, 'changed::memory-header-graph-color2', this.setStyle.bind(this));
     }
     
     setStyle() {
         const lightTheme = Utils.themeStyle === 'light';
         
         this.colors = [
-            Utils.parseRGBA('rgb(29,172,214)'), // blue
-            Utils.parseRGBA('rgb(214,29,29)'), // red
+            Utils.parseRGBA(Config.get_string('memory-header-graph-color1'), 'rgba(29,172,214,1.0)'),
+            Utils.parseRGBA(Config.get_string('memory-header-graph-color2'), 'rgba(214,29,29,1.0)')
         ];
         
         let bg = 'rgba(0,0,0,0.2)';

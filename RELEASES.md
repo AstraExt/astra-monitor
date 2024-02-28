@@ -2,6 +2,7 @@
 
 ### New features
 - Add memory data unit customization (default is kB as kibibyte as standard) [[#67](https://github.com/AstraExt/astra-monitor/issues/67)]
+- All colors for bars, graphs and other elements are now fully customizable [[#58](https://github.com/AstraExt/astra-monitor/issues/58)]
 - Tooltip Customization: now you can choose what to show in the tooltip for each header [[#60](https://github.com/AstraExt/astra-monitor/issues/60)]
 - Sensors Tooltip: now you can choose up to 5 sensors to show in the sensor tooltip with an optional custom name each
 

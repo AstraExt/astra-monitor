@@ -21,14 +21,14 @@
 import GObject from 'gi://GObject';
 
 import BarsBase, { BarProps } from '../bars.js';
+import Config from '../config.js';
 
 type GpuUsage = {
     percent: number,
 }
 
 type GpuBarsParams = BarProps & {
-    layers?: number,
-    colors?: string[]
+    layers?: number
 };
 
 export default GObject.registerClass(
@@ -38,12 +38,17 @@ class GpuBars extends BarsBase {
         if(params.layers === undefined)
             params.layers = 1;
         
-        //TODO: Make these configurable
-        params.colors = [
-            'rgb(29,172,214)'
-        ];
-        
         super(params);
+        
+        Config.connect(this, 'changed::processor-menu-gpu-color', this.setStyle.bind(this));
+    }
+    
+    setStyle() {
+        super.setStyle();
+        
+        this.colors = [
+            Config.get_string('processor-menu-gpu-color') ?? 'rgba(29,172,214,1.0)'
+        ];
     }
     
     setUsage(usage: GpuUsage[]) {

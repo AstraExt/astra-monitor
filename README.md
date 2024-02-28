@@ -61,12 +61,12 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
 ```mermaid
 %%{init: { 'theme': 'dark' } }%%
 timeline
-  section Alpha<br>1/2
-    Late February 2024: 🔲<br>Graph Customization: ✅<br>Tooltips Customization
+  section Alpha<br>2/3
+    Late February 2024: ✅<br>Graph Customization : ✅<br>Tooltips Customization : 🔲<br>Import / Export Settings
   section Beta<br>0/6
-    Early March 2024: 🔲<br>Advanced Network Monitoring: 🔲<br>Advanced Disk Monitoring
-    Late March 2024: 🔲<br>Advanced GPU Monitoring: 🔲<br>Battery Monitoring
-    Early April 2024: 🔲<br>User Custom Commands: 🔲<br>Continuos Monitoring Mode
+    Early March 2024: 🔲<br>Advanced Network Monitoring : 🔲<br>Advanced Disk Monitoring
+    Late March 2024: 🔲<br>Advanced GPU Monitoring : 🔲<br>Battery Monitoring
+    Early April 2024: 🔲<br>User Custom Commands : 🔲<br>Continuos Monitoring Mode
   section Release
     Late April 2024
 ```

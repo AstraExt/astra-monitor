@@ -25,8 +25,7 @@ import Config from '../config.js';
 import { ProcessorUsage } from './processorMonitor.js';
 
 type ProcessorBarsParams = BarProps & {
-    layers?: number,
-    colors?: string[]
+    layers?: number
 };
 
 export default GObject.registerClass(
@@ -36,13 +35,19 @@ class ProcessorBars extends BarsBase {
         if(params.layers === undefined)
             params.layers = 2;
         
-        //TODO: Make these configurable
-        //Config.get_string('processor-header-color1');
-        //Config.get_string('processor-header-color2');
-        if(params.colors === undefined)
-            params.colors = ['rgb(29,172,214)', 'rgb(214,29,29)'];
-        
         super(params);
+        
+        Config.connect(this, 'changed::processor-header-bars-color1', this.setStyle.bind(this));
+        Config.connect(this, 'changed::processor-header-bars-color2', this.setStyle.bind(this));
+    }
+    
+    setStyle() {
+        super.setStyle();
+        
+        this.colors = [
+            Config.get_string('processor-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
+            Config.get_string('processor-header-bars-color2') ?? 'rgba(214,29,29,1.0)'
+        ];
     }
     
     setUsage(usage: ProcessorUsage[]) {

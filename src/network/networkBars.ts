@@ -20,11 +20,12 @@
 
 import GObject from 'gi://GObject';
 
+import Config from '../config.js';
 import BarsBase, { BarProps } from '../bars.js';
 import { MaxSpeeds, NetworkIO } from './networkMonitor.js';
 
 type NetworkBarsParams = BarProps & {
-    colors?: string[]
+    /* empty */
 };
 
 export default GObject.registerClass(
@@ -32,11 +33,19 @@ class NetworkBars extends BarsBase {
     private maxSpeeds?: MaxSpeeds;
     
     constructor(params: NetworkBarsParams) {
-        //TODO: Make these configurable
-        if(params.colors === undefined)
-            params.colors = ['rgb(29,172,214)', 'rgb(214,29,29)'];
-        
         super(params);
+        
+        Config.connect(this, 'changed::network-header-io-bars-color1', this.setStyle.bind(this));
+        Config.connect(this, 'changed::network-header-io-bars-color2', this.setStyle.bind(this));
+    }
+    
+    setStyle() {
+        super.setStyle();
+        
+        this.colors = [
+            Config.get_string('network-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
+            Config.get_string('network-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
+        ];
     }
     
     setMaxSpeeds(maxSpeeds: MaxSpeeds) {

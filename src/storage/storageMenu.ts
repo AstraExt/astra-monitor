@@ -833,8 +833,8 @@ export default class StorageMenu extends MenuBase {
                             
                             if(data.bytesReadPerSec) {
                                 device.readValueLabel.text = Utils.formatBytesPerSec(data.bytesReadPerSec, unit as any, 3);
-                                // TODO: make this color customizable!?
-                                device.readActivityIcon.style = 'color:rgb(29,172,214);';
+                                const readColor = Config.get_string('storage-menu-arrow-color1') ?? 'rgba(29,172,214,1.0)';
+                                device.readActivityIcon.style = `color:${readColor};`;
                             }
                             else {
                                 device.readValueLabel.text = '-';
@@ -843,8 +843,8 @@ export default class StorageMenu extends MenuBase {
                             
                             if(data.bytesWrittenPerSec) {
                                 device.writeValueLabel.text = Utils.formatBytesPerSec(data.bytesWrittenPerSec, unit as any, 3);
-                                // TODO: make this color customizable!?
-                                device.writeActivityIcon.style = 'color:rgb(214,29,29);';
+                                const writeColor = Config.get_string('storage-menu-arrow-color2') ?? 'rgba(214,29,29,1.0)';
+                                device.writeActivityIcon.style = `color:${writeColor};`;
                             }
                             else {
                                 device.writeValueLabel.text = '-';
@@ -894,8 +894,8 @@ export default class StorageMenu extends MenuBase {
                         this.topProcesses.labels[i].label.text = process.exec;
                         
                         if(read > 0) {
-                            // TODO: make this color customizable!?
-                            this.topProcesses.labels[i].read.icon.style = 'color:rgb(29,172,214);';
+                            const readColor = Config.get_string('storage-menu-arrow-color1') ?? 'rgba(29,172,214,1.0)';
+                            this.topProcesses.labels[i].read.icon.style = `color:${readColor};`;
                             this.topProcesses.labels[i].read.value.text = Utils.formatBytesPerSec(read, unit as any, 3);
                         }
                         else {
@@ -904,8 +904,8 @@ export default class StorageMenu extends MenuBase {
                         }
                         
                         if(write > 0) {
-                            // TODO: make this color customizable!?
-                            this.topProcesses.labels[i].write.icon.style = 'color:rgb(214,29,29);';
+                            const writeColor = Config.get_string('storage-menu-arrow-color2') ?? 'rgba(214,29,29,1.0)';
+                            this.topProcesses.labels[i].write.icon.style = `color:${writeColor};`;
                             this.topProcesses.labels[i].write.value.text = Utils.formatBytesPerSec(write, unit as any, 3);
                         }
                         else {

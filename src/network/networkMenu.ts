@@ -488,8 +488,8 @@ export default class NetworkMenu extends MenuBase {
                         
                         if(data.bytesUploadedPerSec) {
                             device.uploadValueLabel.text = Utils.formatBytesPerSec(data.bytesUploadedPerSec, unit as any, 3);
-                            // TODO: make this color customizable!?
-                            device.uploadActivityIcon.style = 'color:rgb(29,172,214);';
+                            const uploadColor = Config.get_string('network-menu-arrow-color1') ?? 'rgba(29,172,214,1.0)';
+                            device.uploadActivityIcon.style = `color:${uploadColor};`;
                         }
                         else {
                             device.uploadValueLabel.text = '-';
@@ -498,8 +498,8 @@ export default class NetworkMenu extends MenuBase {
                         
                         if(data.bytesDownloadedPerSec) {
                             device.downloadValueLabel.text = Utils.formatBytesPerSec(data.bytesDownloadedPerSec, unit as any, 3);
-                            // TODO: make this color customizable!?
-                            device.downloadActivityIcon.style = 'color:rgb(214,29,29);';
+                            const downloadColor = Config.get_string('network-menu-arrow-color2') ?? 'rgba(214,29,29,1.0)';
+                            device.downloadActivityIcon.style = `color:${downloadColor};`;
                         }
                         else {
                             device.downloadValueLabel.text = '-';

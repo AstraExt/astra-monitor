@@ -1680,8 +1680,14 @@ export default class Utils {
         return devices;
     }
     
-    static parseRGBA(colorString: string): Color {
+    static parseRGBA(colorString: string|null, fallbackValue?: string): Color {
         const color: Color = { red: 0, green: 0, blue: 0, alpha: 1 };
+        
+        if(!colorString) {
+            if(fallbackValue)
+                return Utils.parseRGBA(fallbackValue);
+            throw new Error('Color string is empty');
+        }
     
         if(colorString.startsWith('#')) {
             colorString = colorString.substring(1);
@@ -1695,13 +1701,18 @@ export default class Utils {
                     color.alpha = parseInt(colorString.substring(6, 8), 16) / 255;
             }
             else {
+                if(fallbackValue)
+                    return Utils.parseRGBA(fallbackValue);
                 throw new Error('Invalid hex color format');
             }
         }
         else if(colorString.toLowerCase().startsWith('rgb')) {
             const match = colorString.match(/\d+(\.\d+)?/g);
-            if(!match)
+            if(!match) {
+                if(fallbackValue)
+                    return Utils.parseRGBA(fallbackValue);
                 throw new Error('Invalid RGB(A) format');
+            }
             const values = match.map(Number);
             if(values.length === 3 || values.length === 4) {
                 color.red = values[0] / 255;
@@ -1709,14 +1720,21 @@ export default class Utils {
                 color.blue = values[2] / 255;
                 if(values.length === 4)
                     color.alpha = values[3];
-                if(values.some((value, index) => (index < 3 && (value < 0 || value > 255)) || (index === 3 && (value < 0 || value > 1))))
+                if(values.some((value, index) => (index < 3 && (value < 0 || value > 255)) || (index === 3 && (value < 0 || value > 1)))) {    
+                    if(fallbackValue)
+                        return Utils.parseRGBA(fallbackValue);
                     throw new Error('RGB values must be between 0 and 255, and alpha value must be between 0 and 1');
+                }
             }
             else {
+                if(fallbackValue)
+                    return Utils.parseRGBA(fallbackValue);
                 throw new Error('Invalid RGB(A) format');
             }
         }
         else {
+            if(fallbackValue)
+                return Utils.parseRGBA(fallbackValue);
             throw new Error('Invalid color format');
         }
         return color;

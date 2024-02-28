@@ -20,12 +20,12 @@
 
 import GObject from 'gi://GObject';
 
+import Config from '../config.js';
 import BarsBase, { BarProps } from '../bars.js';
 import { SwapUsage } from './memoryMonitor.js';
 
 type SwapBarsParams = BarProps & {
     layers?: number;
-    colors?: string[];
     breakdownConfig?: string;
 };
 
@@ -36,12 +36,17 @@ class SwapBars extends BarsBase {
         if(params.layers === undefined)
             params.layers = 2;
         
-        //TODO: Make these configurable
-        params.colors = [
-            'rgb(29,172,214)'
-        ];
-        
         super(params);
+        
+        Config.connect(this, 'changed::memory-menu-swap-color', this.setStyle.bind(this));
+    }
+    
+    setStyle() {
+        super.setStyle();
+        
+        this.colors = [
+            Config.get_string('memory-menu-swap-color') ?? 'rgba(29,172,214,1.0)'
+        ];
     }
     
     setUsage(usage: SwapUsage|null) {

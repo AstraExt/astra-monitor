@@ -206,6 +206,16 @@
       <summary>Show History Graph</summary>
       <description>Show a graph of the CPU percentage through time</description>
     </key>
+    <key name="processor-header-graph-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Graph Color 1</summary>
+      <description>Main color for processor history graph</description>
+    </key>
+    <key name="processor-header-graph-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>Graph Color 2</summary>
+      <description>Secondary color for processor history graph</description>
+    </key>
     <key name="processor-header-graph-width" type="i">
       <default>30</default>
       <summary>Graph Width</summary>
@@ -226,6 +236,16 @@
       <default>false</default>
       <summary>Show CPU per-core Bars</summary>
       <description>Show realtime bars of each CPU core</description>
+    </key>
+    <key name="processor-header-bars-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Bars Color 1</summary>
+      <description>Main color for processor realtime bars</description>
+    </key>
+    <key name="processor-header-bars-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>Bars Color 2</summary>
+      <description>Secondary color for processor realtime bars</description>
     </key>
     <key name="processor-header-bars-breakdown" type="b">
       <default>true</default>
@@ -273,6 +293,11 @@
       <default>'""'</default>
       <summary>GPU</summary>
       <description>Show the GPU usage</description>
+    </key>
+    <key name="processor-menu-gpu-color" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>GPU Bars Color 1</summary>
+      <description>Main color for GPU bars</description>
     </key>
     
     <!-- MEMORY -->
@@ -382,6 +407,16 @@
       <summary>Show History Graph</summary>
       <description>Show a graph of the memory percentage through time</description>
     </key>
+    <key name="memory-header-graph-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Graph Color 1</summary>
+      <description>Main color for memory history graph</description>
+    </key>
+    <key name="memory-header-graph-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>Graph Color 2</summary>
+      <description>Secondary color for memory history graph</description>
+    </key>
     <key name="memory-header-graph-breakdown" type="b">
       <default>false</default>
       <summary>Graph Category Breakdown</summary>
@@ -397,6 +432,16 @@
       <default>true</default>
       <summary>Show Memory Bar</summary>
       <description>Show realtime bar of memory usage</description>
+    </key>
+    <key name="memory-header-bars-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Bars Color 1</summary>
+      <description>Main color for memory realtime bars</description>
+    </key>
+    <key name="memory-header-bars-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>Bars Color 2</summary>
+      <description>Secondary color for memory realtime bars</description>
     </key>
     <key name="memory-header-bars-breakdown" type="b">
       <default>true</default>
@@ -429,6 +474,11 @@
       <default>true</default>
       <summary>Graph Category Breakdown</summary>
       <description>Color the graph with categories</description>
+    </key>
+    <key name="memory-menu-swap-color" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Swap Bar Color 1</summary>
+      <description>Main color for swap bar</description>
     </key>
     
     <!-- STORAGE -->
@@ -553,15 +603,40 @@
       <summary>Show Storage Usage Bar</summary>
       <description>Show realtime bar of storage usage</description>
     </key>
+    <key name="storage-header-bars-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Bar Color 1</summary>
+      <description>Main color for storage usage bar</description>
+    </key>
     <key name="storage-header-io-bars" type="b">
       <default>false</default>
       <summary>Show Storage Realtime IO Bar</summary>
       <description>Show realtime bar of IO</description>
     </key>
+    <key name="storage-header-io-bars-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>IO Bar Color 1</summary>
+      <description>Main color for storage io bars</description>
+    </key>
+    <key name="storage-header-io-bars-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>IO Bar Color 2</summary>
+      <description>Secondary color for storage IO bar</description>
+    </key>
     <key name="storage-header-graph" type="b">
       <default>false</default>
       <summary>Show Storage IO History Graph</summary>
       <description>Show a graph of the storage IO through time</description>
+    </key>
+    <key name="storage-header-io-graph-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>IO Graph Color 1</summary>
+      <description>Main color for storage io graph</description>
+    </key>
+    <key name="storage-header-io-graph-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>IO Graph Color 2</summary>
+      <description>Secondary color for storage IO graph</description>
     </key>
     <key name="storage-header-graph-width" type="i">
       <default>30</default>
@@ -611,6 +686,22 @@
       <default>true</default>
       <summary>Show Tooltip IO realtime speed</summary>
       <description>Show the IO speed in on the Tooltip of the storage monitor</description>
+    </key>
+    
+    <key name="storage-menu-arrow-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Arrow Color 1</summary>
+      <description>Main color for storage IO arrows</description>
+    </key>
+    <key name="storage-menu-arrow-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>Arrow Color 2</summary>
+      <description>Secondary color for storage IO arrows</description>
+    </key>
+    <key name="storage-menu-device-color" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Device Usage Bar Color</summary>
+      <description>Main color for storage usage bars</description>
     </key>
     
     <!-- NETWORK -->
@@ -681,10 +772,30 @@
       <summary>Show Network IO Bar</summary>
       <description>Show realtime bar of network usage</description>
     </key>
+    <key name="network-header-io-bars-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>IO Bar Color 1</summary>
+      <description>Main color for storage io bars</description>
+    </key>
+    <key name="network-header-io-bars-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>IO Bar Color 2</summary>
+      <description>Secondary color for network IO bar</description>
+    </key>
     <key name="network-header-graph" type="b">
       <default>true</default>
       <summary>Show Network IO History Graph</summary>
       <description>Show a graph of the network IO through time</description>
+    </key>
+    <key name="network-header-io-graph-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>IO Graph Color 1</summary>
+      <description>Main color for network io graph</description>
+    </key>
+    <key name="network-header-io-graph-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>IO Graph Color 2</summary>
+      <description>Secondary color for network IO graph</description>
     </key>
     <key name="network-header-graph-width" type="i">
       <default>30</default>
@@ -719,6 +830,17 @@
       <default>true</default>
       <summary>Show Tooltip IO realtime speed</summary>
       <description>Show the IO speed on the Tooltip of the network monitor</description>
+    </key>
+    
+    <key name="network-menu-arrow-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Arrow Color 1</summary>
+      <description>Main color for network IO arrows</description>
+    </key>
+    <key name="network-menu-arrow-color2" type="s">
+      <default>'rgba(214,29,29,1.0)'</default>
+      <summary>Arrow Color 2</summary>
+      <description>Secondary color for network IO arrows</description>
     </key>
     
     <!-- SENSORS -->

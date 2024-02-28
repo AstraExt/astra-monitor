@@ -22,19 +22,33 @@ import GObject from 'gi://GObject';
 
 import BarsBase, { BarProps } from '../bars.js';
 import { StorageUsage } from './storageMonitor.js';
+import Config from '../config.js';
 
 type StorageBarsParams = BarProps & {
-    colors?: string[]
+    /* empty */
 };
 
 export default GObject.registerClass(
 class StorageBars extends BarsBase {
     constructor(params: StorageBarsParams) {
-        //TODO: Make these configurable
-        if(params.colors === undefined)
-            params.colors = ['rgb(29,172,214)'];
         
         super(params);
+        
+        Config.connect(this, `changed::${this.colorConfig}`, this.setStyle.bind(this));
+    }
+    
+    get colorConfig() {
+        if(this.header)
+            return 'storage-header-bars-color1';
+        return 'storage-menu-device-color';
+    }
+    
+    setStyle() {
+        super.setStyle();
+        
+        this.colors = [
+            Config.get_string(this.colorConfig) ?? 'rgba(29,172,214,1.0)'
+        ];
     }
     
     setUsage(usage: StorageUsage|null) {

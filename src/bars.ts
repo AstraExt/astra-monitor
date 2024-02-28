@@ -34,8 +34,7 @@ export type BarProps = {
     width?:number,
     numBars?:number,
     height?:number,
-    layers?:number,
-    colors?:string[],
+    layers?:number
     style?:string,
     x_align?:Clutter.ActorAlign,
     y_align?:Clutter.ActorAlign,
@@ -48,7 +47,7 @@ class BarsBase extends St.BoxLayout {
     protected layout: 'horizontal'|'vertical';
     protected header: boolean;
     protected mini: boolean;
-    protected colors: string[];
+    protected colors!: string[];
     protected breakdownConfig?: string;
     protected initialWidth: number;
     protected initialHeight: number;
@@ -73,8 +72,6 @@ class BarsBase extends St.BoxLayout {
             params.header = false;
         if(params.mini === undefined)
             params.mini = false;
-        if(params.colors === undefined)
-            params.colors = [];
         if(params.x_align === undefined)
             params.x_align = Clutter.ActorAlign.CENTER;
         if(params.y_align === undefined)
@@ -109,7 +106,6 @@ class BarsBase extends St.BoxLayout {
         this.layout = params.layout;
         this.header = params.header;
         this.mini = params.mini;
-        this.colors = params.colors;
         this.breakdownConfig = params.breakdownConfig;
         this.initialWidth = params.width;
         this.initialHeight = params.height;
