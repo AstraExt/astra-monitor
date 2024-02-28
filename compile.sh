@@ -7,8 +7,6 @@ log_message() {
 }
 
 EXTENSION_NAME="monitor@astraext.github.io"
-XEPHYR_DISPLAY=":2"
-RESOLUTION=1867x1050 # this fits my 4th monitor perfectly, change it to your needs
 
 EXTENSION_DIR=$(dirname "$0") # Assumes pack.sh is in the main directory
 DIST_DIR="${EXTENSION_DIR}/dist"

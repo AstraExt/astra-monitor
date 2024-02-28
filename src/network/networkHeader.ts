@@ -318,23 +318,27 @@ class NetworkHeader extends Header {
             if(!Config.get_boolean('network-header-tooltip'))
                 return;
             
-            const usage = Utils.networkMonitor.getCurrentValue('networkIO');
-            if(!usage) {
-                this.tooltipItem.label.text = '- B/s | - B/s';
-            }
-            else {
-                const bytesUploadedPerSec = usage.bytesUploadedPerSec;
-                const bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
+            const values: string[] = [];
+            
+            if(Config.get_boolean('storage-header-tooltip-io')) {
+                const usage = Utils.networkMonitor.getCurrentValue('networkIO');
                 
-                const unit = Config.get_string('network-io-unit');
-                let maxFigures = Config.get_int('network-header-io-figures');
-                maxFigures = Math.max(1, Math.min(4, maxFigures));
-                const upload = Utils.formatBytesPerSec(bytesUploadedPerSec, unit as any, maxFigures, true);
-                const download = Utils.formatBytesPerSec(bytesDownloadedPerSec, unit as any, maxFigures, true);
-                
-                this.tooltipItem.label.text = `${upload} | ${download}`;
+                if(usage) {
+                    const bytesUploadedPerSec = usage.bytesUploadedPerSec;
+                    const bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
+                    
+                    const unit = Config.get_string('network-io-unit');
+                    let maxFigures = Config.get_int('network-header-io-figures');
+                    maxFigures = Math.max(1, Math.min(4, maxFigures));
+                    values.push('↑' + Utils.formatBytesPerSec(bytesUploadedPerSec, unit as any, maxFigures, true));
+                    values.push('↓' + Utils.formatBytesPerSec(bytesDownloadedPerSec, unit as any, maxFigures, true));
+                }
             }
             
+            if(values.length === 0)
+                values.push('-');
+            
+            this.tooltipItem.label.text = values.join(' | ');
             const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
             this.tooltipMenu.actor.set_width(width);
         });

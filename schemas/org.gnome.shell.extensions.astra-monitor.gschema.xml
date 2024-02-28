@@ -185,11 +185,6 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
-    <key name="processor-header-tooltip" type="b">
-      <default>true</default>
-      <summary>CPU Header Tooltip</summary>
-      <description>Show the tooltip on the header of the CPU monitor</description>
-    </key>
     <key name="processor-header-percentage" type="b">
       <default>false</default>
       <summary>CPU Header Percentage</summary>
@@ -236,6 +231,22 @@
       <default>true</default>
       <summary>CPU Bars Breakdown</summary>
       <description>Color the bars with categories</description>
+    </key>
+    
+    <key name="processor-header-tooltip" type="b">
+      <default>true</default>
+      <summary>CPU Header Tooltip</summary>
+      <description>Show the tooltip on the header of the CPU monitor</description>
+    </key>
+    <key name="processor-header-tooltip-percentage" type="b">
+      <default>true</default>
+      <summary>CPU Tooltip Percentage</summary>
+      <description>Show the percentage on the Tooltip of the CPU monitor</description>
+    </key>
+    <key name="processor-header-tooltip-percentage-core" type="b">
+      <default>false</default>
+      <summary>CPU Tooltip Percentage per Single Core</summary>
+      <description>Set the percentage on the Tooltip of the CPU monitor to single core</description>
     </key>
     
     <key name="processor-menu-bars-breakdown" type="b">
@@ -327,11 +338,6 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
-    <key name="memory-header-tooltip" type="b">
-      <default>true</default>
-      <summary>Memory Header Tooltip</summary>
-      <description>Show the tooltip on the header of the memory monitor</description>
-    </key>
     <key name="memory-header-percentage" type="b">
       <default>false</default>
       <summary>Memory Header Percentage</summary>
@@ -396,6 +402,27 @@
       <default>true</default>
       <summary>Memory Bars Breakdown</summary>
       <description>Color the bars with categories</description>
+    </key>
+    
+    <key name="memory-header-tooltip" type="b">
+      <default>true</default>
+      <summary>Memory Header Tooltip</summary>
+      <description>Show the tooltip on the header of the memory monitor</description>
+    </key>
+    <key name="memory-header-tooltip-percentage" type="b">
+      <default>true</default>
+      <summary>Memory Tooltip Percentage</summary>
+      <description>Show the percentage on the Tooltip of the memory monitor</description>
+    </key>
+    <key name="memory-header-tooltip-value" type="b">
+      <default>true</default>
+      <summary>Memory Tooltip Usage Value</summary>
+      <description>Show the usage value on the Tooltip of the memory monitor</description>
+    </key>
+    <key name="memory-header-tooltip-free" type="b">
+      <default>false</default>
+      <summary>Memory Tooltip Free Value</summary>
+      <description>Show the free value on the Tooltip of the memory monitor</description>
     </key>
     
     <key name="memory-menu-graph-breakdown" type="b">
@@ -482,11 +509,6 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
-    <key name="storage-header-tooltip" type="b">
-      <default>true</default>
-      <summary>Storage Header Tooltip</summary>
-      <description>Show the tooltip on the header of the storage monitor</description>
-    </key>
     <key name="storage-header-percentage" type="b">
       <default>false</default>
       <summary>Storage Header Use Percentage</summary>
@@ -565,6 +587,32 @@
       <range min="0" max="1000000"/>
     </key>
     
+    <key name="storage-header-tooltip" type="b">
+      <default>true</default>
+      <summary>Storage Header Tooltip</summary>
+      <description>Show the tooltip on the header of the storage monitor</description>
+    </key>
+    <key name="storage-header-tooltip-percentage" type="b">
+      <default>true</default>
+      <summary>Storage Tooltip Use Percentage</summary>
+      <description>Show the percentage of storage use on the Tooltip of the storage monitor</description>
+    </key>
+    <key name="storage-header-tooltip-value" type="b">
+      <default>false</default>
+      <summary>Storage Tooltip Usage Value</summary>
+      <description>Show the usage value on the Tooltip of the storage monitor</description>
+    </key>
+    <key name="storage-header-tooltip-free" type="b">
+      <default>true</default>
+      <summary>Storage Tooltip Free Value</summary>
+      <description>Show the free value on the Tooltip of the storage monitor</description>
+    </key>
+    <key name="storage-header-tooltip-io" type="b">
+      <default>true</default>
+      <summary>Show Tooltip IO realtime speed</summary>
+      <description>Show the IO speed in on the Tooltip of the storage monitor</description>
+    </key>
+    
     <!-- NETWORK -->
     <key name="network-update" type="d">
       <default>1.5</default>
@@ -628,11 +676,6 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
-    <key name="network-header-tooltip" type="b">
-      <default>true</default>
-      <summary>Network Header Tooltip</summary>
-      <description>Show the tooltip on the header of the network monitor</description>
-    </key>
     <key name="network-header-bars" type="b">
       <default>false</default>
       <summary>Show Network IO Bar</summary>
@@ -665,6 +708,17 @@
       <summary>IO Speed Threshold</summary>
       <description>Threshold in kB/s to show the IO label</description>
       <range min="0" max="1000000"/>
+    </key>
+    
+    <key name="network-header-tooltip" type="b">
+      <default>true</default>
+      <summary>Network Header Tooltip</summary>
+      <description>Show the tooltip on the header of the network monitor</description>
+    </key>
+    <key name="network-header-tooltip-io" type="b">
+      <default>true</default>
+      <summary>Show Tooltip IO realtime speed</summary>
+      <description>Show the IO speed on the Tooltip of the network monitor</description>
     </key>
     
     <!-- SENSORS -->
@@ -715,11 +769,6 @@
       <description>Size in pixel of the icon</description>
       <range min="8" max="30"/>
     </key>
-    <key name="sensors-header-tooltip" type="b">
-      <default>true</default>
-      <summary>Sensors Header Tooltip</summary>
-      <description>Show the tooltip on the header of the sensors monitor</description>
-    </key>
     <key name="sensors-header-sensor1-show" type="b">
       <default>false</default>
       <summary>Sensors Header Sensor 1</summary>
@@ -750,6 +799,92 @@
       <default>-1</default>
       <summary>Sensors Header Sensor 2 Digits</summary>
       <description>Second sensor digits to show on the header of the sensors monitor</description>
+      <range min="-1" max="3"/>
+    </key>
+    
+    <key name="sensors-header-tooltip" type="b">
+      <default>false</default>
+      <summary>Sensors Header Tooltip</summary>
+      <description>Show the tooltip on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor1" type="s">
+      <default>'""'</default>
+      <summary>Sensors Tooltip Sensor 1</summary>
+      <description>First sensor to show on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor1-name" type="s">
+      <default>''</default>
+      <summary>Sensors Tooltip Sensor 1 Short Name</summary>
+      <description>Short Name for the first sensor on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor1-digits" type="i">
+      <default>-1</default>
+      <summary>Sensors Tooltip Sensor 1 Digits</summary>
+      <description>First sensor digits to show on the Tooltip of the sensors monitor</description>
+      <range min="-1" max="3"/>
+    </key>
+    <key name="sensors-header-tooltip-sensor2" type="s">
+      <default>'""'</default>
+      <summary>Sensors Tooltip Sensor 2</summary>
+      <description>Second sensor to show on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor2-name" type="s">
+      <default>''</default>
+      <summary>Sensors Tooltip Sensor 2 Short Name</summary>
+      <description>Short Name for the second sensor on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor2-digits" type="i">
+      <default>-1</default>
+      <summary>Sensors Tooltip Sensor 2 Digits</summary>
+      <description>Second sensor digits to show on the Tooltip of the sensors monitor</description>
+      <range min="-1" max="3"/>
+    </key>
+    <key name="sensors-header-tooltip-sensor3" type="s">
+      <default>'""'</default>
+      <summary>Sensors Tooltip Sensor 3</summary>
+      <description>Third sensor to show on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor3-name" type="s">
+      <default>''</default>
+      <summary>Sensors Tooltip Sensor 3 Short Name</summary>
+      <description>Short Name for the third sensor on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor3-digits" type="i">
+      <default>-1</default>
+      <summary>Sensors Tooltip Sensor 3 Digits</summary>
+      <description>Third sensor digits to show on the Tooltip of the sensors monitor</description>
+      <range min="-1" max="3"/>
+    </key>
+    <key name="sensors-header-tooltip-sensor4" type="s">
+      <default>'""'</default>
+      <summary>Sensors Tooltip Sensor 4</summary>
+      <description>Fourth sensor to show on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor4-name" type="s">
+      <default>''</default>
+      <summary>Sensors Tooltip Sensor 4 Short Name</summary>
+      <description>Short Name for the fourth sensor on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor4-digits" type="i">
+      <default>-1</default>
+      <summary>Sensors Tooltip Sensor 4 Digits</summary>
+      <description>Fourth sensor digits to show on the Tooltip of the sensors monitor</description>
+      <range min="-1" max="3"/>
+    </key>
+    <key name="sensors-header-tooltip-sensor5" type="s">
+      <default>'""'</default>
+      <summary>Sensors Tooltip Sensor 5</summary>
+      <description>Fifth sensor to show on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor5-name" type="s">
+      <default>''</default>
+      <summary>Sensors Tooltip Sensor 5 Short Name</summary>
+      <description>Short Name for the fifth sensor on the Tooltip of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-tooltip-sensor5-digits" type="i">
+      <default>-1</default>
+      <summary>Sensors Tooltip Sensor 5 Digits</summary>
+      <description>Fifth sensor digits to show on the Tooltip of the sensors monitor</description>
       <range min="-1" max="3"/>
     </key>
   </schema>

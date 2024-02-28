@@ -1374,7 +1374,7 @@ export default class Utils {
                 reject(new Error(`Error creating directory object: ${e.message}`));
                 return;
             }
-
+            
             dir.enumerate_children_async('standard::name', Gio.FileQueryInfoFlags.NONE, 0, null, (sourceObject, result) => {
                 try {
                     const enumerator = sourceObject.enumerate_children_finish(result);

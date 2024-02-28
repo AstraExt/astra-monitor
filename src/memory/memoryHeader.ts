@@ -365,12 +365,39 @@ class MemoryHeader extends Header {
             if(!Config.get_boolean('memory-header-tooltip'))
                 return;
             
-            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
-            if(!usage || !usage.total || isNaN(usage.total) || !usage.used || isNaN(usage.used))
-                this.tooltipItem.label.text = '';
-            else
-                this.tooltipItem.label.text = `${Math.round(usage.used / usage.total * 100)}%`;
+            const values: string[] = [];
             
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            
+            if(Config.get_boolean('memory-header-tooltip-percentage')) {
+                if(!usage || !usage.total || isNaN(usage.total) || !usage.used || isNaN(usage.used))
+                    values.push('-');
+                else
+                    values.push(`${Math.round(usage.used / usage.total * 100)}%`);
+            }
+            
+            if(Config.get_boolean('memory-header-tooltip-value')) {
+                const unit = Config.get_string('memory-unit');
+                const figures = Config.get_int('memory-header-value-figures');
+                if(!usage || !usage.used || isNaN(usage.used))
+                    values.push('-');
+                else
+                    values.push(`${Utils.formatBytes(usage.used, unit as any, figures)}`);
+            }
+            
+            if(Config.get_boolean('memory-header-tooltip-free')) {
+                const unit = Config.get_string('memory-unit');
+                const figures = Config.get_int('memory-header-free-figures');
+                if(!usage || !usage.free || isNaN(usage.free))
+                    values.push('-');
+                else
+                    values.push(`${Utils.formatBytes(usage.free, unit as any, figures)}`);
+            }
+            
+            if(values.length === 0)
+                values.push('-');
+            
+            this.tooltipItem.label.text = values.join(' | ');
             const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
             this.tooltipMenu.actor.set_width(width);
         });

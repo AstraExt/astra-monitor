@@ -133,7 +133,7 @@ export default class SensorsMonitor extends Monitor {
             
             const parsedData = JSON.parse(sensorsDataValue);
             if(parsedData)
-            data.sensors = parsedData;
+                data.sensors = parsedData;
         }
         catch(e: any) {
             Utils.error(e.message);

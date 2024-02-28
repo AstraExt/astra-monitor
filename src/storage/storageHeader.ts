@@ -327,7 +327,7 @@ class StorageHeader extends Header {
             const figures = Config.get_int('storage-header-free-figures');
             
             const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-            if(!usage || !usage.used || isNaN(usage.used))
+            if(!usage || !usage.free || isNaN(usage.free))
                 this.free.text = '-';
             else
                 this.free.text = `${Utils.formatBytes(usage.free, 'kB-KB', figures)}`;
@@ -487,19 +487,64 @@ class StorageHeader extends Header {
                 this.tooltipMenu.close(true);
         });
         
-        Utils.storageMonitor.listen(this.tooltipMenu, 'storageUsage', () => {
+        const updateTooltip = () => {
             if(!Config.get_boolean('storage-header-tooltip'))
                 return;
             
-            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-            if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
-                this.tooltipItem.label.text = '';
-            else
-                this.tooltipItem.label.text = `${Math.round(usage.usePercentage)}%`;
+            const values: string[] = [];
             
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            
+            if(Config.get_boolean('storage-header-tooltip-percentage')) {
+                if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
+                    values.push('-');
+                else
+                    values.push(`${Math.round(usage.usePercentage)}%`);
+            }
+            
+            if(Config.get_boolean('storage-header-tooltip-value')) {
+                const figures = Config.get_int('storage-header-value-figures');
+                
+                const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+                if(!usage || !usage.used || isNaN(usage.used))
+                    values.push('-');
+                else
+                    values.push(`${Utils.formatBytes(usage.used, 'kB-KB', figures)}`);
+            }
+            
+            if(Config.get_boolean('storage-header-tooltip-free')) {
+                const figures = Config.get_int('storage-header-free-figures');
+                
+                const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+                if(!usage || !usage.free || isNaN(usage.free))
+                    values.push('-');
+                else
+                    values.push(`${Utils.formatBytes(usage.free, 'kB-KB', figures)}`);
+            }
+            
+            if(Config.get_boolean('storage-header-tooltip-io')) {
+                const usage = Utils.storageMonitor.getCurrentValue('storageIO');
+                
+                if(usage) {
+                    const unit = Config.get_string('storage-io-unit');
+                    let maxFigures = Config.get_int('storage-header-io-figures');
+                    maxFigures = Math.max(1, Math.min(4, maxFigures));
+                    
+                    values.push('↑' + Utils.formatBytesPerSec(usage.bytesReadPerSec, unit as any, maxFigures));
+                    values.push('↓' + Utils.formatBytesPerSec(usage.bytesWrittenPerSec, unit as any, maxFigures));
+                }
+            }
+            
+            if(values.length === 0)
+                values.push('-');
+            
+            this.tooltipItem.label.text = values.join(' | ');
             const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
             this.tooltipMenu.actor.set_width(width);
-        });
+        };
+        
+        Utils.storageMonitor.listen(this.tooltipMenu, 'storageUsage', updateTooltip);
+        Utils.storageMonitor.listen(this.tooltipMenu, 'storageIO', updateTooltip);
     }
     
     showTooltip() {

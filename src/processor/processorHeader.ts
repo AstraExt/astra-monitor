@@ -325,21 +325,23 @@ class ProcessorHeader extends Header {
             if(!Config.get_boolean('processor-header-tooltip'))
                 return;
             
-            const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
+            const values: string[] = [];
             
-            if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
-                this.tooltipItem.label.text = '0%';
-                return;
+            if(Config.get_boolean('processor-header-tooltip-percentage')) {
+                const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
+                
+                let total = 0;
+                if(cpuUsage && cpuUsage.total && !isNaN(cpuUsage.total))
+                    total = cpuUsage.total;
+                if(Config.get_boolean('processor-header-tooltip-percentage-core'))
+                    total *= Utils.processorMonitor.getNumberOfCores();
+                values.push(Math.round(total) + '%');
             }
             
-            if(Config.get_boolean('processor-header-percentage-core')) {
-                const numberOfCores = Utils.processorMonitor.getNumberOfCores();
-                this.tooltipItem.label.text = (cpuUsage.total * numberOfCores).toFixed(0) + '%';
-            }
-            else {
-                this.tooltipItem.label.text = cpuUsage.total.toFixed(0) + '%';
-            }
+            if(values.length === 0)
+                values.push('-');
             
+            this.tooltipItem.label.text = values.join(' | ');
             const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
             this.tooltipMenu.actor.set_width(width);
         });

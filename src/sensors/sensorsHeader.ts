@@ -320,26 +320,33 @@ class SensorsHeader extends Header {
             if(!Config.get_boolean('sensors-header-tooltip'))
                 return;
             
+            const values: string[] = [];
+            
             const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
-            if(!sensorsData) {
-                this.tooltipItem.label.text = '- | -';
-                return;
+            if(sensorsData) {
+                for(let sensorNum = 1; sensorNum <= 5; sensorNum++) {
+                    const sensorSource = Config.get_json(`sensors-header-tooltip-sensor${sensorNum}`);
+                    if(!sensorSource)
+                        continue;
+                    
+                    const sensorName = Config.get_string(`sensors-header-tooltip-sensor${sensorNum}-name`);
+                    const sensorDigits = Config.get_int(`sensors-header-tooltip-sensor${sensorNum}-digits`);
+                    
+                    const text = this.applySource(sensorsData, sensorSource, sensorDigits);
+                    if(!text || text === '-')
+                        continue;
+                    
+                    if(sensorName)
+                        values.push(sensorName + ': ' + text);
+                    else
+                        values.push(text);
+                }
             }
             
-            const sensor1Source = Config.get_json('sensors-header-sensor1');
-            const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
-            const sensor1 = this.applySource(sensorsData, sensor1Source, sensor1Digits);
+            if(values.length === 0)
+                values.push('-');
             
-            if(Config.get_boolean('sensors-header-sensor2-show')) {
-                const sensor2Source = Config.get_json('sensors-header-sensor2');
-                const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
-                const sensor2 = this.applySource(sensorsData, sensor2Source, sensor2Digits);
-                this.tooltipItem.label.text = `${sensor1} | ${sensor2}`;
-            }
-            else {
-                this.tooltipItem.label.text = sensor1;
-            }
-            
+            this.tooltipItem.label.text = values.join(' | ');
             const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
             this.tooltipMenu.actor.set_width(width);
         });

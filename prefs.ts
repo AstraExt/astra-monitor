@@ -312,9 +312,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             tabs: 1
         }, 'processor-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
-        const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'processor-header-tooltip', tooltipSection);
-        
         const percentageSection = this.addExpanderRow({title: _('Percentage')}, group);
         this.addSwitchRow({title: _('Show Percentage'), tabs: 1}, 'processor-header-percentage', percentageSection);
         this.addSwitchRow({title: _('Single Core Percentage'), tabs: 1}, 'processor-header-percentage-core', percentageSection);
@@ -333,6 +330,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show Realtime Bar'), tabs: 1}, 'processor-header-bars', barsSection);
         this.addSwitchRow({title: _('Realtime per-core Bars'), tabs: 1}, 'processor-header-bars-core', barsSection);
         this.addSwitchRow({title: _('Realtime Bar Breakdown'), tabs: 1}, 'processor-header-bars-breakdown', barsSection);
+        processorsPage.add(group);
+        
+        /* Tooltip */
+        group = new Adw.PreferencesGroup({title: _('Tooltip')});
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'processor-header-tooltip', group);
+        this.addSwitchRow({title: _('Percentage'), tabs: 0}, 'processor-header-tooltip-percentage', group);
+        this.addSwitchRow({title: _('Single Core Percentage'), tabs: 0}, 'processor-header-tooltip-percentage-core', group);
         processorsPage.add(group);
         
         /* Menu */
@@ -415,6 +419,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         memoryPage.add(group);
         
+        /* Header */
         group = new Adw.PreferencesGroup({title: _('Header')});
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
@@ -436,9 +441,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             icon_name: 'am-dialog-warning-symbolic',
             tabs: 1
         }, 'memory-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
-        
-        const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'memory-header-tooltip', tooltipSection);
         
         const percentageSection = this.addExpanderRow({title: _('Usage Percentage')}, group);
         this.addSwitchRow({title: _('Show Usage Percentage'), tabs: 1}, 'memory-header-percentage', percentageSection);
@@ -471,6 +473,15 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Realtime Bar Breakdown'), tabs: 1}, 'memory-header-bars-breakdown', barsSection);
         memoryPage.add(group);
         
+        /* Tooltip */
+        group = new Adw.PreferencesGroup({title: _('Tooltip')});
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'memory-header-tooltip', group);
+        this.addSwitchRow({title: _('Usage Percentage'), tabs: 0}, 'memory-header-tooltip-percentage', group);
+        this.addSwitchRow({title: _('Usage Value'), tabs: 0}, 'memory-header-tooltip-value', group);
+        this.addSwitchRow({title: _('Free Value'), tabs: 0}, 'memory-header-tooltip-free', group);
+        memoryPage.add(group);
+        
+        /* Menu */
         group = new Adw.PreferencesGroup({title: _('Menu')});
         this.addSwitchRow({title: _('History Graph Breakdown')}, 'memory-menu-graph-breakdown', group);
         
@@ -622,6 +633,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         storagePage.add(group);
         
+        /* Header */
         group = new Adw.PreferencesGroup({title: _('Header')});
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
@@ -643,9 +655,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             icon_name: 'am-dialog-warning-symbolic',
             tabs: 1
         }, 'storage-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
-        
-        const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'storage-header-tooltip', tooltipSection);
         
         const mainDiskSection = this.addExpanderRow({title: _('Main Disk')}, group);
         
@@ -675,12 +684,21 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
         this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'storage-header-io-bars', ioSection);
-        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'storage-header-graph', ioSection);  
+        this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'storage-header-graph', ioSection);
         this.addSpinRow({title: _('IO History Graph Width'), tabs: 1}, 'storage-header-graph-width', ioSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
-        this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'storage-header-io', ioSection);  
-        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
-        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0); 
+        this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'storage-header-io', ioSection);
+        this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3);
+        this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0);
         
+        storagePage.add(group);
+        
+        /* Tooltip */
+        group = new Adw.PreferencesGroup({title: _('Tooltip')});
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'storage-header-tooltip', group);
+        this.addSwitchRow({title: _('Main Disk Usage Percentage'), tabs: 0}, 'storage-header-tooltip-percentage', group);
+        this.addSwitchRow({title: _('Main Disk Usage Value'), tabs: 0}, 'storage-header-tooltip-value', group);
+        this.addSwitchRow({title: _('Main Disk Free Value'), tabs: 0}, 'storage-header-tooltip-free', group);
+        this.addSwitchRow({title: _('IO Speed'), tabs: 0}, 'storage-header-tooltip-io', group);
         storagePage.add(group);
         
         return storagePage;
@@ -780,6 +798,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow({title: _('Network IO'), tabs: 1}, networkIOSources, 'network-source-network-io', sourcesSection, 'string', 'auto');
         networkPage.add(group);
         
+        /* Header */
         group = new Adw.PreferencesGroup({title: 'Header'});
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
@@ -802,9 +821,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             tabs: 1
         }, 'network-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
-        const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'network-header-tooltip', tooltipSection);
-        
         const ioSection = this.addExpanderRow({title: _('IO')}, group);
         this.addSwitchRow({title: _('Show Realtime IO Bar'), tabs: 1}, 'network-header-bars', ioSection);
         this.addSwitchRow({title: _('Show IO History Graph'), tabs: 1}, 'network-header-graph', ioSection); 
@@ -812,7 +828,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show IO Speed'), tabs: 1}, 'network-header-io', ioSection);
         this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 1}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
         this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 1}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0); 
-
+        
+        networkPage.add(group);
+        
+        /* Tooltip */
+        group = new Adw.PreferencesGroup({title: _('Tooltip')});
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'network-header-tooltip', group);
+        this.addSwitchRow({title: _('IO Speed'), tabs: 0}, 'network-header-tooltip-io', group);
         networkPage.add(group);
         
         return networkPage;
@@ -832,6 +854,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addComboRow({title: _('Temperature Unit')}, choicesUnit, 'sensors-temperature-unit', group, 'string');
         sensorsPage.add(group);
         
+        /* Header */
         group = new Adw.PreferencesGroup({title: _('Header')});
         
         const orderSection = this.addExpanderRow({title: _('Indicators Order')}, group);
@@ -853,9 +876,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             icon_name: 'am-dialog-warning-symbolic',
             tabs: 1
         }, 'sensors-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
-        
-        const tooltipSection = this.addExpanderRow({title: _('Tooltip')}, group);
-        this.addSwitchRow({title: _('Show Tooltip'), tabs: 1}, 'sensors-header-tooltip', tooltipSection);
         
         const sources = Utils.getSensorSources();
         
@@ -880,6 +900,77 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
             tabs: 1
         }, 'sensors-header-sensor2-digits', sensor2Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
+        sensorsPage.add(group);
+        
+        /* Tooltip */
+        group = new Adw.PreferencesGroup({title: _('Tooltip')});
+        this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'sensors-header-tooltip', group);
+        
+        const tooltipSensor1Section = this.addExpanderRow({title: _('Tooltip Sensor 1')}, group);
+        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor1', tooltipSensor1Section, 'json', '""');
+        this.addTextInputRow({
+            title: _('Short Name'),
+            subtitle: _('Short name to display in the tooltip.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor1-name', tooltipSensor1Section, '');
+        this.addSpinRow({
+            title: _('Value Digits'),
+            subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor1-digits', tooltipSensor1Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
+        
+        const tooltipSensor2Section = this.addExpanderRow({title: _('Tooltip Sensor 2')}, group);
+        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor2', tooltipSensor2Section, 'json', '""');
+        this.addTextInputRow({
+            title: _('Short Name'),
+            subtitle: _('Short name to display in the tooltip.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor2-name', tooltipSensor2Section, '');
+        this.addSpinRow({
+            title: _('Value Digits'),
+            subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor2-digits', tooltipSensor2Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
+        
+        const tooltipSensor3Section = this.addExpanderRow({title: _('Tooltip Sensor 3')}, group);
+        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor3', tooltipSensor3Section, 'json', '""');
+        this.addTextInputRow({
+            title: _('Short Name'),
+            subtitle: _('Short name to display in the tooltip.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor3-name', tooltipSensor3Section, '');
+        this.addSpinRow({
+            title: _('Value Digits'),
+            subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor3-digits', tooltipSensor3Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
+        
+        const tooltipSensor4Section = this.addExpanderRow({title: _('Tooltip Sensor 4')}, group);
+        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor4', tooltipSensor4Section, 'json', '""');
+        this.addTextInputRow({
+            title: _('Short Name'),
+            subtitle: _('Short name to display in the tooltip.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor4-name', tooltipSensor4Section, '');
+        this.addSpinRow({
+            title: _('Value Digits'),
+            subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor4-digits', tooltipSensor4Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
+        
+        const tooltipSensor5Section = this.addExpanderRow({title: _('Tooltip Sensor 5')}, group);
+        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor5', tooltipSensor5Section, 'json', '""');
+        this.addTextInputRow({
+            title: _('Short Name'),
+            subtitle: _('Short name to display in the tooltip.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor5-name', tooltipSensor5Section, '');
+        this.addSpinRow({
+            title: _('Value Digits'),
+            subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
+            tabs: 1
+        }, 'sensors-header-tooltip-sensor5-digits', tooltipSensor5Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
+        
         sensorsPage.add(group);
         
         return sensorsPage;
