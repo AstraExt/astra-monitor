@@ -1,4 +1,4 @@
-# Astra Monitor 13 - TO BE RELEASED
+# Astra Monitor 13 - February 28 2024
 
 ### New features
 - Add memory data unit customization (default is kB as kibibyte as standard) [[#67](https://github.com/AstraExt/astra-monitor/issues/67)]

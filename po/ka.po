@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-22 12:46+0100\n"
+"POT-Creation-Date: 2024-02-28 23:33+0100\n"
 "PO-Revision-Date: 2024-02-19 09:43+0100\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Poedit-Basepath: ../src\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: src/processor/processorMenu.js:35 prefs.js:276
+#: src/processor/processorMenu.js:35 prefs.js:299
 msgid "CPU"
 msgstr "CPU"
 
@@ -93,7 +93,7 @@ msgstr "გჰც"
 msgid "Top processes"
 msgstr "ტოპ პროცესები"
 
-#: src/processor/processorMenu.js:424 prefs.js:281
+#: src/processor/processorMenu.js:424 prefs.js:304
 msgid "GPU"
 msgstr "GPU"
 
@@ -166,20 +166,20 @@ msgstr "მოდულები"
 msgid "System uptime"
 msgstr "სისტემის მუშაობის დრო"
 
-#: src/processor/processorGraph.js:84 src/network/networkGraph.js:89
-#: src/storage/storageGraph.js:93 src/memory/memoryGraph.js:84
+#: src/processor/processorGraph.js:86 src/network/networkGraph.js:91
+#: src/storage/storageGraph.js:95 src/memory/memoryGraph.js:86
 #, fuzzy, javascript-format
 msgid "%d min ago"
 msgid_plural "%d mins ago"
 msgstr[0] "%d წუთის წინ"
 msgstr[1] "%d წუთის წინ"
 
-#: src/processor/processorGraph.js:87 src/network/networkGraph.js:92
-#: src/storage/storageGraph.js:96 src/memory/memoryGraph.js:87
+#: src/processor/processorGraph.js:89 src/network/networkGraph.js:94
+#: src/storage/storageGraph.js:98 src/memory/memoryGraph.js:89
 msgid "now"
 msgstr "ახლა"
 
-#: src/sensors/sensorsMenu.js:35 prefs.js:670 prefs.js:671
+#: src/sensors/sensorsMenu.js:35 prefs.js:818 prefs.js:819
 msgid "Sensors"
 msgstr "სენსორები"
 
@@ -187,7 +187,7 @@ msgstr "სენსორები"
 msgid "No sensor found"
 msgstr "სენსორი ვერ მოიძებნა"
 
-#: src/network/networkMenu.js:33 prefs.js:562 prefs.js:563
+#: src/network/networkMenu.js:33 prefs.js:672 prefs.js:673
 msgid "Network"
 msgstr "ქსელი"
 
@@ -217,7 +217,7 @@ msgctxt "short for download"
 msgid "D"
 msgstr "გადმ"
 
-#: src/storage/storageMenu.js:36 prefs.js:392 prefs.js:393
+#: src/storage/storageMenu.js:36 prefs.js:451 prefs.js:452
 msgid "Storage"
 msgstr "მეხსიერება"
 
@@ -229,7 +229,7 @@ msgstr "გლობალური წაკითხვა:"
 msgid "Global Write:"
 msgstr "გლობალური ჩაწერა:"
 
-#: src/storage/storageMenu.js:250
+#: src/storage/storageMenu.js:250 prefs.js:663
 msgid "Devices"
 msgstr "მოწყობილობები"
 
@@ -251,7 +251,7 @@ msgstr "ჩაწ"
 msgid "Disk"
 msgstr "დისკი"
 
-#: src/memory/memoryMenu.js:34 prefs.js:304 prefs.js:305
+#: src/memory/memoryMenu.js:34 prefs.js:332 prefs.js:333 prefs.js:439
 msgid "Memory"
 msgstr "მეხსიერება"
 
@@ -291,8 +291,8 @@ msgstr "ხელმისაწვდომი"
 msgid "Allocatable"
 msgstr "გამოყოფადი"
 
-#: src/memory/memoryMenu.js:167 prefs.js:445 prefs.js:478 prefs.js:592
-#: prefs.js:617
+#: src/memory/memoryMenu.js:167 prefs.js:504 prefs.js:537 prefs.js:702
+#: prefs.js:727
 msgid "Active"
 msgstr "აქტიური"
 
@@ -304,7 +304,7 @@ msgstr "ბუფერები"
 msgid "Cached"
 msgstr "ქეშირებული"
 
-#: src/memory/memoryMenu.js:280
+#: src/memory/memoryMenu.js:280 prefs.js:441
 msgid "Swap"
 msgstr "Swap"
 
@@ -502,7 +502,7 @@ msgid "Headers Height"
 msgstr "სათაურების სიმაღლე"
 
 #: prefs.js:183 prefs.js:189 prefs.js:195 prefs.js:201 prefs.js:252
-#: prefs.js:354 prefs.js:524 prefs.js:653 prefs.js:695
+#: prefs.js:382 prefs.js:583 prefs.js:763 prefs.js:843
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr ""
 "ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
@@ -535,21 +535,21 @@ msgstr "მონიტორის დალაგება"
 msgid "Processors"
 msgstr "პროცესორები"
 
-#: prefs.js:215 prefs.js:306 prefs.js:394 prefs.js:564 prefs.js:672
-#: prefs.js:706 prefs.js:714
+#: prefs.js:215 prefs.js:334 prefs.js:453 prefs.js:674 prefs.js:820
+#: prefs.js:852 prefs.js:860
 msgid "Show"
 msgstr "ჩვენება"
 
-#: prefs.js:216 prefs.js:307 prefs.js:395 prefs.js:565 prefs.js:673
+#: prefs.js:216 prefs.js:335 prefs.js:454 prefs.js:675 prefs.js:821
 msgid "Update frequency (seconds)"
 msgstr "განახლების სიხშირე (წამები)"
 
-#: prefs.js:217 prefs.js:325 prefs.js:491 prefs.js:630
+#: prefs.js:217 prefs.js:353 prefs.js:550 prefs.js:740
 msgid "Data Sources"
 msgstr "მონაცემთა წყაროები"
 
-#: prefs.js:219 prefs.js:225 prefs.js:231 prefs.js:327 prefs.js:333
-#: prefs.js:493 prefs.js:499 prefs.js:504 prefs.js:632
+#: prefs.js:219 prefs.js:225 prefs.js:231 prefs.js:355 prefs.js:361
+#: prefs.js:552 prefs.js:558 prefs.js:563 prefs.js:742
 msgid "Auto"
 msgstr "ავტო"
 
@@ -561,27 +561,27 @@ msgstr "CPU-ს გამოყენება"
 msgid "Cpu Cores Usage"
 msgstr "CPU-ს ბირთვების გამოყენება"
 
-#: prefs.js:235 prefs.js:337 prefs.js:502
+#: prefs.js:235 prefs.js:365 prefs.js:561
 msgid "Top Processes"
 msgstr "ტოპ პროცესები"
 
-#: prefs.js:237 prefs.js:339 prefs.js:509 prefs.js:680
+#: prefs.js:237 prefs.js:367 prefs.js:568 prefs.js:828
 msgid "Header"
 msgstr "სათაური"
 
-#: prefs.js:238 prefs.js:340 prefs.js:510 prefs.js:639 prefs.js:681
+#: prefs.js:238 prefs.js:368 prefs.js:569 prefs.js:749 prefs.js:829
 msgid "Indicators Order"
 msgstr "ინდიკატორების განლაგება"
 
-#: prefs.js:241 prefs.js:343 prefs.js:513 prefs.js:642 prefs.js:684
+#: prefs.js:241 prefs.js:371 prefs.js:572 prefs.js:752 prefs.js:832
 msgid "Icon"
 msgstr "ხატულა"
 
-#: prefs.js:242 prefs.js:344 prefs.js:514 prefs.js:643 prefs.js:685
+#: prefs.js:242 prefs.js:372 prefs.js:573 prefs.js:753 prefs.js:833
 msgid "Show Icon"
 msgstr "ხატულას ჩვენება"
 
-#: prefs.js:244 prefs.js:346 prefs.js:516 prefs.js:645 prefs.js:687
+#: prefs.js:244 prefs.js:374 prefs.js:575 prefs.js:755 prefs.js:835
 msgid "Icon Name"
 msgstr "ხატულას სახელი"
 
@@ -589,479 +589,671 @@ msgstr "ხატულას სახელი"
 msgid "Set icon name (ie: 'cpu-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'cpu-symbolic')"
 
-#: prefs.js:245 prefs.js:347 prefs.js:517 prefs.js:646 prefs.js:688
+#: prefs.js:245 prefs.js:375 prefs.js:576 prefs.js:756 prefs.js:836
 msgid "Set to empty to disable icon override"
 msgstr "დააყენეთ ცარიელზე ხატულების გადაყენების გასათიშად"
 
-#: prefs.js:248 prefs.js:350 prefs.js:520 prefs.js:649 prefs.js:691
+#: prefs.js:248 prefs.js:378 prefs.js:579 prefs.js:759 prefs.js:839
 msgid "Icon Color"
 msgstr "ხატულას ფერი"
 
-#: prefs.js:249 prefs.js:351 prefs.js:521 prefs.js:650 prefs.js:692
+#: prefs.js:249 prefs.js:379 prefs.js:580 prefs.js:760 prefs.js:840
 msgid "Icon Alert Color"
 msgstr "ხატულას გაფრთხილების ფერი"
 
-#: prefs.js:251 prefs.js:353 prefs.js:523 prefs.js:652 prefs.js:694
+#: prefs.js:251 prefs.js:381 prefs.js:582 prefs.js:762 prefs.js:842
 msgid "Icon Size"
 msgstr "ხატულას ზომა"
 
-#: prefs.js:256 prefs.js:358 prefs.js:528 prefs.js:657 prefs.js:699
-msgid "Tooltip"
-msgstr "მინიშნება"
-
-#: prefs.js:257 prefs.js:359 prefs.js:529 prefs.js:658 prefs.js:700
-msgid "Show Tooltip"
-msgstr "მინიშნების ჩვენება"
-
-#: prefs.js:258
+#: prefs.js:256 prefs.js:295
 msgid "Percentage"
 msgstr "პროცენტი"
 
-#: prefs.js:259
+#: prefs.js:257
 msgid "Show Percentage"
 msgstr "პროცენტის ჩვენება"
 
-#: prefs.js:260
+#: prefs.js:258 prefs.js:296
 msgid "Single Core Percentage"
 msgstr "ერთი ბირთვის პროცენტი"
 
-#: prefs.js:262 prefs.js:363 prefs.js:374 prefs.js:536 prefs.js:547
+#: prefs.js:260 prefs.js:389 prefs.js:400 prefs.js:598 prefs.js:609
 msgid "Icon Alert"
 msgstr "ხატულას გაფღტხილება"
 
-#: prefs.js:263
+#: prefs.js:261
 msgid "Set 0 to disable. Value is percentage of total cpu."
 msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს პროცენტებში."
 
-#: prefs.js:266 prefs.js:378
+#: prefs.js:264 prefs.js:404
 msgid "History Graph"
 msgstr "ისტორიის გრაფიკი"
 
-#: prefs.js:267 prefs.js:379
+#: prefs.js:265 prefs.js:405
 msgid "Show History Graph"
 msgstr "ისტორიის გრაფიკის ჩვენება"
 
-#: prefs.js:268 prefs.js:278 prefs.js:380 prefs.js:387
+#: prefs.js:267 prefs.js:282 prefs.js:407 prefs.js:421 prefs.js:591
+#, fuzzy
+msgid "Main Color"
+msgstr "ხატულას ფერი"
+
+#: prefs.js:268 prefs.js:283
+msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
+msgstr ""
+
+#: prefs.js:271 prefs.js:301 prefs.js:411 prefs.js:440
 msgid "History Graph Breakdown"
 msgstr "ისტორიის გრაფიკის დაყოფა"
 
-#: prefs.js:269 prefs.js:381
+#: prefs.js:273 prefs.js:288 prefs.js:413 prefs.js:427
+#, fuzzy
+msgid "Secondary Color"
+msgstr "ხატულას ფერი"
+
+#: prefs.js:274 prefs.js:289
+msgid "<b>System usage</b> color."
+msgstr ""
+
+#: prefs.js:277 prefs.js:417
 msgid "History Graph Width"
 msgstr "ისტორიის გრაფიკის სიგანე"
 
-#: prefs.js:270 prefs.js:382
+#: prefs.js:278 prefs.js:418
 msgid "Realtime Bar"
 msgstr "რეალური დროის სვეტი"
 
-#: prefs.js:271 prefs.js:383
+#: prefs.js:279 prefs.js:419
 msgid "Show Realtime Bar"
 msgstr "რეალური დროის სვეტის ჩვენება"
 
-#: prefs.js:272
+#: prefs.js:280
 msgid "Realtime per-core Bars"
 msgstr "რეალური დროის ბირთვის სვეტები"
 
-#: prefs.js:273 prefs.js:384
+#: prefs.js:286 prefs.js:425
 msgid "Realtime Bar Breakdown"
 msgstr "რეალური დროის სვეტის დაყოფა"
 
-#: prefs.js:275 prefs.js:386
+#: prefs.js:293 prefs.js:432 prefs.js:644 prefs.js:798 prefs.js:868
+msgid "Tooltip"
+msgstr "მინიშნება"
+
+#: prefs.js:294 prefs.js:433 prefs.js:645 prefs.js:799 prefs.js:869
+msgid "Show Tooltip"
+msgstr "მინიშნების ჩვენება"
+
+#: prefs.js:298 prefs.js:438 prefs.js:651 prefs.js:802
 msgid "Menu"
 msgstr "მენიუ"
 
-#: prefs.js:277
+#: prefs.js:300
 msgid "Realtime Bars Breakdown"
 msgstr "რეალური დროის სვეტების დაყოფა"
 
-#: prefs.js:279
+#: prefs.js:302
 msgid "Core Bars Breakdown"
 msgstr "ბირთვის სვეტების დაყოფა"
 
-#: prefs.js:280
+#: prefs.js:303
 msgid "Top Processes Single Core"
 msgstr "ტოპ პროცესები ერთ ბირთვზე"
 
-#: prefs.js:288 prefs.js:702
+#: prefs.js:311 prefs.js:848
 msgid "None"
 msgstr "არცერთი"
 
-#: prefs.js:299
+#: prefs.js:322
 msgid "Main GPU"
 msgstr "მთავარი GPU"
 
-#: prefs.js:309
+#: prefs.js:324
+#, fuzzy
+msgid "Bars Color"
+msgstr "ხატულას ფერი"
+
+#: prefs.js:325
+msgid "GPU bars main color."
+msgstr ""
+
+#: prefs.js:337
 #, fuzzy
 msgid "kB (as kiB)"
 msgstr "კ (როგორც კბ/წმ)"
 
-#: prefs.js:310
+#: prefs.js:338
 #, fuzzy
 msgid "kB (as KB)"
 msgstr "კ (როგორც კბ/წმ)"
 
-#: prefs.js:311
+#: prefs.js:339
 msgid "kiB"
 msgstr ""
 
-#: prefs.js:312
+#: prefs.js:340
 #, fuzzy
 msgid "KiB"
 msgstr "კიბ/წმ"
 
-#: prefs.js:313
+#: prefs.js:341
 msgid "KB"
 msgstr ""
 
-#: prefs.js:314
+#: prefs.js:342
 #, fuzzy
 msgid "k (as kB)"
 msgstr "კ (როგორც კბ/წმ)"
 
-#: prefs.js:315
+#: prefs.js:343
 #, fuzzy
 msgid "Ki (as Ki)"
 msgstr "კი (როგორც კიბ/წმ)"
 
-#: prefs.js:317 prefs.js:409 prefs.js:579
+#: prefs.js:345 prefs.js:468 prefs.js:689
 msgid "Data Unit"
 msgstr "მონაცემთა ერთეული"
 
-#: prefs.js:319
+#: prefs.js:347
 msgid "Used = Total - Free - Buffers - Cached"
 msgstr "გამოყენებული = ჯამური - თავისუფალი - ბუფერები - ქეშირებული"
 
-#: prefs.js:320
+#: prefs.js:348
 msgid "Used = Total - Free"
 msgstr "გამოყენებული = ჯამური - თავისუფალი"
 
-#: prefs.js:321
+#: prefs.js:349
 msgid "Used = Total - Available"
 msgstr "გამოყენებული = ჯამური - ხელმისაწვდომი"
 
-#: prefs.js:322
+#: prefs.js:350
 msgid "Used = Active"
 msgstr "გამოყენებული = აქტიური"
 
-#: prefs.js:324
+#: prefs.js:352
 msgid "Used Memory"
 msgstr "გამოყენებული მეხსიერება"
 
-#: prefs.js:331
+#: prefs.js:359
 #, fuzzy
 msgid "Memory Usage"
 msgstr "ინფორმაცია მეხსიერების გამოყენების შესახებ"
 
-#: prefs.js:347
+#: prefs.js:375
 msgid "Set icon name (ie: 'memory-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'memory-symbolic')"
 
-#: prefs.js:360 prefs.js:533
+#: prefs.js:386 prefs.js:434 prefs.js:595
 msgid "Usage Percentage"
 msgstr "გამოყენების პროცენტი"
 
-#: prefs.js:361
+#: prefs.js:387
 msgid "Show Usage Percentage"
 msgstr "გამოყენების პროცენტის ჩვენება"
 
-#: prefs.js:364
+#: prefs.js:390
 msgid "Set 0 to disable. Value is percentage of ram usage."
 msgstr ""
 "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიულიმეხსიერების გამოყენების "
 "პროცენტი."
 
-#: prefs.js:367 prefs.js:540
+#: prefs.js:393 prefs.js:435 prefs.js:602
 msgid "Usage Value"
 msgstr "გამოყენების მნიშვნელობა"
 
-#: prefs.js:368
+#: prefs.js:394
 msgid "Show Usage Value"
 msgstr "გამოყენების მნიშვნელობის ჩვენება"
 
-#: prefs.js:369 prefs.js:542
+#: prefs.js:395 prefs.js:604
 msgid "Usage Value Max Number of Figures"
 msgstr "გამოყენების მნიშვნელობის სიმბოლოთამაქსიმალური რაოდენობა"
 
-#: prefs.js:370 prefs.js:543
+#: prefs.js:396 prefs.js:436 prefs.js:605
 #, fuzzy
 msgid "Free Value"
 msgstr "გამოყენების მნიშვნელობა"
 
-#: prefs.js:371
+#: prefs.js:397
 #, fuzzy
 msgid "Show Free Value"
 msgstr "გამოყენების მნიშვნელობის ჩვენება"
 
-#: prefs.js:372 prefs.js:545
+#: prefs.js:398 prefs.js:607
 #, fuzzy
 msgid "Free Value Max Number of Figures"
 msgstr "გამოყენების მნიშვნელობის სიმბოლოთამაქსიმალური რაოდენობა"
 
-#: prefs.js:375
+#: prefs.js:401
 #, fuzzy
 msgid "Set 0 to disable. Value is free MB of ram."
 msgstr ""
 "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიულიმეხსიერების გამოყენების "
 "პროცენტი."
 
-#: prefs.js:397 prefs.js:567
+#: prefs.js:408 prefs.js:422
+msgid "<b>Used</b> memory color."
+msgstr ""
+
+#: prefs.js:414 prefs.js:428
+msgid "<b>Allocated <u>unused</u></b> memory color."
+msgstr ""
+
+#: prefs.js:443
+msgid "Swap Bar Color"
+msgstr ""
+
+#: prefs.js:444
+msgid "Swap bar main color."
+msgstr ""
+
+#: prefs.js:456 prefs.js:677
 msgid "kB/s"
 msgstr "კბ/წმ"
 
-#: prefs.js:398 prefs.js:568
+#: prefs.js:457 prefs.js:678
 msgid "KiB/s"
 msgstr "კიბ/წმ"
 
-#: prefs.js:399 prefs.js:569
+#: prefs.js:458 prefs.js:679
 msgid "kb/s"
 msgstr "კბიტ/წმ"
 
-#: prefs.js:400 prefs.js:570
+#: prefs.js:459 prefs.js:680
 msgid "Kibit/s"
 msgstr "კიბიტ/წმ"
 
-#: prefs.js:401 prefs.js:571
+#: prefs.js:460 prefs.js:681
 msgid "kBps"
 msgstr "კბ/წმ"
 
-#: prefs.js:402 prefs.js:572
+#: prefs.js:461 prefs.js:682
 msgid "KiBps"
 msgstr "კიბ/წმ"
 
-#: prefs.js:403 prefs.js:573
+#: prefs.js:462 prefs.js:683
 msgid "Kibps"
 msgstr "კიბიტ/წმ"
 
-#: prefs.js:404 prefs.js:574
+#: prefs.js:463 prefs.js:684
 msgid "kbps"
 msgstr "კბიტ/წმ"
 
-#: prefs.js:405 prefs.js:575
+#: prefs.js:464 prefs.js:685
 msgid "Kibitps"
 msgstr "კიბიტ/წმ"
 
-#: prefs.js:406 prefs.js:576
+#: prefs.js:465 prefs.js:686
 msgid "k (as kB/s)"
 msgstr "კ (როგორც კბ/წმ)"
 
-#: prefs.js:407 prefs.js:577
+#: prefs.js:466 prefs.js:687
 msgid "Ki (as KiB/s)"
 msgstr "კი (როგორც კიბ/წმ)"
 
-#: prefs.js:430 prefs.js:530
+#: prefs.js:489 prefs.js:587
 msgid "Main Disk"
 msgstr "მთავარი დისკი"
 
-#: prefs.js:431
+#: prefs.js:490
 msgid "Ignored Storage Devices"
 msgstr "იგნორირებული მეხსიერების მოწყობილობები"
 
-#: prefs.js:433 prefs.js:582
+#: prefs.js:492 prefs.js:692
 msgid "Regex"
 msgstr "რეგულარული გამონათქვამი"
 
-#: prefs.js:434
+#: prefs.js:493
 msgid "Devices matching this regex will be ignored."
 msgstr ""
 "მოწყობილობები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება "
 "იგნორირებული."
 
-#: prefs.js:434 prefs.js:583
+#: prefs.js:493 prefs.js:693
 msgid "Leave empty to disable. Usage example: "
 msgstr "დატოვეთ ცარიელი გასათიშად. გამოყენების მაგალითი:"
 
-#: prefs.js:445 prefs.js:468 prefs.js:592 prefs.js:607
+#: prefs.js:504 prefs.js:527 prefs.js:702 prefs.js:717
 msgid "Ignored"
 msgstr "იგნორირებული"
 
-#: prefs.js:447
+#: prefs.js:506
 msgid "Main"
 msgstr "მთავარი"
 
-#: prefs.js:464
+#: prefs.js:523
 msgid "Main disk cannot be ignored"
 msgstr "მთავარი დისკი ვერ იქნება იგნორირებული"
 
-#: prefs.js:497
+#: prefs.js:556
 #, fuzzy
 msgid "Storage Usage"
 msgstr "მეხსიერების გამოყენების სვეტის ჩვენება"
 
-#: prefs.js:507
+#: prefs.js:566
 #, fuzzy
 msgid "Storage IO"
 msgstr "მეხსიერება"
 
-#: prefs.js:517
+#: prefs.js:576
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'drive-harddisk-symbolic')"
 
-#: prefs.js:531
+#: prefs.js:588
 #, fuzzy
 msgid "Usage Bar"
 msgstr "გამოყენების მნიშვნელობა"
 
-#: prefs.js:532
+#: prefs.js:589
 #, fuzzy
 msgid "Show Main Disk Usage Bar"
 msgstr "Показать панель использования сети"
 
-#: prefs.js:534
+#: prefs.js:592
+msgid "<b>Used</b> storage color."
+msgstr ""
+
+#: prefs.js:596
 #, fuzzy
 msgid "Show Main Disk Usage Percentage"
 msgstr "გამოყენების პროცენტის ჩვენება"
 
-#: prefs.js:537
+#: prefs.js:599
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის დისკის გამოყენების პროცენტი."
 
-#: prefs.js:541
+#: prefs.js:603
 #, fuzzy
 msgid "Show Main Disk Usage Value"
 msgstr "გამოყენების მნიშვნელობის ჩვენება"
 
-#: prefs.js:544
+#: prefs.js:606
 #, fuzzy
 msgid "Show Main Disk Free Value"
 msgstr "გამოყენების მნიშვნელობის ჩვენება"
 
-#: prefs.js:548
+#: prefs.js:610
 #, fuzzy
 msgid "Set 0 to disable. Value is free MB of storage."
 msgstr ""
 "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიულიმეხსიერების გამოყენების "
 "პროცენტი."
 
-#: prefs.js:551 prefs.js:659
+#: prefs.js:613 prefs.js:767
 msgid "IO"
 msgstr "შეყვანა/გამოყვანა"
 
-#: prefs.js:552 prefs.js:660
+#: prefs.js:614 prefs.js:768
+#, fuzzy
+msgid "Realtime IO Bar"
+msgstr "რეალური დროის სვეტი"
+
+#: prefs.js:615 prefs.js:769
 msgid "Show Realtime IO Bar"
 msgstr "რეალურ დროში შეყვანის/გამოყვანის პანელის სვეტის ჩვენება"
 
-#: prefs.js:553 prefs.js:661
+#: prefs.js:617 prefs.js:629 prefs.js:654
+#, fuzzy
+msgid "Read Color"
+msgstr "ხატულას ფერი"
+
+#: prefs.js:618
+msgid "<b>Read</b> IO Bar color."
+msgstr ""
+
+#: prefs.js:622 prefs.js:634 prefs.js:659
+msgid "Write Color"
+msgstr ""
+
+#: prefs.js:623
+msgid "<b>Write</b> IO Bar color."
+msgstr ""
+
+#: prefs.js:626 prefs.js:780
+#, fuzzy
+msgid "IO History Graph"
+msgstr "ისტორიის გრაფიკი"
+
+#: prefs.js:627 prefs.js:781
 msgid "Show IO History Graph"
 msgstr "შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
 
-#: prefs.js:554 prefs.js:662
+#: prefs.js:630
+#, fuzzy
+msgid "<b>Read</b> IO History Graph color."
+msgstr "შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
+
+#: prefs.js:635
+msgid "<b>Write</b> IO History Graph color."
+msgstr ""
+
+#: prefs.js:638 prefs.js:792
 msgid "IO History Graph Width"
 msgstr "შეყვანა/გამოყვანის ისტორიის გრაფიკის სიგანე"
 
-#: prefs.js:555 prefs.js:663
+#: prefs.js:639 prefs.js:649 prefs.js:793 prefs.js:800
+#, fuzzy
+msgid "IO Speed"
+msgstr "შეყვანა/გამოყვანის სიჩქარის ჩვენება"
+
+#: prefs.js:640 prefs.js:794
 msgid "Show IO Speed"
 msgstr "შეყვანა/გამოყვანის სიჩქარის ჩვენება"
 
-#: prefs.js:556 prefs.js:664
+#: prefs.js:641 prefs.js:795
 msgid "IO Speed Max Number of Figures"
 msgstr "შეყვანა/გამოყვანის სიმბოლოთა მაქსიმალური რაოდენობა"
 
-#: prefs.js:557 prefs.js:665
+#: prefs.js:642 prefs.js:796
 msgid "IO Speed Threshold"
 msgstr "შეყვანა/გამოყვანის სიჩქარის ლიმიტი"
 
-#: prefs.js:557 prefs.js:665
+#: prefs.js:642 prefs.js:796
 msgid "in kB/s"
 msgstr "კბ/წმ-ში"
 
-#: prefs.js:580
+#: prefs.js:646
+#, fuzzy
+msgid "Main Disk Usage Percentage"
+msgstr "გამოყენების პროცენტის ჩვენება"
+
+#: prefs.js:647
+#, fuzzy
+msgid "Main Disk Usage Value"
+msgstr "გამოყენების მნიშვნელობის ჩვენება"
+
+#: prefs.js:648
+#, fuzzy
+msgid "Main Disk Free Value"
+msgstr "გამოყენების მნიშვნელობის ჩვენება"
+
+#: prefs.js:652 prefs.js:803
+msgid "IO Arrows"
+msgstr ""
+
+#: prefs.js:655
+msgid "<b>Read</b> IO arrow color."
+msgstr ""
+
+#: prefs.js:660
+msgid "<b>Write</b> IO arrow color."
+msgstr ""
+
+#: prefs.js:665
+msgid "Device Usage Bar Color"
+msgstr ""
+
+#: prefs.js:690
 msgid "Ignored Network Interfaces"
 msgstr "იგნორირებული ქსლური ინტერფეისები"
 
-#: prefs.js:583
+#: prefs.js:693
 msgid "Interfaces matching this regex will be ignored."
 msgstr ""
 "ინტერფეისები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება "
 "იგნრირებული."
 
-#: prefs.js:636
+#: prefs.js:746
 #, fuzzy
 msgid "Network IO"
 msgstr "ქსელი"
 
-#: prefs.js:646
+#: prefs.js:756
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'network-wired-symbolic')"
 
-#: prefs.js:675
+#: prefs.js:771 prefs.js:783 prefs.js:805
+#, fuzzy
+msgid "Upload Color"
+msgstr "ხატულას ფერი"
+
+#: prefs.js:772
+msgid "<b>Upload</b> IO Bar color."
+msgstr ""
+
+#: prefs.js:776 prefs.js:788 prefs.js:810
+#, fuzzy
+msgid "Download Color"
+msgstr "ხატულას ფერი"
+
+#: prefs.js:777
+msgid "<b>Download</b> IO Bar color."
+msgstr ""
+
+#: prefs.js:784
+#, fuzzy
+msgid "<b>Upload</b> IO History Graph color."
+msgstr "შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
+
+#: prefs.js:789
+#, fuzzy
+msgid "<b>Download</b> IO History Graph color."
+msgstr "შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
+
+#: prefs.js:806
+msgid "<b>Upload</b> IO arrow color."
+msgstr ""
+
+#: prefs.js:811
+msgid "<b>Download</b> IO arrow color."
+msgstr ""
+
+#: prefs.js:823
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr "ცელსიუსი"
 
-#: prefs.js:676
+#: prefs.js:824
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr "ფარენჰაიტი"
 
-#: prefs.js:678
+#: prefs.js:826
 msgid "Temperature Unit"
 msgstr "ტემპერატურის ერთეული"
 
-#: prefs.js:688
+#: prefs.js:836
 msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'temperature-symbolic')"
 
-#: prefs.js:705
+#: prefs.js:851
 msgid "Sensor 1"
 msgstr "სენსორი 1"
 
-#: prefs.js:707 prefs.js:715
+#: prefs.js:853 prefs.js:861 prefs.js:871 prefs.js:883 prefs.js:895
+#: prefs.js:907 prefs.js:919
 msgid "Source"
 msgstr "წყარო"
 
-#: prefs.js:709 prefs.js:717
+#: prefs.js:855 prefs.js:863 prefs.js:878 prefs.js:890 prefs.js:902
+#: prefs.js:914 prefs.js:926
 msgid "Value Digits"
 msgstr "მნიშვნელობის ციფრები"
 
-#: prefs.js:710 prefs.js:718
+#: prefs.js:856 prefs.js:864 prefs.js:879 prefs.js:891 prefs.js:903
+#: prefs.js:915 prefs.js:927
 msgid "Set -1 to auto. Number of digits after the decimal point."
 msgstr ""
 "დააყენეთ -1 ავტომატურისთვის. ციფრთა რაოდენობა ათწილადი გამყოფის შემდეგ ."
 
-#: prefs.js:713
+#: prefs.js:859
 msgid "Sensor 2"
 msgstr "სენსორი 2"
 
-#: prefs.js:725
+#: prefs.js:870
+#, fuzzy
+msgid "Tooltip Sensor 1"
+msgstr "Показать датчик 1"
+
+#: prefs.js:873 prefs.js:885 prefs.js:897 prefs.js:909 prefs.js:921
+#, fuzzy
+msgid "Short Name"
+msgstr "ხატულას სახელი"
+
+#: prefs.js:874 prefs.js:886 prefs.js:898 prefs.js:910 prefs.js:922
+msgid "Short name to display in the tooltip."
+msgstr ""
+
+#: prefs.js:882
+#, fuzzy
+msgid "Tooltip Sensor 2"
+msgstr "Показать датчик 2"
+
+#: prefs.js:894
+#, fuzzy
+msgid "Tooltip Sensor 3"
+msgstr "Показать датчик 1"
+
+#: prefs.js:906
+#, fuzzy
+msgid "Tooltip Sensor 4"
+msgstr "Показать датчик 1"
+
+#: prefs.js:918
+#, fuzzy
+msgid "Tooltip Sensor 5"
+msgstr "Показать датчик 1"
+
+#: prefs.js:934
 msgid "About"
 msgstr ""
 
-#: prefs.js:726
+#: prefs.js:935
 msgid "Info"
 msgstr "ინფო"
 
-#: prefs.js:735
+#: prefs.js:944
 msgid "Version"
 msgstr "ვერსია"
 
-#: prefs.js:736
+#: prefs.js:945
 msgid "Changelog"
 msgstr "ცვლილებათა ჟურნალი"
 
-#: prefs.js:737
+#: prefs.js:946
 msgid "GitHub"
 msgstr "GitHub"
 
-#: prefs.js:738
+#: prefs.js:947
 msgid "GNOME Extensions page"
 msgstr "GNOME-ს გაფართოებების გვერდი"
 
-#: prefs.js:739
+#: prefs.js:948
 msgid "Report a bug or suggest new feature"
 msgstr "პრობლემის დასმენა ან ახალი ფუნქციის შეთავაზება"
 
-#: prefs.js:740
+#: prefs.js:949
 msgid "Support us on Ko-Fi"
 msgstr "დაგვიჭირეთ მხარი Ko-Fi-ზე"
 
-#: prefs.js:741
+#: prefs.js:950
 msgid "Buy us a coffee"
 msgstr "გვიყიდეთ ყავა"
 
-#: prefs.js:742
+#: prefs.js:951
 msgid "Become a patron"
 msgstr "გახდით მეცენატი"
 
-#: prefs.js:743
+#: prefs.js:952
 msgid "Debug Mode"
 msgstr "დებაგის რეჟიმი"
 
@@ -1086,14 +1278,8 @@ msgstr "დებაგის რეჟიმი"
 #~ msgid "Panel Box Ordering"
 #~ msgstr "Порядок блока с панелями"
 
-#~ msgid "Show Sensor 1"
-#~ msgstr "Показать датчик 1"
-
 #~ msgid "Sensor 1 Source"
 #~ msgstr "Источник датчика 1"
-
-#~ msgid "Show Sensor 2"
-#~ msgstr "Показать датчик 2"
 
 #~ msgid "Sensor 2 Source"
 #~ msgstr "Источник датчика 2"
