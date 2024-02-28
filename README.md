@@ -59,13 +59,14 @@ _**NOTE**: The screenshots below are from an outdated version of the extension a
 As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
 
 ```mermaid
+%%{init: { 'theme': 'dark' } }%%
 timeline
-  section Alpha
-    Late February 2024: Graph Customization: Tooltips Customization
-  section Beta
-    Early March 2024: Advanced Network Monitoring: Advanced Disk Monitoring
-    Late March 2024: Advanced GPU Monitoring: Battery Monitoring
-    Early April 2024: User Custom Commands: Continuos Monitoring Mode
+  section Alpha<br>1/2
+    Late February 2024: 🔲<br>Graph Customization: ✅<br>Tooltips Customization
+  section Beta<br>0/6
+    Early March 2024: 🔲<br>Advanced Network Monitoring: 🔲<br>Advanced Disk Monitoring
+    Late March 2024: 🔲<br>Advanced GPU Monitoring: 🔲<br>Battery Monitoring
+    Early April 2024: 🔲<br>User Custom Commands: 🔲<br>Continuos Monitoring Mode
   section Release
     Late April 2024
 ```
