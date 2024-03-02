@@ -69,6 +69,7 @@ export default class CancellableTaskManager<T> {
             if(this.cancelId) {
                 this.taskCancellable.cancel();
                 this.taskCancellable.disconnect(this.cancelId);
+                this.taskCancellable = new Gio.Cancellable();
                 this.cancelId = undefined;
             }
             if(timeoutId) {

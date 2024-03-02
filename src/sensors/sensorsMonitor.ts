@@ -128,7 +128,7 @@ export default class SensorsMonitor extends Monitor {
         // "sensors" provider
         try {
             const sensorsDataValue = await sensorsData.getValue();
-            if(sensorsDataValue.length < 1)
+            if(!sensorsDataValue)
                 return false;
             
             const parsedData = JSON.parse(sensorsDataValue);
@@ -136,7 +136,7 @@ export default class SensorsMonitor extends Monitor {
                 data.sensors = parsedData;
         }
         catch(e: any) {
-            Utils.error(e.message);
+            Utils.error(`Update sensors data error: ${e.message}`);
         }
         
         //TODO add other providers

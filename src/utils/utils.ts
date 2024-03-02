@@ -1474,7 +1474,7 @@ export default class Utils {
             
             if(cancellableTaskManager)
                 cancellableTaskManager.setSubprocess(proc);
-    
+            
             // Communicate with the subprocess asynchronously
             proc.communicate_utf8_async(null, null, (proc: Gio.Subprocess, res: Gio.AsyncResult) => {
                 try {

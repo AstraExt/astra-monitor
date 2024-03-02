@@ -1,3 +1,8 @@
+# Astra Monitor 14 - TO BE RELEASED
+
+### Bug fixes
+- Fixed a bug where a task could stop updating when a cancel was requested
+
 # Astra Monitor 13 - February 28 2024
 
 ### New features
