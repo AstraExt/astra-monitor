@@ -60,7 +60,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="2">Alpha<br>3/4</th>
+        <th style="text-align:center" colspan="2">Alpha<br>4/5</th>
         <th style="text-align:center" colspan="3">Beta<br>0/6</th>
         <th style="text-align:center">Release</th>
     </tr>
@@ -82,10 +82,18 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
     </tr>
     <tr>
         <td>✅<br>Tooltips Customization</td>
-        <td>🔲<br>CPU Load</td>
+        <td>✅<br>CPU Load</td>
         <td>🔲<br>Advanced Disk Monitoring</td>
         <td>🔲<br>Battery Monitoring</td>
         <td>🔲<br>Continuos Monitoring Mode</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>🔲<br>Add hwmon source</td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
     </tr>
 </table>
