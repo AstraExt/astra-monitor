@@ -1886,7 +1886,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             else if(type.equal(new GLib.VariantType('b')))
                 exported[key] = value.get_boolean();
             else if(type.equal(new GLib.VariantType('i')))
-                exported[key] = Math.round(value.get_double());
+                exported[key] = value.get_int32();
             else if(type.equal(new GLib.VariantType('d')))
                 exported[key] = Utils.roundFloatingPointNumber(value.get_double());
             else
@@ -1942,7 +1942,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             else if(type.equal(new GLib.VariantType('b')))
                 Config.set(key, schema.get_default_value().get_boolean(), 'boolean');
             else if(type.equal(new GLib.VariantType('i')))
-                Config.set(key, schema.get_default_value().get_double(), 'int');
+                Config.set(key, schema.get_default_value().get_int32(), 'int');
             else if(type.equal(new GLib.VariantType('d')))
                 Config.set(key, schema.get_default_value().get_double(), 'number');
             else
