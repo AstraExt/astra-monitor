@@ -1232,7 +1232,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             dialog.connect('response', (dialog, id) => {
                 if(id == Gtk.ResponseType.OK) {
                     try {
-                        const path = dialog.get_file().get_path();
+                        let path = dialog.get_file().get_path();
+                        if(!path.endsWith('.json'))
+                            path += '.json';
                         Utils.readFileAsync(path).then(data => {
                             this.importSettings(data);
                             window.close();
