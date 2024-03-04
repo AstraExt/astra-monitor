@@ -1170,10 +1170,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             version = 'EGOv' + metadata['version'];
         
         this.addLabelRow({title: _('Version')}, version, group);
-        this.addLinkRow({title: _('Changelog')}, 'https://github.com/AstraExt/astra-monitor/blob/main/RELEASES.md', group);
         this.addLinkRow({title: _('GitHub')}, 'https://github.com/AstraExt/astra-monitor', group);
-        this.addLinkRow({title: _('GNOME Extensions page')}, 'https://extensions.gnome.org/extension/6682/astra-monitor/', group);
+        this.addLinkRow({title: _('Changelog')}, 'https://github.com/AstraExt/astra-monitor/blob/main/RELEASES.md', group);
+        this.addLinkRow({title: _('Roadmap')}, 'https://github.com/AstraExt/astra-monitor#roadmap', group);
         this.addLinkRow({title: _('Report a bug or suggest new feature')}, 'https://github.com/AstraExt/astra-monitor/issues/new/choose', group);
+        this.addLinkRow({title: _('GNOME Extensions page')}, 'https://extensions.gnome.org/extension/6682/astra-monitor/', group);
         this.addLinkRow({title: '<span color="#FFB000">★ ' + _('Support us on Ko-Fi') + '</span>'}, 'https://ko-fi.com/astraext', group);
         this.addLinkRow({title: '<span color="#FFB000">★ ' + _('Buy us a coffee') + '</span>'}, 'https://www.buymeacoffee.com/astra.ext', group);
         this.addLinkRow({title: '<span color="#FFB000">★ ' + _('Become a patron') + '</span>'}, 'https://www.patreon.com/AstraExt', group);
