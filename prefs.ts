@@ -44,6 +44,9 @@ type AdjustamentProps = {
     page?:number
 };
 
+type ColorCallback = (color: string) => void;
+enum ColorCategory { MAIN, SECONDARY }
+
 export default class AstraMonitorPrefs extends ExtensionPreferences {
     private minimumSize = { width: 500, height: 300 };
     private defaultSize = { width: 800, height: 700 };
@@ -192,6 +195,25 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle:  _('Set to "Dark" or "Light" based on your shell TOPBAR theme to improve readability.'),
             tabs: 1
         }, choicesPanel, 'theme-style', themeSection, 'string');
+        
+        this.addColorRow({
+            title: _('Main Color'),
+            subtitle: _('Setting this will replace all main colors.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
+        }, (color: string) => {
+            if(color)
+                this.setAllColors(color, ColorCategory.MAIN);
+        }, themeSection, 'rgba(29,172,214,1.0)');
+        this.addColorRow({
+            title: _('Secondary Color'),
+            subtitle: _('Setting this will replace all secondary colors.'),
+            icon_name: 'am-dialog-warning-symbolic',
+            tabs: 1
+        }, (color: string) => {
+            if(color)
+                this.setAllColors(color, ColorCategory.SECONDARY);
+        }, themeSection, 'rgba(214,29,29,1.0)');
         
         const panelSection = this.addExpanderRow({title: _('Panel Box')}, group);
         choicesPanel = [
@@ -713,7 +735,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const mainDiskSection = this.addExpanderRow({title: _('Main Disk')}, group);
         
         this.addLabelRow({title: _('Usage Bar'), tabs: 1}, '', mainDiskSection);
-        this.addSwitchRow({title: _('Show Main Disk Usage Bar'), tabs: 2}, 'storage-header-bars', mainDiskSection);this.addColorRow({
+        this.addSwitchRow({title: _('Show Main Disk Usage Bar'), tabs: 2}, 'storage-header-bars', mainDiskSection);
+        this.addColorRow({
             title: _('Main Color'),
             subtitle: _('<b>Used</b> storage color.'),
             tabs: 2
@@ -1154,6 +1177,47 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         return aboutPage;
     }
     
+    private setAllColors(color:string, category:ColorCategory) {
+        if(category === ColorCategory.MAIN) {
+            const mainColors = [
+                'processor-header-graph-color1',
+                'processor-header-bars-color1',
+                'processor-menu-gpu-color',
+                'memory-header-graph-color1',
+                'memory-header-bars-color1',
+                'memory-menu-swap-color',
+                'storage-header-bars-color1',
+                'storage-header-io-bars-color1',
+                'storage-header-io-graph-color1',
+                'storage-menu-arrow-color1',
+                'storage-menu-device-color',
+                'network-header-io-bars-color1',
+                'network-header-io-graph-color1',
+                'network-menu-arrow-color1'
+            ];
+            
+            for(const colorPref of mainColors)
+                Config.set(colorPref, color, 'string');
+        }
+        else if(category === ColorCategory.SECONDARY) {
+            const secondaryColors = [
+                'processor-header-graph-color2',
+                'processor-header-bars-color2',
+                'memory-header-graph-color2',
+                'memory-header-bars-color2',
+                'storage-header-io-bars-color2',
+                'storage-header-io-graph-color2',
+                'storage-menu-arrow-color2',
+                'network-header-io-bars-color2',
+                'network-header-io-graph-color2',
+                'network-menu-arrow-color2'
+            ];
+            
+            for(const colorPref of secondaryColors)
+                Config.set(colorPref, color, 'string');
+        }
+    }
+    
     private addExpanderRow(props: RowProps, group: Adw.PreferencesGroup|Adw.ExpanderRow) {
         const tabs = props.tabs;
         delete props.tabs;
@@ -1343,9 +1407,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         row.activatable_widget = toggle;
     }
     
-    addColorRow(props: RowProps, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, reset?: string) {
+    addColorRow(props: RowProps, setting: string|ColorCallback, group: Adw.PreferencesGroup|Adw.ExpanderRow, reset?: string) {
         const tabs = props.tabs;
         delete props.tabs;
+        
+        if(props.icon_name) {
+            if(props.title)
+                props.title = '  ' + props.title;
+            if(props.subtitle)
+                props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
+        }
+        
+        const isCallback = typeof setting === 'function';
         
         const row = new Adw.ActionRow(props);
         if(tabs)
@@ -1358,12 +1431,27 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const button = new Gtk.ColorButton();
         const rgba = new Gdk.RGBA();
-        rgba.parse(Config.get_string(setting) || '#000000');
+        if(isCallback)
+            rgba.parse('rgba(0,0,0,0)');
+        else
+            rgba.parse(Config.get_string(setting) || 'rgba(0,0,0,0)');
         button.useAlpha = true;
         button.set_rgba(rgba);
+        
         button.connect('color-set', widget => {
-            Config.set(setting, widget.get_rgba().to_string(), 'string');
+            if(isCallback)
+                setting(widget.get_rgba().to_string() || '');
+            else
+                Config.set(setting, widget.get_rgba().to_string(), 'string');
         });
+        
+        if(!isCallback) {
+            Config.connect(this, 'changed::' + setting, () => {
+                const rgba = new Gdk.RGBA();
+                rgba.parse(Config.get_string(setting) || 'rgba(0,0,0,0)');
+                button.set_rgba(rgba);
+            });
+        }
         
         if(reset !== undefined) {
             const resetButton = new Gtk.Button({
@@ -1377,7 +1465,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             row.add_suffix(resetButton);
             
             resetButton.connect('clicked', () => {
-                Config.set(setting, reset, 'string');
+                if(isCallback)
+                    setting(reset);
+                else
+                    Config.set(setting, reset, 'string');
+                
                 const rgba = new Gdk.RGBA();
                 rgba.parse(reset);
                 button.set_rgba(rgba);
