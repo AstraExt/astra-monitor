@@ -309,6 +309,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         ];
         this.addComboRow({title: _('Top Processes'), tabs: 1}, cpuTopProcessesSources, 'processor-source-top-processes', sourcesSection, 'string', 'auto');
         
+        const cpuLoadAverageSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'proc', text: '/proc/loadavg'},
+        ];
+        this.addComboRow({title: _('Load Average'), tabs: 1}, cpuLoadAverageSources, 'processor-source-load-avg', sourcesSection, 'string', 'auto');
+        
         processorsPage.add(group);
         
         /* Header */

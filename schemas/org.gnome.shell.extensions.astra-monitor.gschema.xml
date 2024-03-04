@@ -50,6 +50,10 @@
     <value nick="auto" value="0"/>
     <value nick="GTop" value="1"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list3">
+    <value nick="auto" value="0"/>
+    <value nick="proc" value="1"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- UTILS -->
     <key name="debug-mode" type="b">
@@ -148,6 +152,11 @@
       <default>'auto'</default>
       <summary>Top Processes Source</summary>
       <description>Source of the top processes</description>
+    </key>
+    <key name="processor-source-load-avg" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list3">
+      <default>'auto'</default>
+      <summary>Cpu Load Average Source</summary>
+      <description>Source of the cpu load average</description>
     </key>
     <key name="processor-header-show" type="b">
       <default>true</default>

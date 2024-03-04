@@ -261,6 +261,7 @@
     font-style: italic;
     color: #999;
     margin-right: 0.8em;
+    padding-top: 0.05em;
     text-align: right;
 }
 
@@ -268,6 +269,7 @@
     font-style: italic;
     color: #666;
     margin-right: 0.8em;
+    padding-top: 0.05em;
     text-align: right;
 }
 
@@ -275,6 +277,7 @@
     font-style: italic;
     color: #808080;
     margin-right: 0.8em;
+    padding-top: 0.05em;
     text-align: right;
 }
 

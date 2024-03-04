@@ -21,7 +21,7 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
-import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {gettext as _, pgettext} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import MenuBase from '../menu.js';
 import Utils, { GpuInfo, UptimeTimer } from '../utils/utils.js';
@@ -117,6 +117,8 @@ export default class ProcessorMenu extends MenuBase {
     private queueTopProcessesUpdate!: boolean;
     private topProcessesPopup!: TopProcessesPopup;
     
+    private loadAverageValues!: St.Label[];
+    
     private gpusSection!: GpusSection;
     private gpuInfoPopups!: GpuInfoPopup[];
     
@@ -131,6 +133,7 @@ export default class ProcessorMenu extends MenuBase {
         this.addPercentage();
         this.addHistoryGraph();
         this.addTopProcesses();
+        this.addLoadAverage();
         this.addGPUs();
         this.addSystemUptime();
         this.addUtilityButtons('processors');
@@ -601,6 +604,136 @@ export default class ProcessorMenu extends MenuBase {
         this.topProcessesPopup.addToMenu(grid, 2);
     }
     
+    addLoadAverage() {
+        this.addMenuSection(_('Load Average'));
+        
+        const defaultStyle = 'max-width:150px;';
+        
+        const hoverButton = new St.Button({
+            reactive: true,
+            track_hover: true,
+            style: defaultStyle
+        });
+        
+        const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
+        
+        this.loadAverageValues = [];
+        
+        // Load Container
+        //{
+            const loadsContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                x_expand: true,
+                style: 'margin-left:0;margin-right:0;'
+            });
+            
+            // One minute
+            //{
+                const oneMinuteContainer = new St.Widget({
+                    layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                    x_expand: true,
+                    style: 'margin-left:0;margin-right:0;'
+                });
+                
+                const oneMinuteLabel = new St.Label({
+                    text: pgettext('short for 1 minute', '1m'),
+                    style_class: 'astra-monitor-menu-label',
+                    style: 'padding-right:0.15em;'
+                });
+                oneMinuteContainer.add_child(oneMinuteLabel);
+                
+                const oneMinuteValueLabel = new St.Label({
+                    text: '-',
+                    x_expand: true,
+                    style_class: 'astra-monitor-menu-key-mid'
+                });
+                oneMinuteContainer.add_child(oneMinuteValueLabel);
+                oneMinuteContainer.set_width(50);
+                
+                this.loadAverageValues.push(oneMinuteValueLabel);
+                
+                loadsContainer.add_child(oneMinuteContainer);
+            //}
+            
+            // Five minutes
+            //{
+                const fiveMinutesContainer = new St.Widget({
+                    layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                    x_expand: true,
+                    style: 'margin-left:0;margin-right:0;'
+                });
+                
+                const fiveMinutesLabel = new St.Label({
+                    text: pgettext('short for 5 minutes', '5m'),
+                    style_class: 'astra-monitor-menu-label',
+                    style: 'padding-right:0.15em;'
+                });
+                fiveMinutesContainer.add_child(fiveMinutesLabel);
+                
+                const fiveMinutesValueLabel = new St.Label({
+                    text: '-',
+                    x_expand: true,
+                    style_class: 'astra-monitor-menu-key-mid'
+                });
+                fiveMinutesContainer.add_child(fiveMinutesValueLabel);
+                fiveMinutesContainer.set_width(50);
+                
+                this.loadAverageValues.push(fiveMinutesValueLabel);
+                
+                loadsContainer.add_child(fiveMinutesContainer);
+            //}
+            
+            // Fifteen minutes
+            //{
+                const fifteenMinutesContainer = new St.Widget({
+                    layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
+                    x_expand: true,
+                    style: 'margin-left:0;margin-right:0;'
+                });
+                
+                const fifteenMinutesLabel = new St.Label({
+                    text: pgettext('short for 15 minutes', '15m'),
+                    style_class: 'astra-monitor-menu-label',
+                    style: 'padding-right:0.15em;'
+                });
+                fifteenMinutesContainer.add_child(fifteenMinutesLabel);
+                
+                const fifteenMinutesValueLabel = new St.Label({
+                    text: '-',
+                    x_expand: true,
+                    style_class: 'astra-monitor-menu-key-mid'
+                });
+                fifteenMinutesContainer.add_child(fifteenMinutesValueLabel);
+                fifteenMinutesContainer.set_width(50);
+                
+                this.loadAverageValues.push(fifteenMinutesValueLabel);
+                
+                loadsContainer.add_child(fifteenMinutesContainer);
+            //}
+            
+            grid.addToGrid(loadsContainer, 2);
+        //}
+        
+        hoverButton.set_child(grid);
+        
+        //this.createLoadAveragePopup(hoverButton);
+        
+        hoverButton.connect('enter-event', () => {
+            hoverButton.style = defaultStyle + this.selectionStyle;
+            
+            //if(this.cpuLoadAveragePopup) {
+            //    this.cpuLoadAveragePopup.open(true);
+        });
+        
+        hoverButton.connect('leave-event', () => {
+            hoverButton.style = defaultStyle;
+            
+            //if(this.cpuLoadAveragePopup)
+            //    this.cpuLoadAveragePopup.close(true);
+        });
+        this.addToMenu(hoverButton, 2);
+    }
+    
     addGPUs() {
         this.gpusSection = {
             gpus: []
@@ -959,6 +1092,9 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
         Utils.processorMonitor.requestUpdate('topProcesses');
         
+        Utils.processorMonitor.listen(this, 'loadAverage', this.update.bind(this, 'loadAverage'));
+        Utils.processorMonitor.requestUpdate('loadAverage');
+        
         if(Utils.processorMonitor.dueIn >= 200)
             this.queueTopProcessesUpdate = true;
         
@@ -973,6 +1109,8 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.unlisten(this, 'cpuUsage');
         Utils.processorMonitor.unlisten(this.graph, 'cpuUsage');
         Utils.processorMonitor.unlisten(this, 'topProcesses');
+        Utils.processorMonitor.unlisten(this, 'loadAverage');
+        
         Utils.processorMonitor.unlisten(this, 'gpuUpdate');
         
         this.queueTopProcessesUpdate = false;
@@ -1002,6 +1140,9 @@ export default class ProcessorMenu extends MenuBase {
             popup.percentage.text = '';
             popup.description.text = '';
         }
+        
+        for(let i = 0; i < this.loadAverageValues.length; i++)
+            this.loadAverageValues[i].text = '-';
         
         this.menuUptime.text = '';
     }
@@ -1151,6 +1292,33 @@ export default class ProcessorMenu extends MenuBase {
                 this.queueTopProcessesUpdate = false;
                 Utils.processorMonitor.requestUpdate('topProcesses');
                 return;
+            }
+            return;
+        }
+        if(code === 'loadAverage') {
+            if(this.loadAverageValues.length === 0)
+                return;
+            
+            const loadAverage = Utils.processorMonitor.getCurrentValue('loadAverage');
+            if(!loadAverage) {
+                for(let i = 0; i < this.loadAverageValues.length; i++)
+                    this.loadAverageValues[i].text = '-';
+            }
+            else {
+                if(!Object.hasOwnProperty.call(loadAverage, 'load1m'))
+                    this.loadAverageValues[0].text = '-';
+                else
+                    this.loadAverageValues[0].text = loadAverage.load1m.toFixed(2);
+                
+                if(!Object.hasOwnProperty.call(loadAverage, 'load5m'))
+                    this.loadAverageValues[1].text = '-';
+                else
+                    this.loadAverageValues[1].text = loadAverage.load5m.toFixed(2);
+                
+                if(!Object.hasOwnProperty.call(loadAverage, 'load15m'))
+                    this.loadAverageValues[2].text = '-';
+                else
+                    this.loadAverageValues[2].text = loadAverage.load15m.toFixed(2);
             }
             return;
         }

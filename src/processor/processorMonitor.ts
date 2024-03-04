@@ -52,7 +52,8 @@ type PreviousCpuCoresUsage = Array<ProcessorUsage>;
 type ProcessorDataSources = {
     cpuUsage?: string,
     cpuCoresUsage?: string,
-    topProcesses?: string
+    topProcesses?: string,
+    loadAvg?: string
 };
 
 type CpuTime = {
@@ -105,6 +106,8 @@ export default class ProcessorMonitor extends Monitor {
     private updateCoresUsageTask: CancellableTaskManager<boolean>;
     private updateCoresFrequencyTask: CancellableTaskManager<boolean>;
     private updateTopProcessesTask: CancellableTaskManager<boolean>;
+    private updateLoadAvgTask: CancellableTaskManager<boolean>;
+    
     private updateAmdGpuTask: ContinuosTaskManager;
     private updateNvidiaGpuTask: ContinuosTaskManager;
     
@@ -126,6 +129,7 @@ export default class ProcessorMonitor extends Monitor {
         this.updateCoresUsageTask = new CancellableTaskManager();
         this.updateCoresFrequencyTask = new CancellableTaskManager();
         this.updateTopProcessesTask = new CancellableTaskManager();
+        this.updateLoadAvgTask = new CancellableTaskManager();
         
         this.updateAmdGpuTask = new ContinuosTaskManager();
         this.updateAmdGpuTask.listen(this, this.updateAmdGpu.bind(this));
@@ -185,6 +189,7 @@ export default class ProcessorMonitor extends Monitor {
         this.updateCoresUsageTask.cancel();
         this.updateCoresFrequencyTask.cancel();
         this.updateTopProcessesTask.cancel();
+        this.updateLoadAvgTask.cancel();
     }
     
     start() {
@@ -201,7 +206,8 @@ export default class ProcessorMonitor extends Monitor {
         this.dataSources = {
             cpuUsage: Config.get_string('processor-source-cpu-usage') ?? undefined,
             cpuCoresUsage: Config.get_string('processor-source-cpu-cores-usage') ?? undefined,
-            topProcesses: Config.get_string('processor-source-top-processes') ?? undefined
+            topProcesses: Config.get_string('processor-source-top-processes') ?? undefined,
+            loadAvg: Config.get_string('processor-source-load-avg') ?? undefined
         };
         
         Config.connect(this, 'changed::processor-source-cpu-usage', () => {
@@ -238,6 +244,12 @@ export default class ProcessorMonitor extends Monitor {
             this.topProcessesTime = -1;
             this.previousPidsCpuTime = new Map();
             this.resetUsageHistory('topProcesses');
+        });
+        
+        Config.connect(this, 'changed::processor-source-load-avg', () => {
+            this.dataSources.loadAvg = Config.get_string('processor-source-load-avg') ?? undefined;
+            this.updateLoadAvgTask.cancel();
+            this.resetUsageHistory('loadAverage');
         });
     }
     
@@ -298,6 +310,11 @@ export default class ProcessorMonitor extends Monitor {
                 this.runUpdate('topProcesses', false, procStat);
             else
                 this.topProcessesCache.updateNotSeen([]);
+            
+            if(this.isListeningFor('loadAverage')) {
+                const procLoadAvgStore = new PromiseValueHolderStore<string[]>(this.getProcLoadAvgAsync.bind(this));
+                this.runUpdate('loadAverage', procLoadAvgStore);
+            }
         }
         return true;
     }
@@ -327,6 +344,12 @@ export default class ProcessorMonitor extends Monitor {
             }
             // Don't push to the queue
             return;
+        }
+        else if(key === 'loadAverage') {
+            if(!this.updateLoadAvgTask.isRunning) {
+                const procLoadAvgStore = new PromiseValueHolderStore<string[]>(this.getProcLoadAvgAsync.bind(this));
+                this.runUpdate('loadAverage', procLoadAvgStore);
+            }
         }
         
         super.requestUpdate(key);
@@ -400,6 +423,21 @@ export default class ProcessorMonitor extends Monitor {
                 task: this.updateTopProcessesTask,
                 run,
                 callback: this.notify.bind(this, 'topProcesses')
+            });
+            return;
+        }
+        if(key === 'loadAverage') {
+            let run;
+            if(this.dataSources.loadAvg === 'proc')
+                run = this.updateLoadAvgProc.bind(this, ...params);
+            else
+                run = this.updateLoadAvgAuto.bind(this, ...params);
+            
+            this.runTask({
+                key,
+                task: this.updateLoadAvgTask,
+                run,
+                callback: this.notify.bind(this, 'loadAverage')
             });
             return;
         }
@@ -1035,6 +1073,35 @@ export default class ProcessorMonitor extends Monitor {
         
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);
+        return true;
+    }
+    
+    getProcLoadAvgAsync(): PromiseValueHolder<string[]> {
+        return new PromiseValueHolder(new Promise((resolve, reject) => {
+            Utils.readFileAsync('/proc/loadavg').then(fileContent => {
+                resolve(fileContent.split(' '));
+            }).catch(e => {
+                reject(e);
+            });
+        }));
+    }
+    
+    async updateLoadAvgAuto(procLoadAvg: PromiseValueHolderStore<string>): Promise<boolean> {
+        return await this.updateLoadAvgProc(procLoadAvg);
+    }
+    
+    async updateLoadAvgProc(procLoadAvg: PromiseValueHolderStore<string>): Promise<boolean> {
+        const procLoadAvgValue = await procLoadAvg.getValue();
+        if(procLoadAvgValue.length < 4)
+            return false;
+        
+        this.setUsageValue('loadAverage', {
+            load1m: parseFloat(procLoadAvgValue[0]),
+            load5m: parseFloat(procLoadAvgValue[1]),
+            load15m: parseFloat(procLoadAvgValue[2]),
+            threadsActive: parseInt(procLoadAvgValue[3].split('/')[0], 10),
+            threadsTotal: parseInt(procLoadAvgValue[3].split('/')[1], 10)
+        });
         return true;
     }
     
