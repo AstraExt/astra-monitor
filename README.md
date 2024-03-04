@@ -58,18 +58,38 @@ _**NOTE**: The screenshots below are from an outdated version of the extension a
 
 As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
 
-```mermaid
-%%{init: { 'theme': 'dark' } }%%
-timeline
-  section Alpha<br>2/3
-    Late February 2024: ✅<br>Graph Customization : ✅<br>Tooltips Customization : 🔲<br>Import / Export Settings
-  section Beta<br>0/6
-    Early March 2024: 🔲<br>Advanced Network Monitoring : 🔲<br>Advanced Disk Monitoring
-    Late March 2024: 🔲<br>Advanced GPU Monitoring : 🔲<br>Battery Monitoring
-    Early April 2024: 🔲<br>User Custom Commands : 🔲<br>Continuos Monitoring Mode
-  section Release
-    Late April 2024
-```
+<table style="text-align:center" align="center">
+    <tr>
+        <th style="text-align:center" colspan="2">Alpha<br>3/4</th>
+        <th style="text-align:center" colspan="3">Beta<br>0/6</th>
+        <th style="text-align:center">Release</th>
+    </tr>
+    <tr>
+        <th style="text-align:center">Late February 2024</th>
+        <th style="text-align:center">Early March 2024</th>
+        <th style="text-align:center">Mid March 2024</th>
+        <th style="text-align:center">Late March 2024</th>
+        <th style="text-align:center">Early April 2024</th>
+        <th style="text-align:center">Late April 2024</th>
+    </tr>
+    <tr>
+        <td>✅<br>Graph Customization</td>
+        <td>✅<br>Import / Export / Reset Settings</td>
+        <td>🔲<br>Advanced Network Monitoring</td>
+        <td>🔲<br>Advanced GPU Monitoring</td>
+        <td>🔲<br>User Custom Commands</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>✅<br>Tooltips Customization</td>
+        <td>🔲<br>CPU Load</td>
+        <td>🔲<br>Advanced Disk Monitoring</td>
+        <td>🔲<br>Battery Monitoring</td>
+        <td>🔲<br>Continuos Monitoring Mode</td>
+        <td></td>
+    </tr>
+</table>
+<br>
 
 Your feedback is invaluable in shaping Astra Monitor's development journey. Do you have any new features to suggest? We are very happy to receive suggestions. The best way to see new features become reality as quickly as possible is through direct contributions or donations. Donations will result in more development time dedicated to the project. If you would like to contribute, please refer to the contribution guidelines.
 
