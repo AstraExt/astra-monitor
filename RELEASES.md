@@ -2,6 +2,7 @@
 
 ### New features
 - Added a shortcut to set all main and secondary colors all at once [[#74](https://github.com/AstraExt/astra-monitor/issues/74)]
+- You can now export, import and reset settings [[#71](https://github.com/AstraExt/astra-monitor/issues/71)]
 
 ### Bug fixes
 - Fixed a bug where a task could stop updating when a cancel was requested

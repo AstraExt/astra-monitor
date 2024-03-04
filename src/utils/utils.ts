@@ -1779,4 +1779,19 @@ export default class Utils {
         else
             return String.fromCharCode.apply(null, value.slice(0, firstNullIndex));
     }
+    
+    static roundFloatingPointNumber(num: number): number {
+        const numStr = num.toString();
+        const decimalIndex = numStr.indexOf('.');
+        
+        if(decimalIndex === -1)
+            return num;
+        
+        const fractionLength = numStr.length - decimalIndex - 1;
+        let precision = Math.min(10, fractionLength);
+        if(fractionLength > 10)
+            precision = fractionLength - 10;
+        
+        return Number(num.toFixed(precision));
+    }
 }

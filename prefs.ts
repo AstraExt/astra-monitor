@@ -103,7 +103,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const sensorsPage = this.setupSensors();
         window.add(sensorsPage);
         
-        const aboutPage = this.setupAbout();
+        const aboutPage = this.setupAbout(window);
         window.add(aboutPage);
         
         if(defaultCategory) {
@@ -1149,13 +1149,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         return sensorsPage;
     }
     
-    private setupAbout() {
+    private setupAbout(window: Adw.PreferencesWindow) {
         const aboutPage = new Adw.PreferencesPage({title: _('About'), icon_name: 'am-dialog-info-symbolic'});
         
-        const group = new Adw.PreferencesGroup({title: _('Info')});
+        let group = new Adw.PreferencesGroup({title: _('Info')});
         
         let version;
-        const metadata = this.metadata as any; // version-name is missing in Gjsify
+        const metadata = this.metadata;
         if(metadata['version-name'] === metadata['version'])
             version = 'v' + metadata['version'];
         else if(metadata['version-name'])
@@ -1171,7 +1171,99 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addLinkRow({title: '<span color="#FFB000">★ ' + _('Support us on Ko-Fi') + '</span>'}, 'https://ko-fi.com/astraext', group);
         this.addLinkRow({title: '<span color="#FFB000">★ ' + _('Buy us a coffee') + '</span>'}, 'https://www.buymeacoffee.com/astra.ext', group);
         this.addLinkRow({title: '<span color="#FFB000">★ ' + _('Become a patron') + '</span>'}, 'https://www.patreon.com/AstraExt', group);
-        this.addSwitchRow({title: _('Debug Mode')}, 'debug-mode', group);
+        
+        aboutPage.add(group);
+        
+        group = new Adw.PreferencesGroup({title: _('Utility')});
+        
+        this.addButtonRow({title: _('Export Settings')}, group, () => {
+            const dialog = new Gtk.FileChooserDialog({
+                title: _('Export Settings'),
+                action: Gtk.FileChooserAction.SAVE,
+                transient_for: window,
+                modal: true,
+            });
+            
+            const filter = new Gtk.FileFilter();
+            filter.add_pattern('*.json');
+            dialog.add_filter(filter);
+            
+            dialog.add_button(_('Save'), Gtk.ResponseType.OK);
+            dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
+            dialog.show();
+            
+            dialog.connect('response', (dialog, id) => {
+                if(id == Gtk.ResponseType.OK) {
+                    const path = dialog.get_file().get_path();
+                    const file = Gio.file_new_for_path(path);
+                    const stream = file.replace(null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+                    const settings = this.exportSettings();
+                    const data: Uint8Array = new TextEncoder().encode(settings);
+                    stream.write_all(data, null);
+                    stream.close(null);
+                }
+                dialog.destroy();
+            });
+        });
+        
+        this.addButtonRow({title: _('Import Settings')}, group, () => {
+            const dialog = new Gtk.FileChooserDialog({
+                title: _('Import Settings'),
+                action: Gtk.FileChooserAction.OPEN,
+                transient_for: window,
+                modal: true,
+            });
+            
+            const filter = new Gtk.FileFilter();
+            filter.add_pattern('*.json');
+            dialog.add_filter(filter);
+            
+            dialog.add_button(_('Open'), Gtk.ResponseType.OK);
+            dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
+            dialog.show();
+            
+            dialog.connect('response', (dialog, id) => {
+                if(id == Gtk.ResponseType.OK) {
+                    try {
+                        const path = dialog.get_file().get_path();
+                        Utils.readFileAsync(path).then(data => {
+                            this.importSettings(data);
+                            window.close();
+                        }).catch(e => {
+                            Utils.error(e.message);
+                        });
+                    }
+                    catch(e:any) {
+                        Utils.error(e.message);
+                    }
+                }
+                dialog.destroy();
+            });
+        });
+        
+        this.addButtonRow({title: _('Reset Preferences')}, group, () => {
+            const dialog = new Gtk.MessageDialog({
+                title: _('Reset Preferences'),
+                text: _('Are you sure you want to reset all preferences?'),
+                buttons: Gtk.ButtonsType.YES_NO,
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: window,
+                modal: true,
+            });
+            dialog.connect('response', (_dialog, response) => {
+                if(response === Gtk.ResponseType.YES) {
+                    this.resetSettings();
+                    window.close();
+                }
+                dialog.close();
+            });
+            dialog.show();
+        });
+        
+        this.addSwitchRow({
+            title: _('Debug Mode'),
+            subtitle: _('Warning: may affect performance, use only if you know what you are doing.'),
+        }, 'debug-mode', group);
         aboutPage.add(group);
         
         return aboutPage;
@@ -1329,7 +1421,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             (group as Adw.ExpanderRow).add_row(row);
         
         row.activatable = true;
-        row.connect('activate', callback);
+        row.connect('activated', callback);
     }
     
     addLinkRow(props: RowProps, url: string, group: Adw.PreferencesGroup|Adw.ExpanderRow) {
@@ -1764,5 +1856,88 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             (group as Adw.PreferencesGroup).add(row);
         else
             (group as Adw.ExpanderRow).add_row(row);
+    }
+    
+    private exportSettings() {
+        const settings = Config.settings;
+        const exported: any = {};
+        
+        if(!settings)
+            return JSON.stringify(exported);
+        
+        const keys = settings.list_keys();
+        
+        for(const key of keys) {
+            const value = settings.get_value(key);
+            const schema = settings.settings_schema.get_key(key);
+            const type = schema.get_value_type();
+            
+            if(type.equal(new GLib.VariantType('s')))
+                exported[key] = value.get_string()[0];
+            else if(type.equal(new GLib.VariantType('b')))
+                exported[key] = value.get_boolean();
+            else if(type.equal(new GLib.VariantType('i')))
+                exported[key] = Math.round(value.get_double());
+            else if(type.equal(new GLib.VariantType('d')))
+                exported[key] = Utils.roundFloatingPointNumber(value.get_double());
+            else
+                Utils.log('Unsupported type: ' + type);
+        }
+        return JSON.stringify(exported);
+    }
+    
+    private importSettings(data: string) {
+        if(!data)
+            return;
+        
+        const imported = JSON.parse(data);
+        if(!imported)
+            return;
+        
+        const settings = Config.settings;
+        if(!settings)
+            return;
+        
+        const keys = Object.keys(imported);
+        for(const key of keys) {
+            const value = imported[key];
+            
+            const schema = settings.settings_schema.get_key(key);
+            const type = schema.get_value_type();
+            
+            if(type.equal(new GLib.VariantType('s')))
+                Config.set(key, value, 'string');
+            else if(type.equal(new GLib.VariantType('b')))
+                Config.set(key, value, 'boolean');
+            else if(type.equal(new GLib.VariantType('i')))
+                Config.set(key, value, 'int');
+            else if(type.equal(new GLib.VariantType('d')))
+                Config.set(key, value, 'number');
+            else
+                Utils.log('Unsupported type: ' + type);
+        }
+    }
+    
+    private resetSettings() {
+        const settings = Config.settings;
+        if(!settings)
+            return;
+        
+        const keys = settings.list_keys();
+        for(const key of keys) {
+            const schema = settings.settings_schema.get_key(key);
+            const type = schema.get_value_type();
+            
+            if(type.equal(new GLib.VariantType('s')))
+                Config.set(key, schema.get_default_value().get_string()[0], 'string');
+            else if(type.equal(new GLib.VariantType('b')))
+                Config.set(key, schema.get_default_value().get_boolean(), 'boolean');
+            else if(type.equal(new GLib.VariantType('i')))
+                Config.set(key, schema.get_default_value().get_double(), 'int');
+            else if(type.equal(new GLib.VariantType('d')))
+                Config.set(key, schema.get_default_value().get_double(), 'number');
+            else
+                Utils.log('Unsupported type: ' + type);
+        }
     }
 }
