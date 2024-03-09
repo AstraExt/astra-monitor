@@ -7,6 +7,7 @@
 
 ### Bug fixes
 - Fixed a bug where a task could stop updating when a cancel was requested
+- Fixed discrete GPU used as display controller with an iGFX not being detected [[#76](https://github.com/AstraExt/astra-monitor/issues/76)]
 
 # Astra Monitor 13 - February 28 2024
 

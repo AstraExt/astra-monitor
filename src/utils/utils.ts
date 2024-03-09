@@ -459,7 +459,7 @@ export default class Utils {
         return Utils.GTop !== false;
     }
     
-    static filterLspciOutput(lspciOutput: string, keywords: string[], collect: number = 1): string[] {
+    static filterLspciOutput(lspciOutput: string, keywords: string[], op:'and'|'or' = 'or', collect: number = 1): string[] {
         const lines = lspciOutput.split('\n');
         const keywordsLower = keywords.map(keyword => keyword.toLowerCase());
         const results = [];
@@ -478,17 +478,30 @@ export default class Utils {
                 continue;
             }
             
-            // check if the line contains all the keywords
-            let containsAll = true;
-            for(const keyword of keywordsLower) {
-                if(!lines[i].toLowerCase().includes(keyword)) {
-                    containsAll = false;
-                    break;
+            if(op === 'and') {
+                // check if the line contains all the keywords
+                let containsAll = true;
+                for(const keyword of keywordsLower) {
+                    if(!lines[i].toLowerCase().includes(keyword)) {
+                        containsAll = false;
+                        break;
+                    }
                 }
+                if(!containsAll)
+                    continue;
             }
-            
-            if(!containsAll)
-                continue;
+            else {
+                // check if the line contains any of the keywords
+                let containsAny = false;
+                for(const keyword of keywordsLower) {
+                    if(lines[i].toLowerCase().includes(keyword)) {
+                        containsAny = true;
+                        break;
+                    }
+                }
+                if(!containsAny)
+                    continue;
+            }
             
             result.push(lines[i]);
             collecting = collect;
@@ -894,7 +907,7 @@ export default class Utils {
                 
                 const lspciOutput = decoder.decode(stdout);
                 
-                const filteredOutputs = Utils.filterLspciOutput(lspciOutput, ['vga'], 5);
+                const filteredOutputs = Utils.filterLspciOutput(lspciOutput, ['vga', 'display controller'], 'or', 5);
                 
                 for(const filtered of filteredOutputs) {
                     // remove unrelated lines and tabs
