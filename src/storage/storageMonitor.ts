@@ -402,10 +402,10 @@ export default class StorageMonitor extends Monitor {
         }));
     }
     
-    async updateStorageUsageAuto(): Promise<boolean> {
+    updateStorageUsageAuto(): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateStorageUsageGTop();
-        return await this.updateStorageUsageProc();
+            return this.updateStorageUsageGTop();
+        return this.updateStorageUsageProc();
     }
     
     async updateStorageUsageProc(): Promise<boolean> {
@@ -525,15 +525,15 @@ export default class StorageMonitor extends Monitor {
         }
     }
     
-    async updateStorageIOAuto(detailed: boolean, procDiskstats: PromiseValueHolder<string[]>): Promise<boolean> {
+    updateStorageIOAuto(detailed: boolean, procDiskstats: PromiseValueHolder<string[]>): Promise<boolean> {
         /**!
          * GTop cannot be used until it's fixed:
          * check the function content for more info
          **/
         // eslint-disable-next-line no-constant-condition
         if(Utils.GTop && false)
-            return await this.updateStorageIOGTop(detailed);
-        return await this.updateStorageIOProc(detailed, procDiskstats);
+            return this.updateStorageIOGTop(detailed);
+        return this.updateStorageIOProc(detailed, procDiskstats);
     }
     
     async updateStorageIOProc(detailed: boolean, procDiskstats: PromiseValueHolder<string[]>): Promise<boolean> {
@@ -749,10 +749,10 @@ export default class StorageMonitor extends Monitor {
         return false;
     }
     
-    async updateTopProcessesAuto(): Promise<boolean> {
+    updateTopProcessesAuto(): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateTopProcessesGTop();
-        return false;
+            return this.updateTopProcessesGTop();
+        return Promise.resolve(false);
     }
     
     async updateTopProcessesGTop(): Promise<boolean> {

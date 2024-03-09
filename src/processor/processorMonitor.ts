@@ -255,7 +255,9 @@ export default class ProcessorMonitor extends Monitor {
     
     startListeningFor(key: string) {
         if(key === 'gpuUpdate') {
-            this.startGpuTask();
+            setTimeout(() => {
+                this.startGpuTask();
+            });
         }
     }
     
@@ -502,11 +504,11 @@ export default class ProcessorMonitor extends Monitor {
                 const cpuInfo: CpuInfo = {};
                 let currentCategory = cpuInfo;
                 let lastKey:string|null = null;
-
-                lines.forEach(line => {
+                
+                for(const line of lines) {
                     if(line.trim() === '')
-                        return;
-
+                        continue;
+                    
                     if(line.endsWith(':')) {
                         // New category
                         const categoryName = line.slice(0, -1).trim();
@@ -533,7 +535,7 @@ export default class ProcessorMonitor extends Monitor {
                         // Continuation of the last key in the current category
                         currentCategory[lastKey] += '\n' + line.trim();
                     }
-                });
+                }
                 
                 this.cpuInfo = cpuInfo;
                 
@@ -566,10 +568,10 @@ export default class ProcessorMonitor extends Monitor {
         return this.cpuInfo;
     }
     
-    async updateCpuUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
+    updateCpuUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateCpuUsageGTop();
-        return await this.updateCpuUsageProc(procStat);
+            return this.updateCpuUsageGTop();
+        return this.updateCpuUsageProc(procStat);
     }
     
     async updateCpuUsageProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
@@ -716,10 +718,10 @@ export default class ProcessorMonitor extends Monitor {
         return true;
     }
     
-    async updateCpuCoresUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
+    updateCpuCoresUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateCpuCoresUsageGTop();
-        return await this.updateCpuCoresUsageProc(procStat);
+            return this.updateCpuCoresUsageGTop();
+        return this.updateCpuCoresUsageProc(procStat);
     }
     
     async updateCpuCoresUsageProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
@@ -843,39 +845,45 @@ export default class ProcessorMonitor extends Monitor {
     }
     
     async updateCpuCoresFrequencyProc(): Promise<boolean> {
-        const frequencies = [];
-        
         if(this.isListeningFor('cpuCoresFrequency')) {
-            const paths = Utils.generateCpuFreqPaths(this.coresNum);
             try {
-                for(const path of paths) {
-                    const fileContent = await Utils.readFileAsync(path);
-                    if(fileContent) {
-                        if(Utils.isIntOrIntString(fileContent))
+                const paths = Utils.generateCpuFreqPaths(this.coresNum);
+                
+                const frequencies: number[] = [];
+                const readFiles = paths.map(path => {
+                    return Utils.readFileAsync(path).then(fileContent => {
+                        if(fileContent) {
+                            if(Utils.isIntOrIntString(fileContent))
+                                frequencies.push(Number.NaN);
+                            else
+                                frequencies.push(parseInt(fileContent, 10) / 1000);
+                        } else {
                             frequencies.push(Number.NaN);
-                        else
-                            frequencies.push(parseInt(fileContent, 10)/1000);
-                    }
-                    else {
+                        }
+                    })
+                    .catch(() => {
                         frequencies.push(Number.NaN);
-                    }
-                }
+                    });
+                });
+                
+                await Promise.all(readFiles);
                 this.pushUsageHistory('cpuCoresFrequency', frequencies);
                 return true;
             }
             catch(e) { /* empty */ }
         }
         
+        const frequencies: number[] = [];
         for(let i = 0; i < this.coresNum; i++)
             frequencies.push(Number.NaN);
         this.pushUsageHistory('cpuCoresFrequency', frequencies);
         return true;
     }
     
-    async updateTopProcessesAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
+    updateTopProcessesAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateTopProcessesGTop();
-        return await this.updateTopProcessesProc(procStat);
+            return this.updateTopProcessesGTop();
+        return this.updateTopProcessesProc(procStat);
     }
     
     /**
@@ -888,100 +896,87 @@ export default class ProcessorMonitor extends Monitor {
         const procStatValue = await procStat.getValue();
         if(procStatValue.length < 1)
             return false;
+
+        const seenPids: number[] = [];
+        const cpuLine = procStatValue[0].split(' ').filter(n => n.trim() !== '');
+        const totalCpuTime = cpuLine.slice(1, -1).reduce((acc, time) => acc + parseInt(time, 10), 0);
+
+        const files = await Utils.readDirAsync('/proc');
+        const pids = files.filter(file => /^\d+$/.test(file));
         
-        const topProcesses = [];
-        const seenPids = [];
-        
-        try {
-            const cpuLine = procStatValue[0].split(' ').filter(n => n.trim() !== '');
-            const totalCpuTime = cpuLine.slice(1, -1).reduce((acc, time) => acc + parseInt(time, 10), 0);
-            
-            const files = await Utils.readDirAsync('/proc');
-            const pids = files.filter(file => /^\d+$/.test(file));
-            
-            const cpuTimes:Map<number, CpuTime> = new Map();
-            
-            for(const pid of pids) {
-                try {
-                    const stat = await Utils.readFileAsync('/proc/' + pid + '/stat');
-                    
-                    const statParts = stat.split(' ');
-                    const utime = parseInt(statParts[13], 10);
-                    const stime = parseInt(statParts[14], 10);
-                    
-                    const nPid = parseInt(pid, 10);
-                    if(nPid)
-                        cpuTimes.set(nPid, { processTime: utime + stime, totalCpuTime });
-                }
-                catch(e) {
-                    //Avoid spamming the log with errors for processes that are gone
-                    //Utils.log(e.message);
-                    continue;
-                }
+        const cpuTimesPromises = pids.map(async (pid) => {
+            try {
+                const stat = await Utils.readFileAsync('/proc/' + pid + '/stat');
+                const statParts = stat.split(' ');
+                const utime = parseInt(statParts[13], 10);
+                const stime = parseInt(statParts[14], 10);
+
+                const nPid = parseInt(pid, 10);
+                if(nPid)
+                    return { nPid, cpuTime: { processTime: utime + stime, totalCpuTime } };
+                return null;
             }
-            
-            for(const [pid, cpuTime] of cpuTimes) {
-                seenPids.push(pid);
-                
-                const previous = this.previousPidsCpuTime.get(pid);
-                this.previousPidsCpuTime.set(pid, cpuTime);
-                
-                if(!previous)
-                    continue;
-                
-                const {
-                    processTime: previousProcessTime,
-                    totalCpuTime: previousTotalCpuTime
-                } = previous;
-                
-                const totalCpuTimeDiff = totalCpuTime - previousTotalCpuTime;
-                const cpuTimeDiff = cpuTime.processTime - previousProcessTime;
-                const cpuUsagePercent = (cpuTimeDiff / totalCpuTimeDiff) * 100.0;
-                
-                let process = this.topProcessesCache.getProcess(pid);
-                if(!process) {
-                    try {
-                        let fileContent = await Utils.readFileAsync(`/proc/${pid}/cmdline`);
-                        
-                        if(fileContent === '') {
-                            fileContent = await Utils.readFileAsync(`/proc/${pid}/comm`);
-                            process = {
-                                pid: pid,
-                                exec: Utils.extractCommandName(fileContent),
-                                cmd: fileContent,
-                                notSeen: 0
-                            };
-                        }
-                        else {
-                            process = {
-                                pid: pid,
-                                exec: Utils.extractCommandName(fileContent),
-                                cmd: fileContent,
-                                notSeen: 0
-                            };
-                        }
-                        
-                        this.topProcessesCache.setProcess(process);
-                    }
-                    catch(e) {
-                        continue;
-                    }
-                }
-                topProcesses.push({ process, cpu: cpuUsagePercent });
+            catch(_e) {
+                return null; // Avoid logging errors for gone processes
             }
-        }
-        catch(e: any) {
-            Utils.error(e.message);
-            return false;
-        }
+        });
+
+        const cpuTimesResults = await Promise.all(cpuTimesPromises);
+        const cpuTimes = new Map();
         
+        for(const result of cpuTimesResults) {
+            if(result)
+                cpuTimes.set(result.nPid, result.cpuTime);
+        }
+
+        const processInfoPromises = Array.from(cpuTimes).map(async ([pid, cpuTime]) => {
+            seenPids.push(pid);
+
+            const previous = this.previousPidsCpuTime.get(pid);
+            this.previousPidsCpuTime.set(pid, cpuTime);
+
+            if(!previous)
+                return null;
+
+            const {
+                processTime: previousProcessTime,
+                totalCpuTime: previousTotalCpuTime
+            } = previous;
+
+            const totalCpuTimeDiff = totalCpuTime - previousTotalCpuTime;
+            const cpuTimeDiff = cpuTime.processTime - previousProcessTime;
+            const cpuUsagePercent = (cpuTimeDiff / totalCpuTimeDiff) * 100.0;
+
+            try {
+                let fileContent = await Utils.readFileAsync(`/proc/${pid}/cmdline`);
+                let process;
+                if(fileContent === '') {
+                    fileContent = await Utils.readFileAsync(`/proc/${pid}/comm`);
+                    process = {
+                        pid: pid,
+                        exec: Utils.extractCommandName(fileContent),
+                        cmd: fileContent,
+                        notSeen: 0
+                    };
+                } else {
+                    process = {
+                        pid: pid,
+                        exec: Utils.extractCommandName(fileContent),
+                        cmd: fileContent,
+                        notSeen: 0
+                    };
+                }
+                return { process, cpu: cpuUsagePercent };
+            }
+            catch(_e) {
+                return null;
+            }
+        });
+        
+        const processes = await Promise.all(processInfoPromises);
+        const topProcesses: any[] = processes.filter(proc => proc !== null);
         topProcesses.sort((a, b) => b.cpu - a.cpu);
         topProcesses.splice(ProcessorMonitor.TOP_PROCESSES_LIMIT);
-        
-        for(const pid of this.previousPidsCpuTime.keys()) {
-            if(!seenPids.includes(pid))
-                this.previousPidsCpuTime.delete(pid);
-        }
         
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);
@@ -1086,8 +1081,8 @@ export default class ProcessorMonitor extends Monitor {
         }));
     }
     
-    async updateLoadAvgAuto(procLoadAvg: PromiseValueHolderStore<string>): Promise<boolean> {
-        return await this.updateLoadAvgProc(procLoadAvg);
+    updateLoadAvgAuto(procLoadAvg: PromiseValueHolderStore<string>): Promise<boolean> {
+        return this.updateLoadAvgProc(procLoadAvg);
     }
     
     async updateLoadAvgProc(procLoadAvg: PromiseValueHolderStore<string>): Promise<boolean> {

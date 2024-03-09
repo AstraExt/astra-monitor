@@ -275,10 +275,10 @@ export default class NetworkMonitor extends Monitor {
         return monitored;
     }
     
-    async updateNetworkIOAuto(detailed: boolean, procNetDev: PromiseValueHolder<string[]>): Promise<boolean> {
+    updateNetworkIOAuto(detailed: boolean, procNetDev: PromiseValueHolder<string[]>): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateNetworkIOGTop(detailed);
-        return await this.updateNetworkIOProc(detailed, procNetDev);
+            return this.updateNetworkIOGTop(detailed);
+        return this.updateNetworkIOProc(detailed, procNetDev);
     }
     
     async updateNetworkIOProc(detailed: boolean, procNetDev: PromiseValueHolder<string[]>): Promise<boolean> {

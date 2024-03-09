@@ -242,10 +242,10 @@ export default class MemoryMonitor extends Monitor {
         }));
     }
     
-    async updateMemoryUsageAuto(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
+    updateMemoryUsageAuto(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateMemoryUsageGTop();
-        return await this.updateMemoryUsageProc(procMeminfo);
+            return this.updateMemoryUsageGTop();
+        return this.updateMemoryUsageProc(procMeminfo);
     }
     
     async updateMemoryUsageProc(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
@@ -334,10 +334,10 @@ export default class MemoryMonitor extends Monitor {
         return true;
     }
     
-    async updateTopProcessesAuto(): Promise<boolean> {
+    updateTopProcessesAuto(): Promise<boolean> {
         if(Utils.GTop)
-            return await this.updateTopProcessesGTop();
-        return await this.updateTopProcessesProc();
+            return this.updateTopProcessesGTop();
+        return this.updateTopProcessesProc();
     }
     
     async updateTopProcessesProc(): Promise<boolean> {

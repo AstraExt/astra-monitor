@@ -180,15 +180,15 @@ class Header extends St.Widget {
     onOpenMenu(_menu: any, open: boolean) {
         if(open) {
             this.add_style_pseudo_class('active');
-            
-            if(this.menu)
-                this.menu.onOpen();
+            setTimeout(() => {
+                this.menu?.onOpen();
+            });
         }
         else {
             this.remove_style_pseudo_class('active');
-            
-            if(this.menu)
-                this.menu.onClose();
+            setTimeout(() => {
+                this.menu?.onClose();
+            });
         }
         
         // Setting the max-height won't do any good if the minimum height of the

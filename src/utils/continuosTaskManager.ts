@@ -51,7 +51,7 @@ export default class ContinuosTaskManager {
         });
     }
     
-    private async task(): Promise<boolean> {
+    private task(): Promise<boolean> {
         return new Promise((resolve, reject) => {
             if(this.command === undefined) {
                 reject('No command');
