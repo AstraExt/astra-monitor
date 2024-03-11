@@ -375,7 +375,7 @@ msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
 
 #: prefs.js:114
 msgid "'lspci' not installed: some features will be disabled!"
-msgstr "»lscpi« nicht installiert: Einige Funktionen sind deaktiviert!"
+msgstr "»lspci« nicht installiert: Einige Funktionen sind deaktiviert!"
 
 #: prefs.js:116
 msgid "'lsblk' not installed: some features will be disabled!"
