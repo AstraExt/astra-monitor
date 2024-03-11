@@ -61,7 +61,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="2">Alpha<br>4/5</th>
+        <th style="text-align:center" colspan="2">Alpha<br>5/5</th>
         <th style="text-align:center" colspan="3">Beta<br>0/6</th>
         <th style="text-align:center">Release</th>
     </tr>
@@ -91,7 +91,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
     </tr>
     <tr>
         <td></td>
-        <td>🔲<br>Add hwmon source</td>
+        <td>✅<br>Add hwmon source</td>
         <td></td>
         <td></td>
         <td></td>

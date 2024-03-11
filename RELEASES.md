@@ -1,4 +1,4 @@
-# Astra Monitor 14 - TO BE RELEASED
+# Astra Monitor 14 - March 11 2024
 
 ### Hwmon
 **Hwmon** is a kernel-based subsystem that provides an interface to monitor various hardware sensors and it's the new default source for sensors. This will benefit the extension on many levels: performance, efficiency, reliability, and compatibility.
