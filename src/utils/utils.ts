@@ -94,6 +94,14 @@ export type InterfaceInfo = {
     linkinfo?: any,
 };
 
+export type HwMonAttribute = {
+    type: string,
+    path: string
+};
+export type HwMonSensor = Map<string, HwMonAttribute>;
+export type HwMonDevice = Map<string, HwMonSensor>;
+export type HwMonDevices = Map<string, HwMonDevice>;
+
 export type Color = { red: number, green: number, blue: number, alpha: number };
 
 export type UptimeTimer = {stop: () => void};
@@ -126,6 +134,9 @@ export default class Utils {
     
     static performanceMap: Map<string,number>|null = null;
     
+    static lastCachedHwmonDevices: number = 0;
+    static cachedHwmonDevices: HwMonDevices = new Map();
+    
     static init({
         extension,
         metadata,
@@ -146,12 +157,16 @@ export default class Utils {
         Utils.debug = Config.get_boolean('debug-mode');
         if(Utils.debug) {
             Utils.performanceMap = new Map();
-            const log = Utils.getLogFile();
-            if(log) {
-                if(log.query_exists(null))
-                    log.delete(null);
-                log.create_readwrite(Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+            
+            try {
+                const log = Utils.getLogFile();
+                if(log) {
+                    if(log.query_exists(null))
+                        log.delete(null);
+                    log.create_readwrite(Gio.FileCreateFlags.REPLACE_DESTINATION, null);
+                }
             }
+            catch(e) { console.error(e); }
         }
         
         if(ProcessorMonitor)
@@ -165,6 +180,7 @@ export default class Utils {
         if(SensorsMonitor)
             Utils.sensorsMonitor = new SensorsMonitor();
         
+        Utils.getCachedHwmonDevicesAsync();
         Utils.initializeGTop();
     }
     
@@ -198,6 +214,9 @@ export default class Utils {
         catch(e: any) {
             Utils.error(e);
         }
+        
+        Utils.lastCachedHwmonDevices = 0;
+        Utils.cachedHwmonDevices = new Map();
         
         (Utils.processorMonitor as any) = undefined;
         (Utils.memoryMonitor as any) = undefined;
@@ -369,10 +388,24 @@ export default class Utils {
         }
     }
     
-    static hasSensors(): boolean {
+    static hasLmSensors(): boolean {
         try {
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('sensors -v');
             return result && stdout && !stderr.length;
+        } catch(e: any) {
+            return false;
+        }
+    }
+    
+    static hasHwmon(): boolean {
+        try {
+            const hwmonDir = Gio.File.new_for_path('/sys/class/hwmon');
+            if(!hwmonDir.query_exists(null))
+                return false;
+            const hwmonEnum = hwmonDir.enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
+            if(!hwmonEnum)
+                return false;
+            return hwmonEnum.next_file(null) !== null;
         } catch(e: any) {
             return false;
         }
@@ -712,12 +745,167 @@ export default class Utils {
         return value;
     }
     
+    static async getCachedHwmonDevicesAsync(): Promise<HwMonDevices> {
+        const devices = await Utils.getHwmonDevices();
+        Utils.lastCachedHwmonDevices = Date.now();
+        Utils.cachedHwmonDevices = devices;
+        return Utils.cachedHwmonDevices;
+    }
+    
+    static getCachedHwmonDevices(): HwMonDevices {
+        if(Utils.lastCachedHwmonDevices + 300000 < Date.now()) { // 5 minutes
+            Utils.lastCachedHwmonDevices = Date.now();
+            Utils.getHwmonDevices().then(devices => {
+                Utils.cachedHwmonDevices = devices;
+            });
+        }
+        return Utils.cachedHwmonDevices;
+    }
+    
+    static sensorsPrefix = ['temp', 'fan', 'in', 'power', 'curr', 'energy', 'pwm', 'freq'];
+    static async getHwmonDevices(): Promise<HwMonDevices> {
+        const baseDir = '/sys/class/hwmon';
+        const devices: HwMonDevices = new Map();
+        
+        try {
+            const hwmons = await Utils.listDirAsync(baseDir, { folder: true, files: false });
+            
+            await Promise.all(hwmons.map(async hwmonInfo => {
+                const hwmon = hwmonInfo.name;
+                let name = await Utils.readFileAsync(`${baseDir}/${hwmon}/name`);
+                if(!name)
+                    return;
+                name = name.trim();
+                
+                let addressAdded = false;
+                try {
+                    let address = await Utils.readFileAsync(`${baseDir}/${hwmon}/device/address`);
+                    if(address) {
+                        address = address.trim();
+                        address = address.replace(/^0+:/, '');
+                        address = address.replace(/\.[0-9]*$/, '');
+                        address = address.replace(/:/g, '');
+                        name = `${name}-{$${address}}`;
+                        
+                        addressAdded = true;
+                    }
+                }
+                catch(e) { /* ignore */ }
+                
+                if(!addressAdded) {
+                    try {
+                        let address = await Utils.readFileAsync(`${baseDir}/${hwmon}/device/device`);
+                        if(address) {
+                            address = address.trim();
+                            address = address.replace(/^0x/, '');
+                            name = `${name}-{$${address}}`;
+                        }
+                    }
+                    catch(e) { /* ignore */ }
+                }
+                
+                const files = await Utils.listDirAsync(`${baseDir}/${hwmon}`, { folder: false, files: true });
+                
+                for(const file of files) {
+                    const fileName = file.name;
+                    if(fileName === 'name' || fileName === 'uevent')
+                        continue;
+                    
+                    const prefix = Utils.sensorsPrefix.find(prefix => fileName.startsWith(prefix));
+                    if(prefix) {
+                        let sensorName = fileName.split('_')[0];
+                        let attrName = fileName.split('_')[1];
+                        
+                        if(attrName === 'label')
+                            continue;
+                        
+                        if(files.find(a => a.name === `${sensorName}_label`)) {
+                            const label = await Utils.readFileAsync(`${baseDir}/${hwmon}/${sensorName}_label`);
+                            if(label)
+                                sensorName = label.trim();
+                        }
+                        
+                        let device = devices.get(name);
+                        if(!device) {
+                            device = new Map();
+                            devices.set(name, device);
+                        }
+                        
+                        let sensor = device.get(sensorName);
+                        if(!sensor) {
+                            sensor = new Map();
+                            device.set(sensorName, sensor);
+                        }
+                        
+                        if(attrName === '' || attrName === undefined)
+                            attrName = 'value';
+                        
+                        let attribute = sensor.get(attrName);
+                        if(!attribute) {
+                            attribute = {
+                                type: prefix,
+                                path: `${hwmon}/${fileName}`
+                            };
+                            sensor.set(attrName, attribute);
+                        }
+                    }
+                }
+            }));
+            
+            // order devices by name
+            const orderedDevices = new Map([...devices.entries()].sort());
+            return orderedDevices;
+        }
+        catch(e) {
+            Utils.error(`Error getting hwmon devices: ${e}`);
+            return new Map();
+        }
+    }
+    
     static getSensorSources(): {value: any, text: string}[] {
         const sensors = [];
         
         try {
-            const [_result, stdout, _stderr] = GLib.spawn_command_line_sync('sensors -j');
             
+            /**
+             * hwmon
+             */
+            const hwmonDevices = Utils.getCachedHwmonDevices();
+            
+            const deviceNames = [];
+            for(const deviceName of hwmonDevices.keys())
+                deviceNames.push(deviceName.split('-{$')[0]);
+            
+            for(const [deviceName, sensorsMap] of hwmonDevices) {
+                for(const [sensorName, attributes] of sensorsMap) {
+                    for(const [attrName, attr] of attributes) {
+                        let deviceLabel;
+                        
+                        const split = deviceName.split('-{$');
+                        if(deviceNames.filter(name => name === split[0]).length === 1)
+                            deviceLabel = Utils.capitalize(split[0]);
+                        else
+                            deviceLabel = Utils.capitalize(split[0]) + ' - ' + split[1].replace(/}$/, '');
+                        
+                        const sensorLabel = Utils.capitalize(sensorName);
+                        const attrLabel = Utils.capitalize(attrName);
+                        const type = Utils.capitalize(attr.type);
+                        
+                        sensors.push({
+                            value: {
+                                service: 'hwmon',
+                                path: [deviceName, sensorName, attrName]
+                            },
+                            text: `[hwmon] ${deviceLabel} -> ${sensorLabel} -> ${type} ${attrLabel}`
+                        });
+                    }
+                }
+            }
+            
+            /**
+             * lm-sensors
+             */
+            const [_result, stdout, _stderr] = GLib.spawn_command_line_sync('sensors -j');
             if(stdout.length > 0) {
                 const decoder = new TextDecoder('utf8');
                 const stdoutString = decoder.decode(stdout);
@@ -734,7 +922,7 @@ export default class Utils {
                                     service: 'sensors',
                                     path: [sensorName, sensor, sensorData]
                                 },
-                                text: sensorName + ' -> ' + sensor + ' -> ' + sensorData
+                                text: `[lm-sensors] ${sensorName} -> ${sensor} -> ${sensorData}`
                             });
                         }
                     }
@@ -800,6 +988,10 @@ export default class Utils {
             return 'A';
         if(key.startsWith('energy'))
             return 'J';
+        if(key.startsWith('pwm'))
+            return '';
+        if(key.startsWith('freq'))
+            return 'MHz';
         return '';
     }
     
@@ -1407,18 +1599,64 @@ export default class Utils {
         });
     }
     
-    static readFileAsync(path: string): Promise<string> {
+    static listDirAsync(path: string, options: { folder: boolean, files: boolean} = { folder: true, files: true }): Promise<{name:string, isFolder:boolean}[]> {
         return new Promise((resolve, reject) => {
             // Check if the path is valid and not empty
             if(!path || typeof path !== 'string') {
-                reject(new Error('Invalid file path'));
+                reject(new Error('Invalid directory path'));
+                return;
+            }
+            
+            let dir;
+            try {
+                dir = Gio.File.new_for_path(path);
+            } catch(e: any) {
+                reject(new Error(`Error creating directory object: ${e.message}`));
+                return;
+            }
+            
+            dir.enumerate_children_async('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, 0, null, (sourceObject, result) => {
+                try {
+                    const enumerator = sourceObject.enumerate_children_finish(result);
+                    
+                    let fileInfo;
+                    const files = [];
+                    
+                    while((fileInfo = enumerator.next_file(null)) !== null) {
+                        const type = fileInfo.get_file_type();
+                        const isFolder = type === Gio.FileType.DIRECTORY;
+                        
+                        if(options.folder == false && isFolder)
+                            continue;
+                        if(options.files == false && !isFolder)
+                            continue;
+                        
+                        const name = fileInfo.get_name();
+                        files.push({name, isFolder});
+                    }
+                    resolve(files);
+                } catch(e: any) {
+                    reject(new Error(`Error reading directory: ${e.message}`));
+                }
+            });
+        });
+    }
+    
+    static readFileAsync(path: string, emptyOnFail: boolean = false): Promise<string> {
+        return new Promise((resolve, reject) => {
+            // Check if the path is valid and not empty
+            if(!path || typeof path !== 'string') {
+                if(emptyOnFail)
+                    resolve('');
+                else
+                    reject(new Error('Invalid file path'));
                 return;
             }
             
             let file;
             try {
                 file = Gio.File.new_for_path(path);
-
+                
                 // Check if the file exists
                 // This is blocking, no need to check
                 /*if(!file.query_exists(null)) {
@@ -1426,7 +1664,10 @@ export default class Utils {
                     return;
                 }*/
             } catch(e: any) {
-                reject(new Error(`Error creating file object: ${e.message}`));
+                if(emptyOnFail)
+                    resolve('');
+                else
+                    reject(new Error(`Error creating file object: ${e.message}`));
                 return;
             }
             
@@ -1436,12 +1677,18 @@ export default class Utils {
 
                     // Check if the file read was successful
                     if(!success) {
-                        reject(new Error('Failed to read file'));
+                        if(emptyOnFail)
+                            resolve('');
+                        else
+                            reject(new Error('Failed to read file'));
                         return;
                     }
 
                     if(fileContent.length === 0) {
-                        reject(new Error('File is empty'));
+                        if(emptyOnFail)
+                            resolve('');
+                        else
+                            reject(new Error('File is empty'));
                         return;
                     }
 
@@ -1449,7 +1696,10 @@ export default class Utils {
                     const decoder = new TextDecoder('utf8');
                     resolve(decoder.decode(fileContent));
                 } catch(e: any) {
-                    reject(new Error(`Error reading file: ${e.message}`));
+                    if(emptyOnFail)
+                        resolve('');
+                    else
+                        reject(new Error(`Error reading file: ${e.message}`));
                 }
             });
         });
@@ -1806,5 +2056,19 @@ export default class Utils {
             precision = fractionLength - 10;
         
         return Number(num.toFixed(precision));
+    }
+    
+    static mapToObject(map: Map<any, any>): any {
+        const obj: {[key: string]: any} = {};
+        map.forEach((value, key) => {
+            obj[key] = value instanceof Map ? Utils.mapToObject(value) : value;
+        });
+        return obj;
+    }
+    
+    static comparePaths(reference: any[], compare: any[]): boolean {
+        if(reference.length > compare.length)
+            return false;
+        return reference.every((element, index) => element === compare[index]);
     }
 }

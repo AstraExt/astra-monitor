@@ -1,10 +1,19 @@
 # Astra Monitor 14 - TO BE RELEASED
 
+### Hwmon
+**Hwmon** is a kernel-based subsystem that provides an interface to monitor various hardware sensors and it's the new default source for sensors. This will benefit the extension on many levels: performance, efficiency, reliability, and compatibility.
+**lm-sensors** is not a required dependency anymore, but it will remain as an option if you have it installed, even though it's not recommended.
+
+<u>We strongly encourage you to <span>manually move all your sensors to **Hwmon**</span> from the Astra Monitor Settings panel</u>. The sensors list in the menu is already on Hwmon by default, but you can still switch to **lm-sensors** if you want to from the settings panel.
+
+_Since this is a major change, we recommend you to test all your sensors and report any issues you may encounter._
+
 ### New features
 - Added a shortcut to set all main and secondary colors all at once [[#74](https://github.com/AstraExt/astra-monitor/issues/74)]
 - You can now export, import and reset settings [[#71](https://github.com/AstraExt/astra-monitor/issues/71)]
 - Added load average to the CPU menu [[#73](https://github.com/AstraExt/astra-monitor/issues/73)]
 - Improved UI performance and some async/await calls to increase parallelization of some tasks
+- New icon for frequency sensor
 
 ### Bug fixes
 - Fixed a bug where a task could stop updating when a cancel was requested

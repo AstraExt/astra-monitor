@@ -21,12 +21,12 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
-import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {gettext as _, ngettext} from 'resource:///org/gnome/shell/extensions/extension.js';
 import MenuBase from '../menu.js';
 import Grid from '../grid.js';
 import Utils from '../utils/utils.js';
 import Config from '../config.js';
-import { SensorDevice } from './sensorsMonitor.js';
+import { SensorNode } from './sensorsMonitor.js';
 
 interface IconData {
     gicon?: any;
@@ -48,7 +48,6 @@ type SensorInfo = {
         }>
     }>
 };
-
 
 export default class SensorsMenu extends MenuBase {
     /*private sensorsSectionLabel!: St.Label;*/
@@ -82,7 +81,7 @@ export default class SensorsMenu extends MenuBase {
         }
     }
     
-    updateSensorsList(sensors: Map<string, SensorDevice>) {
+    updateSensorsList(sensors: Map<string, SensorNode>) {
         if(sensors.size > 0)
             this.noSensorsLabel.hide();
         else
@@ -101,18 +100,17 @@ export default class SensorsMenu extends MenuBase {
         
         for(const id of idList) {
             const sensorData = sensors.get(id);
+            if(!sensorData)
+                continue;
             
             let sensor;
             if(!this.sensors.has(id)) {
                 const valueTree = new Map();
-                for(const category in sensorData) {
-                    if(category === 'Adapter' || category === 'name')
-                        continue;
-                    
+                for(const [categoryName, categories] of sensorData.children.entries()) {
                     const valuesIds = [];
-                    for(const value in sensorData[category])
+                    for(const value of categories.children.keys())
                         valuesIds.push(value);
-                    valueTree.set(category, valuesIds);
+                    valueTree.set(categoryName, valuesIds);
                 }
                 
                 sensor = this.createSensor(valueTree);
@@ -124,8 +122,6 @@ export default class SensorsMenu extends MenuBase {
             }
             
             if(!sensor)
-                continue;
-            if(!sensorData)
                 continue;
             
             //Update sensor info
@@ -266,37 +262,52 @@ export default class SensorsMenu extends MenuBase {
         };
     }
     
-    updateSensor(sensor: SensorInfo, sensorData: SensorDevice) {
+    updateSensor(sensor: SensorInfo, sensorData: SensorNode) {
         sensor.data = sensorData;
-        
         sensor.name.text = sensorData.name;
-        if(sensorData.Adapter)
-            sensor.adapter.text = `[${sensorData.Adapter}]`;
-        else
-            sensor.adapter.text = '';
         
-        for(const categoryName in sensorData) {
-            if(categoryName === 'Adapter' || categoryName === 'name')
-                continue;
+        if(sensorData.attrs.adapter) {
+            sensor.adapter.text = `[${sensorData.attrs.adapter}]`;
+        }
+        else {
+            const count = (node: SensorNode) => {
+                if(node.children.size === 0)
+                    return 1;
+                
+                let num = 0;
+                for(const child of node.children.values())
+                    num += count(child);
+                return num;
+            };
             
+            const numSensors = count(sensorData);
+            sensor.adapter.text = `[${ngettext('%d sensor', '%d sensors', numSensors).format(numSensors)}]`;
+        }
+        
+        for(const [categoryName, category] of sensorData.children.entries()) {
             const categoryData = sensor.categories.get(categoryName);
             if(!categoryData)
                 continue;
             
             categoryData.categoryLabel.text = Utils.sensorsNameFormat(categoryName);
             
-            for(const valueName in sensorData[categoryName]) {
+            for(const [valueName, value] of category.children.entries()) {
                 if(!categoryData.values.has(valueName))
                     continue;
                 
-                const value = categoryData.values.get(valueName);
-                if(value) {
-                    value.name.text = Utils.sensorsNameFormat(valueName);
+                const valueData = categoryData.values.get(valueName);
+                if(valueData) {
+                    valueData.name.text = Utils.sensorsNameFormat(valueName);
                     
-                    let unit = Utils.inferMeasurementUnit(valueName);
+                    let unit:string;
+                    if(value.attrs.unit !== undefined)
+                        unit = value.attrs.unit;
+                    else
+                        unit = Utils.inferMeasurementUnit(valueName);
                     
                     const icon:IconData = {
-                        fallback_icon_name: 'am-am-dialog-info-symbolic',
+                        gicon: Utils.getLocalIcon('am-dialog-info-symbolic'),
+                        fallback_icon_name: 'dialog-info-symbolic'
                     };
                     if(unit === '°C') {
                         icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
@@ -322,45 +333,55 @@ export default class SensorsMenu extends MenuBase {
                         icon.gicon = Utils.getLocalIcon('am-power-symbolic');
                         icon.fallback_icon_name = 'battery-symbolic';
                     }
+                    else if(unit === 'MHz') {
+                        icon.gicon = Utils.getLocalIcon('am-frequency-symbolic');
+                        icon.fallback_icon_name = 'battery-symbolic';
+                    }
                     
                     if(icon.gicon)
-                        value.icon.gicon = icon.gicon;
-                    value.icon.fallback_icon_name = icon.fallback_icon_name;
+                        valueData.icon.gicon = icon.gicon;
+                    valueData.icon.fallback_icon_name = icon.fallback_icon_name;
                     
-                    let numericValue = sensorData[categoryName][valueName];
+                    let numericValue = value.attrs.value;
+                    if(numericValue === undefined)
+                        numericValue = 0;
                     
+                    let strValue = numericValue + '';
                     if(unit === '°C') {
                         if(Config.get_string('sensors-temperature-unit') === 'fahrenheit') {
                             numericValue = Utils.celsiusToFahrenheit(numericValue);
                             unit = '°F';
                         }
-                        numericValue = numericValue.toFixed(1);
+                        strValue = numericValue.toFixed(1);
                     }
                     else if(unit === 'W') {
-                        numericValue = numericValue.toFixed(1);
+                        strValue = numericValue.toFixed(1);
                         unit = ' ' + unit;
                     }
                     else if(unit === 'V') {
-                        numericValue = numericValue.toFixed(2);
+                        strValue = numericValue.toFixed(2);
                         unit = ' ' + unit;
                     }
                     else if(unit === 'RPM') {
+                        strValue = numericValue.toFixed(0);
                         unit = ' ' + unit;
                     }
                     
-                    value.value.text = numericValue + unit;
-                    
+                    valueData.value.text = strValue + unit;
                 }
             }
         }
     }
     
     onOpen() {
+        Utils.sensorsMonitor.listen(this, 'sensorsDataAll', () => {});
+        
         Utils.sensorsMonitor.listen(this, 'sensorsData', this.update.bind(this, 'sensorsData'));
         Utils.sensorsMonitor.requestUpdate('sensorsData');
     }
     
     onClose() {
+        Utils.sensorsMonitor.unlisten(this, 'sensorsDataAll');
         Utils.sensorsMonitor.unlisten(this, 'sensorsData');
     }
     
@@ -368,15 +389,19 @@ export default class SensorsMenu extends MenuBase {
         if(code === 'sensorsData') {
             const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
             if(sensorsData) {
-                const sensorsList: Map<string, SensorDevice> = new Map();
+                const sensorsList: Map<string, SensorNode> = new Map();
                 
-                //list all by "sensors" provider
-                if(sensorsData.sensors) {
-                    for(const sensorName in sensorsData.sensors) {
-                        const sensorData = sensorsData.sensors[sensorName];
-                        sensorData.name = sensorName;
-                        
+                //list all by "lm-sensors" provider
+                if(sensorsData.lm_sensors && Utils.sensorsMonitor.sensorsSourceSetting === 'lm-sensors') {
+                    for(const [sensorName, sensorData] of sensorsData.lm_sensors.children.entries()) {
                         sensorsList.set('sensors/' + sensorName, sensorData);
+                    }
+                }
+                
+                //list all by "hwmon" provider
+                if(sensorsData.hwmon && Utils.sensorsMonitor.sensorsSourceSetting !== 'lm-sensors') {
+                    for(const [sensorName, sensorData] of sensorsData.hwmon.children.entries()) {
+                        sensorsList.set('hwmon/' + sensorName, sensorData);
                     }
                 }
                 

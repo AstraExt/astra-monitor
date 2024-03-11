@@ -18,6 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import GObject from 'gi://GObject';
 import GLib from 'gi://GLib';
 import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
@@ -34,6 +35,7 @@ type RowProps = {
     subtitle?:string;
     icon_name?: string;
     tabs?: number;
+    use_markup?: boolean;
 };
 
 type AdjustamentProps = {
@@ -46,6 +48,8 @@ type AdjustamentProps = {
 
 type ColorCallback = (color: string) => void;
 enum ColorCategory { MAIN, SECONDARY }
+
+type Choice = {value:any, text:string, disabled?:boolean};
 
 export default class AstraMonitorPrefs extends ExtensionPreferences {
     private minimumSize = { width: 500, height: 300 };
@@ -142,8 +146,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             check = false, this.addStatusLabel({title: _('Cannot access /proc/net/dev: this extension will not work!')}, 'am-dialog-error-symbolic', group);
         if(!Utils.hasPs())
             check = false, this.addStatusLabel({title: _('Cannot access \'ps\': this extension will not work!')}, 'am-dialog-error-symbolic', group);
-        if(!Utils.hasSensors())
-            check = false, this.addStatusLabel({title: _('\'lm-sensors\' not installed: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
+        //if(!Utils.hasLmSensors())
+        //    check = false, this.addStatusLabel({title: _('\'lm-sensors\' not installed: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
+        if(!Utils.hasHwmon())
+            check = false, this.addStatusLabel({title: _('Cannot access /sys/class/hwmon: this extension will not work!')}, 'am-dialog-error-symbolic', group);
         if(!Utils.hasLscpu())
             check = false, this.addStatusLabel({title: _('\'lscpu\' not installed: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
         if(!Utils.hasLspci())
@@ -1031,6 +1037,15 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'fahrenheit', text: pgettext('Fahrenheit unit measure choice', 'Fahrenheit')},
         ];
         this.addComboRow({title: _('Temperature Unit')}, choicesUnit, 'sensors-temperature-unit', group, 'string');
+        
+        const sourcesSection = this.addExpanderRow({title: _('Data Sources')}, group);
+        const sensorsSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'hwmon', text: 'Hwmon'},
+            {value: 'lm-sensors', text: 'Lm-sensors', disabled: !Utils.hasLmSensors()},
+        ];
+        this.addComboRow({title: _('Sensors'), tabs: 1}, sensorsSources, 'sensors-source', sourcesSection, 'string', 'auto');
+        
         sensorsPage.add(group);
         
         /* Header */
@@ -1056,15 +1071,26 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             tabs: 1
         }, 'sensors-header-icon-size', iconSection, {min: 8, max: 30, digits: 0, step: 1, page: 1}, true, 18);
         
-        const sources = Utils.getSensorSources();
+        const generateSensorSources = async () => {
+            // wait for the hwmon devices to be cached
+            await Utils.getCachedHwmonDevicesAsync();
+            
+            const sources = Utils.getSensorSources();
+            const choicesSource = [{value: '', text: _('None')}];
+            for(const source of sources)
+                choicesSource.push({value: source.value, text: source.text});
+            return choicesSource;
+        };
         
-        const choicesSource = [{value: '', text: _('None')}];
-        for(const source of sources)
-            choicesSource.push({value: source.value, text: source.text});
+        const sources = generateSensorSources();
         
         const sensor1Section = this.addExpanderRow({title: _('Sensor 1')}, group);
         this.addSwitchRow({title: _('Show'), tabs: 1}, 'sensors-header-sensor1-show', sensor1Section);
-        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-sensor1', sensor1Section, 'json');
+        this.addComboRow({
+            title: _('Source'),
+            tabs: 1,
+            use_markup: true
+        }, sources, 'sensors-header-sensor1', sensor1Section, 'json');
         this.addSpinRow({
             title: _('Value Digits'),
             subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
@@ -1073,7 +1099,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sensor2Section = this.addExpanderRow({title: _('Sensor 2')}, group);
         this.addSwitchRow({title: _('Show'), tabs: 1}, 'sensors-header-sensor2-show', sensor2Section);
-        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-sensor2', sensor2Section, 'json');
+        this.addComboRow({
+            title: _('Source'),
+            tabs: 1,
+            use_markup: true
+        }, sources, 'sensors-header-sensor2', sensor2Section, 'json');
         this.addSpinRow({
             title: _('Value Digits'),
             subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
@@ -1086,7 +1116,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'sensors-header-tooltip', group);
         
         const tooltipSensor1Section = this.addExpanderRow({title: _('Tooltip Sensor 1')}, group);
-        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor1', tooltipSensor1Section, 'json', '""');
+        this.addComboRow({
+            title: _('Source'),
+            tabs: 1,
+            use_markup: true
+        }, sources, 'sensors-header-tooltip-sensor1', tooltipSensor1Section, 'json', '""');
         this.addTextInputRow({
             title: _('Short Name'),
             subtitle: _('Short name to display in the tooltip.'),
@@ -1099,7 +1133,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor1-digits', tooltipSensor1Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor2Section = this.addExpanderRow({title: _('Tooltip Sensor 2')}, group);
-        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor2', tooltipSensor2Section, 'json', '""');
+        this.addComboRow({
+            title: _('Source'),
+            tabs: 1,
+            use_markup: true
+        }, sources, 'sensors-header-tooltip-sensor2', tooltipSensor2Section, 'json', '""');
         this.addTextInputRow({
             title: _('Short Name'),
             subtitle: _('Short name to display in the tooltip.'),
@@ -1112,7 +1150,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor2-digits', tooltipSensor2Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor3Section = this.addExpanderRow({title: _('Tooltip Sensor 3')}, group);
-        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor3', tooltipSensor3Section, 'json', '""');
+        this.addComboRow({
+            title: _('Source'),
+            tabs: 1,
+            use_markup: true
+        }, sources, 'sensors-header-tooltip-sensor3', tooltipSensor3Section, 'json', '""');
         this.addTextInputRow({
             title: _('Short Name'),
             subtitle: _('Short name to display in the tooltip.'),
@@ -1125,7 +1167,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor3-digits', tooltipSensor3Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor4Section = this.addExpanderRow({title: _('Tooltip Sensor 4')}, group);
-        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor4', tooltipSensor4Section, 'json', '""');
+        this.addComboRow({
+            title: _('Source'),
+            tabs: 1,
+            use_markup: true
+        }, sources, 'sensors-header-tooltip-sensor4', tooltipSensor4Section, 'json', '""');
         this.addTextInputRow({
             title: _('Short Name'),
             subtitle: _('Short name to display in the tooltip.'),
@@ -1138,7 +1184,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor4-digits', tooltipSensor4Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor5Section = this.addExpanderRow({title: _('Tooltip Sensor 5')}, group);
-        this.addComboRow({title: _('Source'), tabs: 1}, choicesSource, 'sensors-header-tooltip-sensor5', tooltipSensor5Section, 'json', '""');
+        this.addComboRow({
+            title: _('Source'),
+            tabs: 1,
+            use_markup: true
+        }, sources, 'sensors-header-tooltip-sensor5', tooltipSensor5Section, 'json', '""');
         this.addTextInputRow({
             title: _('Short Name'),
             subtitle: _('Short name to display in the tooltip.'),
@@ -1581,7 +1631,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         row.activatable_widget = button;
     }
     
-    addComboRow(props: RowProps, choices: {value:any, text:string}[], setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, type: TypeEnumStr = 'int', reset?: string) {
+    addComboRow(props: RowProps, choices: Choice[]|Promise<Choice[]>, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, type: TypeEnumStr = 'int', reset?: string) {
         const tabs = props.tabs;
         delete props.tabs;
         
@@ -1609,80 +1659,97 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 break;
         }
         
-        const stringList = new Gtk.StringList();
-        choices.forEach(choice => stringList.append(choice.text));
-        choices.forEach((choice, index) => {
-            let value = choice.value;
-            if(type === 'json')
-                value = JSON.stringify(value);
-            if(value === savedValue)
-                selected = index;
-        });
-        
         const row = new Adw.ActionRow(props);
         if(tabs)
             row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
         
-        const select = new Gtk.DropDown({
-            model: stringList,
-            selected,
-            halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER,
-            hexpand: false,
-            vexpand: false,
-        });
+        if((group as any).add)
+            (group as Adw.PreferencesGroup).add(row);
+        else
+            (group as Adw.ExpanderRow).add_row(row);
         
-        if(reset !== undefined) {
-            const resetButton = new Gtk.Button({
+        const addChoices = (choices: Choice[]) => {
+            const store = new Gtk.ListStore();
+            store.set_column_types([GObject.TYPE_STRING, GObject.TYPE_BOOLEAN]);
+            
+            for(const choice of choices) {
+                const iter = store.append();
+                store.set(iter, [0, 1], [choice.text, choice.disabled !== true]);
+            }
+            choices.forEach((choice, index) => {
+                let value = choice.value;
+                if(type === 'json')
+                    value = JSON.stringify(value);
+                if(value === savedValue)
+                    selected = index;
+            });
+            
+            const select = new Gtk.ComboBox({
+                model: store,
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
                 vexpand: false,
-                icon_name: 'edit-undo-symbolic',
-                sensitive: true,
             });
-            resetButton.connect('clicked', () => {
-                choices.forEach((choice, index) => {
-                    let value = choice.value;
-                    if(type === 'json')
-                        value = JSON.stringify(value);
-                    if(value === savedValue)
-                        selected = index;
+            select.set_active(selected);
+            
+            const renderer = new Gtk.CellRendererText();
+            select.pack_start(renderer, true);
+            select.add_attribute(renderer, 'text', 0);
+            select.add_attribute(renderer, 'sensitive', 1);
+            
+            if(reset !== undefined) {
+                const resetButton = new Gtk.Button({
+                    halign: Gtk.Align.END,
+                    valign: Gtk.Align.CENTER,
+                    hexpand: false,
+                    vexpand: false,
+                    icon_name: 'edit-undo-symbolic',
+                    sensitive: true,
                 });
-                select.selected = selected;
-                const selectedChoice = choices[selected];
+                resetButton.connect('clicked', () => {
+                    choices.forEach((choice, index) => {
+                        let value = choice.value;
+                        if(type === 'json')
+                            value = JSON.stringify(value);
+                        if(value === savedValue)
+                            selected = index;
+                    });
+                    select.set_active(selected);
+                    const selectedChoice = choices[selected];
+                    if(selectedChoice !== undefined) {
+                        if(type === 'json')
+                            Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
+                        else
+                            Config.set(setting, selectedChoice.value, type);
+                    }
+                });
+                row.add_suffix(resetButton);
+            }
+            
+            row.add_suffix(select);
+            row.activatable_widget = select;
+            
+            if(choices[selected] && choices[selected].text)
+                select.set_tooltip_text(choices[selected].text);
+            select.connect('notify::active', () => {
+                const selectedIndex = select.get_active();
+                const selectedChoice = choices[selectedIndex];
                 if(selectedChoice !== undefined) {
+                    row.set_tooltip_text(selectedChoice.text);
+                    
                     if(type === 'json')
                         Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
                     else
                         Config.set(setting, selectedChoice.value, type);
                 }
             });
-            row.add_suffix(resetButton);
-        }
+        };
         
-        row.add_suffix(select);
-        row.activatable_widget = select;
-        
-        if(choices[selected] && choices[selected].text)
-            select.set_tooltip_text(choices[selected].text);
-        select.connect('notify::selected', widget => {
-            const selectedIndex = widget.selected;
-            const selectedChoice = choices[selectedIndex];
-            if(selectedChoice !== undefined) {
-                row.set_tooltip_text(selectedChoice.text);
-                
-                if(type === 'json')
-                    Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
-                else
-                    Config.set(setting, selectedChoice.value, type);
-            }
-        });
-        
-        if((group as any).add)
-            (group as Adw.PreferencesGroup).add(row);
+        if(choices instanceof Promise)
+            choices.then(addChoices);
         else
-            (group as Adw.ExpanderRow).add_row(row);
+            addChoices(choices);
     }
     
     addSpinRow(props: RowProps, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, adj: AdjustamentProps, numeric: boolean = true, reset?: number) {

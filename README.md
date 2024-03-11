@@ -12,6 +12,7 @@
 - [Contributing](#contributing)
 - [Donations](#donations)
 - [Acknowledgments](#acknowledgments)
+- [Star History](#star-history)
 
 # Overview
 

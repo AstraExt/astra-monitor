@@ -31,6 +31,7 @@ import Header from '../header.js';
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
 import SensorsMenu from './sensorsMenu.js';
+import { SensorsData } from './sensorsMonitor.js';
 
 type TooltipMenu = PopupMenu.PopupMenu & {
     actor: St.Widget;
@@ -232,29 +233,44 @@ class SensorsHeader extends Header {
         });
     }
     
-    applySource(sensorsData: any, sensorSource: SensorSource, sensorDigits: number = -1) {
-        if(!sensorSource || !sensorSource.service || !sensorsData[sensorSource.service])
+    applySource(sensorsData: SensorsData, sensorSource: SensorSource, sensorDigits: number = -1): string {
+        if(!sensorSource || !sensorSource.service)
             return '-';
         
-        let data = sensorsData[sensorSource.service];
+        let service = sensorSource.service;
+        if(service === 'sensors')
+            service = 'lm_sensors';
+        
+        if(!sensorsData[service as keyof SensorsData])
+            return '-';
+        
+        let node = sensorsData[service as keyof SensorsData];
+        
         let step;
         for(step of sensorSource.path) {
-            if(!data[step])
+            if(!node)
                 return '-';
-            data = data[step];
+            
+            const tmp = node.children.get(step);
+            if(!tmp)
+                return '-';
+            node = tmp;
         }
+        
+        if(!node)
+            return '-';
         
         let value;
         let unit;
         
-        if(data.value && data.unit) {
-            value = data.value;
-            unit = data.unit;
-        }
-        else {
-            value = data;
+        if(!node.attrs.value)
+            return '-';
+        value = node.attrs.value;
+        
+        if(node.attrs.unit)
+            unit = node.attrs.unit;
+        else
             unit = Utils.inferMeasurementUnit(step || '');
-        }
         
         if(unit) {
             if(unit === '°C' && Config.get_string('sensors-temperature-unit') === 'fahrenheit') {
@@ -272,7 +288,7 @@ class SensorsHeader extends Header {
         }
         if(!Utils.isIntOrIntString(value) && Utils.isNumeric(value))
             value = value.toFixed(1);
-        return value;
+        return value as string;
     }
     
     fixContainerWidth(width: number) {
