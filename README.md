@@ -176,40 +176,6 @@ environment.systemPackages = with pkgs; [
 ];
 ```
 
-### Sensors
-
-If you want to use the sensors data source you may need to install the `lm_sensors` package. This package is not required for the extension to work, but it is recommended for a better experience.
-
-Here is a non-exhaustive list of how to install `lm_sensors` on some popular Linux distributions:
-
-#### Ubuntu/Debian
-```bash
-sudo apt install lm-sensors
-```
-
-#### Fedora
-```bash
-sudo dnf install lm_sensors
-```
-
-#### Arch / Manjaro
-```bash
-sudo pacman -Syu lm_sensors
-```
-
-#### openSUSE
-```bash
-sudo zypper install lm_sensors
-```
-
-#### NixOS
-On NixOS, you may need to add the following to your `configuration.nix`:
-```nix
-environment.systemPackages = with pkgs; [
-    lm_sensors
-];
-```
-
 # Usage
 
 Once installed, Astra Monitor can be accessed and configured directly from the GNOME extensions tool. You can customize what system resources to monitor and how the information is displayed, tailoring the experience to your need.
