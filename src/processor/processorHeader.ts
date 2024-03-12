@@ -66,7 +66,7 @@ class ProcessorHeader extends Header {
         
         Config.connect(this, 'changed::processor-indicators-order', this.addOrReorderIndicators.bind(this));
         Config.bind('processor-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
-        Config.connect(this, 'changed::processor-header-bars-core', this.buildBars.bind(this));
+        Config.connect(this, 'changed::processor-header-bars-core', this.rebuildBars.bind(this));
     }
     
     addOrReorderIndicators() {
@@ -181,6 +181,11 @@ class ProcessorHeader extends Header {
                 }
             }
         });
+    }
+    
+    rebuildBars() {
+        this.buildBars();
+        this.addOrReorderIndicators();
     }
     
     buildBars() {

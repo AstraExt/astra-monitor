@@ -417,7 +417,7 @@ export default class NetworkMenu extends MenuBase {
         });
     }
     
-    onOpen() {
+    async onOpen() {
         this.clear();
         
         this.update('networkIO');
@@ -437,7 +437,7 @@ export default class NetworkMenu extends MenuBase {
         }
     }
     
-    onClose() {
+    async onClose() {
         Utils.networkMonitor.unlisten(this, 'networkIO');
         Utils.networkMonitor.unlisten(this, 'detailedNetworkIO');
         

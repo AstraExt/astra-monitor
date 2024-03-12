@@ -749,7 +749,7 @@ export default class StorageMenu extends MenuBase {
         });
     }
     
-    onOpen() {
+    async onOpen() {
         this.clear();
         
         Utils.storageMonitor.listen(this, 'storageIO', this.update.bind(this, 'storageIO'));
@@ -777,7 +777,7 @@ export default class StorageMenu extends MenuBase {
         }
     }
     
-    onClose() {
+    async onClose() {
         Utils.storageMonitor.unlisten(this, 'storageIO');
         Utils.storageMonitor.unlisten(this, 'detailedStorageIO');
         Utils.processorMonitor.unlisten(this, 'topProcesses');

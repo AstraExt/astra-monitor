@@ -192,11 +192,11 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         this.addToMenu(this.utilityBox, this.grid.getNumCols());
     }
     
-    onOpen() {
+    async onOpen() {
         
     }
     
-    onClose() {
+    async onClose() {
         
     }
     

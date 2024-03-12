@@ -600,7 +600,7 @@ export default class MemoryMenu extends MenuBase {
         this.memorySwapPopup.addToMenu(devicesGrid, 3);
     }
     
-    onOpen() {
+    async onOpen() {
         this.clear();
         
         //Update cpu usage percentage label
@@ -618,7 +618,7 @@ export default class MemoryMenu extends MenuBase {
         Utils.memoryMonitor.requestUpdate('swapUsage');
     }
     
-    onClose() {
+    async onClose() {
         Utils.memoryMonitor.unlisten(this, 'memoryUsage');
         Utils.memoryMonitor.unlisten(this.graph, 'memoryUsage');
         Utils.memoryMonitor.unlisten(this, 'topProcesses');

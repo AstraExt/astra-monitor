@@ -373,14 +373,14 @@ export default class SensorsMenu extends MenuBase {
         }
     }
     
-    onOpen() {
+    async onOpen() {
         Utils.sensorsMonitor.listen(this, 'sensorsDataAll', () => {});
         
         Utils.sensorsMonitor.listen(this, 'sensorsData', this.update.bind(this, 'sensorsData'));
         Utils.sensorsMonitor.requestUpdate('sensorsData');
     }
     
-    onClose() {
+    async onClose() {
         Utils.sensorsMonitor.unlisten(this, 'sensorsDataAll');
         Utils.sensorsMonitor.unlisten(this, 'sensorsData');
     }
