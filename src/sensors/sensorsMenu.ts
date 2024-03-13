@@ -209,7 +209,7 @@ export default class SensorsMenu extends MenuBase {
                 for(const valueId of category) {
                     //Icon
                     const icon = new St.Icon({
-                        style_class: 'astra-monitor-menu-icon-mini',
+                        style_class: 'astra-monitor-menu-sensors-icon',
                         content_gravity: Clutter.ContentGravity.CENTER,
                     });
                     categoryGrid.addToGrid(icon);
@@ -297,7 +297,11 @@ export default class SensorsMenu extends MenuBase {
                 
                 const valueData = categoryData.values.get(valueName);
                 if(valueData) {
-                    valueData.name.text = Utils.sensorsNameFormat(valueName);
+                    let prepend = '';
+                    if(value.attrs.type && !valueName.includes(value.attrs.type))
+                        prepend = value.attrs.type + ' ';
+                    
+                    valueData.name.text = Utils.sensorsNameFormat(prepend + valueName);
                     
                     let unit:string;
                     if(value.attrs.unit !== undefined)

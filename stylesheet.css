@@ -427,15 +427,23 @@
     font-style: italic;
 }
 
+.astra-monitor-menu-sensors-icon {
+    margin-top:0.1em;
+    icon-size: 1em;
+    color: #999;
+    background-size: contain;
+}
+
 .astra-monitor-menu-sensors-label {
     font-size: 1em;
+    font-style: italic;
+    color: #999;
     padding: 0.05em 0.2em;
     text-align: left;
 }
 
 .astra-monitor-menu-sensors-key {
-    font-style: italic;
-    color: #999;
+    margin-top:0.1em;
     margin-right: 0.2em;
     margin-left: 0.5em;
     text-align: right;
