@@ -605,7 +605,7 @@ export default class ProcessorMenu extends MenuBase {
     }
     
     addLoadAverage() {
-        this.addMenuSection(_('Load Average'));
+        this.addMenuSection(_('Load average'));
         
         const defaultStyle = 'max-width:150px;';
         
