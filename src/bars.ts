@@ -202,79 +202,84 @@ class BarsBase extends St.BoxLayout {
         if(!this.get_stage() || !this.get_parent())
             return;
         
-        // eslint-disable-next-line prefer-const
-        let [width, height] = this.get_size();
-        if(this.initialWidth && width > this.initialWidth)
-            width = this.initialWidth;
-        
-        if(this.layout === 'vertical' && this.header) {
-            if(this.initialHeight && height > this.initialHeight)
-                height = this.initialHeight;
+        try {
+            // eslint-disable-next-line prefer-const
+            let [width, height] = this.get_size();
+            if(this.initialWidth && width > this.initialWidth)
+                width = this.initialWidth;
             
-            const parentHeight = this.get_parent()!.get_height();
-            if(height > parentHeight - 6)
-                height = parentHeight - 6;
-        }
-        
-        let size;
-        if(this.layout === 'vertical')
-            size = height - 4; // Remove 2px padding and 2px border
-        else
-            size = width - 4; // Remove 2px padding and 2px border
-        
-        if(!values || values.length === 0) {
+            if(this.layout === 'vertical' && this.header) {
+                if(this.initialHeight && height > this.initialHeight)
+                    height = this.initialHeight;
+                
+                const parentHeight = this.get_parent()!.get_height();
+                if(height > parentHeight - 6)
+                    height = parentHeight - 6;
+            }
+            
+            let size;
+            if(this.layout === 'vertical')
+                size = height - 4; // Remove 2px padding and 2px border
+            else
+                size = width - 4; // Remove 2px padding and 2px border
+            
+            if(!values || values.length === 0) {
+                for(let i = 0; i < this.bars.length; i++) {
+                    const bar = this.bars[i];
+                    for(let l = 0; l < bar.length; l++)
+                        bar[l].visible = false;
+                }
+                return;
+            }
+            
             for(let i = 0; i < this.bars.length; i++) {
                 const bar = this.bars[i];
-                for(let l = 0; l < bar.length; l++)
-                    bar[l].visible = false;
-            }
-            return;
-        }
-        
-        for(let i = 0; i < this.bars.length; i++) {
-            const bar = this.bars[i];
-            if(i >= values.length) {
-                for(let l = 0; l < bar.length; l++)
-                    bar[l].visible = false;
-                continue;
-            }
-            
-            const value = values[i];
-            
-            let start = 0;
-            for(let l = 0; l < bar.length; l++) {
-                const layer = bar[l];
-                if(l >= value.length) {
-                    layer.visible = false;
+                if(i >= values.length) {
+                    for(let l = 0; l < bar.length; l++)
+                        bar[l].visible = false;
                     continue;
                 }
                 
-                if(this.hideEmpty) {
-                    for(let l = 0; l < bar.length; l++)
-                        bar[l].visible = value[l].value > 0;
-                    if(value[l].value === 0)
+                const value = values[i];
+                
+                let start = 0;
+                for(let l = 0; l < bar.length; l++) {
+                    const layer = bar[l];
+                    if(l >= value.length) {
+                        layer.visible = false;
                         continue;
+                    }
+                    
+                    if(this.hideEmpty) {
+                        for(let l = 0; l < bar.length; l++)
+                            bar[l].visible = value.length < l && value[l].value > 0;
+                        if(value[l].value === 0)
+                            continue;
+                    }
+                    
+                    const normalizedValue = value[l].value * size;
+                    let fillSize = 1;
+                    if(normalizedValue >= 0.5)
+                        fillSize = Math.ceil(normalizedValue) / this.scaleFactor;
+                    if(isNaN(fillSize) || fillSize < 1)
+                        fillSize = 1;
+                    
+                    if(this.layout === 'vertical')
+                        layer.set_position(0, size-start-fillSize);
+                    else
+                        layer.set_position(start, 0);
+                    
+                    const style = this.computeStyle(start, fillSize, size) + `background-color:${this.colors[value[l].color]};`;
+                    layer.set_style(style);
+                    start += fillSize;
+                    
+                    if(!layer.visible)
+                        layer.visible = true;
                 }
-                
-                const normalizedValue = value[l].value * size;
-                let fillSize = 1;
-                if(normalizedValue >= 0.5)
-                    fillSize = Math.ceil(normalizedValue) / this.scaleFactor;
-                if(isNaN(fillSize) || fillSize < 1)
-                    fillSize = 1;
-                
-                if(this.layout === 'vertical')
-                    layer.set_position(0, size-start-fillSize);
-                else
-                    layer.set_position(start, 0);
-                
-                const style = this.computeStyle(start, fillSize, size) + `background-color:${this.colors[value[l].color]};`;
-                layer.set_style(style);
-                start += fillSize;
-                
-                if(!layer.visible)
-                    layer.visible = true;
             }
+        }
+        catch(e:any) {
+            Utils.error(e);
         }
     }
     
