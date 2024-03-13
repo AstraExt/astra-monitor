@@ -4,6 +4,7 @@
 - Fixed too wide Select Box in Preferences [[#80](https://github.com/AstraExt/astra-monitor/issues/80)]
 - Fixed CPU Cores Usage Info not being updated when Cores Bar Breakdown is disabled [[#83](https://github.com/AstraExt/astra-monitor/issues/83)]
 - Improved sensors list with more info and better layout [[#84](https://github.com/AstraExt/astra-monitor/issues/84)]
+- Export/Import settings improved, default name, extension filter and keys ordered alphabetically [[#79](https://github.com/AstraExt/astra-monitor/issues/79)]
 
 # Astra Monitor 14 - March 11 2024
 

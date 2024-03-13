@@ -1240,8 +1240,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 transient_for: window,
                 modal: true,
             });
+            dialog.set_current_name('astra-monitor-settings.json');
             
             const filter = new Gtk.FileFilter();
+            filter.set_name('JSON Files');
+            filter.add_mime_type('application/json');
             filter.add_pattern('*.json');
             dialog.add_filter(filter);
             
@@ -1272,6 +1275,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             });
             
             const filter = new Gtk.FileFilter();
+            filter.set_name('JSON Files');
+            filter.add_mime_type('application/json');
             filter.add_pattern('*.json');
             dialog.add_filter(filter);
             
@@ -1282,9 +1287,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             dialog.connect('response', (dialog, id) => {
                 if(id == Gtk.ResponseType.OK) {
                     try {
-                        let path = dialog.get_file().get_path();
-                        if(!path.endsWith('.json'))
-                            path += '.json';
+                        const path = dialog.get_file().get_path();
                         Utils.readFileAsync(path).then(data => {
                             this.importSettings(data);
                             window.close();
@@ -2073,7 +2076,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             else
                 Utils.log('Unsupported type: ' + type);
         }
-        return JSON.stringify(exported);
+        
+        //order keys alphabetically
+        const ordered: any = {};
+        Object.keys(exported).sort().forEach(key => {
+            ordered[key] = exported[key];
+        });
+        return JSON.stringify(ordered);
     }
     
     private importSettings(data: string) {
