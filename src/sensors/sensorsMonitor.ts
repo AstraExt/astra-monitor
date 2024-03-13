@@ -152,16 +152,16 @@ export default class SensorsMonitor extends Monitor {
     update() {
         const enabled = Config.get_boolean('sensors-header-show');
         if(enabled) {
-            const sensorsData = this.getSensorsDataAsync();
-            this.runUpdate('sensorsData', sensorsData);
+            const lmSensorsData = this.getLmSensorsDataAsync();
+            this.runUpdate('sensorsData', lmSensorsData);
         }
         return true;
     }
     
     requestUpdate(key: string) {
         if(key === 'sensorsData') {
-            const sensorsData = this.getSensorsDataAsync();
-            this.runUpdate('sensorsData', sensorsData);
+            const lmSensorsData = this.getLmSensorsDataAsync();
+            this.runUpdate('sensorsData', lmSensorsData);
         }
         super.requestUpdate(key);
     }
@@ -178,7 +178,10 @@ export default class SensorsMonitor extends Monitor {
         }
     }
     
-    getSensorsDataAsync(): PromiseValueHolder<string> {
+    getLmSensorsDataAsync(): PromiseValueHolder<string>|null {
+        if(!Utils.hasLmSensors())
+            return null;
+        
         return new PromiseValueHolder(new Promise((resolve, reject) => {
             try {
                 Utils.executeCommandAsync('sensors -j', this.updateSensorsDataTask).then(result => {
@@ -257,7 +260,7 @@ export default class SensorsMonitor extends Monitor {
         return false;
     }
     
-    async updateSensorsData(sensorsData: PromiseValueHolder<string>): Promise<boolean> {
+    async updateSensorsData(lmSensorsData: PromiseValueHolder<string>): Promise<boolean> {
         const data:SensorsData = {};
         
         // "hwmon" provider
@@ -345,16 +348,16 @@ export default class SensorsMonitor extends Monitor {
             }
         }
         
-        if(this.shouldUpdate('lm-sensors')) {
+        if(lmSensorsData && this.shouldUpdate('lm-sensors')) {
             data.lm_sensors = {name: 'lm-sensors', children: new Map(), attrs: {}};
             
             // "lm-sensors" provider
             try {
-                const sensorsDataValue = await sensorsData.getValue();
-                if(!sensorsDataValue)
+                const lmSensorsDataValue = await lmSensorsData.getValue();
+                if(!lmSensorsDataValue)
                     return false;
                 
-                const parsedData = JSON.parse(sensorsDataValue) as any;
+                const parsedData = JSON.parse(lmSensorsDataValue) as any;
                 if(parsedData) {
                     for(const [deviceName, deviceData] of Object.entries(parsedData)) {
                         let device = data.lm_sensors.children.get(deviceName);
