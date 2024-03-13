@@ -22,7 +22,7 @@ import Config from '../config.js';
 import Utils from '../utils/utils.js';
 import Monitor from '../monitor.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
-import PromiseValueHolder from '../utils/promiseValueHolder.js';
+import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 
 export type SensorNode = {
     name: string;
@@ -152,7 +152,7 @@ export default class SensorsMonitor extends Monitor {
     update() {
         const enabled = Config.get_boolean('sensors-header-show');
         if(enabled) {
-            const lmSensorsData = this.getLmSensorsDataAsync();
+            const lmSensorsData = new PromiseValueHolderStore<string|null>(this.getLmSensorsDataAsync.bind(this));
             this.runUpdate('sensorsData', lmSensorsData);
         }
         return true;
@@ -178,11 +178,11 @@ export default class SensorsMonitor extends Monitor {
         }
     }
     
-    getLmSensorsDataAsync(): PromiseValueHolder<string>|null {
-        if(!Utils.hasLmSensors())
-            return null;
-        
+    getLmSensorsDataAsync(): PromiseValueHolder<string|null> {
         return new PromiseValueHolder(new Promise((resolve, reject) => {
+            if(!Utils.hasLmSensors())
+                return resolve(null);
+            
             try {
                 Utils.executeCommandAsync('sensors -j', this.updateSensorsDataTask).then(result => {
                     resolve(result);
