@@ -1,6 +1,7 @@
 # Astra Monitor 15 - TO BE RELEASED
 
 ### Bug fixes
+- Fixed sensors randomly not updating without lm-sensors installed [[#81](https://github.com/AstraExt/astra-monitor/issues/81)]
 - Fixed too wide Select Box in Preferences [[#80](https://github.com/AstraExt/astra-monitor/issues/80)]
 - Fixed CPU Cores Usage Info not being updated when Cores Bar Breakdown is disabled [[#83](https://github.com/AstraExt/astra-monitor/issues/83)]
 - Improved sensors list with more info and better layout [[#84](https://github.com/AstraExt/astra-monitor/issues/84)]
