@@ -422,7 +422,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 }, {});
             choicesSource.push({value: data, text: Utils.getGPUModelName(gpu)});
         }
-        this.addComboRow({title: _('Main GPU'), tabs: 1}, choicesSource, 'processor-menu-gpu', gpuSection, 'json');
+        this.addDropRow({title: _('Main GPU'), tabs: 1}, choicesSource, 'processor-menu-gpu', gpuSection, 'json');
         this.addColorRow({
             title: _('Bars Color'),
             subtitle: _('GPU bars main color.'),
@@ -1086,7 +1086,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sensor1Section = this.addExpanderRow({title: _('Sensor 1')}, group);
         this.addSwitchRow({title: _('Show'), tabs: 1}, 'sensors-header-sensor1-show', sensor1Section);
-        this.addComboRow({
+        this.addDropRow({
             title: _('Source'),
             tabs: 1,
             use_markup: true
@@ -1099,7 +1099,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sensor2Section = this.addExpanderRow({title: _('Sensor 2')}, group);
         this.addSwitchRow({title: _('Show'), tabs: 1}, 'sensors-header-sensor2-show', sensor2Section);
-        this.addComboRow({
+        this.addDropRow({
             title: _('Source'),
             tabs: 1,
             use_markup: true
@@ -1116,7 +1116,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Show Tooltip'), tabs: 0}, 'sensors-header-tooltip', group);
         
         const tooltipSensor1Section = this.addExpanderRow({title: _('Tooltip Sensor 1')}, group);
-        this.addComboRow({
+        this.addDropRow({
             title: _('Source'),
             tabs: 1,
             use_markup: true
@@ -1133,7 +1133,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor1-digits', tooltipSensor1Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor2Section = this.addExpanderRow({title: _('Tooltip Sensor 2')}, group);
-        this.addComboRow({
+        this.addDropRow({
             title: _('Source'),
             tabs: 1,
             use_markup: true
@@ -1150,7 +1150,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor2-digits', tooltipSensor2Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor3Section = this.addExpanderRow({title: _('Tooltip Sensor 3')}, group);
-        this.addComboRow({
+        this.addDropRow({
             title: _('Source'),
             tabs: 1,
             use_markup: true
@@ -1167,7 +1167,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor3-digits', tooltipSensor3Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor4Section = this.addExpanderRow({title: _('Tooltip Sensor 4')}, group);
-        this.addComboRow({
+        this.addDropRow({
             title: _('Source'),
             tabs: 1,
             use_markup: true
@@ -1184,7 +1184,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'sensors-header-tooltip-sensor4-digits', tooltipSensor4Section, {min: -1, max: 3, digits: 0, step: 1, page: 1}, true, -1);
         
         const tooltipSensor5Section = this.addExpanderRow({title: _('Tooltip Sensor 5')}, group);
-        this.addComboRow({
+        this.addDropRow({
             title: _('Source'),
             tabs: 1,
             use_markup: true
@@ -1631,6 +1631,120 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         row.activatable_widget = button;
     }
     
+    addDropRow(props: RowProps, choices: Choice[]|Promise<Choice[]>, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, type: TypeEnumStr = 'int', reset?: string) {
+        const tabs = props.tabs;
+        delete props.tabs;
+        
+        let selected = -1;
+        let savedValue: any;
+        
+        switch(type) {
+            case 'boolean':
+                savedValue = Config.get_boolean(setting);
+                break;
+            case 'string':
+                savedValue = Config.get_string(setting);
+                break;
+            case 'int':
+                savedValue = Config.get_int(setting);
+                break;
+            case 'number':
+                savedValue = Config.get_double(setting);
+                break;
+            case 'json':
+                savedValue = Config.get_string(setting);
+                break;
+            default:
+                savedValue = Config.get_value(setting);
+                break;
+        }
+        
+        const row = new Adw.ActionRow(props);
+        if(tabs)
+            row.add_prefix(new Gtk.Box({marginStart: tabs * 20}));
+        
+            if((group as any).add)
+            (group as Adw.PreferencesGroup).add(row);
+        else
+            (group as Adw.ExpanderRow).add_row(row);
+        
+        const addChoices = (choices: Choice[]) => {
+            const stringList = new Gtk.StringList();
+            
+            for(const choice of choices)
+                stringList.append(choice.text);
+            
+            choices.forEach((choice, index) => {
+                let value = choice.value;
+                if(type === 'json')
+                    value = JSON.stringify(value);
+                if(value === savedValue)
+                    selected = index;
+            });
+            
+            const select = new Gtk.DropDown({
+                model: stringList,
+                selected,
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+                hexpand: false,
+                vexpand: false,
+            });
+            
+            if(reset !== undefined) {
+                const resetButton = new Gtk.Button({
+                    halign: Gtk.Align.END,
+                    valign: Gtk.Align.CENTER,
+                    hexpand: false,
+                    vexpand: false,
+                    icon_name: 'edit-undo-symbolic',
+                    sensitive: true,
+                });
+                resetButton.connect('clicked', () => {
+                    choices.forEach((choice, index) => {
+                        let value = choice.value;
+                        if(type === 'json')
+                            value = JSON.stringify(value);
+                        if(value === savedValue)
+                            selected = index;
+                    });
+                    select.selected = selected;
+                    const selectedChoice = choices[selected];
+                    if(selectedChoice !== undefined) {
+                        if(type === 'json')
+                            Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
+                        else
+                            Config.set(setting, selectedChoice.value, type);
+                    }
+                });
+                row.add_suffix(resetButton);
+            }
+            
+            row.add_suffix(select);
+            row.activatable_widget = select;
+            
+            if(choices[selected] && choices[selected].text)
+                select.set_tooltip_text(choices[selected].text);
+            select.connect('notify::selected', widget => {
+                const selectedIndex = widget.selected;
+                const selectedChoice = choices[selectedIndex];
+                if(selectedChoice !== undefined) {
+                    row.set_tooltip_text(selectedChoice.text);
+                    
+                    if(type === 'json')
+                        Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
+                    else
+                        Config.set(setting, selectedChoice.value, type);
+                }
+            });
+        };
+        
+        if(choices instanceof Promise)
+            choices.then(addChoices);
+        else
+            addChoices(choices);
+    }
+    
     addComboRow(props: RowProps, choices: Choice[]|Promise<Choice[]>, setting: string, group: Adw.PreferencesGroup|Adw.ExpanderRow, type: TypeEnumStr = 'int', reset?: string) {
         const tabs = props.tabs;
         delete props.tabs;
@@ -2015,5 +2129,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             else
                 Utils.log('Unsupported type: ' + type);
         }
+    }
+    
+    // @ts-expect-error never used
+    private static applyCssToWidget(widget: Gtk.Widget, cssString: string) {
+        const cssProvider = new Gtk.CssProvider();
+        cssProvider.load_from_data(cssString, cssString.length);
+        widget.get_style_context().add_provider(cssProvider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }
