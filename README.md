@@ -61,7 +61,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Alpha<br>5/7</th>
+        <th style="text-align:center" colspan="3">Alpha<br>7/7</th>
         <th style="text-align:center" colspan="3">Beta<br>0/6</th>
         <th style="text-align:center">Release</th>
     </tr>
@@ -77,7 +77,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
     <tr>
         <td>✅<br>Graph Customization</td>
         <td>✅<br>Import / Export / Reset Settings</td>
-        <td>🔲<br>Improve performance</td>
+        <td>✅<br>Improve performance</td>
         <td>🔲<br>Advanced Network Monitoring</td>
         <td>🔲<br>Advanced GPU Monitoring</td>
         <td>🔲<br>User Custom Commands</td>
@@ -86,7 +86,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
     <tr>
         <td>✅<br>Tooltips Customization</td>
         <td>✅<br>CPU Load</td>
-        <td>🔲<br>Pre-beta bugfixing</td>
+        <td>✅<br>Pre-beta bugfixing</td>
         <td>🔲<br>Advanced Disk Monitoring</td>
         <td>🔲<br>Battery Monitoring</td>
         <td>🔲<br>Continuos Monitoring Mode</td>

@@ -1,13 +1,16 @@
-# Astra Monitor 15 - TO BE RELEASED
+# Astra Monitor 15 - March 14 2024
+
+### First Beta Release
+This marks the first beta release of Astra Monitor. After extensive testing, the extension is nearing stability, but we are open to feedback from the community to address any unresolved issues. Explore our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap) to see what's coming next.
 
 ### Bug fixes
-- Overall performance improvements (benchmarks and tests against other popular monitoring extensions will be published at a later date)
-- Fixed hwmon monitoring update triggering lm-sensors query
-- Fixed sensors randomly not updating without lm-sensors installed [[#81](https://github.com/AstraExt/astra-monitor/issues/81)]
-- Fixed too wide Select Box in Preferences [[#80](https://github.com/AstraExt/astra-monitor/issues/80)]
+- Overall performance improvements<br>_(benchmarks and comparative tests with other popular monitoring extensions will be published at a later date)_
+- Resolved an issue where updates to hwmon incorrectly triggered lm-sensors queries
+- Addressed a bug causing sensor updates to fail intermittently when lm-sensors was not installed [[#81](https://github.com/AstraExt/astra-monitor/issues/81)]
+- Adjusted the width of the Select Box in Preferences for improved usability [[#80](https://github.com/AstraExt/astra-monitor/issues/80)]
 - Fixed CPU Cores Usage Info not being updated when Cores Bar Breakdown is disabled [[#83](https://github.com/AstraExt/astra-monitor/issues/83)]
 - Improved sensors list with more info and better layout [[#84](https://github.com/AstraExt/astra-monitor/issues/84)]
-- Export/Import settings improved, default name, extension filter and keys ordered alphabetically [[#79](https://github.com/AstraExt/astra-monitor/issues/79)]
+- Refined the Export/Import settings feature with a default name, file extension filter and alphabetically ordered exported keys [[#79](https://github.com/AstraExt/astra-monitor/issues/79)]
 
 # Astra Monitor 14 - March 11 2024
 

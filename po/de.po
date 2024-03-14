@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-12 00:15+0100\n"
+"POT-Creation-Date: 2024-03-14 02:18+0100\n"
 "PO-Revision-Date: 2024-01-21 12:11+0100\n"
 "Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
 "Language-Team: \n"
@@ -90,8 +90,8 @@ msgstr "GHz"
 msgid "Top processes"
 msgstr ""
 
-#: src/processor/processorMenu.js:422 prefs.js:265
-msgid "Load Average"
+#: src/processor/processorMenu.js:422
+msgid "Load average"
 msgstr ""
 
 #: src/processor/processorMenu.js:442
@@ -618,6 +618,10 @@ msgstr ""
 #, fuzzy
 msgid "Top Processes"
 msgstr "Prozessoren"
+
+#: prefs.js:265
+msgid "Load Average"
+msgstr ""
 
 #: prefs.js:267 prefs.js:397 prefs.js:598 prefs.js:865
 msgid "Header"
@@ -1292,35 +1296,35 @@ msgstr ""
 msgid "Export Settings"
 msgstr ""
 
-#: prefs.js:1035
+#: prefs.js:1038
 msgid "Save"
 msgstr ""
 
-#: prefs.js:1036 prefs.js:1062
+#: prefs.js:1039 prefs.js:1067
 msgid "Cancel"
 msgstr ""
 
-#: prefs.js:1051 prefs.js:1053
+#: prefs.js:1054 prefs.js:1056
 msgid "Import Settings"
 msgstr ""
 
-#: prefs.js:1061
+#: prefs.js:1066
 msgid "Open"
 msgstr ""
 
-#: prefs.js:1084 prefs.js:1086
+#: prefs.js:1087 prefs.js:1089
 msgid "Reset Preferences"
 msgstr ""
 
-#: prefs.js:1087
+#: prefs.js:1090
 msgid "Are you sure you want to reset all preferences?"
 msgstr ""
 
-#: prefs.js:1103
+#: prefs.js:1106
 msgid "Debug Mode"
 msgstr "Debug-Modus"
 
-#: prefs.js:1104
+#: prefs.js:1107
 msgid ""
 "Warning: may affect performance, use only if you know what you are doing."
 msgstr ""
