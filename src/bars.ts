@@ -252,7 +252,7 @@ class BarsBase extends St.BoxLayout {
                     
                     if(this.hideEmpty) {
                         for(let l = 0; l < bar.length; l++)
-                            bar[l].visible = value.length < l && value[l].value > 0;
+                            bar[l].visible = l < value.length && value[l].value > 0;
                         if(value[l].value === 0)
                             continue;
                     }

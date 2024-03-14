@@ -1,3 +1,8 @@
+# Astra Monitor 16 - TO BE RELEASED
+
+### Bug fixes
+- Fixed CPU Cores Usage Info user bar invisible when Cores Bar Breakdown is enabled [[#86](https://github.com/AstraExt/astra-monitor/issues/86)]
+
 # Astra Monitor 15 - March 14 2024
 
 ### First Beta Release
