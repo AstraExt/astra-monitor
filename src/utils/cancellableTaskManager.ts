@@ -55,13 +55,15 @@ export default class CancellableTaskManager<T> {
     
     private makeCancellable(boundTask: () => Promise<T>): { promise: Promise<T>, cancel: () => void } {
         let rejectFn: (reason?: any) => void;
-        let timeoutId: GLib.Source | undefined;
+        let timeoutId: number | undefined;
         
         const promise = new Promise<T>((resolve, reject) => {
             rejectFn = reject;
-            timeoutId = setTimeout(() => {
+            
+            timeoutId = GLib.idle_add(GLib.PRIORITY_LOW, () => {
                 timeoutId = undefined;
                 boundTask().then(resolve).catch(reject);
+                return GLib.SOURCE_REMOVE;
             });
         });
         
@@ -73,7 +75,7 @@ export default class CancellableTaskManager<T> {
                 this.cancelId = undefined;
             }
             if(timeoutId) {
-                clearTimeout(timeoutId);
+                GLib.source_remove(timeoutId);
                 timeoutId = undefined;
             }
             rejectFn({ isCancelled: true, message: 'Task cancelled' });

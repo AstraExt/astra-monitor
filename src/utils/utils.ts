@@ -188,6 +188,9 @@ export default class Utils {
         Utils.xmlParser = null;
         Utils.performanceMap = null;
         
+        for(const task of Utils.lowPriorityTasks)
+            GLib.source_remove(task);
+        
         try {
             Config.clearAll();
         }
@@ -2070,5 +2073,15 @@ export default class Utils {
         if(reference.length > compare.length)
             return false;
         return reference.every((element, index) => element === compare[index]);
+    }
+    
+    static lowPriorityTasks: Array<number> = [];
+    static lowPriorityTask(callback: () => void): void {
+        const task = GLib.idle_add(GLib.PRIORITY_LOW, () => {
+            callback();
+            Utils.lowPriorityTasks = Utils.lowPriorityTasks.filter(id => id !== task);
+            return GLib.SOURCE_REMOVE;
+        });
+        Utils.lowPriorityTasks.push(task);
     }
 }

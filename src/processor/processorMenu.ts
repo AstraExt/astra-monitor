@@ -1095,8 +1095,7 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.listen(this, 'loadAverage', this.update.bind(this, 'loadAverage'));
         Utils.processorMonitor.requestUpdate('loadAverage');
         
-        if(Utils.processorMonitor.dueIn >= 200)
-            this.queueTopProcessesUpdate = true;
+        this.queueTopProcessesUpdate = true;
         
         this.menuUptimeTimer = Utils.getUptime((bootTime) => {
             this.menuUptime.text = Utils.formatUptime(bootTime);
@@ -1289,8 +1288,9 @@ export default class ProcessorMenu extends MenuBase {
             }
             
             if(this.queueTopProcessesUpdate) {
+                if(Utils.processorMonitor.dueIn >= 300)
+                    Utils.processorMonitor.requestUpdate('topProcesses');
                 this.queueTopProcessesUpdate = false;
-                Utils.processorMonitor.requestUpdate('topProcesses');
                 return;
             }
             return;
