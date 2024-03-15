@@ -1,5 +1,12 @@
 # Astra Monitor 16 - TO BE RELEASED
 
+### Advanced Network Monitoring
+As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap), in this release we are focusing on improving the Network monitoring capabilities of Astra Monitor. Here's a list of the new features and improvements:
+
+_THIS LIST IS TEMPORARY AND SUBJECT TO CHANGE UNTIL THE RELEASE DATE_
+
+- **Public IP Address**: now you can see your public IPv4/IPv6 address in the Network Menu. This feature requires a remote API call to get the public IP address. We are using [ipify](https://www.ipify.org/) as the default provider, which is a free and open source service. You can choose a different provider from the settings panel or disable this feature if you don't want to use it. We support every possible provider, the ip address will be matched with a regex to extract it from the response.
+
 ### Bug fixes
 - Fixed CPU Cores Usage Info user bar invisible when Cores Bar Breakdown is enabled [[#86](https://github.com/AstraExt/astra-monitor/issues/86)]
 

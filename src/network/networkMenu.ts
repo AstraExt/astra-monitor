@@ -48,6 +48,16 @@ export default class NetworkMenu extends MenuBase {
     private totalUploadSpeedValueLabel!: St.Label;
     private totalDownloadSpeedValueLabel!: St.Label;
     
+    private publicIPv4!: {
+        label: St.Label;
+        value: St.Label;
+    };
+    private publicIpv6!: {
+        label: St.Label;
+        value1: St.Label;
+        value2: St.Label;
+    };
+    
     private deviceSection!: InstanceType<typeof Grid>;
     private noDevicesLabel!: St.Label;
     
@@ -60,6 +70,7 @@ export default class NetworkMenu extends MenuBase {
         
         /*this.networkSectionLabel = */this.addMenuSection(_('Network'));
         this.createActivitySection();
+        this.createPublicIps();
         this.createDeviceList();
         
         this.addUtilityButtons();
@@ -74,6 +85,10 @@ export default class NetworkMenu extends MenuBase {
         const styleClass = lightTheme ? 'astra-monitor-menu-key-light' : 'astra-monitor-menu-key';
         this.totalUploadSpeedValueLabel.style_class = styleClass;
         this.totalDownloadSpeedValueLabel.style_class = styleClass;
+        
+        this.publicIPv4.value.style_class = styleClass;
+        this.publicIpv6.value1.style_class = styleClass;
+        this.publicIpv6.value2.style_class = styleClass;
     }
     
     createActivitySection() {
@@ -121,6 +136,83 @@ export default class NetworkMenu extends MenuBase {
             x_expand: true
         });
         grid.addToGrid(this.totalDownloadSpeedValueLabel);
+        
+        hoverButton.connect('enter-event', () => {
+            hoverButton.style = defaultStyle + this.selectionStyle;
+            
+        });
+        
+        hoverButton.connect('leave-event', () => {
+            hoverButton.style = defaultStyle;
+            
+        });
+        
+        this.addToMenu(hoverButton, 2);
+    }
+    
+    createPublicIps() {
+        this.addMenuSection(_('Public IP'));
+        
+        const defaultStyle = '';
+        
+        const hoverButton = new St.Button({
+            reactive: true,
+            track_hover: true,
+            style: defaultStyle
+        });
+        
+        const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
+        hoverButton.set_child(grid);
+        
+        const publicIPv4Label = new St.Label({
+            text: _('Public IPv4:'),
+            x_expand: true,
+            style_class: 'astra-monitor-menu-label',
+            style: 'margin-top:0.25em;'
+        });
+        grid.addToGrid(publicIPv4Label);
+        
+        const publicIPv4Value = new St.Label({
+            text: '-',
+            x_expand: true
+        });
+        grid.addToGrid(publicIPv4Value);
+        
+        this.publicIPv4 = {
+            label: publicIPv4Label,
+            value: publicIPv4Value
+        };
+        
+        const publicIpv6Grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid', numCols: 2});
+        
+        const publicIpv6Label = new St.Label({
+            text: _('Public IPv6:'),
+            x_expand: true,
+            style_class: 'astra-monitor-menu-label'
+        });
+        publicIpv6Grid.addGrid(publicIpv6Label, 1, 1, 1, 2);
+        
+        const publicIpv6Value1 = new St.Label({
+            text: '-',
+            x_expand: true,
+            style: 'font-size: 1em;'
+        });
+        publicIpv6Grid.addGrid(publicIpv6Value1, 2, 1, 1, 1);
+        
+        const publicIpv6Value2 = new St.Label({
+            text: '-',
+            x_expand: true,
+            style: 'font-size: 1em;'
+        });
+        publicIpv6Grid.addGrid(publicIpv6Value2, 2, 2, 1, 1);
+        
+        grid.addToGrid(publicIpv6Grid, 2);
+        
+        this.publicIpv6 = {
+            label: publicIpv6Label,
+            value1: publicIpv6Value1,
+            value2: publicIpv6Value2
+        };
         
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
@@ -426,6 +518,9 @@ export default class NetworkMenu extends MenuBase {
         Utils.networkMonitor.listen(this, 'detailedNetworkIO', this.update.bind(this, 'detailedNetworkIO'));
         Utils.networkMonitor.requestUpdate('detailedNetworkIO');
         
+        this.update('publicIps');
+        Utils.networkMonitor.listen(this, 'publicIps', this.update.bind(this, 'publicIps'));
+        
         this.update('deviceList');
         if(!this.updateTimer) {
             this.updateTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
@@ -514,6 +609,47 @@ export default class NetworkMenu extends MenuBase {
                     }
                 }
             }
+            return;
+        }
+        if(code === 'publicIps') {
+            const publicIPv4 = Utils.networkMonitor.getCurrentValue('publicIpv4Address');
+            if(publicIPv4) {
+                this.publicIPv4.label.show();
+                this.publicIPv4.value.show();
+                this.publicIPv4.value.text = publicIPv4;
+            }
+            else {
+                this.publicIPv4.label.hide();
+                this.publicIPv4.value.hide();
+            }
+            
+            const publicIpv6 = Utils.networkMonitor.getCurrentValue('publicIpv6Address');
+            if(publicIpv6) {
+                this.publicIpv6.label.show();
+                
+                if(publicIpv6.length >= 20) {
+                    this.publicIpv6.value1.show();
+                    this.publicIpv6.value2.show();
+                    
+                    const parts = publicIpv6.split(':');
+                    const mid = Math.floor(parts.length / 2);
+                    const part1 = parts.slice(0, mid).join(':') + ':';
+                    const part2 = parts.slice(mid).join(':');
+                    
+                    this.publicIpv6.value1.text = part1;
+                    this.publicIpv6.value2.text = part2;
+                }
+                else {
+                    this.publicIpv6.value1.show();
+                    this.publicIpv6.value2.hide();
+                    this.publicIpv6.value1.text = publicIpv6;
+                }
+            }
+            else {
+                this.publicIpv6.label.hide();
+                this.publicIpv6.value1.hide();
+            }
+            
             return;
         }
     }

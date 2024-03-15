@@ -51,9 +51,7 @@ type NetworkDataSources = {
     networkIO?: string
 };
 
-
 export default class NetworkMonitor extends Monitor {
-    
     private detectedMaxSpeedsValues: MaxSpeeds;
     private interfaceChecks: Record<string, boolean>;
     private ignored: string[];
@@ -65,6 +63,8 @@ export default class NetworkMonitor extends Monitor {
     private previousDetailedNetworkIO!: PreviousDetailedNetworkIO;
     
     private dataSources!: NetworkDataSources;
+    
+    private publicIpsUpdaterID: number|null = null;
     
     constructor() {
         super('Network Monitor');
@@ -84,8 +84,10 @@ export default class NetworkMonitor extends Monitor {
         this.dataSourcesInit();
         
         const enabled = Config.get_boolean('network-header-show');
-        if(enabled)
+        if(enabled) {
+            this.updatePublicIps();
             this.start();
+        }
         
         Config.connect(this, 'changed::network-header-show', () => {
             if(Config.get_boolean('network-header-show'))
@@ -159,10 +161,15 @@ export default class NetworkMonitor extends Monitor {
     
     start() {
         super.start();
+        
+        this.startPublicIpsUpdater();
     }
     
     stop() {
         super.stop();
+        
+        this.stopPublicIpsUpdater();
+        
         this.reset();
     }
     
@@ -446,6 +453,85 @@ export default class NetworkMonitor extends Monitor {
             
             this.pushUsageHistory('detailedNetworkIO', finalData);
         }
+        return true;
+    }
+    
+    private startPublicIpsUpdater() {
+        this.publicIpsUpdaterID = GLib.timeout_add_seconds(
+            GLib.PRIORITY_DEFAULT,
+            60*5, // 5 minute
+            this.updatePublicIps.bind(this)
+        );
+    }
+    
+    private stopPublicIpsUpdater() {
+        if(this.publicIpsUpdaterID !== null) {
+            GLib.source_remove(this.publicIpsUpdaterID);
+            this.publicIpsUpdaterID = null;
+        }
+    }
+    
+    private updatePublicIps() {
+        (async () => {
+            try {
+                const ipv4 = await this.updatePublicIpv4Address();
+                const ipv6 = await this.updatePublicIpv6Address();
+                
+                if(ipv4 || ipv6)
+                    this.notify('publicIps');
+            }
+            catch(e) { /* EMPTY */}
+        })();
+        return true;
+    }
+    
+    private async updatePublicIpv4Address(): Promise<boolean> {
+        const publicIpv4Address = Config.get_string('network-source-public-ipv4');
+        if(!publicIpv4Address)
+            return false;
+        
+        const value = await Utils.getUrlAsync(publicIpv4Address, true);
+        if(!value)
+            return false;
+        
+        const regex = /(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/;
+        const match = value.match(regex);
+        
+        if(!match)
+            return false;
+        
+        const ip = match[0];
+        
+        const currentIp = this.getCurrentValue('publicIpv4Address');
+        if(currentIp === ip)
+            return false;
+        
+        this.pushUsageHistory('publicIpv4Address', ip);
+        return true;
+    }
+    
+    private async updatePublicIpv6Address(): Promise<boolean> {
+        const publicIpv6Address = Config.get_string('network-source-public-ipv6');
+        if(!publicIpv6Address)
+            return false;
+        
+        const value = await Utils.getUrlAsync(publicIpv6Address, true);
+        if(!value)
+            return false;
+        
+        const regex = /(?:[\da-f]{0,4}:){2,7}(?:(?<ipv4>(?:(?:25[0-5]|2[0-4]\d|1?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|1?\d\d?))|[\da-f]{0,4}|:)/i;
+        const match = value.match(regex);
+        
+        if(!match)
+            return false;
+        
+        const ip = match[0];
+        
+        const currentIp = this.getCurrentValue('publicIpv6Address');
+        if(currentIp === ip)
+            return false;
+        
+        this.pushUsageHistory('publicIpv6Address', ip);
         return true;
     }
     

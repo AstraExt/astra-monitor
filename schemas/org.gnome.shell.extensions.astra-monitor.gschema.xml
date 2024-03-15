@@ -745,6 +745,16 @@
       <summary>Network IO Source</summary>
       <description>Source of the network IO</description>
     </key>
+    <key name="network-source-public-ipv4" type="s">
+      <default>'https://api.ipify.org'</default>
+      <summary>Public IPv4 Source</summary>
+      <description>Source of the public IPv4</description>
+    </key>
+    <key name="network-source-public-ipv6" type="s">
+      <default>'https://api6.ipify.org'</default>
+      <summary>Public IPv6 Source</summary>
+      <description>Source of the public IPv6</description>
+    </key>
     <key name="network-header-show" type="b">
       <default>true</default>
       <summary>Network Header</summary>

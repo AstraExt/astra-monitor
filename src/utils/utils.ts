@@ -1708,6 +1708,63 @@ export default class Utils {
         });
     }
     
+    static getUrlAsync(url: string, emptyOnFail: boolean = false): Promise<string> {
+        return new Promise((resolve, reject) => {
+            // Check if the url is valid and not empty
+            const urlRegex = /^(http|https|ftp):\/\/[^\s/$.?#].[^\s]*$/;
+            if(!url || typeof url !== 'string' || !urlRegex.test(url)) {
+                if(emptyOnFail)
+                    resolve('');
+                else
+                    reject(new Error('Invalid url path'));
+                return;
+            }
+            
+            let file;
+            try {
+                file = Gio.File.new_for_uri(url);
+            } catch(e: any) {
+                if(emptyOnFail)
+                    resolve('');
+                else
+                    reject(new Error(`Error creating file object: ${e.message}`));
+                return;
+            }
+            
+            file.load_contents_async(null, (sourceObject, res) => {
+                try {
+                    const [success, fileContent] = sourceObject.load_contents_finish(res);
+
+                    // Check if the file read was successful
+                    if(!success) {
+                        if(emptyOnFail)
+                            resolve('');
+                        else
+                            reject(new Error('Failed to read file'));
+                        return;
+                    }
+                    
+                    if(fileContent.length === 0) {
+                        if(emptyOnFail)
+                            resolve('');
+                        else
+                            reject(new Error('File is empty'));
+                        return;
+                    }
+                    
+                    // Decode the file content
+                    const decoder = new TextDecoder('utf8');
+                    resolve(decoder.decode(fileContent));
+                } catch(e: any) {
+                    if(emptyOnFail)
+                        resolve('');
+                    else
+                        reject(new Error(`Error loading url: ${e.message}`));
+                }
+            });
+        });
+    }
+    
     static executeCommandAsync(command: string, cancellableTaskManager?: CancellableTaskManager<boolean>): Promise<string> {
         return new Promise((resolve, reject) => {
             let argv;

@@ -938,6 +938,19 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'proc', text: '/proc/net/dev'},
         ];
         this.addComboRow({title: _('Network IO'), tabs: 1}, networkIOSources, 'network-source-network-io', sourcesSection, 'string', 'auto');
+        
+        this.addTextInputRow({
+            title: _('Public IPv4 Address'),
+            subtitle: _('Set to empty to disable. Address will be regex matched.'),
+            tabs: 1,
+        }, 'network-source-public-ipv4', sourcesSection, 'https://api.ipify.org');
+        
+        this.addTextInputRow({
+            title: _('Public IPv6 Address'),
+            subtitle: _('Set to empty to disable. Address will be regex matched.'),
+            tabs: 1,
+        }, 'network-source-public-ipv6', sourcesSection, 'https://api6.ipify.org');
+        
         networkPage.add(group);
         
         /* Header */
