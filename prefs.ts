@@ -2106,6 +2106,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         if(!imported)
             return;
         
+        //Reset settings before importing
+        this.resetSettings();
+        
         const settings = Config.settings;
         if(!settings)
             return;
