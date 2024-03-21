@@ -98,11 +98,13 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>🔲<br>Settings Profiles</td>
         <td></td>
     </tr>
 </table>
 <br>
+
+To check our _**FULL Roadmap**_, including past releases, please refer to the [ROADMAP.md](./ROADMAP.md) file.
 
 Your feedback is invaluable in shaping Astra Monitor's development journey. Do you have any new features to suggest? We are very happy to receive suggestions. The best way to see new features become reality as quickly as possible is through direct contributions or donations. Donations will result in more development time dedicated to the project. If you would like to contribute, please refer to the contribution guidelines.
 
