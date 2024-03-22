@@ -172,7 +172,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         Utils.hasGTop().then((GTopAvailable: boolean) => {
             if(!GTopAvailable) {
-                statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled!');
+                statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled! For a better experience, install it from your package manager.');
                 statusLabel.icon.set_from_icon_name('am-dialog-warning-symbolic');
             }
             else {
@@ -181,7 +181,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             }
         }).catch((e: any) => {
             Utils.error(e);
-            statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled!');
+            statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled! For a better experience, install it from your package manager.');
             statusLabel.icon.set_from_icon_name('am-dialog-warning-symbolic');
         });
         
@@ -1316,9 +1316,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             });
         });
         
-        this.addButtonRow({title: _('Reset Preferences')}, group, () => {
+        this.addButtonRow({title: _('Reset Settings')}, group, () => {
             const dialog = new Gtk.MessageDialog({
-                title: _('Reset Preferences'),
+                title: _('Reset Settings'),
                 text: _('Are you sure you want to reset all preferences?'),
                 buttons: Gtk.ButtonsType.YES_NO,
                 message_type: Gtk.MessageType.WARNING,

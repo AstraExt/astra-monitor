@@ -24,6 +24,8 @@ Astra Monitor is a cutting-edge, fully customizable, and performance-focused mon
 - **Optimized Performance:** Designed to be lightweight and efficient. Resources are only queried when needed. No polling. No wasted resources. Hidden components are not queried nor rendered.
 - **Effortless Real-Time Updates:** Changes made in the preferences panel are applied instantly, with no need to restart the extension or GNOME Shell. This feature ensures a seamless and interruption-free user experience, allowing for on-the-fly customization and monitoring adjustments.
 
+_**Check the [COMPARISON.md](./COMPARISON.md) file for a detailed comparative analysis of Astra Monitor features, performance and benchmarks vs similar projects within our domain.**_
+
 ### Screenshots:
 
 _**NOTE**: The screenshots below are from an outdated version of the extension and may not reflect the current release._
