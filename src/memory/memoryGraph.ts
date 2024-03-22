@@ -59,7 +59,7 @@ class MemoryGraph extends GraphBase<MemoryUsage> {
         
         this.colors = [
             Utils.parseRGBA(Config.get_string('memory-header-graph-color1'), 'rgba(29,172,214,1.0)'),
-            Utils.parseRGBA(Config.get_string('memory-header-graph-color2'), 'rgba(214,29,29,1.0)')
+            Utils.parseRGBA(Config.get_string('memory-header-graph-color2'), 'rgba(29,172,214,0.3)')
         ];
         
         let bg = 'rgba(0,0,0,0.2)';

@@ -46,7 +46,7 @@ class MemoryBars extends BarsBase {
         
         this.colors = [
             Config.get_string('memory-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
-            Config.get_string('memory-header-bars-color2') ?? 'rgba(214,29,29,1.0)'
+            Config.get_string('memory-header-bars-color2') ?? 'rgba(29,172,214,0.3)'
         ];
     }
     

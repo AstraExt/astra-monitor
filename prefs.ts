@@ -534,7 +534,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             title: _('Secondary Color'),
             subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
             tabs: 1
-        }, 'memory-header-graph-color2', graphSection, 'rgba(214,29,29,1.0)');
+        }, 'memory-header-graph-color2', graphSection, 'rgba(29,172,214,0.3)');
         this.addSpinRow({title: _('History Graph Width'), tabs: 1}, 'memory-header-graph-width', graphSection, {min: 10, max: 500, digits: 0, step: 1, page: 10}, true, 30);
         
         const barsSection = this.addExpanderRow({title: _('Realtime Bar')}, group);
@@ -549,7 +549,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             title: _('Secondary Color'),
             subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
             tabs: 1
-        }, 'memory-header-bars-color2', barsSection, 'rgba(214,29,29,1.0)');
+        }, 'memory-header-bars-color2', barsSection, 'rgba(29,172,214,0.3)');
         memoryPage.add(group);
         
         /* Tooltip */

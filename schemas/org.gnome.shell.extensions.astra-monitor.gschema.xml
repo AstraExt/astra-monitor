@@ -427,7 +427,7 @@
       <description>Main color for memory history graph</description>
     </key>
     <key name="memory-header-graph-color2" type="s">
-      <default>'rgba(214,29,29,1.0)'</default>
+      <default>'rgba(29,172,214,0.3)'</default>
       <summary>Graph Color 2</summary>
       <description>Secondary color for memory history graph</description>
     </key>
@@ -453,7 +453,7 @@
       <description>Main color for memory realtime bars</description>
     </key>
     <key name="memory-header-bars-color2" type="s">
-      <default>'rgba(214,29,29,1.0)'</default>
+      <default>'rgba(29,172,214,0.3)'</default>
       <summary>Bars Color 2</summary>
       <description>Secondary color for memory realtime bars</description>
     </key>
