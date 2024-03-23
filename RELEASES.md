@@ -5,9 +5,13 @@ As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-fil
 
 _THIS LIST IS TEMPORARY AND SUBJECT TO CHANGE UNTIL THE RELEASE DATE_
 
-- **Public IP Address**: now you can see your public IPv4/IPv6 address in the Network Menu. This feature requires a remote API call to get the public IP address. We are using [ipify](https://www.ipify.org/) as the default provider, which is a free and open source service. You can choose a different provider from the settings panel or disable this feature if you don't want to use it. We support every possible provider, the ip address will be matched with a regex to extract it from the response.
+- **Public IP Address**: now you can see your public IPv4/IPv6 address in the Network Menu. This feature requires a remote API call to get the public IP address. We are using [ipify](https://www.ipify.org/) as the default provider, which is a free and open source service. You can choose a different provider from the settings panel or disable this feature if you don't want to use it. We support every possible provider, included API created by yourself: the ip address will be matched with a regex to extract it from the response.
 
 - **Cumulative Upload/Download Bytes**: now you can see the total upload/download bytes since the last boot in the Network Menu for each network interface and globally.
+
+- **Packet Upload/Download**: now you can see the total packets uploaded/downloaded since the last boot in the Network Menu for each network interface and globally.
+
+- **Errors/Dropped Packets**: now you can see the total error/dropped packets since the last boot in the Network Menu for each network interface and globally.
 
 - **Bridged Network Interfaces**: now you can see the bridged network interfaces in the Network Menu.
 

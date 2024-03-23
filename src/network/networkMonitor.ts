@@ -33,12 +33,19 @@ export type NetworkIO = {
 
 export type MaxSpeeds = NetworkIO;
 
-type DeviceStauts = {
+type DeviceStautsBase = {
     bytesUploaded: number;
     bytesDownloaded: number;
 };
 
-type PreviousNetworkIO = DeviceStauts & {
+type DeviceStauts = DeviceStautsBase & {
+    packetsUploaded: number;
+    packetsDownloaded: number;
+    errorsUpload: number;
+    errorsDownload: number;
+};
+
+type PreviousNetworkIO = DeviceStautsBase & {
     time: number;
 };
 
@@ -296,6 +303,12 @@ export default class NetworkMonitor extends Monitor {
         let bytesUploaded = 0;
         let bytesDownloaded = 0;
         
+        let packetsUploaded = 0;
+        let packetsDownloaded = 0;
+        
+        let errorsUpload = 0;
+        let errorsDownload = 0;
+        
         let devices: Map<string, DeviceStauts>|null = null;
         if(detailed)
             devices = new Map();
@@ -320,24 +333,35 @@ export default class NetworkMonitor extends Monitor {
             if(detailed && devices) {
                 devices.set(interfaceName, {
                     bytesUploaded: parseInt(fields[9]),
-                    //packetsUploaded: parseInt(fields[10]),
-                    //errorsUpload: parseInt(fields[11]),
-                    //dropUpload: parseInt(fields[12]),
+                    packetsUploaded: parseInt(fields[10]),
+                    errorsUpload: parseInt(fields[11]) + parseInt(fields[12]),
                     
                     bytesDownloaded: parseInt(fields[1]),
-                    //packetsDownloaded: parseInt(fields[2]),
-                    //errorsDownload: parseInt(fields[3]),
-                    //dropDownload: parseInt(fields[4])
+                    packetsDownloaded: parseInt(fields[2]),
+                    errorsDownload: parseInt(fields[3]) + parseInt(fields[4])
                 });
             }
             
             bytesUploaded += parseInt(fields[9]);
             bytesDownloaded += parseInt(fields[1]);
+            
+            packetsUploaded += parseInt(fields[10]);
+            packetsDownloaded += parseInt(fields[2]);
+            
+            errorsUpload += parseInt(fields[11]) + parseInt(fields[12]);
+            errorsDownload += parseInt(fields[3]) + parseInt(fields[4]);
         }
         
         return this.updateNetworkIOCommon({
             bytesUploaded,
             bytesDownloaded,
+            
+            packetsUploaded,
+            packetsDownloaded,
+            
+            errorsUpload,
+            errorsDownload,
+            
             detailed,
             devices
         });
@@ -353,6 +377,12 @@ export default class NetworkMonitor extends Monitor {
         
         let bytesUploaded = 0;
         let bytesDownloaded = 0;
+        
+        let packetsUploaded = 0;
+        let packetsDownloaded = 0;
+        
+        let errorsUpload = 0;
+        let errorsDownload = 0;
         
         let devices: Map<string, DeviceStauts>|null = null;
         if(detailed)
@@ -375,27 +405,59 @@ export default class NetworkMonitor extends Monitor {
                 devices.set(interfaceName, {
                     bytesUploaded: netload.bytes_out,
                     bytesDownloaded: netload.bytes_in,
+                    packetsUploaded: netload.packets_out,
+                    packetsDownloaded: netload.packets_in,
+                    errorsUpload: netload.errors_out,
+                    errorsDownload: netload.errors_in
                 });
             }
             
             bytesUploaded += netload.bytes_out;
             bytesDownloaded += netload.bytes_in;
+            
+            packetsUploaded += netload.packets_out;
+            packetsDownloaded += netload.packets_in;
+            
+            errorsUpload += netload.errors_out;
+            errorsDownload += netload.errors_in;
         }
         
         return this.updateNetworkIOCommon({
             bytesUploaded,
             bytesDownloaded,
+            
+            packetsUploaded,
+            packetsDownloaded,
+            
+            errorsUpload,
+            errorsDownload,
+            
             detailed,
             devices
         });
     }
     
-    private updateNetworkIOCommon({bytesUploaded, bytesDownloaded, detailed, devices}: {
+    private updateNetworkIOCommon(data: {
         bytesUploaded: number;
         bytesDownloaded: number;
+        packetsUploaded: number;
+        packetsDownloaded: number;
+        errorsUpload: number;
+        errorsDownload: number;
         detailed: boolean;
         devices: Map<string, DeviceStauts>|null;
     }): boolean {
+        const {
+            bytesUploaded,
+            bytesDownloaded,
+            packetsUploaded,
+            packetsDownloaded,
+            errorsUpload,
+            errorsDownload,
+            detailed,
+            devices
+        } = data;
+        
         const now = GLib.get_monotonic_time();
         
         if(detailed) {
@@ -428,6 +490,10 @@ export default class NetworkMonitor extends Monitor {
         this.pushUsageHistory('networkIO', {
             totalBytesUploaded: bytesUploaded,
             totalBytesDownloaded: bytesDownloaded,
+            packetsUploaded: packetsUploaded,
+            packetsDownloaded: packetsDownloaded,
+            errorsUpload: errorsUpload,
+            errorsDownload: errorsDownload,
             bytesUploadedPerSec,
             bytesDownloadedPerSec
         });
@@ -441,7 +507,16 @@ export default class NetworkMonitor extends Monitor {
             const finalData = new Map();
             
             const interval = (now - this.previousDetailedNetworkIO.time) / 1000000;
-            for(const [deviceName, { bytesUploaded, bytesDownloaded }] of devices) {
+            for(const [deviceName, data] of devices) {
+                const {
+                    bytesUploaded,
+                    bytesDownloaded,
+                    packetsUploaded,
+                    packetsDownloaded,
+                    errorsUpload,
+                    errorsDownload
+                } = data;
+                
                 const previousData = this.previousDetailedNetworkIO.devices.get(deviceName);
                 if(previousData) {
                     const bytesUploadedPerSec = Math.round((bytesUploaded - previousData.bytesUploaded) / interval);
@@ -449,6 +524,10 @@ export default class NetworkMonitor extends Monitor {
                     finalData.set(deviceName, {
                         totalBytesUploaded: bytesUploaded,
                         totalBytesDownloaded: bytesDownloaded,
+                        packetsUploaded: packetsUploaded,
+                        packetsDownloaded: packetsDownloaded,
+                        errorsUpload: errorsUpload,
+                        errorsDownload: errorsDownload,
                         bytesUploadedPerSec,
                         bytesDownloadedPerSec
                     });

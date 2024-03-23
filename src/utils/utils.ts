@@ -654,6 +654,10 @@ export default class Utils {
         'Ki': {base: 1024, mult:1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti']},
     };
     
+    static unit3Map = {
+        'Q': {base: 1000, mult:1, labels: ['', 'K', 'M', 'B', 'T', 'Q']},
+    };
+    
     static formatBytesPerSec(value: number, unit: keyof typeof Utils.unitMap, maxNumbers: number = 2, padded: boolean = false): string {
         if(!Object.prototype.hasOwnProperty.call(Utils.unitMap, unit))
             unit = 'kB/s';
@@ -712,6 +716,38 @@ export default class Utils {
             result = result.substr(0, maxNumbers);
         }
         return `${result} ${Utils.unit2Map[unit].labels[unitIndex]}`;
+    }
+    
+    static formatHugeNumber(value: number, unit: keyof typeof Utils.unit3Map = 'Q', maxNumbers: number = 4): string {
+        if(!Object.prototype.hasOwnProperty.call(Utils.unit3Map, unit))
+            unit = 'Q';
+        
+        if(!value || isNaN(value))
+            return '-' + Utils.unit3Map[unit].labels[0];
+        
+        let unitIndex = 0;
+        while(value >= Math.pow(10, maxNumbers) && unitIndex < Utils.unit3Map[unit].labels.length - 1) {
+            value /= Utils.unit3Map[unit].base;
+            unitIndex++;
+        }
+        
+        // Convert to string and truncate to maxNumbers significant figures
+        let result = value.toString();
+        if(result.indexOf('.') !== -1) {
+            const parts = result.split('.');
+            if(parts[0].length >= maxNumbers)
+                result = parts[0]; // If the integer part is already at max length, ignore decimal part
+            else
+                result = parts[0] + '.' + parts[1].substr(0, maxNumbers - parts[0].length);
+        }
+        else if(result.length > maxNumbers) {
+            result = result.substr(0, maxNumbers);
+        }
+        
+        const finalUnit = Utils.unit3Map[unit].labels[unitIndex];
+        if(finalUnit.length > 0)
+            return `${result} ${finalUnit}`;
+        return `${result}`;
     }
     
     static convertToBytes(value: number|string, unit: string): number {

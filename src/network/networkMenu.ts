@@ -44,11 +44,23 @@ type InterfaceDeviceInfo = {
 type NetworkActivityPopup = MenuBase & {
     totalUploadedValueLabel?: St.Label,
     totalDownloadedValueLabel?: St.Label,
+    
+    packetsUploadedValueLabel?: St.Label,
+    packetsDownloadedValueLabel?: St.Label,
+    
+    errorsUploadValueLabel?: St.Label,
+    errorsDownloadValueLabel?: St.Label,
 };
 
 type DevicePopup = MenuBase & {
     totalUploadedValueLabel?: St.Label,
     totalDownloadedValueLabel?: St.Label,
+    
+    packetsUploadedValueLabel?: St.Label,
+    packetsDownloadedValueLabel?: St.Label,
+    
+    errorsUploadValueLabel?: St.Label,
+    errorsDownloadValueLabel?: St.Label,
 };
 
 export default class NetworkMenu extends MenuBase {
@@ -168,11 +180,11 @@ export default class NetworkMenu extends MenuBase {
     
     createActivityPopup(sourceActor: St.Widget) {
         this.networkActivityPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2});
-        this.networkActivityPopup.addMenuSection(_('Network Activity Info'));
+        this.networkActivityPopup.addMenuSection(_('Upload Activity'));
         
-        //Total Upload
+        //Total
         this.networkActivityPopup.addToMenu(new St.Label({
-            text: _('Total Upload'),
+            text: _('Total'),
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
@@ -180,15 +192,57 @@ export default class NetworkMenu extends MenuBase {
         this.networkActivityPopup.addToMenu(totalUploadedValueLabel);
         this.networkActivityPopup.totalUploadedValueLabel = totalUploadedValueLabel;
         
-        //Total Download
+        //Packets
         this.networkActivityPopup.addToMenu(new St.Label({
-            text: _('Total Download'),
+            text: _('Packets'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const packetsUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.networkActivityPopup.addToMenu(packetsUploadedValueLabel);
+        this.networkActivityPopup.packetsUploadedValueLabel = packetsUploadedValueLabel;
+        
+        //Errors
+        this.networkActivityPopup.addToMenu(new St.Label({
+            text: _('Errors/Dropped'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const errorsUploadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.networkActivityPopup.addToMenu(errorsUploadValueLabel);
+        this.networkActivityPopup.errorsUploadValueLabel = errorsUploadValueLabel;
+        
+        this.networkActivityPopup.addMenuSection(_('Download Activity'));
+        
+        //Total
+        this.networkActivityPopup.addToMenu(new St.Label({
+            text: _('Total'),
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
         const totalDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
         this.networkActivityPopup.addToMenu(totalDownloadedValueLabel);
         this.networkActivityPopup.totalDownloadedValueLabel = totalDownloadedValueLabel;
+        
+        //Packets
+        this.networkActivityPopup.addToMenu(new St.Label({
+            text: _('Packets'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const packetsDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.networkActivityPopup.addToMenu(packetsDownloadedValueLabel);
+        this.networkActivityPopup.packetsDownloadedValueLabel = packetsDownloadedValueLabel;
+        
+        //Errors
+        this.networkActivityPopup.addToMenu(new St.Label({
+            text: _('Errors/Dropped'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const errorsDownloadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.networkActivityPopup.addToMenu(errorsDownloadValueLabel);
+        this.networkActivityPopup.errorsDownloadValueLabel = errorsDownloadValueLabel;
     }
     
     createPublicIps() {
@@ -522,11 +576,11 @@ export default class NetworkMenu extends MenuBase {
     
     createDevicePopup(sourceActor: St.Widget): DevicePopup {
         const popup:DevicePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2});
-        popup.addMenuSection(_('Network Interface Info'));
+        popup.addMenuSection(_('Upload'));
         
-        //Total Upload
+        //Total
         popup.addToMenu(new St.Label({
-            text: _('Total Upload'),
+            text: _('Total'),
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
@@ -534,15 +588,57 @@ export default class NetworkMenu extends MenuBase {
         popup.addToMenu(totalUploadedValueLabel);
         popup.totalUploadedValueLabel = totalUploadedValueLabel;
         
-        //Total Download
+        //Packets
         popup.addToMenu(new St.Label({
-            text: _('Total Download'),
+            text: _('Packets'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const packetsUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        popup.addToMenu(packetsUploadedValueLabel);
+        popup.packetsUploadedValueLabel = packetsUploadedValueLabel;
+        
+        //Errors
+        popup.addToMenu(new St.Label({
+            text: _('Errors/Dropped'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const errorsUploadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        popup.addToMenu(errorsUploadValueLabel);
+        popup.errorsUploadValueLabel = errorsUploadValueLabel;
+        
+        popup.addMenuSection(_('Download'));
+        
+        //Total
+        popup.addToMenu(new St.Label({
+            text: _('Total'),
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
         const totalDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
         popup.addToMenu(totalDownloadedValueLabel);
         popup.totalDownloadedValueLabel = totalDownloadedValueLabel;
+        
+        //Packets
+        popup.addToMenu(new St.Label({
+            text: _('Packets'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const packetsDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        popup.addToMenu(packetsDownloadedValueLabel);
+        popup.packetsDownloadedValueLabel = packetsDownloadedValueLabel;
+        
+        //Errors
+        popup.addToMenu(new St.Label({
+            text: _('Errors/Dropped'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const errorsDownloadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        popup.addToMenu(errorsDownloadValueLabel);
+        popup.errorsDownloadValueLabel = errorsDownloadValueLabel;
         
         return popup;
     }
@@ -674,6 +770,30 @@ export default class NetworkMenu extends MenuBase {
                         else
                             this.networkActivityPopup.totalDownloadedValueLabel.text = '-';
                     }
+                    if(this.networkActivityPopup.packetsUploadedValueLabel) {
+                        if(current.packetsUploaded)
+                            this.networkActivityPopup.packetsUploadedValueLabel.text = Utils.formatHugeNumber(current.packetsUploaded);
+                        else
+                            this.networkActivityPopup.packetsUploadedValueLabel.text = '-';
+                    }
+                    if(this.networkActivityPopup.packetsDownloadedValueLabel) {
+                        if(current.packetsDownloaded)
+                            this.networkActivityPopup.packetsDownloadedValueLabel.text = Utils.formatHugeNumber(current.packetsDownloaded);
+                        else
+                            this.networkActivityPopup.packetsDownloadedValueLabel.text = '-';
+                    }
+                    if(this.networkActivityPopup.errorsUploadValueLabel) {
+                        if(current.errorsUpload)
+                            this.networkActivityPopup.errorsUploadValueLabel.text = Utils.formatHugeNumber(current.errorsUpload);
+                        else
+                            this.networkActivityPopup.errorsUploadValueLabel.text = '-';
+                    }
+                    if(this.networkActivityPopup.errorsDownloadValueLabel) {
+                        if(current.errorsDownload)
+                            this.networkActivityPopup.errorsDownloadValueLabel.text = Utils.formatHugeNumber(current.errorsDownload);
+                        else
+                            this.networkActivityPopup.errorsDownloadValueLabel.text = '-';
+                    }
                 }
             }
             else {
@@ -685,6 +805,14 @@ export default class NetworkMenu extends MenuBase {
                         this.networkActivityPopup.totalUploadedValueLabel.text = '-';
                     if(this.networkActivityPopup.totalDownloadedValueLabel)
                         this.networkActivityPopup.totalDownloadedValueLabel.text = '-';
+                    if(this.networkActivityPopup.packetsUploadedValueLabel)
+                        this.networkActivityPopup.packetsUploadedValueLabel.text = '-';
+                    if(this.networkActivityPopup.packetsDownloadedValueLabel)
+                        this.networkActivityPopup.packetsDownloadedValueLabel.text = '-';
+                    if(this.networkActivityPopup.errorsUploadValueLabel)
+                        this.networkActivityPopup.errorsUploadValueLabel.text = '-';
+                    if(this.networkActivityPopup.errorsDownloadValueLabel)
+                        this.networkActivityPopup.errorsDownloadValueLabel.text = '-';
                 }
             }
             return;
@@ -733,6 +861,30 @@ export default class NetworkMenu extends MenuBase {
                                 else
                                     popup.totalDownloadedValueLabel.text = '-';
                             }
+                            if(popup.packetsUploadedValueLabel) {
+                                if(data.packetsUploaded)
+                                    popup.packetsUploadedValueLabel.text = Utils.formatHugeNumber(data.packetsUploaded);
+                                else
+                                    popup.packetsUploadedValueLabel.text = '-';
+                            }
+                            if(popup.packetsDownloadedValueLabel) {
+                                if(data.packetsDownloaded)
+                                    popup.packetsDownloadedValueLabel.text = Utils.formatHugeNumber(data.packetsDownloaded);
+                                else
+                                    popup.packetsDownloadedValueLabel.text = '-';
+                            }
+                            if(popup.errorsUploadValueLabel) {
+                                if(data.errorsUpload)
+                                    popup.errorsUploadValueLabel.text = Utils.formatHugeNumber(data.errorsUpload);
+                                else
+                                    popup.errorsUploadValueLabel.text = '-';
+                            }
+                            if(popup.errorsDownloadValueLabel) {
+                                if(data.errorsDownload)
+                                    popup.errorsDownloadValueLabel.text = Utils.formatHugeNumber(data.errorsDownload);
+                                else
+                                    popup.errorsDownloadValueLabel.text = '-';
+                            }
                         }
                     }
                     else {
@@ -747,6 +899,14 @@ export default class NetworkMenu extends MenuBase {
                                 popup.totalUploadedValueLabel.text = '-';
                             if(popup.totalDownloadedValueLabel)
                                 popup.totalDownloadedValueLabel.text = '-';
+                            if(popup.packetsUploadedValueLabel)
+                                popup.packetsUploadedValueLabel.text = '-';
+                            if(popup.packetsDownloadedValueLabel)
+                                popup.packetsDownloadedValueLabel.text = '-';
+                            if(popup.errorsUploadValueLabel)
+                                popup.errorsUploadValueLabel.text = '-';
+                            if(popup.errorsDownloadValueLabel)
+                                popup.errorsDownloadValueLabel.text = '-';
                         }
                     }
                 }
@@ -811,6 +971,14 @@ export default class NetworkMenu extends MenuBase {
                 popup.totalUploadedValueLabel.text = '-';
             if(popup.totalDownloadedValueLabel)
                 popup.totalDownloadedValueLabel.text = '-';
+            if(popup.packetsUploadedValueLabel)
+                popup.packetsUploadedValueLabel.text = '-';
+            if(popup.packetsDownloadedValueLabel)
+                popup.packetsDownloadedValueLabel.text = '-';
+            if(popup.errorsUploadValueLabel)
+                popup.errorsUploadValueLabel.text = '-';
+            if(popup.errorsDownloadValueLabel)
+                popup.errorsDownloadValueLabel.text = '-';
         }
         
         if(this.networkActivityPopup) {
@@ -818,6 +986,14 @@ export default class NetworkMenu extends MenuBase {
                 this.networkActivityPopup.totalUploadedValueLabel.text = '-';
             if(this.networkActivityPopup.totalDownloadedValueLabel)
                 this.networkActivityPopup.totalDownloadedValueLabel.text = '-';
+            if(this.networkActivityPopup.packetsUploadedValueLabel)
+                this.networkActivityPopup.packetsUploadedValueLabel.text = '-';
+            if(this.networkActivityPopup.packetsDownloadedValueLabel)
+                this.networkActivityPopup.packetsDownloadedValueLabel.text = '-';
+            if(this.networkActivityPopup.errorsUploadValueLabel)
+                this.networkActivityPopup.errorsUploadValueLabel.text = '-';
+            if(this.networkActivityPopup.errorsDownloadValueLabel)
+                this.networkActivityPopup.errorsDownloadValueLabel.text = '-';
         }
         
         this.publicIPv4.value.text = '-';
