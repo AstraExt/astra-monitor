@@ -1852,7 +1852,7 @@ export default class Utils {
                         continue;
                     
                     const flags = data.flags || [];
-                    if(flags.includes('NO-CARRIER') || flags.includes('LOOPBACK'))
+                    if(flags.includes('LOOPBACK'))
                         continue;
                     
                     const ifindex = data.ifindex;

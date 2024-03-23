@@ -468,10 +468,16 @@ export default class NetworkMenu extends MenuBase {
             icon.gicon = Utils.getLocalIcon('am-wireless-symbolic');
             icon.fallback_icon_name = 'network-wireless-symbolic';
         }
-        else if(deviceData.name.startsWith('wwan') || deviceData.name.startsWith('ww'))
+        else if(deviceData.name.startsWith('wwan') || deviceData.name.startsWith('ww')) {
             icon.fallback_icon_name = 'network-cellular-symbolic';
-        else if(deviceData.name.startsWith('tun') || deviceData.name.startsWith('tap'))
+        }
+        else if(deviceData.name.startsWith('tun') || deviceData.name.startsWith('tap')) {
             icon.fallback_icon_name = 'network-vpn-symbolic';
+        }
+        else if(deviceData.name.includes('br')) {
+            icon.gicon = Utils.getLocalIcon('am-bridge-symbolic');
+            icon.fallback_icon_name = 'network-wired-symbolic';
+        }
         
         if(icon.gicon)
             device.icon.gicon = icon.gicon;
