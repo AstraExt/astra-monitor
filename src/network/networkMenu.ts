@@ -41,8 +41,19 @@ type InterfaceDeviceInfo = {
     downloadActivityIcon: St.Icon;
 };
 
+type NetworkActivityPopup = MenuBase & {
+    totalUploadedValueLabel?: St.Label,
+    totalDownloadedValueLabel?: St.Label,
+};
+
+type DevicePopup = MenuBase & {
+    totalUploadedValueLabel?: St.Label,
+    totalDownloadedValueLabel?: St.Label,
+};
+
 export default class NetworkMenu extends MenuBase {
     /*private networkSectionLabel!: St.Label;*/
+    private networkActivityPopup!: NetworkActivityPopup;
     
     private graph!: InstanceType<typeof NetworkGraph>;
     private totalUploadSpeedValueLabel!: St.Label;
@@ -62,6 +73,7 @@ export default class NetworkMenu extends MenuBase {
     private noDevicesLabel!: St.Label;
     
     private devices!: Map<string, InterfaceDeviceInfo>;
+    private devicesPopup!: Map<string, DevicePopup>;
     
     private updateTimer: number = 0;
     
@@ -137,17 +149,46 @@ export default class NetworkMenu extends MenuBase {
         });
         grid.addToGrid(this.totalDownloadSpeedValueLabel);
         
+        this.createActivityPopup(hoverButton);
+        
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            
+            if(this.networkActivityPopup)
+                this.networkActivityPopup.open(true);
         });
         
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            
+            if(this.networkActivityPopup)
+                this.networkActivityPopup.close(true);
         });
         
         this.addToMenu(hoverButton, 2);
+    }
+    
+    createActivityPopup(sourceActor: St.Widget) {
+        this.networkActivityPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2});
+        this.networkActivityPopup.addMenuSection(_('Network Activity Info'));
+        
+        //Total Upload
+        this.networkActivityPopup.addToMenu(new St.Label({
+            text: _('Total Upload'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.networkActivityPopup.addToMenu(totalUploadedValueLabel);
+        this.networkActivityPopup.totalUploadedValueLabel = totalUploadedValueLabel;
+        
+        //Total Download
+        this.networkActivityPopup.addToMenu(new St.Label({
+            text: _('Total Download'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        this.networkActivityPopup.addToMenu(totalDownloadedValueLabel);
+        this.networkActivityPopup.totalDownloadedValueLabel = totalDownloadedValueLabel;
     }
     
     createPublicIps() {
@@ -239,6 +280,7 @@ export default class NetworkMenu extends MenuBase {
             });
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
+            this.devicesPopup = new Map();
             this.addToMenu(this.deviceSection, 2);
             
             Config.connect(this, 'changed::network-ignored', this.updateDeviceList.bind(this));
@@ -281,6 +323,10 @@ export default class NetworkMenu extends MenuBase {
             if(!devices.has(id)) {
                 this.deviceSection.remove_child(device.container);
                 this.devices.delete(id);
+                
+                this.devicesPopup.get(id)?.close(true);
+                this.devicesPopup.get(id)?.destroy();
+                this.devicesPopup.delete(id);
             }
         }
         
@@ -293,8 +339,9 @@ export default class NetworkMenu extends MenuBase {
             const deviceData = devices.get(id);
             
             let device;
+            let popup;
             if(!this.devices.has(id)) {
-                device = this.createInterfaceDevice();
+                device = this.createInterfaceDevice(id);
                 this.deviceSection.addToGrid(device.container, 2);
                 this.devices.set(id, device);
             }
@@ -304,12 +351,24 @@ export default class NetworkMenu extends MenuBase {
             
             if(!device)
                 continue;
+            
+            if(!this.devicesPopup.has(id)) {
+                popup = this.createDevicePopup(device.container);
+                this.devicesPopup.set(id, popup);
+            }
+            else {
+                popup = this.devicesPopup.get(id);
+            }
+            
+            if(!popup)
+                continue;
+            
             if(!deviceData)
                 continue;
             
             //Update device info
             try {
-                this.updateInterfaceDevice(device, deviceData);
+                this.updateInterfaceDevice(device, popup, deviceData);
             }
             catch(e: any) {
                 Utils.error(e);
@@ -317,7 +376,7 @@ export default class NetworkMenu extends MenuBase {
         }
     }
     
-    createInterfaceDevice(): InterfaceDeviceInfo {
+    createInterfaceDevice(id: string): InterfaceDeviceInfo {
         const defaultStyle = 'padding-top:0.25em;margin-bottom:0.25em;';
         const container = new St.Button({
             reactive: true,
@@ -437,11 +496,15 @@ export default class NetworkMenu extends MenuBase {
         container.connect('enter-event', () => {
             container.style = defaultStyle + this.selectionStyle;
             
+            const popup = this.devicesPopup.get(id);
+            popup?.open(true);
         });
         
         container.connect('leave-event', () => {
             container.style = defaultStyle;
             
+            const popup = this.devicesPopup.get(id);
+            popup?.close(true);
         });
         
         return {
@@ -457,7 +520,34 @@ export default class NetworkMenu extends MenuBase {
         };
     }
     
-    updateInterfaceDevice(device: InterfaceDeviceInfo, deviceData: InterfaceInfo) {
+    createDevicePopup(sourceActor: St.Widget): DevicePopup {
+        const popup:DevicePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2});
+        popup.addMenuSection(_('Network Interface Info'));
+        
+        //Total Upload
+        popup.addToMenu(new St.Label({
+            text: _('Total Upload'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        popup.addToMenu(totalUploadedValueLabel);
+        popup.totalUploadedValueLabel = totalUploadedValueLabel;
+        
+        //Total Download
+        popup.addToMenu(new St.Label({
+            text: _('Total Download'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        popup.addToMenu(totalDownloadedValueLabel);
+        popup.totalDownloadedValueLabel = totalDownloadedValueLabel;
+        
+        return popup;
+    }
+    
+    updateInterfaceDevice(device: InterfaceDeviceInfo, _popup:DevicePopup, deviceData: InterfaceInfo) {
         device.data = deviceData;
         
         const icon = {
@@ -570,10 +660,32 @@ export default class NetworkMenu extends MenuBase {
                     this.totalDownloadSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesDownloadedPerSec, unit as any, 3);
                 else
                     this.totalDownloadSpeedValueLabel.text = '-';
+                
+                if(this.networkActivityPopup) {
+                    if(this.networkActivityPopup.totalUploadedValueLabel) {
+                        if(current.totalBytesUploaded)
+                            this.networkActivityPopup.totalUploadedValueLabel.text = Utils.formatBytes(current.totalBytesUploaded, 'kB-KB', 3);
+                        else
+                            this.networkActivityPopup.totalUploadedValueLabel.text = '-';
+                    }
+                    if(this.networkActivityPopup.totalDownloadedValueLabel) {
+                        if(current.totalBytesDownloaded)
+                            this.networkActivityPopup.totalDownloadedValueLabel.text = Utils.formatBytes(current.totalBytesDownloaded, 'kB-KB', 3);
+                        else
+                            this.networkActivityPopup.totalDownloadedValueLabel.text = '-';
+                    }
+                }
             }
             else {
                 this.totalUploadSpeedValueLabel.text = '-';
                 this.totalDownloadSpeedValueLabel.text = '-';
+                
+                if(this.networkActivityPopup) {
+                    if(this.networkActivityPopup.totalUploadedValueLabel)
+                        this.networkActivityPopup.totalUploadedValueLabel.text = '-';
+                    if(this.networkActivityPopup.totalDownloadedValueLabel)
+                        this.networkActivityPopup.totalDownloadedValueLabel.text = '-';
+                }
             }
             return;
         }
@@ -606,12 +718,36 @@ export default class NetworkMenu extends MenuBase {
                             device.downloadValueLabel.text = '-';
                             device.downloadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                         }
+                        
+                        const popup = this.devicesPopup.get(id);
+                        if(popup) {
+                            if(popup.totalUploadedValueLabel) {
+                                if(data.totalBytesUploaded)
+                                    popup.totalUploadedValueLabel.text = Utils.formatBytes(data.totalBytesUploaded, 'kB-KB', 3);
+                                else
+                                    popup.totalUploadedValueLabel.text = '-';
+                            }
+                            if(popup.totalDownloadedValueLabel) {
+                                if(data.totalBytesDownloaded)
+                                    popup.totalDownloadedValueLabel.text = Utils.formatBytes(data.totalBytesDownloaded, 'kB-KB', 3);
+                                else
+                                    popup.totalDownloadedValueLabel.text = '-';
+                            }
+                        }
                     }
                     else {
                         device.uploadValueLabel.text = '-';
                         device.uploadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                         device.downloadValueLabel.text = '-';
                         device.downloadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
+                        
+                        const popup = this.devicesPopup.get(id);
+                        if(popup) {
+                            if(popup.totalUploadedValueLabel)
+                                popup.totalUploadedValueLabel.text = '-';
+                            if(popup.totalDownloadedValueLabel)
+                                popup.totalDownloadedValueLabel.text = '-';
+                        }
                     }
                 }
             }
@@ -670,6 +806,23 @@ export default class NetworkMenu extends MenuBase {
             device.downloadValueLabel.text = '-';
             device.downloadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
         }
+        for(const [_id, popup] of this.devicesPopup.entries()) {
+            if(popup.totalUploadedValueLabel)
+                popup.totalUploadedValueLabel.text = '-';
+            if(popup.totalDownloadedValueLabel)
+                popup.totalDownloadedValueLabel.text = '-';
+        }
+        
+        if(this.networkActivityPopup) {
+            if(this.networkActivityPopup.totalUploadedValueLabel)
+                this.networkActivityPopup.totalUploadedValueLabel.text = '-';
+            if(this.networkActivityPopup.totalDownloadedValueLabel)
+                this.networkActivityPopup.totalDownloadedValueLabel.text = '-';
+        }
+        
+        this.publicIPv4.value.text = '-';
+        this.publicIpv6.value1.text = '-';
+        this.publicIpv6.value2.hide();
     }
     
     destroy() {

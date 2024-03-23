@@ -426,6 +426,8 @@ export default class NetworkMonitor extends Monitor {
         this.previousNetworkIO.time = now;
         
         this.pushUsageHistory('networkIO', {
+            totalBytesUploaded: bytesUploaded,
+            totalBytesDownloaded: bytesDownloaded,
             bytesUploadedPerSec,
             bytesDownloadedPerSec
         });
@@ -444,7 +446,12 @@ export default class NetworkMonitor extends Monitor {
                 if(previousData) {
                     const bytesUploadedPerSec = Math.round((bytesUploaded - previousData.bytesUploaded) / interval);
                     const bytesDownloadedPerSec = Math.round((bytesDownloaded - previousData.bytesDownloaded) / interval);    
-                    finalData.set(deviceName, { bytesUploadedPerSec, bytesDownloadedPerSec });
+                    finalData.set(deviceName, {
+                        totalBytesUploaded: bytesUploaded,
+                        totalBytesDownloaded: bytesDownloaded,
+                        bytesUploadedPerSec,
+                        bytesDownloadedPerSec
+                    });
                 }
             }
             
