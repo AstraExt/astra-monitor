@@ -169,6 +169,8 @@ export default class Utils {
             catch(e) { console.error(e); }
         }
         
+        Utils.configUpdateFixes();
+        
         if(ProcessorMonitor)
             Utils.processorMonitor = new ProcessorMonitor();
         if(MemoryMonitor)
@@ -2140,5 +2142,27 @@ export default class Utils {
             return GLib.SOURCE_REMOVE;
         });
         Utils.lowPriorityTasks.push(task);
+    }
+    
+    static configUpdateFixes() {
+        //Fix GPU domain missing (v9 => v10)
+        //TODO: remove in release
+        const selectedGpu = Config.get_json('processor-menu-gpu');
+        if(selectedGpu && selectedGpu.domain) {
+            if(!selectedGpu.domain.includes(':')) {
+                selectedGpu.domain = '0000:' + selectedGpu.domain;
+                Config.set('processor-menu-gpu', selectedGpu, 'json');
+            }
+        }
+        
+        //Fix default secondary color in memory bar (v15 => v16)
+        const graphColor2 = Config.get_string('memory-header-graph-color2');
+        if(graphColor2 === 'rgba(214,29,29,1.0)') {
+            Config.set('memory-header-graph-color2', 'rgba(29,172,214,0.3)', 'string');
+        }
+        const barsColor2 = Config.get_string('memory-header-bars-color2');
+        if(barsColor2 === 'rgba(214,29,29,1.0)') {
+            Config.set('memory-header-bars-color2', 'rgba(29,172,214,0.3)', 'string');
+        }
     }
 }

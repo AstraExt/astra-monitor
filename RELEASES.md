@@ -9,6 +9,7 @@ _THIS LIST IS TEMPORARY AND SUBJECT TO CHANGE UNTIL THE RELEASE DATE_
 
 ### Bug fixes
 - Fixed CPU Cores Usage Info user bar invisible when Cores Bar Breakdown is enabled [[#86](https://github.com/AstraExt/astra-monitor/issues/86)]
+- Improved Memory Secondary Color for better readability and value understanding
 
 # Astra Monitor 15 - March 14 2024
 

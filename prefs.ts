@@ -149,7 +149,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         //if(!Utils.hasLmSensors())
         //    check = false, this.addStatusLabel({title: _('\'lm-sensors\' not installed: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
         if(!Utils.hasHwmon())
-            check = false, this.addStatusLabel({title: _('Cannot access /sys/class/hwmon: this extension will not work!')}, 'am-dialog-error-symbolic', group);
+            check = false, this.addStatusLabel({title: _('Cannot access /sys/class/hwmon: sensors monitoring will not work!')}, 'am-dialog-error-symbolic', group);
         if(!Utils.hasLscpu())
             check = false, this.addStatusLabel({title: _('\'lscpu\' not installed: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
         if(!Utils.hasLspci())
@@ -401,14 +401,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSwitchRow({title: _('Core Bars Breakdown'), tabs: 1}, 'processor-menu-core-bars-breakdown', cpuSection);
         this.addSwitchRow({title: _('Top Processes Single Core'), tabs: 1}, 'processor-menu-top-processes-percentage-core', cpuSection);
         const gpuSection = this.addExpanderRow({title: _('GPU')}, group);
-        
-        //Fix GPU domain missing (v9 => v10)
-        //TODO: remove in v12-v13
-        const selectedGpu = Config.get_json('processor-menu-gpu');
-        if(selectedGpu && selectedGpu.domain) {
-            if(!selectedGpu.domain.includes(':'))
-                selectedGpu.domain = '0000:' + selectedGpu.domain;
-        }
         
         const gpus = Utils.getGPUsList();
         const choicesSource = [{value: '', text: _('None')}];
@@ -1365,13 +1357,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             
             for(const colorPref of mainColors)
                 Config.set(colorPref, color, 'string');
+            
+            // Memory secondary colors are the same as main colors with 0.3 alpha
+            const colorParsed = new Gdk.RGBA();
+            colorParsed.parse(color);
+            colorParsed.alpha = 0.3;
+            Config.set('memory-header-graph-color2', colorParsed.to_string(), 'string');
+            Config.set('memory-header-bars-color2', colorParsed.to_string(), 'string');
         }
         else if(category === ColorCategory.SECONDARY) {
             const secondaryColors = [
                 'processor-header-graph-color2',
                 'processor-header-bars-color2',
-                'memory-header-graph-color2',
-                'memory-header-bars-color2',
                 'storage-header-io-bars-color2',
                 'storage-header-io-graph-color2',
                 'storage-menu-arrow-color2',
