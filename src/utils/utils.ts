@@ -85,11 +85,14 @@ export type InterfaceInfo = {
     netmask?: string,
     altnames?: string[],
     addr_info?: {
-        local: string,
-        peer: string,
-        family: string,
-        broadcast: string,
-        anycast: string
+        local?: string,
+        peer?: string,
+        family?: string,
+        broadcast?: string,
+        anycast?: string,
+        label?: string,
+        prefixlen?: number,
+        scope?: string
     }[],
     linkinfo?: any,
 };

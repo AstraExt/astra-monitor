@@ -30,7 +30,7 @@ import Utils, { InterfaceInfo } from '../utils/utils.js';
 import Config from '../config.js';
 
 type InterfaceDeviceInfo = {
-    data: any;
+    data: InterfaceInfo | null;
     container: St.Button;
     icon: St.Icon;
     label: St.Label;
@@ -53,12 +53,44 @@ type NetworkActivityPopup = MenuBase & {
 };
 
 type DevicePopup = MenuBase & {
+    nameValue?: St.Label,
+    altNamesLabel?: St.Label,
+    altNamesValue?: St.Label,
+    ifindexLabel?: St.Label,
+    ifindexValue?: St.Label,
+    macAddressLabel?: St.Label,
+    macAddressValue?: St.Label,
+    groupLabel?: St.Label,
+    groupValue?: St.Label,
+    mtuLabel?: St.Label,
+    mtuValue?: St.Label,
+    txQueueLabel?: St.Label,
+    txQueueValue?: St.Label,
+    linkTypeLabel?: St.Label,
+    linkTypeValue?: St.Label,
+    operStateLabel?: St.Label,
+    operStateValue?: St.Label,
+    qdiscLabel?: St.Label,
+    qdiscValue?: St.Label,
+    
+    addresses: {
+        labelValue: St.Label,
+        familyLabel: St.Label,
+        familyValue: St.Label,
+        localLabel: St.Label,
+        localValue: St.Label,
+        prefixlenLabel: St.Label,
+        prefixlenValue: St.Label,
+        broadcastLabel: St.Label,
+        broadcastValue: St.Label,
+        scopeLabel: St.Label,
+        scopeValue: St.Label,
+    }[],
+    
     totalUploadedValueLabel?: St.Label,
     totalDownloadedValueLabel?: St.Label,
-    
     packetsUploadedValueLabel?: St.Label,
     packetsDownloadedValueLabel?: St.Label,
-    
     errorsUploadValueLabel?: St.Label,
     errorsDownloadValueLabel?: St.Label,
 };
@@ -188,7 +220,7 @@ export default class NetworkMenu extends MenuBase {
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
-        const totalUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        const totalUploadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
         this.networkActivityPopup.addToMenu(totalUploadedValueLabel);
         this.networkActivityPopup.totalUploadedValueLabel = totalUploadedValueLabel;
         
@@ -198,7 +230,7 @@ export default class NetworkMenu extends MenuBase {
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
-        const packetsUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        const packetsUploadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
         this.networkActivityPopup.addToMenu(packetsUploadedValueLabel);
         this.networkActivityPopup.packetsUploadedValueLabel = packetsUploadedValueLabel;
         
@@ -208,7 +240,7 @@ export default class NetworkMenu extends MenuBase {
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
-        const errorsUploadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        const errorsUploadValueLabel = new St.Label({text: '', style: 'text-align:left;'});
         this.networkActivityPopup.addToMenu(errorsUploadValueLabel);
         this.networkActivityPopup.errorsUploadValueLabel = errorsUploadValueLabel;
         
@@ -220,7 +252,7 @@ export default class NetworkMenu extends MenuBase {
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
-        const totalDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        const totalDownloadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
         this.networkActivityPopup.addToMenu(totalDownloadedValueLabel);
         this.networkActivityPopup.totalDownloadedValueLabel = totalDownloadedValueLabel;
         
@@ -230,7 +262,7 @@ export default class NetworkMenu extends MenuBase {
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
-        const packetsDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        const packetsDownloadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
         this.networkActivityPopup.addToMenu(packetsDownloadedValueLabel);
         this.networkActivityPopup.packetsDownloadedValueLabel = packetsDownloadedValueLabel;
         
@@ -240,7 +272,7 @@ export default class NetworkMenu extends MenuBase {
             style_class: 'astra-monitor-menu-sub-key'
         }));
         
-        const errorsDownloadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
+        const errorsDownloadValueLabel = new St.Label({text: '', style: 'text-align:left;'});
         this.networkActivityPopup.addToMenu(errorsDownloadValueLabel);
         this.networkActivityPopup.errorsDownloadValueLabel = errorsDownloadValueLabel;
     }
@@ -575,75 +607,249 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createDevicePopup(sourceActor: St.Widget): DevicePopup {
-        const popup:DevicePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2});
+        const popup:DevicePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DevicePopup;
+        
+        //Info
+        popup.addMenuSection(_('Info'));
+        {
+            //Name
+            popup.addToMenu(new St.Label({
+                text: _('Name'),
+                style_class: 'astra-monitor-menu-sub-key'
+            }));
+            
+            const nameLabel = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(nameLabel);
+            popup.nameValue = nameLabel;
+            
+            // Alt Names
+            const altNamesLabel = new St.Label({
+                text: _('Alt Names'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(altNamesLabel);
+            popup.altNamesLabel = altNamesLabel;
+            
+            const altNamesValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(altNamesValue);
+            popup.altNamesValue = altNamesValue;
+            
+            // Ifindex
+            const ifindexLabel = new St.Label({
+                text: _('Interface Index'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(ifindexLabel);
+            popup.ifindexLabel = ifindexLabel;
+            
+            const ifindexValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(ifindexValue);
+            popup.ifindexValue = ifindexValue;
+            
+            // Mac Address
+            const macAddressLabel = new St.Label({
+                text: _('MAC Address'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(macAddressLabel);
+            popup.macAddressLabel = macAddressLabel;
+            
+            const macAddressValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(macAddressValue);
+            popup.macAddressValue = macAddressValue;
+            
+            // Group
+            const groupLabel = new St.Label({
+                text: _('Group'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(groupLabel);
+            popup.groupLabel = groupLabel;
+            
+            const groupValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(groupValue);
+            popup.groupValue = groupValue;
+            
+            // MTU
+            const mtuLabel = new St.Label({
+                text: _('MTU'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(mtuLabel);
+            popup.mtuLabel = mtuLabel;
+            
+            const mtuValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(mtuValue);
+            popup.mtuValue = mtuValue;
+            
+            // Tx Queue Length
+            const txQueueLabel = new St.Label({
+                text: _('Tx Queue Length'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(txQueueLabel);
+            popup.txQueueLabel = txQueueLabel;
+            
+            const txQueueValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(txQueueValue);
+            popup.txQueueValue = txQueueValue;
+            
+            // Link Type
+            const linkTypeLabel = new St.Label({
+                text: _('Link Type'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(linkTypeLabel);
+            popup.linkTypeLabel = linkTypeLabel;
+            
+            const linkTypeValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(linkTypeValue);
+            popup.linkTypeValue = linkTypeValue;
+            
+            // Operative State
+            const operativeStateLabel = new St.Label({
+                text: _('Operative State'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(operativeStateLabel);
+            popup.operStateLabel = operativeStateLabel;
+            
+            const operativeStateValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(operativeStateValue);
+            popup.operStateValue = operativeStateValue;
+            
+            // Qdisc
+            const qdiscLabel = new St.Label({
+                text: _('Qdisc'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(qdiscLabel);
+            popup.qdiscLabel = qdiscLabel;
+            
+            const qdiscValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(qdiscValue);
+            popup.qdiscValue = qdiscValue;
+        }
+        
+        //Addresses
+        popup.addresses = [];
+        
+        for(let i = 0; i < 5; i++) {
+            const labelValue = new St.Label({text: '', style_class: 'astra-monitor-menu-header-centered', x_expand: true});
+            popup.addToMenu(labelValue, 2);
+            
+            const familyLabel = new St.Label({text: _('Family'), style_class: 'astra-monitor-menu-sub-key'});
+            popup.addToMenu(familyLabel);
+            const familyValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(familyValue);
+            
+            const localLabel = new St.Label({text: _('Local'), style_class: 'astra-monitor-menu-sub-key'});
+            popup.addToMenu(localLabel);
+            const localValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(localValue);
+            
+            const prefixlenLabel = new St.Label({text: _('Prefix Length'), style_class: 'astra-monitor-menu-sub-key'});
+            popup.addToMenu(prefixlenLabel);
+            const prefixlenValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(prefixlenValue);
+            
+            const broadcastLabel = new St.Label({text: _('Broadcast'), style_class: 'astra-monitor-menu-sub-key'});
+            popup.addToMenu(broadcastLabel);
+            const broadcastValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(broadcastValue);
+            
+            const scopeLabel = new St.Label({text: _('Scope'), style_class: 'astra-monitor-menu-sub-key'});
+            popup.addToMenu(scopeLabel);
+            const scopeValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(scopeValue);
+            
+            popup.addresses.push({
+                labelValue,
+                familyLabel,
+                familyValue,
+                localLabel,
+                localValue,
+                prefixlenLabel,
+                prefixlenValue,
+                broadcastLabel,
+                broadcastValue,
+                scopeLabel,
+                scopeValue
+            });
+        }
+        
+        //Upload
         popup.addMenuSection(_('Upload'));
+        {
+            //Total
+            popup.addToMenu(new St.Label({
+                text: _('Total'),
+                style_class: 'astra-monitor-menu-sub-key'
+            }));
+            
+            const totalUploadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(totalUploadedValueLabel);
+            popup.totalUploadedValueLabel = totalUploadedValueLabel;
+            
+            //Packets
+            popup.addToMenu(new St.Label({
+                text: _('Packets'),
+                style_class: 'astra-monitor-menu-sub-key'
+            }));
+            
+            const packetsUploadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(packetsUploadedValueLabel);
+            popup.packetsUploadedValueLabel = packetsUploadedValueLabel;
+            
+            //Errors
+            popup.addToMenu(new St.Label({
+                text: _('Errors/Dropped'),
+                style_class: 'astra-monitor-menu-sub-key'
+            }));
+            
+            const errorsUploadValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(errorsUploadValueLabel);
+            popup.errorsUploadValueLabel = errorsUploadValueLabel;
+        }
         
-        //Total
-        popup.addToMenu(new St.Label({
-            text: _('Total'),
-            style_class: 'astra-monitor-menu-sub-key'
-        }));
-        
-        const totalUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
-        popup.addToMenu(totalUploadedValueLabel);
-        popup.totalUploadedValueLabel = totalUploadedValueLabel;
-        
-        //Packets
-        popup.addToMenu(new St.Label({
-            text: _('Packets'),
-            style_class: 'astra-monitor-menu-sub-key'
-        }));
-        
-        const packetsUploadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
-        popup.addToMenu(packetsUploadedValueLabel);
-        popup.packetsUploadedValueLabel = packetsUploadedValueLabel;
-        
-        //Errors
-        popup.addToMenu(new St.Label({
-            text: _('Errors/Dropped'),
-            style_class: 'astra-monitor-menu-sub-key'
-        }));
-        
-        const errorsUploadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
-        popup.addToMenu(errorsUploadValueLabel);
-        popup.errorsUploadValueLabel = errorsUploadValueLabel;
-        
+        //Download
         popup.addMenuSection(_('Download'));
-        
-        //Total
-        popup.addToMenu(new St.Label({
-            text: _('Total'),
-            style_class: 'astra-monitor-menu-sub-key'
-        }));
-        
-        const totalDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
-        popup.addToMenu(totalDownloadedValueLabel);
-        popup.totalDownloadedValueLabel = totalDownloadedValueLabel;
-        
-        //Packets
-        popup.addToMenu(new St.Label({
-            text: _('Packets'),
-            style_class: 'astra-monitor-menu-sub-key'
-        }));
-        
-        const packetsDownloadedValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
-        popup.addToMenu(packetsDownloadedValueLabel);
-        popup.packetsDownloadedValueLabel = packetsDownloadedValueLabel;
-        
-        //Errors
-        popup.addToMenu(new St.Label({
-            text: _('Errors/Dropped'),
-            style_class: 'astra-monitor-menu-sub-key'
-        }));
-        
-        const errorsDownloadValueLabel = new St.Label({text: '', style: 'width:4.5em;text-align:right;'});
-        popup.addToMenu(errorsDownloadValueLabel);
-        popup.errorsDownloadValueLabel = errorsDownloadValueLabel;
+        {
+            //Total
+            popup.addToMenu(new St.Label({
+                text: _('Total'),
+                style_class: 'astra-monitor-menu-sub-key'
+            }));
+            
+            const totalDownloadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(totalDownloadedValueLabel);
+            popup.totalDownloadedValueLabel = totalDownloadedValueLabel;
+            
+            //Packets
+            popup.addToMenu(new St.Label({
+                text: _('Packets'),
+                style_class: 'astra-monitor-menu-sub-key'
+            }));
+            
+            const packetsDownloadedValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(packetsDownloadedValueLabel);
+            popup.packetsDownloadedValueLabel = packetsDownloadedValueLabel;
+            
+            //Errors
+            popup.addToMenu(new St.Label({
+                text: _('Errors/Dropped'),
+                style_class: 'astra-monitor-menu-sub-key'
+            }));
+            
+            const errorsDownloadValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(errorsDownloadValueLabel);
+            popup.errorsDownloadValueLabel = errorsDownloadValueLabel;
+        }
         
         return popup;
     }
     
-    updateInterfaceDevice(device: InterfaceDeviceInfo, _popup:DevicePopup, deviceData: InterfaceInfo) {
+    updateInterfaceDevice(device: InterfaceDeviceInfo, popup:DevicePopup, deviceData: InterfaceInfo) {
         device.data = deviceData;
         
         const icon = {
@@ -683,6 +889,178 @@ export default class NetworkMenu extends MenuBase {
         }
         
         device.label2.text = label2;
+        
+        if(popup) {
+            if(deviceData.name && popup.nameValue)
+                popup.nameValue.text = deviceData.name;
+            
+            if(deviceData.altnames && deviceData.altnames.length > 0 && popup.altNamesValue) {
+                popup.altNamesLabel?.show();
+                popup.altNamesValue?.show();
+                popup.altNamesValue.text = deviceData.altnames.join(', ');
+            }
+            else {
+                popup.altNamesLabel?.hide();
+                popup.altNamesValue?.hide();
+            }
+            
+            if(deviceData.ifindex && popup.ifindexValue) {
+                popup.ifindexLabel?.show();
+                popup.ifindexValue?.show();
+                popup.ifindexValue.text = deviceData.ifindex.toString();
+            }
+            else {
+                popup.ifindexLabel?.hide();
+                popup.ifindexValue?.hide();
+            }
+            
+            if(deviceData.address && popup.macAddressValue) {
+                popup.macAddressLabel?.show();
+                popup.macAddressValue?.show();
+                popup.macAddressValue.text = deviceData.address;
+            }
+            else {
+                popup.macAddressLabel?.hide();
+                popup.macAddressValue?.hide();
+            }
+            
+            if(deviceData.group && popup.groupValue) {
+                popup.groupLabel?.show();
+                popup.groupValue?.show();
+                popup.groupValue.text = deviceData.group;
+            }
+            else {
+                popup.groupLabel?.hide();
+                popup.groupValue?.hide();
+            }
+            
+            if(deviceData.mtu && popup.mtuValue) {
+                popup.mtuLabel?.show();
+                popup.mtuValue?.show();
+                popup.mtuValue.text = deviceData.mtu.toString();
+            }
+            else {
+                popup.mtuLabel?.hide();
+                popup.mtuValue?.hide();
+            }
+            
+            if(deviceData.txqlen && popup.txQueueValue) {
+                popup.txQueueLabel?.show();
+                popup.txQueueValue?.show();
+                popup.txQueueValue.text = deviceData.txqlen.toString();
+            }
+            else {
+                popup.txQueueLabel?.hide();
+                popup.txQueueValue?.hide();
+            }
+            
+            if(deviceData.link_type && popup.linkTypeValue) {
+                popup.linkTypeLabel?.show();
+                popup.linkTypeValue?.show();
+                popup.linkTypeValue.text = deviceData.link_type;
+            }
+            else {
+                popup.linkTypeLabel?.hide();
+                popup.linkTypeValue?.hide();
+            }
+            
+            if(deviceData.operstate && popup.operStateValue) {
+                popup.operStateLabel?.show();
+                popup.operStateValue?.show();
+                popup.operStateValue.text = deviceData.operstate;
+            }
+            else {
+                popup.operStateLabel?.hide();
+                popup.operStateValue?.hide();
+            }
+            
+            if(deviceData.qdisc && popup.qdiscValue) {
+                popup.qdiscLabel?.show();
+                popup.qdiscValue?.show();
+                popup.qdiscValue.text = deviceData.qdisc;
+            }
+            else {
+                popup.qdiscLabel?.hide();
+                popup.qdiscValue?.hide();
+            }
+            
+            //Addresses
+            for(let i = 0; i < 5; i++) {
+                const address = popup.addresses[i];
+                
+                if(address && deviceData.addr_info && deviceData.addr_info[i]) {
+                    const addrInfo = deviceData.addr_info[i];
+                    
+                    let label = 'Address ' + (i+1);
+                    if(addrInfo.label)
+                        label += ` [${addrInfo.label}]`;
+                    address.labelValue.text = label;
+                    
+                    if(addrInfo.family) {
+                        address.familyLabel.show();
+                        address.familyValue.show();
+                        address.familyValue.text = addrInfo.family;
+                    }
+                    else {
+                        address.familyLabel.hide();
+                        address.familyValue.hide();
+                    }
+                    
+                    if(addrInfo.local) {
+                        address.localLabel.show();
+                        address.localValue.show();
+                        address.localValue.text = addrInfo.local;
+                    }
+                    else {
+                        address.localLabel.hide();
+                        address.localValue.hide();
+                    }
+                    
+                    if(addrInfo.prefixlen) {
+                        address.prefixlenLabel.show();
+                        address.prefixlenValue.show();
+                        address.prefixlenValue.text = addrInfo.prefixlen.toString();
+                    }
+                    else {
+                        address.prefixlenLabel.hide();
+                        address.prefixlenValue.hide();
+                    }
+                    
+                    if(addrInfo.broadcast) {
+                        address.broadcastLabel.show();
+                        address.broadcastValue.show();
+                        address.broadcastValue.text = addrInfo.broadcast;
+                    }
+                    else {
+                        address.broadcastLabel.hide();
+                        address.broadcastValue.hide();
+                    }
+                    
+                    if(addrInfo.scope) {
+                        address.scopeLabel.show();
+                        address.scopeValue.show();
+                        address.scopeValue.text = addrInfo.scope;
+                    }
+                    else {
+                        address.scopeLabel.hide();
+                        address.scopeValue.hide();
+                    }
+                }
+                else {
+                    address.labelValue.hide();
+                    address.familyLabel.hide();
+                    address.familyValue.hide();
+                    address.localLabel.hide();
+                    address.localValue.hide();
+                    address.prefixlenLabel.hide();
+                    address.prefixlenValue.hide();
+                    address.broadcastLabel.hide();
+                    address.broadcastValue.hide();
+                    address.scopeLabel.hide();
+                    address.scopeValue.hide();
+                }
+            }
+        }
     }
     
     addUtilityButtons() {
