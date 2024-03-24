@@ -109,6 +109,8 @@ export default class NetworkMenu extends MenuBase {
     private totalUploadSpeedValueLabel!: St.Label;
     private totalDownloadSpeedValueLabel!: St.Label;
     
+    private publicIPLabel!: St.Label;
+    private publicIPContainer!: St.Button;
     private publicIPv4!: {
         label: St.Label;
         value: St.Label;
@@ -284,18 +286,18 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createPublicIps() {
-        this.addMenuSection(_('Public IP'));
+        this.publicIPLabel = this.addMenuSection(_('Public IP'));
         
         const defaultStyle = '';
         
-        const hoverButton = new St.Button({
+        this.publicIPContainer = new St.Button({
             reactive: true,
             track_hover: true,
             style: defaultStyle
         });
         
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
-        hoverButton.set_child(grid);
+        this.publicIPContainer.set_child(grid);
         
         const publicIPv4Label = new St.Label({
             text: _('Public IPv4:'),
@@ -347,17 +349,17 @@ export default class NetworkMenu extends MenuBase {
             value2: publicIpv6Value2
         };
         
-        hoverButton.connect('enter-event', () => {
-            hoverButton.style = defaultStyle + this.selectionStyle;
+        this.publicIPContainer.connect('enter-event', () => {
+            this.publicIPContainer.style = defaultStyle + this.selectionStyle;
             
         });
         
-        hoverButton.connect('leave-event', () => {
-            hoverButton.style = defaultStyle;
+        this.publicIPContainer.connect('leave-event', () => {
+            this.publicIPContainer.style = defaultStyle;
             
         });
         
-        this.addToMenu(hoverButton, 2);
+        this.addToMenu(this.publicIPContainer, 2);
     }
     
     createDeviceList() {
@@ -1399,6 +1401,15 @@ export default class NetworkMenu extends MenuBase {
             else {
                 this.publicIpv6.label.hide();
                 this.publicIpv6.value1.hide();
+            }
+            
+            if(!publicIPv4 && !publicIpv6) {
+                this.publicIPLabel.hide();
+                this.publicIPContainer.hide();
+            }
+            else {
+                this.publicIPLabel.show();
+                this.publicIPContainer.show();
             }
             
             return;

@@ -141,6 +141,9 @@ export default class NetworkMonitor extends Monitor {
                 this.ignoredRegex = null;
             }
         });
+        
+        Config.connect(this, 'changed::network-source-public-ipv4', this.updatePublicIps.bind(this));
+        Config.connect(this, 'changed::network-source-public-ipv6', this.updatePublicIps.bind(this));
     }
     
     get updateFrequency() {
@@ -571,20 +574,27 @@ export default class NetworkMonitor extends Monitor {
         return true;
     }
     
+    private resetIPv4(): boolean {
+        if(this.getCurrentValue('publicIpv4Address') === '')
+            return false;
+        this.setUsageValue('publicIpv4Address', '');
+        return true;
+    }
+    
     private async updatePublicIpv4Address(): Promise<boolean> {
         const publicIpv4Address = Config.get_string('network-source-public-ipv4');
         if(!publicIpv4Address)
-            return false;
+            return this.resetIPv4();
         
         const value = await Utils.getUrlAsync(publicIpv4Address, true);
         if(!value)
-            return false;
+            return this.resetIPv4();
         
         const regex = /(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/;
         const match = value.match(regex);
         
         if(!match)
-            return false;
+            return this.resetIPv4();
         
         const ip = match[0];
         
@@ -596,20 +606,27 @@ export default class NetworkMonitor extends Monitor {
         return true;
     }
     
+    private resetIPv6(): boolean {
+        if(this.getCurrentValue('publicIpv6Address') === '')
+            return false;
+        this.setUsageValue('publicIpv6Address', '');
+        return true;
+    }
+    
     private async updatePublicIpv6Address(): Promise<boolean> {
         const publicIpv6Address = Config.get_string('network-source-public-ipv6');
         if(!publicIpv6Address)
-            return false;
+            return this.resetIPv6();
         
         const value = await Utils.getUrlAsync(publicIpv6Address, true);
         if(!value)
-            return false;
+            return this.resetIPv6();
         
         const regex = /(?:[\da-f]{0,4}:){2,7}(?:(?<ipv4>(?:(?:25[0-5]|2[0-4]\d|1?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|1?\d\d?))|[\da-f]{0,4}|:)/i;
         const match = value.match(regex);
         
         if(!match)
-            return false;
+            return this.resetIPv6();
         
         const ip = match[0];
         
