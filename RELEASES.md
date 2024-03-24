@@ -7,6 +7,8 @@ _THIS LIST IS TEMPORARY AND SUBJECT TO CHANGE UNTIL THE RELEASE DATE_
 
 - **Public IP Address**: now you can see your public IPv4/IPv6 address in the Network Menu. This feature requires a remote API call to get the public IP address. We are using [ipify](https://www.ipify.org/) as the default provider, which is a free and open source service. You can choose a different provider from the settings panel or disable this feature if you don't want to use it. We support every possible provider, included API created by yourself: the ip address will be matched with a regex to extract it from the response.
 
+- **Default Routes**: you can see default routing informations in the Network Menu.
+
 - **Device Info**: hovering a network interface will show you a lot more information about it.
 
 - **Cumulative Upload/Download Bytes**: now you can see the total upload/download bytes since the last boot in the Network Menu for each network interface and globally.
@@ -15,7 +17,9 @@ _THIS LIST IS TEMPORARY AND SUBJECT TO CHANGE UNTIL THE RELEASE DATE_
 
 - **Errors/Dropped Packets**: now you can see the total error/dropped packets since the last boot in the Network Menu for each network interface and globally.
 
-- **Bridged Network Interfaces**: now you can see the bridged network interfaces in the Network Menu.
+- **Bridged Network Interfaces**: bridged network interfaces are now visible in the Network Menu.
+
+- **VPN Network Interfaces**: VPN network interfaces are now marked with a specific icon in the Network Menu.
 
 ### Bug fixes
 - Fixed CPU Cores Usage Info user bar invisible when Cores Bar Breakdown is enabled [[#86](https://github.com/AstraExt/astra-monitor/issues/86)]

@@ -65,6 +65,7 @@ export default class NetworkMonitor extends Monitor {
     private ignoredRegex: RegExp|null;
     
     private updateNetworkIOTask: CancellableTaskManager<boolean>;
+    private updateRoutesTask: CancellableTaskManager<boolean>;
     
     private previousNetworkIO!: PreviousNetworkIO;
     private previousDetailedNetworkIO!: PreviousDetailedNetworkIO;
@@ -86,6 +87,7 @@ export default class NetworkMonitor extends Monitor {
         
         // Setup tasks
         this.updateNetworkIOTask = new CancellableTaskManager();
+        this.updateRoutesTask = new CancellableTaskManager();
         
         this.reset();
         this.dataSourcesInit();
@@ -167,6 +169,7 @@ export default class NetworkMonitor extends Monitor {
         };
         
         this.updateNetworkIOTask.cancel();
+        this.updateRoutesTask.cancel();
     }
     
     start() {
@@ -239,6 +242,9 @@ export default class NetworkMonitor extends Monitor {
             if(detailed)
                 super.requestUpdate('networkIO'); // override also the storageIO update
         }
+        if(key === 'routes') {
+            this.runUpdate('routes');
+        }
         super.requestUpdate(key);
     }
     
@@ -264,6 +270,15 @@ export default class NetworkMonitor extends Monitor {
                 task: this.updateNetworkIOTask,
                 run,
                 callback
+            });
+            return;
+        }
+        if(key === 'routes') {
+            this.runTask({
+                key,
+                task: this.updateRoutesTask,
+                run: this.updateRoutes.bind(this),
+                callback: () => this.notify('routes')
             });
             return;
         }
@@ -635,6 +650,14 @@ export default class NetworkMonitor extends Monitor {
             return false;
         
         this.pushUsageHistory('publicIpv6Address', ip);
+        return true;
+    }
+    
+    private async updateRoutes(): Promise<boolean> {
+        const routes = await Utils.getNetworkRoutesAsync();
+        if(!routes)
+            return false;
+        this.setUsageValue('routes', routes);
         return true;
     }
     

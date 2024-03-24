@@ -101,6 +101,17 @@ export type InterfaceInfo = {
     linkinfo?: any,
 };
 
+export type RouteInfo = {
+    type: string,
+    destination: string,
+    gateway: string,
+    device: string,
+    protocol: string,
+    scope: string,
+    metric: number,
+    flags: string[]
+};
+
 export type HwMonAttribute = {
     type: string,
     path: string
@@ -2014,6 +2025,42 @@ export default class Utils {
         }
         
         return devices;
+    }
+    
+    static async getNetworkRoutesAsync(task?: CancellableTaskManager<boolean>): Promise<RouteInfo[]> {
+        const routes:RouteInfo[] = [];
+        
+        if(!Utils.hasIp())
+            return routes;
+        
+        try {
+            const result = await Utils.executeCommandAsync('ip -d -j route show default', task);
+            if(result) {
+                const json = JSON.parse(result);
+                for(const data of json) {
+                    const device = data.dev;
+                    if(!device)
+                        continue;
+                    
+                    const route: RouteInfo = {
+                        type: data.type,
+                        destination: data.dst,
+                        gateway: data.gateway,
+                        device: device,
+                        protocol: data.protocol,
+                        scope: data.scope,
+                        metric: data.metric || 0,
+                        flags: data.flags
+                    };
+                    routes.push(route);
+                }
+            }
+            return routes;
+        }
+        catch(e: any) {
+            Utils.error(e.message);
+            return routes;
+        }
     }
     
     /**

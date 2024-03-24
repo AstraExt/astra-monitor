@@ -26,7 +26,7 @@ import {gettext as _, pgettext} from 'resource:///org/gnome/shell/extensions/ext
 import MenuBase from '../menu.js';
 import NetworkGraph from './networkGraph.js';
 import Grid from '../grid.js';
-import Utils, { InterfaceInfo } from '../utils/utils.js';
+import Utils, { InterfaceInfo, RouteInfo } from '../utils/utils.js';
 import Config from '../config.js';
 
 type InterfaceDeviceInfo = {
@@ -50,6 +50,28 @@ type NetworkActivityPopup = MenuBase & {
     
     errorsUploadValueLabel?: St.Label,
     errorsDownloadValueLabel?: St.Label,
+};
+
+type RoutesPopup = MenuBase & {
+    routes: {
+        titleLabel: St.Label,
+        metricLabel: St.Label,
+        metricValue: St.Label,
+        typeLabel: St.Label,
+        typeValue: St.Label,
+        deviceLabel: St.Label,
+        deviceValue: St.Label,
+        destinationLabel: St.Label,
+        destinationValue: St.Label,
+        gatewayLabel: St.Label,
+        gatewayValue: St.Label,
+        protocolLabel: St.Label,
+        protocolValue: St.Label,
+        scopeLabel: St.Label,
+        scopeValue: St.Label,
+        flagsLabel: St.Label,
+        flagsValue: St.Label,
+    }[]
 };
 
 type DevicePopup = MenuBase & {
@@ -121,6 +143,10 @@ export default class NetworkMenu extends MenuBase {
         value2: St.Label;
     };
     
+    private defaultRouteDevice!: St.Label;
+    private defaultRouteGateway!: St.Label;
+    private routesPopup!: RoutesPopup;
+    
     private deviceSection!: InstanceType<typeof Grid>;
     private noDevicesLabel!: St.Label;
     
@@ -135,6 +161,7 @@ export default class NetworkMenu extends MenuBase {
         /*this.networkSectionLabel = */this.addMenuSection(_('Network'));
         this.createActivitySection();
         this.createPublicIps();
+        this.createRoutes();
         this.createDeviceList();
         
         this.addUtilityButtons();
@@ -153,6 +180,8 @@ export default class NetworkMenu extends MenuBase {
         this.publicIPv4.value.style_class = styleClass;
         this.publicIpv6.value1.style_class = styleClass;
         this.publicIpv6.value2.style_class = styleClass;
+        
+        this.defaultRouteGateway.style_class = styleClass;
     }
     
     createActivitySection() {
@@ -360,6 +389,123 @@ export default class NetworkMenu extends MenuBase {
         });
         
         this.addToMenu(this.publicIPContainer, 2);
+    }
+    
+    createRoutes() {
+        this.publicIPLabel = this.addMenuSection(_('Default Routes'));
+        
+        const defaultStyle = '';
+        
+        const hoverButton = new St.Button({
+            reactive: true,
+            track_hover: true,
+            style: defaultStyle
+        });
+        
+        const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
+        hoverButton.set_child(grid);
+        
+        this.defaultRouteDevice = new St.Label({
+            text: '',
+            x_expand: true,
+            style_class: 'astra-monitor-menu-label',
+            style: 'margin-top:0.25em;'
+        });
+        grid.addToGrid(this.defaultRouteDevice);
+        
+        this.defaultRouteGateway = new St.Label({
+            text: '-',
+            x_expand: true
+        });
+        grid.addToGrid(this.defaultRouteGateway);
+        
+        this.createRoutesPopup(hoverButton);
+        
+        hoverButton.connect('enter-event', () => {
+            hoverButton.style = defaultStyle + this.selectionStyle;
+            
+            if(this.routesPopup)
+                this.routesPopup.open(true);
+        });
+        
+        hoverButton.connect('leave-event', () => {
+            hoverButton.style = defaultStyle;
+            
+            if(this.routesPopup)
+                this.routesPopup.close(true);
+        });
+        
+        this.addToMenu(hoverButton, 2);
+    }
+    
+    createRoutesPopup(sourceActor: St.Widget) {
+        this.routesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as RoutesPopup;
+        this.routesPopup.routes = [];
+        
+        for(let i = 0; i < 5; i++) {
+            const titleLabel = new St.Label({text: _('Route') + ` ${i}`, style_class: 'astra-monitor-menu-header-centered', x_expand: true});
+            this.routesPopup.addToMenu(titleLabel, 2);
+            
+            const metricLabel = new St.Label({text: _('Metric'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(metricLabel);
+            const metricValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(metricValue);
+            
+            const deviceLabel = new St.Label({text: _('Device'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(deviceLabel);
+            const deviceValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(deviceValue);
+            
+            const gatewayLabel = new St.Label({text: _('Gateway'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(gatewayLabel);
+            const gatewayValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(gatewayValue);
+            
+            const typeLabel = new St.Label({text: _('Type'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(typeLabel);
+            const typeValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(typeValue);
+            
+            const destinationLabel = new St.Label({text: _('Destination'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(destinationLabel);
+            const destinationValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(destinationValue);
+            
+            const protocolLabel = new St.Label({text: _('Protocol'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(protocolLabel);
+            const protocolValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(protocolValue);
+            
+            const scopeLabel = new St.Label({text: _('Scope'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(scopeLabel);
+            const scopeValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(scopeValue);
+            
+            const flagsLabel = new St.Label({text: _('Flags'), style_class: 'astra-monitor-menu-sub-key'});
+            this.routesPopup.addToMenu(flagsLabel);
+            const flagsValue = new St.Label({text: '', style: 'text-align:left;'});
+            this.routesPopup.addToMenu(flagsValue);
+            
+            this.routesPopup.routes.push({
+                titleLabel,
+                metricLabel,
+                metricValue,
+                typeLabel,
+                typeValue,
+                deviceLabel,
+                deviceValue,
+                destinationLabel,
+                destinationValue,
+                gatewayLabel,
+                gatewayValue,
+                protocolLabel,
+                protocolValue,
+                scopeLabel,
+                scopeValue,
+                flagsLabel,
+                flagsValue
+            });
+        }
     }
     
     createDeviceList() {
@@ -1164,6 +1310,10 @@ export default class NetworkMenu extends MenuBase {
         this.update('publicIps');
         Utils.networkMonitor.listen(this, 'publicIps', this.update.bind(this, 'publicIps'));
         
+        this.update('routes');
+        Utils.networkMonitor.listen(this, 'routes', this.update.bind(this, 'routes'));
+        Utils.networkMonitor.requestUpdate('routes');
+        
         this.update('deviceList');
         if(!this.updateTimer) {
             this.updateTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
@@ -1411,7 +1561,109 @@ export default class NetworkMenu extends MenuBase {
                 this.publicIPLabel.show();
                 this.publicIPContainer.show();
             }
-            
+            return;
+        }
+        if(code == 'routes') {
+            const routes: RouteInfo[] = Utils.networkMonitor.getCurrentValue('routes');
+            if(routes && routes.length > 0) {
+                for(let i = 0; i < 5; i++) {
+                    const route = routes[i];
+                    
+                    if(i === 0) {
+                        this.defaultRouteDevice.text = route.device;
+                        this.defaultRouteGateway.text = route.gateway;
+                    }
+                    
+                    const popupRoute = this.routesPopup.routes[i];
+                    if(!popupRoute)
+                        break;
+                    
+                    if(!route) {
+                        popupRoute.titleLabel.hide();
+                        popupRoute.metricLabel.hide();
+                        popupRoute.metricValue.hide();
+                        popupRoute.typeLabel.hide();
+                        popupRoute.typeValue.hide();
+                        popupRoute.deviceLabel.hide();
+                        popupRoute.deviceValue.hide();
+                        popupRoute.destinationLabel.hide();
+                        popupRoute.destinationValue.hide();
+                        popupRoute.gatewayLabel.hide();
+                        popupRoute.gatewayValue.hide();
+                        popupRoute.protocolLabel.hide();
+                        popupRoute.protocolValue.hide();
+                        popupRoute.scopeLabel.hide();
+                        popupRoute.scopeValue.hide();
+                        popupRoute.flagsLabel.hide();
+                        popupRoute.flagsValue.hide();
+                        continue;
+                    }
+                    
+                    popupRoute.titleLabel.show();
+                    
+                    popupRoute.metricLabel.show();
+                    popupRoute.metricValue.text = route.metric!.toString() ?? '0';
+                    popupRoute.metricValue.show();
+                    
+                    popupRoute.typeLabel.show();
+                    popupRoute.typeValue.text = route.type ?? '-';
+                    popupRoute.typeValue.show();
+                    
+                    popupRoute.deviceLabel.show();
+                    popupRoute.deviceValue.text = route.device;
+                    popupRoute.deviceValue.show();
+                    
+                    popupRoute.destinationLabel.show();
+                    popupRoute.destinationValue.text = route.destination ?? '-';
+                    popupRoute.destinationValue.show();
+                    
+                    popupRoute.gatewayLabel.show();
+                    popupRoute.gatewayValue.text = route.gateway ?? '-';
+                    popupRoute.gatewayValue.show();
+                    
+                    popupRoute.protocolLabel.show();
+                    popupRoute.protocolValue.text = route.protocol ?? '-';
+                    popupRoute.protocolValue.show();
+                    
+                    popupRoute.scopeLabel.show();
+                    popupRoute.scopeValue.text = route.scope ?? '-';
+                    popupRoute.scopeValue.show();
+                    
+                    if(route.flags && route.flags.length > 0) {
+                        popupRoute.flagsLabel.show();
+                        popupRoute.flagsValue.text = route.flags.join(', ');
+                        popupRoute.flagsValue.show();
+                    }
+                    else {
+                        popupRoute.flagsLabel.hide();
+                        popupRoute.flagsValue.hide();
+                    }
+                }
+            }
+            else {
+                this.defaultRouteDevice.text = '-';
+                this.defaultRouteGateway.text = '-';
+                
+                for(const popupRoute of this.routesPopup.routes) {
+                    popupRoute.titleLabel.hide();
+                    popupRoute.metricLabel.hide();
+                    popupRoute.metricValue.hide();
+                    popupRoute.typeLabel.hide();
+                    popupRoute.typeValue.hide();
+                    popupRoute.deviceLabel.hide();
+                    popupRoute.deviceValue.hide();
+                    popupRoute.destinationLabel.hide();
+                    popupRoute.destinationValue.hide();
+                    popupRoute.gatewayLabel.hide();
+                    popupRoute.gatewayValue.hide();
+                    popupRoute.protocolLabel.hide();
+                    popupRoute.protocolValue.hide();
+                    popupRoute.scopeLabel.hide();
+                    popupRoute.scopeValue.hide();
+                    popupRoute.flagsLabel.hide();
+                    popupRoute.flagsValue.hide();
+                }
+            }
             return;
         }
     }
