@@ -66,6 +66,8 @@ gnome-extensions pack --force \
     --extra-source=./LICENSE \
     --extra-source=./README.md \
     --extra-source=./RELEASES.md \
+    --extra-source=./ROADMAP.md \
+    --extra-source=./COMPARISON.md \
     .
 
 # Check for errors
