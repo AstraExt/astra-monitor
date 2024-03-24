@@ -73,6 +73,8 @@ export type InterfaceInfo = {
     name: string,
     flags: string[],
     ifindex: number,
+    speed?: number,
+    duplex?: string,
     mtu?: number,
     qdisc?: string,
     operstate?: string,
@@ -1751,6 +1753,57 @@ export default class Utils {
         });
     }
     
+    static readFileSync(path: string, emptyOnFail: boolean = false): string {
+        // Check if the path is valid and not empty
+        if(!path || typeof path !== 'string') {
+            if(emptyOnFail)
+                return '';
+            throw new Error('Invalid file path');
+        }
+        
+        let file;
+        try {
+            file = Gio.File.new_for_path(path);
+            
+            // Check if the file exists
+            // This is blocking, no need to check
+            /*if(!file.query_exists(null)) {
+                if(emptyOnFail)
+                    return '';
+                throw new Error('File does not exist');
+            }*/
+        } catch(e: any) {
+            if(emptyOnFail)
+                return '';
+            throw new Error(`Error creating file object: ${e.message}`);
+        }
+        
+        try {
+            const fileContent = file.load_contents(null);
+            
+            // Check if the file read was successful
+            if(!fileContent[0]) {
+                if(emptyOnFail)
+                    return '';
+                throw new Error('Failed to read file');
+            }
+            
+            if(fileContent[1].length === 0) {
+                if(emptyOnFail)
+                    return '';
+                throw new Error('File is empty');
+            }
+            
+            // Decode the file content
+            const decoder = new TextDecoder('utf8');
+            return decoder.decode(fileContent[1]);
+        } catch(e: any) {
+            if(emptyOnFail)
+                return '';
+            throw new Error(`Error reading file: ${e.message}`);
+        }
+    }
+    
     static getUrlAsync(url: string, emptyOnFail: boolean = false): Promise<string> {
         return new Promise((resolve, reject) => {
             // Check if the url is valid and not empty
@@ -1936,6 +1989,21 @@ export default class Utils {
                         device.addr_info = data.addr_info;
                     if(data.linkinfo)
                         device.linkinfo = data.linkinfo;
+                    
+                    //try to get link speed
+                    const speedStr = Utils.readFileSync(`/sys/class/net/${name}/speed`, true).trim();
+                    if(speedStr) {
+                        if(Utils.isIntOrIntString(speedStr)) {
+                            const speed = parseInt(speedStr, 10);
+                            if(speed > 0)
+                                device.speed = speed;
+                        }
+                    }
+                    
+                    //try to get duplex
+                    const duplex = Utils.readFileSync(`/sys/class/net/${name}/duplex`, true).trim();
+                    if(duplex)
+                        device.duplex = duplex;
                     
                     devices.set(name, device);
                 }

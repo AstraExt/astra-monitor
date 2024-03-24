@@ -62,6 +62,10 @@ type DevicePopup = MenuBase & {
     macAddressValue?: St.Label,
     groupLabel?: St.Label,
     groupValue?: St.Label,
+    speedLabel?: St.Label,
+    speedValue?: St.Label,
+    duplexLabel?: St.Label,
+    duplexValue?: St.Label,
     mtuLabel?: St.Label,
     mtuValue?: St.Label,
     txQueueLabel?: St.Label,
@@ -672,6 +676,30 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(groupValue);
             popup.groupValue = groupValue;
             
+            // Speed
+            const speedLabel = new St.Label({
+                text: _('Speed'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(speedLabel);
+            popup.speedLabel = speedLabel;
+            
+            const speedValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(speedValue);
+            popup.speedValue = speedValue;
+            
+            // Duplex
+            const duplexLabel = new St.Label({
+                text: _('Duplex'),
+                style_class: 'astra-monitor-menu-sub-key'
+            });
+            popup.addToMenu(duplexLabel);
+            popup.duplexLabel = duplexLabel;
+            
+            const duplexValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(duplexValue);
+            popup.duplexValue = duplexValue;
+            
             // MTU
             const mtuLabel = new St.Label({
                 text: _('MTU'),
@@ -943,6 +971,26 @@ export default class NetworkMenu extends MenuBase {
             else {
                 popup.groupLabel?.hide();
                 popup.groupValue?.hide();
+            }
+            
+            if(deviceData.speed && popup.speedValue) {
+                popup.speedLabel?.show();
+                popup.speedValue?.show();
+                popup.speedValue.text = `${deviceData.speed} Mb/s`;
+            }
+            else {
+                popup.speedLabel?.hide();
+                popup.speedValue?.hide();
+            }
+            
+            if(deviceData.duplex && popup.duplexValue) {
+                popup.duplexLabel?.show();
+                popup.duplexValue?.show();
+                popup.duplexValue.text = deviceData.duplex;
+            }
+            else {
+                popup.duplexLabel?.hide();
+                popup.duplexValue?.hide();
             }
             
             if(deviceData.mtu && popup.mtuValue) {
