@@ -84,6 +84,8 @@ export type InterfaceInfo = {
     broadcast?: string,
     netmask?: string,
     altnames?: string[],
+    parentbus?: string,
+    parentdev?: string,
     addr_info?: {
         local?: string,
         peer?: string,
@@ -1926,6 +1928,10 @@ export default class Utils {
                         device.netmask = data.netmask;
                     if(data.altnames)
                         device.altnames = data.altnames;
+                    if(data.parentbus)
+                        device.parentbus = data.parentbus;
+                    if(data.parentdev)
+                        device.parentdev = data.parentdev;
                     if(data.addr_info)
                         device.addr_info = data.addr_info;
                     if(data.linkinfo)

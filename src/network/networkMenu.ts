@@ -72,6 +72,8 @@ type DevicePopup = MenuBase & {
     operStateValue?: St.Label,
     qdiscLabel?: St.Label,
     qdiscValue?: St.Label,
+    parentLabel?: St.Label,
+    parentValue?: St.Label,
     
     addresses: {
         labelValue: St.Label,
@@ -729,6 +731,15 @@ export default class NetworkMenu extends MenuBase {
             const qdiscValue = new St.Label({text: '', style: 'text-align:left;'});
             popup.addToMenu(qdiscValue);
             popup.qdiscValue = qdiscValue;
+            
+            // Parent
+            const parentLabel = new St.Label({text:'', style_class: 'astra-monitor-menu-sub-key'});
+            popup.addToMenu(parentLabel);
+            popup.parentLabel = parentLabel;
+            
+            const parentValue = new St.Label({text: '', style: 'text-align:left;'});
+            popup.addToMenu(parentValue);
+            popup.parentValue = parentValue;
         }
         
         //Addresses
@@ -982,6 +993,17 @@ export default class NetworkMenu extends MenuBase {
             else {
                 popup.qdiscLabel?.hide();
                 popup.qdiscValue?.hide();
+            }
+            
+            if(deviceData.parentbus && deviceData.parentdev && popup.parentLabel && popup.parentValue) {
+                popup.parentLabel?.show();
+                popup.parentValue?.show();
+                popup.parentLabel.text = deviceData.parentbus;
+                popup.parentValue.text = deviceData.parentdev;
+            }
+            else {
+                popup.parentLabel?.hide();
+                popup.parentValue?.hide();
             }
             
             //Addresses
