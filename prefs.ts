@@ -172,7 +172,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         Utils.hasGTop().then((GTopAvailable: boolean) => {
             if(!GTopAvailable) {
-                statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled! For a better experience, install it from your package manager.');
+                statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled! For a better experience and performance, install it from your package manager.');
                 statusLabel.icon.set_from_icon_name('am-dialog-warning-symbolic');
             }
             else {
@@ -181,7 +181,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             }
         }).catch((e: any) => {
             Utils.error(e);
-            statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled! For a better experience, install it from your package manager.');
+            statusLabel.row.title = _('\'GTop\' not installed, some optional features will be disabled! For a better experience and performance, install it from your package manager.');
             statusLabel.icon.set_from_icon_name('am-dialog-warning-symbolic');
         });
         

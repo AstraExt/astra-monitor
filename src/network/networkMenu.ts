@@ -903,6 +903,7 @@ export default class NetworkMenu extends MenuBase {
             icon.fallback_icon_name = 'network-cellular-symbolic';
         }
         else if(deviceData.name.startsWith('tun') || deviceData.name.startsWith('tap')) {
+            icon.gicon = Utils.getLocalIcon('am-vpn-symbolic');
             icon.fallback_icon_name = 'network-vpn-symbolic';
         }
         else if(deviceData.name.includes('br')) {
