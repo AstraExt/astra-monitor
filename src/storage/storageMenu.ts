@@ -194,6 +194,7 @@ export default class StorageMenu extends MenuBase {
             const label = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-name',
+                style: 'max-width:85px;',
                 x_expand: true
             });
             grid.addToGrid(label);
