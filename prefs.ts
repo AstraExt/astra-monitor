@@ -76,6 +76,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     
     fillPreferencesWindow(window: Adw.PreferencesWindow) {
         Utils.init({
+            service: 'prefs',
             metadata: this.metadata,
             settings: this.getSettings()
         });

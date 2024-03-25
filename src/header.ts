@@ -50,6 +50,8 @@ class Header extends St.Widget {
         });
         this.name = name;
         
+        Utils.verbose(`Creating ${this.name}`);
+        
         const hbox = new St.BoxLayout({ style_class: 'astra-monitor-header-box' });
         this.add_child(hbox);
         this.box = hbox;

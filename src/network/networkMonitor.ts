@@ -218,6 +218,8 @@ export default class NetworkMonitor extends Monitor {
     }
     
     update(): boolean {
+        Utils.verbose('Updating Network Monitor');
+        
         const enabled = Config.get_boolean('network-header-show');
         if(enabled) {
             const procNetDev = new PromiseValueHolderStore<string[]>(this.getProNetDevAsync.bind(this));

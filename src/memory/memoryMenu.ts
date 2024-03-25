@@ -109,7 +109,7 @@ export default class MemoryMenu extends MenuBase {
     private memorySwapPopup!: MemorySwapPopup;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide);
+        super(sourceActor, arrowAlignment, arrowSide, { name: 'Memory Menu' });
         
         /*this.memorySectionLabel = */this.addMenuSection(_('Memory'));
         this.addUsage();

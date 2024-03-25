@@ -126,7 +126,7 @@ export default class ProcessorMenu extends MenuBase {
     private menuUptimeTimer: UptimeTimer|null = null;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide);
+        super(sourceActor, arrowAlignment, arrowSide, { name: 'Processor Menu' });
         
         /*this.cpuSectionLabel = */this.addMenuSection(_('CPU'));
         this.addName();

@@ -91,7 +91,9 @@ export default class StorageMenu extends MenuBase {
     private updateTimer: number = 0;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide);
+        super(sourceActor, arrowAlignment, arrowSide, { name: 'Storage Menu' });
+        
+        Utils.verbose('Initializing storage menu');
         
         /*this.storageSectionLabel = */this.addMenuSection(_('Storage'));
         this.createActivitySection();

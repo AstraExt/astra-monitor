@@ -300,6 +300,8 @@ export default class ProcessorMonitor extends Monitor {
     }
     
     update(): boolean {
+        Utils.verbose('Updating Processor Monitor');
+        
         const enabled = Config.get_boolean('processor-header-show');
         if(enabled) {
             const procStat = new PromiseValueHolderStore<string[]>(this.getProcStatAsync.bind(this));

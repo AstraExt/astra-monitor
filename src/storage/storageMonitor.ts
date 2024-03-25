@@ -287,7 +287,9 @@ export default class StorageMonitor extends Monitor {
         }
     }
     
-    update() {
+    update(): boolean {
+        Utils.verbose('Updating Storage Monitor');
+        
         const enabled = Config.get_boolean('storage-header-show');
         if(enabled) {
             this.runUpdate('storageUsage');

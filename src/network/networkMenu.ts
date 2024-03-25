@@ -156,7 +156,7 @@ export default class NetworkMenu extends MenuBase {
     private updateTimer: number = 0;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide);
+        super(sourceActor, arrowAlignment, arrowSide, { name: 'Network Menu' });
         
         /*this.networkSectionLabel = */this.addMenuSection(_('Network'));
         this.createActivitySection();

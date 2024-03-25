@@ -63,6 +63,8 @@ export default class Monitor {
     }
     
     start() {
+        Utils.log(`Starting ${this.name} monitoring`);
+        
         const updateFrequency = this.updateFrequency;
         if(this.timerID === null) {
             if(updateFrequency >= 0.1) {
@@ -81,6 +83,8 @@ export default class Monitor {
     }
     
     stop() {
+        Utils.log(`Stopping ${this.name} monitoring`);
+        
         if(this.timerID) {
             GLib.source_remove(this.timerID);
             this.timerID = null;

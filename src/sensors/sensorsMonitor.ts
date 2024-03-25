@@ -149,7 +149,9 @@ export default class SensorsMonitor extends Monitor {
         this.reset();
     }
     
-    update() {
+    update(): boolean {
+        Utils.verbose('Updating Sensors Monitor');
+        
         const enabled = Config.get_boolean('sensors-header-show');
         if(enabled) {
             const lmSensorsData = new PromiseValueHolderStore<string|null>(this.getLmSensorsDataAsync.bind(this));

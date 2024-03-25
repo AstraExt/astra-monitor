@@ -37,6 +37,8 @@ type ExtensionMetadata = import('resource:///org/gnome/shell/extensions/extensio
 type Button = import('resource:///org/gnome/shell/ui/panelMenu.js').Button;
 
 type UtilsInitProps = {
+    service: string;
+    
     extension?: Extension;
     metadata?: ExtensionMetadata;
     settings: Gio.Settings;
@@ -156,6 +158,8 @@ export default class Utils {
     static cachedHwmonDevices: HwMonDevices = new Map();
     
     static init({
+        service,
+        
         extension,
         metadata,
         settings,
@@ -173,7 +177,7 @@ export default class Utils {
         Utils.xmlParser = new XMLParser();
         
         Utils.debug = Config.get_boolean('debug-mode');
-        if(Utils.debug) {
+        if(Utils.debug && service === 'astra-monitor') {
             Utils.performanceMap = new Map();
             
             try {
@@ -183,6 +187,7 @@ export default class Utils {
                         log.delete(null);
                     log.create_readwrite(Gio.FileCreateFlags.REPLACE_DESTINATION, null);
                 }
+            
             }
             catch(e) { console.error(e); }
         }
@@ -277,6 +282,12 @@ export default class Utils {
         }
     }
     
+    static verbose(message: string) {
+        if(Utils.debug) {
+            Utils.logToFile(message);
+        }
+    }
+    
     static warn(message: string) {
         const error = new Error();
         console.warn(error, Utils.logHeader + ' WARNING: ' + message);
@@ -315,8 +326,11 @@ export default class Utils {
         const log = Utils.getLogFile();
         if(log) {
             try {
+                const date = new Date();
+                const time = date.toISOString().split('T')[1].slice(0, -1);
+                
                 const outputStream = log.append_to(Gio.FileCreateFlags.NONE, null);
-                const buffer: Uint8Array = new TextEncoder().encode(message + '\n');
+                const buffer: Uint8Array = new TextEncoder().encode(`${time} - ${message}\n`);
                 outputStream.write_all(buffer, null);
             }
             catch(e: any) {

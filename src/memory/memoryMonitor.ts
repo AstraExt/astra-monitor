@@ -147,6 +147,8 @@ export default class MemoryMonitor extends Monitor {
     }
     
     update() {
+        Utils.verbose('Updating Memory Monitor');
+        
         const enabled = Config.get_boolean('memory-header-show');
         if(enabled) {
             const procMeminfo = new PromiseValueHolderStore<string[]>(this.getProcMeminfoAsync.bind(this));

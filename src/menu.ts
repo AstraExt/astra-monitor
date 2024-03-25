@@ -32,6 +32,7 @@ import Grid from './grid.js';
 import Config from './config.js';
 
 type MenuProps = {
+    name?: string;
     scrollable?: boolean;
     numCols?: number;
 }
@@ -48,6 +49,9 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side, params: MenuProps = {}) {
         super(sourceActor, arrowAlignment, arrowSide);
+        
+        if(params.name)
+            Utils.verbose(`Creating ${params.name}`);
         
         if(params.scrollable) {
             // SCROLLABLE

@@ -37,6 +37,7 @@ export default class AstraMonitorExtension extends Extension {
     
     enable() {
         Utils.init({
+            service: 'astra-monitor',
             extension: this,
             metadata: this.metadata,
             settings: this.getSettings(),

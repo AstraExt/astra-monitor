@@ -58,7 +58,7 @@ export default class SensorsMenu extends MenuBase {
     private sensors!: Map<string, SensorInfo>;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide);
+        super(sourceActor, arrowAlignment, arrowSide, { name: 'Sensors Menu' });
         
         this.createSensorsList();
         this.addUtilityButtons('sensors');
