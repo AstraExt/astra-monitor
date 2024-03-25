@@ -31,7 +31,7 @@ import Config from '../config.js';
 
 type InterfaceDeviceInfo = {
     data: InterfaceInfo | null;
-    container: St.Button;
+    container: InstanceType<typeof Grid>;
     icon: St.Icon;
     label: St.Label;
     label2: St.Label;
@@ -74,7 +74,7 @@ type RoutesPopup = MenuBase & {
     }[]
 };
 
-type DevicePopup = MenuBase & {
+type DeviceInfoPopup = MenuBase & {
     nameValue?: St.Label,
     altNamesLabel?: St.Label,
     altNamesValue?: St.Label,
@@ -100,7 +100,9 @@ type DevicePopup = MenuBase & {
     qdiscValue?: St.Label,
     parentLabel?: St.Label,
     parentValue?: St.Label,
-    
+};
+
+type DeviceAddressesPopup = MenuBase & {
     addresses: {
         labelValue: St.Label,
         familyLabel: St.Label,
@@ -113,15 +115,17 @@ type DevicePopup = MenuBase & {
         broadcastValue: St.Label,
         scopeLabel: St.Label,
         scopeValue: St.Label,
-    }[],
-    
+    }[]
+}
+
+type DeviceTotalsPopup = MenuBase & {
     totalUploadedValueLabel?: St.Label,
     totalDownloadedValueLabel?: St.Label,
     packetsUploadedValueLabel?: St.Label,
     packetsDownloadedValueLabel?: St.Label,
     errorsUploadValueLabel?: St.Label,
     errorsDownloadValueLabel?: St.Label,
-};
+}
 
 export default class NetworkMenu extends MenuBase {
     /*private networkSectionLabel!: St.Label;*/
@@ -151,7 +155,9 @@ export default class NetworkMenu extends MenuBase {
     private noDevicesLabel!: St.Label;
     
     private devices!: Map<string, InterfaceDeviceInfo>;
-    private devicesPopup!: Map<string, DevicePopup>;
+    private devicesInfoPopup!: Map<string, DeviceInfoPopup>;
+    private devicesAddressesPopup!: Map<string, DeviceAddressesPopup>;
+    private devicesTotalsPopup!: Map<string, DeviceTotalsPopup>;
     
     private updateTimer: number = 0;
     
@@ -520,7 +526,9 @@ export default class NetworkMenu extends MenuBase {
             });
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
-            this.devicesPopup = new Map();
+            this.devicesInfoPopup = new Map();
+            this.devicesAddressesPopup = new Map();
+            this.devicesTotalsPopup = new Map();
             this.addToMenu(this.deviceSection, 2);
             
             Config.connect(this, 'changed::network-ignored', this.updateDeviceList.bind(this));
@@ -564,9 +572,17 @@ export default class NetworkMenu extends MenuBase {
                 this.deviceSection.remove_child(device.container);
                 this.devices.delete(id);
                 
-                this.devicesPopup.get(id)?.close(true);
-                this.devicesPopup.get(id)?.destroy();
-                this.devicesPopup.delete(id);
+                this.devicesInfoPopup.get(id)?.close(true);
+                this.devicesInfoPopup.get(id)?.destroy();
+                this.devicesInfoPopup.delete(id);
+                
+                this.devicesAddressesPopup.get(id)?.close(true);
+                this.devicesAddressesPopup.get(id)?.destroy();
+                this.devicesAddressesPopup.delete(id);
+                
+                this.devicesTotalsPopup.get(id)?.close(true);
+                this.devicesTotalsPopup.get(id)?.destroy();
+                this.devicesTotalsPopup.delete(id);
             }
         }
         
@@ -579,7 +595,10 @@ export default class NetworkMenu extends MenuBase {
             const deviceData = devices.get(id);
             
             let device;
-            let popup;
+            let infoPopup;
+            let addressesPopup;
+            let totalsPopup;
+            
             if(!this.devices.has(id)) {
                 device = this.createInterfaceDevice(id);
                 this.deviceSection.addToGrid(device.container, 2);
@@ -592,23 +611,44 @@ export default class NetworkMenu extends MenuBase {
             if(!device)
                 continue;
             
-            if(!this.devicesPopup.has(id)) {
-                popup = this.createDevicePopup(device.container);
-                this.devicesPopup.set(id, popup);
+            //Info Popup
+            if(!this.devicesInfoPopup.has(id)) {
+                infoPopup = this.createDeviceInfoPopup(device.container);
+                this.devicesInfoPopup.set(id, infoPopup);
             }
             else {
-                popup = this.devicesPopup.get(id);
+                infoPopup = this.devicesInfoPopup.get(id);
             }
-            
-            if(!popup)
+            if(!infoPopup)
                 continue;
             
-            if(!deviceData)
+            //Addresses Popup
+            if(!this.devicesAddressesPopup.has(id)) {
+                addressesPopup = this.createDeviceAddressesPopup(device.container);
+                this.devicesAddressesPopup.set(id, addressesPopup);
+            }
+            else {
+                addressesPopup = this.devicesAddressesPopup.get(id);
+            }
+            if(!addressesPopup)
+                continue;
+            
+            //Totals Popup
+            if(!this.devicesTotalsPopup.has(id)) {
+                totalsPopup = this.createDeviceTotalsPopup(device.container);
+                this.devicesTotalsPopup.set(id, totalsPopup);
+            }
+            else {
+                totalsPopup = this.devicesTotalsPopup.get(id);
+            }
+            if(!totalsPopup)
                 continue;
             
             //Update device info
+            if(!deviceData)
+                continue;
             try {
-                this.updateInterfaceDevice(device, popup, deviceData);
+                this.updateInterfaceDevice(device, infoPopup, addressesPopup, totalsPopup, deviceData);
             }
             catch(e: any) {
                 Utils.error(e);
@@ -617,56 +657,107 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createInterfaceDevice(id: string): InterfaceDeviceInfo {
-        const defaultStyle = 'padding-top:0.25em;margin-bottom:0.25em;';
-        const container = new St.Button({
-            reactive: true,
-            track_hover: true,
+        const container = new Grid({
             x_expand: true,
-            style: defaultStyle
+            styleClass: 'astra-monitor-menu-subgrid',
+            style: 'padding-top:0.25em;margin-bottom:0.25em;'
         });
-        
-        const grid = new Grid({
-            x_expand: true,
-            styleClass: 'astra-monitor-menu-subgrid'
-        });
-        container.set_child(grid);
         
         //Header Grid
         //{
             const headerGrid = new Grid({
-                numCols: 3,
-                styleClass: 'astra-monitor-menu-subgrid'
+                numCols: 2,
+                styleClass: 'astra-monitor-menu-subgrid',
             });
+            
+            const nameGrid = new Grid({
+                numCols: 2,
+                styleClass: 'astra-monitor-menu-subgrid',
+                style: 'backgrund-color:red;'
+            });
+            
+            const nameButton = new St.Button({
+                reactive: true,
+                track_hover: true,
+                x_expand: true,
+                style: ''
+            });
+            nameButton.set_child(nameGrid);
+            
+            nameButton.connect('enter-event', () => {
+                nameButton.style = this.selectionStyle;
+                
+                const popup = this.devicesInfoPopup.get(id);
+                popup?.open(true);
+            });
+            
+            nameButton.connect('leave-event', () => {
+                nameButton.style = '';
+                
+                const popup = this.devicesInfoPopup.get(id);
+                popup?.close(true);
+            });
+            headerGrid.addToGrid(nameButton);
             
             const icon = new St.Icon({
                 style_class: 'astra-monitor-menu-icon',
                 style: 'padding-left:0.25em;'
             });
-            headerGrid.addToGrid(icon);
+            nameGrid.addToGrid(icon);
             
             const label = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-label'
             });
-            headerGrid.addToGrid(label);
+            nameGrid.addToGrid(label);
+            
+            const ipButton = new St.Button({
+                reactive: true,
+                track_hover: true,
+                x_expand: true,
+                style: ''
+            });
             
             const label2 = new St.Label({
                 text: '',
                 x_expand: true,
                 style_class: 'astra-monitor-menu-key-mid'
             });
-            headerGrid.addToGrid(label2);
+            ipButton.set_child(label2);
             
-            grid.addToGrid(headerGrid, 2);
+            ipButton.connect('enter-event', () => {
+                ipButton.style = this.selectionStyle;
+                
+                const popup = this.devicesAddressesPopup.get(id);
+                popup?.open(true);
+            });
+            
+            ipButton.connect('leave-event', () => {
+                ipButton.style = '';
+                
+                const popup = this.devicesAddressesPopup.get(id);
+                popup?.close(true);
+            });
+            headerGrid.addToGrid(ipButton);
+            
+            container.addToGrid(headerGrid, 2);
         //}
         
         // Upload/Download Speed
         //{
+            const rwButton = new St.Button({
+                reactive: true,
+                track_hover: true,
+                x_expand: true,
+                style: ''
+            });
+            
             const rwContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
                 x_expand: true,
                 style: 'margin-left:0;margin-right:0;'
             });
+            rwButton.set_child(rwContainer);
             
             const uploadContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
@@ -730,22 +821,22 @@ export default class NetworkMenu extends MenuBase {
             
             rwContainer.add_child(downloadContainer);
             
-            grid.addToGrid(rwContainer, 2);
+            rwButton.connect('enter-event', () => {
+                rwButton.style = this.selectionStyle;
+                
+                const popup = this.devicesTotalsPopup.get(id);
+                popup?.open(true);
+            });
+            
+            rwButton.connect('leave-event', () => {
+                rwButton.style = '';
+                
+                const popup = this.devicesTotalsPopup.get(id);
+                popup?.close(true);
+            });
+            
+            container.addToGrid(rwButton, 2);
         //}
-        
-        container.connect('enter-event', () => {
-            container.style = defaultStyle + this.selectionStyle;
-            
-            const popup = this.devicesPopup.get(id);
-            popup?.open(true);
-        });
-        
-        container.connect('leave-event', () => {
-            container.style = defaultStyle;
-            
-            const popup = this.devicesPopup.get(id);
-            popup?.close(true);
-        });
         
         return {
             data: null,
@@ -760,8 +851,8 @@ export default class NetworkMenu extends MenuBase {
         };
     }
     
-    createDevicePopup(sourceActor: St.Widget): DevicePopup {
-        const popup:DevicePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DevicePopup;
+    createDeviceInfoPopup(sourceActor: St.Widget): DeviceInfoPopup {
+        const popup:DeviceInfoPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceInfoPopup;
         
         //Info
         popup.addMenuSection(_('Info'));
@@ -918,10 +1009,16 @@ export default class NetworkMenu extends MenuBase {
             popup.parentValue = parentValue;
         }
         
+        return popup;
+    }
+    
+    createDeviceAddressesPopup(sourceActor: St.Widget): DeviceAddressesPopup {
+        const popup:DeviceAddressesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceAddressesPopup;
+        
         //Addresses
         popup.addresses = [];
         
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < 10; i++) {
             const labelValue = new St.Label({text: '', style_class: 'astra-monitor-menu-header-centered', x_expand: true});
             popup.addToMenu(labelValue, 2);
             
@@ -964,6 +1061,12 @@ export default class NetworkMenu extends MenuBase {
                 scopeValue
             });
         }
+        
+        return popup;
+    }
+    
+    createDeviceTotalsPopup(sourceActor: St.Widget): DeviceTotalsPopup {
+        const popup:DeviceTotalsPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceTotalsPopup;
         
         //Upload
         popup.addMenuSection(_('Upload'));
@@ -1036,7 +1139,7 @@ export default class NetworkMenu extends MenuBase {
         return popup;
     }
     
-    updateInterfaceDevice(device: InterfaceDeviceInfo, popup:DevicePopup, deviceData: InterfaceInfo) {
+    updateInterfaceDevice(device: InterfaceDeviceInfo, infoPopup:DeviceInfoPopup, addressesPopup: DeviceAddressesPopup, _totalsPopup: DeviceTotalsPopup, deviceData: InterfaceInfo) {
         device.data = deviceData;
         
         const icon = {
@@ -1078,134 +1181,136 @@ export default class NetworkMenu extends MenuBase {
         
         device.label2.text = label2;
         
-        if(popup) {
-            if(deviceData.name && popup.nameValue)
-                popup.nameValue.text = deviceData.name;
+        if(infoPopup) {
+            if(deviceData.name && infoPopup.nameValue)
+                infoPopup.nameValue.text = deviceData.name;
             
-            if(deviceData.altnames && deviceData.altnames.length > 0 && popup.altNamesValue) {
-                popup.altNamesLabel?.show();
-                popup.altNamesValue?.show();
-                popup.altNamesValue.text = deviceData.altnames.join(', ');
+            if(deviceData.altnames && deviceData.altnames.length > 0 && infoPopup.altNamesValue) {
+                infoPopup.altNamesLabel?.show();
+                infoPopup.altNamesValue?.show();
+                infoPopup.altNamesValue.text = deviceData.altnames.join(', ');
             }
             else {
-                popup.altNamesLabel?.hide();
-                popup.altNamesValue?.hide();
+                infoPopup.altNamesLabel?.hide();
+                infoPopup.altNamesValue?.hide();
             }
             
-            if(deviceData.ifindex && popup.ifindexValue) {
-                popup.ifindexLabel?.show();
-                popup.ifindexValue?.show();
-                popup.ifindexValue.text = deviceData.ifindex.toString();
+            if(deviceData.ifindex && infoPopup.ifindexValue) {
+                infoPopup.ifindexLabel?.show();
+                infoPopup.ifindexValue?.show();
+                infoPopup.ifindexValue.text = deviceData.ifindex.toString();
             }
             else {
-                popup.ifindexLabel?.hide();
-                popup.ifindexValue?.hide();
+                infoPopup.ifindexLabel?.hide();
+                infoPopup.ifindexValue?.hide();
             }
             
-            if(deviceData.address && popup.macAddressValue) {
-                popup.macAddressLabel?.show();
-                popup.macAddressValue?.show();
-                popup.macAddressValue.text = deviceData.address;
+            if(deviceData.address && infoPopup.macAddressValue) {
+                infoPopup.macAddressLabel?.show();
+                infoPopup.macAddressValue?.show();
+                infoPopup.macAddressValue.text = deviceData.address;
             }
             else {
-                popup.macAddressLabel?.hide();
-                popup.macAddressValue?.hide();
+                infoPopup.macAddressLabel?.hide();
+                infoPopup.macAddressValue?.hide();
             }
             
-            if(deviceData.group && popup.groupValue) {
-                popup.groupLabel?.show();
-                popup.groupValue?.show();
-                popup.groupValue.text = deviceData.group;
+            if(deviceData.group && infoPopup.groupValue) {
+                infoPopup.groupLabel?.show();
+                infoPopup.groupValue?.show();
+                infoPopup.groupValue.text = deviceData.group;
             }
             else {
-                popup.groupLabel?.hide();
-                popup.groupValue?.hide();
+                infoPopup.groupLabel?.hide();
+                infoPopup.groupValue?.hide();
             }
             
-            if(deviceData.speed && popup.speedValue) {
-                popup.speedLabel?.show();
-                popup.speedValue?.show();
-                popup.speedValue.text = `${deviceData.speed} Mb/s`;
+            if(deviceData.speed && infoPopup.speedValue) {
+                infoPopup.speedLabel?.show();
+                infoPopup.speedValue?.show();
+                infoPopup.speedValue.text = `${deviceData.speed} Mb/s`;
             }
             else {
-                popup.speedLabel?.hide();
-                popup.speedValue?.hide();
+                infoPopup.speedLabel?.hide();
+                infoPopup.speedValue?.hide();
             }
             
-            if(deviceData.duplex && popup.duplexValue) {
-                popup.duplexLabel?.show();
-                popup.duplexValue?.show();
-                popup.duplexValue.text = deviceData.duplex;
+            if(deviceData.duplex && infoPopup.duplexValue) {
+                infoPopup.duplexLabel?.show();
+                infoPopup.duplexValue?.show();
+                infoPopup.duplexValue.text = deviceData.duplex;
             }
             else {
-                popup.duplexLabel?.hide();
-                popup.duplexValue?.hide();
+                infoPopup.duplexLabel?.hide();
+                infoPopup.duplexValue?.hide();
             }
             
-            if(deviceData.mtu && popup.mtuValue) {
-                popup.mtuLabel?.show();
-                popup.mtuValue?.show();
-                popup.mtuValue.text = deviceData.mtu.toString();
+            if(deviceData.mtu && infoPopup.mtuValue) {
+                infoPopup.mtuLabel?.show();
+                infoPopup.mtuValue?.show();
+                infoPopup.mtuValue.text = deviceData.mtu.toString();
             }
             else {
-                popup.mtuLabel?.hide();
-                popup.mtuValue?.hide();
+                infoPopup.mtuLabel?.hide();
+                infoPopup.mtuValue?.hide();
             }
             
-            if(deviceData.txqlen && popup.txQueueValue) {
-                popup.txQueueLabel?.show();
-                popup.txQueueValue?.show();
-                popup.txQueueValue.text = deviceData.txqlen.toString();
+            if(deviceData.txqlen && infoPopup.txQueueValue) {
+                infoPopup.txQueueLabel?.show();
+                infoPopup.txQueueValue?.show();
+                infoPopup.txQueueValue.text = deviceData.txqlen.toString();
             }
             else {
-                popup.txQueueLabel?.hide();
-                popup.txQueueValue?.hide();
+                infoPopup.txQueueLabel?.hide();
+                infoPopup.txQueueValue?.hide();
             }
             
-            if(deviceData.link_type && popup.linkTypeValue) {
-                popup.linkTypeLabel?.show();
-                popup.linkTypeValue?.show();
-                popup.linkTypeValue.text = deviceData.link_type;
+            if(deviceData.link_type && infoPopup.linkTypeValue) {
+                infoPopup.linkTypeLabel?.show();
+                infoPopup.linkTypeValue?.show();
+                infoPopup.linkTypeValue.text = deviceData.link_type;
             }
             else {
-                popup.linkTypeLabel?.hide();
-                popup.linkTypeValue?.hide();
+                infoPopup.linkTypeLabel?.hide();
+                infoPopup.linkTypeValue?.hide();
             }
             
-            if(deviceData.operstate && popup.operStateValue) {
-                popup.operStateLabel?.show();
-                popup.operStateValue?.show();
-                popup.operStateValue.text = deviceData.operstate;
+            if(deviceData.operstate && infoPopup.operStateValue) {
+                infoPopup.operStateLabel?.show();
+                infoPopup.operStateValue?.show();
+                infoPopup.operStateValue.text = deviceData.operstate;
             }
             else {
-                popup.operStateLabel?.hide();
-                popup.operStateValue?.hide();
+                infoPopup.operStateLabel?.hide();
+                infoPopup.operStateValue?.hide();
             }
             
-            if(deviceData.qdisc && popup.qdiscValue) {
-                popup.qdiscLabel?.show();
-                popup.qdiscValue?.show();
-                popup.qdiscValue.text = deviceData.qdisc;
+            if(deviceData.qdisc && infoPopup.qdiscValue) {
+                infoPopup.qdiscLabel?.show();
+                infoPopup.qdiscValue?.show();
+                infoPopup.qdiscValue.text = deviceData.qdisc;
             }
             else {
-                popup.qdiscLabel?.hide();
-                popup.qdiscValue?.hide();
+                infoPopup.qdiscLabel?.hide();
+                infoPopup.qdiscValue?.hide();
             }
             
-            if(deviceData.parentbus && deviceData.parentdev && popup.parentLabel && popup.parentValue) {
-                popup.parentLabel?.show();
-                popup.parentValue?.show();
-                popup.parentLabel.text = deviceData.parentbus;
-                popup.parentValue.text = deviceData.parentdev;
+            if(deviceData.parentbus && deviceData.parentdev && infoPopup.parentLabel && infoPopup.parentValue) {
+                infoPopup.parentLabel?.show();
+                infoPopup.parentValue?.show();
+                infoPopup.parentLabel.text = deviceData.parentbus;
+                infoPopup.parentValue.text = deviceData.parentdev;
             }
             else {
-                popup.parentLabel?.hide();
-                popup.parentValue?.hide();
+                infoPopup.parentLabel?.hide();
+                infoPopup.parentValue?.hide();
             }
-            
+        }
+        
+        if(addressesPopup) {
             //Addresses
-            for(let i = 0; i < 5; i++) {
-                const address = popup.addresses[i];
+            for(let i = 0; i < 10; i++) {
+                const address = addressesPopup.addresses[i];
                 
                 if(address && deviceData.addr_info && deviceData.addr_info[i]) {
                     const addrInfo = deviceData.addr_info[i];
@@ -1424,7 +1529,7 @@ export default class NetworkMenu extends MenuBase {
             if(current) {
                 for(const [id, device] of this.devices.entries()) {
                     const data = current.get(id);
-                        
+                    
                     if(data) {
                         const unit = Config.get_string('network-io-unit');
                         
@@ -1448,43 +1553,43 @@ export default class NetworkMenu extends MenuBase {
                             device.downloadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                         }
                         
-                        const popup = this.devicesPopup.get(id);
-                        if(popup) {
-                            if(popup.totalUploadedValueLabel) {
+                        const totalsPopup = this.devicesTotalsPopup.get(id);
+                        if(totalsPopup) {
+                            if(totalsPopup.totalUploadedValueLabel) {
                                 if(data.totalBytesUploaded)
-                                    popup.totalUploadedValueLabel.text = Utils.formatBytes(data.totalBytesUploaded, 'kB-KB', 3);
+                                    totalsPopup.totalUploadedValueLabel.text = Utils.formatBytes(data.totalBytesUploaded, 'kB-KB', 3);
                                 else
-                                    popup.totalUploadedValueLabel.text = '-';
+                                    totalsPopup.totalUploadedValueLabel.text = '-';
                             }
-                            if(popup.totalDownloadedValueLabel) {
+                            if(totalsPopup.totalDownloadedValueLabel) {
                                 if(data.totalBytesDownloaded)
-                                    popup.totalDownloadedValueLabel.text = Utils.formatBytes(data.totalBytesDownloaded, 'kB-KB', 3);
+                                    totalsPopup.totalDownloadedValueLabel.text = Utils.formatBytes(data.totalBytesDownloaded, 'kB-KB', 3);
                                 else
-                                    popup.totalDownloadedValueLabel.text = '-';
+                                    totalsPopup.totalDownloadedValueLabel.text = '-';
                             }
-                            if(popup.packetsUploadedValueLabel) {
+                            if(totalsPopup.packetsUploadedValueLabel) {
                                 if(data.packetsUploaded)
-                                    popup.packetsUploadedValueLabel.text = Utils.formatHugeNumber(data.packetsUploaded);
+                                    totalsPopup.packetsUploadedValueLabel.text = Utils.formatHugeNumber(data.packetsUploaded);
                                 else
-                                    popup.packetsUploadedValueLabel.text = '-';
+                                    totalsPopup.packetsUploadedValueLabel.text = '-';
                             }
-                            if(popup.packetsDownloadedValueLabel) {
+                            if(totalsPopup.packetsDownloadedValueLabel) {
                                 if(data.packetsDownloaded)
-                                    popup.packetsDownloadedValueLabel.text = Utils.formatHugeNumber(data.packetsDownloaded);
+                                    totalsPopup.packetsDownloadedValueLabel.text = Utils.formatHugeNumber(data.packetsDownloaded);
                                 else
-                                    popup.packetsDownloadedValueLabel.text = '-';
+                                    totalsPopup.packetsDownloadedValueLabel.text = '-';
                             }
-                            if(popup.errorsUploadValueLabel) {
+                            if(totalsPopup.errorsUploadValueLabel) {
                                 if(data.errorsUpload)
-                                    popup.errorsUploadValueLabel.text = Utils.formatHugeNumber(data.errorsUpload);
+                                    totalsPopup.errorsUploadValueLabel.text = Utils.formatHugeNumber(data.errorsUpload);
                                 else
-                                    popup.errorsUploadValueLabel.text = '-';
+                                    totalsPopup.errorsUploadValueLabel.text = '-';
                             }
-                            if(popup.errorsDownloadValueLabel) {
+                            if(totalsPopup.errorsDownloadValueLabel) {
                                 if(data.errorsDownload)
-                                    popup.errorsDownloadValueLabel.text = Utils.formatHugeNumber(data.errorsDownload);
+                                    totalsPopup.errorsDownloadValueLabel.text = Utils.formatHugeNumber(data.errorsDownload);
                                 else
-                                    popup.errorsDownloadValueLabel.text = '-';
+                                    totalsPopup.errorsDownloadValueLabel.text = '-';
                             }
                         }
                     }
@@ -1494,20 +1599,20 @@ export default class NetworkMenu extends MenuBase {
                         device.downloadValueLabel.text = '-';
                         device.downloadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                         
-                        const popup = this.devicesPopup.get(id);
-                        if(popup) {
-                            if(popup.totalUploadedValueLabel)
-                                popup.totalUploadedValueLabel.text = '-';
-                            if(popup.totalDownloadedValueLabel)
-                                popup.totalDownloadedValueLabel.text = '-';
-                            if(popup.packetsUploadedValueLabel)
-                                popup.packetsUploadedValueLabel.text = '-';
-                            if(popup.packetsDownloadedValueLabel)
-                                popup.packetsDownloadedValueLabel.text = '-';
-                            if(popup.errorsUploadValueLabel)
-                                popup.errorsUploadValueLabel.text = '-';
-                            if(popup.errorsDownloadValueLabel)
-                                popup.errorsDownloadValueLabel.text = '-';
+                        const totalsPopup = this.devicesTotalsPopup.get(id);
+                        if(totalsPopup) {
+                            if(totalsPopup.totalUploadedValueLabel)
+                                totalsPopup.totalUploadedValueLabel.text = '-';
+                            if(totalsPopup.totalDownloadedValueLabel)
+                                totalsPopup.totalDownloadedValueLabel.text = '-';
+                            if(totalsPopup.packetsUploadedValueLabel)
+                                totalsPopup.packetsUploadedValueLabel.text = '-';
+                            if(totalsPopup.packetsDownloadedValueLabel)
+                                totalsPopup.packetsDownloadedValueLabel.text = '-';
+                            if(totalsPopup.errorsUploadValueLabel)
+                                totalsPopup.errorsUploadValueLabel.text = '-';
+                            if(totalsPopup.errorsDownloadValueLabel)
+                                totalsPopup.errorsDownloadValueLabel.text = '-';
                         }
                     }
                 }
@@ -1678,19 +1783,19 @@ export default class NetworkMenu extends MenuBase {
             device.downloadValueLabel.text = '-';
             device.downloadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
         }
-        for(const [_id, popup] of this.devicesPopup.entries()) {
-            if(popup.totalUploadedValueLabel)
-                popup.totalUploadedValueLabel.text = '-';
-            if(popup.totalDownloadedValueLabel)
-                popup.totalDownloadedValueLabel.text = '-';
-            if(popup.packetsUploadedValueLabel)
-                popup.packetsUploadedValueLabel.text = '-';
-            if(popup.packetsDownloadedValueLabel)
-                popup.packetsDownloadedValueLabel.text = '-';
-            if(popup.errorsUploadValueLabel)
-                popup.errorsUploadValueLabel.text = '-';
-            if(popup.errorsDownloadValueLabel)
-                popup.errorsDownloadValueLabel.text = '-';
+        for(const [_id, totalsPopup] of this.devicesTotalsPopup.entries()) {
+            if(totalsPopup.totalUploadedValueLabel)
+                totalsPopup.totalUploadedValueLabel.text = '-';
+            if(totalsPopup.totalDownloadedValueLabel)
+                totalsPopup.totalDownloadedValueLabel.text = '-';
+            if(totalsPopup.packetsUploadedValueLabel)
+                totalsPopup.packetsUploadedValueLabel.text = '-';
+            if(totalsPopup.packetsDownloadedValueLabel)
+                totalsPopup.packetsDownloadedValueLabel.text = '-';
+            if(totalsPopup.errorsUploadValueLabel)
+                totalsPopup.errorsUploadValueLabel.text = '-';
+            if(totalsPopup.errorsDownloadValueLabel)
+                totalsPopup.errorsDownloadValueLabel.text = '-';
         }
         
         if(this.networkActivityPopup) {
