@@ -36,7 +36,7 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Beta<br>0/6</th>
+        <th style="text-align:center" colspan="3">Beta<br>1/7</th>
     </tr>
     <tr>
         <th style="text-align:center">Late March 2024</th>
@@ -44,7 +44,7 @@
         <th style="text-align:center">Late April 2024</th>
     </tr>
     <tr>
-        <td>🔲<br>Advanced Network Monitoring</td>
+        <td>✅<br>Advanced Network Monitoring</td>
         <td>🔲<br>Advanced GPU Monitoring</td>
         <td>🔲<br>User Custom Commands</td>
     </tr>

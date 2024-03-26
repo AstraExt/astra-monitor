@@ -1,4 +1,4 @@
-# Astra Monitor 16 - TO BE RELEASED
+# Astra Monitor 16 - March 26 2024
 
 ### Advanced Network Monitoring
 As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap), in this release we are focusing on improving the Network monitoring capabilities of Astra Monitor. Here's a list of the new features and improvements:
@@ -22,6 +22,7 @@ As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-fil
 - **VPN Network Interfaces**: VPN network interfaces are now marked with a specific icon in the Network Menu.
 
 ### Bug fixes
+- Overall performance improvements: Astra Monitor is now faster and more efficient than all system monitor extension I could test it against.<br>_(benchmarks and comparative tests with other popular monitoring extensions can be found [here](https://github.com/AstraExt/astra-monitor/blob/main/COMPARISON.md)!)_
 - Fixed CPU Cores Usage Info user bar invisible when Cores Bar Breakdown is enabled [[#86](https://github.com/AstraExt/astra-monitor/issues/86)]
 - Improved Memory Secondary Color for better readability and value understanding
 
@@ -31,7 +32,7 @@ As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-fil
 This marks the first beta release of Astra Monitor. After extensive testing, the extension is nearing stability, but we are open to feedback from the community to address any unresolved issues. Explore our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap) to see what's coming next.
 
 ### Bug fixes
-- Overall performance improvements<br>_(benchmarks and comparative tests with other popular monitoring extensions will be published at a later date)_
+- Overall performance improvements<br>_(benchmarks and comparative tests with other popular monitoring extensions can be found [here](https://github.com/AstraExt/astra-monitor/blob/main/COMPARISON.md)!)_
 - Resolved an issue where updates to hwmon incorrectly triggered lm-sensors queries
 - Addressed a bug causing sensor updates to fail intermittently when lm-sensors was not installed [[#81](https://github.com/AstraExt/astra-monitor/issues/81)]
 - Adjusted the width of the Select Box in Preferences for improved usability [[#80](https://github.com/AstraExt/astra-monitor/issues/80)]

@@ -64,7 +64,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
 <table style="text-align:center" align="center">
     <tr>
         <th style="text-align:center" colspan="3">Alpha<br>7/7</th>
-        <th style="text-align:center" colspan="3">Beta<br>0/6</th>
+        <th style="text-align:center" colspan="3">Beta<br>1/7</th>
         <th style="text-align:center">Release</th>
     </tr>
     <tr>
@@ -80,7 +80,7 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
         <td>✅<br>Graph Customization</td>
         <td>✅<br>Import / Export / Reset Settings</td>
         <td>✅<br>Improve performance</td>
-        <td>🔲<br>Advanced Network Monitoring</td>
+        <td>✅<br>Advanced Network Monitoring</td>
         <td>🔲<br>Advanced GPU Monitoring</td>
         <td>🔲<br>User Custom Commands</td>
         <td></td>
