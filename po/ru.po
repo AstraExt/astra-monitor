@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-26 02:07+0100\n"
+"POT-Creation-Date: 2024-03-26 02:29+0100\n"
 "PO-Revision-Date: 2024-02-13 12:28+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -1354,7 +1354,7 @@ msgid "Public IPv6 Address"
 msgstr ""
 
 #: prefs.js:790
-msgid "Wireless"
+msgid "Wireless Info"
 msgstr ""
 
 #: prefs.js:800

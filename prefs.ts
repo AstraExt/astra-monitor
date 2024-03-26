@@ -951,7 +951,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {value: 'iwconfig', text: 'iwconfig'},
             {value: 'iw', text: 'iw'},
         ];
-        this.addComboRow({title: _('Wireless'), tabs: 1}, networkWirelessSources, 'network-source-wireless', sourcesSection, 'string', 'auto');
+        this.addComboRow({title: _('Wireless Info'), tabs: 1}, networkWirelessSources, 'network-source-wireless', sourcesSection, 'string', 'auto');
         
         networkPage.add(group);
         

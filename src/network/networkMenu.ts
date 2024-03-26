@@ -423,7 +423,7 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createRoutes() {
-        this.publicIPLabel = this.addMenuSection(_('Default Routes'));
+        this.addMenuSection(_('Default Routes'));
         
         const defaultStyle = '';
         

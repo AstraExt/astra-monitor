@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-26 02:07+0100\n"
+"POT-Creation-Date: 2024-03-26 02:29+0100\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -1333,7 +1333,7 @@ msgid "Public IPv6 Address"
 msgstr ""
 
 #: prefs.js:790
-msgid "Wireless"
+msgid "Wireless Info"
 msgstr ""
 
 #: prefs.js:800
