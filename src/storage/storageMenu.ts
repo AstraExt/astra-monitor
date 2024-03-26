@@ -91,7 +91,7 @@ export default class StorageMenu extends MenuBase {
     private updateTimer: number = 0;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide, { name: 'Storage Menu' });
+        super(sourceActor, arrowAlignment, { name: 'Storage Menu', arrowSide });
         
         Utils.verbose('Initializing storage menu');
         
@@ -287,7 +287,7 @@ export default class StorageMenu extends MenuBase {
     }
     
     createTopProcessesPopup(sourceActor: St.Widget) {
-        this.topProcessesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
         this.topProcessesPopup.addMenuSection(_('Top processes'));
         this.topProcessesPopup.processes = new Map();
         

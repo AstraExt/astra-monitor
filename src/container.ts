@@ -32,6 +32,7 @@ import MemoryHeader from './memory/memoryHeader.js';
 import StorageHeader from './storage/storageHeader.js';
 import NetworkHeader from './network/networkHeader.js';
 import SensorsHeader from './sensors/sensorsHeader.js';
+import MenuBase from './menu.js';
 
 type Widget = InstanceType<typeof ProcessorHeader> | InstanceType<typeof MemoryHeader> | InstanceType<typeof StorageHeader> | InstanceType<typeof NetworkHeader> | InstanceType<typeof SensorsHeader>;
 
@@ -45,6 +46,10 @@ class AstraMonitorContainer extends PanelMenu.Button {
         Utils.log('Initializing container');
         
         Utils.container = this;
+        
+        const panelBox = Config.get_string('panel-box');
+        if(panelBox === 'left')
+            MenuBase.openingSide = St.Side.LEFT;
         
         (this as any).box = new St.BoxLayout({
             vertical: false,

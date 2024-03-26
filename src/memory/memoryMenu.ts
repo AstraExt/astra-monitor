@@ -109,7 +109,7 @@ export default class MemoryMenu extends MenuBase {
     private memorySwapPopup!: MemorySwapPopup;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide, { name: 'Memory Menu' });
+        super(sourceActor, arrowAlignment, { name: 'Memory Menu', arrowSide });
         
         /*this.memorySectionLabel = */this.addMenuSection(_('Memory'));
         this.addUsage();
@@ -205,7 +205,7 @@ export default class MemoryMenu extends MenuBase {
     }
     
     createUsagePopup(sourceActor: St.Widget) {
-        this.memoryUsagePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 3});
+        this.memoryUsagePopup = new MenuBase(sourceActor, 0.05, { numCols: 3});
         this.memoryUsagePopup.addMenuSection(_('Memory Usage Raw Info'));
         
         //Total Memory
@@ -393,7 +393,7 @@ export default class MemoryMenu extends MenuBase {
     }
     
     createTopProcessesPopup(sourceActor: St.Widget) {
-        this.topProcessesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
         this.topProcessesPopup.addMenuSection(_('Top processes'));
         this.topProcessesPopup.processes = new Map();
         
@@ -498,7 +498,7 @@ export default class MemoryMenu extends MenuBase {
     }
     
     createSwapPopup(sourceActor: St.Widget) {
-        this.memorySwapPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 3 });
+        this.memorySwapPopup = new MenuBase(sourceActor, 0.05, { numCols: 3 });
         this.memorySwapPopup.addMenuSection(_('Swap Info'));
         
         //Total Swap

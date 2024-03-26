@@ -1,3 +1,8 @@
+# Astra Monitor 17 - TO BE RELEASED
+
+### Bug fixes
+- Improved Popup Menu opening side: now they should always properly open on the right side when the extension is on the left side of the top bar _(Requires the extension to be restarted if the panel box position has been changed in the current sesssion)_ [[#92](https://github.com/AstraExt/astra-monitor/issues/92)]
+
 # Astra Monitor 16 - March 26 2024
 
 ### Advanced Network Monitoring

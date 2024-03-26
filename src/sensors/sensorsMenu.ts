@@ -58,7 +58,7 @@ export default class SensorsMenu extends MenuBase {
     private sensors!: Map<string, SensorInfo>;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide, { name: 'Sensors Menu' });
+        super(sourceActor, arrowAlignment, { name: 'Sensors Menu', arrowSide });
         
         this.createSensorsList();
         this.addUtilityButtons('sensors');
@@ -165,7 +165,7 @@ export default class SensorsMenu extends MenuBase {
         
         //Pop-up menu
         //{
-            const popup = new MenuBase(container, 0.05, St.Side.RIGHT);
+            const popup = new MenuBase(container, 0.05);
             
             const valueTreeExtimatedHeight = Utils.valueTreeExtimatedHeight(valueTree);
             const actorBox = popup.box.get_allocation_box();

@@ -35,6 +35,7 @@ type MenuProps = {
     name?: string;
     scrollable?: boolean;
     numCols?: number;
+    arrowSide?: St.Side;
 }
 
 type Size = {
@@ -43,12 +44,14 @@ type Size = {
 };
 
 export default class MenuBase extends PopupMenu.PopupMenu {
+    public static openingSide: St.Side = St.Side.RIGHT;
+    
     private statusMenu: PopupMenu.PopupMenuSection;
     private grid: InstanceType<typeof Grid>;
     private utilityBox?: St.BoxLayout;
     
-    constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side, params: MenuProps = {}) {
-        super(sourceActor, arrowAlignment, arrowSide);
+    constructor(sourceActor: St.Widget, arrowAlignment: number, params: MenuProps = {}) {
+        super(sourceActor, arrowAlignment, params.arrowSide ?? MenuBase.openingSide);
         
         if(params.name)
             Utils.verbose(`Creating ${params.name}`);

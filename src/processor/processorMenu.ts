@@ -126,7 +126,7 @@ export default class ProcessorMenu extends MenuBase {
     private menuUptimeTimer: UptimeTimer|null = null;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide, { name: 'Processor Menu' });
+        super(sourceActor, arrowAlignment, { name: 'Processor Menu', arrowSide });
         
         /*this.cpuSectionLabel = */this.addMenuSection(_('CPU'));
         this.addName();
@@ -193,7 +193,7 @@ export default class ProcessorMenu extends MenuBase {
     }
     
     createCPUInfoPopup(sourceActor: St.Widget, cpuInfo: CpuInfo, cpuName: string) {
-        this.cpuInfoPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        this.cpuInfoPopup = new MenuBase(sourceActor, 0.05);
         this.cpuInfoPopup.addMenuSection(_('CPU info'));
         
         this.cpuInfoPopup.hideable = [];
@@ -323,7 +323,7 @@ export default class ProcessorMenu extends MenuBase {
     }
     
     createPercentagePopup(sourceActor: St.Widget) {
-        this.cpuCategoryUsagePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        this.cpuCategoryUsagePopup = new MenuBase(sourceActor, 0.05);
         this.cpuCategoryUsagePopup.addMenuSection(_('CPU Category Usage Raw Info'));
         
         this.cpuCategoryUsagePopup.addToMenu(new St.Label({
@@ -452,7 +452,7 @@ export default class ProcessorMenu extends MenuBase {
         //TODO: for processors with 150+ cores the popup might be too big to fit on the screen
         //      - add option for a more compact view
         
-        this.cpuCoresUsagePopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        this.cpuCoresUsagePopup = new MenuBase(sourceActor, 0.05);
         this.cpuCoresUsagePopup.addMenuSection(_('CPU Cores Usage Info'));
         this.cpuCoresUsagePopup.cores = new Map();
         
@@ -573,7 +573,7 @@ export default class ProcessorMenu extends MenuBase {
     }
     
     createTopProcessesPopup(sourceActor: St.Widget) {
-        this.topProcessesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
         this.topProcessesPopup.addMenuSection(_('Top processes'));
         this.topProcessesPopup.processes = new Map();
         
@@ -963,7 +963,7 @@ export default class ProcessorMenu extends MenuBase {
     }
     
     createGPUInfoPopup(sourceActor: St.Widget, gpuInfo: GpuInfo): GpuInfoPopup {
-        const popup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT);
+        const popup = new MenuBase(sourceActor, 0.05);
         popup.addMenuSection(_('GPU info'));
             
         popup.addToMenu(new St.Label({

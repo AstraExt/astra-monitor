@@ -187,7 +187,7 @@ export default class NetworkMenu extends MenuBase {
     private updateTimer: number = 0;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
-        super(sourceActor, arrowAlignment, arrowSide, { name: 'Network Menu' });
+        super(sourceActor, arrowAlignment, { name: 'Network Menu', arrowSide });
         
         /*this.networkSectionLabel = */this.addMenuSection(_('Network'));
         this.createActivitySection();
@@ -279,7 +279,7 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createActivityPopup(sourceActor: St.Widget) {
-        this.networkActivityPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2});
+        this.networkActivityPopup = new MenuBase(sourceActor, 0.05, { numCols: 2});
         this.networkActivityPopup.addMenuSection(_('Upload Activity'));
         
         //Total
@@ -470,7 +470,7 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createRoutesPopup(sourceActor: St.Widget) {
-        this.routesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as RoutesPopup;
+        this.routesPopup = new MenuBase(sourceActor, 0.05, { numCols: 2}) as RoutesPopup;
         this.routesPopup.routes = [];
         
         for(let i = 0; i < 5; i++) {
@@ -929,7 +929,7 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createDeviceInfoPopup(sourceActor: St.Widget): DeviceInfoPopup {
-        const popup:DeviceInfoPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceInfoPopup;
+        const popup:DeviceInfoPopup = new MenuBase(sourceActor, 0.05, { numCols: 2}) as DeviceInfoPopup;
         
         //Info
         popup.addMenuSection(_('Info'));
@@ -1090,7 +1090,7 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createDeviceAddressesPopup(sourceActor: St.Widget): DeviceAddressesPopup {
-        const popup:DeviceAddressesPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceAddressesPopup;
+        const popup:DeviceAddressesPopup = new MenuBase(sourceActor, 0.05, { numCols: 2}) as DeviceAddressesPopup;
         
         //Addresses
         popup.addresses = [];
@@ -1143,7 +1143,7 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createDeviceTotalsPopup(sourceActor: St.Widget): DeviceTotalsPopup {
-        const popup:DeviceTotalsPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceTotalsPopup;
+        const popup:DeviceTotalsPopup = new MenuBase(sourceActor, 0.05, { numCols: 2}) as DeviceTotalsPopup;
         
         //Upload
         popup.addMenuSection(_('Upload'));
@@ -1217,7 +1217,7 @@ export default class NetworkMenu extends MenuBase {
     }
     
     createDeviceWirelessPopup(sourceActor: St.Widget): DeviceWirelessPopup {
-        const popup:DeviceWirelessPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceWirelessPopup;
+        const popup:DeviceWirelessPopup = new MenuBase(sourceActor, 0.05, { numCols: 2}) as DeviceWirelessPopup;
         
         const IEEELabel = new St.Label({
             text: _('IEEE'),
