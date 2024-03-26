@@ -28,6 +28,7 @@ import NetworkGraph from './networkGraph.js';
 import Grid from '../grid.js';
 import Utils, { InterfaceInfo, RouteInfo } from '../utils/utils.js';
 import Config from '../config.js';
+import { NetworkWirelessInfo } from './networkMonitor.js';
 
 type InterfaceDeviceInfo = {
     data: InterfaceInfo | null;
@@ -39,6 +40,8 @@ type InterfaceDeviceInfo = {
     uploadActivityIcon: St.Icon;
     downloadValueLabel: St.Label;
     downloadActivityIcon: St.Icon;
+    wirelessButton: St.Button;
+    wirelessLabel: St.Label;
 };
 
 type NetworkActivityPopup = MenuBase & {
@@ -127,6 +130,27 @@ type DeviceTotalsPopup = MenuBase & {
     errorsDownloadValueLabel?: St.Label,
 }
 
+type DeviceWirelessPopup = MenuBase & {
+    IEEELabel?: St.Label,
+    IEEEValue?: St.Label,
+    SSIDLabel?: St.Label,
+    SSIDValue?: St.Label,
+    modeLabel?: St.Label,
+    modeValue?: St.Label,
+    frequencyLabel?: St.Label,
+    frequencyValue?: St.Label,
+    accessPointLabel?: St.Label,
+    accessPointValue?: St.Label,
+    bitRateLabel?: St.Label,
+    bitRateValue?: St.Label,
+    txPowerLabel?: St.Label,
+    txPowerValue?: St.Label,
+    linkQualityLabel?: St.Label,
+    linkQualityValue?: St.Label,
+    signalLevelLabel?: St.Label,
+    signalLevelValue?: St.Label,
+}
+
 export default class NetworkMenu extends MenuBase {
     /*private networkSectionLabel!: St.Label;*/
     private networkActivityPopup!: NetworkActivityPopup;
@@ -158,6 +182,7 @@ export default class NetworkMenu extends MenuBase {
     private devicesInfoPopup!: Map<string, DeviceInfoPopup>;
     private devicesAddressesPopup!: Map<string, DeviceAddressesPopup>;
     private devicesTotalsPopup!: Map<string, DeviceTotalsPopup>;
+    private devicesWirelessPopup!: Map<string, DeviceWirelessPopup>;
     
     private updateTimer: number = 0;
     
@@ -529,6 +554,7 @@ export default class NetworkMenu extends MenuBase {
             this.devicesInfoPopup = new Map();
             this.devicesAddressesPopup = new Map();
             this.devicesTotalsPopup = new Map();
+            this.devicesWirelessPopup = new Map();
             this.addToMenu(this.deviceSection, 2);
             
             Config.connect(this, 'changed::network-ignored', this.updateDeviceList.bind(this));
@@ -583,6 +609,10 @@ export default class NetworkMenu extends MenuBase {
                 this.devicesTotalsPopup.get(id)?.close(true);
                 this.devicesTotalsPopup.get(id)?.destroy();
                 this.devicesTotalsPopup.delete(id);
+                
+                this.devicesWirelessPopup.get(id)?.close(true);
+                this.devicesWirelessPopup.get(id)?.destroy();
+                this.devicesWirelessPopup.delete(id);
             }
         }
         
@@ -598,6 +628,7 @@ export default class NetworkMenu extends MenuBase {
             let infoPopup;
             let addressesPopup;
             let totalsPopup;
+            let wirelessPopup;
             
             if(!this.devices.has(id)) {
                 device = this.createInterfaceDevice(id);
@@ -644,11 +675,22 @@ export default class NetworkMenu extends MenuBase {
             if(!totalsPopup)
                 continue;
             
+            //Wireless Popup
+            if(!this.devicesWirelessPopup.has(id)) {
+                wirelessPopup = this.createDeviceWirelessPopup(device.container);
+                this.devicesWirelessPopup.set(id, wirelessPopup);
+            }
+            else {
+                wirelessPopup = this.devicesWirelessPopup.get(id);
+            }
+            if(!wirelessPopup)
+                continue;
+            
             //Update device info
             if(!deviceData)
                 continue;
             try {
-                this.updateInterfaceDevice(device, infoPopup, addressesPopup, totalsPopup, deviceData);
+                this.updateInterfaceDevice(device, infoPopup, addressesPopup, totalsPopup, wirelessPopup, deviceData);
             }
             catch(e: any) {
                 Utils.error(e);
@@ -729,7 +771,8 @@ export default class NetworkMenu extends MenuBase {
                 ipButton.style = this.selectionStyle;
                 
                 const popup = this.devicesAddressesPopup.get(id);
-                popup?.open(true);
+                if(popup && popup.addresses.length > 0 && popup.addresses[0].labelValue.visible)
+                    popup.open(true);
             });
             
             ipButton.connect('leave-event', () => {
@@ -838,6 +881,38 @@ export default class NetworkMenu extends MenuBase {
             container.addToGrid(rwButton, 2);
         //}
         
+        const wirelessButtonStyle = 'margin-bottom:0.5em;';
+        const wirelessButton = new St.Button({
+            reactive: true,
+            track_hover: true,
+            x_expand: true,
+            style: wirelessButtonStyle
+        });
+        
+        const wirelessLabel = new St.Label({
+            text: '',
+            x_expand: true,
+            style_class: 'astra-monitor-menu-special',
+            style: 'padding-right:0.15em;'
+        });
+        wirelessButton.set_child(wirelessLabel);
+        
+        wirelessButton.connect('enter-event', () => {
+            wirelessButton.style = wirelessButtonStyle + this.selectionStyle;
+            
+            const popup = this.devicesWirelessPopup.get(id);
+            popup?.open(true);
+        });
+        
+        wirelessButton.connect('leave-event', () => {
+            wirelessButton.style = wirelessButtonStyle;
+            
+            const popup = this.devicesWirelessPopup.get(id);
+            popup?.close(true);
+        });
+        
+        container.addToGrid(wirelessButton, 2);
+        
         return {
             data: null,
             container,
@@ -847,7 +922,9 @@ export default class NetworkMenu extends MenuBase {
             uploadValueLabel,
             uploadActivityIcon,
             downloadValueLabel,
-            downloadActivityIcon
+            downloadActivityIcon,
+            wirelessButton,
+            wirelessLabel
         };
     }
     
@@ -1139,7 +1216,139 @@ export default class NetworkMenu extends MenuBase {
         return popup;
     }
     
-    updateInterfaceDevice(device: InterfaceDeviceInfo, infoPopup:DeviceInfoPopup, addressesPopup: DeviceAddressesPopup, _totalsPopup: DeviceTotalsPopup, deviceData: InterfaceInfo) {
+    createDeviceWirelessPopup(sourceActor: St.Widget): DeviceWirelessPopup {
+        const popup:DeviceWirelessPopup = new MenuBase(sourceActor, 0.05, St.Side.RIGHT, { numCols: 2}) as DeviceWirelessPopup;
+        
+        const IEEELabel = new St.Label({
+            text: _('IEEE'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(IEEELabel);
+        popup.IEEELabel = IEEELabel;
+        
+        const IEEEValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(IEEEValue);
+        popup.IEEEValue = IEEEValue;
+        
+        const SSIDLabel = new St.Label({
+            text: _('SSID'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(SSIDLabel);
+        popup.SSIDLabel = SSIDLabel;
+        
+        const SSIDValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(SSIDValue);
+        popup.SSIDValue = SSIDValue;
+        
+        const modeLabel = new St.Label({
+            text: _('Mode'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(modeLabel);
+        popup.modeLabel = modeLabel;
+        
+        const modeValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(modeValue);
+        popup.modeValue = modeValue;
+        
+        const frequencyLabel = new St.Label({
+            text: _('Frequency'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(frequencyLabel);
+        popup.frequencyLabel = frequencyLabel;
+        
+        const frequencyValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(frequencyValue);
+        popup.frequencyValue = frequencyValue;
+        
+        const accessPointLabel = new St.Label({
+            text: _('Access Point'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(accessPointLabel);
+        popup.accessPointLabel = accessPointLabel;
+        
+        const accessPointValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(accessPointValue);
+        popup.accessPointValue = accessPointValue;
+        
+        const bitRateLabel = new St.Label({
+            text: _('Bit Rate'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(bitRateLabel);
+        popup.bitRateLabel = bitRateLabel;
+        
+        const bitRateValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(bitRateValue);
+        popup.bitRateValue = bitRateValue;
+        
+        const txPowerLabel = new St.Label({
+            text: _('TX Power'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(txPowerLabel);
+        popup.txPowerLabel = txPowerLabel;
+        
+        const txPowerValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(txPowerValue);
+        popup.txPowerValue = txPowerValue;
+        
+        const linkQualityLabel = new St.Label({
+            text: _('Link Quality'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(linkQualityLabel);
+        popup.linkQualityLabel = linkQualityLabel;
+        
+        const linkQualityValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(linkQualityValue);
+        popup.linkQualityValue = linkQualityValue;
+        
+        const signalLevelLabel = new St.Label({
+            text: _('Signal Level'),
+            style_class: 'astra-monitor-menu-sub-key'
+        });
+        popup.addToMenu(signalLevelLabel);
+        popup.signalLevelLabel = signalLevelLabel;
+        
+        const signalLevelValue = new St.Label({
+            text: '',
+            style: 'text-align:left;'
+        });
+        popup.addToMenu(signalLevelValue);
+        popup.signalLevelValue = signalLevelValue;
+        
+        return popup;
+    }
+    
+    updateInterfaceDevice(device: InterfaceDeviceInfo, infoPopup:DeviceInfoPopup, addressesPopup: DeviceAddressesPopup, _totalsPopup: DeviceTotalsPopup, _wirelessPopup: DeviceWirelessPopup, deviceData: InterfaceInfo) {
         device.data = deviceData;
         
         const icon = {
@@ -1419,6 +1628,10 @@ export default class NetworkMenu extends MenuBase {
         Utils.networkMonitor.listen(this, 'routes', this.update.bind(this, 'routes'));
         Utils.networkMonitor.requestUpdate('routes');
         
+        this.update('wireless');
+        Utils.networkMonitor.listen(this, 'wireless', this.update.bind(this, 'wireless'));
+        Utils.networkMonitor.requestUpdate('wireless');
+        
         this.update('deviceList');
         if(!this.updateTimer) {
             this.updateTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT,
@@ -1433,6 +1646,9 @@ export default class NetworkMenu extends MenuBase {
     async onClose() {
         Utils.networkMonitor.unlisten(this, 'networkIO');
         Utils.networkMonitor.unlisten(this, 'detailedNetworkIO');
+        Utils.networkMonitor.unlisten(this, 'publicIps');
+        Utils.networkMonitor.unlisten(this, 'routes');
+        Utils.networkMonitor.unlisten(this, 'wireless');
         
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
@@ -1707,7 +1923,7 @@ export default class NetworkMenu extends MenuBase {
                     popupRoute.titleLabel.show();
                     
                     popupRoute.metricLabel.show();
-                    popupRoute.metricValue.text = route.metric!.toString() ?? '0';
+                    popupRoute.metricValue.text = route.metric?.toString() ?? '0';
                     popupRoute.metricValue.show();
                     
                     popupRoute.typeLabel.show();
@@ -1767,6 +1983,123 @@ export default class NetworkMenu extends MenuBase {
                     popupRoute.scopeValue.hide();
                     popupRoute.flagsLabel.hide();
                     popupRoute.flagsValue.hide();
+                }
+            }
+            return;
+        }
+        if(code === 'wireless') {
+            const wirelessDevices:Map<string, NetworkWirelessInfo> = Utils.networkMonitor.getCurrentValue('wireless');
+            if(!wirelessDevices) {
+                for(const info of this.devices.values())
+                    info.wirelessButton.hide();
+            }
+            else {
+                for(const [id, info] of this.devices.entries()) {
+                    const popup = (this.devicesWirelessPopup.get(id) as DeviceWirelessPopup);
+                    if(!popup) {
+                        info.wirelessButton.hide();
+                    }
+                    else {
+                        const wirelessInfo = wirelessDevices.get(id);
+                        
+                        if(!wirelessInfo || !wirelessInfo.EESSID) {
+                            info.wirelessButton.hide();
+                        }
+                        else {
+                            info.wirelessLabel.text = wirelessInfo.EESSID;
+                            info.wirelessButton.show();
+                            
+                            if(wirelessInfo.IEEE && popup.IEEEValue) {
+                                popup.IEEELabel?.show();
+                                popup.IEEEValue.show();
+                                popup.IEEEValue.text = wirelessInfo.IEEE;
+                            }
+                            else {
+                                popup.IEEELabel?.hide();
+                                popup.IEEEValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.EESSID && popup.SSIDValue) {
+                                popup.SSIDLabel?.show();
+                                popup.SSIDValue.show();
+                                popup.SSIDValue.text = wirelessInfo.EESSID;
+                            }
+                            else {
+                                popup.SSIDLabel?.hide();
+                                popup.SSIDValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.mode && popup.modeValue) {
+                                popup.modeLabel?.show();
+                                popup.modeValue.show();
+                                popup.modeValue.text = wirelessInfo.mode;
+                            }
+                            else {
+                                popup.modeLabel?.hide();
+                                popup.modeValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.frequency && popup.frequencyValue) {
+                                popup.frequencyLabel?.show();
+                                popup.frequencyValue.show();
+                                popup.frequencyValue.text = wirelessInfo.frequency;
+                            }
+                            else {
+                                popup.frequencyLabel?.hide();
+                                popup.frequencyValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.accessPoint && popup.accessPointValue) {
+                                popup.accessPointLabel?.show();
+                                popup.accessPointValue.show();
+                                popup.accessPointValue.text = wirelessInfo.accessPoint;
+                            }
+                            else {
+                                popup.accessPointLabel?.hide();
+                                popup.accessPointValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.bitRate && popup.bitRateValue) {
+                                popup.bitRateLabel?.show();
+                                popup.bitRateValue.show();
+                                popup.bitRateValue.text = wirelessInfo.bitRate;
+                            }
+                            else {
+                                popup.bitRateLabel?.hide();
+                                popup.bitRateValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.txPower && popup.txPowerValue) {
+                                popup.txPowerLabel?.show();
+                                popup.txPowerValue.show();
+                                popup.txPowerValue.text = wirelessInfo.txPower;
+                            }
+                            else {
+                                popup.txPowerLabel?.hide();
+                                popup.txPowerValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.linkQuality && popup.linkQualityValue) {
+                                popup.linkQualityLabel?.show();
+                                popup.linkQualityValue.show();
+                                popup.linkQualityValue.text = wirelessInfo.linkQuality;
+                            }
+                            else {
+                                popup.linkQualityLabel?.hide();
+                                popup.linkQualityValue?.hide();
+                            }
+                            
+                            if(wirelessInfo.signalLevel && popup.signalLevelValue) {
+                                popup.signalLevelLabel?.show();
+                                popup.signalLevelValue.show();
+                                popup.signalLevelValue.text = wirelessInfo.signalLevel;
+                            }
+                            else {
+                                popup.signalLevelLabel?.hide();
+                                popup.signalLevelValue?.hide();
+                            }
+                        }
+                    }
                 }
             }
             return;

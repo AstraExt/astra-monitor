@@ -56,6 +56,20 @@ type PreviousDetailedNetworkIO = {
 
 type NetworkDataSources = {
     networkIO?: string
+    wireless?: string
+};
+
+export type NetworkWirelessInfo = {
+    name: string;
+    IEEE?: string;
+    EESSID?: string;
+    mode?: string;
+    frequency?: string;
+    accessPoint?: string;
+    bitRate?: string;
+    txPower?: string;
+    linkQuality?: string;
+    signalLevel?: string;
 };
 
 export default class NetworkMonitor extends Monitor {
@@ -66,6 +80,7 @@ export default class NetworkMonitor extends Monitor {
     
     private updateNetworkIOTask: CancellableTaskManager<boolean>;
     private updateRoutesTask: CancellableTaskManager<boolean>;
+    private updateWirelessTask: CancellableTaskManager<boolean>;
     
     private previousNetworkIO!: PreviousNetworkIO;
     private previousDetailedNetworkIO!: PreviousDetailedNetworkIO;
@@ -88,6 +103,7 @@ export default class NetworkMonitor extends Monitor {
         // Setup tasks
         this.updateNetworkIOTask = new CancellableTaskManager();
         this.updateRoutesTask = new CancellableTaskManager();
+        this.updateWirelessTask = new CancellableTaskManager();
         
         this.reset();
         this.dataSourcesInit();
@@ -170,6 +186,7 @@ export default class NetworkMonitor extends Monitor {
         
         this.updateNetworkIOTask.cancel();
         this.updateRoutesTask.cancel();
+        this.updateWirelessTask.cancel();
     }
     
     start() {
@@ -189,6 +206,7 @@ export default class NetworkMonitor extends Monitor {
     dataSourcesInit() {
         this.dataSources = {
             networkIO: Config.get_string('network-source-network-io') ?? undefined,
+            wireless: Config.get_string('network-source-wireless') ?? undefined
         };
         
         Config.connect(this, 'changed::network-source-network-io', () => {
@@ -205,6 +223,12 @@ export default class NetworkMonitor extends Monitor {
             };
             this.resetUsageHistory('networkIO');
             this.resetUsageHistory('detailedNetworkIO');
+        });
+        
+        Config.connect(this, 'changed::network-source-wireless', () => {
+            this.dataSources.wireless = Config.get_string('network-source-wireless') ?? undefined;
+            this.updateWirelessTask.cancel();
+            this.resetUsageHistory('wireless');
         });
     }
     
@@ -229,6 +253,9 @@ export default class NetworkMonitor extends Monitor {
                 detailed = true;
             
             this.runUpdate('networkIO', detailed, procNetDev);
+            
+            if(this.isListeningFor('wireless'))
+                this.runUpdate('wireless');
         }
         return true;
     }
@@ -246,6 +273,9 @@ export default class NetworkMonitor extends Monitor {
         }
         if(key === 'routes') {
             this.runUpdate('routes');
+        }
+        if(key === 'wireless') {
+            this.runUpdate('wireless');
         }
         super.requestUpdate(key);
     }
@@ -281,6 +311,24 @@ export default class NetworkMonitor extends Monitor {
                 task: this.updateRoutesTask,
                 run: this.updateRoutes.bind(this),
                 callback: () => this.notify('routes')
+            });
+            return;
+        }
+        if(key === 'wireless') {
+            
+            let run;
+            if(this.dataSources.wireless === 'iw')
+                run = this.updateWirelessIw.bind(this, ...params);
+            else if(this.dataSources.wireless === 'iwconfig')
+                run = this.updateWirelessIwconfig.bind(this, ...params);
+            else
+                run = this.updateWirelessAuto.bind(this, ...params);
+            
+            this.runTask({
+                key,
+                task: this.updateWirelessTask,
+                run,
+                callback: () => this.notify('wireless')
             });
             return;
         }
@@ -660,6 +708,132 @@ export default class NetworkMonitor extends Monitor {
         if(!routes)
             return false;
         this.setUsageValue('routes', routes);
+        return true;
+    }
+    
+    private async updateWirelessAuto(): Promise<boolean> {
+        if(Utils.hasIwconfig())
+            return this.updateWirelessIwconfig();
+        if(Utils.hasIw())
+            return this.updateWirelessIw();
+        return false;
+    }
+    
+    private async updateWirelessIwconfig(): Promise<boolean> {
+        const result = await Utils.executeCommandAsync('iwconfig');
+        if(!result)
+            return false;
+        
+        const devices: Map<string, NetworkWirelessInfo> = new Map();
+        const deviceBlocks = result.split('\n\n');
+    
+        for(const block of deviceBlocks) {
+            const lines = block.split('\n').filter(line => line.trim() !== '');
+            if(lines.length <= 1)
+                continue;
+    
+            const deviceName = lines[0].split(' ')[0];
+            if(!deviceName)
+                continue;
+            
+            lines[0] = lines[0].substring(deviceName.length);
+            
+            const info: NetworkWirelessInfo = { name: deviceName };
+            
+            for(const line of lines) {
+                const pairs = line.trim().split(/\s{2,}/);
+                for(const pair of pairs) {
+                    if(pair.startsWith('IEEE'))
+                        info.IEEE = pair.split(':')[1];
+                    else if(pair.startsWith('ESSID'))
+                        info.EESSID = pair.split(':')[1].replace(/^"|"$/g, '');
+                    else if(pair.startsWith('Mode'))
+                        info.mode = pair.split(':')[1];
+                    else if(pair.startsWith('Frequency'))
+                        info.frequency = pair.split(':')[1];
+                    else if(pair.startsWith('Access Point'))
+                        info.accessPoint = pair.substring(pair.indexOf(':') + 1).trim();
+                    else if(pair.startsWith('Bit Rate'))
+                        info.bitRate = pair.split('=')[1];
+                    else if(pair.startsWith('Tx-Power'))
+                        info.txPower = pair.split('=')[1];
+                    else if(pair.startsWith('Link Quality'))
+                        info.linkQuality = pair.split('=')[1];
+                    else if(pair.startsWith('Signal level'))
+                        info.signalLevel = pair.split('=')[1];
+                }
+            }
+            
+            if(!info.EESSID || info.EESSID === 'off/any')
+                continue;
+            
+            devices.set(deviceName, info);
+        }
+        
+        this.setUsageValue('wireless', devices);
+        
+        return true;
+    }
+    
+    private async updateWirelessIw(): Promise<boolean> {
+        // List all wireless interfaces
+        const list = await Utils.listDirAsync('/sys/class/net', { folders: true, files: false });
+        if(!list)
+            return false;
+        
+        const devices: Map<string, NetworkWirelessInfo> = new Map();
+            
+        for(const { name: dev } of list) {
+            if(this.ignored.includes(dev))
+                continue;
+            
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(dev))
+                continue;
+            
+            if(!Utils.checkFolderExists('/sys/class/net/' + dev + '/wireless') && !Utils.checkFolderExists('/sys/class/net/' + dev + '/phy80211'))
+                continue;
+            
+            const str = await Utils.executeCommandAsync('iw dev ' + dev + ' link');
+            if(!str)
+                return false;
+            
+            //parse info
+            const data: NetworkWirelessInfo = {name: dev};
+            const lines = str.split('\n');
+            
+            const firstLine = lines.shift();
+            if(firstLine === undefined)
+                continue;
+            
+            const mac = firstLine.match(/([0-9a-f]{2}:){5}[0-9a-f]{2}/i);
+            if(mac === null)
+                continue;
+            
+            data.accessPoint = mac[0];
+            
+            for(const line of lines) {
+                const parts = line.split(':');
+                if(parts.length < 2)
+                    continue;
+                
+                const key = parts[0].trim();
+                const value = parts[1].trim();
+                
+                if(key === 'SSID')
+                    data.EESSID = value;
+                else if(key === 'freq')
+                    data.frequency = value + ' MHz';
+                else if(key === 'signal')
+                    data.signalLevel = value;
+                else if(key === 'tx bitrate')
+                    data.bitRate = value.split(' ')[0] + ' MBit/s';
+            }
+            
+            devices.set(dev, data);
+        }
+        
+        this.setUsageValue('wireless', devices);
+
         return true;
     }
     

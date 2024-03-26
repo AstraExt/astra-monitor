@@ -3,13 +3,13 @@
 ### Advanced Network Monitoring
 As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap), in this release we are focusing on improving the Network monitoring capabilities of Astra Monitor. Here's a list of the new features and improvements:
 
-_THIS LIST IS TEMPORARY AND SUBJECT TO CHANGE UNTIL THE RELEASE DATE_
-
 - **Public IP Address**: now you can see your public IPv4/IPv6 address in the Network Menu. This feature requires a remote API call to get the public IP address. We are using [ipify](https://www.ipify.org/) as the default provider, which is a free and open source service. You can choose a different provider from the settings panel or disable this feature if you don't want to use it. We support every possible provider, included API created by yourself: the ip address will be matched with a regex to extract it from the response.
 
 - **Default Routes**: you can see default routing informations in the Network Menu.
 
 - **Device Info**: hovering a network interface will show you a lot more information about it.
+
+- **Wireless Networks**: the SSID of the connected wireless network is now visible in the Network Menu along with other useful information.
 
 - **Cumulative Upload/Download Bytes**: now you can see the total upload/download bytes since the last boot in the Network Menu for each network interface and globally.
 

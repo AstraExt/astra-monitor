@@ -484,6 +484,24 @@ export default class Utils {
         }
     }
     
+    static hasIw(): boolean {
+        try {
+            const [result, stdout, stderr] = GLib.spawn_command_line_sync('iw --version');
+            return result && stdout && !stderr.length;
+        } catch(e: any) {
+            return false;
+        }
+    }
+    
+    static hasIwconfig(): boolean {
+        try {
+            const [result, stdout, stderr] = GLib.spawn_command_line_sync('iwconfig --version');
+            return result && stdout && !stderr.length;
+        } catch(e: any) {
+            return false;
+        }
+    }
+    
     static hasAMDGpu(): boolean {
         const gpus = Utils.getGPUsList();
         for(const gpu of gpus) {
@@ -841,7 +859,7 @@ export default class Utils {
         const devices: HwMonDevices = new Map();
         
         try {
-            const hwmons = await Utils.listDirAsync(baseDir, { folder: true, files: false });
+            const hwmons = await Utils.listDirAsync(baseDir, { folders: true, files: false });
             
             await Promise.all(hwmons.map(async hwmonInfo => {
                 const hwmon = hwmonInfo.name;
@@ -877,7 +895,7 @@ export default class Utils {
                     catch(e) { /* ignore */ }
                 }
                 
-                const files = await Utils.listDirAsync(`${baseDir}/${hwmon}`, { folder: false, files: true });
+                const files = await Utils.listDirAsync(`${baseDir}/${hwmon}`, { folders: false, files: true });
                 
                 for(const file of files) {
                     const fileName = file.name;
@@ -1672,7 +1690,7 @@ export default class Utils {
         });
     }
     
-    static listDirAsync(path: string, options: { folder: boolean, files: boolean} = { folder: true, files: true }): Promise<{name:string, isFolder:boolean}[]> {
+    static listDirAsync(path: string, options: { folders: boolean, files: boolean} = { folders: true, files: true }): Promise<{name:string, isFolder:boolean}[]> {
         return new Promise((resolve, reject) => {
             // Check if the path is valid and not empty
             if(!path || typeof path !== 'string') {
@@ -1699,7 +1717,7 @@ export default class Utils {
                         const type = fileInfo.get_file_type();
                         const isFolder = type === Gio.FileType.DIRECTORY;
                         
-                        if(options.folder == false && isFolder)
+                        if(options.folders == false && isFolder)
                             continue;
                         if(options.files == false && !isFolder)
                             continue;
@@ -1713,6 +1731,15 @@ export default class Utils {
                 }
             });
         });
+    }
+    
+    static checkFolderExists(path: string): boolean {
+        try {
+            const file = Gio.File.new_for_path(path);
+            return file.query_exists(null);
+        } catch(e: any) {
+            return false;
+        }
     }
     
     static readFileAsync(path: string, emptyOnFail: boolean = false): Promise<string> {

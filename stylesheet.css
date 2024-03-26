@@ -456,3 +456,12 @@
 .astra-monitor-tooltip-item {
     font-weight: bold;
 }
+
+.astra-monitor-menu-special {
+    font-size: 0.85em;
+    font-style: italic;
+    text-decoration: underline;
+    color: #999;
+    padding: 0.05em 0.5em;
+    text-align: center;
+}

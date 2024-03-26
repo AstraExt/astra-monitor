@@ -161,6 +161,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             check = false, this.addStatusLabel({title: _('Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
         if(!Utils.hasIp())
             check = false, this.addStatusLabel({title: _('\'iproute2\' not installed: some features will be disabled!')}, 'am-dialog-warning-symbolic', group);
+        if(!Utils.hasIw() && !Utils.hasIwconfig())
+            check = false, this.addStatusLabel({title: _('\'iwconfig\' and \'iw\' not installed: install one of them to enable wireless network info!')}, 'am-dialog-warning-symbolic', group);
         
         if(Utils.hasAMDGpu() && !Utils.hasAmdGpuTop())
             check = false, this.addStatusLabel({title: _('AMD GPU detected but \'amdgpu_top\' not installed: some optional features will be disabled!')}, 'am-dialog-warning-symbolic', group);
@@ -943,6 +945,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             subtitle: _('Set to empty to disable. Address will be regex matched.'),
             tabs: 1,
         }, 'network-source-public-ipv6', sourcesSection, 'https://api6.ipify.org');
+        
+        const networkWirelessSources = [
+            {value: 'auto', text: _('Auto')},
+            {value: 'iwconfig', text: 'iwconfig'},
+            {value: 'iw', text: 'iw'},
+        ];
+        this.addComboRow({title: _('Wireless'), tabs: 1}, networkWirelessSources, 'network-source-wireless', sourcesSection, 'string', 'auto');
         
         networkPage.add(group);
         

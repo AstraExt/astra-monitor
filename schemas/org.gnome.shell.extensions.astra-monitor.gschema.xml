@@ -59,6 +59,11 @@
     <value nick="hwmon" value="1"/>
     <value nick="lm-sensors" value="2"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list5">
+    <value nick="auto" value="0"/>
+    <value nick="iwconfig" value="1"/>
+    <value nick="iw" value="2"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- UTILS -->
     <key name="debug-mode" type="b">
@@ -744,6 +749,11 @@
       <default>'auto'</default>
       <summary>Network IO Source</summary>
       <description>Source of the network IO</description>
+    </key>
+    <key name="network-source-wireless" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list5">
+      <default>'auto'</default>
+      <summary>Network Wireless Device Source</summary>
+      <description>Source of the wireless device data</description>
     </key>
     <key name="network-source-public-ipv4" type="s">
       <default>'https://api.ipify.org'</default>
