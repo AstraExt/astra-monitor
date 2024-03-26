@@ -1126,4 +1126,10 @@ Thank you all for the amazing support and feedback. We have been the most downlo
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=AstraExt/astra-monitor,corecoding/Vitals,fflewddur/tophat,paradoxxxzero/gnome-shell-system-monitor-applet,0ry0n/Resource_Monitor&type=Timeline)](https://star-history.com/#AstraExt/astra-monitor&corecoding/Vitals&fflewddur/tophat&paradoxxxzero/gnome-shell-system-monitor-applet&0ry0n/Resource_Monitor&Timeline)
+<a href="https://star-history.com/#AstraExt/astra-monitor&corecoding/Vitals&fflewddur/tophat&paradoxxxzero/gnome-shell-system-monitor-applet&0ry0n/Resource_Monitor&Timeline">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://rb.gy/wrs915" />
+    <source media="(prefers-color-scheme: light)" srcset="https://rb.gy/91wxok" />
+    <img alt="Star History Chart" src="https://rb.gy/91wxok" />
+  </picture>
+</a>
