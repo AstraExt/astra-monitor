@@ -41,6 +41,8 @@ export default class Config {
             Config.settings.set_int(key, value);
         else if(type === 'number')
             Config.settings.set_double(key, value);
+        else if(type === 'json')
+            Config.settings.set_string(key, JSON.stringify(value));
         else
             Config.settings.set_value(key, value);
     }
