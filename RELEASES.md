@@ -1,6 +1,7 @@
-# Astra Monitor 17 - TO BE RELEASED
+# Astra Monitor 17 - March 27 2024
 
 ### Bug fixes
+- Fixed an important bug that prevented the extension to start with a GPU selected before v10 [[#94](https://github.com/AstraExt/astra-monitor/issues/94)]
 - Improved Popup Menu opening side: now they should always properly open on the right side when the extension is on the left side of the top bar _(Requires the extension to be restarted if the panel box position has been changed in the current sesssion)_ [[#92](https://github.com/AstraExt/astra-monitor/issues/92)]
 
 # Astra Monitor 16 - March 26 2024
