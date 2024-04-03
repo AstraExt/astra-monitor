@@ -694,7 +694,11 @@ export default class StorageMenu extends MenuBase {
                 label = _('Disk');
         }
         device.label.text = label;
-        device.name.text = deviceData.name ? `[${deviceData.name}]` : '';
+        
+        let name = deviceData.name;
+        if(name && name.length > 17)
+            name = name.substring(0, 15) + '…';
+        device.name.text = name ? `[${name}]` : '';
         
         if(!Number.isNaN(deviceData.usage) && deviceData.usage !== undefined) {
             device.barGrid.visible = true;

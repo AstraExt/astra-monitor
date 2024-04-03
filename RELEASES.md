@@ -1,3 +1,8 @@
+# Astra Monitor 18 - TO BE RELEASED
+
+### Bug fixes
+- Fixed long device name in the Storage Menu leading to a misalignment of other elements
+
 # Astra Monitor 17 - March 27 2024
 
 ### Bug fixes
