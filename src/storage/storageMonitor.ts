@@ -55,6 +55,79 @@ export type BlockDevice = {
     parents: BlockDevice[];
 };
 
+export type BlockDeviceData = {
+    parent?: BlockDeviceData | null;
+    alignment: number;
+    'id-link': string;
+    id: string;
+    'disc-aln': number;
+    dax: boolean;
+    'disc-gran': number;
+    'disk-seq': number;
+    'disc-max': number;
+    'disc-zero': boolean;
+    fsavail?: number | null;
+    fsroots: (string | null)[];
+    fssize?: number | null;
+    fstype?: string | null;
+    fsused?: number | null;
+    'fsuse%'?: string | null;
+    fsver?: string | null;
+    group: string;
+    hctl?: string | null;
+    hotplug: boolean;
+    kname: string;
+    label?: string | null;
+    'log-sec': number;
+    'maj:min': string;
+    'min-io': number;
+    mode: string;
+    model?: string | null;
+    mq: string;
+    name: string;
+    'opt-io': number;
+    owner: string;
+    partflags?: any | null;
+    partlabel?: any | null;
+    partn?: any | null;
+    parttype?: any | null;
+    parttypename?: any | null;
+    partuuid?: any | null;
+    path: string;
+    'phy-sec': number;
+    pkname?: any | null;
+    pttype?: any | null;
+    ptuuid?: any | null;
+    ra: number;
+    rand: boolean;
+    rev?: string | null;
+    rm: boolean;
+    ro: boolean;
+    rota: boolean;
+    'rq-size': number;
+    sched?: string | null;
+    serial?: string | null;
+    size: number;
+    start?: any | null;
+    state?: string | null;
+    subsystems: string;
+    mountpoint?: string | null;
+    mountpoints: (string | null)[];
+    tran?: string | null;
+    type: string;
+    uuid?: string | null;
+    vendor?: string | null;
+    wsame: number;
+    wwn: string;
+    zoned: string;
+    'zone-sz': number;
+    'zone-wgran': number;
+    'zone-app': number;
+    'zone-nr': number;
+    'zone-omax': number;
+    'zone-amax': number;
+}
+
 type DeviceStauts = {
     bytesRead: number;
     bytesWritten: number;
@@ -103,6 +176,7 @@ export default class StorageMonitor extends Monitor {
     private updateStorageUsageTask: CancellableTaskManager<boolean>;
     private updateTopProcessesTask: CancellableTaskManager<boolean>;
     private updateStorageIOTask: CancellableTaskManager<boolean>;
+    private updateStorageInfoTask: CancellableTaskManager<boolean>;
     
     private previousStorageIO!: PreviousStorageIO;
     private previousDetailedStorageIO!: PreviousDetailedStorageIO;
@@ -127,6 +201,7 @@ export default class StorageMonitor extends Monitor {
         this.updateStorageUsageTask = new CancellableTaskManager();
         this.updateTopProcessesTask = new CancellableTaskManager();
         this.updateStorageIOTask = new CancellableTaskManager();
+        this.updateStorageInfoTask = new CancellableTaskManager();
         
         this.checkMainDisk();
         
@@ -212,6 +287,7 @@ export default class StorageMonitor extends Monitor {
         this.updateStorageUsageTask.cancel();
         this.updateTopProcessesTask.cancel();
         this.updateStorageIOTask.cancel();
+        this.updateStorageInfoTask.cancel();
         
         //this.disksCacheFilled = false;
         this.disksCache.clear();
@@ -326,6 +402,11 @@ export default class StorageMonitor extends Monitor {
                 this.runUpdate('topProcesses');
             return; // Don't push to the queue
         }
+        else if(key === 'storageInfo') {
+            if(!this.updateStorageInfoTask.isRunning)
+                this.runUpdate('storageInfo');
+            return; // single value, no queue
+        }
         super.requestUpdate(key);
     }
     
@@ -389,6 +470,15 @@ export default class StorageMonitor extends Monitor {
                 task: this.updateStorageIOTask,
                 run,
                 callback
+            });
+            return;
+        }
+        if(key === 'storageInfo') {
+            this.runTask({
+                key,
+                task: this.updateStorageInfoTask,
+                run: this.updateStorageInfo.bind(this, ...params),
+                callback: this.notify.bind(this, 'storageInfo')
             });
             return;
         }
@@ -860,6 +950,52 @@ export default class StorageMonitor extends Monitor {
         
         this.disksCache.set(device, disk);
         return disk;
+    }
+    
+    async updateStorageInfo(): Promise<boolean> {
+        try {
+            const result = await Utils.executeCommandAsync('lsblk -JbO', this.updateStorageInfoTask);
+            
+            const map = new Map<string, BlockDeviceData>();
+            
+            const blockToInfo = (data:any) => {
+                const deviceInfo: BlockDeviceData = {} as BlockDeviceData;
+                for(const key in data) {
+                    if(Object.prototype.hasOwnProperty.call(data, key) && key !== 'children') {
+                        (deviceInfo as any)[key] = data[key];
+                    }
+                }
+                return deviceInfo;
+            };
+            
+            if(result) {
+                const json = JSON.parse(result);
+                
+                if(json.blockdevices && json.blockdevices.length > 0) {
+                    for(const device of json.blockdevices) {
+                        const id = device.id;
+                        const deviceInfo: BlockDeviceData = blockToInfo(device);
+                        map.set(id, deviceInfo);
+                        
+                        if(device.children && device.children.length > 0) {
+                            for(const child of device.children) {
+                                const childID = child.id;
+                                const childInfo: BlockDeviceData = blockToInfo(child);
+                                childInfo.parent = deviceInfo;
+                                map.set(childID, childInfo);
+                            }
+                        }
+                    }
+                }
+                
+                this.setUsageValue('storageInfo', map);
+                return true;
+            }
+        }
+        catch(e: any) {
+            Utils.error(e);
+        }
+        return false;
     }
     
     destroy() {

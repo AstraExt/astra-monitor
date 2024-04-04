@@ -1,5 +1,12 @@
 # Astra Monitor 18 - TO BE RELEASED
 
+### Advanced Storage Monitoring
+As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap), in this release we are focusing on improving the Storage monitoring capabilities of Astra Monitor. Here's a list of the new features and improvements:
+
+_This release is still in development and the features listed below are subject to change._
+
+- **Storage Devices Info**: now you can see a lot more information about your storage devices in the Storage Menu.
+
 ### Bug fixes
 - Fixed long device name in the Storage Menu leading to a misalignment of other elements
 

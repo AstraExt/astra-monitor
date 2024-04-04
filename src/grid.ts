@@ -70,6 +70,13 @@ class Grid extends St.Widget {
         this.numCols = params.numCols;
     }
     
+    newLine() {
+        if(this.currentCol > 0) {
+            this.currentRow++;
+            this.currentCol = 0;
+        }
+    }
+    
     addToGrid(widget: any, colSpan = 1) {
         this.lm.attach(widget, this.currentCol, this.currentRow, colSpan, 1);
         this.currentCol += colSpan;

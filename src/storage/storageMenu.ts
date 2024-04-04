@@ -31,7 +31,7 @@ import Config from '../config.js';
 import MenuBase from '../menu.js';
 import StorageBars from './storageBars.js';
 import StorageGraph from './storageGraph.js';
-import StorageMonitor, { BlockDevice } from './storageMonitor.js';
+import StorageMonitor, { BlockDevice, BlockDeviceData } from './storageMonitor.js';
 
 type BlockDeviceInfo = {
     data: BlockDevice|null,
@@ -48,6 +48,48 @@ type BlockDeviceInfo = {
     writeValueLabel: St.Label,
     writeActivityIcon: St.Icon
 }
+
+type DeviceInfoPopup = MenuBase & {
+    empty: boolean,
+    
+    section1: St.Label;
+    labelsS1: St.Label[],
+    valuesS1: St.Label[],
+    
+    section2: St.Label;
+    labelsS2: St.Label[],
+    valuesS2: St.Label[],
+    
+    section3: St.Label;
+    labelsS3: St.Label[],
+    valuesS3: St.Label[],
+    
+    section4: St.Label;
+    labelsS4: St.Label[],
+    valuesS4: St.Label[],
+    
+    section5: St.Label;
+    labelsS5: St.Label[],
+    valuesS5: St.Label[],
+    
+    section6: St.Label;
+    labelsS6: St.Label[],
+    valuesS6: St.Label[],
+};
+
+type DeviceInfoPopupConfiguration = {
+    title: string,
+    sectionNr: 'section1' | 'section2' | 'section3' | 'section4' | 'section5' | 'section6',
+    labels: 'labelsS1' | 'labelsS2' | 'labelsS3' | 'labelsS4' | 'labelsS5' | 'labelsS6',
+    values: 'valuesS1' | 'valuesS2' | 'valuesS3' | 'valuesS4' | 'valuesS5' | 'valuesS6',
+    fields: {
+        key: keyof BlockDeviceData,
+        label: string,
+        parent?: boolean,
+        checkNull?: boolean,
+        formatAsBytes?: boolean
+    }[],
+}[];
 
 type TopProcess = {
     label: St.Label,
@@ -88,6 +130,7 @@ export default class StorageMenu extends MenuBase {
     private noDevicesLabel!: St.Label;
     
     private devices!: Map<string, BlockDeviceInfo>;
+    private devicesInfoPopup!: Map<string, DeviceInfoPopup>;
     private updateTimer: number = 0;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
@@ -383,6 +426,7 @@ export default class StorageMenu extends MenuBase {
             });
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
+            this.devicesInfoPopup = new Map();
             this.addToMenu(this.deviceSection, 2);
             
             Config.connect(this, 'changed::storage-ignored', this.updateDeviceList.bind(this));
@@ -429,6 +473,10 @@ export default class StorageMenu extends MenuBase {
             if(!devices.has(id)) {
                 this.deviceSection.remove_child(device.container);
                 this.devices.delete(id);
+                
+                this.devicesInfoPopup.get(id)?.close(true);
+                this.devicesInfoPopup.get(id)?.destroy();
+                this.devicesInfoPopup.delete(id);
             }
         }
         
@@ -448,8 +496,10 @@ export default class StorageMenu extends MenuBase {
             const deviceData = devices.get(id);
             
             let device;
+            let infoPopup;
+            
             if(!this.devices.has(id)) {
-                device = this.createBlockDevice();
+                device = this.createBlockDevice(id);
                 this.deviceSection.addToGrid(device.container, 2);
                 this.devices.set(id, device);
             }
@@ -459,10 +509,21 @@ export default class StorageMenu extends MenuBase {
             
             if(!device)
                 continue;
-            if(!deviceData)
+            
+            //Info Popup
+            if(!this.devicesInfoPopup.has(id)) {
+                infoPopup = this.createDeviceInfoPopup(device.container);
+                this.devicesInfoPopup.set(id, infoPopup);
+            }
+            else {
+                infoPopup = this.devicesInfoPopup.get(id);
+            }
+            if(!infoPopup)
                 continue;
             
             //Update device info
+            if(!deviceData)
+                continue;
             try {
                 this.updateBlockDevice(device, deviceData);
             }
@@ -472,7 +533,7 @@ export default class StorageMenu extends MenuBase {
         }
     }
     
-    createBlockDevice(): BlockDeviceInfo {
+    createBlockDevice(id: string): BlockDeviceInfo {
         const defaultStyle = 'padding-top:0.25em;margin-bottom:0.25em;';
         const container = new St.Button({
             reactive: true,
@@ -625,11 +686,16 @@ export default class StorageMenu extends MenuBase {
         container.connect('enter-event', () => {
             container.style = defaultStyle + this.selectionStyle;
             
+            const popup = this.devicesInfoPopup.get(id);
+            if(popup?.empty === false)
+                popup?.open(true);
         });
         
         container.connect('leave-event', () => {
             container.style = defaultStyle;
             
+            const popup = this.devicesInfoPopup.get(id);
+            popup?.close(true);
         });
         
         return {
@@ -647,6 +713,146 @@ export default class StorageMenu extends MenuBase {
             writeValueLabel,
             writeActivityIcon
         };
+    }
+    
+    static get deviceInfoPopupConfiguration(): DeviceInfoPopupConfiguration {
+        return [
+            {
+                title: _('Basic Info'),
+                labels: 'labelsS1',
+                values: 'valuesS1',
+                sectionNr: 'section1',
+                fields: [
+                    { key: 'name', label: _('Name') },
+                    { key: 'type', label: _('Type') },
+                    { key: 'model', label: _('Model'), parent: true },
+                    { key: 'vendor', label: _('Vendor'), parent: true },
+                    { key: 'serial', label: _('Serial'), parent: true },
+                    { key: 'size', label: _('Size'), formatAsBytes: true },
+                    { key: 'state', label: _('State'), parent: true },
+                    { key: 'subsystems', label: _('Subsystems') },
+                ]
+            },
+            {
+                title: _('File System and Mounting Info'),
+                labels: 'labelsS2',
+                values: 'valuesS2',
+                sectionNr: 'section2',
+                fields: [
+                    { key: 'fstype', label: _('File System Type') },
+                    { key: 'label', label: _('Label') },
+                    { key: 'uuid', label: _('UUID') },
+                    { key: 'mountpoints', label: _('Mount Points') },
+                    { key: 'fsavail', label: _('Available Space'), formatAsBytes: true },
+                    { key: 'fssize', label: _('File System Size'), formatAsBytes: true },
+                    { key: 'fsused', label: _('Used Space'), formatAsBytes: true },
+                    { key: 'fsuse%', label: _('Used Space (%)') },
+                    { key: 'fsver', label: _('File System Version') },
+                    { key: 'fsroots', label: _('File System Roots') },
+                ]
+            },
+            {
+                title: _('Physical and Disk Details'),
+                labels: 'labelsS3',
+                values: 'valuesS3',
+                sectionNr: 'section3',
+                fields: [
+                    { key: 'phy-sec', label: _('Physical Sector Size'), formatAsBytes: true},
+                    { key: 'log-sec', label: _('Logical Sector Size'), formatAsBytes: true},
+                    { key: 'min-io', label: _('Minimum IO Size'), formatAsBytes: true},
+                    { key: 'opt-io', label: _('Optimal IO Size'), formatAsBytes: true},
+                    { key: 'rota', label: _('Rotational'), checkNull: true },
+                    { key: 'rq-size', label: _('Request Size'), formatAsBytes: true},
+                    { key: 'alignment', label: _('Alignment Offset'), formatAsBytes: true},
+                    { key: 'disc-aln', label: _('Discard Alignment'), formatAsBytes: true},
+                    { key: 'disc-gran', label: _('Discard Granularity'), formatAsBytes: true},
+                    { key: 'disc-max', label: _('Discard Max Size'), formatAsBytes: true},
+                    { key: 'disc-zero', label: _('Discard Zeroes Data'), checkNull: true },
+                ]
+            },
+            {
+                title: _('Partition Info'),
+                labels: 'labelsS4',
+                values: 'valuesS4',
+                sectionNr: 'section4',
+                fields: [
+                    { key: 'parttype', label: _('Partition Type') },
+                    { key: 'partlabel', label: _('Partition Label') },
+                    { key: 'partuuid', label: _('Partition UUID') },
+                    { key: 'partn', label: _('Partition Number') },
+                    { key: 'pttype', label: _('Partition Table Type') },
+                    { key: 'ptuuid', label: _('Partition Table UUID') },
+                ]
+            },
+            {
+                title: _('Performance and Settings'),
+                labels: 'labelsS5',
+                values: 'valuesS5',
+                sectionNr: 'section5',
+                fields: [
+                    { key: 'ra', label: _('Read Ahead'), formatAsBytes: true },
+                    { key: 'sched', label: _('Scheduler') },
+                    { key: 'dax', label: _('Direct Access'), checkNull: true },
+                    { key: 'mq', label: _('Multiqueue'), checkNull: true },
+                ]
+            },
+            {
+                title: _('Advanced Identifiers and States'),
+                labels: 'labelsS6',
+                values: 'valuesS6',
+                sectionNr: 'section6',
+                fields: [
+                    { key: 'id-link', label: _('ID Link') },
+                    { key: 'id', label: _('ID') },
+                    { key: 'maj:min', label: _('Major:Minor') },
+                    { key: 'hctl', label: _('HCTL') },
+                    { key: 'kname', label: _('Kernel Name') },
+                    { key: 'path', label: _('Path') },
+                    { key: 'rev', label: _('Revision') },
+                    { key: 'wwn', label: _('World Wide Name') },
+                    { key: 'tran', label: _('Transport') },
+                    { key: 'hotplug', label: _('Hotplug'), checkNull: true },
+                    { key: 'rand', label: _('Random'), checkNull: true },
+                    { key: 'group', label: _('Group') },
+                    { key: 'owner', label: _('Owner') },
+                    { key: 'mode', label: _('Mode') },
+                    { key: 'ro', label: _('Read Only'), checkNull: true },
+                    { key: 'rm', label: _('Removable'), checkNull: true },
+                    { key: 'wsame', label: _('Write Same'), checkNull: true },
+                    { key: 'zoned', label: _('Zoned'), checkNull: true },
+                    { key: 'zone-sz', label: _('Zone Size'), formatAsBytes: true },
+                    { key: 'zone-wgran', label: _('Zone Write Granularity'), formatAsBytes: true },
+                    { key: 'zone-app', label: _('Zone Append'), checkNull: true },
+                    { key: 'zone-nr', label: _('Zone Number') },
+                    { key: 'zone-omax', label: _('Zone Open Max') },
+                    { key: 'zone-amax', label: _('Zone Active Max') },
+                ]
+            }
+        ];
+    }
+    
+    createDeviceInfoPopup(sourceActor: St.Widget): DeviceInfoPopup {
+        const popup:DeviceInfoPopup = new MenuBase(sourceActor, 0.05, { numCols: 4 }) as DeviceInfoPopup;
+        popup.empty = true;
+        
+        const configuration = StorageMenu.deviceInfoPopupConfiguration;
+        
+        for(const section of configuration) {
+            popup[section.sectionNr] = popup.addMenuSection(section.title);
+            popup[section.labels] = [];
+            popup[section.values] = [];
+            
+            for(let i = 0; i < section.fields.length; i++) {
+                const label = new St.Label({text: '', style_class: 'astra-monitor-menu-sub-key'});
+                popup.addToMenu(label);
+                popup[section.labels].push(label);
+                
+                const value = new St.Label({text: '', style_class: 'astra-monitor-menu-sub-value'});
+                popup.addToMenu(value);
+                popup[section.values].push(value);
+            }
+        }
+        return popup;
     }
     
     updateBlockDevice(device: BlockDeviceInfo, deviceData: BlockDevice) {
@@ -779,15 +985,20 @@ export default class StorageMenu extends MenuBase {
                 Utils.storageMonitor.updateFrequency * 1000 * 2, // Halves the update frequency
                 () => {
                     this.update('deviceList');
+                    Utils.storageMonitor.requestUpdate('storageInfo');
                     return true;
                 });
         }
+        
+        Utils.storageMonitor.listen(this, 'storageInfo', this.update.bind(this, 'storageInfo'));
+        Utils.storageMonitor.requestUpdate('storageInfo');
     }
     
     async onClose() {
         Utils.storageMonitor.unlisten(this, 'storageIO');
         Utils.storageMonitor.unlisten(this, 'detailedStorageIO');
-        Utils.processorMonitor.unlisten(this, 'topProcesses');
+        Utils.storageMonitor.unlisten(this, 'topProcesses');
+        Utils.storageMonitor.unlisten(this, 'storageInfo');
         
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
@@ -951,6 +1162,71 @@ export default class StorageMenu extends MenuBase {
                         }
                     }*/
                 }   
+            }
+            return;
+        }
+        if(code === 'storageInfo') {
+            const storageInfo:Map<string, BlockDeviceData> = Utils.storageMonitor.getCurrentValue('storageInfo');
+            
+            const formatValue = (value: any, isBytes: boolean = false) => {
+                if(Array.isArray(value))
+                    return value.join('\n');
+                if(isBytes && typeof value === 'number')
+                    return Utils.formatBytes(value, 'kB-KB', 4);
+                if(typeof value === 'boolean')
+                    return value ? _('Yes') : _('No');
+                let str = value?.toString().trim() ?? '';
+                if(str.length > 100)
+                    str = str.substring(0, 97) + '…';
+                if(str.length > 50)
+                    str = str.substring(0, str.length/2) + ' ⏎\n' + str.substring(str.length/2);
+                return str;
+            };
+            
+            const configuration = StorageMenu.deviceInfoPopupConfiguration;
+            
+            for(const [id, popup] of this.devicesInfoPopup.entries()) {
+                const info = storageInfo.get(id);
+                
+                if(!info) {
+                    popup.empty = true;
+                    popup.close(true);
+                    continue;
+                }
+                popup.empty = false;
+                
+                for(const section of configuration) {
+                    let i = 0;
+                    const labels = popup[section.labels];
+                    const values = popup[section.values];
+                    
+                    for(const field of section.fields) {
+                        let value;
+                        if(info[field.key])
+                            value = info[field.key];
+                        else if(field.parent && info.parent && info.parent[field.key])
+                            value = info.parent[field.key];
+                        
+                        if(field.checkNull ? value !== undefined && value !== null : value) {
+                            const formattedValue = formatValue(value, field.formatAsBytes);
+                            labels[i].text = field.label;
+                            labels[i].show();
+                            values[i].text = formattedValue;
+                            values[i].show();
+                            i++;
+                        }
+                    }
+                    
+                    if(i === 0)
+                        popup[section.sectionNr].hide();
+                    else
+                        popup[section.sectionNr].show();
+                    
+                    for(; i < labels.length; i++) {
+                        labels[i].hide();
+                        values[i].hide();
+                    }
+                }
             }
             return;
         }
