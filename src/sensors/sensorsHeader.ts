@@ -50,8 +50,8 @@ export default GObject.registerClass(
 class SensorsHeader extends Header {
     private icon!: St.Icon;
     private valuesContainer!: St.BoxLayout;
-    private sensor1!: St.Label;
-    private sensor2!: St.Label;
+    private sensors!: St.Label;
+    private sensorsNum: number = 1;
     
     private maxWidths: number[] = [];
     
@@ -106,14 +106,10 @@ class SensorsHeader extends Header {
     resetMaxWidths() {
         this.maxWidths = [];
         
-        if(!this.sensor1.get_stage())
+        if(!this.sensors.get_stage())
             return;
         
-        const sensor1w = this.sensor1.get_preferred_width(-1);
-        const sensor2w = null;
-        if(Config.get_boolean('sensors-header-sensor2-show'))
-            this.sensor2.get_preferred_width(-1);
-        this.fixContainerWidth(Math.max(sensor1w?sensor1w[1]:0, sensor2w?sensor2w[1]:0));
+        this.fixContainerStyle();
     }
     
     buildIcon() {
@@ -155,81 +151,59 @@ class SensorsHeader extends Header {
     
     buildValues() {
         this.valuesContainer = new St.BoxLayout({
-            style_class: 'astra-monitor-header-sensors-values-container',
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.CENTER,
-            x_expand: true,
+            x_align: Clutter.ActorAlign.START,
+            y_align: Clutter.ActorAlign.FILL,
             y_expand: true,
-            vertical: true
+            vertical: true,
+            width: 1
         });
         
-        this.sensor1 = new St.Label({
-            text: '-',
-            x_expand: true
-        });
-        this.sensor1.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        this.sensor1.clutter_text.line_wrap = false;
-        
-        this.sensor2 = new St.Label({
-            text: '-',
+        this.sensors = new St.Label({
+            text: '',
             style_class: 'astra-monitor-header-sensors-values-label',
+            style: 'font-size: 0.65em;',
+            y_align: Clutter.ActorAlign.CENTER,
+            x_align: Clutter.ActorAlign.END,
             x_expand: true,
-            y_align: Clutter.ActorAlign.END,
+            y_expand: true
         });
-        this.sensor2.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        this.sensor2.clutter_text.line_wrap = false;
-        
-        const rebuild = () => {
-            this.valuesContainer.remove_all_children();
-            if(!Config.get_boolean('sensors-header-sensor1-show')) {
-                this.valuesContainer.visible = false;
-                return;
-            }
-            
-            this.valuesContainer.visible = true;
-            this.valuesContainer.add_child(this.sensor1);
-            
-            if(!Config.get_boolean('sensors-header-sensor2-show')) {
-                this.sensor1.set_style_class_name('astra-monitor-header-sensors-value-label');
-                this.sensor1.y_align = Clutter.ActorAlign.CENTER;
-                return;
-            }
-                
-            this.sensor1.set_style_class_name('astra-monitor-header-sensors-values-label');
-            this.sensor1.y_align = Clutter.ActorAlign.START;
-            this.valuesContainer.add_child(this.sensor2);
-        };
-        
-        Config.connect(this.valuesContainer, 'changed::sensors-header-sensor1-show', rebuild);
-        Config.connect(this.valuesContainer, 'changed::sensors-header-sensor2-show', rebuild);
-        rebuild();
+        this.sensors.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        this.sensors.clutter_text.line_wrap = false;
+        this.valuesContainer.add_child(this.sensors);
         
         Utils.sensorsMonitor.listen(this.valuesContainer, 'sensorsData', () => {
             if(!Config.get_boolean('sensors-header-sensor1-show') && !Config.get_boolean('sensors-header-sensor2-show'))
                 return;
             
+            let sensor1 = '-';
+            let sensor2 = '-';
+                
             const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
-            if(!sensorsData) {
-                this.sensor1.text = '-';
-                this.sensor2.text = '-';
-                return;
+            if(sensorsData) {
+            
+                const sensor1Source = Config.get_json('sensors-header-sensor1');
+                const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
+                sensor1 = this.applySource(sensorsData, sensor1Source, sensor1Digits);
+                
+                if(Config.get_boolean('sensors-header-sensor2-show')) {
+                    const sensor2Source = Config.get_json('sensors-header-sensor2');
+                    const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
+                    sensor2 = this.applySource(sensorsData, sensor2Source, sensor2Digits);
+                }
+                else {
+                    sensor2 = '';
+                }
             }
             
-            const sensor1Source = Config.get_json('sensors-header-sensor1');
-            const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
-            this.sensor1.text = this.applySource(sensorsData, sensor1Source, sensor1Digits);
-            const sensor1w = this.sensor1.get_preferred_width(-1);
-            
-            if(Config.get_boolean('sensors-header-sensor2-show')) {
-                const sensor2Source = Config.get_json('sensors-header-sensor2');
-                const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
-                this.sensor2.text = this.applySource(sensorsData, sensor2Source, sensor2Digits);
-                const sensor2w = this.sensor2.get_preferred_width(-1);
-                this.fixContainerWidth(Math.max(sensor1w?sensor1w[1]:0, sensor2w?sensor2w[1]:0));
+            if(sensor2) {
+                this.sensorsNum = 2;
+                this.sensors.text = `${sensor1}\n${sensor2}`;
             }
             else {
-                this.fixContainerWidth(sensor1w?sensor1w[1]:0);
+                this.sensorsNum = 1;
+                this.sensors.text = sensor1;
             }
+            this.fixContainerStyle();
         });
     }
     
@@ -291,9 +265,26 @@ class SensorsHeader extends Header {
         return value as string;
     }
     
-    fixContainerWidth(width: number) {
-        if(!this.valuesContainer.get_stage())
+    fixContainerStyle() {
+        if(!this.valuesContainer.get_parent())
             return;
+        if(!this.sensors.get_parent())
+            return;
+        
+        const calculateStyle = () => {
+            if(this.sensorsNum === 1)
+                return 'font-size:1em;';
+            const containerHeight = this.valuesContainer.height;
+            return `font-size:${Math.round(containerHeight/3)}px;`;
+        };
+        const style = calculateStyle();
+        
+        if(this.sensors.style !== style)
+            this.sensors.style = style;
+        
+        const sensorsWidth = this.sensors.get_preferred_width(-1);
+        const width = sensorsWidth ? sensorsWidth[1] : 0;
+            
         this.maxWidths.push(width);
         
         if(this.maxWidths.length > Utils.sensorsMonitor.updateFrequency * 10)

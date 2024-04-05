@@ -47,8 +47,7 @@ class NetworkHeader extends Header {
     private bars!: InstanceType<typeof NetworkBars>;
     private graph!: InstanceType<typeof NetworkGraph>;
     private speedContainer!: St.BoxLayout;
-    private upload!: St.Label;
-    private download!: St.Label;
+    private speed!: St.Label;
     
     protected tooltipMenu!: TooltipMenu;
     protected tooltipItem!: TooltipItem;
@@ -114,12 +113,10 @@ class NetworkHeader extends Header {
         if(!Config.get_boolean('network-header-io'))
             return;
         
-        if(!this.upload.get_stage() || !this.download.get_stage())
+        if(!this.speed.get_stage())
             return;
         
-        const uploadWidth = this.upload.get_preferred_width(-1);
-        const downloadWidth = this.download.get_preferred_width(-1);
-        this.fixSpeedContainerWidth(Math.max(uploadWidth?uploadWidth[1]:0, downloadWidth?downloadWidth[1]:0));
+        this.fixSpeedContainerStyle();
     }
     
     buildIcon() {
@@ -213,30 +210,22 @@ class NetworkHeader extends Header {
     buildSpeed() {
         this.speedContainer = new St.BoxLayout({
             x_align: Clutter.ActorAlign.START,
-            y_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.FILL,
             y_expand: true,
             vertical: true,
             width: 1
         });
         
-        this.upload = new St.Label({
-            text: '- B/s',
+        this.speed = new St.Label({
+            text: '',
             style_class: 'astra-monitor-header-speed-label',
-            y_align: Clutter.ActorAlign.START,
+            style: 'font-size: 0.65em;',
+            y_align: Clutter.ActorAlign.CENTER,
             x_align: Clutter.ActorAlign.END,
             x_expand: true,
+            y_expand: true
         });
-        
-        this.download = new St.Label({
-            text: '- B/s',
-            style_class: 'astra-monitor-header-speed-label',
-            y_align: Clutter.ActorAlign.END,
-            x_align: Clutter.ActorAlign.END,
-            x_expand: true,
-        });
-        
-        this.speedContainer.add_child(this.upload);
-        this.speedContainer.add_child(this.download);
+        this.speedContainer.add_child(this.speed);
         
         Config.bind('network-header-io', this.speedContainer, 'visible', Gio.SettingsBindFlags.GET);
         
@@ -244,12 +233,11 @@ class NetworkHeader extends Header {
             if(!Config.get_boolean('network-header-io'))
                 return;
             
+            let upload = '- B/s';
+            let download = '- B/s';
+                
             const usage = Utils.networkMonitor.getCurrentValue('networkIO');
-            if(!usage) {
-                this.upload.text = '- B/s';
-                this.download.text = '- B/s';
-            }
-            else {
+            if(usage) {
                 let bytesUploadedPerSec = usage.bytesUploadedPerSec;
                 let bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
                 
@@ -264,17 +252,30 @@ class NetworkHeader extends Header {
                 const unit = Config.get_string('network-io-unit');
                 let maxFigures = Config.get_int('network-header-io-figures');
                 maxFigures = Math.max(1, Math.min(4, maxFigures));
-                this.upload.text = Utils.formatBytesPerSec(bytesUploadedPerSec, unit as any, maxFigures, true);
-                this.download.text = Utils.formatBytesPerSec(bytesDownloadedPerSec, unit as any, maxFigures, true);
-                
-                const uploadWidth = this.upload.get_preferred_width(-1);
-                const downloadWidth = this.download.get_preferred_width(-1);
-                this.fixSpeedContainerWidth(Math.max(uploadWidth?uploadWidth[1]:0, downloadWidth?downloadWidth[1]:0));
+                upload = Utils.formatBytesPerSec(bytesUploadedPerSec, unit as any, maxFigures, true);
+                download = Utils.formatBytesPerSec(bytesDownloadedPerSec, unit as any, maxFigures, true);
             }
+            
+            this.speed.text = `${upload}\n${download}`;
+            this.fixSpeedContainerStyle();
         });
     }
     
-    fixSpeedContainerWidth(width: number) {
+    fixSpeedContainerStyle() {
+        if(!this.speedContainer.get_parent())
+            return;
+        if(!this.speed.get_parent())
+            return;
+        
+        const containerHeight = this.speedContainer.height;
+        const style = `font-size:${Math.round(containerHeight/3)}px;`;
+        
+        if(this.speed.style !== style)
+            this.speed.style = style;
+        
+        const speedWidth = this.speed.get_preferred_width(-1);
+        const width = speedWidth ? speedWidth[1] : 0;
+        
         this.maxWidths.push(width);
         
         if(this.maxWidths.length > Utils.networkMonitor.updateFrequency * 30)

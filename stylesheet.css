@@ -49,21 +49,13 @@
 }
 
 .astra-monitor-header-speed-label {
-    font-size: 0.7em;
     font-weight: lighter;
     text-align: right;
     margin-right: 0.3em;
 }
 
 .astra-monitor-header-sensors-values-label {
-    font-size: 0.7em;
     font-weight: lighter;
-    text-align: right;
-    margin-right: 0.3em;
-}
-
-.astra-monitor-header-sensors-value-label {
-    font-size: 1em;
     text-align: right;
     margin-right: 0.3em;
 }

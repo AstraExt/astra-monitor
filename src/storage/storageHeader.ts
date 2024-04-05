@@ -59,8 +59,7 @@ class StorageHeader extends Header {
     
     protected maxWidths!: number[];
     
-    protected read!: St.Label;
-    protected write!: St.Label;
+    protected speed!: St.Label;
     
     constructor() {
         super('Storage Header');
@@ -137,12 +136,10 @@ class StorageHeader extends Header {
         if(!Config.get_boolean('storage-header-io'))
             return;
         
-        if(!this.read.get_stage() || !this.write.get_stage())
+        if(!this.speed.get_stage())
             return;
         
-        const readWidth = this.read.get_preferred_width(-1);
-        const writeWidth = this.write.get_preferred_width(-1);
-        this.fixSpeedContainerWidth(Math.max(readWidth?readWidth[1]:0, writeWidth?writeWidth[1]:0));
+        this.fixSpeedContainerStyle();
     }
     
     buildIcon() {
@@ -384,32 +381,23 @@ class StorageHeader extends Header {
     
     buildSpeed() {
         this.speedContainer = new St.BoxLayout({
-            style_class: 'astra-monitor-header-speed-container',
             x_align: Clutter.ActorAlign.START,
-            y_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.FILL,
             y_expand: true,
             vertical: true,
             width: 1
         });
         
-        this.read = new St.Label({
-            text: '- B/s',
+        this.speed = new St.Label({
+            text: '',
             style_class: 'astra-monitor-header-speed-label',
-            y_align: Clutter.ActorAlign.START,
+            style: 'font-size: 0.65em;',
+            y_align: Clutter.ActorAlign.CENTER,
             x_align: Clutter.ActorAlign.END,
             x_expand: true,
+            y_expand: true
         });
-        
-        this.write = new St.Label({
-            text: '- B/s',
-            style_class: 'astra-monitor-header-speed-label',
-            y_align: Clutter.ActorAlign.END,
-            x_align: Clutter.ActorAlign.END,
-            x_expand: true,
-        });
-        
-        this.speedContainer.add_child(this.read);
-        this.speedContainer.add_child(this.write);
+        this.speedContainer.add_child(this.speed);
         
         Config.bind('storage-header-io', this.speedContainer, 'visible', Gio.SettingsBindFlags.GET);
         
@@ -417,12 +405,11 @@ class StorageHeader extends Header {
             if(!Config.get_boolean('storage-header-io'))
                 return;
             
+            let read = '- B/s';
+            let write = '- B/s';
+            
             const usage = Utils.storageMonitor.getCurrentValue('storageIO');
-            if(!usage) {
-                this.read.text = '- B/s';
-                this.write.text = '- B/s';
-            }
-            else {
+            if(usage) {
                 let bytesReadPerSec = usage.bytesReadPerSec;
                 let bytesWrittenPerSec = usage.bytesWrittenPerSec;
                 
@@ -437,17 +424,31 @@ class StorageHeader extends Header {
                 const unit = Config.get_string('storage-io-unit');
                 let maxFigures = Config.get_int('storage-header-io-figures');
                 maxFigures = Math.max(1, Math.min(4, maxFigures));
-                this.read.text = Utils.formatBytesPerSec(bytesReadPerSec, unit as any, maxFigures);
-                this.write.text = Utils.formatBytesPerSec(bytesWrittenPerSec, unit as any, maxFigures);
                 
-                const readWidth = this.read.get_preferred_width(-1);
-                const writeWidth = this.write.get_preferred_width(-1);
-                this.fixSpeedContainerWidth(Math.max(readWidth?readWidth[1]:0, writeWidth?writeWidth[1]:0));
+                read = Utils.formatBytesPerSec(bytesReadPerSec, unit as any, maxFigures);
+                write = Utils.formatBytesPerSec(bytesWrittenPerSec, unit as any, maxFigures);
             }
+            
+            this.speed.text = `${read}\n${write}`;
+            this.fixSpeedContainerStyle();
         });
     }
     
-    fixSpeedContainerWidth(width: number) {
+    fixSpeedContainerStyle() {
+        if(!this.speedContainer.get_parent())
+            return;
+        if(!this.speed.get_parent())
+            return;
+        
+        const containerHeight = this.speedContainer.height;
+        const style = `font-size:${Math.round(containerHeight/3)}px;`;
+        
+        if(this.speed.style !== style)
+            this.speed.style = style;
+        
+        const speedWidth = this.speed.get_preferred_width(-1);
+        const width = speedWidth ? speedWidth[1] : 0;
+        
         this.maxWidths.push(width);
         
         if(this.maxWidths.length > Utils.storageMonitor.updateFrequency * 30)
