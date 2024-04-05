@@ -219,9 +219,9 @@ class BarsBase extends St.BoxLayout {
             
             let size;
             if(this.layout === 'vertical')
-                size = height - 4; // Remove 2px padding and 2px border
+                size = height - (this.mini ? 2 : 4); // Remove 2px padding and 2px border
             else
-                size = width - 4; // Remove 2px padding and 2px border
+                size = width - (this.mini ? 2 : 4); // Remove 2px padding and 2px border
             
             if(!values || values.length === 0) {
                 for(let i = 0; i < this.bars.length; i++) {
