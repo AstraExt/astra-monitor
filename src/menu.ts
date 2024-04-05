@@ -108,6 +108,18 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         }
     }
     
+    static get arrowAlignement() {
+        const shellBarPosition = Config.get_string('shell-bar-position');
+        
+        if(shellBarPosition === 'top')
+            return St.Side.TOP;
+        if(shellBarPosition === 'bottom')
+            return St.Side.BOTTOM;
+        if(shellBarPosition === 'left')
+            return St.Side.LEFT;
+        return St.Side.RIGHT;
+    }
+    
     static getMonitorSize(actorBox: Clutter.ActorBox): Size {
         const display = global.display;
         // @ts-expect-error Mtk types are not up to date

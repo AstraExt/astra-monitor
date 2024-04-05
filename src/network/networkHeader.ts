@@ -32,6 +32,7 @@ import Utils from '../utils/utils.js';
 import NetworkMenu from './networkMenu.js';
 import NetworkGraph from './networkGraph.js';
 import NetworkBars from './networkBars.js';
+import MenuBase from '../menu.js';
 
 type TooltipMenu = PopupMenu.PopupMenu & {
     actor: St.Widget;
@@ -65,7 +66,7 @@ class NetworkHeader extends Header {
         
         this.addOrReorderIndicators();
         
-        const menu = new NetworkMenu(this, 0.5, St.Side.TOP);
+        const menu = new NetworkMenu(this, 0.5, MenuBase.arrowAlignement);
         this.setMenu(menu);
         
         this.resetMaxWidths();

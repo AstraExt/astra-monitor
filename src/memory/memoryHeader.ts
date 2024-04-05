@@ -32,6 +32,7 @@ import Utils from '../utils/utils.js';
 import MemoryMenu from './memoryMenu.js';
 import MemoryGraph from './memoryGraph.js';
 import MemoryBars from './memoryBars.js';
+import MenuBase from '../menu.js';
 
 type TooltipMenu = PopupMenu.PopupMenu & {
     actor: St.Widget;
@@ -65,7 +66,7 @@ class MemoryHeader extends Header {
         
         this.addOrReorderIndicators();
         
-        const menu = new MemoryMenu(this, 0.5, St.Side.TOP);
+        const menu = new MemoryMenu(this, 0.5, MenuBase.arrowAlignement);
         this.setMenu(menu);
         
         Config.connect(this, 'changed::memory-indicators-order', this.addOrReorderIndicators.bind(this));

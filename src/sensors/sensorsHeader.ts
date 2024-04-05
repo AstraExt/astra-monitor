@@ -32,6 +32,7 @@ import Config from '../config.js';
 import Utils from '../utils/utils.js';
 import SensorsMenu from './sensorsMenu.js';
 import { SensorsData } from './sensorsMonitor.js';
+import MenuBase from '../menu.js';
 
 type TooltipMenu = PopupMenu.PopupMenu & {
     actor: St.Widget;
@@ -66,7 +67,7 @@ class SensorsHeader extends Header {
         this.buildValues();
         this.addOrReorderIndicators();
         
-        const menu = new SensorsMenu(this, 0.5, St.Side.TOP);
+        const menu = new SensorsMenu(this, 0.5, MenuBase.arrowAlignement);
         this.setMenu(menu);
         
         this.resetMaxWidths();

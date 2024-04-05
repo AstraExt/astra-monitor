@@ -32,6 +32,7 @@ import Utils from '../utils/utils.js';
 import ProcessorMenu from './processorMenu.js';
 import ProcessorGraph from './processorGraph.js';
 import ProcessorBars from './processorBars.js';
+import MenuBase from '../menu.js';
 
 type TooltipMenu = PopupMenu.PopupMenu & {
     actor: St.Widget;
@@ -61,7 +62,7 @@ class ProcessorHeader extends Header {
         
         this.addOrReorderIndicators();
         
-        const menu = new ProcessorMenu(this, 0.5, St.Side.TOP);
+        const menu = new ProcessorMenu(this, 0.5, MenuBase.arrowAlignement);
         this.setMenu(menu);
         
         Config.connect(this, 'changed::processor-indicators-order', this.addOrReorderIndicators.bind(this));

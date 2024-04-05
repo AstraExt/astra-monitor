@@ -34,6 +34,7 @@ import StorageGraph from './storageGraph.js';
 import StorageBars from './storageBars.js';
 import StorageIOBars from './storageIOBars.js';
 import { StorageIO } from './storageMonitor.js';
+import MenuBase from '../menu.js';
 
 type TooltipMenu = PopupMenu.PopupMenu & {
     actor: St.Widget;
@@ -75,7 +76,7 @@ class StorageHeader extends Header {
         
         this.addOrReorderIndicators();
         
-        const menu = new StorageMenu(this, 0.5, St.Side.TOP);
+        const menu = new StorageMenu(this, 0.5, MenuBase.arrowAlignement);
         this.setMenu(menu);
         
         this.resetMaxWidths();

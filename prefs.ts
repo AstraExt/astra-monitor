@@ -203,7 +203,19 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             title: _('Shell TOPBAR Theme Style'),
             subtitle:  _('Set to "Dark" or "Light" based on your shell TOPBAR theme to improve readability.'),
             tabs: 1
-        }, choicesPanel, 'theme-style', themeSection, 'string');
+        }, choicesPanel, 'theme-style', themeSection, 'string', 'dark');
+        
+        choicesPanel = [
+            {value: 'top', text: _('Top')},
+            {value: 'bottom', text: _('Bottom')},
+            {value: 'left', text: _('Left')},
+            {value: 'right', text: _('Right')}
+        ];
+        this.addComboRow({
+            title: _('Shell TOPBAR/DASH/PANEL Position'),
+            subtitle:  _('Set this if you moved your shell to another position to improve the layout.') + '\n' + _('Disable/Enable the extension to apply changes.'),
+            tabs: 1
+        }, choicesPanel, 'shell-bar-position', themeSection, 'string', 'top');
         
         this.addColorRow({
             title: _('Main Color'),

@@ -13,6 +13,12 @@
     <value nick="dark" value="0"/>
     <value nick="light" value="1"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.shell-bar-position">
+    <value nick="top" value="0"/>
+    <value nick="bottom" value="1"/>
+    <value nick="left" value="2"/>
+    <value nick="right" value="3"/>
+  </enum>
   <enum id="org.gnome.shell.extensions.astra-monitor.enum.memory-used">
     <value nick="total-free-buffers-cached" value="0"/>
     <value nick="total-free" value="1"/>
@@ -116,6 +122,11 @@
       <default>'dark'</default>
       <summary>Preferred Theme Style</summary>
       <description>Select the preferred theme style</description>
+    </key>
+    <key name="shell-bar-position" enum="org.gnome.shell.extensions.astra-monitor.enum.shell-bar-position">
+      <default>'top'</default>
+      <summary>Topbar/dash screen position</summary>
+      <description>The position of the topbar/dash on the screen</description>
     </key>
     <key name="headers-font-family" type="s">
       <default>''</default>
