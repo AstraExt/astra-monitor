@@ -14,6 +14,7 @@ _This release is still in development and the features listed below are subject 
 - Greatly improved multiline text rendering in the Top Bar Headers [[#30](https://github.com/AstraExt/astra-monitor/issues/30)] [[#93](https://github.com/AstraExt/astra-monitor/issues/93)]
 - Improved topbar header rendering: as a result of that *Header Margin* is now deprecated and not needed anymore, the header should always be perfectly aligned with the topbar
 - Fixed long device name in the Storage Menu leading to a misalignment of other elements
+- Reset button in dropdown menus of settings was reloading last saved value, now works as intended resetting to default value
 
 # Astra Monitor 17 - March 27 2024
 

@@ -1743,7 +1743,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                         let value = choice.value;
                         if(type === 'json')
                             value = JSON.stringify(value);
-                        if(value === savedValue)
+                        if(value === reset)
                             selected = index;
                     });
                     select.selected = selected;
@@ -1860,13 +1860,17 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     sensitive: true,
                 });
                 resetButton.connect('clicked', () => {
-                    choices.forEach((choice, index) => {
+                    for(let index = 0; index < choices.length; index++) {
+                        const choice = choices[index];
                         let value = choice.value;
                         if(type === 'json')
                             value = JSON.stringify(value);
-                        if(value === savedValue)
+                        
+                        if(value === reset) {
                             selected = index;
-                    });
+                            break;
+                        }
+                    }
                     select.set_active(selected);
                     const selectedChoice = choices[selected];
                     if(selectedChoice !== undefined) {
