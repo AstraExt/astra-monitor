@@ -47,7 +47,7 @@ The results of the tests are shown in the table below. The values are the averag
         <td>868 🏆</td>
         <td>32.18</td>
         <td>780</td>
-        <td>780</td>
+        <td>?*</td>
         <td>1696</td>
     </tr>
     <tr>
@@ -59,7 +59,7 @@ The results of the tests are shown in the table below. The values are the averag
         <td>2432</td>
     </tr>
 </table>
-<p style="font-size:12px" align="center"><i>The lower the values, the better the performance.</i></p>
+<p style="font-size:12px" align="center"><i>* Value missing; I have already collected this data but I'm currently abroad. Details will be updated upon return.</i><br><i>The lower the values, the better the performance.</i></p>
 
 #### Astra Monitor vs [TopHat](https://github.com/fflewddur/tophat):
 <p style="font-size:12px" align="center"><b>Configuration:</b> Both extensions have Cpu perc usage and bar, Memory perc usage and bar, Disk bar and IO values, Network IO values. Update frequency is the same on both extensions.</p>
