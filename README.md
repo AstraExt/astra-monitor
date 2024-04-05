@@ -71,8 +71,8 @@ As Astra Monitor is in the early stages of development, we have an ambitious roa
         <th style="text-align:center">Late February 2024</th>
         <th style="text-align:center">Early March 2024</th>
         <th style="text-align:center">Mid March 2024</th>
-        <th style="text-align:center">Late March 2024</th>
         <th style="text-align:center">Early April 2024</th>
+        <th style="text-align:center">Mid April 2024</th>
         <th style="text-align:center">Late April 2024</th>
         <th style="text-align:center">May 2024</th>
     </tr>

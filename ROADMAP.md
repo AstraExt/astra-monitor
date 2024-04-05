@@ -39,8 +39,8 @@
         <th style="text-align:center" colspan="3">Beta<br>1/7</th>
     </tr>
     <tr>
-        <th style="text-align:center">Late March 2024</th>
         <th style="text-align:center">Early April 2024</th>
+        <th style="text-align:center">Mid April 2024</th>
         <th style="text-align:center">Late April 2024</th>
     </tr>
     <tr>
