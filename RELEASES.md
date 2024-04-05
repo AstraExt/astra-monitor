@@ -7,6 +7,9 @@ _This release is still in development and the features listed below are subject 
 
 - **Storage Devices Info**: now you can see a lot more information about your storage devices in the Storage Menu.
 
+### New features
+- Added layout settings for all multiline headers like Storage IO Speed, Network IO Speed and Sensors: now you can choose either to show them in a single line or in multiple lines [[#82](https://github.com/AstraExt/astra-monitor/issues/82)]
+
 ### Bug fixes
 - Greatly improved multiline text rendering in the Top Bar Headers [[#30](https://github.com/AstraExt/astra-monitor/issues/30)] [[#93](https://github.com/AstraExt/astra-monitor/issues/93)]
 - Improved topbar header rendering: as a result of that *Header Margin* is now deprecated and not needed anymore, the header should always be perfectly aligned with the topbar

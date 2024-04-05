@@ -795,6 +795,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         this.addLabelRow({title: _('IO Speed'), tabs: 1}, '', ioSection);
         this.addSwitchRow({title: _('Show IO Speed'), tabs: 2}, 'storage-header-io', ioSection);
+        
+        const layouts = [
+            {value: 'vertical', text: _('Vertical')},
+            {value: 'horizontal', text: _('Horizontal')},
+        ];
+        this.addComboRow({title: _('IO Speed Layout'), tabs: 2}, layouts, 'storage-header-io-layout', ioSection, 'string', 'vertical');
+        
         this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 2}, 'storage-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3);
         this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 2}, 'storage-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0);
         
@@ -1003,6 +1010,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         this.addLabelRow({title: _('IO Speed'), tabs: 1}, '', ioSection);
         this.addSwitchRow({title: _('Show IO Speed'), tabs: 2}, 'network-header-io', ioSection);
+        
+        const layouts = [
+            {value: 'vertical', text: _('Vertical')},
+            {value: 'horizontal', text: _('Horizontal')},
+        ];
+        this.addComboRow({title: _('IO Speed Layout'), tabs: 2}, layouts, 'network-header-io-layout', ioSection, 'string', 'vertical');
+        
         this.addSpinRow({title: _('IO Speed Max Number of Figures'), tabs: 2}, 'network-header-io-figures', ioSection, {min: 2, max: 4, digits: 0, step: 1, page: 1}, true, 3); 
         this.addSpinRow({title: _('IO Speed Threshold'), subtitle: _('in kB/s'), tabs: 2}, 'network-header-io-threshold', ioSection, {min: 0, max: 1000000, digits: 0, step: 1000, page: 10000}, true, 0); 
         
@@ -1108,6 +1122,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         const sensor2Section = this.addExpanderRow({title: _('Sensor 2')}, group);
         this.addSwitchRow({title: _('Show'), tabs: 1}, 'sensors-header-sensor2-show', sensor2Section);
+        
+        const layouts = [
+            {value: 'vertical', text: _('Vertical')},
+            {value: 'horizontal', text: _('Horizontal')},
+        ];
+        this.addComboRow({title: _('Sensor 2 Layout'), tabs: 1}, layouts, 'sensors-header-sensor2-layout', sensor2Section, 'string', 'vertical');
+        
         this.addDropRow({
             title: _('Source'),
             tabs: 1,

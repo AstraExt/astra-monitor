@@ -52,6 +52,7 @@ class SensorsHeader extends Header {
     private valuesContainer!: St.BoxLayout;
     private sensors!: St.Label;
     private sensorsNum: number = 1;
+    private sensorsLayout!: string;
     
     private maxWidths: number[] = [];
     
@@ -78,6 +79,14 @@ class SensorsHeader extends Header {
         Config.connect(this, 'changed::sensors-header-sensor2-show', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
+        
+        const updateSensorsLayout = () => {
+            this.sensorsLayout = Config.get_string('sensors-header-sensor2-layout') || 'vertical';
+            this.sensors.text = '';
+            this.resetMaxWidths();
+        };
+        Config.connect(this, 'changed::sensors-header-sensor2-layout', updateSensorsLayout.bind(this));
+        updateSensorsLayout();
     }
     
     addOrReorderIndicators() {
@@ -197,7 +206,11 @@ class SensorsHeader extends Header {
             
             if(sensor2) {
                 this.sensorsNum = 2;
-                this.sensors.text = `${sensor1}\n${sensor2}`;
+                
+                if(this.sensorsLayout === 'horizontal')
+                    this.sensors.text = `${sensor1} | ${sensor2}`;
+                else
+                    this.sensors.text = `${sensor1}\n${sensor2}`;
             }
             else {
                 this.sensorsNum = 1;
@@ -272,15 +285,18 @@ class SensorsHeader extends Header {
             return;
         
         const calculateStyle = () => {
-            if(this.sensorsNum === 1)
+            if(this.sensorsNum === 1 || this.sensorsLayout === 'horizontal')
                 return 'font-size:1em;';
             const containerHeight = this.valuesContainer.height;
             return `font-size:${Math.round(containerHeight/3)}px;`;
         };
         const style = calculateStyle();
         
-        if(this.sensors.style !== style)
+        if(this.sensors.style !== style) {
             this.sensors.style = style;
+            this.sensors.queue_relayout();
+            this.valuesContainer.queue_relayout();
+        }
         
         const sensorsWidth = this.sensors.get_preferred_width(-1);
         const width = sensorsWidth ? sensorsWidth[1] : 0;

@@ -53,13 +53,13 @@ class StorageHeader extends Header {
     protected ioBars!: InstanceType<typeof StorageIOBars>;
     protected graph!: InstanceType<typeof StorageGraph>;
     protected speedContainer!: St.BoxLayout;
+    protected speed!: St.Label;
+    protected ioLayout!: string;
     
     protected tooltipMenu!: TooltipMenu;
     protected tooltipItem!: TooltipItem;
     
     protected maxWidths!: number[];
-    
-    protected speed!: St.Label;
     
     constructor() {
         super('Storage Header');
@@ -81,12 +81,20 @@ class StorageHeader extends Header {
         this.resetMaxWidths();
         
         Config.connect(this, 'changed::storage-indicators-order', this.addOrReorderIndicators.bind(this));
-        Config.bind('storage-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+        Config.bind('storage-header-show', this, 'visible', Gio.SettingsBindFlags.GET);        
         
         Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::storage-header-io', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
+        
+        const updateIOLayout = () => {
+            this.ioLayout = Config.get_string('storage-header-io-layout') || 'vertical';
+            this.speed.text = '';
+            this.resetMaxWidths();
+        };
+        Config.connect(this, 'changed::storage-header-io-layout', updateIOLayout.bind(this));
+        updateIOLayout();
     }
     
     addOrReorderIndicators() {
@@ -429,7 +437,10 @@ class StorageHeader extends Header {
                 write = Utils.formatBytesPerSec(bytesWrittenPerSec, unit as any, maxFigures);
             }
             
-            this.speed.text = `${read}\n${write}`;
+            if(this.ioLayout === 'horizontal')
+                this.speed.text = `${read} | ${write}`;
+            else
+                this.speed.text = `${read}\n${write}`;
             this.fixSpeedContainerStyle();
         });
     }
@@ -440,11 +451,19 @@ class StorageHeader extends Header {
         if(!this.speed.get_parent())
             return;
         
-        const containerHeight = this.speedContainer.height;
-        const style = `font-size:${Math.round(containerHeight/3)}px;`;
+        const calculateStyle = () => {
+            if(this.ioLayout === 'horizontal')
+                return 'font-size:1em;';
+            const containerHeight = this.speedContainer.height;
+            return `font-size:${Math.round(containerHeight/3)}px;`;
+        };
+        const style = calculateStyle();
         
-        if(this.speed.style !== style)
+        if(this.speed.style !== style) {
             this.speed.style = style;
+            this.speed.queue_relayout();
+            this.speedContainer.queue_relayout();
+        }
         
         const speedWidth = this.speed.get_preferred_width(-1);
         const width = speedWidth ? speedWidth[1] : 0;

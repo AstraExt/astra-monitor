@@ -48,6 +48,7 @@ class NetworkHeader extends Header {
     private graph!: InstanceType<typeof NetworkGraph>;
     private speedContainer!: St.BoxLayout;
     private speed!: St.Label;
+    protected ioLayout!: string;
     
     protected tooltipMenu!: TooltipMenu;
     protected tooltipItem!: TooltipItem;
@@ -76,6 +77,14 @@ class NetworkHeader extends Header {
         Config.connect(this, 'changed::network-header-io', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
         Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
+        
+        const updateIOLayout = () => {
+            this.ioLayout = Config.get_string('network-header-io-layout') || 'vertical';
+            this.speed.text = '';
+            this.resetMaxWidths();
+        };
+        Config.connect(this, 'changed::network-header-io-layout', updateIOLayout.bind(this));
+        updateIOLayout();
     }
     
     addOrReorderIndicators() {
@@ -121,7 +130,7 @@ class NetworkHeader extends Header {
     
     buildIcon() {
         const defaultStyle = 'margin-left:2px;margin-right:4px;';
-        let iconSize = Config.get_int('storage-header-icon-size');
+        let iconSize = Config.get_int('network-header-icon-size');
         iconSize = Math.max(8, Math.min(30, iconSize));
         this.icon = new St.Icon({
             fallback_gicon: Utils.getLocalIcon('am-network-symbolic'),
@@ -256,7 +265,10 @@ class NetworkHeader extends Header {
                 download = Utils.formatBytesPerSec(bytesDownloadedPerSec, unit as any, maxFigures, true);
             }
             
-            this.speed.text = `${upload}\n${download}`;
+            if(this.ioLayout === 'horizontal')
+                this.speed.text = `${upload} | ${download}`;
+            else
+                this.speed.text = `${upload}\n${download}`;
             this.fixSpeedContainerStyle();
         });
     }
@@ -267,11 +279,19 @@ class NetworkHeader extends Header {
         if(!this.speed.get_parent())
             return;
         
-        const containerHeight = this.speedContainer.height;
-        const style = `font-size:${Math.round(containerHeight/3)}px;`;
+        const calculateStyle = () => {
+            if(this.ioLayout === 'horizontal')
+                return 'font-size:1em;';
+            const containerHeight = this.speedContainer.height;
+            return `font-size:${Math.round(containerHeight/3)}px;`;
+        };
+        const style = calculateStyle();
         
-        if(this.speed.style !== style)
+        if(this.speed.style !== style) {
             this.speed.style = style;
+            this.speed.queue_relayout();
+            this.speedContainer.queue_relayout();
+        }
         
         const speedWidth = this.speed.get_preferred_width(-1);
         const width = speedWidth ? speedWidth[1] : 0;
@@ -321,7 +341,7 @@ class NetworkHeader extends Header {
             
             const values: string[] = [];
             
-            if(Config.get_boolean('storage-header-tooltip-io')) {
+            if(Config.get_boolean('network-header-tooltip-io')) {
                 const usage = Utils.networkMonitor.getCurrentValue('networkIO');
                 
                 if(usage) {

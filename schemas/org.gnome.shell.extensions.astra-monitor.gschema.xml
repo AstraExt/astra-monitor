@@ -662,6 +662,11 @@
       <summary>Show Storage IO realtime speed</summary>
       <description>Show the IO speed in realtime as a label</description>
     </key>
+    <key name="storage-header-io-layout" type="s">
+      <default>'vertical'</default>
+      <summary>Storage IO speed layout</summary>
+      <description>Show the IO speed in vertical or horizontal layout</description>
+    </key>
     <key name="storage-header-io-figures" type="i">
       <default>2</default>
       <summary>Max Number Figures</summary>
@@ -836,6 +841,11 @@
       <summary>Show Network IO realtime speed</summary>
       <description>Show the IO speed in realtime as a label</description>
     </key>
+    <key name="network-header-io-layout" type="s">
+      <default>'vertical'</default>
+      <summary>Network IO speed layout</summary>
+      <description>Show the IO speed in vertical or horizontal layout</description>
+    </key>
     <key name="network-header-io-figures" type="i">
       <default>2</default>
       <summary>Max Number Figures</summary>
@@ -944,6 +954,11 @@
       <default>false</default>
       <summary>Sensors Header Sensor 2</summary>
       <description>Show the second sensor on the header of the sensors monitor</description>
+    </key>
+    <key name="sensors-header-sensor2-layout" type="s">
+      <default>'vertical'</default>
+      <summary>Sensors layout</summary>
+      <description>Show the sensors in vertical or horizontal layout</description>
     </key>
     <key name="sensors-header-sensor2" type="s">
       <default>'""'</default>
