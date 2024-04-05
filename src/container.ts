@@ -20,7 +20,6 @@
 
 import GObject from 'gi://GObject';
 import St from 'gi://St';
-import Clutter from 'gi://Clutter';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
@@ -41,6 +40,8 @@ class AstraMonitorContainer extends PanelMenu.Button {
     private widgets: Map<string, Widget> = new Map();
     private uuid: string = '';
     
+    declare box: St.BoxLayout;
+    
     constructor() {
         super(0, 'Astra Monitor');
         Utils.log('Initializing container');
@@ -51,19 +52,16 @@ class AstraMonitorContainer extends PanelMenu.Button {
         if(panelBox === 'left')
             MenuBase.openingSide = St.Side.LEFT;
         
-        (this as any).box = new St.BoxLayout({
+        this.box = new St.BoxLayout({
             vertical: false,
             x_expand: true,
             y_expand: true,
-            x_align: Clutter.ActorAlign.FILL,
-            y_align: Clutter.ActorAlign.FILL,
             style: this.computeStyle(),
         });
         
-        this.add_child((this as any).box);
+        this.add_child(this.box);
         
         this.remove_style_class_name('panel-button');
-        this.add_style_class_name('astra-monitor-header-container');
         this.setup();
         
         Config.connect(this, 'changed::panel-box', this.updatePanel.bind(this));
@@ -99,14 +97,14 @@ class AstraMonitorContainer extends PanelMenu.Button {
     
     updateStyle() {
         const style = this.computeStyle();
-        (this as any).box.style = style;
+        this.box.style = style;
     }
     
     addWidget(key: string, widget: Widget) {
         Utils.log('Adding widget: ' + key);
         
         this.widgets.set(key, widget);
-        (this as any).box.add_child(widget);
+        this.box.add_child(widget);
     }
     
     reorderWidgets() {
@@ -118,8 +116,8 @@ class AstraMonitorContainer extends PanelMenu.Button {
             const widget = this.widgets.get(monitor);
             if(!widget)
                 continue;
-            (this as any).box.remove_child(widget);
-            (this as any).box.insert_child_at_index(widget, position++);
+            this.box.remove_child(widget);
+            this.box.insert_child_at_index(widget, position++);
         }
     }
     

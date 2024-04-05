@@ -8,6 +8,7 @@ _This release is still in development and the features listed below are subject 
 - **Storage Devices Info**: now you can see a lot more information about your storage devices in the Storage Menu.
 
 ### Bug fixes
+- Improved topbar header rendering: as a result of that *Header Margin* is now deprecated and not needed anymore, the header should always be perfectly aligned with the topbar
 - Fixed long device name in the Storage Menu leading to a misalignment of other elements
 
 # Astra Monitor 17 - March 27 2024

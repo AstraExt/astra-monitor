@@ -134,12 +134,6 @@
       <description>Set the height of the headers</description>
       <range min="15" max="80"/>
     </key>
-    <key name="headers-margins" type="i">
-      <default>2</default>
-      <summary>Headers Margins</summary>
-      <description>Set the margins of the headers</description>
-      <range min="0" max="15"/>
-    </key>
     
     <!-- PROCESSOR -->
     <key name="processor-update" type="d">

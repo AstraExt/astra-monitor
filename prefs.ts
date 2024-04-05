@@ -258,12 +258,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             icon_name: 'am-dialog-warning-symbolic',
             tabs: 1
         }, 'headers-height', headersSection, {min: 15, max: 80, digits: 0, step: 1, page: 5}, true, 28);
-        this.addSpinRow({
-            title: _('Headers Margins'),
-            subtitle: _('Experimental feature: may require to disable/enable the extension.'),
-            icon_name: 'am-dialog-warning-symbolic',
-            tabs: 1
-        }, 'headers-margins', headersSection, {min: 0, max: 15, digits: 0, step: 1, page: 2}, true, 2);
         this.addFontRow({
             title: _('Headers Font'),
             subtitle: _('Experimental feature: may require to disable/enable the extension.') + '\n' + _('Set to empty to disable font override'),

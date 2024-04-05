@@ -33,8 +33,8 @@ declare const global: any;
 
 export default GObject.registerClass(
 class Header extends St.Widget {
-    private box: St.BoxLayout;
     private menu?: MenuBase;
+    private box: St.Widget;
     
     constructor(name: string) {
         super({
@@ -44,17 +44,22 @@ class Header extends St.Widget {
             style_class: 'panel-button astra-monitor-header',
             accessible_name: name,
             accessible_role: Atk.Role.MENU,
+            layoutManager: new Clutter.BinLayout(),
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.CENTER,
         });
         this.name = name;
         
         Utils.verbose(`Creating ${this.name}`);
         
-        const hbox = new St.BoxLayout({ style_class: 'astra-monitor-header-box' });
-        this.add_child(hbox);
-        this.box = hbox;
+        this.box = new St.BoxLayout({
+            x_expand: true,
+            y_expand: true,
+            x_align: Clutter.ActorAlign.START,
+            y_align: Clutter.ActorAlign.CENTER,
+            style_class: 'astra-monitor-header-box'
+        });
+        this.add_child(this.box);
         
         this.createTooltip();
         
@@ -84,7 +89,6 @@ class Header extends St.Widget {
         });
         
         Config.connect(this, 'changed::headers-height', this.setStyle.bind(this));
-        Config.connect(this, 'changed::headers-margins', this.setStyle.bind(this));
         this.setStyle();
     }
     
@@ -92,30 +96,8 @@ class Header extends St.Widget {
         return this.menu;
     }
     
-    // @ts-expect-error vfunc not in types
-    vfunc_get_preferred_width(_forHeight): [number, number] {
-        const child = this.get_first_child();
-        if(child) 
-            return child.get_preferred_width(_forHeight);
-        return [0, 0];
-    }
-    
-    // @ts-expect-error vfunc not in types
-    vfunc_get_preferred_height(_forWidth): [number, number] {
-        const child = this.get_first_child();
-        if(child)
-            return child.get_preferred_height(_forWidth);
-        return [0, 0];
-    }
-    
     setStyle() {
         let style = '';
-        
-        let margins = Config.get_int('headers-margins');
-        if(margins < 0 || margins > 15)
-            margins = 4;
-        if(margins > 0)
-            style += `margin-top:${margins}px;margin-bottom:${margins}px;`;
         
         let height = Config.get_int('headers-height');
         if(height < 15 || height > 80)
@@ -123,15 +105,7 @@ class Header extends St.Widget {
         style += `height:${height}px;`;
         
         this.box.set_style(style);
-        //this.box.height = height;
         this.box.queue_relayout();
-    }
-    
-    add_child(child: any) {
-        if(this.box)
-            this.box.add_child(child);
-        else
-            super.add_child(child);
     }
     
     insert_child_above(child: any, sibling: any) {
