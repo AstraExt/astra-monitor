@@ -12,6 +12,7 @@ As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-fil
 ### New features
 - Added layout settings for all multiline headers like Storage IO Speed, Network IO Speed and Sensors: now you can choose either to show them in a single line or in multiple lines [[#82](https://github.com/AstraExt/astra-monitor/issues/82)]
 - Added a setting to hint **Astra Monitor** on the position of the topbar/dash/panel to improve menu anchor points [[#96](https://github.com/AstraExt/astra-monitor/issues/96)]
+- Added an option to replace '-' with 0 [[#85](https://github.com/AstraExt/astra-monitor/issues/85)]
 
 ### Bug fixes
 - Greatly improved multiline text rendering in the Top Bar Headers [[#30](https://github.com/AstraExt/astra-monitor/issues/30)] [[#93](https://github.com/AstraExt/astra-monitor/issues/93)]

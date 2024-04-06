@@ -156,6 +156,7 @@ export default class Utils {
     
     static lastCachedHwmonDevices: number = 0;
     static cachedHwmonDevices: HwMonDevices = new Map();
+    static explicitZero: boolean = false;
     
     static init({
         service,
@@ -207,6 +208,10 @@ export default class Utils {
         
         Utils.getCachedHwmonDevicesAsync();
         Utils.initializeGTop();
+        
+        const updateExplicitZero = () => Utils.explicitZero = Config.get_boolean('explicit-zero');
+        Config.connect(this, 'changed::explicit-zero', updateExplicitZero);
+        updateExplicitZero();
     }
     
     static clear() {
@@ -350,6 +355,10 @@ export default class Utils {
         if(Config.get_string('theme-style') === 'light')
             return 'light';
         return 'dark';
+    }
+    
+    static get zeroStr(): string {
+        return Utils.explicitZero ? '0' : '-';
     }
     
     static getMonitorsOrder(): string[] {
@@ -713,7 +722,7 @@ export default class Utils {
             unit = 'kB/s';
         
         if(!value || isNaN(value))
-            return '-' + (padded ? '   ' : ' ') + Utils.unitMap[unit].labels[0];
+            return Utils.zeroStr + (padded ? '   ' : ' ') + Utils.unitMap[unit].labels[0];
         
         value *= Utils.unitMap[unit].mult;
         
@@ -743,7 +752,7 @@ export default class Utils {
             unit = 'kB-KB';
         
         if(!bytes || isNaN(bytes))
-            return '-' + Utils.unit2Map[unit].labels[0];
+            return Utils.zeroStr + Utils.unit2Map[unit].labels[0];
         
         bytes *= Utils.unit2Map[unit].mult;
         
@@ -773,7 +782,7 @@ export default class Utils {
             unit = 'Q';
         
         if(!value || isNaN(value))
-            return '-' + Utils.unit3Map[unit].labels[0];
+            return Utils.zeroStr + Utils.unit3Map[unit].labels[0];
         
         let unitIndex = 0;
         while(value >= Math.pow(10, maxNumbers) && unitIndex < Utils.unit3Map[unit].labels.length - 1) {

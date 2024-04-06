@@ -243,8 +243,8 @@ class NetworkHeader extends Header {
             if(!Config.get_boolean('network-header-io'))
                 return;
             
-            let upload = '- B/s';
-            let download = '- B/s';
+            let upload = Utils.zeroStr + ' B/s';
+            let download = Utils.zeroStr + ' B/s';
                 
             const usage = Utils.networkMonitor.getCurrentValue('networkIO');
             if(usage) {

@@ -269,7 +269,7 @@ class ProcessorHeader extends Header {
     buildPercentage() {
         const useFourDigitStyle = Config.get_boolean('processor-header-percentage-core');
         this.percentage = new St.Label({
-            text: '-%',
+            text: Utils.zeroStr + '%',
             style_class: useFourDigitStyle ? 'astra-monitor-header-percentage4' : 'astra-monitor-header-percentage3',
             y_align: Clutter.ActorAlign.CENTER,
         });

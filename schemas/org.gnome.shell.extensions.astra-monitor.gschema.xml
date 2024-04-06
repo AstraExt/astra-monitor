@@ -128,6 +128,11 @@
       <summary>Topbar/dash screen position</summary>
       <description>The position of the topbar/dash on the screen</description>
     </key>
+    <key name="explicit-zero" type="b">
+      <default>false</default>
+      <summary>Explicit Zero</summary>
+      <description>Show 0 instead of '-'</description>
+    </key>
     <key name="headers-font-family" type="s">
       <default>''</default>
       <summary>Headers Font Family</summary>

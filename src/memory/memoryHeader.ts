@@ -272,7 +272,7 @@ class MemoryHeader extends Header {
     
     buildPercentage() {
         this.percentage = new St.Label({
-            text: '-%',
+            text: Utils.zeroStr + '%',
             style_class: 'astra-monitor-header-percentage3',
             y_align: Clutter.ActorAlign.CENTER,
         });

@@ -277,7 +277,7 @@ class StorageHeader extends Header {
     
     buildPercentage() {
         this.percentage = new St.Label({
-            text: '-%',
+            text: Utils.zeroStr + '%',
             style_class: 'astra-monitor-header-percentage3',
             y_align: Clutter.ActorAlign.CENTER,
             x_align: Clutter.ActorAlign.CENTER,
@@ -414,8 +414,8 @@ class StorageHeader extends Header {
             if(!Config.get_boolean('storage-header-io'))
                 return;
             
-            let read = '- B/s';
-            let write = '- B/s';
+            let read = Utils.zeroStr + ' B/s';
+            let write = Utils.zeroStr + ' B/s';
             
             const usage = Utils.storageMonitor.getCurrentValue('storageIO');
             if(usage) {

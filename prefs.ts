@@ -235,6 +235,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             if(color)
                 this.setAllColors(color, ColorCategory.SECONDARY);
         }, themeSection, 'rgba(214,29,29,1.0)');
+        this.addSwitchRow({title: _('Show 0 instead of -'), tabs: 1}, 'explicit-zero', themeSection);
         
         const panelSection = this.addExpanderRow({title: _('Panel Box')}, group);
         choicesPanel = [
