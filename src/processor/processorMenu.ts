@@ -574,10 +574,16 @@ export default class ProcessorMenu extends MenuBase {
     
     createTopProcessesPopup(sourceActor: St.Widget) {
         this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
-        this.topProcessesPopup.addMenuSection(_('Top processes'));
+        const section = this.topProcessesPopup.addMenuSection(_('Top processes'));
+        section.style = 'min-width:500px;';
         this.topProcessesPopup.processes = new Map();
         
-        const grid = new Grid({ numCols: 2, styleClass: 'astra-monitor-menu-subgrid' });
+        const grid = new Grid({
+            x_expand: true,
+            x_align: Clutter.ActorAlign.START,
+            numCols: 2,
+            styleClass: 'astra-monitor-menu-subgrid'
+        });
         
         for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
             const percentage = new St.Label({
@@ -1376,19 +1382,19 @@ export default class ProcessorMenu extends MenuBase {
         
         if(this.cpuInfoPopup) {
             this.cpuInfoPopup.destroy();
-            //(this.cpuInfoPopup as any) = null;
+            (this.cpuInfoPopup as any) = null;
         }
         if(this.cpuCategoryUsagePopup) {
             this.cpuCategoryUsagePopup.destroy();
-            //(this.cpuCategoryUsagePopup as any) = null;
+            (this.cpuCategoryUsagePopup as any) = null;
         }
         if(this.cpuCoresUsagePopup) {
             this.cpuCoresUsagePopup.destroy();
-            //(this.cpuCoresUsagePopup as any) = null;
+            (this.cpuCoresUsagePopup as any) = null;
         }
         if(this.topProcessesPopup) {
             this.topProcessesPopup.destroy();
-            //(this.topProcessesPopup as any) = null;
+            (this.topProcessesPopup as any) = null;
         }
         
         super.destroy();

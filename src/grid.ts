@@ -28,6 +28,8 @@ type GridProps = {
     styleClass?:string,
     x_expand?:boolean,
     y_expand?:boolean,
+    x_align?:Clutter.ActorAlign,
+    y_align?:Clutter.ActorAlign,
     orientation?:Clutter.Orientation
 }
 export default GObject.registerClass(
@@ -61,6 +63,10 @@ class Grid extends St.Widget {
             data.y_expand = params.y_expand;
         else
             data.y_expand = true;
+        if(params.x_align)
+            data.x_align = params.x_align;
+        if(params.y_align)
+            data.y_align = params.y_align;
         super(data);
         
         // @ts-expect-error Clutter.GridLayout not updated in gjs

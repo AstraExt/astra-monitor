@@ -897,11 +897,11 @@ export default class MemoryMenu extends MenuBase {
         
         if(this.memoryUsagePopup) {
             this.memoryUsagePopup.destroy();
-            /*(this.memoryUsagePopup as any) = null;*/
+            (this.memoryUsagePopup as any) = null;
         }
         if(this.topProcessesPopup) {
             this.topProcessesPopup.destroy();
-            /*(this.topProcessesPopup as any) = null;*/
+            (this.topProcessesPopup as any) = null;
         }
         
         super.destroy();

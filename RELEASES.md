@@ -3,11 +3,11 @@
 ### Advanced Storage Monitoring
 As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap), in this release we are focusing on improving the Storage monitoring capabilities of Astra Monitor. Here's a list of the new features and improvements:
 
-_This release is still in development and the features listed below are subject to change._
-
 - **Storage Devices Info**: now you can see a lot more information about your storage devices in the Storage Menu.
 
 - **Cumulative Read/Write Bytes**: now you can see the total read/write bytes since the last boot in the Storage Menu for each storage device and globally.
+
+- **Top Processes Details**: now you can see more details about the top processes in the Storage Menu.
 
 ### New features
 - Added layout settings for all multiline headers like Storage IO Speed, Network IO Speed and Sensors: now you can choose either to show them in a single line or in multiple lines [[#82](https://github.com/AstraExt/astra-monitor/issues/82)]

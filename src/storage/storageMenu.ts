@@ -348,18 +348,18 @@ export default class StorageMenu extends MenuBase {
         
         hoverButton.set_child(grid);
         
-        //this.createTopProcessesPopup(hoverButton);
+        this.createTopProcessesPopup(hoverButton);
         
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            //if(this.topProcessesPopup)
-            //    this.topProcessesPopup.open(true);
+            if(this.topProcessesPopup)
+                this.topProcessesPopup.open(true);
         });
         
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            //if(this.topProcessesPopup)
-            //    this.topProcessesPopup.close(true);
+            if(this.topProcessesPopup)
+                this.topProcessesPopup.close(true);
         });
         this.addToMenu(hoverButton, 2);
         
@@ -372,10 +372,16 @@ export default class StorageMenu extends MenuBase {
     
     createTopProcessesPopup(sourceActor: St.Widget) {
         this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
-        this.topProcessesPopup.addMenuSection(_('Top processes'));
+        const section = this.topProcessesPopup.addMenuSection(_('Top processes'));
+        section.style = 'min-width:500px;';
         this.topProcessesPopup.processes = new Map();
         
-        const grid = new Grid({ numCols: 2, styleClass: 'astra-monitor-menu-subgrid' });
+        const grid = new Grid({
+            x_expand: true,
+            x_align: Clutter.ActorAlign.START,
+            numCols: 2,
+            styleClass: 'astra-monitor-menu-subgrid'
+        });
         
         for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
             // READ
@@ -1253,22 +1259,25 @@ export default class StorageMenu extends MenuBase {
                         this.topProcesses.labels[i].write.icon.style = 'color:rgba(255,255,255,0.5);';
                     }
                     
-                    /*if(this.topProcessesPopup && this.topProcessesPopup['process' + i]) {
-                        const popupElement = this.topProcessesPopup['process' + i];
-                        popupElement.label.hide();
-                        popupElement.description.hide();
-                        popupElement.read.container.hide();
-                        popupElement.write.container.hide();
-                    }*/
+                    if(this.topProcessesPopup && this.topProcessesPopup.processes) {
+                        const popupElement = this.topProcessesPopup.processes.get(i);
+                        if(popupElement) {
+                            popupElement.label.hide();
+                            popupElement.description?.hide();
+                            popupElement.read.container.hide();
+                            popupElement.write.container.hide();
+                        }
+                    }
                 }
                 else {
+                    const unit = Config.get_string('storage-io-unit');
+                    
                     const topProcess = topProcesses[i];
                     const process = topProcess.process;
                     const read = topProcess.read;
                     const write = topProcess.write;
                     
                     if(i < 5) {
-                        const unit = Config.get_string('storage-io-unit');
                         this.topProcesses.labels[i].label.text = process.exec;
                         
                         if(read > 0) {
@@ -1292,35 +1301,38 @@ export default class StorageMenu extends MenuBase {
                         }
                     }
                     
-                    /*if(this.topProcessesPopup && this.topProcessesPopup['process' + i]) {
-                        const popupElement = this.topProcessesPopup['process' + i];
-                        
-                        popupElement.label.show();
-                        popupElement.label.text = process.exec;
-                        
-                        popupElement.description.show();
-                        popupElement.description.text = process.cmd;
-                        
-                        popupElement.read.container.show();
-                        if(read > 0) {
-                            popupElement.read.icon.style = 'color:rgb(29,172,214);';
-                            popupElement.read.value.text = Utils.formatBytesPerSec(read, 3);
+                    if(this.topProcessesPopup && this.topProcessesPopup.processes) {
+                        const popupElement = this.topProcessesPopup.processes.get(i);
+                        if(popupElement) {
+                            popupElement.label.show();
+                            popupElement.label.text = process.exec;
+                            
+                            if(popupElement.description) {
+                                popupElement.description.show();
+                                popupElement.description.text = process.cmd;
+                            }
+                            
+                            popupElement.read.container.show();
+                            if(read > 0) {
+                                popupElement.read.icon.style = 'color:rgb(29,172,214);';
+                                popupElement.read.value.text = Utils.formatBytesPerSec(read, unit as any, 3);
+                            }
+                            else {
+                                popupElement.read.icon.style = 'color:rgba(255,255,255,0.5);';
+                                popupElement.read.value.text = '-';
+                            }
+                            
+                            popupElement.write.container.show();
+                            if(write > 0) {
+                                popupElement.write.icon.style = 'color:rgb(214,29,29);';
+                                popupElement.write.value.text = Utils.formatBytesPerSec(write, unit as any, 3);
+                            }
+                            else {
+                                popupElement.write.icon.style = 'color:rgba(255,255,255,0.5);';
+                                popupElement.write.value.text = '-';
+                            }
                         }
-                        else {
-                            popupElement.read.icon.style = 'color:rgba(255,255,255,0.5);';
-                            popupElement.read.value.text = '-';
-                        }
-                        
-                        popupElement.write.container.show();
-                        if(write > 0) {
-                            popupElement.write.icon.style = 'color:rgb(214,29,29);';
-                            popupElement.write.value.text = Utils.formatBytesPerSec(write, 3);
-                        }
-                        else {
-                            popupElement.write.icon.style = 'color:rgba(255,255,255,0.5);';
-                            popupElement.write.value.text = '-';
-                        }
-                    }*/
+                    }
                 }   
             }
             return;
