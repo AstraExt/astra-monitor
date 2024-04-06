@@ -1,4 +1,4 @@
-# Astra Monitor 18 - TO BE RELEASED
+# Astra Monitor 18 - April 6 2024
 
 ### Advanced Storage Monitoring
 As per our [Roadmap](https://github.com/AstraExt/astra-monitor?tab=readme-ov-file#roadmap), in this release we are focusing on improving the Storage monitoring capabilities of Astra Monitor. Here's a list of the new features and improvements:

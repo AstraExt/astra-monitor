@@ -36,7 +36,7 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Beta<br>1/7</th>
+        <th style="text-align:center" colspan="3">Beta<br>2/7</th>
     </tr>
     <tr>
         <th style="text-align:center">Early April 2024</th>
@@ -49,7 +49,7 @@
         <td>🔲<br>User Custom Commands</td>
     </tr>
     <tr>
-        <td>🔲<br>Advanced Disk Monitoring</td>
+        <td>✅<br>Advanced Disk Monitoring</td>
         <td>🔲<br>Battery Monitoring</td>
         <td>🔲<br>Continuos Monitoring Mode</td>
     </tr>
