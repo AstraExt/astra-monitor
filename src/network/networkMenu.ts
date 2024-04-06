@@ -702,7 +702,7 @@ export default class NetworkMenu extends MenuBase {
         const container = new Grid({
             x_expand: true,
             styleClass: 'astra-monitor-menu-subgrid',
-            style: 'padding-top:0.25em;margin-bottom:0.25em;'
+            style: 'padding-top:0.3em;margin-bottom:0.3em;'
         });
         
         //Header Grid

@@ -35,7 +35,7 @@ import StorageMonitor, { BlockDevice, BlockDeviceData } from './storageMonitor.j
 
 type BlockDeviceInfo = {
     data: BlockDevice|null,
-    container: St.Button,
+    container: InstanceType<typeof Grid>,
     icon: St.Icon,
     label: St.Label,
     name: St.Label,
@@ -47,6 +47,11 @@ type BlockDeviceInfo = {
     readActivityIcon: St.Icon,
     writeValueLabel: St.Label,
     writeActivityIcon: St.Icon
+}
+
+type StorageActivityPopup = MenuBase & {
+    totalReadValueLabel?: St.Label,
+    totalWriteValueLabel?: St.Label
 }
 
 type DeviceInfoPopup = MenuBase & {
@@ -76,6 +81,11 @@ type DeviceInfoPopup = MenuBase & {
     labelsS6: St.Label[],
     valuesS6: St.Label[],
 };
+
+type DeviceTotalsPopup = MenuBase & {
+    totalReadValueLabel?: St.Label,
+    totalWriteValueLabel?: St.Label
+}
 
 type DeviceInfoPopupConfiguration = {
     title: string,
@@ -118,6 +128,7 @@ type TopProcessesPopup = MenuBase & {
 
 export default class StorageMenu extends MenuBase {
     /*private storageSectionLabel!: St.Label;*/
+    private storageActivityPopup!: StorageActivityPopup;
     
     private graph!: InstanceType<typeof StorageGraph>;
     private totalReadSpeedValueLabel!: St.Label;
@@ -131,6 +142,7 @@ export default class StorageMenu extends MenuBase {
     
     private devices!: Map<string, BlockDeviceInfo>;
     private devicesInfoPopup!: Map<string, DeviceInfoPopup>;
+    private devicesTotalsPopup!: Map<string, DeviceTotalsPopup>;
     private updateTimer: number = 0;
     
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
@@ -203,17 +215,46 @@ export default class StorageMenu extends MenuBase {
         });
         grid.addToGrid(this.totalWriteSpeedValueLabel);
         
+        this.createActivityPopup(hoverButton);
+        
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            
+            if(this.storageActivityPopup)
+                this.storageActivityPopup.open(true);
         });
         
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            
+            if(this.storageActivityPopup)
+                this.storageActivityPopup.close(true);
         });
         
         this.addToMenu(hoverButton, 2);
+    }
+    
+    createActivityPopup(sourceActor: St.Widget) {
+        this.storageActivityPopup = new MenuBase(sourceActor, 0.05, { numCols: 2});
+        this.storageActivityPopup.addMenuSection(_('Total Activity'));
+        
+        //Read
+        this.storageActivityPopup.addToMenu(new St.Label({
+            text: _('Read'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalReadValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+        this.storageActivityPopup.addToMenu(totalReadValueLabel);
+        this.storageActivityPopup.totalReadValueLabel = totalReadValueLabel;
+        
+        //Write
+        this.storageActivityPopup.addToMenu(new St.Label({
+            text: _('Write'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalWriteValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+        this.storageActivityPopup.addToMenu(totalWriteValueLabel);
+        this.storageActivityPopup.totalWriteValueLabel = totalWriteValueLabel;
     }
     
     addTopProcesses() {
@@ -427,6 +468,7 @@ export default class StorageMenu extends MenuBase {
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
             this.devicesInfoPopup = new Map();
+            this.devicesTotalsPopup = new Map();
             this.addToMenu(this.deviceSection, 2);
             
             Config.connect(this, 'changed::storage-ignored', this.updateDeviceList.bind(this));
@@ -477,6 +519,10 @@ export default class StorageMenu extends MenuBase {
                 this.devicesInfoPopup.get(id)?.close(true);
                 this.devicesInfoPopup.get(id)?.destroy();
                 this.devicesInfoPopup.delete(id);
+                
+                this.devicesTotalsPopup.get(id)?.close(true);
+                this.devicesTotalsPopup.get(id)?.destroy();
+                this.devicesTotalsPopup.delete(id);
             }
         }
         
@@ -497,6 +543,7 @@ export default class StorageMenu extends MenuBase {
             
             let device;
             let infoPopup;
+            let totalsPopup;
             
             if(!this.devices.has(id)) {
                 device = this.createBlockDevice(id);
@@ -521,6 +568,17 @@ export default class StorageMenu extends MenuBase {
             if(!infoPopup)
                 continue;
             
+            //Totals Popup
+            if(!this.devicesTotalsPopup.has(id)) {
+                totalsPopup = this.createDeviceTotalsPopup(device.container);
+                this.devicesTotalsPopup.set(id, totalsPopup);
+            }
+            else {
+                totalsPopup = this.devicesTotalsPopup.get(id);
+            }
+            if(!totalsPopup)
+                continue;
+            
             //Update device info
             if(!deviceData)
                 continue;
@@ -534,17 +592,20 @@ export default class StorageMenu extends MenuBase {
     }
     
     createBlockDevice(id: string): BlockDeviceInfo {
-        const defaultStyle = 'padding-top:0.25em;margin-bottom:0.25em;';
-        const container = new St.Button({
-            reactive: true,
-            track_hover: true,
-            style: defaultStyle
+        const container = new Grid({
+            x_expand: true,
+            styleClass: 'astra-monitor-menu-subgrid',
+            style: 'padding-top:0.3em;margin-bottom:0.3em;'
         });
         
-        const grid = new Grid({
-            styleClass: 'astra-monitor-menu-subgrid'
+        const topInfoGrid = new Grid({styleClass: 'astra-monitor-menu-subgrid'});
+        
+        const topInfoButton = new St.Button({
+            reactive: true,
+            track_hover: true,
+            style: ''
         });
-        container.set_child(grid);
+        topInfoButton.set_child(topInfoGrid);
         
         //Header Grid
         //{
@@ -572,7 +633,7 @@ export default class StorageMenu extends MenuBase {
             });
             headerGrid.addToGrid(name);
             
-            grid.addToGrid(headerGrid, 2);
+            topInfoGrid.addToGrid(headerGrid, 2);
         //}
         
         //Bar
@@ -607,16 +668,41 @@ export default class StorageMenu extends MenuBase {
             });
             (barGrid.layout_manager as any).attach(barLabel, 2, 0, 1, 1);
             
-            grid.addToGrid(barGrid, 2);
+            topInfoGrid.addToGrid(barGrid, 2);
         //}
+        
+        container.addToGrid(topInfoButton, 2);
+        
+        topInfoButton.connect('enter-event', () => {
+            topInfoButton.style = this.selectionStyle;
+            
+            const popup = this.devicesInfoPopup.get(id);
+            if(popup?.empty === false)
+                popup?.open(true);
+        });
+        
+        topInfoButton.connect('leave-event', () => {
+            topInfoButton.style = '';
+            
+            const popup = this.devicesInfoPopup.get(id);
+            popup?.close(true);
+        });
         
         // Read/Write Speed
         //{
+            const rwButton = new St.Button({
+                reactive: true,
+                track_hover: true,
+                x_expand: true,
+                style: ''
+            });
+            
             const rwContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
                 x_expand: true,
                 style: 'margin-left:0;margin-right:0;'
             });
+            rwButton.set_child(rwContainer);
             
             const readContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({orientation: Clutter.Orientation.HORIZONTAL}),
@@ -680,23 +766,22 @@ export default class StorageMenu extends MenuBase {
             
             rwContainer.add_child(writeContainer);
             
-            grid.addToGrid(rwContainer, 2);
-        //}
-        
-        container.connect('enter-event', () => {
-            container.style = defaultStyle + this.selectionStyle;
-            
-            const popup = this.devicesInfoPopup.get(id);
-            if(popup?.empty === false)
+            rwButton.connect('enter-event', () => {
+                rwButton.style = this.selectionStyle;
+                
+                const popup = this.devicesTotalsPopup.get(id);
                 popup?.open(true);
-        });
-        
-        container.connect('leave-event', () => {
-            container.style = defaultStyle;
+            });
             
-            const popup = this.devicesInfoPopup.get(id);
-            popup?.close(true);
-        });
+            rwButton.connect('leave-event', () => {
+                rwButton.style = '';
+                
+                const popup = this.devicesTotalsPopup.get(id);
+                popup?.close(true);
+            });
+            
+            container.addToGrid(rwButton, 2);
+        //}
         
         return {
             data: null,
@@ -852,6 +937,35 @@ export default class StorageMenu extends MenuBase {
                 popup[section.values].push(value);
             }
         }
+        return popup;
+    }
+    
+    createDeviceTotalsPopup(sourceActor: St.Widget): DeviceTotalsPopup {
+        const popup:DeviceTotalsPopup = new MenuBase(sourceActor, 0.05, { numCols: 2}) as DeviceTotalsPopup;
+        
+        //Totals
+        popup.addMenuSection(_('Total Device Activity'));
+        
+        //Read
+        popup.addToMenu(new St.Label({
+            text: _('Read'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalReadValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+        popup.addToMenu(totalReadValueLabel);
+        popup.totalReadValueLabel = totalReadValueLabel;
+        
+        //Write
+        popup.addToMenu(new St.Label({
+            text: _('Write'),
+            style_class: 'astra-monitor-menu-sub-key'
+        }));
+        
+        const totalWriteValueLabel = new St.Label({text: '', style: 'text-align:left;'});
+        popup.addToMenu(totalWriteValueLabel);
+        popup.totalWriteValueLabel = totalWriteValueLabel;
+        
         return popup;
     }
     
@@ -1028,10 +1142,32 @@ export default class StorageMenu extends MenuBase {
                     this.totalWriteSpeedValueLabel.text = Utils.formatBytesPerSec(current.bytesWrittenPerSec, unit as any, 3);
                 else
                     this.totalWriteSpeedValueLabel.text = '-';
+                
+                if(this.storageActivityPopup) {
+                    if(this.storageActivityPopup.totalReadValueLabel) {
+                        if(current.totalBytesRead)
+                            this.storageActivityPopup.totalReadValueLabel.text = Utils.formatBytes(current.totalBytesRead, 'kB-KB', 3);
+                        else
+                            this.storageActivityPopup.totalReadValueLabel.text = '-';
+                    }
+                    if(this.storageActivityPopup.totalWriteValueLabel) {
+                        if(current.totalBytesWritten)
+                            this.storageActivityPopup.totalWriteValueLabel.text = Utils.formatBytes(current.totalBytesWritten, 'kB-KB', 3);
+                        else
+                            this.storageActivityPopup.totalWriteValueLabel.text = '-';
+                    }
+                }
             }
             else {
                 this.totalReadSpeedValueLabel.text = '-';
                 this.totalWriteSpeedValueLabel.text = '-';
+                
+                if(this.storageActivityPopup) {
+                    if(this.storageActivityPopup.totalReadValueLabel)
+                        this.storageActivityPopup.totalReadValueLabel.text = '-';
+                    if(this.storageActivityPopup.totalWriteValueLabel)
+                        this.storageActivityPopup.totalWriteValueLabel.text = '-';
+                }
             }
             return;
         }
@@ -1039,7 +1175,7 @@ export default class StorageMenu extends MenuBase {
             const current = Utils.storageMonitor.getCurrentValue('detailedStorageIO');
             
             if(current) {
-                for(const [_id, device] of this.devices.entries()) {
+                for(const [id, device] of this.devices.entries()) {
                     if(device.data === null)
                         continue;
                     const kname = device.data.kname;
@@ -1068,6 +1204,22 @@ export default class StorageMenu extends MenuBase {
                                 device.writeValueLabel.text = '-';
                                 device.writeActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                             }
+                            
+                            const totalsPopup = this.devicesTotalsPopup.get(id);
+                            if(totalsPopup) {
+                                if(totalsPopup.totalReadValueLabel) {
+                                    if(data.totalBytesRead)
+                                        totalsPopup.totalReadValueLabel.text = Utils.formatBytes(data.totalBytesRead, 'kB-KB', 3);
+                                    else
+                                        totalsPopup.totalReadValueLabel.text = '-';
+                                }
+                                if(totalsPopup.totalWriteValueLabel) {
+                                    if(data.totalBytesWritten)
+                                        totalsPopup.totalWriteValueLabel.text = Utils.formatBytes(data.totalBytesWritten, 'kB-KB', 3);
+                                    else
+                                        totalsPopup.totalWriteValueLabel.text = '-';
+                                }
+                            }
                         }
                     }
                     else {
@@ -1075,6 +1227,14 @@ export default class StorageMenu extends MenuBase {
                         device.readActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                         device.writeValueLabel.text = '-';
                         device.writeActivityIcon.style = 'color:rgba(255,255,255,0.5);';
+                        
+                        const totalsPopup = this.devicesTotalsPopup.get(id);
+                        if(totalsPopup) {
+                            if(totalsPopup.totalReadValueLabel)
+                                totalsPopup.totalReadValueLabel.text = '-';
+                            if(totalsPopup.totalWriteValueLabel)
+                                totalsPopup.totalWriteValueLabel.text = '-';
+                        }
                     }
                 }
             }

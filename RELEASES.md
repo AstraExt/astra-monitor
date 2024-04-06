@@ -7,6 +7,8 @@ _This release is still in development and the features listed below are subject 
 
 - **Storage Devices Info**: now you can see a lot more information about your storage devices in the Storage Menu.
 
+- **Cumulative Read/Write Bytes**: now you can see the total read/write bytes since the last boot in the Storage Menu for each storage device and globally.
+
 ### New features
 - Added layout settings for all multiline headers like Storage IO Speed, Network IO Speed and Sensors: now you can choose either to show them in a single line or in multiple lines [[#82](https://github.com/AstraExt/astra-monitor/issues/82)]
 - Added a setting to hint **Astra Monitor** on the position of the topbar/dash/panel to improve menu anchor points [[#96](https://github.com/AstraExt/astra-monitor/issues/96)]

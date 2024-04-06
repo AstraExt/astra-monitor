@@ -700,6 +700,8 @@ export default class StorageMonitor extends Monitor {
         const interval = (now - this.previousStorageIO.time) / 1000000;
         const bytesReadPerSec = Math.round((bytesRead - this.previousStorageIO.bytesRead) / interval);
         const bytesWrittenPerSec = Math.round((bytesWritten - this.previousStorageIO.bytesWritten) / interval);
+        const totalBytesRead = bytesRead;
+        const totalBytesWritten = bytesWritten;
         
         this.previousStorageIO.bytesRead = bytesRead;
         this.previousStorageIO.bytesWritten = bytesWritten;
@@ -707,7 +709,9 @@ export default class StorageMonitor extends Monitor {
         
         this.pushUsageHistory('storageIO', {
             bytesReadPerSec,
-            bytesWrittenPerSec
+            bytesWrittenPerSec,
+            totalBytesRead,
+            totalBytesWritten
         });
         
         if(detailed && devices !== null) {
@@ -725,7 +729,9 @@ export default class StorageMonitor extends Monitor {
                 if(previousData) {
                     const bytesReadPerSec = Math.round((bytesRead - previousData.bytesRead) / interval);
                     const bytesWrittenPerSec = Math.round((bytesWritten - previousData.bytesWritten) / interval);    
-                    finalData.set(deviceName, { bytesReadPerSec, bytesWrittenPerSec });
+                    const totalBytesRead = bytesRead;
+                    const totalBytesWritten = bytesWritten;
+                    finalData.set(deviceName, { bytesReadPerSec, bytesWrittenPerSec, totalBytesRead, totalBytesWritten });
                 }
             }
             
