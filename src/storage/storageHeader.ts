@@ -455,8 +455,9 @@ class StorageHeader extends Header {
         const calculateStyle = () => {
             if(this.ioLayout === 'horizontal')
                 return 'font-size:1em;';
-            const containerHeight = this.speedContainer.height;
-            return `font-size:${Math.round(containerHeight/3)}px;`;
+            return 'font-size:0.6em;';
+            /*const containerHeight = this.speedContainer.height;
+            return `font-size:${Math.round(containerHeight/3)}px;`;*/
         };
         const style = calculateStyle();
         
