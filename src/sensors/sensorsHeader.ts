@@ -288,9 +288,10 @@ class SensorsHeader extends Header {
         const calculateStyle = () => {
             if(this.sensorsNum === 1 || this.sensorsLayout === 'horizontal')
                 return 'font-size:1em;';
-            return 'font-size:0.6em;';
-            /*const containerHeight = this.valuesContainer.height;
-            return `font-size:${Math.round(containerHeight/3)}px;`;*/
+            const superHeight = this.valuesContainer.get_parent()?.height ?? 0;
+            if(superHeight <= 20)
+                return 'font-size:0.65em;';
+            return `font-size:${Math.round(superHeight/3)}px;`;
         };
         const style = calculateStyle();
         

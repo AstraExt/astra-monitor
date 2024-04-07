@@ -283,9 +283,10 @@ class NetworkHeader extends Header {
         const calculateStyle = () => {
             if(this.ioLayout === 'horizontal')
                 return 'font-size:1em;';
-            return 'font-size:0.6em;';
-            /*const containerHeight = this.speedContainer.height;
-            return `font-size:${Math.round(containerHeight/3)}px;`;*/
+            const superHeight = this.speedContainer.get_parent()?.height ?? 0;
+            if(superHeight <= 20)
+                return 'font-size:0.65em;';
+            return `font-size:${Math.round(superHeight/3)}px;`;
         };
         const style = calculateStyle();
         

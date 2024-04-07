@@ -1,3 +1,8 @@
+# Astra Monitor 19 - April 8 2024
+
+### Bug fixes
+- Fixed a graphical bug with multiline font size calculation [[#97](https://github.com/AstraExt/astra-monitor/issues/97)]
+
 # Astra Monitor 18 - April 6 2024
 
 ### Advanced Storage Monitoring
