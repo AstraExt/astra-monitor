@@ -219,7 +219,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         
         this.addColorRow({
             title: _('Main Color'),
-            subtitle: _('Setting this will replace all main colors.'),
+            subtitle: _('This is an utility rather than a setting.') + '\n' + _('Changing this will just replace all main colors.'),
             icon_name: 'am-dialog-warning-symbolic',
             tabs: 1
         }, (color: string) => {
@@ -228,7 +228,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, themeSection, 'rgba(29,172,214,1.0)');
         this.addColorRow({
             title: _('Secondary Color'),
-            subtitle: _('Setting this will replace all secondary colors.'),
+            subtitle: _('This is an utility rather than a setting.') + '\n' + _('Changing this will just replace all secondary colors.'),
             icon_name: 'am-dialog-warning-symbolic',
             tabs: 1
         }, (color: string) => {
@@ -533,7 +533,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'memory-header-graph-color1', graphSection, 'rgba(29,172,214,1.0)');
         this.addSwitchRow({title: _('History Graph Breakdown'), tabs: 1}, 'memory-header-graph-breakdown', graphSection);
         this.addColorRow({
-            title: _('Secondary Color'),
+            title: _('Alt Color'),
             subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
             tabs: 1
         }, 'memory-header-graph-color2', graphSection, 'rgba(29,172,214,0.3)');
@@ -548,7 +548,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }, 'memory-header-bars-color1', barsSection, 'rgba(29,172,214,1.0)');
         this.addSwitchRow({title: _('Realtime Bar Breakdown'), tabs: 1}, 'memory-header-bars-breakdown', barsSection);
         this.addColorRow({
-            title: _('Secondary Color'),
+            title: _('Alt Color'),
             subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
             tabs: 1
         }, 'memory-header-bars-color2', barsSection, 'rgba(29,172,214,0.3)');
