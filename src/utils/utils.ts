@@ -158,6 +158,8 @@ export default class Utils {
     static cachedHwmonDevices: HwMonDevices = new Map();
     static explicitZero: boolean = false;
     
+    static commandsPath:Map<string, string>|null = null;
+    
     static init({
         service,
         
@@ -176,6 +178,7 @@ export default class Utils {
         Utils.metadata = metadata;
         Config.settings = settings;
         Utils.xmlParser = new XMLParser();
+        Utils.commandsPath = new Map();
         
         Utils.debug = Config.get_boolean('debug-mode');
         if(Utils.debug && service === 'astra-monitor') {
@@ -217,6 +220,7 @@ export default class Utils {
     static clear() {
         Utils.xmlParser = null;
         Utils.performanceMap = null;
+        Utils.commandsPath = null;
         
         for(const task of Utils.lowPriorityTasks)
             GLib.source_remove(task);
@@ -389,6 +393,26 @@ export default class Utils {
         return indicators;
     }
     
+    static commandPathLookup(fullCommand:string): string|false {
+        const [command, ..._args] = fullCommand.split(' ');
+        if(Utils.commandsPath!.has(command))
+            return Utils.commandsPath!.get(command) ?? false;
+        
+        for(const path of ['', '/bin/', '/usr/bin/', '/sbin/', '/usr/sbin/', '/usr/local/bin/', '/usr/local/sbin/', '/opt/', '/opt/bin/', '/opt/sbin/']) {
+            try {
+                const [result, stdout, stderr] = GLib.spawn_command_line_sync(path+fullCommand);
+                if(result && stdout && !stderr.length) {
+                    Utils.commandsPath!.set(command, path);
+                    return path;
+                }
+            }
+            catch(e: any) {
+                /* EMPTY */
+            }
+        }
+        return false;
+    }
+    
     static hasProcStat(): boolean {
         try {
             const fileContents = GLib.file_get_contents('/proc/stat');
@@ -435,12 +459,7 @@ export default class Utils {
     }
     
     static hasLmSensors(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('sensors -v');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('sensors -v') !== false;
     }
     
     static hasHwmon(): boolean {
@@ -458,57 +477,27 @@ export default class Utils {
     }
     
     static hasLscpu(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('lscpu -V');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('lscpu -V') !== false;
     }
     
     static hasLspci(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('lspci -n');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('lspci -n') !== false;
     }
     
     static hasLsblk(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('lsblk -V');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('lsblk -V') !== false;
     }
     
     static hasIp(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('ip -V');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('ip -V') !== false;
     }
     
     static hasIw(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('iw --version');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('iw --version') !== false;
     }
     
     static hasIwconfig(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('iwconfig --version');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('iwconfig --version') !== false;
     }
     
     static hasAMDGpu(): boolean {
@@ -620,39 +609,19 @@ export default class Utils {
     }
     
     static hasAmdGpuTop(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('amdgpu_top -V');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('amdgpu_top -V') !== false;
     }
     
     static hasRadeonTop(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('radeontop -v');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('radeontop -v') !== false;
     }
     
     static hasNvidiaSmi(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('nvidia-smi -h');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('nvidia-smi -h') !== false;
     }
     
     static hasIntelGpuTop(): boolean {
-        try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('intel_gpu_top -h');
-            return result && stdout && !stderr.length;
-        } catch(e: any) {
-            return false;
-        }
+        return Utils.commandPathLookup('intel_gpu_top -h') !== false;
     }
     
     static hasCoresFrequency(): boolean {
@@ -1005,37 +974,42 @@ export default class Utils {
             /**
              * lm-sensors
              */
-            const [_result, stdout, _stderr] = GLib.spawn_command_line_sync('sensors -j');
-            if(stdout.length > 0) {
-                const decoder = new TextDecoder('utf8');
-                const stdoutString = decoder.decode(stdout);
-                const parsedData = JSON.parse(stdoutString);
+            if(Utils.hasLmSensors()) {
+                const path = Utils.commandPathLookup('sensors');
                 
-                for(const sensorName in parsedData) {
-                    for(const sensor in parsedData[sensorName]) {
-                        if(sensor === 'Adapter')
-                            continue;
-                        
-                        for(const sensorData in parsedData[sensorName][sensor]) {
-                            sensors.push({
-                                value: {
-                                    service: 'sensors',
-                                    path: [sensorName, sensor, sensorData]
-                                },
-                                text: `[lm-sensors] ${sensorName} -> ${sensor} -> ${sensorData}`
-                            });
+                const [_result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}sensors -j`);
+                if(stdout.length > 0) {
+                    const decoder = new TextDecoder('utf8');
+                    const stdoutString = decoder.decode(stdout);
+                    const parsedData = JSON.parse(stdoutString);
+                    
+                    for(const sensorName in parsedData) {
+                        for(const sensor in parsedData[sensorName]) {
+                            if(sensor === 'Adapter')
+                                continue;
+                            
+                            for(const sensorData in parsedData[sensorName][sensor]) {
+                                sensors.push({
+                                    value: {
+                                        service: 'sensors',
+                                        path: [sensorName, sensor, sensorData]
+                                    },
+                                    text: `[lm-sensors] ${sensorName} -> ${sensor} -> ${sensorData}`
+                                });
+                            }
                         }
                     }
                 }
-            }
-            else {
-                Utils.log('No sensor data found or sensors command failed');
+                else {
+                    Utils.log('No sensor data found or sensors command failed');
+                }
             }
             
             /*if(Utils.hasAMDGpu()) {
                 //TODO: add support for radeontop
                 if(Utils.hasAmdGpuTop()) {
-                    const [result, stdout, stderr] = GLib.spawn_command_line_sync('amdgpu_top -J -n 1');
+                    const path = Utils.commandPathLookup('amdgpu_top');
+                    const [result, stdout, stderr] = GLib.spawn_command_line_sync(`${path}amdgpu_top -J -n 1`);
                     
                     if(stdout.length > 0) {
                         const decoder = new TextDecoder('utf8');
@@ -1184,125 +1158,132 @@ export default class Utils {
     
     static lspciCached?: GpuInfo[];
     static getGPUsList(): GpuInfo[] {
-        if(!Utils.lspciCached) {
-            Utils.lspciCached = [];
-            try {
-                const decoder = new TextDecoder('utf8');
-                
-                // Cannot use -mm because it doesn't show the driver and module
-                const [result, stdout, stderr] = GLib.spawn_command_line_sync('lspci -nnk');
-                if(!result || !stdout) {
-                    const lspciError = decoder.decode(stderr);
-                    Utils.error('Error getting GPUs list: ' + lspciError);
-                    return Utils.lspciCached;
-                }
-                
-                const lspciOutput = decoder.decode(stdout);
-                
-                const filteredOutputs = Utils.filterLspciOutput(lspciOutput, ['vga', 'display controller'], 'or', 5);
-                
-                for(const filtered of filteredOutputs) {
-                    // remove unrelated lines and tabs
-                    const lines = filtered.split('\n');
-                    for(let i = lines.length - 1; i >= 1; i--) {
-                        if(lines[i].startsWith('\t'))
-                            lines[i] = lines[i].substring(1);
-                        else
-                            lines.splice(i, lines.length - i);
-                    }
-                    
-                    // parse address
-                    let firstLine = lines[0];
-                    const addressRegex = /^((?:[0-9a-fA-F]{4}:)?[0-9a-fA-F]{2}):([0-9a-fA-F]{2})\.([0-9a-fA-F]) /;
-                    const addressMatch = addressRegex.exec(firstLine);
-                    if(!addressMatch) {
-                        Utils.warn('Error getting GPUs list: ' + firstLine + ' does not match address');
-                        continue;
-                    }
-                    let domain = addressMatch[1];
-                    if(!domain.includes(':'))
-                        domain = '0000:' + domain;
-                    
-                    const [bus, slot] = [addressMatch[2], addressMatch[3]];
-                    firstLine = firstLine.replace(addressRegex, '');
-                    
-                    // parse vendor and model
-                    const vendorLine = firstLine.split(':');
-                    if(vendorLine.length < 3) {
-                        Utils.warn('Error getting GPUs list: ' + firstLine + ' does not match vendor');
-                        continue;
-                    }
-                    vendorLine.shift();
-                    
-                    let vendor = vendorLine.join(':').trim();
-                    const regex = /\[([\da-fA-F]{4}):([\da-fA-F]{4})\]\s*/g;
-                    
-                    let match;
-                    let vendorId = null;
-                    let productId = null;
-                    
-                    if((match = regex.exec(vendor)) !== null) {
-                        vendorId = match[1];
-                        productId = match[2];
-                    }
-                    vendor = vendor.replace(regex, '').trim();
-                    
-                    if(lines.length < 2) {
-                        Utils.warn('Error getting GPUs list: lines length < 2');
-                        continue;
-                    }
-                    const modelLine = lines[1].split(':');
-                    if(modelLine.length < 2) {
-                        Utils.warn('Error getting GPUs list: model line missmatch');
-                        continue;
-                    }
-                    modelLine.shift();
-                    let model = modelLine.join(':').trim();
-                    model = model.replace(regex, '').trim();
-                    
-                    // parse drivers and modules
-                    let drivers = null;
-                    if(lines.length >= 3) {
-                        const driverLine = lines[2].split(':');
-                        if(driverLine.length >= 2) {
-                            driverLine.shift();
-                            drivers = driverLine.join(':').split(',').map(line => line.trim());
-                        }
-                    }
-                    
-                    let modules = null;
-                    if(lines.length >= 4) {
-                        const moduleLine = lines[3].split(':');
-                        if(moduleLine.length >= 2) {
-                            moduleLine.shift();
-                            modules = moduleLine.join(':').split(',').map(line => line.trim());
-                        }
-                    }
-                    
-                    // add to cached list
-                    const gpu: GpuInfo = {
-                        domain,
-                        bus,
-                        slot,
-                        vendor,
-                        model,
-                    };
-                    
-                    if(vendorId)
-                        gpu.vendorId = vendorId;
-                    if(productId)
-                        gpu.productId = productId;
-                    if(drivers)
-                        gpu.drivers = drivers;
-                    if(modules)
-                        gpu.modules = modules;
-                    
-                    Utils.lspciCached.push(gpu);
-                }
-            } catch(e: any) {
-                Utils.log('Error getting GPUs list: ' + e.message);
+        if(Utils.lspciCached)
+            return Utils.lspciCached;
+        
+        Utils.lspciCached = [];
+        
+        if(!Utils.hasLspci())
+            return Utils.lspciCached;
+    
+        try {
+            const decoder = new TextDecoder('utf8');
+            
+            // Cannot use -mm because it doesn't show the driver and module
+            const path = Utils.commandPathLookup('lspci');
+            const [result, stdout, stderr] = GLib.spawn_command_line_sync(`${path}lspci -nnk`);
+            if(!result || !stdout) {
+                const lspciError = decoder.decode(stderr);
+                Utils.error('Error getting GPUs list: ' + lspciError);
+                return Utils.lspciCached;
             }
+            
+            const lspciOutput = decoder.decode(stdout);
+            
+            const filteredOutputs = Utils.filterLspciOutput(lspciOutput, ['vga', 'display controller'], 'or', 5);
+            
+            for(const filtered of filteredOutputs) {
+                // remove unrelated lines and tabs
+                const lines = filtered.split('\n');
+                for(let i = lines.length - 1; i >= 1; i--) {
+                    if(lines[i].startsWith('\t'))
+                        lines[i] = lines[i].substring(1);
+                    else
+                        lines.splice(i, lines.length - i);
+                }
+                
+                // parse address
+                let firstLine = lines[0];
+                const addressRegex = /^((?:[0-9a-fA-F]{4}:)?[0-9a-fA-F]{2}):([0-9a-fA-F]{2})\.([0-9a-fA-F]) /;
+                const addressMatch = addressRegex.exec(firstLine);
+                if(!addressMatch) {
+                    Utils.warn('Error getting GPUs list: ' + firstLine + ' does not match address');
+                    continue;
+                }
+                let domain = addressMatch[1];
+                if(!domain.includes(':'))
+                    domain = '0000:' + domain;
+                
+                const [bus, slot] = [addressMatch[2], addressMatch[3]];
+                firstLine = firstLine.replace(addressRegex, '');
+                
+                // parse vendor and model
+                const vendorLine = firstLine.split(':');
+                if(vendorLine.length < 3) {
+                    Utils.warn('Error getting GPUs list: ' + firstLine + ' does not match vendor');
+                    continue;
+                }
+                vendorLine.shift();
+                
+                let vendor = vendorLine.join(':').trim();
+                const regex = /\[([\da-fA-F]{4}):([\da-fA-F]{4})\]\s*/g;
+                
+                let match;
+                let vendorId = null;
+                let productId = null;
+                
+                if((match = regex.exec(vendor)) !== null) {
+                    vendorId = match[1];
+                    productId = match[2];
+                }
+                vendor = vendor.replace(regex, '').trim();
+                
+                if(lines.length < 2) {
+                    Utils.warn('Error getting GPUs list: lines length < 2');
+                    continue;
+                }
+                const modelLine = lines[1].split(':');
+                if(modelLine.length < 2) {
+                    Utils.warn('Error getting GPUs list: model line missmatch');
+                    continue;
+                }
+                modelLine.shift();
+                let model = modelLine.join(':').trim();
+                model = model.replace(regex, '').trim();
+                
+                // parse drivers and modules
+                let drivers = null;
+                if(lines.length >= 3) {
+                    const driverLine = lines[2].split(':');
+                    if(driverLine.length >= 2) {
+                        driverLine.shift();
+                        drivers = driverLine.join(':').split(',').map(line => line.trim());
+                    }
+                }
+                
+                let modules = null;
+                if(lines.length >= 4) {
+                    const moduleLine = lines[3].split(':');
+                    if(moduleLine.length >= 2) {
+                        moduleLine.shift();
+                        modules = moduleLine.join(':').split(',').map(line => line.trim());
+                    }
+                }
+                
+                // add to cached list
+                const gpu: GpuInfo = {
+                    domain,
+                    bus,
+                    slot,
+                    vendor,
+                    model,
+                };
+                
+                if(vendorId)
+                    gpu.vendorId = vendorId;
+                if(productId)
+                    gpu.productId = productId;
+                if(drivers)
+                    gpu.drivers = drivers;
+                if(modules)
+                    gpu.modules = modules;
+                
+                Utils.lspciCached.push(gpu);
+            }
+        } catch(e: any) {
+            Utils.log('Error getting GPUs list: ' + e.message);
         }
+        
         return Utils.lspciCached;
     }
     
@@ -1523,8 +1504,12 @@ export default class Utils {
     static listDisksSync(): Map<string, DiskInfo> {
         const disks = new Map<string, DiskInfo>();
         
+        if(!Utils.hasLsblk())
+            return disks;
+        
         try {
-            const [_result, stdout, _stderr] = GLib.spawn_command_line_sync('lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH');
+            const path = Utils.commandPathLookup('lsblk');
+            const [_result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH`);
             
             if(stdout.length > 0) {
                 const decoder = new TextDecoder('utf8');
@@ -1560,8 +1545,12 @@ export default class Utils {
     static async listDisksAsync(task: CancellableTaskManager<boolean>): Promise<Map<string, DiskInfo>> {
         const disks = new Map<string, DiskInfo>();
         
+        if(!Utils.hasLsblk())
+            return disks;
+        
         try {
-            const result = await Utils.executeCommandAsync('lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH', task);
+            const path = Utils.commandPathLookup('lsblk');
+            const result = await Utils.executeCommandAsync(`${path}lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH`, task);
             if(result) {
                 const parsedData = JSON.parse(result);
                 
@@ -1993,7 +1982,8 @@ export default class Utils {
             return devices;
         
         try {
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('ip -d -j addr');
+            const path = Utils.commandPathLookup('ip');
+            const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}ip -d -j addr`);
             
             if(result && stdout) {
                 const decoder = new TextDecoder('utf8');
@@ -2084,7 +2074,8 @@ export default class Utils {
             return routes;
         
         try {
-            const result = await Utils.executeCommandAsync('ip -d -j route show default', task);
+            const path = Utils.commandPathLookup('ip');
+            const result = await Utils.executeCommandAsync(`${path}ip -d -j route show default`, task);
             if(result) {
                 const json = JSON.parse(result);
                 for(const data of json) {
@@ -2121,8 +2112,12 @@ export default class Utils {
     static getBlockDevicesSync(): Map<string, BlockDevice> {
         const devices = new Map();
         
+        if(!Utils.hasLsblk())
+            return devices;
+        
         try {
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE');
+            const path = Utils.commandPathLookup('lsblk');
+            const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE`);
             
             if(result && stdout) {
                 const decoder = new TextDecoder('utf8');
