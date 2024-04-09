@@ -720,7 +720,8 @@ export default class NetworkMonitor extends Monitor {
     }
     
     private async updateWirelessIwconfig(): Promise<boolean> {
-        const result = await Utils.executeCommandAsync('iwconfig');
+        const path = Utils.commandPathLookup('iwconfig');
+        const result = await Utils.executeCommandAsync(`${path}iwconfig`);
         if(!result)
             return false;
         
@@ -792,8 +793,9 @@ export default class NetworkMonitor extends Monitor {
             
             if(!Utils.checkFolderExists('/sys/class/net/' + dev + '/wireless') && !Utils.checkFolderExists('/sys/class/net/' + dev + '/phy80211'))
                 continue;
-                        
-            const str = await Utils.executeCommandAsync(Utils.getIwCmd() + ' dev ' + dev + ' link');
+            
+            const path = Utils.commandPathLookup('iw');
+            const str = await Utils.executeCommandAsync(`${path}iw dev ${dev} link`);
             if(!str)
                 return false;
             

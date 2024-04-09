@@ -275,7 +275,8 @@ export default class ProcessorMonitor extends Monitor {
         if(Utils.hasAMDGpu() && Utils.hasAmdGpuTop() && Utils.isAmdGpu(selectedGpu)) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
-            this.updateAmdGpuTask.start(`amdgpu_top -J -u ${timer} -s ${timer} -n 0`);
+            const path = Utils.commandPathLookup('amdgpu_top');
+            this.updateAmdGpuTask.start(`${path}amdgpu_top -J -u ${timer} -s ${timer} -n 0`);
         }
         
         if(Utils.hasNVidiaGpu() && Utils.hasNvidiaSmi() && Utils.isNvidiaGpu(selectedGpu)) {
@@ -287,7 +288,8 @@ export default class ProcessorMonitor extends Monitor {
              * It also doesn't support processes monitoring and other features we might want
              * to add in the future.
              */
-            this.updateNvidiaGpuTask.start(`nvidia-smi -q -x -lms ${timer}`, '</nvidia_smi_log>');
+            const path = Utils.commandPathLookup('nvidia-smi');
+            this.updateNvidiaGpuTask.start(`${path}nvidia-smi -q -x -lms ${timer}`, '</nvidia_smi_log>');
         }
     }
     
@@ -495,73 +497,78 @@ export default class ProcessorMonitor extends Monitor {
         if(this.cpuInfo !== undefined)
             return this.cpuInfo;
         
+        this.cpuInfo = {};
+        
         try {
+            if(!Utils.hasLscpu())
+                return this.cpuInfo;
+            
             //TODO: switch to lscpu --json!?
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync('lscpu');
-            if(result && stdout) {
-                const decoder = new TextDecoder('utf8');
-                const output = decoder.decode(stdout);
+            const path = Utils.commandPathLookup('lscpu');
+            const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}lscpu`);
+            
+            if(!result || !stdout)
+                return this.cpuInfo;
+            
+            const decoder = new TextDecoder('utf8');
+            const output = decoder.decode(stdout);
+            
+            const lines = output.split('\n');
+            const cpuInfo: CpuInfo = {};
+            let currentCategory = cpuInfo;
+            let lastKey:string|null = null;
+            
+            for(const line of lines) {
+                if(line.trim() === '')
+                    continue;
                 
-                const lines = output.split('\n');
-                const cpuInfo: CpuInfo = {};
-                let currentCategory = cpuInfo;
-                let lastKey:string|null = null;
-                
-                for(const line of lines) {
-                    if(line.trim() === '')
-                        continue;
-                    
-                    if(line.endsWith(':')) {
-                        // New category
-                        const categoryName = line.slice(0, -1).trim();
-                        cpuInfo[categoryName] = {};
-                        currentCategory = cpuInfo[categoryName];
-                        lastKey = null;
-                    }
-                    else if(line.includes(':')) {
-                        // Key-value pair
-                        const [key, value] = line.split(':').map(s => s.trim());
-                        if(key === 'Flags') {
-                            currentCategory[key] = value.split(' ');
-                        }
-                        else {
-                            currentCategory[key] = value;
-                        }
-                        lastKey = key;
-                    }
-                    else if(lastKey && lastKey === 'Flags') {
-                        // Continuation of Flags
-                        currentCategory[lastKey] = currentCategory[lastKey].concat(line.trim().split(' '));
-                    }
-                    else if(lastKey) {
-                        // Continuation of the last key in the current category
-                        currentCategory[lastKey] += '\n' + line.trim();
-                    }
+                if(line.endsWith(':')) {
+                    // New category
+                    const categoryName = line.slice(0, -1).trim();
+                    cpuInfo[categoryName] = {};
+                    currentCategory = cpuInfo[categoryName];
+                    lastKey = null;
                 }
-                
-                this.cpuInfo = cpuInfo;
-                
-                if(!this.cpuInfo['Model name']) {
-                    // lscpu is localized, so we need to fallback to /proc/cpuinfo
-                    // TODO: fix flags too
-                    
-                    const fileContents = GLib.file_get_contents('/proc/cpuinfo');
-                    if(fileContents && fileContents[0]) {
-                        const decoder = new TextDecoder('utf8');
-                        const lines = decoder.decode(fileContents[1]).split('\n');
-                        
-                        for(const line of lines) {
-                            if(line.startsWith('model name')) {
-                                const [, value] = line.split(':').map(s => s.trim());
-                                this.cpuInfo['Model name'] = value;
-                                break;
-                            }
-                        }
+                else if(line.includes(':')) {
+                    // Key-value pair
+                    const [key, value] = line.split(':').map(s => s.trim());
+                    if(key === 'Flags') {
+                        currentCategory[key] = value.split(' ');
                     }
+                    else {
+                        currentCategory[key] = value;
+                    }
+                    lastKey = key;
+                }
+                else if(lastKey && lastKey === 'Flags') {
+                    // Continuation of Flags
+                    currentCategory[lastKey] = currentCategory[lastKey].concat(line.trim().split(' '));
+                }
+                else if(lastKey) {
+                    // Continuation of the last key in the current category
+                    currentCategory[lastKey] += '\n' + line.trim();
                 }
             }
-            else {
-                this.cpuInfo = {};
+            
+            this.cpuInfo = cpuInfo;
+            
+            if(!this.cpuInfo['Model name']) {
+                // lscpu is localized, so we need to fallback to /proc/cpuinfo
+                // TODO: fix flags too
+                
+                const fileContents = GLib.file_get_contents('/proc/cpuinfo');
+                if(fileContents && fileContents[0]) {
+                    const decoder = new TextDecoder('utf8');
+                    const lines = decoder.decode(fileContents[1]).split('\n');
+                    
+                    for(const line of lines) {
+                        if(line.startsWith('model name')) {
+                            const [, value] = line.split(':').map(s => s.trim());
+                            this.cpuInfo['Model name'] = value;
+                            break;
+                        }
+                    }
+                }
             }
         } catch(e) {
             this.cpuInfo = {};

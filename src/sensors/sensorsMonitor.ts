@@ -186,7 +186,8 @@ export default class SensorsMonitor extends Monitor {
                 return resolve(null);
             
             try {
-                Utils.executeCommandAsync('sensors -j', this.updateSensorsDataTask).then(result => {
+                const path = Utils.commandPathLookup('sensors');
+                Utils.executeCommandAsync(`${path}sensors -j`, this.updateSensorsDataTask).then(result => {
                     resolve(result);
                 }).catch(e => {
                     reject(e);
