@@ -493,14 +493,24 @@ export default class Utils {
         }
     }
     
-    static hasIw(): boolean {
+    private static hasIwWithPath(path: string): boolean {
         try {
-            const [result, stdout, stderr] = GLib.spawn_command_line_sync('iw --version');
+            const [result, stdout, stderr] = GLib.spawn_command_line_sync(`${path}iw --version`);
             return result && stdout && !stderr.length;
         } catch(e: any) {
             return false;
         }
     }
+    static getIwCmd(): string {
+        if(this.hasIwWithPath('/sbin/'))
+            return '/sbin/iw';
+
+        return 'iw';
+    }
+    static hasIw(): boolean {
+        return this.hasIwWithPath('') || this.hasIwWithPath('/sbin/');
+    }
+
     
     static hasIwconfig(): boolean {
         try {

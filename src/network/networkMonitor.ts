@@ -792,8 +792,8 @@ export default class NetworkMonitor extends Monitor {
             
             if(!Utils.checkFolderExists('/sys/class/net/' + dev + '/wireless') && !Utils.checkFolderExists('/sys/class/net/' + dev + '/phy80211'))
                 continue;
-            
-            const str = await Utils.executeCommandAsync('iw dev ' + dev + ' link');
+                        
+            const str = await Utils.executeCommandAsync(Utils.getIwCmd() + ' dev ' + dev + ' link');
             if(!str)
                 return false;
             
