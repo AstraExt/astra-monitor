@@ -29,37 +29,49 @@ type StorageIOBarsParams = BarProps & {
 };
 
 export default GObject.registerClass(
-class StorageIOBars extends BarsBase {
-    constructor(params: StorageIOBarsParams) {
-        super(params);
-        
-        Config.connect(this, 'changed::storage-header-io-bars-color1', this.setStyle.bind(this));
-        Config.connect(this, 'changed::storage-header-io-bars-color2', this.setStyle.bind(this));
-    }
-    
-    setStyle() {
-        super.setStyle();
-        
-        this.colors = [
-            Config.get_string('storage-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
-            Config.get_string('storage-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
-        ];
-    }
-    
-    setUsage(usage: StorageIO[]|null) {
-        if(!usage || !Array.isArray(usage) || usage.length === 0) {
-            this.updateBars([]);
-            return;
+    class StorageIOBars extends BarsBase {
+        constructor(params: StorageIOBarsParams) {
+            super(params);
+
+            Config.connect(
+                this,
+                'changed::storage-header-io-bars-color1',
+                this.setStyle.bind(this)
+            );
+            Config.connect(
+                this,
+                'changed::storage-header-io-bars-color2',
+                this.setStyle.bind(this)
+            );
         }
-        
-        const readSpeed = usage[0].bytesReadPerSec || 0;
-        const writeSpeed = usage[0].bytesWrittenPerSec || 0;
-        const maxReadSpeed = usage.reduce((max, cur) => Math.max(max, cur.bytesReadPerSec), 0);
-        const maxWriteSpeed = usage.reduce((max, cur) => Math.max(max, cur.bytesWrittenPerSec), 0);
-        
-        this.updateBars([
-            [{ color: 0, value: readSpeed / maxReadSpeed }],
-            [{ color: 1, value: writeSpeed / maxWriteSpeed }],
-        ]);
+
+        setStyle() {
+            super.setStyle();
+
+            this.colors = [
+                Config.get_string('storage-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
+                Config.get_string('storage-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
+            ];
+        }
+
+        setUsage(usage: StorageIO[] | null) {
+            if(!usage || !Array.isArray(usage) || usage.length === 0) {
+                this.updateBars([]);
+                return;
+            }
+
+            const readSpeed = usage[0].bytesReadPerSec || 0;
+            const writeSpeed = usage[0].bytesWrittenPerSec || 0;
+            const maxReadSpeed = usage.reduce((max, cur) => Math.max(max, cur.bytesReadPerSec), 0);
+            const maxWriteSpeed = usage.reduce(
+                (max, cur) => Math.max(max, cur.bytesWrittenPerSec),
+                0
+            );
+
+            this.updateBars([
+                [{ color: 0, value: readSpeed / maxReadSpeed }],
+                [{ color: 1, value: writeSpeed / maxWriteSpeed }]
+            ]);
+        }
     }
-});
+);

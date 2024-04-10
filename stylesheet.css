@@ -132,7 +132,6 @@
 }
 
 .astra-monitor-graph-container {
-    
 }
 
 .astra-monitor-graph-mini {
@@ -390,7 +389,7 @@
 }
 
 .astra-monitor-menu-icon-mini {
-    margin-top:0.1em;
+    margin-top: 0.1em;
     icon-size: 1em;
     background-size: contain;
 }
@@ -416,7 +415,7 @@
 }
 
 .astra-monitor-menu-sensors-icon {
-    margin-top:0.1em;
+    margin-top: 0.1em;
     icon-size: 1em;
     color: #999;
     background-size: contain;
@@ -431,14 +430,13 @@
 }
 
 .astra-monitor-menu-sensors-key {
-    margin-top:0.1em;
+    margin-top: 0.1em;
     margin-right: 0.2em;
     margin-left: 0.5em;
     text-align: right;
 }
 
 .astra-monitor-tooltip-menu {
-    
 }
 
 .astra-monitor-tooltip-item {

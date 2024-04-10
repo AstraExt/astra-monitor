@@ -34,56 +34,50 @@ import SensorsMonitor from './src/sensors/sensorsMonitor.js';
 export default class AstraMonitorExtension extends Extension {
     private container?: InstanceType<typeof AstraMonitorContainer>;
     private timeout: number = 0;
-    
+
     enable() {
         Utils.init({
             service: 'astra-monitor',
             extension: this,
             metadata: this.metadata,
             settings: this.getSettings(),
-            
+
             ProcessorMonitor,
             MemoryMonitor,
             StorageMonitor,
             NetworkMonitor,
-            SensorsMonitor,
+            SensorsMonitor
         });
         Utils.log('AstraMonitor enabled');
-        
+
         this.container = new AstraMonitorContainer();
-        
+
         // Startup delay to allow the initialization of the monitors
         // avoiding graphical glitches / empty widgets
-        this.timeout = GLib.timeout_add(
-            GLib.PRIORITY_DEFAULT,
-            Utils.startupDelay * 1000,
-            () => {
-                if(this.container)
-                    this.container.place(this.uuid);
-                this.timeout = 0;
-                Utils.ready = true;
-                return false;
-            }
-        );
+        this.timeout = GLib.timeout_add(GLib.PRIORITY_DEFAULT, Utils.startupDelay * 1000, () => {
+            if(this.container) this.container.place(this.uuid);
+            this.timeout = 0;
+            Utils.ready = true;
+            return false;
+        });
     }
-    
+
     disable() {
         Utils.log('AstraMonitor disabled');
         Utils.ready = false;
-        
+
         if(this.timeout !== 0) {
             GLib.source_remove(this.timeout);
             this.timeout = 0;
         }
-        
+
         try {
             this.container?.destroy();
-        }
-        catch(e: any) {
+        } catch(e: any) {
             Utils.error(e);
         }
         this.container = undefined;
-        
+
         Utils.clear();
     }
 }

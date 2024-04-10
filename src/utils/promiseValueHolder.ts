@@ -20,15 +20,14 @@
 
 export class PromiseValueHolderStore<T> {
     private creator: () => PromiseValueHolder<T>;
-    private valueHolder: PromiseValueHolder<T>|undefined;
-    
+    private valueHolder: PromiseValueHolder<T> | undefined;
+
     constructor(creator: () => PromiseValueHolder<T>) {
         this.creator = creator;
     }
-    
+
     getValue(): Promise<T> {
-        if(this.valueHolder === undefined)
-            this.valueHolder = this.creator();
+        if(this.valueHolder === undefined) this.valueHolder = this.creator();
         return this.valueHolder.getValue();
     }
 }
@@ -37,24 +36,25 @@ export default class PromiseValueHolder<T> {
     private promise: Promise<T>;
     private isResolved: boolean = false;
     private resolvedValue!: T;
-    
+
     constructor(promise: Promise<T>) {
         this.promise = promise;
-        
-        this.promise.then((value: T) => {
-            this.resolvedValue = value;
-            this.isResolved = true;
-        }).catch(error => {
-            this.isResolved = true;
-            throw error;
-        });
+
+        this.promise
+            .then((value: T) => {
+                this.resolvedValue = value;
+                this.isResolved = true;
+            })
+            .catch(error => {
+                this.isResolved = true;
+                throw error;
+            });
     }
-    
+
     getValue(): Promise<T> {
         if(this.isResolved) {
             return Promise.resolve(this.resolvedValue);
-        }
-        else {
+        } else {
             return this.promise;
         }
     }

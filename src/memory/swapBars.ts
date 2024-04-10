@@ -30,31 +30,29 @@ type SwapBarsParams = BarProps & {
 };
 
 export default GObject.registerClass(
-class SwapBars extends BarsBase {
-    constructor(params: SwapBarsParams) {
-        //default params
-        if(params.layers === undefined)
-            params.layers = 2;
-        
-        super(params);
-        
-        Config.connect(this, 'changed::memory-menu-swap-color', this.setStyle.bind(this));
-    }
-    
-    setStyle() {
-        super.setStyle();
-        
-        this.colors = [
-            Config.get_string('memory-menu-swap-color') ?? 'rgba(29,172,214,1.0)'
-        ];
-    }
-    
-    setUsage(usage: SwapUsage|null) {
-        if(!usage || !usage.total) {
-            this.updateBars([]);
-            return;
+    class SwapBars extends BarsBase {
+        constructor(params: SwapBarsParams) {
+            //default params
+            if(params.layers === undefined) params.layers = 2;
+
+            super(params);
+
+            Config.connect(this, 'changed::memory-menu-swap-color', this.setStyle.bind(this));
         }
-        
-        this.updateBars([[{ color: 0, value: usage.used / usage.total }]]);
+
+        setStyle() {
+            super.setStyle();
+
+            this.colors = [Config.get_string('memory-menu-swap-color') ?? 'rgba(29,172,214,1.0)'];
+        }
+
+        setUsage(usage: SwapUsage | null) {
+            if(!usage || !usage.total) {
+                this.updateBars([]);
+                return;
+            }
+
+            this.updateBars([[{ color: 0, value: usage.used / usage.total }]]);
+        }
     }
-});
+);

@@ -29,38 +29,54 @@ type NetworkBarsParams = BarProps & {
 };
 
 export default GObject.registerClass(
-class NetworkBars extends BarsBase {
-    private maxSpeeds?: MaxSpeeds;
-    
-    constructor(params: NetworkBarsParams) {
-        super(params);
-        
-        Config.connect(this, 'changed::network-header-io-bars-color1', this.setStyle.bind(this));
-        Config.connect(this, 'changed::network-header-io-bars-color2', this.setStyle.bind(this));
+    class NetworkBars extends BarsBase {
+        private maxSpeeds?: MaxSpeeds;
+
+        constructor(params: NetworkBarsParams) {
+            super(params);
+
+            Config.connect(
+                this,
+                'changed::network-header-io-bars-color1',
+                this.setStyle.bind(this)
+            );
+            Config.connect(
+                this,
+                'changed::network-header-io-bars-color2',
+                this.setStyle.bind(this)
+            );
+        }
+
+        setStyle() {
+            super.setStyle();
+
+            this.colors = [
+                Config.get_string('network-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
+                Config.get_string('network-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
+            ];
+        }
+
+        setMaxSpeeds(maxSpeeds: MaxSpeeds) {
+            this.maxSpeeds = maxSpeeds;
+        }
+
+        setUsage(usage: NetworkIO) {
+            const uploadSpeed = usage && usage.bytesUploadedPerSec ? usage.bytesUploadedPerSec : 0;
+            const downloadSpeed =
+                usage && usage.bytesDownloadedPerSec ? usage.bytesDownloadedPerSec : 0;
+            const maxUploadSpeed =
+                this.maxSpeeds && this.maxSpeeds.bytesUploadedPerSec
+                    ? this.maxSpeeds.bytesUploadedPerSec
+                    : 1;
+            const maxDownloadSpeed =
+                this.maxSpeeds && this.maxSpeeds.bytesDownloadedPerSec
+                    ? this.maxSpeeds.bytesDownloadedPerSec
+                    : 1;
+
+            this.updateBars([
+                [{ color: 0, value: uploadSpeed / maxUploadSpeed }],
+                [{ color: 1, value: downloadSpeed / maxDownloadSpeed }]
+            ]);
+        }
     }
-    
-    setStyle() {
-        super.setStyle();
-        
-        this.colors = [
-            Config.get_string('network-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
-            Config.get_string('network-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
-        ];
-    }
-    
-    setMaxSpeeds(maxSpeeds: MaxSpeeds) {
-        this.maxSpeeds = maxSpeeds;
-    }
-    
-    setUsage(usage: NetworkIO) {
-        const uploadSpeed = usage && usage.bytesUploadedPerSec ? usage.bytesUploadedPerSec : 0;
-        const downloadSpeed = usage && usage.bytesDownloadedPerSec ? usage.bytesDownloadedPerSec : 0;
-        const maxUploadSpeed = this.maxSpeeds && this.maxSpeeds.bytesUploadedPerSec ? this.maxSpeeds.bytesUploadedPerSec : 1;
-        const maxDownloadSpeed = this.maxSpeeds && this.maxSpeeds.bytesDownloadedPerSec ? this.maxSpeeds.bytesDownloadedPerSec : 1;
-        
-        this.updateBars([
-            [{ color: 0, value: uploadSpeed / maxUploadSpeed }],
-            [{ color: 1, value: downloadSpeed / maxDownloadSpeed }],
-        ]);
-    }
-});
+);
