@@ -1,6 +1,4 @@
 .DS_Store
-.github
-.vscode
 node_modules
 package-lock.json
 pnpm-lock.yaml

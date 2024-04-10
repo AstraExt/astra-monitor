@@ -55,6 +55,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Format the code
+log_message "Formatting the code..."
+npm run format
+
+# Check for errors
+if [ $? -ne 0 ]; then
+    log_message "Failed to format the code"
+    exit 1
+fi
+
 # Run i18n.sh
 if [ -f "${EXTENSION_DIR}/i18n.sh" ]; then
     log_message "Running i18n.sh..."
