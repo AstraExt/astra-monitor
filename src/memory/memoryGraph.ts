@@ -60,47 +60,47 @@ export default GObject.registerClass(
             this.colors = [
                 Utils.parseRGBA(
                     Config.get_string('memory-header-graph-color1'),
-                    'rgba(29,172,214,1.0)',
+                    'rgba(29,172,214,1.0)'
                 ),
                 Utils.parseRGBA(
                     Config.get_string('memory-header-graph-color2'),
-                    'rgba(29,172,214,0.3)',
-                ),
+                    'rgba(29,172,214,0.3)'
+                )
             ];
 
             let bg = 'rgba(0,0,0,0.2)';
-            if (lightTheme) bg = 'rgba(255,255,255,0.2)';
+            if(lightTheme) bg = 'rgba(255,255,255,0.2)';
 
             this.bgColor = Utils.parseRGBA(bg);
 
-            if (this.axis100Label) {
-                if (lightTheme) this.axis100Label.style_class = 'astra-monitor-graph-label-light';
+            if(this.axis100Label) {
+                if(lightTheme) this.axis100Label.style_class = 'astra-monitor-graph-label-light';
                 else this.axis100Label.style_class = 'astra-monitor-graph-label';
             }
 
-            if (this.axis50Label) {
-                if (lightTheme) this.axis50Label.style_class = 'astra-monitor-graph-label-light';
+            if(this.axis50Label) {
+                if(lightTheme) this.axis50Label.style_class = 'astra-monitor-graph-label-light';
                 else this.axis50Label.style_class = 'astra-monitor-graph-label';
             }
 
-            if (this.axis0Label) {
-                if (lightTheme) this.axis0Label.style_class = 'astra-monitor-graph-label-light';
+            if(this.axis0Label) {
+                if(lightTheme) this.axis0Label.style_class = 'astra-monitor-graph-label-light';
                 else this.axis0Label.style_class = 'astra-monitor-graph-label';
             }
 
-            if (this.thenLabel) {
-                if (lightTheme) this.thenLabel.style_class = 'astra-monitor-graph-label-then-light';
+            if(this.thenLabel) {
+                if(lightTheme) this.thenLabel.style_class = 'astra-monitor-graph-label-then-light';
                 else this.thenLabel.style_class = 'astra-monitor-graph-label-then';
             }
 
-            if (this.nowLabel) {
-                if (lightTheme) this.nowLabel.style_class = 'astra-monitor-graph-label-now-light';
+            if(this.nowLabel) {
+                if(lightTheme) this.nowLabel.style_class = 'astra-monitor-graph-label-now-light';
                 else this.nowLabel.style_class = 'astra-monitor-graph-label-now';
             }
         }
 
         buildHistoryGrid() {
-            if (!this.historyGrid) return;
+            if(!this.historyGrid) return;
 
             this.axis100Label = new St.Label({ text: '100%', y_align: Clutter.ActorAlign.START });
             this.historyGrid.attach(this.axis100Label, 2, 0, 1, 1);
@@ -112,7 +112,7 @@ export default GObject.registerClass(
             const seconds = Utils.memoryMonitor.historyLength * Config.get_double('memory-update');
             const limitInMins = seconds / 60;
             const startLabel = (ngettext('%d min ago', '%d mins ago', limitInMins) as any).format(
-                limitInMins,
+                limitInMins
             );
             this.thenLabel = new St.Label({ text: startLabel });
             this.historyGrid.attach(this.thenLabel, 0, 3, 1, 1);
@@ -132,22 +132,22 @@ export default GObject.registerClass(
                 this.bgColor.red,
                 this.bgColor.green,
                 this.bgColor.blue,
-                this.bgColor.alpha,
+                this.bgColor.alpha
             );
             ctx.rectangle(0, 0, width, height);
             ctx.fill();
 
-            if (this.history && this.history.length > 0) {
+            if(this.history && this.history.length > 0) {
                 const pointSpacing = width / (this.historyLimit - 1);
                 const baseX = (this.historyLimit - historyLength) * pointSpacing;
 
-                if (!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
+                if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                     // Draw allocated graph on top
                     ctx.setSourceRGBA(
                         this.colors[1].red,
                         this.colors[1].green,
                         this.colors[1].blue,
-                        this.colors[1].alpha,
+                        this.colors[1].alpha
                     );
                     const activeFunc = (node: MemoryUsage) => node.allocated / node.total;
                     super.drawGraph(ctx, this.history, activeFunc, baseX, 0, height, pointSpacing);
@@ -157,7 +157,7 @@ export default GObject.registerClass(
                         this.colors[0].red,
                         this.colors[0].green,
                         this.colors[0].blue,
-                        this.colors[0].alpha,
+                        this.colors[0].alpha
                     );
                     const inactiveFunc = (node: MemoryUsage) => node.used / node.total;
                     super.drawGraph(
@@ -167,7 +167,7 @@ export default GObject.registerClass(
                         baseX,
                         0,
                         height,
-                        pointSpacing,
+                        pointSpacing
                     );
                 } else {
                     // Draw single graph for total usage
@@ -175,7 +175,7 @@ export default GObject.registerClass(
                         this.colors[0].red,
                         this.colors[0].green,
                         this.colors[0].blue,
-                        this.colors[0].alpha,
+                        this.colors[0].alpha
                     );
                     const usedFunc = (node: MemoryUsage) => node.used / node.total;
                     super.drawGraph(ctx, this.history, usedFunc, baseX, 0, height, pointSpacing);
@@ -183,5 +183,5 @@ export default GObject.registerClass(
             }
             ctx.$dispose();
         }
-    },
+    }
 );

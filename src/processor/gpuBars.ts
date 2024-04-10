@@ -35,7 +35,7 @@ export default GObject.registerClass(
     class GpuBars extends BarsBase {
         constructor(params: GpuBarsParams) {
             //default params
-            if (params.layers === undefined) params.layers = 1;
+            if(params.layers === undefined) params.layers = 1;
 
             super(params);
 
@@ -49,16 +49,16 @@ export default GObject.registerClass(
         }
 
         setUsage(usage: GpuUsage[]) {
-            if (!usage || !Array.isArray(usage) || usage.length == 0) {
+            if(!usage || !Array.isArray(usage) || usage.length == 0) {
                 this.updateBars([]);
                 return;
             }
 
             const values = [];
-            for (let i = 0; i < usage.length; i++) {
+            for(let i = 0; i < usage.length; i++) {
                 values.push([{ color: 0, value: usage[i].percent / 100 }]);
             }
             this.updateBars(values);
         }
-    },
+    }
 );

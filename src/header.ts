@@ -46,7 +46,7 @@ export default GObject.registerClass(
                 accessible_role: Atk.Role.MENU,
                 layoutManager: new Clutter.BinLayout(),
                 x_expand: true,
-                y_expand: true,
+                y_expand: true
             });
             this.name = name;
 
@@ -57,24 +57,24 @@ export default GObject.registerClass(
                 y_expand: true,
                 x_align: Clutter.ActorAlign.START,
                 y_align: Clutter.ActorAlign.CENTER,
-                style_class: 'astra-monitor-header-box',
+                style_class: 'astra-monitor-header-box'
             });
             this.add_child(this.box);
 
             this.createTooltip();
 
             this.connect('button-press-event', (_widget, _event) => {
-                if (this.menu) this.menu.toggle();
+                if(this.menu) this.menu.toggle();
                 return Clutter.EVENT_PROPAGATE;
             });
 
             this.connect('touch-event', (_widget, _event) => {
-                if (this.menu) this.menu.toggle();
+                if(this.menu) this.menu.toggle();
                 return Clutter.EVENT_PROPAGATE;
             });
 
             this.connect('hide', () => {
-                if (this.menu) this.menu.close(true);
+                if(this.menu) this.menu.close(true);
             });
 
             this.connect('enter-event', () => {
@@ -97,7 +97,7 @@ export default GObject.registerClass(
             let style = '';
 
             let height = Config.get_int('headers-height');
-            if (height < 15 || height > 80) height = 32;
+            if(height < 15 || height > 80) height = 32;
             style += `height:${height}px;`;
 
             this.box.set_style(style);
@@ -105,22 +105,22 @@ export default GObject.registerClass(
         }
 
         insert_child_above(child: any, sibling: any) {
-            if (this.box) this.box.insert_child_above(child, sibling);
+            if(this.box) this.box.insert_child_above(child, sibling);
             else super.insert_child_above(child, sibling);
         }
 
         insert_child_at_index(child: any, index: number) {
-            if (this.box) this.box.insert_child_at_index(child, index);
+            if(this.box) this.box.insert_child_at_index(child, index);
             else super.insert_child_at_index(child, index);
         }
 
         insert_child_below(child: any, sibling: any) {
-            if (this.box) this.box.insert_child_below(child, sibling);
+            if(this.box) this.box.insert_child_below(child, sibling);
             else super.insert_child_below(child, sibling);
         }
 
         remove_child(child: any) {
-            if (this.box) this.box.remove_child(child);
+            if(this.box) this.box.remove_child(child);
             else super.remove_child(child);
         }
 
@@ -142,7 +142,7 @@ export default GObject.registerClass(
          * Keep it here for future reference
          */
         onOpenMenu(_menu: any, open: boolean) {
-            if (open) {
+            if(open) {
                 this.add_style_pseudo_class('active');
                 this.menu?.onOpen();
             } else {
@@ -154,7 +154,7 @@ export default GObject.registerClass(
             // menu is higher then the screen; it's useful if part of the menu is
             // scrollable so the minimum height is smaller than the natural height
             const workArea = Main.layoutManager.getWorkAreaForMonitor(
-                Main.layoutManager.primaryIndex,
+                Main.layoutManager.primaryIndex
             );
             const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
             // @ts-expect-error actor not in types
@@ -178,12 +178,12 @@ export default GObject.registerClass(
         destroy() {
             Config.clear(this);
 
-            if (this.menu) {
+            if(this.menu) {
                 this.menu.onClose();
                 this.menu.destroy();
             }
 
             super.destroy();
         }
-    },
+    }
 );

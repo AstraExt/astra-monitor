@@ -27,7 +27,7 @@ export class PromiseValueHolderStore<T> {
     }
 
     getValue(): Promise<T> {
-        if (this.valueHolder === undefined) this.valueHolder = this.creator();
+        if(this.valueHolder === undefined) this.valueHolder = this.creator();
         return this.valueHolder.getValue();
     }
 }
@@ -45,14 +45,14 @@ export default class PromiseValueHolder<T> {
                 this.resolvedValue = value;
                 this.isResolved = true;
             })
-            .catch((error) => {
+            .catch(error => {
                 this.isResolved = true;
                 throw error;
             });
     }
 
     getValue(): Promise<T> {
-        if (this.isResolved) {
+        if(this.isResolved) {
             return Promise.resolve(this.resolvedValue);
         } else {
             return this.promise;

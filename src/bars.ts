@@ -58,35 +58,35 @@ export default GObject.registerClass(
 
         constructor(params: BarProps) {
             //default params
-            if (params.layout === undefined) params.layout = 'vertical';
-            if (params.numBars === undefined) params.numBars = 1;
-            if (params.width === undefined) params.width = 0;
-            if (params.height === undefined) params.height = 0;
-            if (params.layers === undefined) params.layers = 1;
-            if (params.header === undefined) params.header = false;
-            if (params.mini === undefined) params.mini = false;
-            if (params.x_align === undefined) params.x_align = Clutter.ActorAlign.CENTER;
-            if (params.y_align === undefined) params.y_align = Clutter.ActorAlign.CENTER;
-            if (params.style === undefined) params.style = '';
-            if (params.hideEmpty === undefined) params.hideEmpty = false;
+            if(params.layout === undefined) params.layout = 'vertical';
+            if(params.numBars === undefined) params.numBars = 1;
+            if(params.width === undefined) params.width = 0;
+            if(params.height === undefined) params.height = 0;
+            if(params.layers === undefined) params.layers = 1;
+            if(params.header === undefined) params.header = false;
+            if(params.mini === undefined) params.mini = false;
+            if(params.x_align === undefined) params.x_align = Clutter.ActorAlign.CENTER;
+            if(params.y_align === undefined) params.y_align = Clutter.ActorAlign.CENTER;
+            if(params.style === undefined) params.style = '';
+            if(params.hideEmpty === undefined) params.hideEmpty = false;
 
             let style = '';
-            if (params.height) {
-                if (params.layout === 'vertical') style += `height:${params.height}em;`;
+            if(params.height) {
+                if(params.layout === 'vertical') style += `height:${params.height}em;`;
             }
-            if (params.width) {
-                if (params.layout === 'horizontal') style += `width:${params.width}px;`;
+            if(params.width) {
+                if(params.layout === 'horizontal') style += `width:${params.width}px;`;
             }
             style += params.style;
 
-            if (params.mini) params.y_align = Clutter.ActorAlign.FILL;
+            if(params.mini) params.y_align = Clutter.ActorAlign.FILL;
 
             super({
                 style: style,
                 x_align: params.x_align,
                 x_expand: true,
                 y_align: params.y_align,
-                y_expand: true,
+                y_expand: true
             });
 
             this.layout = params.layout;
@@ -104,45 +104,45 @@ export default GObject.registerClass(
             this.barSize = this.computeBarSize(params.numBars, size);
 
             const bars = new Array(params.numBars);
-            for (let i = 0; i < params.numBars; i++) {
+            for(let i = 0; i < params.numBars; i++) {
                 bars[i] = [];
 
                 let barConfig;
-                if (this.layout === 'vertical') {
+                if(this.layout === 'vertical') {
                     barConfig = {
                         reactive: false,
                         track_hover: false,
                         can_focus: false,
-                        style: `width:${this.barSize}em;`,
+                        style: `width:${this.barSize}em;`
                     };
                 } else {
                     barConfig = {
                         reactive: false,
                         track_hover: false,
                         can_focus: false,
-                        style: `height:${this.barSize}em;`,
+                        style: `height:${this.barSize}em;`
                     };
                 }
 
                 const container = new St.Widget(barConfig);
 
-                for (let k = 0; k < params.layers; k++) {
+                for(let k = 0; k < params.layers; k++) {
                     let layerConfig;
 
-                    if (this.layout === 'vertical') {
+                    if(this.layout === 'vertical') {
                         layerConfig = {
                             style_class: 'astra-monitor-bars-vertical-bar',
-                            x_expand: true,
+                            x_expand: true
                         };
                     } else {
                         layerConfig = {
                             style_class: 'astra-monitor-bars-horizontal-bar',
-                            y_expand: true,
+                            y_expand: true
                         };
                     }
 
                     const layer = new St.Widget(layerConfig);
-                    if (k > 0) layer.visible = false;
+                    if(k > 0) layer.visible = false;
 
                     bars[i].push(layer);
                     container.add_child(layer);
@@ -152,9 +152,9 @@ export default GObject.registerClass(
             this.bars = bars;
 
             const themeContext = St.ThemeContext.get_for_stage(global.get_stage());
-            if (themeContext.get_scale_factor) {
+            if(themeContext.get_scale_factor) {
                 this.scaleFactor = themeContext.get_scale_factor();
-                themeContext.connect('notify::scale-factor', (obj) => {
+                themeContext.connect('notify::scale-factor', obj => {
                     this.scaleFactor = obj.get_scale_factor();
                 });
             } else {
@@ -164,10 +164,10 @@ export default GObject.registerClass(
 
         setStyle() {
             let styleClass;
-            if (this.layout === 'vertical') styleClass = 'astra-monitor-bars-vertical';
+            if(this.layout === 'vertical') styleClass = 'astra-monitor-bars-vertical';
             else styleClass = 'astra-monitor-bars-horizontal';
 
-            if (this.mini) styleClass += '-mini';
+            if(this.mini) styleClass += '-mini';
 
             const bgStyle = 'astra-monitor-bg-' + Utils.themeStyle;
             this.style_class = styleClass + ' ' + bgStyle;
@@ -178,64 +178,64 @@ export default GObject.registerClass(
         }
 
         updateBars(values: { color: number; value: number }[][]) {
-            if (!this.get_stage() || !this.get_parent()) return;
+            if(!this.get_stage() || !this.get_parent()) return;
 
             try {
                 // eslint-disable-next-line prefer-const
                 let [width, height] = this.get_size();
-                if (this.initialWidth && width > this.initialWidth) width = this.initialWidth;
+                if(this.initialWidth && width > this.initialWidth) width = this.initialWidth;
 
-                if (this.layout === 'vertical' && this.header) {
-                    if (this.initialHeight && height > this.initialHeight)
+                if(this.layout === 'vertical' && this.header) {
+                    if(this.initialHeight && height > this.initialHeight)
                         height = this.initialHeight;
 
                     const parentHeight = this.get_parent()!.get_height();
-                    if (height > parentHeight - 6) height = parentHeight - 6;
+                    if(height > parentHeight - 6) height = parentHeight - 6;
                 }
 
                 let size;
-                if (this.layout === 'vertical')
+                if(this.layout === 'vertical')
                     size = height - (this.mini ? 2 : 4); // Remove 2px padding and 2px border
                 else size = width - (this.mini ? 2 : 4); // Remove 2px padding and 2px border
 
-                if (!values || values.length === 0) {
-                    for (let i = 0; i < this.bars.length; i++) {
+                if(!values || values.length === 0) {
+                    for(let i = 0; i < this.bars.length; i++) {
                         const bar = this.bars[i];
-                        for (let l = 0; l < bar.length; l++) bar[l].visible = false;
+                        for(let l = 0; l < bar.length; l++) bar[l].visible = false;
                     }
                     return;
                 }
 
-                for (let i = 0; i < this.bars.length; i++) {
+                for(let i = 0; i < this.bars.length; i++) {
                     const bar = this.bars[i];
-                    if (i >= values.length) {
-                        for (let l = 0; l < bar.length; l++) bar[l].visible = false;
+                    if(i >= values.length) {
+                        for(let l = 0; l < bar.length; l++) bar[l].visible = false;
                         continue;
                     }
 
                     const value = values[i];
 
                     let start = 0;
-                    for (let l = 0; l < bar.length; l++) {
+                    for(let l = 0; l < bar.length; l++) {
                         const layer = bar[l];
-                        if (l >= value.length) {
+                        if(l >= value.length) {
                             layer.visible = false;
                             continue;
                         }
 
-                        if (this.hideEmpty) {
-                            for (let l = 0; l < bar.length; l++)
+                        if(this.hideEmpty) {
+                            for(let l = 0; l < bar.length; l++)
                                 bar[l].visible = l < value.length && value[l].value > 0;
-                            if (value[l].value === 0) continue;
+                            if(value[l].value === 0) continue;
                         }
 
                         const normalizedValue = value[l].value * size;
                         let fillSize = 1;
-                        if (normalizedValue >= 0.5)
+                        if(normalizedValue >= 0.5)
                             fillSize = Math.ceil(normalizedValue) / this.scaleFactor;
-                        if (isNaN(fillSize) || fillSize < 1) fillSize = 1;
+                        if(isNaN(fillSize) || fillSize < 1) fillSize = 1;
 
-                        if (this.layout === 'vertical')
+                        if(this.layout === 'vertical')
                             layer.set_position(0, size - start - fillSize);
                         else layer.set_position(start, 0);
 
@@ -245,10 +245,10 @@ export default GObject.registerClass(
                         layer.set_style(style);
                         start += fillSize;
 
-                        if (!layer.visible) layer.visible = true;
+                        if(!layer.visible) layer.visible = true;
                     }
                 }
-            } catch (e: any) {
+            } catch(e: any) {
                 Utils.error(e);
             }
         }
@@ -259,11 +259,11 @@ export default GObject.registerClass(
                 topLeft: '0',
                 topRight: '0',
                 bottomRight: '0',
-                bottomLeft: '0',
+                bottomLeft: '0'
             };
 
-            if (start === 0) {
-                if (this.layout === 'vertical') {
+            if(start === 0) {
+                if(this.layout === 'vertical') {
                     bordersHelper.bottomLeft = border;
                     bordersHelper.bottomRight = border;
                 } else {
@@ -275,8 +275,8 @@ export default GObject.registerClass(
             const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
 
             const roundedSize = this.mini ? 3 : 4;
-            if (totalSize - (start + size) <= roundedSize * scaleFactor) {
-                if (this.layout === 'vertical') {
+            if(totalSize - (start + size) <= roundedSize * scaleFactor) {
+                if(this.layout === 'vertical') {
                     bordersHelper.topLeft = border;
                     bordersHelper.topRight = border;
                 } else {
@@ -286,15 +286,15 @@ export default GObject.registerClass(
             }
 
             const style = `border-radius: ${bordersHelper.topLeft} ${bordersHelper.topRight} ${bordersHelper.bottomRight} ${bordersHelper.bottomLeft};`;
-            if (this.layout === 'vertical')
+            if(this.layout === 'vertical')
                 return `${style}height:${size}px;width:${this.barSize}em;`;
             return `${style}height:${this.barSize}em;width:${size}px;`;
         }
 
         computeBarSize(numBars: number, size: number) {
-            if (numBars > 8)
+            if(numBars > 8)
                 size *= 0.5; // Reduce bar by half when there are many bars
-            else if (numBars > 2) size *= 0.75; // Reduce bar by 3/4 when there are a few bars
+            else if(numBars > 2) size *= 0.75; // Reduce bar by 3/4 when there are a few bars
             return size;
         }
 
@@ -302,5 +302,5 @@ export default GObject.registerClass(
             Config.clear(this);
             super.destroy();
         }
-    },
+    }
 );

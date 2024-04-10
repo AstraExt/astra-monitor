@@ -75,7 +75,7 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::sensors-indicators-order',
-                this.addOrReorderIndicators.bind(this),
+                this.addOrReorderIndicators.bind(this)
             );
             Config.bind('sensors-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -83,12 +83,12 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::sensors-header-sensor1-show',
-                this.resetMaxWidths.bind(this),
+                this.resetMaxWidths.bind(this)
             );
             Config.connect(
                 this,
                 'changed::sensors-header-sensor2-show',
-                this.resetMaxWidths.bind(this),
+                this.resetMaxWidths.bind(this)
             );
             Config.connect(this, 'changed::headers-font-family', this.resetMaxWidths.bind(this));
             Config.connect(this, 'changed::headers-font-size', this.resetMaxWidths.bind(this));
@@ -102,7 +102,7 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::sensors-header-sensor2-layout',
-                updateSensorsLayout.bind(this),
+                updateSensorsLayout.bind(this)
             );
             updateSensorsLayout();
         }
@@ -111,9 +111,9 @@ export default GObject.registerClass(
             const indicators = Utils.getIndicatorsOrder('sensors');
 
             let position = 0;
-            for (const indicator of indicators) {
+            for(const indicator of indicators) {
                 let widget;
-                switch (indicator) {
+                switch(indicator) {
                     case 'icon':
                         widget = this.icon;
                         break;
@@ -122,8 +122,8 @@ export default GObject.registerClass(
                         break;
                 }
 
-                if (widget) {
-                    if (widget.get_parent()) this.remove_child(widget);
+                if(widget) {
+                    if(widget.get_parent()) this.remove_child(widget);
                     this.insert_child_at_index(widget, position++);
                 }
             }
@@ -132,7 +132,7 @@ export default GObject.registerClass(
         resetMaxWidths() {
             this.maxWidths = [];
 
-            if (!this.sensors.get_stage()) return;
+            if(!this.sensors.get_stage()) return;
 
             this.fixContainerStyle();
         }
@@ -147,12 +147,12 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER,
+                x_align: Clutter.ActorAlign.CENTER
             });
 
             const setIconName = () => {
                 const iconCustom = Config.get_string('sensors-header-icon-custom');
-                if (iconCustom) this.icon.icon_name = iconCustom;
+                if(iconCustom) this.icon.icon_name = iconCustom;
                 // @ts-expect-error gicon shouldn't be null, but we do have a fallback icon
                 else this.icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
             };
@@ -160,7 +160,7 @@ export default GObject.registerClass(
 
             const setIconColor = () => {
                 const iconColor = Config.get_string('sensors-header-icon-color');
-                if (iconColor) this.icon.style = defaultStyle + 'color:' + iconColor + ';';
+                if(iconColor) this.icon.style = defaultStyle + 'color:' + iconColor + ';';
                 else this.icon.style = defaultStyle;
             };
             setIconColor();
@@ -170,17 +170,17 @@ export default GObject.registerClass(
                 'sensors-header-icon-size',
                 this.icon,
                 'icon_size',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
             Config.connect(
                 this.icon,
                 'changed::sensors-header-icon-custom',
-                setIconName.bind(this),
+                setIconName.bind(this)
             );
             Config.connect(
                 this.icon,
                 'changed::sensors-header-icon-color',
-                setIconColor.bind(this),
+                setIconColor.bind(this)
             );
         }
 
@@ -190,7 +190,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.FILL,
                 y_expand: true,
                 vertical: true,
-                width: 1,
+                width: 1
             });
 
             this.sensors = new St.Label({
@@ -200,14 +200,14 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.CENTER,
                 x_align: Clutter.ActorAlign.END,
                 x_expand: true,
-                y_expand: true,
+                y_expand: true
             });
             this.sensors.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
             this.sensors.clutter_text.line_wrap = false;
             this.valuesContainer.add_child(this.sensors);
 
             Utils.sensorsMonitor.listen(this.valuesContainer, 'sensorsData', () => {
-                if (
+                if(
                     !Config.get_boolean('sensors-header-sensor1-show') &&
                     !Config.get_boolean('sensors-header-sensor2-show')
                 )
@@ -217,12 +217,12 @@ export default GObject.registerClass(
                 let sensor2 = '-';
 
                 const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
-                if (sensorsData) {
+                if(sensorsData) {
                     const sensor1Source = Config.get_json('sensors-header-sensor1');
                     const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
                     sensor1 = this.applySource(sensorsData, sensor1Source, sensor1Digits);
 
-                    if (Config.get_boolean('sensors-header-sensor2-show')) {
+                    if(Config.get_boolean('sensors-header-sensor2-show')) {
                         const sensor2Source = Config.get_json('sensors-header-sensor2');
                         const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
                         sensor2 = this.applySource(sensorsData, sensor2Source, sensor2Digits);
@@ -231,10 +231,10 @@ export default GObject.registerClass(
                     }
                 }
 
-                if (sensor2) {
+                if(sensor2) {
                     this.sensorsNum = 2;
 
-                    if (this.sensorsLayout === 'horizontal')
+                    if(this.sensorsLayout === 'horizontal')
                         this.sensors.text = `${sensor1} | ${sensor2}`;
                     else this.sensors.text = `${sensor1}\n${sensor2}`;
                 } else {
@@ -248,39 +248,39 @@ export default GObject.registerClass(
         applySource(
             sensorsData: SensorsData,
             sensorSource: SensorSource,
-            sensorDigits: number = -1,
+            sensorDigits: number = -1
         ): string {
-            if (!sensorSource || !sensorSource.service) return '-';
+            if(!sensorSource || !sensorSource.service) return '-';
 
             let service = sensorSource.service;
-            if (service === 'sensors') service = 'lm_sensors';
+            if(service === 'sensors') service = 'lm_sensors';
 
-            if (!sensorsData[service as keyof SensorsData]) return '-';
+            if(!sensorsData[service as keyof SensorsData]) return '-';
 
             let node = sensorsData[service as keyof SensorsData];
 
             let step;
-            for (step of sensorSource.path) {
-                if (!node) return '-';
+            for(step of sensorSource.path) {
+                if(!node) return '-';
 
                 const tmp = node.children.get(step);
-                if (!tmp) return '-';
+                if(!tmp) return '-';
                 node = tmp;
             }
 
-            if (!node) return '-';
+            if(!node) return '-';
 
             let value;
             let unit;
 
-            if (!node.attrs.value) return '-';
+            if(!node.attrs.value) return '-';
             value = node.attrs.value;
 
-            if (node.attrs.unit) unit = node.attrs.unit;
+            if(node.attrs.unit) unit = node.attrs.unit;
             else unit = Utils.inferMeasurementUnit(step || '');
 
-            if (unit) {
-                if (
+            if(unit) {
+                if(
                     unit === '°C' &&
                     Config.get_string('sensors-temperature-unit') === 'fahrenheit'
                 ) {
@@ -288,30 +288,30 @@ export default GObject.registerClass(
                     unit = '°F';
                 }
 
-                if (Utils.isNumeric(value)) {
-                    if (sensorDigits >= 0) value = value.toFixed(sensorDigits);
-                    else if (!Utils.isIntOrIntString(value)) value = value.toFixed(1);
+                if(Utils.isNumeric(value)) {
+                    if(sensorDigits >= 0) value = value.toFixed(sensorDigits);
+                    else if(!Utils.isIntOrIntString(value)) value = value.toFixed(1);
                 }
                 return value + ' ' + unit;
             }
-            if (!Utils.isIntOrIntString(value) && Utils.isNumeric(value)) value = value.toFixed(1);
+            if(!Utils.isIntOrIntString(value) && Utils.isNumeric(value)) value = value.toFixed(1);
             return value as string;
         }
 
         fixContainerStyle() {
-            if (!this.valuesContainer.get_parent()) return;
-            if (!this.sensors.get_parent()) return;
+            if(!this.valuesContainer.get_parent()) return;
+            if(!this.sensors.get_parent()) return;
 
             const calculateStyle = () => {
-                if (this.sensorsNum === 1 || this.sensorsLayout === 'horizontal')
+                if(this.sensorsNum === 1 || this.sensorsLayout === 'horizontal')
                     return 'font-size:1em;';
                 const superHeight = this.valuesContainer.get_parent()?.height ?? 0;
-                if (superHeight <= 20) return 'font-size:0.65em;';
+                if(superHeight <= 20) return 'font-size:0.65em;';
                 return `font-size:${Math.round(superHeight / 3)}px;`;
             };
             const style = calculateStyle();
 
-            if (this.sensors.style !== style) {
+            if(this.sensors.style !== style) {
                 this.sensors.style = style;
                 this.sensors.queue_relayout();
                 this.valuesContainer.queue_relayout();
@@ -322,12 +322,12 @@ export default GObject.registerClass(
 
             this.maxWidths.push(width);
 
-            if (this.maxWidths.length > Utils.sensorsMonitor.updateFrequency * 10)
+            if(this.maxWidths.length > Utils.sensorsMonitor.updateFrequency * 10)
                 this.maxWidths.shift();
 
             const max = Math.max(...this.maxWidths);
 
-            if (max === this.valuesContainer.width) return;
+            if(max === this.valuesContainer.width) return;
             this.valuesContainer.set_width(max);
         }
 
@@ -343,7 +343,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item',
+                style_class: 'astra-monitor-tooltip-item'
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;
@@ -351,38 +351,38 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::sensors-header-tooltip', () => {
-                if (!Config.get_boolean('sensors-header-tooltip')) this.tooltipMenu.close(true);
+                if(!Config.get_boolean('sensors-header-tooltip')) this.tooltipMenu.close(true);
             });
 
             Utils.sensorsMonitor.listen(this.tooltipMenu, 'sensorsData', () => {
-                if (!Config.get_boolean('sensors-header-tooltip')) return;
+                if(!Config.get_boolean('sensors-header-tooltip')) return;
 
                 const values: string[] = [];
 
                 const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
-                if (sensorsData) {
-                    for (let sensorNum = 1; sensorNum <= 5; sensorNum++) {
+                if(sensorsData) {
+                    for(let sensorNum = 1; sensorNum <= 5; sensorNum++) {
                         const sensorSource = Config.get_json(
-                            `sensors-header-tooltip-sensor${sensorNum}`,
+                            `sensors-header-tooltip-sensor${sensorNum}`
                         );
-                        if (!sensorSource) continue;
+                        if(!sensorSource) continue;
 
                         const sensorName = Config.get_string(
-                            `sensors-header-tooltip-sensor${sensorNum}-name`,
+                            `sensors-header-tooltip-sensor${sensorNum}-name`
                         );
                         const sensorDigits = Config.get_int(
-                            `sensors-header-tooltip-sensor${sensorNum}-digits`,
+                            `sensors-header-tooltip-sensor${sensorNum}-digits`
                         );
 
                         const text = this.applySource(sensorsData, sensorSource, sensorDigits);
-                        if (!text || text === '-') continue;
+                        if(!text || text === '-') continue;
 
-                        if (sensorName) values.push(sensorName + ': ' + text);
+                        if(sensorName) values.push(sensorName + ': ' + text);
                         else values.push(text);
                     }
                 }
 
-                if (values.length === 0) values.push('-');
+                if(values.length === 0) values.push('-');
 
                 this.tooltipItem.label.text = values.join(' | ');
                 const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
@@ -391,15 +391,15 @@ export default GObject.registerClass(
         }
 
         showTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('sensors-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('sensors-header-tooltip')) return;
 
             this.tooltipMenu.open(false);
         }
 
         hideTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('sensors-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('sensors-header-tooltip')) return;
             this.tooltipMenu.close(false);
         }
 
@@ -409,11 +409,11 @@ export default GObject.registerClass(
 
             Config.clear(this.icon);
 
-            if (this.valuesContainer) {
+            if(this.valuesContainer) {
                 Config.clear(this.valuesContainer);
                 Utils.sensorsMonitor.unlisten(this.valuesContainer);
             }
-            if (this.tooltipMenu) {
+            if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.sensorsMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
@@ -421,5 +421,5 @@ export default GObject.registerClass(
 
             super.destroy();
         }
-    },
+    }
 );

@@ -87,7 +87,7 @@ export default class MemoryMonitor extends Monitor {
         this.dataSourcesInit();
 
         const enabled = Config.get_boolean('memory-header-show');
-        if (enabled) this.start();
+        if(enabled) this.start();
 
         Config.connect(this, 'changed::memory-used', () => {
             this.usedPref = Config.get_string('memory-used');
@@ -96,7 +96,7 @@ export default class MemoryMonitor extends Monitor {
         });
 
         Config.connect(this, 'changed::memory-header-show', () => {
-            if (Config.get_boolean('memory-header-show')) this.start();
+            if(Config.get_boolean('memory-header-show')) this.start();
             else this.stop();
         });
 
@@ -127,7 +127,7 @@ export default class MemoryMonitor extends Monitor {
     dataSourcesInit() {
         this.dataSources = {
             memoryUsage: Config.get_string('memory-source-memory-usage') ?? undefined,
-            topProcesses: Config.get_string('memory-source-top-processes') ?? undefined,
+            topProcesses: Config.get_string('memory-source-top-processes') ?? undefined
         };
 
         Config.connect(this, 'changed::memory-source-memory-usage', () => {
@@ -149,38 +149,38 @@ export default class MemoryMonitor extends Monitor {
         Utils.verbose('Updating Memory Monitor');
 
         const enabled = Config.get_boolean('memory-header-show');
-        if (enabled) {
+        if(enabled) {
             const procMeminfo = new PromiseValueHolderStore<string[]>(
-                this.getProcMeminfoAsync.bind(this),
+                this.getProcMeminfoAsync.bind(this)
             );
 
             this.runUpdate('memoryUsage', procMeminfo);
 
-            if (this.isListeningFor('topProcesses')) this.runUpdate('topProcesses');
+            if(this.isListeningFor('topProcesses')) this.runUpdate('topProcesses');
             else this.topProcessesCache.updateNotSeen([]);
 
-            if (this.isListeningFor('swapUsage')) this.runUpdate('swapUsage', procMeminfo);
+            if(this.isListeningFor('swapUsage')) this.runUpdate('swapUsage', procMeminfo);
         }
         return true;
     }
 
     requestUpdate(key: string) {
-        if (key === 'memoryUsage') {
-            if (!this.updateMemoryUsageTask.isRunning) {
+        if(key === 'memoryUsage') {
+            if(!this.updateMemoryUsageTask.isRunning) {
                 const procMeminfo = new PromiseValueHolderStore<string[]>(
-                    this.getProcMeminfoAsync.bind(this),
+                    this.getProcMeminfoAsync.bind(this)
                 );
                 this.runUpdate('memoryUsage', procMeminfo);
             }
-        } else if (key === 'topProcesses') {
-            if (!this.updateTopProcessesTask.isRunning) {
+        } else if(key === 'topProcesses') {
+            if(!this.updateTopProcessesTask.isRunning) {
                 this.runUpdate('topProcesses');
             }
             return; // Don't push to the queue
-        } else if (key === 'swapUsage') {
-            if (!this.updateSwapUsageTask.isRunning) {
+        } else if(key === 'swapUsage') {
+            if(!this.updateSwapUsageTask.isRunning) {
                 const procMeminfo = new PromiseValueHolderStore<string[]>(
-                    this.getProcMeminfoAsync.bind(this),
+                    this.getProcMeminfoAsync.bind(this)
                 );
                 this.runUpdate('swapUsage', procMeminfo);
             }
@@ -189,11 +189,11 @@ export default class MemoryMonitor extends Monitor {
     }
 
     runUpdate(key: string, ...params: any[]) {
-        if (key === 'memoryUsage') {
+        if(key === 'memoryUsage') {
             let run;
-            if (this.dataSources.memoryUsage === 'GTop')
+            if(this.dataSources.memoryUsage === 'GTop')
                 run = this.updateMemoryUsageGTop.bind(this, ...params);
-            else if (this.dataSources.memoryUsage === 'proc')
+            else if(this.dataSources.memoryUsage === 'proc')
                 run = this.updateMemoryUsageProc.bind(this, ...params);
             else run = this.updateMemoryUsageAuto.bind(this, ...params);
 
@@ -201,15 +201,15 @@ export default class MemoryMonitor extends Monitor {
                 key,
                 task: this.updateMemoryUsageTask,
                 run,
-                callback: this.notify.bind(this, 'memoryUsage'),
+                callback: this.notify.bind(this, 'memoryUsage')
             });
             return;
         }
-        if (key === 'topProcesses') {
+        if(key === 'topProcesses') {
             let run;
-            if (this.dataSources.topProcesses === 'GTop')
+            if(this.dataSources.topProcesses === 'GTop')
                 run = this.updateTopProcessesGTop.bind(this, ...params);
-            else if (this.dataSources.topProcesses === 'proc')
+            else if(this.dataSources.topProcesses === 'proc')
                 run = this.updateTopProcessesProc.bind(this, ...params);
             else run = this.updateTopProcessesAuto.bind(this, ...params);
 
@@ -217,16 +217,16 @@ export default class MemoryMonitor extends Monitor {
                 key,
                 task: this.updateTopProcessesTask,
                 run,
-                callback: this.notify.bind(this, 'topProcesses'),
+                callback: this.notify.bind(this, 'topProcesses')
             });
             return;
         }
-        if (key === 'swapUsage') {
+        if(key === 'swapUsage') {
             this.runTask({
                 key,
                 task: this.updateSwapUsageTask,
                 run: this.updateSwapUsageProc.bind(this, ...params),
-                callback: this.notify.bind(this, 'swapUsage'),
+                callback: this.notify.bind(this, 'swapUsage')
             });
             return;
         }
@@ -236,24 +236,24 @@ export default class MemoryMonitor extends Monitor {
         return new PromiseValueHolder(
             new Promise((resolve, reject) => {
                 Utils.readFileAsync('/proc/meminfo')
-                    .then((fileContent) => {
+                    .then(fileContent => {
                         resolve(fileContent.split('\n'));
                     })
-                    .catch((e) => {
+                    .catch(e => {
                         reject(e);
                     });
-            }),
+            })
         );
     }
 
     updateMemoryUsageAuto(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
-        if (Utils.GTop) return this.updateMemoryUsageGTop();
+        if(Utils.GTop) return this.updateMemoryUsageGTop();
         return this.updateMemoryUsageProc(procMeminfo);
     }
 
     async updateMemoryUsageProc(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procMeminfoValue = await procMeminfo.getValue();
-        if (procMeminfoValue.length < 1) return false;
+        if(procMeminfoValue.length < 1) return false;
 
         let total = 0,
             free = 0,
@@ -262,12 +262,12 @@ export default class MemoryMonitor extends Monitor {
             available = 0,
             active = 0;
 
-        for (let i = 0; i < procMeminfoValue.length; i++) {
+        for(let i = 0; i < procMeminfoValue.length; i++) {
             const parts = procMeminfoValue[i].split(/\s+/);
             const key = parts[0].trim();
             const value = parseInt(parts[1]);
 
-            switch (key) {
+            switch(key) {
                 case 'MemTotal:':
                     total = value * 1024;
                     break;
@@ -297,7 +297,7 @@ export default class MemoryMonitor extends Monitor {
 
     async updateMemoryUsageGTop(): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         const mem = new GTop.glibtop_mem();
         GTop.glibtop_get_mem(mem);
@@ -315,7 +315,7 @@ export default class MemoryMonitor extends Monitor {
             available,
             free,
             buffers,
-            cached,
+            cached
         });
     }
 
@@ -325,7 +325,7 @@ export default class MemoryMonitor extends Monitor {
         available,
         free,
         buffers,
-        cached,
+        cached
     }: {
         active: number;
         total: number;
@@ -335,9 +335,9 @@ export default class MemoryMonitor extends Monitor {
         cached: number;
     }): boolean {
         let used;
-        if (this.usedPref === 'active') used = active;
-        else if (this.usedPref === 'total-available') used = total - available;
-        else if (this.usedPref === 'total-free') used = total - free;
+        if(this.usedPref === 'active') used = active;
+        else if(this.usedPref === 'total-available') used = total - available;
+        else if(this.usedPref === 'total-free') used = total - free;
         else used = total - free - buffers - cached;
 
         const allocated = total - free;
@@ -352,13 +352,13 @@ export default class MemoryMonitor extends Monitor {
             available,
             free,
             buffers,
-            cached,
+            cached
         });
         return true;
     }
 
     updateTopProcessesAuto(): Promise<boolean> {
-        if (Utils.GTop) return this.updateTopProcessesGTop();
+        if(Utils.GTop) return this.updateTopProcessesGTop();
         return this.updateTopProcessesProc();
     }
 
@@ -369,20 +369,20 @@ export default class MemoryMonitor extends Monitor {
         try {
             const result = await Utils.executeCommandAsync(
                 'ps -eo pid,rss,%mem --sort=-%mem',
-                this.updateTopProcessesTask,
+                this.updateTopProcessesTask
             );
-            if (result) {
+            if(result) {
                 let lines = result.split('\n');
                 lines.shift(); // Remove the first line (header)
-                if (lines.length > MemoryMonitor.TOP_PROCESSES_LIMIT)
+                if(lines.length > MemoryMonitor.TOP_PROCESSES_LIMIT)
                     lines = lines.slice(0, MemoryMonitor.TOP_PROCESSES_LIMIT);
 
-                for (const line of lines) {
-                    if (line.trim() === '') continue;
+                for(const line of lines) {
+                    if(line.trim() === '') continue;
 
-                    const [spid, susage, sperc] = line.split(' ').filter((n) => n.trim() !== '');
+                    const [spid, susage, sperc] = line.split(' ').filter(n => n.trim() !== '');
 
-                    if (
+                    if(
                         !Utils.isIntOrIntString(spid) ||
                         !Utils.isNumeric(susage) ||
                         !Utils.isNumeric(sperc)
@@ -395,35 +395,35 @@ export default class MemoryMonitor extends Monitor {
                     seenPids.push(pid);
 
                     let process = this.topProcessesCache.getProcess(pid);
-                    if (!process) {
+                    if(!process) {
                         try {
                             let fileContent = await Utils.readFileAsync(`/proc/${pid}/cmdline`);
-                            if (fileContent === '') {
+                            if(fileContent === '') {
                                 fileContent = await Utils.readFileAsync(`/proc/${pid}/comm`);
                                 process = {
                                     pid: pid,
                                     exec: Utils.extractCommandName(fileContent),
                                     cmd: fileContent,
-                                    notSeen: 0,
+                                    notSeen: 0
                                 };
                             } else {
                                 process = {
                                     pid: pid,
                                     exec: Utils.extractCommandName(fileContent),
                                     cmd: fileContent,
-                                    notSeen: 0,
+                                    notSeen: 0
                                 };
                             }
 
                             this.topProcessesCache.setProcess(process);
-                        } catch (e) {
+                        } catch(e) {
                             continue;
                         }
                     }
                     topProcesses.push({ process, usage, percentage });
                 }
             }
-        } catch (e: any) {
+        } catch(e: any) {
             Utils.error(e.message);
         }
 
@@ -434,7 +434,7 @@ export default class MemoryMonitor extends Monitor {
 
     async updateTopProcessesGTop() {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         const buf = new GTop.glibtop_proclist();
         const pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0); // GLIBTOP_EXCLUDE_IDLE
@@ -448,28 +448,28 @@ export default class MemoryMonitor extends Monitor {
 
         GTop.glibtop_get_mem(mem);
 
-        for (const pid of pids) {
+        for(const pid of pids) {
             seenPids.push(pid);
 
             let process = this.topProcessesCache.getProcess(pid);
-            if (!process) {
+            if(!process) {
                 const argSize = new GTop.glibtop_proc_args();
                 let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
 
-                if (!cmd) {
+                if(!cmd) {
                     const procState = new GTop.glibtop_proc_state();
                     GTop.glibtop_get_proc_state(procState, pid);
-                    if (procState && procState.cmd) {
+                    if(procState && procState.cmd) {
                         let str = '';
-                        for (let i = 0; i < procState.cmd.length; i++) {
-                            if (procState.cmd[i] === 0) break;
+                        for(let i = 0; i < procState.cmd.length; i++) {
+                            if(procState.cmd[i] === 0) break;
                             str += String.fromCharCode(procState.cmd[i]);
                         }
                         cmd = str ? `[${str}]` : cmd;
                     }
                 }
 
-                if (!cmd) {
+                if(!cmd) {
                     //Utils.log('cmd is null for pid: ' + pid);
                     continue;
                 }
@@ -478,7 +478,7 @@ export default class MemoryMonitor extends Monitor {
                     pid: pid,
                     exec: Utils.extractCommandName(cmd),
                     cmd: cmd,
-                    notSeen: 0,
+                    notSeen: 0
                 };
                 this.topProcessesCache.setProcess(process);
             }
@@ -500,7 +500,7 @@ export default class MemoryMonitor extends Monitor {
 
     async updateSwapUsageProc(procMeminfo: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procMeminfoValue = await procMeminfo.getValue();
-        if (procMeminfoValue.length < 1) return false;
+        if(procMeminfoValue.length < 1) return false;
 
         let total = 0,
             free = 0,
@@ -508,13 +508,13 @@ export default class MemoryMonitor extends Monitor {
             zswap = 0,
             zswapped = 0;
 
-        for (let i = 0; i < procMeminfoValue.length; i++) {
+        for(let i = 0; i < procMeminfoValue.length; i++) {
             const parts = procMeminfoValue[i].split(/\s+/);
 
             const key = parts[0].trim();
             const value = parseInt(parts[1]);
 
-            switch (key) {
+            switch(key) {
                 case 'SwapTotal:':
                     total = value * 1024;
                     break;
@@ -541,34 +541,34 @@ export default class MemoryMonitor extends Monitor {
             free,
             cached,
             zswap,
-            zswapped,
+            zswapped
         };
 
         try {
             const fileContent = await Utils.readFileAsync('/proc/swaps');
-            if (fileContent) {
+            if(fileContent) {
                 const lines = fileContent.split('\n');
                 lines.shift(); // Remove the first line (header)
 
                 const swapDevices = [];
-                for (const line of lines) {
-                    if (line.trim() === '') continue;
+                for(const line of lines) {
+                    if(line.trim() === '') continue;
 
                     const [device, type, size, used, priority] = line.split(/\s+/);
 
-                    if (!Utils.isNumeric(size) || !Utils.isNumeric(used)) continue;
+                    if(!Utils.isNumeric(size) || !Utils.isNumeric(used)) continue;
 
                     swapDevices.push({
                         device,
                         type,
                         size: parseInt(size, 10) * 1024,
                         used: parseInt(used, 10) * 1024,
-                        priority: parseInt(priority, 10),
+                        priority: parseInt(priority, 10)
                     });
                 }
                 swapUsage.devices = swapDevices;
             }
-        } catch (e: any) {
+        } catch(e: any) {
             Utils.error(e.message);
         }
 

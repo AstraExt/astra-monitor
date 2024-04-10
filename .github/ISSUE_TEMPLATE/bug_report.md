@@ -26,10 +26,10 @@ assignees: ''
 
 <!-- Please complete the following information -->
 
-- **Astra Monitor Version**:
-- **GNOME Version**:
-- **Operating System and Version**:
-- **Other Relevant System Information**:
+-   **Astra Monitor Version**:
+-   **GNOME Version**:
+-   **Operating System and Version**:
+-   **Other Relevant System Information**:
 
 ## Logs
 

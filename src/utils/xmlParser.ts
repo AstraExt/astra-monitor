@@ -39,25 +39,25 @@ export default class XMLParser {
         let rootObjName = '';
         const rootObj: XMLObject = {};
 
-        while (this.pos < this.xml.length) {
+        while(this.pos < this.xml.length) {
             const nextLessThan = this.xml.indexOf('<', this.pos);
-            if (nextLessThan === -1) break; // End of XML document
+            if(nextLessThan === -1) break; // End of XML document
 
-            if (nextLessThan !== this.pos) {
+            if(nextLessThan !== this.pos) {
                 const textContent = this.parseTextContent(this.pos);
-                if (textContent && this.currentObj) this.currentObj['#text'] = textContent;
+                if(textContent && this.currentObj) this.currentObj['#text'] = textContent;
             }
 
             this.pos = nextLessThan;
             this.skipToNextImportantChar();
 
-            if (this.xml[this.pos] === '<') {
-                if (this.xml[this.pos + 1] === '/') {
+            if(this.xml[this.pos] === '<') {
+                if(this.xml[this.pos + 1] === '/') {
                     // Closing tag
                     this.pos = this.xml.indexOf('>', this.pos) + 1;
                     const finishedObject = this.stack.pop();
-                    if (this.stack.length === 0) {
-                        if (rootObjName) {
+                    if(this.stack.length === 0) {
+                        if(rootObjName) {
                             rootObj[rootObjName] = finishedObject?.obj ?? {};
                             return rootObj;
                         }
@@ -66,22 +66,22 @@ export default class XMLParser {
                     this.currentObj = this.stack[this.stack.length - 1].obj;
                 } else {
                     // Opening tag
-                    if (!this.parseTag()) break; // Could not find tag: malformed XML
+                    if(!this.parseTag()) break; // Could not find tag: malformed XML
 
                     const attributes = this.parseAttributes();
                     const newObj: XMLObject = { ...attributes };
-                    if (!this.currentObj) {
+                    if(!this.currentObj) {
                         rootObjName = this.currentTagName;
                         this.currentObj = newObj;
                     } else {
-                        if (!this.currentObj[this.currentTagName])
+                        if(!this.currentObj[this.currentTagName])
                             this.currentObj[this.currentTagName] = newObj;
-                        else if (Array.isArray(this.currentObj[this.currentTagName]))
+                        else if(Array.isArray(this.currentObj[this.currentTagName]))
                             (this.currentObj[this.currentTagName] as Array<XMLObject>).push(newObj);
                         else
                             this.currentObj[this.currentTagName] = [
                                 this.currentObj[this.currentTagName] as XMLObject,
-                                newObj,
+                                newObj
                             ];
                     }
                     this.stack.push({ tagName: this.currentTagName, obj: newObj });
@@ -104,9 +104,9 @@ export default class XMLParser {
 
     private skipDeclarations(): void {
         // Skip XML declaration
-        if (this.xml.startsWith('<?xml', this.pos)) this.pos = this.xml.indexOf('?>', this.pos) + 2;
+        if(this.xml.startsWith('<?xml', this.pos)) this.pos = this.xml.indexOf('?>', this.pos) + 2;
         // Skip whitespace
-        while (
+        while(
             this.xml[this.pos] === ' ' ||
             this.xml[this.pos] === '\n' ||
             this.xml[this.pos] === '\t' ||
@@ -114,10 +114,10 @@ export default class XMLParser {
         )
             this.pos++;
         // Skip DOCTYPE declaration
-        if (this.xml.startsWith('<!DOCTYPE', this.pos))
+        if(this.xml.startsWith('<!DOCTYPE', this.pos))
             this.pos = this.xml.indexOf('>', this.pos) + 1;
         // Skip any whitespace after declarations
-        while (
+        while(
             this.xml[this.pos] === ' ' ||
             this.xml[this.pos] === '\n' ||
             this.xml[this.pos] === '\t' ||
@@ -138,7 +138,7 @@ export default class XMLParser {
 
         const endOfTagName =
             firstSpace !== -1 && firstSpace < firstClosure ? firstSpace : firstClosure;
-        if (endOfTagName === -1) return false;
+        if(endOfTagName === -1) return false;
 
         this.currentTagName = this.xml.substring(this.pos + 1, endOfTagName).trim();
         this.pos = endOfTagName;
@@ -148,45 +148,45 @@ export default class XMLParser {
     private parseAttributes(): XMLObject {
         const attrs: XMLObject = {};
 
-        while (this.xml[this.pos] === ' ') this.pos++;
+        while(this.xml[this.pos] === ' ') this.pos++;
 
-        if (this.xml[this.pos] === '>') {
+        if(this.xml[this.pos] === '>') {
             this.pos++; // Move past '>'
             return attrs; // Return empty attributes
         }
 
-        while (this.pos < this.xml.length && this.xml[this.pos] !== '>') {
+        while(this.pos < this.xml.length && this.xml[this.pos] !== '>') {
             // Find the end of this tag or the next attribute
             let nextSpace = this.xml.indexOf(' ', this.pos);
             const nextEqual = this.xml.indexOf('=', this.pos);
             let endOfTag = this.xml.indexOf('>', this.pos);
 
-            if (nextSpace === -1 || (nextEqual !== -1 && nextEqual < nextSpace))
+            if(nextSpace === -1 || (nextEqual !== -1 && nextEqual < nextSpace))
                 nextSpace = nextEqual;
 
-            if (nextSpace === -1 || nextSpace > endOfTag) nextSpace = endOfTag;
+            if(nextSpace === -1 || nextSpace > endOfTag) nextSpace = endOfTag;
             // No more attributes
-            if (nextSpace === this.pos || nextSpace === -1) break;
+            if(nextSpace === this.pos || nextSpace === -1) break;
 
             const attrName = '@' + this.xml.substring(this.pos, nextSpace);
             this.pos = nextSpace + 1; // Move past the space or equal sign
 
             // Skip spaces to find the start of attribute value or next attribute name
-            while (this.xml[this.pos] === ' ' && this.pos < endOfTag) this.pos++;
+            while(this.xml[this.pos] === ' ' && this.pos < endOfTag) this.pos++;
 
             // Check if attribute has a value
-            if (
+            if(
                 this.xml[this.pos] === '=' ||
                 this.xml[this.pos] === '"' ||
                 this.xml[this.pos] === "'"
             ) {
-                if (this.xml[this.pos] === '=') {
+                if(this.xml[this.pos] === '=') {
                     this.pos++; // Move past '='
-                    while (this.xml[this.pos] === ' ') this.pos++; // Skip spaces after '='
+                    while(this.xml[this.pos] === ' ') this.pos++; // Skip spaces after '='
                 }
 
                 const quoteChar = this.xml[this.pos];
-                if (quoteChar === '"' || quoteChar === "'") {
+                if(quoteChar === '"' || quoteChar === "'") {
                     this.pos++; // Move past opening quote
                     const endQuote = this.xml.indexOf(quoteChar, this.pos);
                     const attrValue = this.xml.substring(this.pos, endQuote);
@@ -196,7 +196,7 @@ export default class XMLParser {
                     // Handle as number or boolean
                     let spaceOrEndTag = this.xml.indexOf(' ', this.pos);
                     endOfTag = this.xml.indexOf('>', this.pos);
-                    if (spaceOrEndTag === -1 || spaceOrEndTag > endOfTag) spaceOrEndTag = endOfTag;
+                    if(spaceOrEndTag === -1 || spaceOrEndTag > endOfTag) spaceOrEndTag = endOfTag;
                     const attrValue = this.xml.substring(this.pos, spaceOrEndTag);
                     attrs[attrName] = isNaN(Number(attrValue)) ? attrValue : Number(attrValue); // Convert to number if possible
                     this.pos = spaceOrEndTag;
@@ -206,8 +206,8 @@ export default class XMLParser {
                 attrs[attrName] = true;
             }
 
-            while (this.xml[this.pos] === ' ' && this.pos < endOfTag) this.pos++;
-            if (this.xml[this.pos] === '>') {
+            while(this.xml[this.pos] === ' ' && this.pos < endOfTag) this.pos++;
+            if(this.xml[this.pos] === '>') {
                 this.pos++; // Move past '>'
                 break;
             }

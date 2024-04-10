@@ -33,7 +33,7 @@ export default GObject.registerClass(
     class SwapBars extends BarsBase {
         constructor(params: SwapBarsParams) {
             //default params
-            if (params.layers === undefined) params.layers = 2;
+            if(params.layers === undefined) params.layers = 2;
 
             super(params);
 
@@ -47,12 +47,12 @@ export default GObject.registerClass(
         }
 
         setUsage(usage: SwapUsage | null) {
-            if (!usage || !usage.total) {
+            if(!usage || !usage.total) {
                 this.updateBars([]);
                 return;
             }
 
             this.updateBars([[{ color: 0, value: usage.used / usage.total }]]);
         }
-    },
+    }
 );

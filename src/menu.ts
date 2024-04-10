@@ -53,19 +53,19 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     constructor(sourceActor: St.Widget, arrowAlignment: number, params: MenuProps = {}) {
         super(sourceActor, arrowAlignment, params.arrowSide ?? MenuBase.openingSide);
 
-        if (params.name) Utils.verbose(`Creating ${params.name}`);
+        if(params.name) Utils.verbose(`Creating ${params.name}`);
 
-        if (params.scrollable) {
+        if(params.scrollable) {
             // SCROLLABLE
             const scrollView = new St.ScrollView({
                 x_expand: true,
                 y_expand: true,
-                y_align: Clutter.ActorAlign.START,
+                y_align: Clutter.ActorAlign.START
             });
             scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
             const boxLayout = new St.BoxLayout({
-                vertical: true,
+                vertical: true
             });
             scrollView.add_child(boxLayout);
 
@@ -109,9 +109,9 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     static get arrowAlignement() {
         const shellBarPosition = Config.get_string('shell-bar-position');
 
-        if (shellBarPosition === 'top') return St.Side.TOP;
-        if (shellBarPosition === 'bottom') return St.Side.BOTTOM;
-        if (shellBarPosition === 'left') return St.Side.LEFT;
+        if(shellBarPosition === 'top') return St.Side.TOP;
+        if(shellBarPosition === 'bottom') return St.Side.BOTTOM;
+        if(shellBarPosition === 'left') return St.Side.LEFT;
         return St.Side.RIGHT;
     }
 
@@ -122,18 +122,18 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             x: actorBox.x1,
             y: actorBox.y1,
             width: actorBox.x2 - actorBox.x1,
-            height: actorBox.y2 - actorBox.y1,
+            height: actorBox.y2 - actorBox.y1
         });
         let monitorIndex = display.get_monitor_index_for_rect(rect);
-        if (monitorIndex === -1) monitorIndex = display.get_primary_monitor();
+        if(monitorIndex === -1) monitorIndex = display.get_primary_monitor();
         const geometry = display.get_monitor_geometry(monitorIndex);
         return { width: geometry.width, height: geometry.height };
     }
 
     addMenuSection(text: string, add: boolean = true, newLine: boolean = false): St.Label {
         const label = new St.Label({ text, style_class: 'astra-monitor-menu-header-centered' });
-        if (add) {
-            if (newLine) this.grid.newLine();
+        if(add) {
+            if(newLine) this.grid.newLine();
             this.addToMenu(label, this.grid.getNumCols());
         }
         return label;
@@ -142,11 +142,11 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     addMenuSeparator(
         text: string,
         add: boolean = true,
-        newLine: boolean = false,
+        newLine: boolean = false
     ): PopupMenu.PopupSeparatorMenuItem {
         const separator = new PopupMenu.PopupSeparatorMenuItem(text);
-        if (add) {
-            if (newLine) this.grid.newLine();
+        if(add) {
+            if(newLine) this.grid.newLine();
             this.addToMenu(separator, this.grid.getNumCols());
         }
         return separator;
@@ -157,7 +157,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     }
 
     get selectionStyle(): string {
-        if (Utils.themeStyle === 'light')
+        if(Utils.themeStyle === 'light')
             return 'background-color:rgba(0,0,0,0.1);box-shadow: 0 0 2px rgba(255,255,255,0.2);border-radius:0.3em;';
         return 'background-color:rgba(255,255,255,0.1);box-shadow: 0 0 2px rgba(0,0,0,0.2);border-radius:0.3em;';
     }
@@ -167,19 +167,19 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             style_class: 'astra-monitor-menu-button-box',
             x_align: Clutter.ActorAlign.CENTER,
             reactive: true,
-            x_expand: true,
+            x_expand: true
         });
 
-        if (addButtons) addButtons(this.utilityBox);
+        if(addButtons) addButtons(this.utilityBox);
 
         // System Monitor
         const appSys = Shell.AppSystem.get_default();
         const app = appSys.lookup_app('gnome-system-monitor.desktop');
-        if (app) {
+        if(app) {
             const button = new St.Button({ style_class: 'button' });
             button.child = new St.Icon({
                 gicon: Utils.getLocalIcon('am-system-monitor-symbolic'),
-                fallback_icon_name: 'org.gnome.SystemMonitor-symbolic',
+                fallback_icon_name: 'org.gnome.SystemMonitor-symbolic'
             });
 
             button.connect('clicked', () => {
@@ -193,15 +193,15 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         const button = new St.Button({ style_class: 'button' });
         button.child = new St.Icon({
             gicon: Utils.getLocalIcon('am-settings-symbolic'),
-            fallback_icon_name: 'preferences-system-symbolic',
+            fallback_icon_name: 'preferences-system-symbolic'
         });
         button.connect('clicked', () => {
             this.close(true);
             try {
-                if (category) Config.set('queued-pref-category', category, 'string');
-                if (!Utils.extension) throw new Error('Extension not found');
+                if(category) Config.set('queued-pref-category', category, 'string');
+                if(!Utils.extension) throw new Error('Extension not found');
                 Utils.extension.openPreferences();
-            } catch (err) {
+            } catch(err) {
                 Utils.log(`Error opening settings: ${err}`);
             }
         });

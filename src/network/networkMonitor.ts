@@ -95,7 +95,7 @@ export default class NetworkMonitor extends Monitor {
         //TODO: let the user choose max speeds / save max speeds
         this.detectedMaxSpeedsValues = {
             bytesUploadedPerSec: 0,
-            bytesDownloadedPerSec: 0,
+            bytesDownloadedPerSec: 0
         };
 
         this.interfaceChecks = {};
@@ -109,13 +109,13 @@ export default class NetworkMonitor extends Monitor {
         this.dataSourcesInit();
 
         const enabled = Config.get_boolean('network-header-show');
-        if (enabled) {
+        if(enabled) {
             this.updatePublicIps();
             this.start();
         }
 
         Config.connect(this, 'changed::network-header-show', () => {
-            if (Config.get_boolean('network-header-show')) this.start();
+            if(Config.get_boolean('network-header-show')) this.start();
             else this.stop();
         });
 
@@ -123,20 +123,20 @@ export default class NetworkMonitor extends Monitor {
 
         // Manually ignored interfaces
         this.ignored = Config.get_json('network-ignored');
-        if (this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
+        if(this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
         Config.connect(this, 'changed::network-ignored', () => {
             this.reset();
 
             this.ignored = Config.get_json('network-ignored');
-            if (this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
+            if(this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
         });
 
         // Regex ignored interfaces
         const regex = Config.get_string('network-ignored-regex');
         try {
-            if (regex === null || regex === '') this.ignoredRegex = null;
+            if(regex === null || regex === '') this.ignoredRegex = null;
             else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
-        } catch (e) {
+        } catch(e) {
             this.ignoredRegex = null;
         }
 
@@ -145,9 +145,9 @@ export default class NetworkMonitor extends Monitor {
 
             const regex = Config.get_string('network-ignored-regex');
             try {
-                if (regex === null || regex === '') this.ignoredRegex = null;
+                if(regex === null || regex === '') this.ignoredRegex = null;
                 else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
-            } catch (e) {
+            } catch(e) {
                 this.ignoredRegex = null;
             }
         });
@@ -155,12 +155,12 @@ export default class NetworkMonitor extends Monitor {
         Config.connect(
             this,
             'changed::network-source-public-ipv4',
-            this.updatePublicIps.bind(this),
+            this.updatePublicIps.bind(this)
         );
         Config.connect(
             this,
             'changed::network-source-public-ipv6',
-            this.updatePublicIps.bind(this),
+            this.updatePublicIps.bind(this)
         );
     }
 
@@ -176,12 +176,12 @@ export default class NetworkMonitor extends Monitor {
         this.previousNetworkIO = {
             bytesUploaded: -1,
             bytesDownloaded: -1,
-            time: -1,
+            time: -1
         };
 
         this.previousDetailedNetworkIO = {
             devices: null,
-            time: -1,
+            time: -1
         };
 
         this.updateNetworkIOTask.cancel();
@@ -206,7 +206,7 @@ export default class NetworkMonitor extends Monitor {
     dataSourcesInit() {
         this.dataSources = {
             networkIO: Config.get_string('network-source-network-io') ?? undefined,
-            wireless: Config.get_string('network-source-wireless') ?? undefined,
+            wireless: Config.get_string('network-source-wireless') ?? undefined
         };
 
         Config.connect(this, 'changed::network-source-network-io', () => {
@@ -216,11 +216,11 @@ export default class NetworkMonitor extends Monitor {
             this.previousNetworkIO = {
                 bytesUploaded: -1,
                 bytesDownloaded: -1,
-                time: -1,
+                time: -1
             };
             this.previousDetailedNetworkIO = {
                 devices: null,
-                time: -1,
+                time: -1
             };
             this.resetUsageHistory('networkIO');
             this.resetUsageHistory('detailedNetworkIO');
@@ -236,7 +236,7 @@ export default class NetworkMonitor extends Monitor {
     stopListeningFor(key: string) {
         super.stopListeningFor(key);
 
-        if (key === 'detailedNetworkIO') {
+        if(key === 'detailedNetworkIO') {
             this.previousDetailedNetworkIO.devices = null;
             this.previousDetailedNetworkIO.time = -1;
         }
@@ -246,54 +246,54 @@ export default class NetworkMonitor extends Monitor {
         Utils.verbose('Updating Network Monitor');
 
         const enabled = Config.get_boolean('network-header-show');
-        if (enabled) {
+        if(enabled) {
             const procNetDev = new PromiseValueHolderStore<string[]>(
-                this.getProNetDevAsync.bind(this),
+                this.getProNetDevAsync.bind(this)
             );
 
             let detailed = false;
-            if (this.isListeningFor('detailedNetworkIO')) detailed = true;
+            if(this.isListeningFor('detailedNetworkIO')) detailed = true;
 
             this.runUpdate('networkIO', detailed, procNetDev);
 
-            if (this.isListeningFor('wireless')) this.runUpdate('wireless');
+            if(this.isListeningFor('wireless')) this.runUpdate('wireless');
         }
         return true;
     }
 
     requestUpdate(key: string) {
-        if (key === 'networkIO' || key === 'detailedNetworkIO') {
+        if(key === 'networkIO' || key === 'detailedNetworkIO') {
             const procNetDev = new PromiseValueHolderStore<string[]>(
-                this.getProNetDevAsync.bind(this),
+                this.getProNetDevAsync.bind(this)
             );
 
             const detailed = key === 'detailedNetworkIO';
 
             this.runUpdate('networkIO', detailed, procNetDev);
 
-            if (detailed) super.requestUpdate('networkIO'); // override also the storageIO update
+            if(detailed) super.requestUpdate('networkIO'); // override also the storageIO update
         }
-        if (key === 'routes') {
+        if(key === 'routes') {
             this.runUpdate('routes');
         }
-        if (key === 'wireless') {
+        if(key === 'wireless') {
             this.runUpdate('wireless');
         }
         super.requestUpdate(key);
     }
 
     runUpdate(key: string, ...params: any[]) {
-        if (key === 'networkIO') {
+        if(key === 'networkIO') {
             const detailed = params[0];
             const callback = () => {
                 this.notify('networkIO');
-                if (detailed) this.notify('detailedNetworkIO');
+                if(detailed) this.notify('detailedNetworkIO');
             };
 
             let run;
-            if (this.dataSources.networkIO === 'GTop')
+            if(this.dataSources.networkIO === 'GTop')
                 run = this.updateNetworkIOGTop.bind(this, ...params);
-            else if (this.dataSources.networkIO === 'proc')
+            else if(this.dataSources.networkIO === 'proc')
                 run = this.updateNetworkIOProc.bind(this, ...params);
             else run = this.updateNetworkIOAuto.bind(this, ...params);
 
@@ -301,24 +301,24 @@ export default class NetworkMonitor extends Monitor {
                 key,
                 task: this.updateNetworkIOTask,
                 run,
-                callback,
+                callback
             });
             return;
         }
-        if (key === 'routes') {
+        if(key === 'routes') {
             this.runTask({
                 key,
                 task: this.updateRoutesTask,
                 run: this.updateRoutes.bind(this),
-                callback: () => this.notify('routes'),
+                callback: () => this.notify('routes')
             });
             return;
         }
-        if (key === 'wireless') {
+        if(key === 'wireless') {
             let run;
-            if (this.dataSources.wireless === 'iw')
+            if(this.dataSources.wireless === 'iw')
                 run = this.updateWirelessIw.bind(this, ...params);
-            else if (this.dataSources.wireless === 'iwconfig')
+            else if(this.dataSources.wireless === 'iwconfig')
                 run = this.updateWirelessIwconfig.bind(this, ...params);
             else run = this.updateWirelessAuto.bind(this, ...params);
 
@@ -326,7 +326,7 @@ export default class NetworkMonitor extends Monitor {
                 key,
                 task: this.updateWirelessTask,
                 run,
-                callback: () => this.notify('wireless'),
+                callback: () => this.notify('wireless')
             });
             return;
         }
@@ -336,22 +336,22 @@ export default class NetworkMonitor extends Monitor {
         return new PromiseValueHolder(
             new Promise((resolve, reject) => {
                 Utils.readFileAsync('/proc/net/dev')
-                    .then((fileContent) => {
+                    .then(fileContent => {
                         resolve(fileContent.split('\n'));
                     })
-                    .catch((e) => {
+                    .catch(e => {
                         reject(e);
                     });
-            }),
+            })
         );
     }
 
     isMonitoredInterface(interfaceName: string): boolean {
-        if (this.interfaceChecks[interfaceName] !== undefined)
+        if(this.interfaceChecks[interfaceName] !== undefined)
             return this.interfaceChecks[interfaceName];
 
         let monitored = true;
-        if (interfaceName === 'lo') monitored = false;
+        if(interfaceName === 'lo') monitored = false;
 
         //TODO: Add the possibility to choose the interfaces to monitor
         this.interfaceChecks[interfaceName] = monitored;
@@ -360,18 +360,18 @@ export default class NetworkMonitor extends Monitor {
 
     updateNetworkIOAuto(
         detailed: boolean,
-        procNetDev: PromiseValueHolder<string[]>,
+        procNetDev: PromiseValueHolder<string[]>
     ): Promise<boolean> {
-        if (Utils.GTop) return this.updateNetworkIOGTop(detailed);
+        if(Utils.GTop) return this.updateNetworkIOGTop(detailed);
         return this.updateNetworkIOProc(detailed, procNetDev);
     }
 
     async updateNetworkIOProc(
         detailed: boolean,
-        procNetDev: PromiseValueHolder<string[]>,
+        procNetDev: PromiseValueHolder<string[]>
     ): Promise<boolean> {
         let procNetDevValue = await procNetDev.getValue();
-        if (procNetDevValue.length < 1) return false;
+        if(procNetDevValue.length < 1) return false;
 
         let bytesUploaded = 0;
         let bytesDownloaded = 0;
@@ -383,22 +383,22 @@ export default class NetworkMonitor extends Monitor {
         let errorsDownload = 0;
 
         let devices: Map<string, DeviceStauts> | null = null;
-        if (detailed) devices = new Map();
+        if(detailed) devices = new Map();
 
         procNetDevValue = procNetDevValue.slice(2); // Remove the first two lines
 
-        for (const device of procNetDevValue) {
+        for(const device of procNetDevValue) {
             const fields = device.trim().split(/\s+/);
-            if (fields.length < 10) continue;
+            if(fields.length < 10) continue;
 
             const interfaceName = fields[0].slice(0, -1); // Remove the trailing ':'
-            if (!this.isMonitoredInterface(interfaceName)) continue;
+            if(!this.isMonitoredInterface(interfaceName)) continue;
 
-            if (this.ignored.includes(interfaceName)) continue;
+            if(this.ignored.includes(interfaceName)) continue;
 
-            if (this.ignoredRegex !== null && this.ignoredRegex.test(interfaceName)) continue;
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(interfaceName)) continue;
 
-            if (detailed && devices) {
+            if(detailed && devices) {
                 devices.set(interfaceName, {
                     bytesUploaded: parseInt(fields[9]),
                     packetsUploaded: parseInt(fields[10]),
@@ -406,7 +406,7 @@ export default class NetworkMonitor extends Monitor {
 
                     bytesDownloaded: parseInt(fields[1]),
                     packetsDownloaded: parseInt(fields[2]),
-                    errorsDownload: parseInt(fields[3]) + parseInt(fields[4]),
+                    errorsDownload: parseInt(fields[3]) + parseInt(fields[4])
                 });
             }
 
@@ -431,13 +431,13 @@ export default class NetworkMonitor extends Monitor {
             errorsDownload,
 
             detailed,
-            devices,
+            devices
         });
     }
 
     async updateNetworkIOGTop(detailed: boolean): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         const buf = new GTop.glibtop_netlist();
         const netlist = GTop.glibtop_get_netlist(buf);
@@ -452,26 +452,26 @@ export default class NetworkMonitor extends Monitor {
         let errorsDownload = 0;
 
         let devices: Map<string, DeviceStauts> | null = null;
-        if (detailed) devices = new Map();
+        if(detailed) devices = new Map();
 
-        for (const interfaceName of netlist) {
-            if (!this.isMonitoredInterface(interfaceName)) continue;
+        for(const interfaceName of netlist) {
+            if(!this.isMonitoredInterface(interfaceName)) continue;
 
-            if (this.ignored.includes(interfaceName)) continue;
+            if(this.ignored.includes(interfaceName)) continue;
 
-            if (this.ignoredRegex !== null && this.ignoredRegex.test(interfaceName)) continue;
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(interfaceName)) continue;
 
             const netload = new GTop.glibtop_netload();
             GTop.glibtop_get_netload(netload, interfaceName);
 
-            if (detailed && devices) {
+            if(detailed && devices) {
                 devices.set(interfaceName, {
                     bytesUploaded: netload.bytes_out,
                     bytesDownloaded: netload.bytes_in,
                     packetsUploaded: netload.packets_out,
                     packetsDownloaded: netload.packets_in,
                     errorsUpload: netload.errors_out,
-                    errorsDownload: netload.errors_in,
+                    errorsDownload: netload.errors_in
                 });
             }
 
@@ -496,7 +496,7 @@ export default class NetworkMonitor extends Monitor {
             errorsDownload,
 
             detailed,
-            devices,
+            devices
         });
     }
 
@@ -518,13 +518,13 @@ export default class NetworkMonitor extends Monitor {
             errorsUpload,
             errorsDownload,
             detailed,
-            devices,
+            devices
         } = data;
 
         const now = GLib.get_monotonic_time();
 
-        if (detailed) {
-            if (
+        if(detailed) {
+            if(
                 this.previousDetailedNetworkIO.devices === null ||
                 this.previousDetailedNetworkIO.time === -1
             ) {
@@ -533,7 +533,7 @@ export default class NetworkMonitor extends Monitor {
             }
         }
 
-        if (
+        if(
             this.previousNetworkIO.bytesUploaded === -1 ||
             this.previousNetworkIO.bytesDownloaded === -1 ||
             this.previousNetworkIO.time === -1
@@ -546,15 +546,15 @@ export default class NetworkMonitor extends Monitor {
 
         const interval = (now - this.previousNetworkIO.time) / 1000000;
         const bytesUploadedPerSec = Math.round(
-            (bytesUploaded - this.previousNetworkIO.bytesUploaded) / interval,
+            (bytesUploaded - this.previousNetworkIO.bytesUploaded) / interval
         );
         const bytesDownloadedPerSec = Math.round(
-            (bytesDownloaded - this.previousNetworkIO.bytesDownloaded) / interval,
+            (bytesDownloaded - this.previousNetworkIO.bytesDownloaded) / interval
         );
 
-        if (bytesUploadedPerSec > this.detectedMaxSpeeds.bytesUploadedPerSec)
+        if(bytesUploadedPerSec > this.detectedMaxSpeeds.bytesUploadedPerSec)
             this.detectedMaxSpeeds.bytesUploadedPerSec = bytesUploadedPerSec;
-        if (bytesDownloadedPerSec > this.detectedMaxSpeeds.bytesDownloadedPerSec)
+        if(bytesDownloadedPerSec > this.detectedMaxSpeeds.bytesDownloadedPerSec)
             this.detectedMaxSpeeds.bytesDownloadedPerSec = bytesDownloadedPerSec;
 
         this.previousNetworkIO.bytesUploaded = bytesUploaded;
@@ -569,33 +569,33 @@ export default class NetworkMonitor extends Monitor {
             errorsUpload: errorsUpload,
             errorsDownload: errorsDownload,
             bytesUploadedPerSec,
-            bytesDownloadedPerSec,
+            bytesDownloadedPerSec
         });
 
-        if (detailed && devices !== null) {
-            if (this.previousDetailedNetworkIO.time === now) return false;
-            if (this.previousDetailedNetworkIO.devices === null) return false;
+        if(detailed && devices !== null) {
+            if(this.previousDetailedNetworkIO.time === now) return false;
+            if(this.previousDetailedNetworkIO.devices === null) return false;
 
             const finalData = new Map();
 
             const interval = (now - this.previousDetailedNetworkIO.time) / 1000000;
-            for (const [deviceName, data] of devices) {
+            for(const [deviceName, data] of devices) {
                 const {
                     bytesUploaded,
                     bytesDownloaded,
                     packetsUploaded,
                     packetsDownloaded,
                     errorsUpload,
-                    errorsDownload,
+                    errorsDownload
                 } = data;
 
                 const previousData = this.previousDetailedNetworkIO.devices.get(deviceName);
-                if (previousData) {
+                if(previousData) {
                     const bytesUploadedPerSec = Math.round(
-                        (bytesUploaded - previousData.bytesUploaded) / interval,
+                        (bytesUploaded - previousData.bytesUploaded) / interval
                     );
                     const bytesDownloadedPerSec = Math.round(
-                        (bytesDownloaded - previousData.bytesDownloaded) / interval,
+                        (bytesDownloaded - previousData.bytesDownloaded) / interval
                     );
                     finalData.set(deviceName, {
                         totalBytesUploaded: bytesUploaded,
@@ -605,7 +605,7 @@ export default class NetworkMonitor extends Monitor {
                         errorsUpload: errorsUpload,
                         errorsDownload: errorsDownload,
                         bytesUploadedPerSec,
-                        bytesDownloadedPerSec,
+                        bytesDownloadedPerSec
                     });
                 }
             }
@@ -622,12 +622,12 @@ export default class NetworkMonitor extends Monitor {
         this.publicIpsUpdaterID = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
             60 * 5, // 5 minute
-            this.updatePublicIps.bind(this),
+            this.updatePublicIps.bind(this)
         );
     }
 
     private stopPublicIpsUpdater() {
-        if (this.publicIpsUpdaterID !== null) {
+        if(this.publicIpsUpdaterID !== null) {
             GLib.source_remove(this.publicIpsUpdaterID);
             this.publicIpsUpdaterID = null;
         }
@@ -639,8 +639,8 @@ export default class NetworkMonitor extends Monitor {
                 const ipv4 = await this.updatePublicIpv4Address();
                 const ipv6 = await this.updatePublicIpv6Address();
 
-                if (ipv4 || ipv6) this.notify('publicIps');
-            } catch (e) {
+                if(ipv4 || ipv6) this.notify('publicIps');
+            } catch(e) {
                 /* EMPTY */
             }
         })();
@@ -648,56 +648,56 @@ export default class NetworkMonitor extends Monitor {
     }
 
     private resetIPv4(): boolean {
-        if (this.getCurrentValue('publicIpv4Address') === '') return false;
+        if(this.getCurrentValue('publicIpv4Address') === '') return false;
         this.setUsageValue('publicIpv4Address', '');
         return true;
     }
 
     private async updatePublicIpv4Address(): Promise<boolean> {
         const publicIpv4Address = Config.get_string('network-source-public-ipv4');
-        if (!publicIpv4Address) return this.resetIPv4();
+        if(!publicIpv4Address) return this.resetIPv4();
 
         const value = await Utils.getUrlAsync(publicIpv4Address, true);
-        if (!value) return this.resetIPv4();
+        if(!value) return this.resetIPv4();
 
         const regex =
             /(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/;
         const match = value.match(regex);
 
-        if (!match) return this.resetIPv4();
+        if(!match) return this.resetIPv4();
 
         const ip = match[0];
 
         const currentIp = this.getCurrentValue('publicIpv4Address');
-        if (currentIp === ip) return false;
+        if(currentIp === ip) return false;
 
         this.pushUsageHistory('publicIpv4Address', ip);
         return true;
     }
 
     private resetIPv6(): boolean {
-        if (this.getCurrentValue('publicIpv6Address') === '') return false;
+        if(this.getCurrentValue('publicIpv6Address') === '') return false;
         this.setUsageValue('publicIpv6Address', '');
         return true;
     }
 
     private async updatePublicIpv6Address(): Promise<boolean> {
         const publicIpv6Address = Config.get_string('network-source-public-ipv6');
-        if (!publicIpv6Address) return this.resetIPv6();
+        if(!publicIpv6Address) return this.resetIPv6();
 
         const value = await Utils.getUrlAsync(publicIpv6Address, true);
-        if (!value) return this.resetIPv6();
+        if(!value) return this.resetIPv6();
 
         const regex =
             /(?:[\da-f]{0,4}:){2,7}(?:(?<ipv4>(?:(?:25[0-5]|2[0-4]\d|1?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|1?\d\d?))|[\da-f]{0,4}|:)/i;
         const match = value.match(regex);
 
-        if (!match) return this.resetIPv6();
+        if(!match) return this.resetIPv6();
 
         const ip = match[0];
 
         const currentIp = this.getCurrentValue('publicIpv6Address');
-        if (currentIp === ip) return false;
+        if(currentIp === ip) return false;
 
         this.pushUsageHistory('publicIpv6Address', ip);
         return true;
@@ -705,54 +705,54 @@ export default class NetworkMonitor extends Monitor {
 
     private async updateRoutes(): Promise<boolean> {
         const routes = await Utils.getNetworkRoutesAsync();
-        if (!routes) return false;
+        if(!routes) return false;
         this.setUsageValue('routes', routes);
         return true;
     }
 
     private async updateWirelessAuto(): Promise<boolean> {
-        if (Utils.hasIwconfig()) return this.updateWirelessIwconfig();
-        if (Utils.hasIw()) return this.updateWirelessIw();
+        if(Utils.hasIwconfig()) return this.updateWirelessIwconfig();
+        if(Utils.hasIw()) return this.updateWirelessIw();
         return false;
     }
 
     private async updateWirelessIwconfig(): Promise<boolean> {
         const path = Utils.commandPathLookup('iwconfig');
         const result = await Utils.executeCommandAsync(`${path}iwconfig`);
-        if (!result) return false;
+        if(!result) return false;
 
         const devices: Map<string, NetworkWirelessInfo> = new Map();
         const deviceBlocks = result.split('\n\n');
 
-        for (const block of deviceBlocks) {
-            const lines = block.split('\n').filter((line) => line.trim() !== '');
-            if (lines.length <= 1) continue;
+        for(const block of deviceBlocks) {
+            const lines = block.split('\n').filter(line => line.trim() !== '');
+            if(lines.length <= 1) continue;
 
             const deviceName = lines[0].split(' ')[0];
-            if (!deviceName) continue;
+            if(!deviceName) continue;
 
             lines[0] = lines[0].substring(deviceName.length);
 
             const info: NetworkWirelessInfo = { name: deviceName };
 
-            for (const line of lines) {
+            for(const line of lines) {
                 const pairs = line.trim().split(/\s{2,}/);
-                for (const pair of pairs) {
-                    if (pair.startsWith('IEEE')) info.IEEE = pair.split(':')[1];
-                    else if (pair.startsWith('ESSID'))
+                for(const pair of pairs) {
+                    if(pair.startsWith('IEEE')) info.IEEE = pair.split(':')[1];
+                    else if(pair.startsWith('ESSID'))
                         info.EESSID = pair.split(':')[1].replace(/^"|"$/g, '');
-                    else if (pair.startsWith('Mode')) info.mode = pair.split(':')[1];
-                    else if (pair.startsWith('Frequency')) info.frequency = pair.split(':')[1];
-                    else if (pair.startsWith('Access Point'))
+                    else if(pair.startsWith('Mode')) info.mode = pair.split(':')[1];
+                    else if(pair.startsWith('Frequency')) info.frequency = pair.split(':')[1];
+                    else if(pair.startsWith('Access Point'))
                         info.accessPoint = pair.substring(pair.indexOf(':') + 1).trim();
-                    else if (pair.startsWith('Bit Rate')) info.bitRate = pair.split('=')[1];
-                    else if (pair.startsWith('Tx-Power')) info.txPower = pair.split('=')[1];
-                    else if (pair.startsWith('Link Quality')) info.linkQuality = pair.split('=')[1];
-                    else if (pair.startsWith('Signal level')) info.signalLevel = pair.split('=')[1];
+                    else if(pair.startsWith('Bit Rate')) info.bitRate = pair.split('=')[1];
+                    else if(pair.startsWith('Tx-Power')) info.txPower = pair.split('=')[1];
+                    else if(pair.startsWith('Link Quality')) info.linkQuality = pair.split('=')[1];
+                    else if(pair.startsWith('Signal level')) info.signalLevel = pair.split('=')[1];
                 }
             }
 
-            if (!info.EESSID || info.EESSID === 'off/any') continue;
+            if(!info.EESSID || info.EESSID === 'off/any') continue;
 
             devices.set(deviceName, info);
         }
@@ -765,16 +765,16 @@ export default class NetworkMonitor extends Monitor {
     private async updateWirelessIw(): Promise<boolean> {
         // List all wireless interfaces
         const list = await Utils.listDirAsync('/sys/class/net', { folders: true, files: false });
-        if (!list) return false;
+        if(!list) return false;
 
         const devices: Map<string, NetworkWirelessInfo> = new Map();
 
-        for (const { name: dev } of list) {
-            if (this.ignored.includes(dev)) continue;
+        for(const { name: dev } of list) {
+            if(this.ignored.includes(dev)) continue;
 
-            if (this.ignoredRegex !== null && this.ignoredRegex.test(dev)) continue;
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(dev)) continue;
 
-            if (
+            if(
                 !Utils.checkFolderExists('/sys/class/net/' + dev + '/wireless') &&
                 !Utils.checkFolderExists('/sys/class/net/' + dev + '/phy80211')
             )
@@ -782,31 +782,31 @@ export default class NetworkMonitor extends Monitor {
 
             const path = Utils.commandPathLookup('iw');
             const str = await Utils.executeCommandAsync(`${path}iw dev ${dev} link`);
-            if (!str) return false;
+            if(!str) return false;
 
             //parse info
             const data: NetworkWirelessInfo = { name: dev };
             const lines = str.split('\n');
 
             const firstLine = lines.shift();
-            if (firstLine === undefined) continue;
+            if(firstLine === undefined) continue;
 
             const mac = firstLine.match(/([0-9a-f]{2}:){5}[0-9a-f]{2}/i);
-            if (mac === null) continue;
+            if(mac === null) continue;
 
             data.accessPoint = mac[0];
 
-            for (const line of lines) {
+            for(const line of lines) {
                 const parts = line.split(':');
-                if (parts.length < 2) continue;
+                if(parts.length < 2) continue;
 
                 const key = parts[0].trim();
                 const value = parts[1].trim();
 
-                if (key === 'SSID') data.EESSID = value;
-                else if (key === 'freq') data.frequency = value + ' MHz';
-                else if (key === 'signal') data.signalLevel = value;
-                else if (key === 'tx bitrate') data.bitRate = value.split(' ')[0] + ' MBit/s';
+                if(key === 'SSID') data.EESSID = value;
+                else if(key === 'freq') data.frequency = value + ' MHz';
+                else if(key === 'signal') data.signalLevel = value;
+                else if(key === 'tx bitrate') data.bitRate = value.split(' ')[0] + ' MBit/s';
             }
 
             devices.set(dev, data);

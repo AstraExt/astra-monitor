@@ -32,7 +32,7 @@ export default GObject.registerClass(
     class ProcessorBars extends BarsBase {
         constructor(params: ProcessorBarsParams) {
             //default params
-            if (params.layers === undefined) params.layers = 2;
+            if(params.layers === undefined) params.layers = 2;
 
             super(params);
 
@@ -45,22 +45,22 @@ export default GObject.registerClass(
 
             this.colors = [
                 Config.get_string('processor-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
-                Config.get_string('processor-header-bars-color2') ?? 'rgba(214,29,29,1.0)',
+                Config.get_string('processor-header-bars-color2') ?? 'rgba(214,29,29,1.0)'
             ];
         }
 
         setUsage(usage: ProcessorUsage[]) {
-            if (!usage || !Array.isArray(usage) || usage.length == 0) {
+            if(!usage || !Array.isArray(usage) || usage.length == 0) {
                 this.updateBars([]);
                 return;
             }
 
             const values = [];
-            for (let i = 0; i < usage.length; i++) {
-                if (!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
+            for(let i = 0; i < usage.length; i++) {
+                if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                     values.push([
                         { color: 0, value: usage[i].user / 100.0 },
-                        { color: 1, value: (usage[i].total - usage[i].user) / 100.0 },
+                        { color: 1, value: (usage[i].total - usage[i].user) / 100.0 }
                     ]);
                 } else {
                     values.push([{ color: 0, value: usage[i].total / 100.0 }]);
@@ -68,5 +68,5 @@ export default GObject.registerClass(
             }
             this.updateBars(values);
         }
-    },
+    }
 );

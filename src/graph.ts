@@ -55,19 +55,19 @@ export default GObject.registerClass(
 
         constructor(params: GraphProps = {}) {
             //default params
-            if (params.width === undefined) params.width = 50;
-            if (params.mini === undefined) params.mini = false;
-            if (params.x_align === undefined) params.x_align = Clutter.ActorAlign.CENTER;
-            if (params.y_align === undefined) params.y_align = Clutter.ActorAlign.CENTER;
+            if(params.width === undefined) params.width = 50;
+            if(params.mini === undefined) params.mini = false;
+            if(params.x_align === undefined) params.x_align = Clutter.ActorAlign.CENTER;
+            if(params.y_align === undefined) params.y_align = Clutter.ActorAlign.CENTER;
 
-            if (params.mini) params.y_align = Clutter.ActorAlign.FILL;
+            if(params.mini) params.y_align = Clutter.ActorAlign.FILL;
 
             super({
                 style_class: 'astra-monitor-graph-container',
                 x_align: params.x_align,
                 x_expand: true,
                 y_align: params.y_align,
-                y_expand: true,
+                y_expand: true
             });
 
             this.mini = params.mini;
@@ -77,18 +77,18 @@ export default GObject.registerClass(
 
             this.historyChart = new St.DrawingArea({
                 style_class: style_class,
-                style: `width:${params.width}px;`,
+                style: `width:${params.width}px;`
             });
 
-            if (!this.mini) {
+            if(!this.mini) {
                 this.grid = new St.Widget({
                     layout_manager: new Clutter.GridLayout({
-                        orientation: Clutter.Orientation.VERTICAL,
-                    }),
+                        orientation: Clutter.Orientation.VERTICAL
+                    })
                 });
                 // @ts-expect-error Clutter.GridLayout not updated in gjs
                 this.historyGrid = this.grid.layout_manager;
-                if (this.historyGrid) this.historyGrid.attach(this.historyChart, 0, 0, 2, 3);
+                if(this.historyGrid) this.historyGrid.attach(this.historyChart, 0, 0, 2, 3);
                 this.add_child(this.grid);
 
                 this.buildHistoryGrid();
@@ -120,7 +120,7 @@ export default GObject.registerClass(
         }
 
         setupClipping(ctx: CairoContext, width: number, height: number, cornerRadius: number) {
-            if (this.mini) {
+            if(this.mini) {
                 ctx.moveTo(cornerRadius, 0);
                 ctx.lineTo(width - cornerRadius, 0);
                 ctx.arc(
@@ -128,7 +128,7 @@ export default GObject.registerClass(
                     cornerRadius,
                     cornerRadius,
                     1.5 * Math.PI,
-                    2 * Math.PI,
+                    2 * Math.PI
                 );
                 ctx.lineTo(width, height - cornerRadius);
                 ctx.arc(
@@ -136,7 +136,7 @@ export default GObject.registerClass(
                     height - cornerRadius,
                     cornerRadius,
                     0,
-                    0.5 * Math.PI,
+                    0.5 * Math.PI
                 );
                 ctx.lineTo(cornerRadius, height);
                 ctx.arc(cornerRadius, height - cornerRadius, cornerRadius, 0.5 * Math.PI, Math.PI);
@@ -153,15 +153,15 @@ export default GObject.registerClass(
             baseX: number,
             baseY: number,
             height: number,
-            pointSpacing: number,
+            pointSpacing: number
         ) {
             let points = [];
 
-            for (let i = 0; i < data.length; i++) {
+            for(let i = 0; i < data.length; i++) {
                 const currentNode = data[data.length - 1 - i];
 
                 let usage = dataFunc(currentNode);
-                if (!usage || isNaN(usage)) usage = 0;
+                if(!usage || isNaN(usage)) usage = 0;
                 usage = Math.max(0, Math.min(1, usage));
 
                 const x = Math.round(i * pointSpacing);
@@ -174,10 +174,10 @@ export default GObject.registerClass(
         }
 
         drawPoints({ ctx, points, baseX, baseY, height, pointSpacing }: GraphInfo) {
-            if (!ctx) return;
-            if (points.length < 2) return;
-            if (height <= 0) return;
-            if (pointSpacing <= 0) return;
+            if(!ctx) return;
+            if(points.length < 2) return;
+            if(height <= 0) return;
+            if(pointSpacing <= 0) return;
 
             let currentX = baseX + points[0][0];
             ctx.moveTo(currentX, baseY + height);
@@ -185,7 +185,7 @@ export default GObject.registerClass(
             let currentY = baseY + height - points[0][1];
             ctx.lineTo(currentX, currentY);
 
-            for (let i = 1; i < points.length; i++) {
+            for(let i = 1; i < points.length; i++) {
                 currentX = baseX + points[i][0];
                 currentY = baseY + height - points[i][1];
                 ctx.lineTo(currentX, currentY);
@@ -205,5 +205,5 @@ export default GObject.registerClass(
             Config.clear(this);
             super.destroy();
         }
-    },
+    }
 );

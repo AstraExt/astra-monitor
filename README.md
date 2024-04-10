@@ -2,18 +2,18 @@
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Roadmap](#roadmap)
-- [Installation](#installation)
-- [Requirements](#requirements)
-- [Usage](#usage)
-- [Licensing](#licensing)
-- [Translations](#translations)
-- [Building and Testing](#building-and-testing)
-- [Contributing](#contributing)
-- [Donations](#donations)
-- [Acknowledgments](#acknowledgments)
-- [Star History](#star-history)
+-   [Overview](#overview)
+-   [Roadmap](#roadmap)
+-   [Installation](#installation)
+-   [Requirements](#requirements)
+-   [Usage](#usage)
+-   [Licensing](#licensing)
+-   [Translations](#translations)
+-   [Building and Testing](#building-and-testing)
+-   [Contributing](#contributing)
+-   [Donations](#donations)
+-   [Acknowledgments](#acknowledgments)
+-   [Star History](#star-history)
 
 # Overview
 
@@ -21,10 +21,10 @@ Astra Monitor is a cutting-edge, fully customizable, and performance-focused mon
 
 ### Key Features:
 
-- **Comprehensive Monitoring:** Track a wide array of system resources. Apart from the wide variety of resources to monitor in the top header bar, inside the menus you can find even more detailed information just by hovering over the resource you want to know more about.
-- **Customizable Interface:** Tailor the monitoring experience to suit your preferences. Choose what resources to monitor and how to display them. A lot of customization options are available.
-- **Optimized Performance:** Designed to be lightweight and efficient. Resources are only queried when needed. No polling. No wasted resources. Hidden components are not queried nor rendered.
-- **Effortless Real-Time Updates:** Changes made in the preferences panel are applied instantly, with no need to restart the extension or GNOME Shell. This feature ensures a seamless and interruption-free user experience, allowing for on-the-fly customization and monitoring adjustments.
+-   **Comprehensive Monitoring:** Track a wide array of system resources. Apart from the wide variety of resources to monitor in the top header bar, inside the menus you can find even more detailed information just by hovering over the resource you want to know more about.
+-   **Customizable Interface:** Tailor the monitoring experience to suit your preferences. Choose what resources to monitor and how to display them. A lot of customization options are available.
+-   **Optimized Performance:** Designed to be lightweight and efficient. Resources are only queried when needed. No polling. No wasted resources. Hidden components are not queried nor rendered.
+-   **Effortless Real-Time Updates:** Changes made in the preferences panel are applied instantly, with no need to restart the extension or GNOME Shell. This feature ensures a seamless and interruption-free user experience, allowing for on-the-fly customization and monitoring adjustments.
 
 _**Check the [COMPARISON.md](./COMPARISON.md) file for a detailed comparative analysis of Astra Monitor features, performance and benchmarks vs similar projects within our domain.**_
 
@@ -226,35 +226,35 @@ Various scripts are provided to facilitate packing and testing of the extension.
 
 ### Scripts
 
-- **`test.sh`:** Compile, pack, install, and run the extension in a Xephyr session with a GNOME nested Wayland session, allowing for easy testing without restarting your own GNOME Shell session. It can be run with the following command:
+-   **`test.sh`:** Compile, pack, install, and run the extension in a Xephyr session with a GNOME nested Wayland session, allowing for easy testing without restarting your own GNOME Shell session. It can be run with the following command:
 
-  ```
-  bash ./test.sh
-  ```
+    ```
+    bash ./test.sh
+    ```
 
-- **`schemas.sh`:** This script compiles the schemas for the extension. It can be run with the following command:
+-   **`schemas.sh`:** This script compiles the schemas for the extension. It can be run with the following command:
 
-  ```
-  bash ./schemas.sh
-  ```
+    ```
+    bash ./schemas.sh
+    ```
 
-- **`i18n.sh`:** This script creates the translations files for the extension. It can be run with the following command:
+-   **`i18n.sh`:** This script creates the translations files for the extension. It can be run with the following command:
 
-  ```
-  bash ./i18n.sh
-  ```
+    ```
+    bash ./i18n.sh
+    ```
 
-- **`pack.sh`:** This script packs the extension into a zip file ready for distribution or use. It automatically checks dependencies and compiles schemas. It can be run with the following command:
+-   **`pack.sh`:** This script packs the extension into a zip file ready for distribution or use. It automatically checks dependencies and compiles schemas. It can be run with the following command:
 
-  ```
-  bash ./pack.sh
-  ```
+    ```
+    bash ./pack.sh
+    ```
 
-- **`compile.sh`:** This script compiles the TypeScript source code into JavaScript; the output is placed in the `dist` directory. It can be run with the following command:
+-   **`compile.sh`:** This script compiles the TypeScript source code into JavaScript; the output is placed in the `dist` directory. It can be run with the following command:
 
-  ```
-  bash ./compile.sh
-  ```
+    ```
+    bash ./compile.sh
+    ```
 
 # Contributing
 
@@ -272,9 +272,9 @@ Astra Monitor is a free and open-source project: we rely on the support of our c
 
 ### How Your Donations Help
 
-- **More Development Time**: Donations allow our team to spend more time directly on project development, leading to quicker releases and updates.
-- **Community-Driven Features**: With additional resources, we can focus on implementing features most requested by our community.
-- **Enhanced Project Sustainability**: Your support helps us maintain the project in the long run, ensuring its continual improvement and relevance.
+-   **More Development Time**: Donations allow our team to spend more time directly on project development, leading to quicker releases and updates.
+-   **Community-Driven Features**: With additional resources, we can focus on implementing features most requested by our community.
+-   **Enhanced Project Sustainability**: Your support helps us maintain the project in the long run, ensuring its continual improvement and relevance.
 
 ### How to Donate
 

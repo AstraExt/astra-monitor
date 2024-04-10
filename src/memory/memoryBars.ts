@@ -32,7 +32,7 @@ export default GObject.registerClass(
     class MemoryBars extends BarsBase {
         constructor(params: MemoryBarsParams) {
             //default params
-            if (params.layers === undefined) params.layers = 2;
+            if(params.layers === undefined) params.layers = 2;
 
             super(params);
 
@@ -45,26 +45,26 @@ export default GObject.registerClass(
 
             this.colors = [
                 Config.get_string('memory-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
-                Config.get_string('memory-header-bars-color2') ?? 'rgba(29,172,214,0.3)',
+                Config.get_string('memory-header-bars-color2') ?? 'rgba(29,172,214,0.3)'
             ];
         }
 
         setUsage(usage: MemoryUsage[]) {
-            if (!usage || !Array.isArray(usage) || usage.length == 0) {
+            if(!usage || !Array.isArray(usage) || usage.length == 0) {
                 this.updateBars([]);
                 return;
             }
 
             const values = [];
-            for (let i = 0; i < usage.length; i++) {
-                if (!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
+            for(let i = 0; i < usage.length; i++) {
+                if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                     const total = usage[i].total;
                     const used = usage[i].used / total;
                     const allocated = (usage[i].allocated - usage[i].used) / total;
 
                     values.push([
                         { color: 0, value: used },
-                        { color: 1, value: allocated },
+                        { color: 1, value: allocated }
                     ]);
                 } else {
                     values.push([{ color: 0, value: usage[i].used / usage[i].total }]);
@@ -72,5 +72,5 @@ export default GObject.registerClass(
             }
             this.updateBars(values);
         }
-    },
+    }
 );

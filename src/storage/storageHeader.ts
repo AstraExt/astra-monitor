@@ -84,7 +84,7 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::storage-indicators-order',
-                this.addOrReorderIndicators.bind(this),
+                this.addOrReorderIndicators.bind(this)
             );
             Config.bind('storage-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -106,9 +106,9 @@ export default GObject.registerClass(
             const indicators = Utils.getIndicatorsOrder('storage');
 
             let position = 0;
-            for (const indicator of indicators) {
+            for(const indicator of indicators) {
                 let widget;
-                switch (indicator) {
+                switch(indicator) {
                     case 'icon':
                         widget = this.icon;
                         break;
@@ -135,8 +135,8 @@ export default GObject.registerClass(
                         break;
                 }
 
-                if (widget) {
-                    if (widget.get_parent()) this.remove_child(widget);
+                if(widget) {
+                    if(widget.get_parent()) this.remove_child(widget);
                     this.insert_child_at_index(widget, position++);
                 }
             }
@@ -145,9 +145,9 @@ export default GObject.registerClass(
         resetMaxWidths() {
             this.maxWidths = [];
 
-            if (!Config.get_boolean('storage-header-io')) return;
+            if(!Config.get_boolean('storage-header-io')) return;
 
-            if (!this.speed.get_stage()) return;
+            if(!this.speed.get_stage()) return;
 
             this.fixSpeedContainerStyle();
         }
@@ -162,12 +162,12 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER,
+                x_align: Clutter.ActorAlign.CENTER
             });
 
             const setIconName = () => {
                 const iconCustom = Config.get_string('storage-header-icon-custom');
-                if (iconCustom) this.icon.icon_name = iconCustom;
+                if(iconCustom) this.icon.icon_name = iconCustom;
                 // @ts-expect-error gicon shouldn't be null, but we do have a fallback icon
                 else this.icon.gicon = Utils.getLocalIcon('am-harddisk-symbolic');
             };
@@ -186,8 +186,8 @@ export default GObject.registerClass(
                 updateIconColor();
             };
             const updateIconColor = () => {
-                if (alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
-                else if (baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
+                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
                 else this.icon.style = defaultStyle;
             };
 
@@ -200,34 +200,34 @@ export default GObject.registerClass(
                 'storage-header-icon-size',
                 this.icon,
                 'icon_size',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
             Config.connect(
                 this.icon,
                 'changed::storage-header-icon-custom',
-                setIconName.bind(this),
+                setIconName.bind(this)
             );
             Config.connect(
                 this.icon,
                 'changed::storage-header-icon-color',
-                setIconBaseColor.bind(this),
+                setIconBaseColor.bind(this)
             );
             Config.connect(
                 this.icon,
                 'changed::storage-header-icon-alert-color',
-                setIconAlertColor.bind(this),
+                setIconAlertColor.bind(this)
             );
 
             Utils.storageMonitor.listen(this.icon, 'storageUsage', () => {
-                if (!Config.get_boolean('storage-header-icon')) return;
+                if(!Config.get_boolean('storage-header-icon')) return;
 
                 const percentageThreshold =
                     Config.get_int('storage-header-percentage-icon-alert-threshold') || 0;
                 const freeThreshold =
                     Config.get_int('storage-header-free-icon-alert-threshold') || 0;
 
-                if (percentageThreshold === 0 && freeThreshold === 0) {
-                    if (alerts.size > 0) {
+                if(percentageThreshold === 0 && freeThreshold === 0) {
+                    if(alerts.size > 0) {
                         alerts.clear();
                         updateIconColor();
                     }
@@ -235,30 +235,30 @@ export default GObject.registerClass(
                 }
 
                 const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                if (!usage || !usage.usePercentage || isNaN(usage.usePercentage)) return;
+                if(!usage || !usage.usePercentage || isNaN(usage.usePercentage)) return;
 
-                if (percentageThreshold > 0) {
-                    if (usage.usePercentage < percentageThreshold) {
-                        if (alerts.has('storageUsage')) {
+                if(percentageThreshold > 0) {
+                    if(usage.usePercentage < percentageThreshold) {
+                        if(alerts.has('storageUsage')) {
                             alerts.delete('storageUsage');
                             updateIconColor();
                         }
                     } else {
-                        if (!alerts.has('storageUsage')) {
+                        if(!alerts.has('storageUsage')) {
                             alerts.add('storageUsage');
                             updateIconColor();
                         }
                     }
                 }
 
-                if (freeThreshold > 0) {
-                    if (usage.free >= freeThreshold * 1000 * 1000) {
-                        if (alerts.has('storageFree')) {
+                if(freeThreshold > 0) {
+                    if(usage.free >= freeThreshold * 1000 * 1000) {
+                        if(alerts.has('storageFree')) {
                             alerts.delete('storageFree');
                             updateIconColor();
                         }
                     } else {
-                        if (!alerts.has('storageFree')) {
+                        if(!alerts.has('storageFree')) {
                             alerts.add('storageFree');
                             updateIconColor();
                         }
@@ -268,7 +268,7 @@ export default GObject.registerClass(
         }
 
         buildBars() {
-            if (this.bars) {
+            if(this.bars) {
                 this.remove_child(this.bars);
                 Config.clear(this.bars);
                 Utils.storageMonitor.unlisten(this.bars);
@@ -279,7 +279,7 @@ export default GObject.registerClass(
             Config.bind('storage-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
             Utils.storageMonitor.listen(this.bars, 'storageUsage', () => {
-                if (!Config.get_boolean('storage-header-bars')) return;
+                if(!Config.get_boolean('storage-header-bars')) return;
 
                 const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
                 this.bars.setUsage(usage);
@@ -291,20 +291,20 @@ export default GObject.registerClass(
                 text: Utils.zeroStr + '%',
                 style_class: 'astra-monitor-header-percentage3',
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER,
+                x_align: Clutter.ActorAlign.CENTER
             });
             Config.bind(
                 'storage-header-percentage',
                 this.percentage,
                 'visible',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
 
             Utils.storageMonitor.listen(this.percentage, 'storageUsage', () => {
-                if (!Config.get_boolean('storage-header-percentage')) return;
+                if(!Config.get_boolean('storage-header-percentage')) return;
 
                 const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                if (!usage || !usage.usePercentage || isNaN(usage.usePercentage))
+                if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
                     this.percentage.text = '';
                 else this.percentage.text = `${Math.round(usage.usePercentage)}%`;
             });
@@ -314,17 +314,17 @@ export default GObject.registerClass(
             this.value = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-header-value',
-                y_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.CENTER
             });
             Config.bind('storage-header-value', this.value, 'visible', Gio.SettingsBindFlags.GET);
 
             Utils.storageMonitor.listen(this.value, 'storageUsage', () => {
-                if (!Config.get_boolean('storage-header-value')) return;
+                if(!Config.get_boolean('storage-header-value')) return;
 
                 const figures = Config.get_int('storage-header-value-figures');
 
                 const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                if (!usage || !usage.used || isNaN(usage.used)) this.value.text = '-';
+                if(!usage || !usage.used || isNaN(usage.used)) this.value.text = '-';
                 else this.value.text = `${Utils.formatBytes(usage.used, 'kB-KB', figures)}`;
             });
         }
@@ -333,23 +333,23 @@ export default GObject.registerClass(
             this.free = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-header-value',
-                y_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.CENTER
             });
             Config.bind('storage-header-free', this.free, 'visible', Gio.SettingsBindFlags.GET);
 
             Utils.storageMonitor.listen(this.free, 'storageUsage', () => {
-                if (!Config.get_boolean('storage-header-free')) return;
+                if(!Config.get_boolean('storage-header-free')) return;
 
                 const figures = Config.get_int('storage-header-free-figures');
 
                 const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                if (!usage || !usage.free || isNaN(usage.free)) this.free.text = '-';
+                if(!usage || !usage.free || isNaN(usage.free)) this.free.text = '-';
                 else this.free.text = `${Utils.formatBytes(usage.free, 'kB-KB', figures)}`;
             });
         }
 
         buildIOBars() {
-            if (this.ioBars) {
+            if(this.ioBars) {
                 this.remove_child(this.ioBars);
                 Config.clear(this.ioBars);
                 Utils.storageMonitor.unlisten(this.ioBars);
@@ -361,18 +361,18 @@ export default GObject.registerClass(
                 'storage-header-io-bars',
                 this.ioBars,
                 'visible',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
 
             Utils.storageMonitor.listen(this.ioBars, 'storageIO', () => {
-                if (!Config.get_boolean('storage-header-io-bars')) return;
+                if(!Config.get_boolean('storage-header-io-bars')) return;
                 const usage = Utils.storageMonitor.getUsageHistory('storageIO') as StorageIO[];
                 this.ioBars.setUsage(usage);
             });
         }
 
         buildGraph() {
-            if (this.graph) {
+            if(this.graph) {
                 this.remove_child(this.graph);
                 Config.clear(this.graph);
                 Utils.storageMonitor.unlisten(this.graph);
@@ -392,7 +392,7 @@ export default GObject.registerClass(
             });
 
             Utils.storageMonitor.listen(this.graph, 'storageIO', () => {
-                if (!Config.get_boolean('storage-header-graph')) return;
+                if(!Config.get_boolean('storage-header-graph')) return;
 
                 const usage = Utils.storageMonitor.getUsageHistory('storageIO');
                 this.graph.setUsageHistory(usage);
@@ -405,7 +405,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.FILL,
                 y_expand: true,
                 vertical: true,
-                width: 1,
+                width: 1
             });
 
             this.speed = new St.Label({
@@ -415,7 +415,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.CENTER,
                 x_align: Clutter.ActorAlign.END,
                 x_expand: true,
-                y_expand: true,
+                y_expand: true
             });
             this.speedContainer.add_child(this.speed);
 
@@ -423,25 +423,25 @@ export default GObject.registerClass(
                 'storage-header-io',
                 this.speedContainer,
                 'visible',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
 
             Utils.storageMonitor.listen(this.speedContainer, 'storageIO', () => {
-                if (!Config.get_boolean('storage-header-io')) return;
+                if(!Config.get_boolean('storage-header-io')) return;
 
                 let read = Utils.zeroStr + ' B/s';
                 let write = Utils.zeroStr + ' B/s';
 
                 const usage = Utils.storageMonitor.getCurrentValue('storageIO');
-                if (usage) {
+                if(usage) {
                     let bytesReadPerSec = usage.bytesReadPerSec;
                     let bytesWrittenPerSec = usage.bytesWrittenPerSec;
 
                     const threshold = Config.get_int('storage-header-io-threshold');
 
-                    if (bytesReadPerSec < threshold * 1000) bytesReadPerSec = 0;
+                    if(bytesReadPerSec < threshold * 1000) bytesReadPerSec = 0;
 
-                    if (bytesWrittenPerSec < threshold * 1000) bytesWrittenPerSec = 0;
+                    if(bytesWrittenPerSec < threshold * 1000) bytesWrittenPerSec = 0;
 
                     const unit = Config.get_string('storage-io-unit');
                     let maxFigures = Config.get_int('storage-header-io-figures');
@@ -451,25 +451,25 @@ export default GObject.registerClass(
                     write = Utils.formatBytesPerSec(bytesWrittenPerSec, unit as any, maxFigures);
                 }
 
-                if (this.ioLayout === 'horizontal') this.speed.text = `${read} | ${write}`;
+                if(this.ioLayout === 'horizontal') this.speed.text = `${read} | ${write}`;
                 else this.speed.text = `${read}\n${write}`;
                 this.fixSpeedContainerStyle();
             });
         }
 
         fixSpeedContainerStyle() {
-            if (!this.speedContainer.get_parent()) return;
-            if (!this.speed.get_parent()) return;
+            if(!this.speedContainer.get_parent()) return;
+            if(!this.speed.get_parent()) return;
 
             const calculateStyle = () => {
-                if (this.ioLayout === 'horizontal') return 'font-size:1em;';
+                if(this.ioLayout === 'horizontal') return 'font-size:1em;';
                 const superHeight = this.speedContainer.get_parent()?.height ?? 0;
-                if (superHeight <= 20) return 'font-size:0.65em;';
+                if(superHeight <= 20) return 'font-size:0.65em;';
                 return `font-size:${Math.round(superHeight / 3)}px;`;
             };
             const style = calculateStyle();
 
-            if (this.speed.style !== style) {
+            if(this.speed.style !== style) {
                 this.speed.style = style;
                 this.speed.queue_relayout();
                 this.speedContainer.queue_relayout();
@@ -480,12 +480,12 @@ export default GObject.registerClass(
 
             this.maxWidths.push(width);
 
-            if (this.maxWidths.length > Utils.storageMonitor.updateFrequency * 30)
+            if(this.maxWidths.length > Utils.storageMonitor.updateFrequency * 30)
                 this.maxWidths.shift();
 
             let max = Math.max(...this.maxWidths);
-            if (max === this.speedContainer.width) return;
-            if (max <= 0) max = 1;
+            if(max === this.speedContainer.width) return;
+            if(max <= 0) max = 1;
             this.speedContainer.set_width(max);
         }
 
@@ -501,7 +501,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item',
+                style_class: 'astra-monitor-tooltip-item'
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;
@@ -509,42 +509,42 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::storage-header-tooltip', () => {
-                if (!Config.get_boolean('storage-header-tooltip')) this.tooltipMenu.close(true);
+                if(!Config.get_boolean('storage-header-tooltip')) this.tooltipMenu.close(true);
             });
 
             const updateTooltip = () => {
-                if (!Config.get_boolean('storage-header-tooltip')) return;
+                if(!Config.get_boolean('storage-header-tooltip')) return;
 
                 const values: string[] = [];
 
                 const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
 
-                if (Config.get_boolean('storage-header-tooltip-percentage')) {
-                    if (!usage || !usage.usePercentage || isNaN(usage.usePercentage))
+                if(Config.get_boolean('storage-header-tooltip-percentage')) {
+                    if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
                         values.push('-');
                     else values.push(`${Math.round(usage.usePercentage)}%`);
                 }
 
-                if (Config.get_boolean('storage-header-tooltip-value')) {
+                if(Config.get_boolean('storage-header-tooltip-value')) {
                     const figures = Config.get_int('storage-header-value-figures');
 
                     const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                    if (!usage || !usage.used || isNaN(usage.used)) values.push('-');
+                    if(!usage || !usage.used || isNaN(usage.used)) values.push('-');
                     else values.push(`${Utils.formatBytes(usage.used, 'kB-KB', figures)}`);
                 }
 
-                if (Config.get_boolean('storage-header-tooltip-free')) {
+                if(Config.get_boolean('storage-header-tooltip-free')) {
                     const figures = Config.get_int('storage-header-free-figures');
 
                     const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                    if (!usage || !usage.free || isNaN(usage.free)) values.push('-');
+                    if(!usage || !usage.free || isNaN(usage.free)) values.push('-');
                     else values.push(`${Utils.formatBytes(usage.free, 'kB-KB', figures)}`);
                 }
 
-                if (Config.get_boolean('storage-header-tooltip-io')) {
+                if(Config.get_boolean('storage-header-tooltip-io')) {
                     const usage = Utils.storageMonitor.getCurrentValue('storageIO');
 
-                    if (usage) {
+                    if(usage) {
                         const unit = Config.get_string('storage-io-unit');
                         let maxFigures = Config.get_int('storage-header-io-figures');
                         maxFigures = Math.max(1, Math.min(4, maxFigures));
@@ -554,21 +554,21 @@ export default GObject.registerClass(
                                 Utils.formatBytesPerSec(
                                     usage.bytesReadPerSec,
                                     unit as any,
-                                    maxFigures,
-                                ),
+                                    maxFigures
+                                )
                         );
                         values.push(
                             '↓' +
                                 Utils.formatBytesPerSec(
                                     usage.bytesWrittenPerSec,
                                     unit as any,
-                                    maxFigures,
-                                ),
+                                    maxFigures
+                                )
                         );
                     }
                 }
 
-                if (values.length === 0) values.push('-');
+                if(values.length === 0) values.push('-');
 
                 this.tooltipItem.label.text = values.join(' | ');
                 const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
@@ -580,15 +580,15 @@ export default GObject.registerClass(
         }
 
         showTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('storage-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('storage-header-tooltip')) return;
 
             this.tooltipMenu.open(false);
         }
 
         hideTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('storage-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('storage-header-tooltip')) return;
             this.tooltipMenu.close(false);
         }
 
@@ -598,35 +598,35 @@ export default GObject.registerClass(
 
             Config.clear(this.icon);
 
-            if (this.percentage) {
+            if(this.percentage) {
                 Config.clear(this.percentage);
                 Utils.storageMonitor.unlisten(this.percentage);
             }
-            if (this.value) {
+            if(this.value) {
                 Config.clear(this.value);
                 Utils.memoryMonitor.unlisten(this.value);
             }
-            if (this.free) {
+            if(this.free) {
                 Config.clear(this.free);
                 Utils.memoryMonitor.unlisten(this.free);
             }
-            if (this.bars) {
+            if(this.bars) {
                 Config.clear(this.bars);
                 Utils.storageMonitor.unlisten(this.bars);
             }
-            if (this.ioBars) {
+            if(this.ioBars) {
                 Config.clear(this.ioBars);
                 Utils.storageMonitor.unlisten(this.ioBars);
             }
-            if (this.graph) {
+            if(this.graph) {
                 Config.clear(this.graph);
                 Utils.storageMonitor.unlisten(this.graph);
             }
-            if (this.speedContainer) {
+            if(this.speedContainer) {
                 Config.clear(this.speedContainer);
                 Utils.storageMonitor.unlisten(this.speedContainer);
             }
-            if (this.tooltipMenu) {
+            if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.storageMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
@@ -634,5 +634,5 @@ export default GObject.registerClass(
 
             super.destroy();
         }
-    },
+    }
 );

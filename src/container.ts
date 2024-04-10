@@ -54,13 +54,13 @@ export default GObject.registerClass(
             Utils.container = this;
 
             const panelBox = Config.get_string('panel-box');
-            if (panelBox === 'left') MenuBase.openingSide = St.Side.LEFT;
+            if(panelBox === 'left') MenuBase.openingSide = St.Side.LEFT;
 
             this.box = new St.BoxLayout({
                 vertical: false,
                 x_expand: true,
                 y_expand: true,
-                style: this.computeStyle(),
+                style: this.computeStyle()
             });
 
             this.add_child(this.box);
@@ -81,16 +81,16 @@ export default GObject.registerClass(
             let style = '';
 
             const marginLeft = Config.get_int('panel-margin-left');
-            if (marginLeft) style += `margin-left:${marginLeft}px;`;
+            if(marginLeft) style += `margin-left:${marginLeft}px;`;
 
             const marginRight = Config.get_int('panel-margin-right');
-            if (marginRight) style += `margin-right:${marginRight}px;`;
+            if(marginRight) style += `margin-right:${marginRight}px;`;
 
             const fontFamily = Config.get_string('headers-font-family');
-            if (fontFamily) style += `font-family:"${fontFamily}";`;
+            if(fontFamily) style += `font-family:"${fontFamily}";`;
 
             const fontSize = Config.get_int('headers-font-size');
-            if (fontSize) style += `font-size:${fontSize}pt;`;
+            if(fontSize) style += `font-size:${fontSize}pt;`;
 
             return style;
         }
@@ -112,9 +112,9 @@ export default GObject.registerClass(
             const monitors = Utils.getMonitorsOrder();
 
             let position = 0;
-            for (const monitor of monitors) {
+            for(const monitor of monitors) {
                 const widget = this.widgets.get(monitor);
-                if (!widget) continue;
+                if(!widget) continue;
                 this.box.remove_child(widget);
                 this.box.insert_child_at_index(widget, position++);
             }
@@ -123,32 +123,32 @@ export default GObject.registerClass(
         setup() {
             const monitors = Utils.getMonitorsOrder();
 
-            for (const monitor of monitors) {
-                if (monitor === 'processor') {
+            for(const monitor of monitors) {
+                if(monitor === 'processor') {
                     const processorHeader = new ProcessorHeader();
                     this.addWidget('processor', processorHeader);
                     (Main.panel as any).menuManager.addMenu(processorHeader.getMenu());
                     continue;
                 }
-                if (monitor === 'memory') {
+                if(monitor === 'memory') {
                     const memoryHeader = new MemoryHeader();
                     this.addWidget('memory', memoryHeader);
                     (Main.panel as any).menuManager.addMenu(memoryHeader.getMenu());
                     continue;
                 }
-                if (monitor === 'storage') {
+                if(monitor === 'storage') {
                     const storageHeader = new StorageHeader();
                     this.addWidget('storage', storageHeader);
                     (Main.panel as any).menuManager.addMenu(storageHeader.getMenu());
                     continue;
                 }
-                if (monitor === 'network') {
+                if(monitor === 'network') {
                     const networkHeader = new NetworkHeader();
                     this.addWidget('network', networkHeader);
                     (Main.panel as any).menuManager.addMenu(networkHeader.getMenu());
                     continue;
                 }
-                if (monitor === 'sensors') {
+                if(monitor === 'sensors') {
                     const sonsorHeader = new SensorsHeader();
                     this.addWidget('sensors', sonsorHeader);
                     (Main.panel as any).menuManager.addMenu(sonsorHeader.getMenu());
@@ -175,7 +175,7 @@ export default GObject.registerClass(
                 // @ts-expect-error _centerBox not in types
                 center: Main.panel._centerBox,
                 // @ts-expect-error _rightBox not in types
-                right: Main.panel._rightBox,
+                right: Main.panel._rightBox
             };
             // @ts-expect-error _rightBox not in types
             const boxContainer = boxes[panelBox] || Main.panel._rightBox;
@@ -190,16 +190,16 @@ export default GObject.registerClass(
 
             try {
                 Config.clear(this);
-            } catch (e: any) {
+            } catch(e: any) {
                 Utils.error(e);
             }
 
             try {
-                for (const widget of this.widgets.values()) widget.destroy();
-            } catch (e: any) {
+                for(const widget of this.widgets.values()) widget.destroy();
+            } catch(e: any) {
                 Utils.error(e);
             }
             super.destroy();
         }
-    },
+    }
 );

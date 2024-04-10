@@ -37,7 +37,7 @@ export default GObject.registerClass(
         }
 
         get colorConfig() {
-            if (this.header) return 'storage-header-bars-color1';
+            if(this.header) return 'storage-header-bars-color1';
             return 'storage-menu-device-color';
         }
 
@@ -48,12 +48,12 @@ export default GObject.registerClass(
         }
 
         setUsage(usage: StorageUsage | null) {
-            if (!usage || !Object.prototype.hasOwnProperty.call(usage, 'usePercentage')) {
+            if(!usage || !Object.prototype.hasOwnProperty.call(usage, 'usePercentage')) {
                 this.updateBars([]);
                 return;
             }
 
             this.updateBars([[{ color: 0, value: usage.usePercentage / 100.0 }]]);
         }
-    },
+    }
 );

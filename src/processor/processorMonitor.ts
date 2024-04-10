@@ -147,10 +147,10 @@ export default class ProcessorMonitor extends Monitor {
         this.dataSourcesInit();
 
         const enabled = Config.get_boolean('processor-header-show');
-        if (enabled) this.start();
+        if(enabled) this.start();
 
         Config.connect(this, 'changed::processor-header-show', () => {
-            if (Config.get_boolean('processor-header-show')) this.start();
+            if(Config.get_boolean('processor-header-show')) this.start();
             else this.stop();
         });
 
@@ -166,15 +166,15 @@ export default class ProcessorMonitor extends Monitor {
             idle: -1,
             user: -1,
             system: -1,
-            total: -1,
+            total: -1
         };
         this.previousCpuCoresUsage = new Array(this.coresNum);
-        for (let i = 0; i < this.coresNum; i++) {
+        for(let i = 0; i < this.coresNum; i++) {
             this.previousCpuCoresUsage[i] = {
                 idle: -1,
                 user: -1,
                 system: -1,
-                total: -1,
+                total: -1
             };
         }
 
@@ -205,7 +205,7 @@ export default class ProcessorMonitor extends Monitor {
             cpuUsage: Config.get_string('processor-source-cpu-usage') ?? undefined,
             cpuCoresUsage: Config.get_string('processor-source-cpu-cores-usage') ?? undefined,
             topProcesses: Config.get_string('processor-source-top-processes') ?? undefined,
-            loadAvg: Config.get_string('processor-source-load-avg') ?? undefined,
+            loadAvg: Config.get_string('processor-source-load-avg') ?? undefined
         };
 
         Config.connect(this, 'changed::processor-source-cpu-usage', () => {
@@ -216,7 +216,7 @@ export default class ProcessorMonitor extends Monitor {
                 idle: -1,
                 user: -1,
                 system: -1,
-                total: -1,
+                total: -1
             };
             this.resetUsageHistory('cpuUsage');
         });
@@ -226,12 +226,12 @@ export default class ProcessorMonitor extends Monitor {
                 Config.get_string('processor-source-cpu-cores-usage') ?? undefined;
             this.updateCoresUsageTask.cancel();
             this.previousCpuCoresUsage = new Array(this.coresNum);
-            for (let i = 0; i < this.coresNum; i++) {
+            for(let i = 0; i < this.coresNum; i++) {
                 this.previousCpuCoresUsage[i] = {
                     idle: -1,
                     user: -1,
                     system: -1,
-                    total: -1,
+                    total: -1
                 };
             }
             this.resetUsageHistory('cpuCoresUsage');
@@ -255,7 +255,7 @@ export default class ProcessorMonitor extends Monitor {
     }
 
     startListeningFor(key: string) {
-        if (key === 'gpuUpdate') {
+        if(key === 'gpuUpdate') {
             setTimeout(() => {
                 this.startGpuTask();
             });
@@ -263,23 +263,23 @@ export default class ProcessorMonitor extends Monitor {
     }
 
     stopListeningFor(key: string) {
-        if (key === 'gpuUpdate') {
+        if(key === 'gpuUpdate') {
             this.stopGpuTask();
         }
     }
 
     private startGpuTask() {
         const selectedGpu = Utils.getSelectedGPU();
-        if (!selectedGpu) return;
+        if(!selectedGpu) return;
 
-        if (Utils.hasAMDGpu() && Utils.hasAmdGpuTop() && Utils.isAmdGpu(selectedGpu)) {
+        if(Utils.hasAMDGpu() && Utils.hasAmdGpuTop() && Utils.isAmdGpu(selectedGpu)) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
             const path = Utils.commandPathLookup('amdgpu_top');
             this.updateAmdGpuTask.start(`${path}amdgpu_top -J -u ${timer} -s ${timer} -n 0`);
         }
 
-        if (Utils.hasNVidiaGpu() && Utils.hasNvidiaSmi() && Utils.isNvidiaGpu(selectedGpu)) {
+        if(Utils.hasNVidiaGpu() && Utils.hasNvidiaSmi() && Utils.isNvidiaGpu(selectedGpu)) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
             /**
@@ -291,37 +291,37 @@ export default class ProcessorMonitor extends Monitor {
             const path = Utils.commandPathLookup('nvidia-smi');
             this.updateNvidiaGpuTask.start(
                 `${path}nvidia-smi -q -x -lms ${timer}`,
-                '</nvidia_smi_log>',
+                '</nvidia_smi_log>'
             );
         }
     }
 
     private stopGpuTask() {
-        if (this.updateAmdGpuTask.isRunning) this.updateAmdGpuTask.stop();
+        if(this.updateAmdGpuTask.isRunning) this.updateAmdGpuTask.stop();
 
-        if (this.updateNvidiaGpuTask.isRunning) this.updateNvidiaGpuTask.stop();
+        if(this.updateNvidiaGpuTask.isRunning) this.updateNvidiaGpuTask.stop();
     }
 
     update(): boolean {
         Utils.verbose('Updating Processor Monitor');
 
         const enabled = Config.get_boolean('processor-header-show');
-        if (enabled) {
+        if(enabled) {
             const procStat = new PromiseValueHolderStore<string[]>(
-                this.getProcStatAsync.bind(this),
+                this.getProcStatAsync.bind(this)
             );
 
             this.runUpdate('cpuUsage', procStat);
             this.runUpdate('cpuCoresUsage', procStat);
             this.runUpdate('cpuCoresFrequency');
 
-            if (this.isListeningFor('topProcesses'))
+            if(this.isListeningFor('topProcesses'))
                 this.runUpdate('topProcesses', false, procStat);
             else this.topProcessesCache.updateNotSeen([]);
 
-            if (this.isListeningFor('loadAverage')) {
+            if(this.isListeningFor('loadAverage')) {
                 const procLoadAvgStore = new PromiseValueHolderStore<string[]>(
-                    this.getProcLoadAvgAsync.bind(this),
+                    this.getProcLoadAvgAsync.bind(this)
                 );
                 this.runUpdate('loadAverage', procLoadAvgStore);
             }
@@ -330,37 +330,37 @@ export default class ProcessorMonitor extends Monitor {
     }
 
     requestUpdate(key: string) {
-        if (key === 'cpuUsage') {
-            if (!this.updateCpuUsageTask.isRunning) {
+        if(key === 'cpuUsage') {
+            if(!this.updateCpuUsageTask.isRunning) {
                 const procStatStore = new PromiseValueHolderStore<string[]>(
-                    this.getProcStatAsync.bind(this),
+                    this.getProcStatAsync.bind(this)
                 );
                 this.runUpdate('cpuUsage', procStatStore);
             }
-        } else if (key === 'cpuCoresUsage') {
-            if (!this.updateCoresUsageTask.isRunning) {
+        } else if(key === 'cpuCoresUsage') {
+            if(!this.updateCoresUsageTask.isRunning) {
                 const procStatStore = new PromiseValueHolderStore<string[]>(
-                    this.getProcStatAsync.bind(this),
+                    this.getProcStatAsync.bind(this)
                 );
                 this.runUpdate('cpuCoresUsage', procStatStore);
             }
-        } else if (key === 'cpuCoresFrequency') {
-            if (!this.updateCoresFrequencyTask.isRunning) {
+        } else if(key === 'cpuCoresFrequency') {
+            if(!this.updateCoresFrequencyTask.isRunning) {
                 this.runUpdate('cpuCoresFrequency');
             }
-        } else if (key === 'topProcesses') {
-            if (!this.updateTopProcessesTask.isRunning) {
+        } else if(key === 'topProcesses') {
+            if(!this.updateTopProcessesTask.isRunning) {
                 const procStatStore = new PromiseValueHolderStore<string[]>(
-                    this.getProcStatAsync.bind(this),
+                    this.getProcStatAsync.bind(this)
                 );
                 this.runUpdate('topProcesses', true, procStatStore);
             }
             // Don't push to the queue
             return;
-        } else if (key === 'loadAverage') {
-            if (!this.updateLoadAvgTask.isRunning) {
+        } else if(key === 'loadAverage') {
+            if(!this.updateLoadAvgTask.isRunning) {
                 const procLoadAvgStore = new PromiseValueHolderStore<string[]>(
-                    this.getProcLoadAvgAsync.bind(this),
+                    this.getProcLoadAvgAsync.bind(this)
                 );
                 this.runUpdate('loadAverage', procLoadAvgStore);
             }
@@ -370,11 +370,11 @@ export default class ProcessorMonitor extends Monitor {
     }
 
     runUpdate(key: string, ...params: any[]) {
-        if (key === 'cpuUsage') {
+        if(key === 'cpuUsage') {
             let run;
-            if (this.dataSources.cpuUsage === 'GTop')
+            if(this.dataSources.cpuUsage === 'GTop')
                 run = this.updateCpuUsageGTop.bind(this, ...params);
-            else if (this.dataSources.cpuUsage === 'proc')
+            else if(this.dataSources.cpuUsage === 'proc')
                 run = this.updateCpuUsageProc.bind(this, ...params);
             else run = this.updateCpuUsageAuto.bind(this, ...params);
 
@@ -382,15 +382,15 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateCpuUsageTask,
                 run,
-                callback: this.notify.bind(this, 'cpuUsage'),
+                callback: this.notify.bind(this, 'cpuUsage')
             });
             return;
         }
-        if (key === 'cpuCoresUsage') {
+        if(key === 'cpuCoresUsage') {
             let run;
-            if (this.dataSources.cpuCoresUsage === 'GTop')
+            if(this.dataSources.cpuCoresUsage === 'GTop')
                 run = this.updateCpuCoresUsageGTop.bind(this, ...params);
-            else if (this.dataSources.cpuCoresUsage === 'proc')
+            else if(this.dataSources.cpuCoresUsage === 'proc')
                 run = this.updateCpuCoresUsageProc.bind(this, ...params);
             else run = this.updateCpuCoresUsageAuto.bind(this, ...params);
 
@@ -398,34 +398,34 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateCoresUsageTask,
                 run,
-                callback: this.notify.bind(this, 'cpuCoresUsage'),
+                callback: this.notify.bind(this, 'cpuCoresUsage')
             });
             return;
         }
-        if (key === 'cpuCoresFrequency') {
+        if(key === 'cpuCoresFrequency') {
             this.runTask({
                 key,
                 task: this.updateCoresFrequencyTask,
                 run: this.updateCpuCoresFrequencyProc.bind(this, ...params),
-                callback: this.notify.bind(this, 'cpuCoresFrequency'),
+                callback: this.notify.bind(this, 'cpuCoresFrequency')
             });
             return;
         }
-        if (key === 'topProcesses') {
+        if(key === 'topProcesses') {
             const forced = params.shift();
 
             //Top processes should never be called more than twice per second
             //unless it's forced
             const now = GLib.get_monotonic_time();
-            if (!forced && now - this.topProcessesTime < 500000)
+            if(!forced && now - this.topProcessesTime < 500000)
                 // 0.5s
                 return;
-            if (!forced) this.topProcessesTime = now;
+            if(!forced) this.topProcessesTime = now;
 
             let run;
-            if (this.dataSources.topProcesses === 'GTop')
+            if(this.dataSources.topProcesses === 'GTop')
                 run = this.updateTopProcessesGTop.bind(this, ...params);
-            else if (this.dataSources.topProcesses === 'proc')
+            else if(this.dataSources.topProcesses === 'proc')
                 run = this.updateTopProcessesProc.bind(this, ...params);
             else run = this.updateTopProcessesAuto.bind(this, ...params);
 
@@ -433,13 +433,13 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateTopProcessesTask,
                 run,
-                callback: this.notify.bind(this, 'topProcesses'),
+                callback: this.notify.bind(this, 'topProcesses')
             });
             return;
         }
-        if (key === 'loadAverage') {
+        if(key === 'loadAverage') {
             let run;
-            if (this.dataSources.loadAvg === 'proc')
+            if(this.dataSources.loadAvg === 'proc')
                 run = this.updateLoadAvgProc.bind(this, ...params);
             else run = this.updateLoadAvgAuto.bind(this, ...params);
 
@@ -447,7 +447,7 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateLoadAvgTask,
                 run,
-                callback: this.notify.bind(this, 'loadAverage'),
+                callback: this.notify.bind(this, 'loadAverage')
             });
             return;
         }
@@ -457,13 +457,13 @@ export default class ProcessorMonitor extends Monitor {
         return new PromiseValueHolder(
             new Promise((resolve, reject) => {
                 Utils.readFileAsync('/proc/stat')
-                    .then((fileContent) => {
+                    .then(fileContent => {
                         resolve(fileContent.split('\n'));
                     })
-                    .catch((e) => {
+                    .catch(e => {
                         reject(e);
                     });
-            }),
+            })
         );
     }
 
@@ -471,7 +471,7 @@ export default class ProcessorMonitor extends Monitor {
         // this is used very rarely, only on first setup
         // takes ~0.2ms but could be more on slower systems
         const fileContents = GLib.file_get_contents('/proc/stat');
-        if (fileContents && fileContents[0]) {
+        if(fileContents && fileContents[0]) {
             const decoder = new TextDecoder('utf8');
             return decoder.decode(fileContents[1]).split('\n');
         }
@@ -482,14 +482,14 @@ export default class ProcessorMonitor extends Monitor {
      * This is a sync function but caches the result
      */
     getNumberOfCores(): number {
-        if (this.coresNum !== -1) return this.coresNum;
+        if(this.coresNum !== -1) return this.coresNum;
 
         const procstat = this.getProcStatSync();
-        if (procstat.length < 1) return 0;
+        if(procstat.length < 1) return 0;
 
         let cores = 0;
-        for (let i = 0; i < procstat.length; i++) {
-            if (procstat[i].startsWith('cpu')) cores++;
+        for(let i = 0; i < procstat.length; i++) {
+            if(procstat[i].startsWith('cpu')) cores++;
         }
         this.coresNum = cores - 1;
         return this.coresNum;
@@ -499,18 +499,18 @@ export default class ProcessorMonitor extends Monitor {
      * This is a sync function but caches the result
      */
     getCpuInfoSync(): CpuInfo {
-        if (this.cpuInfo !== undefined) return this.cpuInfo;
+        if(this.cpuInfo !== undefined) return this.cpuInfo;
 
         this.cpuInfo = {};
 
         try {
-            if (!Utils.hasLscpu()) return this.cpuInfo;
+            if(!Utils.hasLscpu()) return this.cpuInfo;
 
             //TODO: switch to lscpu --json!?
             const path = Utils.commandPathLookup('lscpu');
             const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}lscpu`);
 
-            if (!result || !stdout) return this.cpuInfo;
+            if(!result || !stdout) return this.cpuInfo;
 
             const decoder = new TextDecoder('utf8');
             const output = decoder.decode(stdout);
@@ -520,30 +520,30 @@ export default class ProcessorMonitor extends Monitor {
             let currentCategory = cpuInfo;
             let lastKey: string | null = null;
 
-            for (const line of lines) {
-                if (line.trim() === '') continue;
+            for(const line of lines) {
+                if(line.trim() === '') continue;
 
-                if (line.endsWith(':')) {
+                if(line.endsWith(':')) {
                     // New category
                     const categoryName = line.slice(0, -1).trim();
                     cpuInfo[categoryName] = {};
                     currentCategory = cpuInfo[categoryName];
                     lastKey = null;
-                } else if (line.includes(':')) {
+                } else if(line.includes(':')) {
                     // Key-value pair
-                    const [key, value] = line.split(':').map((s) => s.trim());
-                    if (key === 'Flags') {
+                    const [key, value] = line.split(':').map(s => s.trim());
+                    if(key === 'Flags') {
                         currentCategory[key] = value.split(' ');
                     } else {
                         currentCategory[key] = value;
                     }
                     lastKey = key;
-                } else if (lastKey && lastKey === 'Flags') {
+                } else if(lastKey && lastKey === 'Flags') {
                     // Continuation of Flags
                     currentCategory[lastKey] = currentCategory[lastKey].concat(
-                        line.trim().split(' '),
+                        line.trim().split(' ')
                     );
-                } else if (lastKey) {
+                } else if(lastKey) {
                     // Continuation of the last key in the current category
                     currentCategory[lastKey] += '\n' + line.trim();
                 }
@@ -551,25 +551,25 @@ export default class ProcessorMonitor extends Monitor {
 
             this.cpuInfo = cpuInfo;
 
-            if (!this.cpuInfo['Model name']) {
+            if(!this.cpuInfo['Model name']) {
                 // lscpu is localized, so we need to fallback to /proc/cpuinfo
                 // TODO: fix flags too
 
                 const fileContents = GLib.file_get_contents('/proc/cpuinfo');
-                if (fileContents && fileContents[0]) {
+                if(fileContents && fileContents[0]) {
                     const decoder = new TextDecoder('utf8');
                     const lines = decoder.decode(fileContents[1]).split('\n');
 
-                    for (const line of lines) {
-                        if (line.startsWith('model name')) {
-                            const [, value] = line.split(':').map((s) => s.trim());
+                    for(const line of lines) {
+                        if(line.startsWith('model name')) {
+                            const [, value] = line.split(':').map(s => s.trim());
                             this.cpuInfo['Model name'] = value;
                             break;
                         }
                     }
                 }
             }
-        } catch (e) {
+        } catch(e) {
             this.cpuInfo = {};
         }
 
@@ -577,17 +577,17 @@ export default class ProcessorMonitor extends Monitor {
     }
 
     updateCpuUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
-        if (Utils.GTop) return this.updateCpuUsageGTop();
+        if(Utils.GTop) return this.updateCpuUsageGTop();
         return this.updateCpuUsageProc(procStat);
     }
 
     async updateCpuUsageProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procStatValue = await procStat.getValue();
-        if (procStatValue.length < 1) return false;
+        if(procStatValue.length < 1) return false;
 
         //TODO: check dual socket systems
-        const cpuLine = procStatValue[0].split(' ').filter((n) => n.trim() !== '');
-        if (cpuLine.length < 9) return false;
+        const cpuLine = procStatValue[0].split(' ').filter(n => n.trim() !== '');
+        if(cpuLine.length < 9) return false;
 
         // Parse the individual times
         return this.updateCpuUsageCommon({
@@ -598,13 +598,13 @@ export default class ProcessorMonitor extends Monitor {
             iowait: parseInt(cpuLine[5], 10),
             irq: parseInt(cpuLine[6], 10),
             softirq: parseInt(cpuLine[7], 10),
-            steal: parseInt(cpuLine[8], 10),
+            steal: parseInt(cpuLine[8], 10)
         });
     }
 
     async updateCpuUsageGTop(): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         const cpu = new GTop.glibtop_cpu();
         GTop.glibtop_get_cpu(cpu);
@@ -617,7 +617,7 @@ export default class ProcessorMonitor extends Monitor {
             iowait: cpu.iowait,
             irq: cpu.irq,
             softirq: cpu.softirq,
-            steal: 0,
+            steal: 0
         });
     }
 
@@ -629,7 +629,7 @@ export default class ProcessorMonitor extends Monitor {
         iowait,
         irq,
         softirq,
-        steal,
+        steal
     }: {
         user: number;
         nice: number;
@@ -646,7 +646,7 @@ export default class ProcessorMonitor extends Monitor {
         const totalSystem = system + irq + softirq;
         const total = user + nice + system + idle + iowait + irq + softirq + steal;
 
-        if (this.previousCpuUsage.total === -1 || !this.previousCpuUsage.raw) {
+        if(this.previousCpuUsage.total === -1 || !this.previousCpuUsage.raw) {
             this.previousCpuUsage.idle = totalIdle;
             this.previousCpuUsage.user = totalUser;
             this.previousCpuUsage.system = totalSystem;
@@ -660,7 +660,7 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: iowait,
                 irq: irq,
                 softirq: softirq,
-                steal: steal,
+                steal: steal
             };
             return false;
         }
@@ -693,7 +693,7 @@ export default class ProcessorMonitor extends Monitor {
             iowait: iowait,
             irq: irq,
             softirq: softirq,
-            steal: steal,
+            steal: steal
         };
 
         // Calculate the percentage of CPU usage
@@ -725,30 +725,30 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: rawIowaitUsage,
                 irq: rawIrqUsage,
                 softirq: rawSoftirqUsage,
-                steal: rawStealUsage,
-            },
+                steal: rawStealUsage
+            }
         });
         return true;
     }
 
     updateCpuCoresUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
-        if (Utils.GTop) return this.updateCpuCoresUsageGTop();
+        if(Utils.GTop) return this.updateCpuCoresUsageGTop();
         return this.updateCpuCoresUsageProc(procStat);
     }
 
     async updateCpuCoresUsageProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         let procStatValue = await procStat.getValue();
-        if (procStatValue.length < 1) return false;
+        if(procStatValue.length < 1) return false;
 
         // Remove the first line (total CPU usage)
         procStatValue = procStatValue.slice(1);
 
         const cpuCoresUsage: PreviousCpuCoresUsage = [];
-        for (let i = 0; i < procStatValue.length; i++) {
-            if (!procStatValue[i].startsWith('cpu')) break;
+        for(let i = 0; i < procStatValue.length; i++) {
+            if(!procStatValue[i].startsWith('cpu')) break;
 
-            const cpuLine = procStatValue[i].split(' ').filter((n) => n.trim() !== '');
-            if (cpuLine.length < 9) continue;
+            const cpuLine = procStatValue[i].split(' ').filter(n => n.trim() !== '');
+            if(cpuLine.length < 9) continue;
 
             const cpuCoreUsage = this.updateCpuCoresUsageCommon(i, {
                 user: parseInt(cpuLine[1], 10),
@@ -758,10 +758,10 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: parseInt(cpuLine[5], 10),
                 irq: parseInt(cpuLine[6], 10),
                 softirq: parseInt(cpuLine[7], 10),
-                steal: parseInt(cpuLine[8], 10),
+                steal: parseInt(cpuLine[8], 10)
             });
 
-            if (cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
+            if(cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
         }
 
         this.pushUsageHistory('cpuCoresUsage', cpuCoresUsage);
@@ -770,17 +770,17 @@ export default class ProcessorMonitor extends Monitor {
 
     async updateCpuCoresUsageGTop(): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         const buf = new GTop.glibtop_cpu();
         GTop.glibtop_get_cpu(buf);
 
         const cpuCoresUsage = [];
-        for (let i = 0; i < this.coresNum; i++) {
+        for(let i = 0; i < this.coresNum; i++) {
             const cpu = new GTop.glibtop_cpu();
             GTop.glibtop_get_cpu(cpu);
 
-            if (cpu.xcpu_total.length <= i) break;
+            if(cpu.xcpu_total.length <= i) break;
 
             const cpuCoreUsage = this.updateCpuCoresUsageCommon(i, {
                 user: cpu.xcpu_user[i],
@@ -790,10 +790,10 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: cpu.xcpu_iowait[i],
                 irq: cpu.xcpu_irq[i],
                 softirq: cpu.xcpu_softirq[i],
-                steal: 0,
+                steal: 0
             });
 
-            if (cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
+            if(cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
         }
 
         this.pushUsageHistory('cpuCoresUsage', cpuCoresUsage);
@@ -810,7 +810,7 @@ export default class ProcessorMonitor extends Monitor {
             iowait,
             irq,
             softirq,
-            steal,
+            steal
         }: {
             user: number;
             nice: number;
@@ -820,7 +820,7 @@ export default class ProcessorMonitor extends Monitor {
             irq: number;
             softirq: number;
             steal: number;
-        },
+        }
     ): { total: number; user: number; system: number; idle: number } | null {
         // Calculate total time and total idle time
         const totalIdle = idle + iowait + steal;
@@ -828,7 +828,7 @@ export default class ProcessorMonitor extends Monitor {
         const totalSystem = system + irq + softirq;
         const total = user + nice + system + idle + iowait + irq + softirq + steal;
 
-        if (this.previousCpuCoresUsage[i].total === -1) {
+        if(this.previousCpuCoresUsage[i].total === -1) {
             this.previousCpuCoresUsage[i].idle = totalIdle;
             this.previousCpuCoresUsage[i].user = totalUser;
             this.previousCpuCoresUsage[i].system = totalSystem;
@@ -857,21 +857,21 @@ export default class ProcessorMonitor extends Monitor {
             total: cpuUsage,
             user: userUsage,
             system: systemUsage,
-            idle: idleUsage,
+            idle: idleUsage
         };
     }
 
     async updateCpuCoresFrequencyProc(): Promise<boolean> {
-        if (this.isListeningFor('cpuCoresFrequency')) {
+        if(this.isListeningFor('cpuCoresFrequency')) {
             try {
                 const paths = Utils.generateCpuFreqPaths(this.coresNum);
 
                 const frequencies: number[] = [];
-                const readFiles = paths.map((path) => {
+                const readFiles = paths.map(path => {
                     return Utils.readFileAsync(path)
-                        .then((fileContent) => {
-                            if (fileContent) {
-                                if (Utils.isIntOrIntString(fileContent))
+                        .then(fileContent => {
+                            if(fileContent) {
+                                if(Utils.isIntOrIntString(fileContent))
                                     frequencies.push(Number.NaN);
                                 else frequencies.push(parseInt(fileContent, 10) / 1000);
                             } else {
@@ -886,19 +886,19 @@ export default class ProcessorMonitor extends Monitor {
                 await Promise.all(readFiles);
                 this.pushUsageHistory('cpuCoresFrequency', frequencies);
                 return true;
-            } catch (e) {
+            } catch(e) {
                 /* empty */
             }
         }
 
         const frequencies: number[] = [];
-        for (let i = 0; i < this.coresNum; i++) frequencies.push(Number.NaN);
+        for(let i = 0; i < this.coresNum; i++) frequencies.push(Number.NaN);
         this.pushUsageHistory('cpuCoresFrequency', frequencies);
         return true;
     }
 
     updateTopProcessesAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
-        if (Utils.GTop) return this.updateTopProcessesGTop();
+        if(Utils.GTop) return this.updateTopProcessesGTop();
         return this.updateTopProcessesProc(procStat);
     }
 
@@ -910,18 +910,18 @@ export default class ProcessorMonitor extends Monitor {
      */
     async updateTopProcessesProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
         const procStatValue = await procStat.getValue();
-        if (procStatValue.length < 1) return false;
+        if(procStatValue.length < 1) return false;
 
         const seenPids: number[] = [];
-        const cpuLine = procStatValue[0].split(' ').filter((n) => n.trim() !== '');
+        const cpuLine = procStatValue[0].split(' ').filter(n => n.trim() !== '');
         const totalCpuTime = cpuLine
             .slice(1, -1)
             .reduce((acc, time) => acc + parseInt(time, 10), 0);
 
         const files = await Utils.readDirAsync('/proc');
-        const pids = files.filter((file) => /^\d+$/.test(file));
+        const pids = files.filter(file => /^\d+$/.test(file));
 
-        const cpuTimesPromises = pids.map(async (pid) => {
+        const cpuTimesPromises = pids.map(async pid => {
             try {
                 const stat = await Utils.readFileAsync('/proc/' + pid + '/stat');
                 const statParts = stat.split(' ');
@@ -929,9 +929,9 @@ export default class ProcessorMonitor extends Monitor {
                 const stime = parseInt(statParts[14], 10);
 
                 const nPid = parseInt(pid, 10);
-                if (nPid) return { nPid, cpuTime: { processTime: utime + stime, totalCpuTime } };
+                if(nPid) return { nPid, cpuTime: { processTime: utime + stime, totalCpuTime } };
                 return null;
-            } catch (_e) {
+            } catch(_e) {
                 return null; // Avoid logging errors for gone processes
             }
         });
@@ -939,8 +939,8 @@ export default class ProcessorMonitor extends Monitor {
         const cpuTimesResults = await Promise.all(cpuTimesPromises);
         const cpuTimes = new Map();
 
-        for (const result of cpuTimesResults) {
-            if (result) cpuTimes.set(result.nPid, result.cpuTime);
+        for(const result of cpuTimesResults) {
+            if(result) cpuTimes.set(result.nPid, result.cpuTime);
         }
 
         const processInfoPromises = Array.from(cpuTimes).map(async ([pid, cpuTime]) => {
@@ -949,7 +949,7 @@ export default class ProcessorMonitor extends Monitor {
             const previous = this.previousPidsCpuTime.get(pid);
             this.previousPidsCpuTime.set(pid, cpuTime);
 
-            if (!previous) return null;
+            if(!previous) return null;
 
             const { processTime: previousProcessTime, totalCpuTime: previousTotalCpuTime } =
                 previous;
@@ -961,30 +961,30 @@ export default class ProcessorMonitor extends Monitor {
             try {
                 let fileContent = await Utils.readFileAsync(`/proc/${pid}/cmdline`);
                 let process;
-                if (fileContent === '') {
+                if(fileContent === '') {
                     fileContent = await Utils.readFileAsync(`/proc/${pid}/comm`);
                     process = {
                         pid: pid,
                         exec: Utils.extractCommandName(fileContent),
                         cmd: fileContent,
-                        notSeen: 0,
+                        notSeen: 0
                     };
                 } else {
                     process = {
                         pid: pid,
                         exec: Utils.extractCommandName(fileContent),
                         cmd: fileContent,
-                        notSeen: 0,
+                        notSeen: 0
                     };
                 }
                 return { process, cpu: cpuUsagePercent };
-            } catch (_e) {
+            } catch(_e) {
                 return null;
             }
         });
 
         const processes = await Promise.all(processInfoPromises);
-        const topProcesses: any[] = processes.filter((proc) => proc !== null);
+        const topProcesses: any[] = processes.filter(proc => proc !== null);
         topProcesses.sort((a, b) => b.cpu - a.cpu);
         topProcesses.splice(ProcessorMonitor.TOP_PROCESSES_LIMIT);
 
@@ -995,7 +995,7 @@ export default class ProcessorMonitor extends Monitor {
 
     async updateTopProcessesGTop(): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         const buf = new GTop.glibtop_proclist();
         const pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0); // GLIBTOP_EXCLUDE_IDLE
@@ -1004,28 +1004,28 @@ export default class ProcessorMonitor extends Monitor {
         const topProcesses = [];
         const seenPids = [];
 
-        for (const pid of pids) {
+        for(const pid of pids) {
             seenPids.push(pid);
 
             let process = this.topProcessesCache.getProcess(pid);
-            if (!process) {
+            if(!process) {
                 const argSize = new GTop.glibtop_proc_args();
                 let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
 
-                if (!cmd) {
+                if(!cmd) {
                     const procState = new GTop.glibtop_proc_state();
                     GTop.glibtop_get_proc_state(procState, pid);
-                    if (procState && procState.cmd) {
+                    if(procState && procState.cmd) {
                         let str = '';
-                        for (let i = 0; i < procState.cmd.length; i++) {
-                            if (procState.cmd[i] === 0) break;
+                        for(let i = 0; i < procState.cmd.length; i++) {
+                            if(procState.cmd[i] === 0) break;
                             str += String.fromCharCode(procState.cmd[i]);
                         }
                         cmd = str ? `[${str}]` : cmd;
                     }
                 }
 
-                if (!cmd) {
+                if(!cmd) {
                     //Utils.log('cmd is null for pid: ' + pid);
                     continue;
                 }
@@ -1034,7 +1034,7 @@ export default class ProcessorMonitor extends Monitor {
                     pid: pid,
                     exec: Utils.extractCommandName(cmd),
                     cmd: cmd,
-                    notSeen: 0,
+                    notSeen: 0
                 };
                 this.topProcessesCache.setProcess(process);
             }
@@ -1051,7 +1051,7 @@ export default class ProcessorMonitor extends Monitor {
             const previous = this.previousPidsCpuTime.get(pid);
             this.previousPidsCpuTime.set(pid, cpuTime);
 
-            if (!previous) continue;
+            if(!previous) continue;
 
             const { processTime: previousProcessTime, totalCpuTime: previousTotalCpuTime } =
                 previous;
@@ -1066,8 +1066,8 @@ export default class ProcessorMonitor extends Monitor {
         topProcesses.sort((a, b) => b.cpu - a.cpu);
         topProcesses.splice(ProcessorMonitor.TOP_PROCESSES_LIMIT);
 
-        for (const pid of this.previousPidsCpuTime.keys()) {
-            if (!seenPids.includes(pid)) this.previousPidsCpuTime.delete(pid);
+        for(const pid of this.previousPidsCpuTime.keys()) {
+            if(!seenPids.includes(pid)) this.previousPidsCpuTime.delete(pid);
         }
 
         this.topProcessesCache.updateNotSeen(seenPids);
@@ -1079,13 +1079,13 @@ export default class ProcessorMonitor extends Monitor {
         return new PromiseValueHolder(
             new Promise((resolve, reject) => {
                 Utils.readFileAsync('/proc/loadavg')
-                    .then((fileContent) => {
+                    .then(fileContent => {
                         resolve(fileContent.split(' '));
                     })
-                    .catch((e) => {
+                    .catch(e => {
                         reject(e);
                     });
-            }),
+            })
         );
     }
 
@@ -1095,26 +1095,26 @@ export default class ProcessorMonitor extends Monitor {
 
     async updateLoadAvgProc(procLoadAvg: PromiseValueHolderStore<string>): Promise<boolean> {
         const procLoadAvgValue = await procLoadAvg.getValue();
-        if (procLoadAvgValue.length < 4) return false;
+        if(procLoadAvgValue.length < 4) return false;
 
         this.setUsageValue('loadAverage', {
             load1m: parseFloat(procLoadAvgValue[0]),
             load5m: parseFloat(procLoadAvgValue[1]),
             load15m: parseFloat(procLoadAvgValue[2]),
             threadsActive: parseInt(procLoadAvgValue[3].split('/')[0], 10),
-            threadsTotal: parseInt(procLoadAvgValue[3].split('/')[1], 10),
+            threadsTotal: parseInt(procLoadAvgValue[3].split('/')[1], 10)
         });
         return true;
     }
 
     updateAmdGpu(data: ContinuosTaskManagerData) {
-        if (data.exit || !data.result) return;
+        if(data.exit || !data.result) return;
 
         try {
             const json = JSON.parse(data.result);
 
             const gpus = new Map<string, any>();
-            for (const gpuInfo of json.devices) {
+            for(const gpuInfo of json.devices) {
                 const id = gpuInfo.Info?.PCI;
 
                 const gpu: AmdInfo = {
@@ -1122,43 +1122,43 @@ export default class ProcessorMonitor extends Monitor {
                     family: 'AMD',
                     vram: {},
                     activity: {},
-                    raw: gpuInfo,
+                    raw: gpuInfo
                 };
 
-                if (gpuInfo.VRAM) {
+                if(gpuInfo.VRAM) {
                     const toalData = gpuInfo.VRAM['Total VRAM'];
-                    if (toalData && toalData.value && toalData.unit) {
+                    if(toalData && toalData.value && toalData.unit) {
                         const total = Utils.convertToBytes(toalData.value, toalData.unit);
-                        if (total >= 0) gpu.vram.total = total;
+                        if(total >= 0) gpu.vram.total = total;
                     }
 
                     const usedData = gpuInfo.VRAM['Total VRAM Usage'];
-                    if (usedData && usedData.value && usedData.unit) {
+                    if(usedData && usedData.value && usedData.unit) {
                         const used = Utils.convertToBytes(usedData.value, usedData.unit);
-                        if (used >= 0) gpu.vram.used = used;
+                        if(used >= 0) gpu.vram.used = used;
                     }
 
-                    if (gpu.vram.total !== undefined && gpu.vram.used !== undefined)
+                    if(gpu.vram.total !== undefined && gpu.vram.used !== undefined)
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
                 }
 
-                if (
+                if(
                     gpuInfo.gpu_activity &&
                     gpuInfo.gpu_activity.GFX &&
                     Object.prototype.hasOwnProperty.call(gpuInfo.gpu_activity.GFX, 'value') &&
                     gpuInfo.gpu_activity.GFX.unit === '%'
                 ) {
                     const GFX = gpuInfo.gpu_activity.GFX.value;
-                    if (typeof GFX === 'string') gpu.activity.GFX = parseFloat(GFX);
+                    if(typeof GFX === 'string') gpu.activity.GFX = parseFloat(GFX);
                     else gpu.activity.GFX = GFX;
-                } else if (
+                } else if(
                     gpuInfo.GRBM &&
                     gpuInfo.GRBM['Graphics Pipe'] &&
                     Object.prototype.hasOwnProperty.call(gpuInfo.GRBM['Graphics Pipe'], 'value') &&
                     gpuInfo.GRBM['Graphics Pipe'].unit === '%'
                 ) {
                     const gfx = gpuInfo.GRBM['Graphics Pipe'].value;
-                    if (typeof gfx === 'string') gpu.activity.GFX = parseFloat(gfx);
+                    if(typeof gfx === 'string') gpu.activity.GFX = parseFloat(gfx);
                     else gpu.activity.GFX = gfx;
                 }
 
@@ -1166,75 +1166,75 @@ export default class ProcessorMonitor extends Monitor {
             }
 
             this.notify('gpuUpdate', gpus);
-        } catch (e: any) {
+        } catch(e: any) {
             Utils.error(`updateAmdGpu: ${e.message}`);
         }
     }
 
     updateNvidiaGpu(data: ContinuosTaskManagerData) {
-        if (data.exit || !data.result) return;
+        if(data.exit || !data.result) return;
 
         try {
             const xml = Utils.xmlParse(data.result);
 
-            if (!xml.nvidia_smi_log) return;
+            if(!xml.nvidia_smi_log) return;
 
             let gpuInfoList = xml.nvidia_smi_log.gpu;
-            if (!gpuInfoList || gpuInfoList.length === 0) return;
+            if(!gpuInfoList || gpuInfoList.length === 0) return;
 
-            if (!Array.isArray(gpuInfoList)) gpuInfoList = [gpuInfoList];
+            if(!Array.isArray(gpuInfoList)) gpuInfoList = [gpuInfoList];
 
             const gpus = new Map<string, any>();
 
-            for (const gpuInfo of gpuInfoList) {
-                if (!gpuInfo['@id']) continue;
+            for(const gpuInfo of gpuInfoList) {
+                if(!gpuInfo['@id']) continue;
 
                 let id = gpuInfo['@id'];
-                if (id.startsWith('00000000:')) id = id.slice(4);
+                if(id.startsWith('00000000:')) id = id.slice(4);
 
                 const gpu: NvidiaInfo = {
                     id,
                     family: 'NVIDIA',
                     vram: {},
                     activity: {},
-                    raw: gpuInfo,
+                    raw: gpuInfo
                 };
 
-                if (gpuInfo.fb_memory_usage) {
+                if(gpuInfo.fb_memory_usage) {
                     const toalData = gpuInfo.fb_memory_usage.total;
-                    if (toalData && toalData['#text']) {
+                    if(toalData && toalData['#text']) {
                         const [value, unit] = toalData['#text'].split(' ');
 
                         const total = Utils.convertToBytes(value, unit);
-                        if (total >= 0) gpu.vram.total = total;
+                        if(total >= 0) gpu.vram.total = total;
                     }
 
                     const usedData = gpuInfo.fb_memory_usage.used;
-                    if (usedData && usedData['#text']) {
+                    if(usedData && usedData['#text']) {
                         const [value, unit] = usedData['#text'].split(' ');
 
                         const used = Utils.convertToBytes(value, unit);
-                        if (used >= 0) gpu.vram.used = used;
+                        if(used >= 0) gpu.vram.used = used;
                     }
 
-                    if (gpu.vram.total !== undefined && gpu.vram.used !== undefined)
+                    if(gpu.vram.total !== undefined && gpu.vram.used !== undefined)
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
                 }
 
-                if (
+                if(
                     gpuInfo.utilization &&
                     gpuInfo.utilization.gpu_util &&
                     Object.prototype.hasOwnProperty.call(gpuInfo.utilization.gpu_util, '#text')
                 ) {
                     const [value, unit] = gpuInfo.utilization.gpu_util['#text'].split(' ');
-                    if (unit === '%') gpu.activity.GFX = parseFloat(value);
+                    if(unit === '%') gpu.activity.GFX = parseFloat(value);
                 }
 
                 gpus.set(id, gpu);
             }
 
             this.notify('gpuUpdate', gpus);
-        } catch (e: any) {
+        } catch(e: any) {
             Utils.error(`updateNvidiaGpu: ${e.message}`);
         }
     }

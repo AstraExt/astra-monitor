@@ -38,12 +38,12 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::network-header-io-bars-color1',
-                this.setStyle.bind(this),
+                this.setStyle.bind(this)
             );
             Config.connect(
                 this,
                 'changed::network-header-io-bars-color2',
-                this.setStyle.bind(this),
+                this.setStyle.bind(this)
             );
         }
 
@@ -52,7 +52,7 @@ export default GObject.registerClass(
 
             this.colors = [
                 Config.get_string('network-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
-                Config.get_string('network-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)',
+                Config.get_string('network-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
             ];
         }
 
@@ -75,8 +75,8 @@ export default GObject.registerClass(
 
             this.updateBars([
                 [{ color: 0, value: uploadSpeed / maxUploadSpeed }],
-                [{ color: 1, value: downloadSpeed / maxDownloadSpeed }],
+                [{ color: 1, value: downloadSpeed / maxDownloadSpeed }]
             ]);
         }
-    },
+    }
 );

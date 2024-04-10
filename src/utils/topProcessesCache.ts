@@ -29,12 +29,12 @@ export default class TopProcessesCache {
     }
 
     updateNotSeen(pidList: number[]) {
-        for (const [pid, process] of this.processesCache) {
-            if (!pidList.includes(pid)) {
+        for(const [pid, process] of this.processesCache) {
+            if(!pidList.includes(pid)) {
                 process.notSeen++;
 
                 // Remove process from cache if it hasn't been seen in a 5 minutes
-                if (process.notSeen > 300 / this.updateTime) this.processesCache.delete(pid);
+                if(process.notSeen > 300 / this.updateTime) this.processesCache.delete(pid);
             } else {
                 process.notSeen = 0;
             }

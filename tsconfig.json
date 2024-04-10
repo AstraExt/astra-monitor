@@ -1,22 +1,22 @@
 {
-  "version": "1.0.0",
-  "compileOnSave": true,
-  "compilerOptions": {
-    "strict": true,
+    "version": "1.0.0",
+    "compileOnSave": true,
+    "compilerOptions": {
+        "strict": true,
 
-    "lib": ["ES2020"],
-    "target": "ES2020",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "./build",
-    "pretty": true,
-    "removeComments": true,
-    "incremental": true,
-    "sourceMap": false,
+        "lib": ["ES2020"],
+        "target": "ES2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "outDir": "./build",
+        "pretty": true,
+        "removeComments": true,
+        "incremental": true,
+        "sourceMap": false,
 
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
-  },
-  "include": ["types/ambient.d.ts"],
-  "files": ["extension.ts", "prefs.ts"]
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    },
+    "include": ["types/ambient.d.ts"],
+    "files": ["extension.ts", "prefs.ts"]
 }

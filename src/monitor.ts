@@ -52,7 +52,7 @@ export default class Monitor {
     }
 
     get dueIn(): number {
-        if (this.nextCallTime === -1) return -1;
+        if(this.nextCallTime === -1) return -1;
         const dueInMicroseconds = this.nextCallTime - GLib.get_monotonic_time();
         return dueInMicroseconds / 1000;
     }
@@ -65,8 +65,8 @@ export default class Monitor {
         Utils.log(`Starting ${this.name} monitoring`);
 
         const updateFrequency = this.updateFrequency;
-        if (this.timerID === null) {
-            if (updateFrequency >= 0.1) {
+        if(this.timerID === null) {
+            if(updateFrequency >= 0.1) {
                 this.nextCallTime = GLib.get_monotonic_time() + updateFrequency * 1000000;
                 this.timerID = GLib.timeout_add(
                     GLib.PRIORITY_DEFAULT,
@@ -75,7 +75,7 @@ export default class Monitor {
                         const res = this.update();
                         this.nextCallTime = GLib.get_monotonic_time() + updateFrequency * 1000000;
                         return res;
-                    },
+                    }
                 );
             }
         }
@@ -84,7 +84,7 @@ export default class Monitor {
     stop() {
         Utils.log(`Stopping ${this.name} monitoring`);
 
-        if (this.timerID) {
+        if(this.timerID) {
             GLib.source_remove(this.timerID);
             this.timerID = null;
             this.nextCallTime = -1;
@@ -114,8 +114,8 @@ export default class Monitor {
     runTask({ key, task, run, callback }: Task) {
         task.run(run)
             .then(callback)
-            .catch((e) => {
-                if (e.isCancelled) {
+            .catch(e => {
+                if(e.isCancelled) {
                     //TODO: manage canceled update
                     Utils.log(this.name + ' update canceled: ' + key);
                 } else {
@@ -126,17 +126,17 @@ export default class Monitor {
 
     pushUsageHistory(key: string, value: any) {
         let values = this.usageHistory.get(key);
-        if (values === undefined) {
+        if(values === undefined) {
             values = [];
             this.usageHistory.set(key, values);
         }
 
-        if (this.enqueuedUpdates.includes(key) && values.length > 0) {
+        if(this.enqueuedUpdates.includes(key) && values.length > 0) {
             values[0] = value;
-            this.enqueuedUpdates = this.enqueuedUpdates.filter((k) => k !== key);
+            this.enqueuedUpdates = this.enqueuedUpdates.filter(k => k !== key);
         } else {
             values.unshift(value);
-            if (values.length > this.usageHistoryLength) values.pop();
+            if(values.length > this.usageHistoryLength) values.pop();
         }
     }
 
@@ -146,13 +146,13 @@ export default class Monitor {
 
     getUsageHistory(key: string): any[] {
         const values = this.usageHistory.get(key);
-        if (values === undefined) return [];
+        if(values === undefined) return [];
         return values;
     }
 
     getCurrentValue(key: string): any | null {
         const values = this.usageHistory.get(key);
-        if (values === undefined) return null;
+        if(values === undefined) return null;
         return values[0];
     }
 
@@ -165,25 +165,25 @@ export default class Monitor {
      * WARNING: When overriden, super.requestUpdate(key) must be called at the end of the function
      */
     requestUpdate(key: string) {
-        if (!this.enqueuedUpdates.includes(key)) this.enqueuedUpdates.push(key);
+        if(!this.enqueuedUpdates.includes(key)) this.enqueuedUpdates.push(key);
     }
 
     isListeningFor(key: string): boolean {
         const listeners = this.listeners.get(key);
-        if (!listeners) return false;
+        if(!listeners) return false;
         return listeners.length > 0;
     }
 
     listen(subject: any, key: string, callback: (value: any) => void) {
         let listeners = this.listeners.get(key);
-        if (listeners === undefined) {
+        if(listeners === undefined) {
             listeners = [];
             this.listeners.set(key, listeners);
         }
 
         //check if the subject is already listening to this key
-        for (const listener of listeners) {
-            if (listener.subject === subject) {
+        for(const listener of listeners) {
+            if(listener.subject === subject) {
                 //if so, update the callback
                 listener.callback = callback;
                 return;
@@ -194,36 +194,34 @@ export default class Monitor {
     }
 
     notify(key: string, value?: any) {
-        if (!Utils.ready) return;
+        if(!Utils.ready) return;
 
         const listeners = this.listeners.get(key);
-        if (listeners) {
-            for (const listener of listeners) listener.callback(value);
+        if(listeners) {
+            for(const listener of listeners) listener.callback(value);
         }
     }
 
     unlisten(subject: any, key?: string) {
-        if (key === undefined) {
-            for (const key in this.listeners) {
+        if(key === undefined) {
+            for(const key in this.listeners) {
                 const listeners = this.listeners.get(key);
-                if (listeners) {
-                    const newListeners = listeners.filter(
-                        (listener) => listener.subject !== subject,
-                    );
+                if(listeners) {
+                    const newListeners = listeners.filter(listener => listener.subject !== subject);
                     this.listeners.set(key, newListeners);
 
-                    if (newListeners.length === 0) this.stopListeningFor(key);
+                    if(newListeners.length === 0) this.stopListeningFor(key);
                 }
             }
             return;
         }
 
         const listeners = this.listeners.get(key);
-        if (listeners) {
-            const newListeners = listeners.filter((listener) => listener.subject !== subject);
+        if(listeners) {
+            const newListeners = listeners.filter(listener => listener.subject !== subject);
             this.listeners.set(key, newListeners);
 
-            if (newListeners.length === 0) this.stopListeningFor(key);
+            if(newListeners.length === 0) this.stopListeningFor(key);
         }
     }
 

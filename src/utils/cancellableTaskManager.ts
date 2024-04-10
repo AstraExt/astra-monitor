@@ -31,14 +31,14 @@ export default class CancellableTaskManager<T> {
     }
 
     public run(boundTask: () => Promise<T>): Promise<T> {
-        if (this.currentTask) this.currentTask.cancel();
+        if(this.currentTask) this.currentTask.cancel();
 
         this.currentTask = this.makeCancellable(boundTask);
 
         return this.currentTask.promise.finally(() => {
-            if (this.currentTask) this.currentTask = undefined;
+            if(this.currentTask) this.currentTask = undefined;
 
-            if (this.cancelId) this.taskCancellable.disconnect(this.cancelId);
+            if(this.cancelId) this.taskCancellable.disconnect(this.cancelId);
             this.cancelId = undefined;
         });
     }
@@ -67,13 +67,13 @@ export default class CancellableTaskManager<T> {
         });
 
         const cancel = () => {
-            if (this.cancelId) {
+            if(this.cancelId) {
                 this.taskCancellable.cancel();
                 this.taskCancellable.disconnect(this.cancelId);
                 this.taskCancellable = new Gio.Cancellable();
                 this.cancelId = undefined;
             }
-            if (timeoutId) {
+            if(timeoutId) {
                 GLib.source_remove(timeoutId);
                 timeoutId = undefined;
             }
@@ -83,7 +83,7 @@ export default class CancellableTaskManager<T> {
     }
 
     public cancel() {
-        if (this.currentTask) this.currentTask.cancel();
+        if(this.currentTask) this.currentTask.cancel();
     }
 
     public get isRunning() {

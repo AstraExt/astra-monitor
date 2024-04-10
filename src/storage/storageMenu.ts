@@ -175,7 +175,7 @@ export default class StorageMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle,
+            style: defaultStyle
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -184,7 +184,7 @@ export default class StorageMenu extends MenuBase {
         //TODO: make width customizable!?
         this.graph = new StorageGraph({
             width: 200 - 2 - 15,
-            mini: false,
+            mini: false
         });
         grid.addToGrid(this.graph, 2);
 
@@ -192,26 +192,26 @@ export default class StorageMenu extends MenuBase {
             text: _('Global Read:'),
             x_expand: true,
             style_class: 'astra-monitor-menu-label',
-            style: 'margin-top:0.25em;',
+            style: 'margin-top:0.25em;'
         });
         grid.addToGrid(totalReadSpeedLabel);
 
         this.totalReadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
+            x_expand: true
         });
         grid.addToGrid(this.totalReadSpeedValueLabel);
 
         const totalWriteSpeedLabel = new St.Label({
             text: _('Global Write:'),
             x_expand: true,
-            style_class: 'astra-monitor-menu-label',
+            style_class: 'astra-monitor-menu-label'
         });
         grid.addToGrid(totalWriteSpeedLabel);
 
         this.totalWriteSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
+            x_expand: true
         });
         grid.addToGrid(this.totalWriteSpeedValueLabel);
 
@@ -219,12 +219,12 @@ export default class StorageMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if (this.storageActivityPopup) this.storageActivityPopup.open(true);
+            if(this.storageActivityPopup) this.storageActivityPopup.open(true);
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if (this.storageActivityPopup) this.storageActivityPopup.close(true);
+            if(this.storageActivityPopup) this.storageActivityPopup.close(true);
         });
 
         this.addToMenu(hoverButton, 2);
@@ -238,8 +238,8 @@ export default class StorageMenu extends MenuBase {
         this.storageActivityPopup.addToMenu(
             new St.Label({
                 text: _('Read'),
-                style_class: 'astra-monitor-menu-sub-key',
-            }),
+                style_class: 'astra-monitor-menu-sub-key'
+            })
         );
 
         const totalReadValueLabel = new St.Label({ text: '', style: 'text-align:left;' });
@@ -250,8 +250,8 @@ export default class StorageMenu extends MenuBase {
         this.storageActivityPopup.addToMenu(
             new St.Label({
                 text: _('Write'),
-                style_class: 'astra-monitor-menu-sub-key',
-            }),
+                style_class: 'astra-monitor-menu-sub-key'
+            })
         );
 
         const totalWriteValueLabel = new St.Label({ text: '', style: 'text-align:left;' });
@@ -268,7 +268,7 @@ export default class StorageMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle,
+            style: defaultStyle
         });
         hoverButton.hide();
 
@@ -278,35 +278,35 @@ export default class StorageMenu extends MenuBase {
 
         //TODO: allow to customize number of processes to show in the menu
         const numProcesses = 5;
-        for (let i = 0; i < numProcesses; i++) {
+        for(let i = 0; i < numProcesses; i++) {
             const label = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-name',
                 style: 'max-width:85px;',
-                x_expand: true,
+                x_expand: true
             });
             grid.addToGrid(label);
 
             // READ
             const readContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL,
+                    orientation: Clutter.Orientation.HORIZONTAL
                 }),
-                style: 'margin-left:0;margin-right:0;width:5.5em;',
+                style: 'margin-left:0;margin-right:0;width:5.5em;'
             });
 
             const readActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-up-symbolic'),
                 fallback_icon_name: 'go-up-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);',
+                style: 'color:rgba(255,255,255,0.5);'
             });
             readContainer.add_child(readActivityIcon);
 
             const readValue = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                x_expand: true
             });
             readContainer.add_child(readValue);
 
@@ -315,23 +315,23 @@ export default class StorageMenu extends MenuBase {
             // WRITE
             const writeContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL,
+                    orientation: Clutter.Orientation.HORIZONTAL
                 }),
-                style: 'margin-left:0;margin-right:0;width:5.5em;',
+                style: 'margin-left:0;margin-right:0;width:5.5em;'
             });
 
             const writeActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-down-symbolic'),
                 fallback_icon_name: 'go-down-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);',
+                style: 'color:rgba(255,255,255,0.5);'
             });
             writeContainer.add_child(writeActivityIcon);
 
             const writeValue = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                x_expand: true
             });
             writeContainer.add_child(writeValue);
 
@@ -342,13 +342,13 @@ export default class StorageMenu extends MenuBase {
                 read: {
                     container: readContainer,
                     value: readValue,
-                    icon: readActivityIcon,
+                    icon: readActivityIcon
                 },
                 write: {
                     container: writeContainer,
                     value: writeValue,
-                    icon: writeActivityIcon,
-                },
+                    icon: writeActivityIcon
+                }
             });
         }
 
@@ -358,19 +358,19 @@ export default class StorageMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if (this.topProcessesPopup) this.topProcessesPopup.open(true);
+            if(this.topProcessesPopup) this.topProcessesPopup.open(true);
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if (this.topProcessesPopup) this.topProcessesPopup.close(true);
+            if(this.topProcessesPopup) this.topProcessesPopup.close(true);
         });
         this.addToMenu(hoverButton, 2);
 
         this.topProcesses = {
             separator,
             labels,
-            hoverButton,
+            hoverButton
         };
     }
 
@@ -384,30 +384,30 @@ export default class StorageMenu extends MenuBase {
             x_expand: true,
             x_align: Clutter.ActorAlign.START,
             numCols: 2,
-            styleClass: 'astra-monitor-menu-subgrid',
+            styleClass: 'astra-monitor-menu-subgrid'
         });
 
-        for (let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
+        for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
             // READ
             const readContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL,
+                    orientation: Clutter.Orientation.HORIZONTAL
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;',
+                style: 'margin-left:0;margin-right:0;width:5em;'
             });
 
             const readActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-up-symbolic'),
                 fallback_icon_name: 'go-up-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);',
+                style: 'color:rgba(255,255,255,0.5);'
             });
             readContainer.add_child(readActivityIcon);
 
             const readValue = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                x_expand: true
             });
             readContainer.add_child(readValue);
 
@@ -416,23 +416,23 @@ export default class StorageMenu extends MenuBase {
             // WRITE
             const writeContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL,
+                    orientation: Clutter.Orientation.HORIZONTAL
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;',
+                style: 'margin-left:0;margin-right:0;width:5em;'
             });
 
             const writeActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-down-symbolic'),
                 fallback_icon_name: 'go-down-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);',
+                style: 'color:rgba(255,255,255,0.5);'
             });
             writeContainer.add_child(writeActivityIcon);
 
             const writeValue = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                x_expand: true
             });
             writeContainer.add_child(writeValue);
 
@@ -440,13 +440,13 @@ export default class StorageMenu extends MenuBase {
 
             const label = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-name-full',
+                style_class: 'astra-monitor-menu-cmd-name-full'
             });
             grid.addGrid(label, 1, i * 2, 1, 1);
 
             const description = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-description',
+                style_class: 'astra-monitor-menu-cmd-description'
             });
             grid.addGrid(description, 1, i * 2 + 1, 1, 1);
 
@@ -456,13 +456,13 @@ export default class StorageMenu extends MenuBase {
                 read: {
                     container: readContainer,
                     value: readValue,
-                    icon: readActivityIcon,
+                    icon: readActivityIcon
                 },
                 write: {
                     container: writeContainer,
                     value: writeValue,
-                    icon: writeActivityIcon,
-                },
+                    icon: writeActivityIcon
+                }
             });
         }
 
@@ -470,14 +470,14 @@ export default class StorageMenu extends MenuBase {
     }
 
     createDeviceList() {
-        if (this.deviceSection === undefined) {
+        if(this.deviceSection === undefined) {
             this.addMenuSection(_('Devices'));
 
             this.deviceSection = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
             this.noDevicesLabel = new St.Label({
                 text: _('No storage device found'),
                 style_class: 'astra-monitor-menu-label-warning',
-                style: 'font-style:italic;',
+                style: 'font-style:italic;'
             });
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
@@ -489,22 +489,22 @@ export default class StorageMenu extends MenuBase {
             Config.connect(
                 this,
                 'changed::storage-ignored-regex',
-                this.updateDeviceList.bind(this),
+                this.updateDeviceList.bind(this)
             );
         }
     }
 
     updateDeviceList() {
         const devices = Utils.getBlockDevicesSync();
-        if (devices.size > 0) this.noDevicesLabel.hide();
+        if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
 
         //filter ignored devices
         const ignoredDevices = Config.get_json('storage-ignored');
-        if (ignoredDevices && Array.isArray(ignoredDevices) && ignoredDevices.length > 0) {
-            for (const kname of ignoredDevices) {
-                for (const [id, device] of devices.entries()) {
-                    if (device.kname === kname) {
+        if(ignoredDevices && Array.isArray(ignoredDevices) && ignoredDevices.length > 0) {
+            for(const kname of ignoredDevices) {
+                for(const [id, device] of devices.entries()) {
+                    if(device.kname === kname) {
                         devices.delete(id);
                         break;
                     }
@@ -513,20 +513,20 @@ export default class StorageMenu extends MenuBase {
         }
 
         const ignoredRegex = Config.get_string('storage-ignored-regex');
-        if (ignoredRegex) {
+        if(ignoredRegex) {
             try {
                 const regex = new RegExp(`^${ignoredRegex}$`, 'i');
-                for (const [id, device] of devices.entries()) {
-                    if (regex.test(device.kname)) devices.delete(id);
+                for(const [id, device] of devices.entries()) {
+                    if(regex.test(device.kname)) devices.delete(id);
                 }
-            } catch (e) {
+            } catch(e) {
                 //Not a valid regex
             }
         }
 
         // remove all devices that are not present anymore
-        for (const [id, device] of this.devices.entries()) {
-            if (!devices.has(id)) {
+        for(const [id, device] of this.devices.entries()) {
+            if(!devices.has(id)) {
                 this.deviceSection.remove_child(device.container);
                 this.devices.delete(id);
 
@@ -544,22 +544,22 @@ export default class StorageMenu extends MenuBase {
         const idList = Array.from(devices.keys());
         // set main storage device first
         const mainDisk = Config.get_string('storage-main');
-        if (mainDisk) {
+        if(mainDisk) {
             const mainDiskIndex = idList.indexOf(mainDisk);
-            if (mainDiskIndex > 0) {
+            if(mainDiskIndex > 0) {
                 idList.splice(mainDiskIndex, 1);
                 idList.unshift(mainDisk);
             }
         }
 
-        for (const id of idList) {
+        for(const id of idList) {
             const deviceData = devices.get(id);
 
             let device;
             let infoPopup;
             let totalsPopup;
 
-            if (!this.devices.has(id)) {
+            if(!this.devices.has(id)) {
                 device = this.createBlockDevice(id);
                 this.deviceSection.addToGrid(device.container, 2);
                 this.devices.set(id, device);
@@ -567,31 +567,31 @@ export default class StorageMenu extends MenuBase {
                 device = this.devices.get(id);
             }
 
-            if (!device) continue;
+            if(!device) continue;
 
             //Info Popup
-            if (!this.devicesInfoPopup.has(id)) {
+            if(!this.devicesInfoPopup.has(id)) {
                 infoPopup = this.createDeviceInfoPopup(device.container);
                 this.devicesInfoPopup.set(id, infoPopup);
             } else {
                 infoPopup = this.devicesInfoPopup.get(id);
             }
-            if (!infoPopup) continue;
+            if(!infoPopup) continue;
 
             //Totals Popup
-            if (!this.devicesTotalsPopup.has(id)) {
+            if(!this.devicesTotalsPopup.has(id)) {
                 totalsPopup = this.createDeviceTotalsPopup(device.container);
                 this.devicesTotalsPopup.set(id, totalsPopup);
             } else {
                 totalsPopup = this.devicesTotalsPopup.get(id);
             }
-            if (!totalsPopup) continue;
+            if(!totalsPopup) continue;
 
             //Update device info
-            if (!deviceData) continue;
+            if(!deviceData) continue;
             try {
                 this.updateBlockDevice(device, deviceData);
-            } catch (e: any) {
+            } catch(e: any) {
                 Utils.error(e);
             }
         }
@@ -601,7 +601,7 @@ export default class StorageMenu extends MenuBase {
         const container = new Grid({
             x_expand: true,
             styleClass: 'astra-monitor-menu-subgrid',
-            style: 'padding-top:0.3em;margin-bottom:0.3em;',
+            style: 'padding-top:0.3em;margin-bottom:0.3em;'
         });
 
         const topInfoGrid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -609,7 +609,7 @@ export default class StorageMenu extends MenuBase {
         const topInfoButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: '',
+            style: ''
         });
         topInfoButton.set_child(topInfoGrid);
 
@@ -617,25 +617,25 @@ export default class StorageMenu extends MenuBase {
         //{
         const headerGrid = new Grid({
             numCols: 3,
-            styleClass: 'astra-monitor-menu-subgrid',
+            styleClass: 'astra-monitor-menu-subgrid'
         });
 
         const icon = new St.Icon({
             style_class: 'astra-monitor-menu-icon',
-            style: 'padding-left:0.25em;',
+            style: 'padding-left:0.25em;'
         });
         headerGrid.addToGrid(icon);
 
         const label = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-label',
+            style_class: 'astra-monitor-menu-label'
         });
         headerGrid.addToGrid(label);
 
         const name = new St.Label({
             text: '',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid',
+            style_class: 'astra-monitor-menu-key-mid'
         });
         headerGrid.addToGrid(name);
 
@@ -646,13 +646,13 @@ export default class StorageMenu extends MenuBase {
         //{
         const barGrid = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL }),
-            style: 'margin-left:0;',
+            style: 'margin-left:0;'
         });
 
         const sizeLabel = new St.Label({
             text: '',
             y_align: Clutter.ActorAlign.CENTER,
-            style_class: 'astra-monitor-menu-key-mid',
+            style_class: 'astra-monitor-menu-key-mid'
         });
         (barGrid.layout_manager as any).attach(sizeLabel, 0, 0, 1, 1);
 
@@ -663,14 +663,14 @@ export default class StorageMenu extends MenuBase {
             mini: false,
             layout: 'horizontal',
             x_align: Clutter.ActorAlign.START,
-            style: 'margin-left:0;margin-bottom:0;margin-right:0;border:solid 1px #555;',
+            style: 'margin-left:0;margin-bottom:0;margin-right:0;border:solid 1px #555;'
         });
         (barGrid.layout_manager as any).attach(bar, 1, 0, 1, 1);
 
         const barLabel = new St.Label({
             text: '0%',
             y_align: Clutter.ActorAlign.CENTER,
-            style: 'width:2.7em;font-size:0.8em;text-align:right;margin-right:0.25em;margin-top:0.2em;',
+            style: 'width:2.7em;font-size:0.8em;text-align:right;margin-right:0.25em;margin-top:0.2em;'
         });
         (barGrid.layout_manager as any).attach(barLabel, 2, 0, 1, 1);
 
@@ -683,7 +683,7 @@ export default class StorageMenu extends MenuBase {
             topInfoButton.style = this.selectionStyle;
 
             const popup = this.devicesInfoPopup.get(id);
-            if (popup?.empty === false) popup?.open(true);
+            if(popup?.empty === false) popup?.open(true);
         });
 
         topInfoButton.connect('leave-event', () => {
@@ -699,26 +699,26 @@ export default class StorageMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: '',
+            style: ''
         });
 
         const rwContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;',
+            style: 'margin-left:0;margin-right:0;'
         });
         rwButton.set_child(rwContainer);
 
         const readContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;',
+            style: 'margin-left:0;margin-right:0;'
         });
 
         const readLabel = new St.Label({
             text: pgettext('short for read', 'R'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;',
+            style: 'padding-right:0.15em;'
         });
         readContainer.add_child(readLabel);
 
@@ -726,14 +726,14 @@ export default class StorageMenu extends MenuBase {
             gicon: Utils.getLocalIcon('am-up-symbolic'),
             fallback_icon_name: 'go-up-symbolic',
             style_class: 'astra-monitor-menu-icon-mini',
-            style: 'color:rgba(255,255,255,0.5);',
+            style: 'color:rgba(255,255,255,0.5);'
         });
         readContainer.add_child(readActivityIcon);
 
         const readValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid',
+            style_class: 'astra-monitor-menu-key-mid'
         });
         readContainer.add_child(readValueLabel);
         readContainer.set_width(100);
@@ -743,13 +743,13 @@ export default class StorageMenu extends MenuBase {
         const writeContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;',
+            style: 'margin-left:0;margin-right:0;'
         });
 
         const writeLabel = new St.Label({
             text: pgettext('short for write', 'W'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;',
+            style: 'padding-right:0.15em;'
         });
         writeContainer.add_child(writeLabel);
 
@@ -757,14 +757,14 @@ export default class StorageMenu extends MenuBase {
             gicon: Utils.getLocalIcon('am-down-symbolic'),
             fallback_icon_name: 'go-down-symbolic',
             style_class: 'astra-monitor-menu-icon-mini',
-            style: 'color:rgba(255,255,255,0.5);',
+            style: 'color:rgba(255,255,255,0.5);'
         });
         writeContainer.add_child(writeActivityIcon);
 
         const writeValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid',
+            style_class: 'astra-monitor-menu-key-mid'
         });
         writeContainer.add_child(writeValueLabel);
         writeContainer.set_width(100);
@@ -801,7 +801,7 @@ export default class StorageMenu extends MenuBase {
             readValueLabel,
             readActivityIcon,
             writeValueLabel,
-            writeActivityIcon,
+            writeActivityIcon
         };
     }
 
@@ -820,8 +820,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'serial', label: _('Serial'), parent: true },
                     { key: 'size', label: _('Size'), formatAsBytes: true },
                     { key: 'state', label: _('State'), parent: true },
-                    { key: 'subsystems', label: _('Subsystems') },
-                ],
+                    { key: 'subsystems', label: _('Subsystems') }
+                ]
             },
             {
                 title: _('File System and Mounting Info'),
@@ -838,8 +838,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'fsused', label: _('Used Space'), formatAsBytes: true },
                     { key: 'fsuse%', label: _('Used Space (%)') },
                     { key: 'fsver', label: _('File System Version') },
-                    { key: 'fsroots', label: _('File System Roots') },
-                ],
+                    { key: 'fsroots', label: _('File System Roots') }
+                ]
             },
             {
                 title: _('Physical and Disk Details'),
@@ -857,8 +857,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'disc-aln', label: _('Discard Alignment'), formatAsBytes: true },
                     { key: 'disc-gran', label: _('Discard Granularity'), formatAsBytes: true },
                     { key: 'disc-max', label: _('Discard Max Size'), formatAsBytes: true },
-                    { key: 'disc-zero', label: _('Discard Zeroes Data'), checkNull: true },
-                ],
+                    { key: 'disc-zero', label: _('Discard Zeroes Data'), checkNull: true }
+                ]
             },
             {
                 title: _('Partition Info'),
@@ -871,8 +871,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'partuuid', label: _('Partition UUID') },
                     { key: 'partn', label: _('Partition Number') },
                     { key: 'pttype', label: _('Partition Table Type') },
-                    { key: 'ptuuid', label: _('Partition Table UUID') },
-                ],
+                    { key: 'ptuuid', label: _('Partition Table UUID') }
+                ]
             },
             {
                 title: _('Performance and Settings'),
@@ -883,8 +883,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'ra', label: _('Read Ahead'), formatAsBytes: true },
                     { key: 'sched', label: _('Scheduler') },
                     { key: 'dax', label: _('Direct Access'), checkNull: true },
-                    { key: 'mq', label: _('Multiqueue'), checkNull: true },
-                ],
+                    { key: 'mq', label: _('Multiqueue'), checkNull: true }
+                ]
             },
             {
                 title: _('Advanced Identifiers and States'),
@@ -915,33 +915,33 @@ export default class StorageMenu extends MenuBase {
                     { key: 'zone-app', label: _('Zone Append'), checkNull: true },
                     { key: 'zone-nr', label: _('Zone Number') },
                     { key: 'zone-omax', label: _('Zone Open Max') },
-                    { key: 'zone-amax', label: _('Zone Active Max') },
-                ],
-            },
+                    { key: 'zone-amax', label: _('Zone Active Max') }
+                ]
+            }
         ];
     }
 
     createDeviceInfoPopup(sourceActor: St.Widget): DeviceInfoPopup {
         const popup: DeviceInfoPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 4,
+            numCols: 4
         }) as DeviceInfoPopup;
         popup.empty = true;
 
         const configuration = StorageMenu.deviceInfoPopupConfiguration;
 
-        for (const section of configuration) {
+        for(const section of configuration) {
             popup[section.sectionNr] = popup.addMenuSection(section.title);
             popup[section.labels] = [];
             popup[section.values] = [];
 
-            for (let i = 0; i < section.fields.length; i++) {
+            for(let i = 0; i < section.fields.length; i++) {
                 const label = new St.Label({ text: '', style_class: 'astra-monitor-menu-sub-key' });
                 popup.addToMenu(label);
                 popup[section.labels].push(label);
 
                 const value = new St.Label({
                     text: '',
-                    style_class: 'astra-monitor-menu-sub-value',
+                    style_class: 'astra-monitor-menu-sub-value'
                 });
                 popup.addToMenu(value);
                 popup[section.values].push(value);
@@ -952,7 +952,7 @@ export default class StorageMenu extends MenuBase {
 
     createDeviceTotalsPopup(sourceActor: St.Widget): DeviceTotalsPopup {
         const popup: DeviceTotalsPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 2,
+            numCols: 2
         }) as DeviceTotalsPopup;
 
         //Totals
@@ -962,8 +962,8 @@ export default class StorageMenu extends MenuBase {
         popup.addToMenu(
             new St.Label({
                 text: _('Read'),
-                style_class: 'astra-monitor-menu-sub-key',
-            }),
+                style_class: 'astra-monitor-menu-sub-key'
+            })
         );
 
         const totalReadValueLabel = new St.Label({ text: '', style: 'text-align:left;' });
@@ -974,8 +974,8 @@ export default class StorageMenu extends MenuBase {
         popup.addToMenu(
             new St.Label({
                 text: _('Write'),
-                style_class: 'astra-monitor-menu-sub-key',
-            }),
+                style_class: 'astra-monitor-menu-sub-key'
+            })
         );
 
         const totalWriteValueLabel = new St.Label({ text: '', style: 'text-align:left;' });
@@ -990,52 +990,52 @@ export default class StorageMenu extends MenuBase {
 
         const icon = {
             gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
-            fallback_icon_name: 'drive-harddisk-symbolic',
+            fallback_icon_name: 'drive-harddisk-symbolic'
         };
 
-        if (deviceData.removable) {
+        if(deviceData.removable) {
             icon.gicon = Utils.getLocalIcon('am-media-removable-symbolic');
             icon.fallback_icon_name = 'media-removable-symbolic';
-        } else if (
+        } else if(
             (deviceData.filesystem && deviceData.filesystem.startsWith('swap')) ||
             deviceData.mountpoints.includes('/boot') ||
             deviceData.mountpoints.includes('[SWAP]')
         ) {
             icon.gicon = Utils.getLocalIcon('am-linux-symbolic');
             icon.fallback_icon_name = 'drive-harddisk-system-symbolic';
-        } else if (
+        } else if(
             deviceData.type.startsWith('raid') ||
             deviceData.type.startsWith('lvm') ||
             deviceData.type.startsWith('md')
         ) {
             icon.gicon = Utils.getLocalIcon('am-raid-symbolic');
             icon.fallback_icon_name = 'drive-harddisk-raid-symbolic';
-        } else if (
+        } else if(
             deviceData.type.startsWith('cdrom') ||
             deviceData.type.startsWith('rom') ||
             deviceData.type.endsWith('rom')
         ) {
             icon.fallback_icon_name = 'drive-optical-symbolic';
-        } else if (deviceData.type.startsWith('floppy')) {
+        } else if(deviceData.type.startsWith('floppy')) {
             icon.fallback_icon_name = 'media-floppy-symbolic';
         }
 
-        if (icon.gicon) device.icon.gicon = icon.gicon;
+        if(icon.gicon) device.icon.gicon = icon.gicon;
         device.icon.fallback_icon_name = icon.fallback_icon_name;
 
         let label = deviceData.label || '';
-        if (!label) {
-            if (deviceData.model) label = deviceData.model;
-            else if (deviceData.vendor) label = deviceData.vendor;
+        if(!label) {
+            if(deviceData.model) label = deviceData.model;
+            else if(deviceData.vendor) label = deviceData.vendor;
             else label = _('Disk');
         }
         device.label.text = label;
 
         let name = deviceData.name;
-        if (name && name.length > 17) name = name.substring(0, 15) + '…';
+        if(name && name.length > 17) name = name.substring(0, 15) + '…';
         device.name.text = name ? `[${name}]` : '';
 
-        if (!Number.isNaN(deviceData.usage) && deviceData.usage !== undefined) {
+        if(!Number.isNaN(deviceData.usage) && deviceData.usage !== undefined) {
             device.barGrid.visible = true;
             device.barLabel.text = `${deviceData.usage}%`;
             device.bar.setUsage({ size: deviceData.size, usePercentage: deviceData.usage });
@@ -1044,23 +1044,23 @@ export default class StorageMenu extends MenuBase {
         }
 
         const size = deviceData.size;
-        if (size) device.sizeLabel.text = Utils.formatBytes(size, 'kB-KB', 3);
+        if(size) device.sizeLabel.text = Utils.formatBytes(size, 'kB-KB', 3);
         else device.sizeLabel.text = '-';
     }
 
     addUtilityButtons() {
-        super.addUtilityButtons('storage', (box) => {
+        super.addUtilityButtons('storage', box => {
             const appSys = Shell.AppSystem.get_default();
 
             //TODO: add enable/disable these buttons on the preferences menu!?
 
             // Disk Usage Analyzer
             const baobabApp = appSys.lookup_app('org.gnome.baobab.desktop');
-            if (baobabApp) {
+            if(baobabApp) {
                 const button = new St.Button({ style_class: 'button' });
                 button.child = new St.Icon({
                     gicon: Utils.getLocalIcon('am-pie-symbolic'),
-                    fallback_icon_name: 'baobab-symbolic',
+                    fallback_icon_name: 'baobab-symbolic'
                 });
 
                 button.connect('clicked', () => {
@@ -1072,11 +1072,11 @@ export default class StorageMenu extends MenuBase {
 
             // Disk Utility
             const diskApp = appSys.lookup_app('org.gnome.DiskUtility.desktop');
-            if (diskApp) {
+            if(diskApp) {
                 const button = new St.Button({ style_class: 'button' });
                 button.child = new St.Icon({
                     gicon: Utils.getLocalIcon('am-disk-utility-symbolic'),
-                    fallback_icon_name: 'utilities-disk-utility-symbolic',
+                    fallback_icon_name: 'utilities-disk-utility-symbolic'
                 });
 
                 button.connect('clicked', () => {
@@ -1097,24 +1097,24 @@ export default class StorageMenu extends MenuBase {
         Utils.storageMonitor.listen(
             this,
             'detailedStorageIO',
-            this.update.bind(this, 'detailedStorageIO'),
+            this.update.bind(this, 'detailedStorageIO')
         );
         Utils.storageMonitor.requestUpdate('detailedStorageIO');
 
-        if (Utils.GTop) {
+        if(Utils.GTop) {
             this.topProcesses.separator.show();
             this.topProcesses.hoverButton.show();
 
             Utils.storageMonitor.listen(
                 this,
                 'topProcesses',
-                this.update.bind(this, 'topProcesses'),
+                this.update.bind(this, 'topProcesses')
             );
             Utils.storageMonitor.requestUpdate('topProcesses');
         }
 
         this.update('deviceList');
-        if (!this.updateTimer) {
+        if(!this.updateTimer) {
             this.updateTimer = GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 Utils.storageMonitor.updateFrequency * 1000 * 2, // Halves the update frequency
@@ -1122,7 +1122,7 @@ export default class StorageMenu extends MenuBase {
                     this.update('deviceList');
                     Utils.storageMonitor.requestUpdate('storageInfo');
                     return true;
-                },
+                }
             );
         }
 
@@ -1136,57 +1136,57 @@ export default class StorageMenu extends MenuBase {
         Utils.storageMonitor.unlisten(this, 'topProcesses');
         Utils.storageMonitor.unlisten(this, 'storageInfo');
 
-        if (this.updateTimer) {
+        if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
             this.updateTimer = 0;
         }
     }
 
     update(code: string) {
-        if (code === 'deviceList') {
+        if(code === 'deviceList') {
             this.updateDeviceList();
             return;
         }
-        if (code === 'storageIO') {
+        if(code === 'storageIO') {
             const usage = Utils.storageMonitor.getUsageHistory('storageIO');
             this.graph.setUsageHistory(usage);
 
             const current = Utils.storageMonitor.getCurrentValue('storageIO');
-            if (current) {
+            if(current) {
                 const unit = Config.get_string('storage-io-unit');
 
-                if (current.bytesReadPerSec)
+                if(current.bytesReadPerSec)
                     this.totalReadSpeedValueLabel.text = Utils.formatBytesPerSec(
                         current.bytesReadPerSec,
                         unit as any,
-                        3,
+                        3
                     );
                 else this.totalReadSpeedValueLabel.text = '-';
 
-                if (current.bytesWrittenPerSec)
+                if(current.bytesWrittenPerSec)
                     this.totalWriteSpeedValueLabel.text = Utils.formatBytesPerSec(
                         current.bytesWrittenPerSec,
                         unit as any,
-                        3,
+                        3
                     );
                 else this.totalWriteSpeedValueLabel.text = '-';
 
-                if (this.storageActivityPopup) {
-                    if (this.storageActivityPopup.totalReadValueLabel) {
-                        if (current.totalBytesRead)
+                if(this.storageActivityPopup) {
+                    if(this.storageActivityPopup.totalReadValueLabel) {
+                        if(current.totalBytesRead)
                             this.storageActivityPopup.totalReadValueLabel.text = Utils.formatBytes(
                                 current.totalBytesRead,
                                 'kB-KB',
-                                3,
+                                3
                             );
                         else this.storageActivityPopup.totalReadValueLabel.text = '-';
                     }
-                    if (this.storageActivityPopup.totalWriteValueLabel) {
-                        if (current.totalBytesWritten)
+                    if(this.storageActivityPopup.totalWriteValueLabel) {
+                        if(current.totalBytesWritten)
                             this.storageActivityPopup.totalWriteValueLabel.text = Utils.formatBytes(
                                 current.totalBytesWritten,
                                 'kB-KB',
-                                3,
+                                3
                             );
                         else this.storageActivityPopup.totalWriteValueLabel.text = '-';
                     }
@@ -1195,33 +1195,33 @@ export default class StorageMenu extends MenuBase {
                 this.totalReadSpeedValueLabel.text = '-';
                 this.totalWriteSpeedValueLabel.text = '-';
 
-                if (this.storageActivityPopup) {
-                    if (this.storageActivityPopup.totalReadValueLabel)
+                if(this.storageActivityPopup) {
+                    if(this.storageActivityPopup.totalReadValueLabel)
                         this.storageActivityPopup.totalReadValueLabel.text = '-';
-                    if (this.storageActivityPopup.totalWriteValueLabel)
+                    if(this.storageActivityPopup.totalWriteValueLabel)
                         this.storageActivityPopup.totalWriteValueLabel.text = '-';
                 }
             }
             return;
         }
-        if (code === 'detailedStorageIO') {
+        if(code === 'detailedStorageIO') {
             const current = Utils.storageMonitor.getCurrentValue('detailedStorageIO');
 
-            if (current) {
-                for (const [id, device] of this.devices.entries()) {
-                    if (device.data === null) continue;
+            if(current) {
+                for(const [id, device] of this.devices.entries()) {
+                    if(device.data === null) continue;
                     const kname = device.data.kname;
-                    if (kname) {
+                    if(kname) {
                         const data = current.get(kname);
 
-                        if (data) {
+                        if(data) {
                             const unit = Config.get_string('storage-io-unit');
 
-                            if (data.bytesReadPerSec) {
+                            if(data.bytesReadPerSec) {
                                 device.readValueLabel.text = Utils.formatBytesPerSec(
                                     data.bytesReadPerSec,
                                     unit as any,
-                                    3,
+                                    3
                                 );
                                 const readColor =
                                     Config.get_string('storage-menu-arrow-color1') ??
@@ -1232,11 +1232,11 @@ export default class StorageMenu extends MenuBase {
                                 device.readActivityIcon.style = 'color:rgba(255,255,255,0.5);';
                             }
 
-                            if (data.bytesWrittenPerSec) {
+                            if(data.bytesWrittenPerSec) {
                                 device.writeValueLabel.text = Utils.formatBytesPerSec(
                                     data.bytesWrittenPerSec,
                                     unit as any,
-                                    3,
+                                    3
                                 );
                                 const writeColor =
                                     Config.get_string('storage-menu-arrow-color2') ??
@@ -1248,22 +1248,22 @@ export default class StorageMenu extends MenuBase {
                             }
 
                             const totalsPopup = this.devicesTotalsPopup.get(id);
-                            if (totalsPopup) {
-                                if (totalsPopup.totalReadValueLabel) {
-                                    if (data.totalBytesRead)
+                            if(totalsPopup) {
+                                if(totalsPopup.totalReadValueLabel) {
+                                    if(data.totalBytesRead)
                                         totalsPopup.totalReadValueLabel.text = Utils.formatBytes(
                                             data.totalBytesRead,
                                             'kB-KB',
-                                            3,
+                                            3
                                         );
                                     else totalsPopup.totalReadValueLabel.text = '-';
                                 }
-                                if (totalsPopup.totalWriteValueLabel) {
-                                    if (data.totalBytesWritten)
+                                if(totalsPopup.totalWriteValueLabel) {
+                                    if(data.totalBytesWritten)
                                         totalsPopup.totalWriteValueLabel.text = Utils.formatBytes(
                                             data.totalBytesWritten,
                                             'kB-KB',
-                                            3,
+                                            3
                                         );
                                     else totalsPopup.totalWriteValueLabel.text = '-';
                                 }
@@ -1276,10 +1276,10 @@ export default class StorageMenu extends MenuBase {
                         device.writeActivityIcon.style = 'color:rgba(255,255,255,0.5);';
 
                         const totalsPopup = this.devicesTotalsPopup.get(id);
-                        if (totalsPopup) {
-                            if (totalsPopup.totalReadValueLabel)
+                        if(totalsPopup) {
+                            if(totalsPopup.totalReadValueLabel)
                                 totalsPopup.totalReadValueLabel.text = '-';
-                            if (totalsPopup.totalWriteValueLabel)
+                            if(totalsPopup.totalWriteValueLabel)
                                 totalsPopup.totalWriteValueLabel.text = '-';
                         }
                     }
@@ -1287,17 +1287,17 @@ export default class StorageMenu extends MenuBase {
             }
             return;
         }
-        if (code === 'topProcesses') {
+        if(code === 'topProcesses') {
             const topProcesses = Utils.storageMonitor.getCurrentValue('topProcesses');
 
-            for (let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
-                if (
+            for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
+                if(
                     !topProcesses ||
                     !Array.isArray(topProcesses) ||
                     !topProcesses[i] ||
                     !topProcesses[i].process
                 ) {
-                    if (i < 5) {
+                    if(i < 5) {
                         this.topProcesses.labels[i].label.text = '-';
                         this.topProcesses.labels[i].read.value.text = '-';
                         this.topProcesses.labels[i].read.icon.style =
@@ -1307,9 +1307,9 @@ export default class StorageMenu extends MenuBase {
                             'color:rgba(255,255,255,0.5);';
                     }
 
-                    if (this.topProcessesPopup && this.topProcessesPopup.processes) {
+                    if(this.topProcessesPopup && this.topProcessesPopup.processes) {
                         const popupElement = this.topProcessesPopup.processes.get(i);
-                        if (popupElement) {
+                        if(popupElement) {
                             popupElement.label.hide();
                             popupElement.description?.hide();
                             popupElement.read.container.hide();
@@ -1324,10 +1324,10 @@ export default class StorageMenu extends MenuBase {
                     const read = topProcess.read;
                     const write = topProcess.write;
 
-                    if (i < 5) {
+                    if(i < 5) {
                         this.topProcesses.labels[i].label.text = process.exec;
 
-                        if (read > 0) {
+                        if(read > 0) {
                             const readColor =
                                 Config.get_string('storage-menu-arrow-color1') ??
                                 'rgba(29,172,214,1.0)';
@@ -1335,7 +1335,7 @@ export default class StorageMenu extends MenuBase {
                             this.topProcesses.labels[i].read.value.text = Utils.formatBytesPerSec(
                                 read,
                                 unit as any,
-                                3,
+                                3
                             );
                         } else {
                             this.topProcesses.labels[i].read.icon.style =
@@ -1343,7 +1343,7 @@ export default class StorageMenu extends MenuBase {
                             this.topProcesses.labels[i].read.value.text = '-';
                         }
 
-                        if (write > 0) {
+                        if(write > 0) {
                             const writeColor =
                                 Config.get_string('storage-menu-arrow-color2') ??
                                 'rgba(214,29,29,1.0)';
@@ -1351,7 +1351,7 @@ export default class StorageMenu extends MenuBase {
                             this.topProcesses.labels[i].write.value.text = Utils.formatBytesPerSec(
                                 write,
                                 unit as any,
-                                3,
+                                3
                             );
                         } else {
                             this.topProcesses.labels[i].write.icon.style =
@@ -1360,24 +1360,24 @@ export default class StorageMenu extends MenuBase {
                         }
                     }
 
-                    if (this.topProcessesPopup && this.topProcessesPopup.processes) {
+                    if(this.topProcessesPopup && this.topProcessesPopup.processes) {
                         const popupElement = this.topProcessesPopup.processes.get(i);
-                        if (popupElement) {
+                        if(popupElement) {
                             popupElement.label.show();
                             popupElement.label.text = process.exec;
 
-                            if (popupElement.description) {
+                            if(popupElement.description) {
                                 popupElement.description.show();
                                 popupElement.description.text = process.cmd;
                             }
 
                             popupElement.read.container.show();
-                            if (read > 0) {
+                            if(read > 0) {
                                 popupElement.read.icon.style = 'color:rgb(29,172,214);';
                                 popupElement.read.value.text = Utils.formatBytesPerSec(
                                     read,
                                     unit as any,
-                                    3,
+                                    3
                                 );
                             } else {
                                 popupElement.read.icon.style = 'color:rgba(255,255,255,0.5);';
@@ -1385,12 +1385,12 @@ export default class StorageMenu extends MenuBase {
                             }
 
                             popupElement.write.container.show();
-                            if (write > 0) {
+                            if(write > 0) {
                                 popupElement.write.icon.style = 'color:rgb(214,29,29);';
                                 popupElement.write.value.text = Utils.formatBytesPerSec(
                                     write,
                                     unit as any,
-                                    3,
+                                    3
                                 );
                             } else {
                                 popupElement.write.icon.style = 'color:rgba(255,255,255,0.5);';
@@ -1402,46 +1402,46 @@ export default class StorageMenu extends MenuBase {
             }
             return;
         }
-        if (code === 'storageInfo') {
+        if(code === 'storageInfo') {
             const storageInfo: Map<string, BlockDeviceData> =
                 Utils.storageMonitor.getCurrentValue('storageInfo');
 
             const formatValue = (value: any, isBytes: boolean = false) => {
-                if (Array.isArray(value)) return value.join('\n');
-                if (isBytes && typeof value === 'number')
+                if(Array.isArray(value)) return value.join('\n');
+                if(isBytes && typeof value === 'number')
                     return Utils.formatBytes(value, 'kB-KB', 4);
-                if (typeof value === 'boolean') return value ? _('Yes') : _('No');
+                if(typeof value === 'boolean') return value ? _('Yes') : _('No');
                 let str = value?.toString().trim() ?? '';
-                if (str.length > 100) str = str.substring(0, 97) + '…';
-                if (str.length > 50)
+                if(str.length > 100) str = str.substring(0, 97) + '…';
+                if(str.length > 50)
                     str = str.substring(0, str.length / 2) + ' ⏎\n' + str.substring(str.length / 2);
                 return str;
             };
 
             const configuration = StorageMenu.deviceInfoPopupConfiguration;
 
-            for (const [id, popup] of this.devicesInfoPopup.entries()) {
+            for(const [id, popup] of this.devicesInfoPopup.entries()) {
                 const info = storageInfo.get(id);
 
-                if (!info) {
+                if(!info) {
                     popup.empty = true;
                     popup.close(true);
                     continue;
                 }
                 popup.empty = false;
 
-                for (const section of configuration) {
+                for(const section of configuration) {
                     let i = 0;
                     const labels = popup[section.labels];
                     const values = popup[section.values];
 
-                    for (const field of section.fields) {
+                    for(const field of section.fields) {
                         let value;
-                        if (info[field.key]) value = info[field.key];
-                        else if (field.parent && info.parent && info.parent[field.key])
+                        if(info[field.key]) value = info[field.key];
+                        else if(field.parent && info.parent && info.parent[field.key])
                             value = info.parent[field.key];
 
-                        if (field.checkNull ? value !== undefined && value !== null : value) {
+                        if(field.checkNull ? value !== undefined && value !== null : value) {
                             const formattedValue = formatValue(value, field.formatAsBytes);
                             labels[i].text = field.label;
                             labels[i].show();
@@ -1451,10 +1451,10 @@ export default class StorageMenu extends MenuBase {
                         }
                     }
 
-                    if (i === 0) popup[section.sectionNr].hide();
+                    if(i === 0) popup[section.sectionNr].hide();
                     else popup[section.sectionNr].show();
 
-                    for (; i < labels.length; i++) {
+                    for(; i < labels.length; i++) {
                         labels[i].hide();
                         values[i].hide();
                     }
@@ -1468,7 +1468,7 @@ export default class StorageMenu extends MenuBase {
         this.totalReadSpeedValueLabel.text = '-';
         this.totalWriteSpeedValueLabel.text = '-';
 
-        for (const [_id, device] of this.devices.entries()) {
+        for(const [_id, device] of this.devices.entries()) {
             device.readValueLabel.text = '-';
             device.readActivityIcon.style = 'color:rgba(255,255,255,0.5);';
             device.writeValueLabel.text = '-';

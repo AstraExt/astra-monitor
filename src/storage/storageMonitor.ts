@@ -209,10 +209,10 @@ export default class StorageMonitor extends Monitor {
         this.dataSourcesInit();
 
         const enabled = Config.get_boolean('storage-header-show');
-        if (enabled) this.start();
+        if(enabled) this.start();
 
         Config.connect(this, 'changed::storage-header-show', () => {
-            if (Config.get_boolean('storage-header-show')) this.start();
+            if(Config.get_boolean('storage-header-show')) this.start();
             else this.stop();
         });
 
@@ -220,20 +220,20 @@ export default class StorageMonitor extends Monitor {
 
         // Manually ignored devices
         this.ignored = Config.get_json('storage-ignored');
-        if (this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
+        if(this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
         Config.connect(this, 'changed::storage-ignored', () => {
             this.reset();
 
             this.ignored = Config.get_json('storage-ignored');
-            if (this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
+            if(this.ignored === null || !Array.isArray(this.ignored)) this.ignored = [];
         });
 
         // Regex ignored devices
         const regex = Config.get_string('storage-ignored-regex');
         try {
-            if (regex === null || regex === '') this.ignoredRegex = null;
+            if(regex === null || regex === '') this.ignoredRegex = null;
             else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
-        } catch (e) {
+        } catch(e) {
             this.ignoredRegex = null;
         }
 
@@ -242,9 +242,9 @@ export default class StorageMonitor extends Monitor {
 
             const regex = Config.get_string('storage-ignored-regex');
             try {
-                if (regex === null || regex === '') this.ignoredRegex = null;
+                if(regex === null || regex === '') this.ignoredRegex = null;
                 else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
-            } catch (e) {
+            } catch(e) {
                 this.ignoredRegex = null;
             }
         });
@@ -262,12 +262,12 @@ export default class StorageMonitor extends Monitor {
         this.previousStorageIO = {
             bytesRead: -1,
             bytesWritten: -1,
-            time: -1,
+            time: -1
         };
 
         this.previousDetailedStorageIO = {
             devices: null,
-            time: -1,
+            time: -1
         };
 
         this.topProcessesCache.reset();
@@ -287,9 +287,9 @@ export default class StorageMonitor extends Monitor {
     checkMainDisk(): string | null {
         let storageMain = Config.get_string('storage-main');
         const disks = Utils.listDisksSync();
-        if (!storageMain || storageMain === '[default]' || !disks.has(storageMain)) {
+        if(!storageMain || storageMain === '[default]' || !disks.has(storageMain)) {
             const defaultId = Utils.findDefaultDisk(disks);
-            if (defaultId !== null) {
+            if(defaultId !== null) {
                 Config.set('storage-main', defaultId, 'string');
                 storageMain = defaultId;
             }
@@ -310,7 +310,7 @@ export default class StorageMonitor extends Monitor {
         this.dataSources = {
             storageUsage: Config.get_string('storage-source-storage-usage') ?? undefined,
             topProcesses: Config.get_string('storage-source-top-processes') ?? undefined,
-            storageIO: Config.get_string('storage-source-storage-io') ?? undefined,
+            storageIO: Config.get_string('storage-source-storage-io') ?? undefined
         };
 
         Config.connect(this, 'changed::storage-source-storage-usage', () => {
@@ -337,11 +337,11 @@ export default class StorageMonitor extends Monitor {
             this.previousStorageIO = {
                 bytesRead: -1,
                 bytesWritten: -1,
-                time: -1,
+                time: -1
             };
             this.previousDetailedStorageIO = {
                 devices: null,
-                time: -1,
+                time: -1
             };
             this.resetUsageHistory('storageIO');
             this.resetUsageHistory('detailedStorageIO');
@@ -351,7 +351,7 @@ export default class StorageMonitor extends Monitor {
     stopListeningFor(key: string) {
         super.stopListeningFor(key);
 
-        if (key === 'detailedStorageIO') {
+        if(key === 'detailedStorageIO') {
             this.previousDetailedStorageIO.devices = null;
             this.previousDetailedStorageIO.time = -1;
         }
@@ -361,18 +361,18 @@ export default class StorageMonitor extends Monitor {
         Utils.verbose('Updating Storage Monitor');
 
         const enabled = Config.get_boolean('storage-header-show');
-        if (enabled) {
+        if(enabled) {
             this.runUpdate('storageUsage');
 
             // Only GTop supports for now
-            if (Utils.GTop) {
-                if (this.isListeningFor('topProcesses')) this.runUpdate('topProcesses');
+            if(Utils.GTop) {
+                if(this.isListeningFor('topProcesses')) this.runUpdate('topProcesses');
                 else this.topProcessesCache.updateNotSeen([]);
             }
 
             const detailed = this.isListeningFor('detailedStorageIO');
             const procDiskstats = new PromiseValueHolderStore<string[]>(
-                this.getProcDiskStatsAsync.bind(this),
+                this.getProcDiskStatsAsync.bind(this)
             );
             this.runUpdate('updateStorageIO', detailed, procDiskstats);
         }
@@ -380,34 +380,34 @@ export default class StorageMonitor extends Monitor {
     }
 
     requestUpdate(key: string) {
-        if (key === 'storageUsage') {
+        if(key === 'storageUsage') {
             this.runUpdate('storageUsage');
-        } else if (key === 'storageIO' || key === 'detailedStorageIO') {
+        } else if(key === 'storageIO' || key === 'detailedStorageIO') {
             const procDiskstats = new PromiseValueHolderStore<string[]>(
-                this.getProcDiskStatsAsync.bind(this),
+                this.getProcDiskStatsAsync.bind(this)
             );
             const detailed = key === 'detailedStorageIO';
 
             this.runUpdate('updateStorageIO', detailed, procDiskstats);
-            if (detailed) super.requestUpdate('storageIO'); // override also the storageIO update
-        } else if (key === 'topProcesses') {
-            if (!this.updateTopProcessesTask.isRunning && Utils.GTop)
+            if(detailed) super.requestUpdate('storageIO'); // override also the storageIO update
+        } else if(key === 'topProcesses') {
+            if(!this.updateTopProcessesTask.isRunning && Utils.GTop)
                 // Only GTop supports for now
                 this.runUpdate('topProcesses');
             return; // Don't push to the queue
-        } else if (key === 'storageInfo') {
-            if (!this.updateStorageInfoTask.isRunning) this.runUpdate('storageInfo');
+        } else if(key === 'storageInfo') {
+            if(!this.updateStorageInfoTask.isRunning) this.runUpdate('storageInfo');
             return; // single value, no queue
         }
         super.requestUpdate(key);
     }
 
     runUpdate(key: string, ...params: any[]) {
-        if (key === 'storageUsage') {
+        if(key === 'storageUsage') {
             let run;
-            if (this.dataSources.storageUsage === 'GTop')
+            if(this.dataSources.storageUsage === 'GTop')
                 run = this.updateStorageUsageGTop.bind(this, ...params);
-            else if (this.dataSources.storageUsage === 'proc')
+            else if(this.dataSources.storageUsage === 'proc')
                 run = this.updateStorageUsageProc.bind(this, ...params);
             else run = this.updateStorageUsageAuto.bind(this, ...params);
 
@@ -415,13 +415,13 @@ export default class StorageMonitor extends Monitor {
                 key,
                 task: this.updateStorageUsageTask,
                 run,
-                callback: this.notify.bind(this, 'storageUsage'),
+                callback: this.notify.bind(this, 'storageUsage')
             });
             return;
         }
-        if (key === 'topProcesses') {
+        if(key === 'topProcesses') {
             let run;
-            if (this.dataSources.topProcesses === 'GTop')
+            if(this.dataSources.topProcesses === 'GTop')
                 run = this.updateTopProcessesGTop.bind(this, ...params);
             else run = this.updateTopProcessesAuto.bind(this, ...params);
 
@@ -429,15 +429,15 @@ export default class StorageMonitor extends Monitor {
                 key,
                 task: this.updateTopProcessesTask,
                 run,
-                callback: this.notify.bind(this, 'topProcesses'),
+                callback: this.notify.bind(this, 'topProcesses')
             });
             return;
         }
-        if (key === 'updateStorageIO') {
+        if(key === 'updateStorageIO') {
             const detailed = params[0];
             const callback = () => {
                 this.notify('storageIO');
-                if (detailed) this.notify('detailedStorageIO');
+                if(detailed) this.notify('detailedStorageIO');
             };
 
             let run;
@@ -447,9 +447,9 @@ export default class StorageMonitor extends Monitor {
              * check the function content for more info
              **/
             // eslint-disable-next-line no-constant-condition
-            if (this.dataSources.storageIO === 'GTop' && false)
+            if(this.dataSources.storageIO === 'GTop' && false)
                 run = this.updateStorageIOGTop.bind(this, ...params);
-            else if (this.dataSources.storageIO === 'proc')
+            else if(this.dataSources.storageIO === 'proc')
                 run = this.updateStorageIOProc.bind(this, ...params);
             else run = this.updateStorageIOAuto.bind(this, ...params);
 
@@ -457,16 +457,16 @@ export default class StorageMonitor extends Monitor {
                 key,
                 task: this.updateStorageIOTask,
                 run,
-                callback,
+                callback
             });
             return;
         }
-        if (key === 'storageInfo') {
+        if(key === 'storageInfo') {
             this.runTask({
                 key,
                 task: this.updateStorageInfoTask,
                 run: this.updateStorageInfo.bind(this, ...params),
-                callback: this.notify.bind(this, 'storageInfo'),
+                callback: this.notify.bind(this, 'storageInfo')
             });
             return;
         }
@@ -476,18 +476,18 @@ export default class StorageMonitor extends Monitor {
         return new PromiseValueHolder(
             new Promise((resolve, reject) => {
                 Utils.readFileAsync('/proc/diskstats')
-                    .then((fileContent) => {
+                    .then(fileContent => {
                         resolve(fileContent.split('\n'));
                     })
-                    .catch((e) => {
+                    .catch(e => {
                         reject(e);
                     });
-            }),
+            })
         );
     }
 
     updateStorageUsageAuto(): Promise<boolean> {
-        if (Utils.GTop) return this.updateStorageUsageGTop();
+        if(Utils.GTop) return this.updateStorageUsageGTop();
         return this.updateStorageUsageProc();
     }
 
@@ -496,26 +496,26 @@ export default class StorageMonitor extends Monitor {
         const disks = await Utils.listDisksAsync(this.updateStorageUsageTask);
 
         try {
-            if (!mainDisk || mainDisk === '[default]') mainDisk = this.checkMainDisk();
+            if(!mainDisk || mainDisk === '[default]') mainDisk = this.checkMainDisk();
 
             let disk = disks.get(mainDisk || '');
-            if (!disk) {
+            if(!disk) {
                 mainDisk = this.checkMainDisk();
                 disk = disks.get(mainDisk || '');
             }
 
-            if (!disk || !disk.path) return false;
+            if(!disk || !disk.path) return false;
 
             const path = disk.path.replace(/[^a-zA-Z0-9/-]/g, '');
             const result = await Utils.executeCommandAsync(
                 `lsblk -Jb -o ID,SIZE,FSUSE% ${path}`,
-                this.updateStorageUsageTask,
+                this.updateStorageUsageTask
             );
 
-            if (result) {
+            if(result) {
                 const json = JSON.parse(result);
 
-                if (json.blockdevices && json.blockdevices.length > 0) {
+                if(json.blockdevices && json.blockdevices.length > 0) {
                     const usage = parseInt(json.blockdevices[0]['fsuse%'], 10);
                     const size = json.blockdevices[0]['size'];
 
@@ -523,12 +523,12 @@ export default class StorageMonitor extends Monitor {
                         size: size,
                         used: Math.round((size * usage) / 100),
                         free: Math.round((size * (100 - usage)) / 100),
-                        usePercentage: usage,
+                        usePercentage: usage
                     });
                     return true;
                 }
             }
-        } catch (e: any) {
+        } catch(e: any) {
             Utils.error(e);
         }
         return false;
@@ -536,16 +536,16 @@ export default class StorageMonitor extends Monitor {
 
     async updateStorageUsageGTop(): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         let mainDisk = Config.get_string('storage-main');
         try {
-            if (!mainDisk || mainDisk === '[default]') mainDisk = this.checkMainDisk();
-            if (!mainDisk) return false;
+            if(!mainDisk || mainDisk === '[default]') mainDisk = this.checkMainDisk();
+            if(!mainDisk) return false;
 
             const disk = await this.getCachedDisk(mainDisk);
             const mountpoints = disk?.mountpoints;
-            if (
+            if(
                 !mountpoints ||
                 mountpoints.length === 0 ||
                 (mountpoints.length === 1 && mountpoints[0] === '[SWAP]')
@@ -554,10 +554,10 @@ export default class StorageMonitor extends Monitor {
 
             const buf = new GTop.glibtop_fsusage();
             let mnt = 0;
-            while (buf.blocks === 0 && mnt <= mountpoints.length)
+            while(buf.blocks === 0 && mnt <= mountpoints.length)
                 GTop.glibtop_get_fsusage(buf, mountpoints[mnt++]);
 
-            if (buf.blocks === 0) return false;
+            if(buf.blocks === 0) return false;
 
             const size = buf.blocks * buf.block_size;
             const free = buf.bfree * buf.block_size;
@@ -566,10 +566,10 @@ export default class StorageMonitor extends Monitor {
                 size: size,
                 used: size - free,
                 free: free,
-                usePercentage: Math.round(((size - free) / size) * 100),
+                usePercentage: Math.round(((size - free) / size) * 100)
             });
             return true;
-        } catch (e: any) {
+        } catch(e: any) {
             /* EMPTY */
         }
         return false;
@@ -579,11 +579,11 @@ export default class StorageMonitor extends Monitor {
      * This function is Sync but it caches the result
      */
     getSectorSize(device: string): number {
-        if (this.sectorSizes[device] === undefined) {
+        if(this.sectorSizes[device] === undefined) {
             const fileContents = GLib.file_get_contents(
-                `/sys/block/${device}/queue/hw_sector_size`,
+                `/sys/block/${device}/queue/hw_sector_size`
             );
-            if (fileContents && fileContents[0]) {
+            if(fileContents && fileContents[0]) {
                 const decoder = new TextDecoder('utf8');
                 this.sectorSizes[device] = parseInt(decoder.decode(fileContents[1]));
             } else {
@@ -597,57 +597,57 @@ export default class StorageMonitor extends Monitor {
      * This function is Sync but it caches the result
      */
     isDisk(deviceName: string): boolean {
-        if (this.diskChecks[deviceName] !== undefined) return this.diskChecks[deviceName];
+        if(this.diskChecks[deviceName] !== undefined) return this.diskChecks[deviceName];
 
         try {
             const path = `/sys/block/${deviceName}`;
             const fileType = GLib.file_test(path, GLib.FileTest.IS_DIR);
             this.diskChecks[deviceName] = fileType;
             return fileType;
-        } catch (e) {
+        } catch(e) {
             return false;
         }
     }
 
     updateStorageIOAuto(
         detailed: boolean,
-        procDiskstats: PromiseValueHolder<string[]>,
+        procDiskstats: PromiseValueHolder<string[]>
     ): Promise<boolean> {
         /**!
          * GTop cannot be used until it's fixed:
          * check the function content for more info
          **/
         // eslint-disable-next-line no-constant-condition
-        if (Utils.GTop && false) return this.updateStorageIOGTop(detailed);
+        if(Utils.GTop && false) return this.updateStorageIOGTop(detailed);
         return this.updateStorageIOProc(detailed, procDiskstats);
     }
 
     async updateStorageIOProc(
         detailed: boolean,
-        procDiskstats: PromiseValueHolder<string[]>,
+        procDiskstats: PromiseValueHolder<string[]>
     ): Promise<boolean> {
         const procDiskstatsValue = await procDiskstats.getValue();
-        if (procDiskstatsValue.length < 1) return false;
+        if(procDiskstatsValue.length < 1) return false;
 
         let bytesRead = 0;
         let bytesWritten = 0;
 
         let devices: Map<string, DeviceStauts> | null = null;
-        if (detailed) devices = new Map();
+        if(detailed) devices = new Map();
 
         let lastSectorSize = -1;
 
-        for (const device of procDiskstatsValue) {
+        for(const device of procDiskstatsValue) {
             const fields = device.trim().split(/\s+/);
-            if (fields.length < 10) continue;
+            if(fields.length < 10) continue;
 
             const deviceName = fields[2];
 
-            if (deviceName.startsWith('loop')) continue;
+            if(deviceName.startsWith('loop')) continue;
 
-            if (this.ignored.includes(deviceName)) continue;
+            if(this.ignored.includes(deviceName)) continue;
 
-            if (this.ignoredRegex !== null && this.ignoredRegex.test(deviceName)) continue;
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(deviceName)) continue;
 
             const isPartition = !this.isDisk(deviceName);
 
@@ -655,17 +655,17 @@ export default class StorageMonitor extends Monitor {
             const writtenSectors = parseInt(fields[9]);
 
             // TODO: Ugly hack to get the sector size of a partition
-            if (!isPartition) lastSectorSize = this.getSectorSize(deviceName);
+            if(!isPartition) lastSectorSize = this.getSectorSize(deviceName);
 
-            if (detailed && devices !== null) {
+            if(detailed && devices !== null) {
                 devices.set(deviceName, {
                     bytesRead: readSectors * lastSectorSize,
-                    bytesWritten: writtenSectors * lastSectorSize,
+                    bytesWritten: writtenSectors * lastSectorSize
                 });
             }
 
             // Filter partitions
-            if (!isPartition) {
+            if(!isPartition) {
                 bytesRead += readSectors * lastSectorSize;
                 bytesWritten += writtenSectors * lastSectorSize;
             }
@@ -673,8 +673,8 @@ export default class StorageMonitor extends Monitor {
 
         const now = GLib.get_monotonic_time();
 
-        if (detailed) {
-            if (
+        if(detailed) {
+            if(
                 this.previousDetailedStorageIO.devices === null ||
                 this.previousDetailedStorageIO.time === -1
             ) {
@@ -683,7 +683,7 @@ export default class StorageMonitor extends Monitor {
             }
         }
 
-        if (
+        if(
             this.previousStorageIO.bytesRead === -1 ||
             this.previousStorageIO.bytesWritten === -1 ||
             this.previousStorageIO.time === -1
@@ -696,10 +696,10 @@ export default class StorageMonitor extends Monitor {
 
         const interval = (now - this.previousStorageIO.time) / 1000000;
         const bytesReadPerSec = Math.round(
-            (bytesRead - this.previousStorageIO.bytesRead) / interval,
+            (bytesRead - this.previousStorageIO.bytesRead) / interval
         );
         const bytesWrittenPerSec = Math.round(
-            (bytesWritten - this.previousStorageIO.bytesWritten) / interval,
+            (bytesWritten - this.previousStorageIO.bytesWritten) / interval
         );
         const totalBytesRead = bytesRead;
         const totalBytesWritten = bytesWritten;
@@ -712,25 +712,25 @@ export default class StorageMonitor extends Monitor {
             bytesReadPerSec,
             bytesWrittenPerSec,
             totalBytesRead,
-            totalBytesWritten,
+            totalBytesWritten
         });
 
-        if (detailed && devices !== null) {
-            if (this.previousDetailedStorageIO.time === now) return false;
-            if (this.previousDetailedStorageIO.devices === null) return false;
+        if(detailed && devices !== null) {
+            if(this.previousDetailedStorageIO.time === now) return false;
+            if(this.previousDetailedStorageIO.devices === null) return false;
 
             const finalData = new Map();
 
             const interval = (now - this.previousDetailedStorageIO.time) / 1000000;
 
-            for (const [deviceName, { bytesRead, bytesWritten }] of devices) {
+            for(const [deviceName, { bytesRead, bytesWritten }] of devices) {
                 const previousData = this.previousDetailedStorageIO.devices.get(deviceName);
-                if (previousData) {
+                if(previousData) {
                     const bytesReadPerSec = Math.round(
-                        (bytesRead - previousData.bytesRead) / interval,
+                        (bytesRead - previousData.bytesRead) / interval
                     );
                     const bytesWrittenPerSec = Math.round(
-                        (bytesWritten - previousData.bytesWritten) / interval,
+                        (bytesWritten - previousData.bytesWritten) / interval
                     );
                     const totalBytesRead = bytesRead;
                     const totalBytesWritten = bytesWritten;
@@ -738,7 +738,7 @@ export default class StorageMonitor extends Monitor {
                         bytesReadPerSec,
                         bytesWrittenPerSec,
                         totalBytesRead,
-                        totalBytesWritten,
+                        totalBytesWritten
                     });
                 }
             }
@@ -752,7 +752,7 @@ export default class StorageMonitor extends Monitor {
 
     async updateStorageIOGTop(detailed: boolean): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         /**!
          * TODO:
@@ -848,20 +848,20 @@ export default class StorageMonitor extends Monitor {
             bytesWrittenPerSec
         });*/
 
-        if (detailed) {
+        if(detailed) {
             /* TODO: */
         }
         return false;
     }
 
     updateTopProcessesAuto(): Promise<boolean> {
-        if (Utils.GTop) return this.updateTopProcessesGTop();
+        if(Utils.GTop) return this.updateTopProcessesGTop();
         return Promise.resolve(false);
     }
 
     async updateTopProcessesGTop(): Promise<boolean> {
         const GTop = Utils.GTop;
-        if (!GTop) return false;
+        if(!GTop) return false;
 
         const buf = new GTop.glibtop_proclist();
         const pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0); // GLIBTOP_EXCLUDE_IDLE
@@ -872,28 +872,28 @@ export default class StorageMonitor extends Monitor {
 
         const io = new GTop.glibtop_proc_io();
 
-        for (const pid of pids) {
+        for(const pid of pids) {
             seenPids.push(pid);
 
             let process = this.topProcessesCache.getProcess(pid);
-            if (!process) {
+            if(!process) {
                 const argSize = new GTop.glibtop_proc_args();
                 let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
 
-                if (!cmd) {
+                if(!cmd) {
                     const procState = new GTop.glibtop_proc_state();
                     GTop.glibtop_get_proc_state(procState, pid);
-                    if (procState && procState.cmd) {
+                    if(procState && procState.cmd) {
                         let str = '';
-                        for (let i = 0; i < procState.cmd.length; i++) {
-                            if (procState.cmd[i] === 0) break;
+                        for(let i = 0; i < procState.cmd.length; i++) {
+                            if(procState.cmd[i] === 0) break;
                             str += String.fromCharCode(procState.cmd[i]);
                         }
                         cmd = str ? `[${str}]` : cmd;
                     }
                 }
 
-                if (!cmd) {
+                if(!cmd) {
                     //Utils.log('cmd is null for pid: ' + pid);
                     continue;
                 }
@@ -902,7 +902,7 @@ export default class StorageMonitor extends Monitor {
                     pid: pid,
                     exec: Utils.extractCommandName(cmd),
                     cmd: cmd,
-                    notSeen: 0,
+                    notSeen: 0
                 };
                 this.topProcessesCache.setProcess(process);
             }
@@ -915,22 +915,22 @@ export default class StorageMonitor extends Monitor {
             this.previousPidsIO.set(pid, {
                 read: currentRead,
                 write: currentWrite,
-                time: GLib.get_monotonic_time(),
+                time: GLib.get_monotonic_time()
             });
 
-            if (!previous) continue;
+            if(!previous) continue;
 
             const { read: previousRead, write: previousWrite, time: previousTime } = previous;
 
             const read = Math.round(
                 (currentRead - previousRead) /
-                    ((GLib.get_monotonic_time() - previousTime) / 1000000),
+                    ((GLib.get_monotonic_time() - previousTime) / 1000000)
             );
             const write = Math.round(
                 (currentWrite - previousWrite) /
-                    ((GLib.get_monotonic_time() - previousTime) / 1000000),
+                    ((GLib.get_monotonic_time() - previousTime) / 1000000)
             );
-            if (read + write === 0) continue;
+            if(read + write === 0) continue;
 
             topProcesses.push({ process, read, write });
         }
@@ -938,8 +938,8 @@ export default class StorageMonitor extends Monitor {
         topProcesses.sort((a, b) => b.read + b.write - (a.read + a.write));
         topProcesses.splice(StorageMonitor.TOP_PROCESSES_LIMIT);
 
-        for (const pid of this.previousPidsIO.keys()) {
-            if (!seenPids.includes(pid)) this.previousPidsIO.delete(pid);
+        for(const pid of this.previousPidsIO.keys()) {
+            if(!seenPids.includes(pid)) this.previousPidsIO.delete(pid);
         }
 
         this.topProcessesCache.updateNotSeen(seenPids);
@@ -948,12 +948,12 @@ export default class StorageMonitor extends Monitor {
     }
 
     async getCachedDisk(device: string): Promise<DiskInfo | undefined> {
-        if (this.disksCache.has(device)) return this.disksCache.get(device);
+        if(this.disksCache.has(device)) return this.disksCache.get(device);
 
         const disks = await Utils.listDisksAsync(this.updateMountpointCache);
 
         const disk = disks.get(device);
-        if (!disk || !disk.mountpoints || disk.mountpoints.length === 0) return;
+        if(!disk || !disk.mountpoints || disk.mountpoints.length === 0) return;
 
         this.disksCache.set(device, disk);
         return disk;
@@ -963,32 +963,32 @@ export default class StorageMonitor extends Monitor {
         try {
             const result = await Utils.executeCommandAsync(
                 'lsblk -JbO',
-                this.updateStorageInfoTask,
+                this.updateStorageInfoTask
             );
 
             const map = new Map<string, BlockDeviceData>();
 
             const blockToInfo = (data: any) => {
                 const deviceInfo: BlockDeviceData = {} as BlockDeviceData;
-                for (const key in data) {
-                    if (Object.prototype.hasOwnProperty.call(data, key) && key !== 'children') {
+                for(const key in data) {
+                    if(Object.prototype.hasOwnProperty.call(data, key) && key !== 'children') {
                         (deviceInfo as any)[key] = data[key];
                     }
                 }
                 return deviceInfo;
             };
 
-            if (result) {
+            if(result) {
                 const json = JSON.parse(result);
 
-                if (json.blockdevices && json.blockdevices.length > 0) {
-                    for (const device of json.blockdevices) {
+                if(json.blockdevices && json.blockdevices.length > 0) {
+                    for(const device of json.blockdevices) {
                         const id = device.id;
                         const deviceInfo: BlockDeviceData = blockToInfo(device);
                         map.set(id, deviceInfo);
 
-                        if (device.children && device.children.length > 0) {
-                            for (const child of device.children) {
+                        if(device.children && device.children.length > 0) {
+                            for(const child of device.children) {
                                 const childID = child.id;
                                 const childInfo: BlockDeviceData = blockToInfo(child);
                                 childInfo.parent = deviceInfo;
@@ -1001,7 +1001,7 @@ export default class StorageMonitor extends Monitor {
                 this.setUsageValue('storageInfo', map);
                 return true;
             }
-        } catch (e: any) {
+        } catch(e: any) {
             Utils.error(e);
         }
         return false;

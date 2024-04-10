@@ -36,12 +36,12 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::storage-header-io-bars-color1',
-                this.setStyle.bind(this),
+                this.setStyle.bind(this)
             );
             Config.connect(
                 this,
                 'changed::storage-header-io-bars-color2',
-                this.setStyle.bind(this),
+                this.setStyle.bind(this)
             );
         }
 
@@ -50,12 +50,12 @@ export default GObject.registerClass(
 
             this.colors = [
                 Config.get_string('storage-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
-                Config.get_string('storage-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)',
+                Config.get_string('storage-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
             ];
         }
 
         setUsage(usage: StorageIO[] | null) {
-            if (!usage || !Array.isArray(usage) || usage.length === 0) {
+            if(!usage || !Array.isArray(usage) || usage.length === 0) {
                 this.updateBars([]);
                 return;
             }
@@ -65,13 +65,13 @@ export default GObject.registerClass(
             const maxReadSpeed = usage.reduce((max, cur) => Math.max(max, cur.bytesReadPerSec), 0);
             const maxWriteSpeed = usage.reduce(
                 (max, cur) => Math.max(max, cur.bytesWrittenPerSec),
-                0,
+                0
             );
 
             this.updateBars([
                 [{ color: 0, value: readSpeed / maxReadSpeed }],
-                [{ color: 1, value: writeSpeed / maxWriteSpeed }],
+                [{ color: 1, value: writeSpeed / maxWriteSpeed }]
             ]);
         }
-    },
+    }
 );

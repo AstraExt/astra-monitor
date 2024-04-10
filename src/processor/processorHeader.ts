@@ -68,13 +68,13 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::processor-indicators-order',
-                this.addOrReorderIndicators.bind(this),
+                this.addOrReorderIndicators.bind(this)
             );
             Config.bind('processor-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
             Config.connect(
                 this,
                 'changed::processor-header-bars-core',
-                this.rebuildBars.bind(this),
+                this.rebuildBars.bind(this)
             );
         }
 
@@ -82,9 +82,9 @@ export default GObject.registerClass(
             const indicators = Utils.getIndicatorsOrder('processor');
 
             let position = 0;
-            for (const indicator of indicators) {
+            for(const indicator of indicators) {
                 let widget;
-                switch (indicator) {
+                switch(indicator) {
                     case 'icon':
                         widget = this.icon;
                         break;
@@ -99,8 +99,8 @@ export default GObject.registerClass(
                         break;
                 }
 
-                if (widget) {
-                    if (widget.get_parent()) this.remove_child(widget);
+                if(widget) {
+                    if(widget.get_parent()) this.remove_child(widget);
                     this.insert_child_at_index(widget, position++);
                 }
             }
@@ -116,12 +116,12 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER,
+                x_align: Clutter.ActorAlign.CENTER
             });
 
             const setIconName = () => {
                 const iconCustom = Config.get_string('processor-header-icon-custom');
-                if (iconCustom) this.icon.icon_name = iconCustom;
+                if(iconCustom) this.icon.icon_name = iconCustom;
                 // @ts-expect-error gicon shouldn't be null, but we do have a fallback icon
                 else this.icon.gicon = Utils.getLocalIcon('am-cpu-symbolic');
             };
@@ -140,8 +140,8 @@ export default GObject.registerClass(
                 updateIconColor();
             };
             const updateIconColor = () => {
-                if (alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
-                else if (baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
+                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
                 else this.icon.style = defaultStyle;
             };
 
@@ -154,31 +154,31 @@ export default GObject.registerClass(
                 'processor-header-icon-size',
                 this.icon,
                 'icon_size',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
             Config.connect(
                 this.icon,
                 'changed::processor-header-icon-custom',
-                setIconName.bind(this),
+                setIconName.bind(this)
             );
             Config.connect(
                 this.icon,
                 'changed::processor-header-icon-color',
-                setIconBaseColor.bind(this),
+                setIconBaseColor.bind(this)
             );
             Config.connect(
                 this.icon,
                 'changed::processor-header-icon-alert-color',
-                setIconAlertColor.bind(this),
+                setIconAlertColor.bind(this)
             );
 
             Utils.processorMonitor.listen(this.icon, 'cpuUsage', () => {
-                if (!Config.get_boolean('processor-header-icon')) return;
+                if(!Config.get_boolean('processor-header-icon')) return;
 
                 const threshold =
                     Config.get_int('processor-header-percentage-icon-alert-threshold') || 0;
-                if (threshold === 0) {
-                    if (alerts.size > 0) {
+                if(threshold === 0) {
+                    if(alerts.size > 0) {
                         alerts.clear();
                         updateIconColor();
                     }
@@ -186,15 +186,15 @@ export default GObject.registerClass(
                 }
 
                 const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
-                if (!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) return;
+                if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) return;
 
-                if (cpuUsage.total < threshold) {
-                    if (alerts.has('cpuUsage')) {
+                if(cpuUsage.total < threshold) {
+                    if(alerts.has('cpuUsage')) {
                         alerts.delete('cpuUsage');
                         updateIconColor();
                     }
                 } else {
-                    if (!alerts.has('cpuUsage')) {
+                    if(!alerts.has('cpuUsage')) {
                         alerts.add('cpuUsage');
                         updateIconColor();
                     }
@@ -208,7 +208,7 @@ export default GObject.registerClass(
         }
 
         buildBars() {
-            if (this.bars) {
+            if(this.bars) {
                 this.remove_child(this.bars);
                 Config.clear(this.bars);
                 Utils.processorMonitor.unlisten(this.bars);
@@ -217,40 +217,40 @@ export default GObject.registerClass(
 
             let numBars = 1;
             const perCoreBars = Config.get_boolean('processor-header-bars-core');
-            if (perCoreBars) numBars = Utils.processorMonitor.getNumberOfCores();
+            if(perCoreBars) numBars = Utils.processorMonitor.getNumberOfCores();
 
             this.bars = new ProcessorBars({
                 numBars: numBars,
                 header: true,
                 mini: true,
                 width: 0.5,
-                breakdownConfig: 'processor-header-bars-breakdown',
+                breakdownConfig: 'processor-header-bars-breakdown'
             });
             Config.bind('processor-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
-            if (perCoreBars) {
+            if(perCoreBars) {
                 Utils.processorMonitor.listen(this.bars, 'cpuCoresUsage', () => {
-                    if (!Config.get_boolean('processor-header-bars')) return;
+                    if(!Config.get_boolean('processor-header-bars')) return;
 
                     const usage = Utils.processorMonitor.getCurrentValue('cpuCoresUsage');
                     const cores = Utils.processorMonitor.getNumberOfCores();
-                    if (!usage || !Array.isArray(usage) || usage.length < cores)
+                    if(!usage || !Array.isArray(usage) || usage.length < cores)
                         this.bars.setUsage([]);
                     else this.bars.setUsage(usage);
                 });
             } else {
                 Utils.processorMonitor.listen(this.bars, 'cpuUsage', () => {
-                    if (!Config.get_boolean('processor-header-bars')) return;
+                    if(!Config.get_boolean('processor-header-bars')) return;
 
                     const usage = Utils.processorMonitor.getCurrentValue('cpuUsage');
-                    if (!usage || !usage.total || isNaN(usage.total)) this.bars.setUsage([]);
+                    if(!usage || !usage.total || isNaN(usage.total)) this.bars.setUsage([]);
                     else this.bars.setUsage([usage]);
                 });
             }
         }
 
         buildGraph() {
-            if (this.graph) {
+            if(this.graph) {
                 this.remove_child(this.graph);
                 Config.clear(this.graph);
                 Utils.processorMonitor.unlisten(this.graph);
@@ -263,7 +263,7 @@ export default GObject.registerClass(
             this.graph = new ProcessorGraph({
                 width: graphWidth,
                 mini: true,
-                breakdownConfig: 'processor-header-graph-breakdown',
+                breakdownConfig: 'processor-header-graph-breakdown'
             });
             Config.bind('processor-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -274,7 +274,7 @@ export default GObject.registerClass(
             });
 
             Utils.processorMonitor.listen(this.graph, 'cpuUsage', () => {
-                if (!Config.get_boolean('processor-header-graph')) return;
+                if(!Config.get_boolean('processor-header-graph')) return;
                 const usage = Utils.processorMonitor.getUsageHistory('cpuUsage');
                 this.graph.setUsageHistory(usage);
             });
@@ -287,13 +287,13 @@ export default GObject.registerClass(
                 style_class: useFourDigitStyle
                     ? 'astra-monitor-header-percentage4'
                     : 'astra-monitor-header-percentage3',
-                y_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.CENTER
             });
             Config.bind(
                 'processor-header-percentage',
                 this.percentage,
                 'visible',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
 
             Config.connect(this.percentage, 'changed::processor-header-percentage-core', () => {
@@ -304,16 +304,16 @@ export default GObject.registerClass(
             });
 
             Utils.processorMonitor.listen(this.percentage, 'cpuUsage', () => {
-                if (!Config.get_boolean('processor-header-percentage')) return;
+                if(!Config.get_boolean('processor-header-percentage')) return;
 
                 const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
 
-                if (!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
+                if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
                     this.percentage.text = '0%';
                     return;
                 }
 
-                if (Config.get_boolean('processor-header-percentage-core')) {
+                if(Config.get_boolean('processor-header-percentage-core')) {
                     const numberOfCores = Utils.processorMonitor.getNumberOfCores();
                     this.percentage.text = (cpuUsage.total * numberOfCores).toFixed(0) + '%';
                 } else {
@@ -334,7 +334,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item',
+                style_class: 'astra-monitor-tooltip-item'
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;
@@ -342,26 +342,26 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::processor-header-tooltip', () => {
-                if (!Config.get_boolean('processor-header-tooltip')) this.tooltipMenu.close(true);
+                if(!Config.get_boolean('processor-header-tooltip')) this.tooltipMenu.close(true);
             });
 
             Utils.processorMonitor.listen(this.tooltipMenu, 'cpuUsage', () => {
-                if (!Config.get_boolean('processor-header-tooltip')) return;
+                if(!Config.get_boolean('processor-header-tooltip')) return;
 
                 const values: string[] = [];
 
-                if (Config.get_boolean('processor-header-tooltip-percentage')) {
+                if(Config.get_boolean('processor-header-tooltip-percentage')) {
                     const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
 
                     let total = 0;
-                    if (cpuUsage && cpuUsage.total && !isNaN(cpuUsage.total))
+                    if(cpuUsage && cpuUsage.total && !isNaN(cpuUsage.total))
                         total = cpuUsage.total;
-                    if (Config.get_boolean('processor-header-tooltip-percentage-core'))
+                    if(Config.get_boolean('processor-header-tooltip-percentage-core'))
                         total *= Utils.processorMonitor.getNumberOfCores();
                     values.push(Math.round(total) + '%');
                 }
 
-                if (values.length === 0) values.push('-');
+                if(values.length === 0) values.push('-');
 
                 this.tooltipItem.label.text = values.join(' | ');
                 const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
@@ -370,15 +370,15 @@ export default GObject.registerClass(
         }
 
         showTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('processor-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('processor-header-tooltip')) return;
 
             this.tooltipMenu.open(false);
         }
 
         hideTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('processor-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('processor-header-tooltip')) return;
             this.tooltipMenu.close(false);
         }
 
@@ -388,19 +388,19 @@ export default GObject.registerClass(
 
             Config.clear(this.icon);
 
-            if (this.percentage) {
+            if(this.percentage) {
                 Config.clear(this.percentage);
                 Utils.processorMonitor.unlisten(this.percentage);
             }
-            if (this.bars) {
+            if(this.bars) {
                 Config.clear(this.bars);
                 Utils.processorMonitor.unlisten(this.bars);
             }
-            if (this.graph) {
+            if(this.graph) {
                 Config.clear(this.graph);
                 Utils.processorMonitor.unlisten(this.graph);
             }
-            if (this.tooltipMenu) {
+            if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.processorMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
@@ -408,5 +408,5 @@ export default GObject.registerClass(
 
             super.destroy();
         }
-    },
+    }
 );

@@ -71,7 +71,7 @@ export default class SensorsMenu extends MenuBase {
     }
 
     createSensorsList() {
-        if (this.sensorsSection === undefined) {
+        if(this.sensorsSection === undefined) {
             /*this.sensorsSectionLabel = */ this.addMenuSection(_('Sensors'));
 
             this.sensorsSection = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -79,7 +79,7 @@ export default class SensorsMenu extends MenuBase {
                 text: _('No sensor found'),
                 style_class: 'astra-monitor-menu-label-warning',
                 style: 'font-style:italic;',
-                x_expand: true,
+                x_expand: true
             });
             this.sensorsSection.addToGrid(this.noSensorsLabel, 2);
             this.sensors = new Map();
@@ -88,12 +88,12 @@ export default class SensorsMenu extends MenuBase {
     }
 
     updateSensorsList(sensors: Map<string, SensorNode>) {
-        if (sensors.size > 0) this.noSensorsLabel.hide();
+        if(sensors.size > 0) this.noSensorsLabel.hide();
         else this.noSensorsLabel.show();
 
         // remove all sensors that are not present anymore
-        for (const [id, sensor] of this.sensors.entries()) {
-            if (!sensors.has(id)) {
+        for(const [id, sensor] of this.sensors.entries()) {
+            if(!sensors.has(id)) {
                 this.sensorsSection.remove_child(sensor.container);
                 this.sensors.delete(id);
             }
@@ -102,16 +102,16 @@ export default class SensorsMenu extends MenuBase {
         // add new sensors / update existing sensors
         const idList: string[] = Array.from(sensors.keys());
 
-        for (const id of idList) {
+        for(const id of idList) {
             const sensorData = sensors.get(id);
-            if (!sensorData) continue;
+            if(!sensorData) continue;
 
             let sensor;
-            if (!this.sensors.has(id)) {
+            if(!this.sensors.has(id)) {
                 const valueTree = new Map();
-                for (const [categoryName, categories] of sensorData.children.entries()) {
+                for(const [categoryName, categories] of sensorData.children.entries()) {
                     const valuesIds = [];
-                    for (const value of categories.children.keys()) valuesIds.push(value);
+                    for(const value of categories.children.keys()) valuesIds.push(value);
                     valueTree.set(categoryName, valuesIds);
                 }
 
@@ -122,12 +122,12 @@ export default class SensorsMenu extends MenuBase {
                 sensor = this.sensors.get(id);
             }
 
-            if (!sensor) continue;
+            if(!sensor) continue;
 
             //Update sensor info
             try {
                 this.updateSensor(sensor, sensorData);
-            } catch (e: any) {
+            } catch(e: any) {
                 Utils.error(e);
             }
         }
@@ -139,26 +139,26 @@ export default class SensorsMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: defaultStyle,
+            style: defaultStyle
         });
 
         const grid = new Grid({
             x_expand: true,
-            styleClass: 'astra-monitor-menu-subgrid',
+            styleClass: 'astra-monitor-menu-subgrid'
         });
         container.set_child(grid);
 
         const name = new St.Label({
             text: '',
             style_class: 'astra-monitor-menu-sensors-name',
-            x_expand: true,
+            x_expand: true
         });
         grid.addToGrid(name, 2);
 
         const adapter = new St.Label({
             text: '',
             style_class: 'astra-monitor-menu-sensors-adapter',
-            x_expand: true,
+            x_expand: true
         });
         grid.addToGrid(adapter, 2);
 
@@ -171,43 +171,43 @@ export default class SensorsMenu extends MenuBase {
         const monitorSize = MenuBase.getMonitorSize(actorBox);
 
         let cols = 1;
-        if (valueTreeExtimatedHeight > monitorSize.height * 0.8) cols = 2;
+        if(valueTreeExtimatedHeight > monitorSize.height * 0.8) cols = 2;
 
         const popupGrid = new Grid({
             numCols: cols * 2,
             styleClass: 'astra-monitor-menu-subgrid',
-            x_expand: true,
+            x_expand: true
         });
 
         const categories = new Map();
 
         let num = 0;
-        for (const [categoryName, category] of valueTree.entries()) {
+        for(const [categoryName, category] of valueTree.entries()) {
             let style = '';
-            if (cols === 2) {
-                if (num % 2 === 0) style = 'margin-right:1em;';
+            if(cols === 2) {
+                if(num % 2 === 0) style = 'margin-right:1em;';
             }
 
             const categoryGrid = new Grid({
                 numCols: 3,
                 styleClass: 'astra-monitor-menu-subgrid',
                 style: style,
-                x_expand: true,
+                x_expand: true
             });
 
             const categoryLabel = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-sensors-category',
-                x_expand: true,
+                x_expand: true
             });
             categoryGrid.addToGrid(categoryLabel, 3);
 
             const values = new Map();
-            for (const valueId of category) {
+            for(const valueId of category) {
                 //Icon
                 const icon = new St.Icon({
                     style_class: 'astra-monitor-menu-sensors-icon',
-                    content_gravity: Clutter.ContentGravity.CENTER,
+                    content_gravity: Clutter.ContentGravity.CENTER
                 });
                 categoryGrid.addToGrid(icon);
 
@@ -215,7 +215,7 @@ export default class SensorsMenu extends MenuBase {
                 const name = new St.Label({
                     text: '',
                     style_class: 'astra-monitor-menu-sensors-label',
-                    x_expand: true,
+                    x_expand: true
                 });
                 categoryGrid.addToGrid(name);
 
@@ -223,7 +223,7 @@ export default class SensorsMenu extends MenuBase {
                 const value = new St.Label({
                     text: '-',
                     style_class: 'astra-monitor-menu-sensors-key',
-                    x_expand: true,
+                    x_expand: true
                 });
                 categoryGrid.addToGrid(value);
 
@@ -255,7 +255,7 @@ export default class SensorsMenu extends MenuBase {
             name,
             adapter,
             popup,
-            categories,
+            categories
         };
     }
 
@@ -263,14 +263,14 @@ export default class SensorsMenu extends MenuBase {
         sensor.data = sensorData;
         sensor.name.text = sensorData.name;
 
-        if (sensorData.attrs.adapter) {
+        if(sensorData.attrs.adapter) {
             sensor.adapter.text = `[${sensorData.attrs.adapter}]`;
         } else {
             const count = (node: SensorNode) => {
-                if (node.children.size === 0) return 1;
+                if(node.children.size === 0) return 1;
 
                 let num = 0;
-                for (const child of node.children.values()) num += count(child);
+                for(const child of node.children.values()) num += count(child);
                 return num;
             };
 
@@ -278,74 +278,74 @@ export default class SensorsMenu extends MenuBase {
             sensor.adapter.text = `[${ngettext('%d sensor', '%d sensors', numSensors).format(numSensors)}]`;
         }
 
-        for (const [categoryName, category] of sensorData.children.entries()) {
+        for(const [categoryName, category] of sensorData.children.entries()) {
             const categoryData = sensor.categories.get(categoryName);
-            if (!categoryData) continue;
+            if(!categoryData) continue;
 
             categoryData.categoryLabel.text = Utils.sensorsNameFormat(categoryName);
 
-            for (const [valueName, value] of category.children.entries()) {
-                if (!categoryData.values.has(valueName)) continue;
+            for(const [valueName, value] of category.children.entries()) {
+                if(!categoryData.values.has(valueName)) continue;
 
                 const valueData = categoryData.values.get(valueName);
-                if (valueData) {
+                if(valueData) {
                     let prepend = '';
-                    if (value.attrs.type && !valueName.includes(value.attrs.type))
+                    if(value.attrs.type && !valueName.includes(value.attrs.type))
                         prepend = value.attrs.type + ' ';
 
                     valueData.name.text = Utils.sensorsNameFormat(prepend + valueName);
 
                     let unit: string;
-                    if (value.attrs.unit !== undefined) unit = value.attrs.unit;
+                    if(value.attrs.unit !== undefined) unit = value.attrs.unit;
                     else unit = Utils.inferMeasurementUnit(valueName);
 
                     const icon: IconData = {
                         gicon: Utils.getLocalIcon('am-dialog-info-symbolic'),
-                        fallback_icon_name: 'dialog-info-symbolic',
+                        fallback_icon_name: 'dialog-info-symbolic'
                     };
-                    if (unit === '°C') {
+                    if(unit === '°C') {
                         icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
                         icon.fallback_icon_name = 'temperature-symbolic';
-                    } else if (unit === 'RPM') {
+                    } else if(unit === 'RPM') {
                         icon.gicon = Utils.getLocalIcon('am-fan-symbolic');
                         icon.fallback_icon_name = 'fan-symbolic';
-                    } else if (unit === 'V') {
+                    } else if(unit === 'V') {
                         icon.gicon = Utils.getLocalIcon('am-voltage-symbolic');
                         icon.fallback_icon_name = 'battery-symbolic';
-                    } else if (unit === 'W') {
+                    } else if(unit === 'W') {
                         icon.gicon = Utils.getLocalIcon('am-power-symbolic');
                         icon.fallback_icon_name = 'plug-symbolic';
-                    } else if (unit === 'A') {
+                    } else if(unit === 'A') {
                         icon.gicon = Utils.getLocalIcon('am-current-symbolic');
                         icon.fallback_icon_name = 'battery-symbolic';
-                    } else if (unit === 'J') {
+                    } else if(unit === 'J') {
                         icon.gicon = Utils.getLocalIcon('am-power-symbolic');
                         icon.fallback_icon_name = 'battery-symbolic';
-                    } else if (unit === 'MHz') {
+                    } else if(unit === 'MHz') {
                         icon.gicon = Utils.getLocalIcon('am-frequency-symbolic');
                         icon.fallback_icon_name = 'battery-symbolic';
                     }
 
-                    if (icon.gicon) valueData.icon.gicon = icon.gicon;
+                    if(icon.gicon) valueData.icon.gicon = icon.gicon;
                     valueData.icon.fallback_icon_name = icon.fallback_icon_name;
 
                     let numericValue = value.attrs.value;
-                    if (numericValue === undefined) numericValue = 0;
+                    if(numericValue === undefined) numericValue = 0;
 
                     let strValue = numericValue + '';
-                    if (unit === '°C') {
-                        if (Config.get_string('sensors-temperature-unit') === 'fahrenheit') {
+                    if(unit === '°C') {
+                        if(Config.get_string('sensors-temperature-unit') === 'fahrenheit') {
                             numericValue = Utils.celsiusToFahrenheit(numericValue);
                             unit = '°F';
                         }
                         strValue = numericValue.toFixed(1);
-                    } else if (unit === 'W') {
+                    } else if(unit === 'W') {
                         strValue = numericValue.toFixed(1);
                         unit = ' ' + unit;
-                    } else if (unit === 'V') {
+                    } else if(unit === 'V') {
                         strValue = numericValue.toFixed(2);
                         unit = ' ' + unit;
-                    } else if (unit === 'RPM') {
+                    } else if(unit === 'RPM') {
                         strValue = numericValue.toFixed(0);
                         unit = ' ' + unit;
                     }
@@ -369,30 +369,30 @@ export default class SensorsMenu extends MenuBase {
     }
 
     update(code: string) {
-        if (code === 'sensorsData') {
+        if(code === 'sensorsData') {
             const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
-            if (sensorsData) {
+            if(sensorsData) {
                 const sensorsList: Map<string, SensorNode> = new Map();
 
                 //list all by "lm-sensors" provider
-                if (
+                if(
                     sensorsData.lm_sensors &&
                     Utils.sensorsMonitor.sensorsSourceSetting === 'lm-sensors'
                 ) {
-                    for (const [
+                    for(const [
                         sensorName,
-                        sensorData,
+                        sensorData
                     ] of sensorsData.lm_sensors.children.entries()) {
                         sensorsList.set('sensors/' + sensorName, sensorData);
                     }
                 }
 
                 //list all by "hwmon" provider
-                if (
+                if(
                     sensorsData.hwmon &&
                     Utils.sensorsMonitor.sensorsSourceSetting !== 'lm-sensors'
                 ) {
-                    for (const [sensorName, sensorData] of sensorsData.hwmon.children.entries()) {
+                    for(const [sensorName, sensorData] of sensorsData.hwmon.children.entries()) {
                         sensorsList.set('hwmon/' + sensorName, sensorData);
                     }
                 }

@@ -2,10 +2,10 @@
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Performance and Benchmarks](#performance-and-benchmarks)
-- [Features](#features)
-- [Public Response](#public-response)
+-   [Introduction](#introduction)
+-   [Performance and Benchmarks](#performance-and-benchmarks)
+-   [Features](#features)
+-   [Public Response](#public-response)
 
 ## Introduction
 
@@ -141,11 +141,11 @@ The aim of these tests is to provide a general idea of the performance of the ex
 
 #### Legend
 
-- ✅: Feature is present
-- ⚠️: Feature is partially present
-- ❌: Feature is not present
-- 🚧: Feature is in development
-- ❓: Feature status is unknown
+-   ✅: Feature is present
+-   ⚠️: Feature is partially present
+-   ❌: Feature is not present
+-   🚧: Feature is in development
+-   ❓: Feature status is unknown
 
 _<u>FEATURE COMPARISON TABLE IS ONLY PARTIALLY COMPLETE.<br>
 PLEASE BEAR WITH US AS WE CONTINUE TO UPDATE IT.</u>_

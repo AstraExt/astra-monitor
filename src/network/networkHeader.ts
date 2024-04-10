@@ -74,7 +74,7 @@ export default GObject.registerClass(
             Config.connect(
                 this,
                 'changed::network-indicators-order',
-                this.addOrReorderIndicators.bind(this),
+                this.addOrReorderIndicators.bind(this)
             );
             Config.bind('network-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -96,9 +96,9 @@ export default GObject.registerClass(
             const indicators = Utils.getIndicatorsOrder('network');
 
             let position = 0;
-            for (const indicator of indicators) {
+            for(const indicator of indicators) {
                 let widget;
-                switch (indicator) {
+                switch(indicator) {
                     case 'icon':
                         widget = this.icon;
                         break;
@@ -113,8 +113,8 @@ export default GObject.registerClass(
                         break;
                 }
 
-                if (widget) {
-                    if (widget.get_parent()) this.remove_child(widget);
+                if(widget) {
+                    if(widget.get_parent()) this.remove_child(widget);
                     this.insert_child_at_index(widget, position++);
                 }
             }
@@ -123,9 +123,9 @@ export default GObject.registerClass(
         resetMaxWidths() {
             this.maxWidths = [];
 
-            if (!Config.get_boolean('network-header-io')) return;
+            if(!Config.get_boolean('network-header-io')) return;
 
-            if (!this.speed.get_stage()) return;
+            if(!this.speed.get_stage()) return;
 
             this.fixSpeedContainerStyle();
         }
@@ -140,12 +140,12 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER,
+                x_align: Clutter.ActorAlign.CENTER
             });
 
             const setIconName = () => {
                 const iconCustom = Config.get_string('network-header-icon-custom');
-                if (iconCustom) this.icon.icon_name = iconCustom;
+                if(iconCustom) this.icon.icon_name = iconCustom;
                 // @ts-expect-error gicon shouldn't be null, but we do have a fallback icon
                 else this.icon.gicon = Utils.getLocalIcon('am-network-symbolic');
             };
@@ -153,7 +153,7 @@ export default GObject.registerClass(
 
             const setIconColor = () => {
                 const iconColor = Config.get_string('network-header-icon-color');
-                if (iconColor) this.icon.style = defaultStyle + 'color:' + iconColor + ';';
+                if(iconColor) this.icon.style = defaultStyle + 'color:' + iconColor + ';';
                 else this.icon.style = defaultStyle;
             };
             setIconColor();
@@ -163,22 +163,22 @@ export default GObject.registerClass(
                 'network-header-icon-size',
                 this.icon,
                 'icon_size',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
             Config.connect(
                 this.icon,
                 'changed::network-header-icon-custom',
-                setIconName.bind(this),
+                setIconName.bind(this)
             );
             Config.connect(
                 this.icon,
                 'changed::network-header-icon-color',
-                setIconColor.bind(this),
+                setIconColor.bind(this)
             );
         }
 
         buildBars() {
-            if (this.bars) {
+            if(this.bars) {
                 this.remove_child(this.bars);
                 Config.clear(this.bars);
                 Utils.networkMonitor.unlisten(this.bars);
@@ -189,7 +189,7 @@ export default GObject.registerClass(
             Config.bind('network-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
             Utils.networkMonitor.listen(this.bars, 'networkIO', () => {
-                if (!Config.get_boolean('network-header-bars')) return;
+                if(!Config.get_boolean('network-header-bars')) return;
 
                 const usage = Utils.networkMonitor.getCurrentValue('networkIO');
                 const maxSpeeds = Utils.networkMonitor.detectedMaxSpeeds;
@@ -199,7 +199,7 @@ export default GObject.registerClass(
         }
 
         buildGraph() {
-            if (this.graph) {
+            if(this.graph) {
                 this.remove_child(this.graph);
                 Config.clear(this.graph);
                 Utils.networkMonitor.unlisten(this.graph);
@@ -219,7 +219,7 @@ export default GObject.registerClass(
             });
 
             Utils.networkMonitor.listen(this.graph, 'networkIO', () => {
-                if (!Config.get_boolean('network-header-graph')) return;
+                if(!Config.get_boolean('network-header-graph')) return;
 
                 const usage = Utils.networkMonitor.getUsageHistory('networkIO');
                 this.graph.setUsageHistory(usage);
@@ -232,7 +232,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.FILL,
                 y_expand: true,
                 vertical: true,
-                width: 1,
+                width: 1
             });
 
             this.speed = new St.Label({
@@ -242,7 +242,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.CENTER,
                 x_align: Clutter.ActorAlign.END,
                 x_expand: true,
-                y_expand: true,
+                y_expand: true
             });
             this.speedContainer.add_child(this.speed);
 
@@ -250,25 +250,25 @@ export default GObject.registerClass(
                 'network-header-io',
                 this.speedContainer,
                 'visible',
-                Gio.SettingsBindFlags.GET,
+                Gio.SettingsBindFlags.GET
             );
 
             Utils.networkMonitor.listen(this.speedContainer, 'networkIO', () => {
-                if (!Config.get_boolean('network-header-io')) return;
+                if(!Config.get_boolean('network-header-io')) return;
 
                 let upload = Utils.zeroStr + ' B/s';
                 let download = Utils.zeroStr + ' B/s';
 
                 const usage = Utils.networkMonitor.getCurrentValue('networkIO');
-                if (usage) {
+                if(usage) {
                     let bytesUploadedPerSec = usage.bytesUploadedPerSec;
                     let bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
 
                     const threshold = Config.get_int('network-header-io-threshold');
 
-                    if (bytesUploadedPerSec < threshold * 1000) bytesUploadedPerSec = 0;
+                    if(bytesUploadedPerSec < threshold * 1000) bytesUploadedPerSec = 0;
 
-                    if (bytesDownloadedPerSec < threshold * 100) bytesDownloadedPerSec = 0;
+                    if(bytesDownloadedPerSec < threshold * 100) bytesDownloadedPerSec = 0;
 
                     const unit = Config.get_string('network-io-unit');
                     let maxFigures = Config.get_int('network-header-io-figures');
@@ -277,35 +277,35 @@ export default GObject.registerClass(
                         bytesUploadedPerSec,
                         unit as any,
                         maxFigures,
-                        true,
+                        true
                     );
                     download = Utils.formatBytesPerSec(
                         bytesDownloadedPerSec,
                         unit as any,
                         maxFigures,
-                        true,
+                        true
                     );
                 }
 
-                if (this.ioLayout === 'horizontal') this.speed.text = `${upload} | ${download}`;
+                if(this.ioLayout === 'horizontal') this.speed.text = `${upload} | ${download}`;
                 else this.speed.text = `${upload}\n${download}`;
                 this.fixSpeedContainerStyle();
             });
         }
 
         fixSpeedContainerStyle() {
-            if (!this.speedContainer.get_parent()) return;
-            if (!this.speed.get_parent()) return;
+            if(!this.speedContainer.get_parent()) return;
+            if(!this.speed.get_parent()) return;
 
             const calculateStyle = () => {
-                if (this.ioLayout === 'horizontal') return 'font-size:1em;';
+                if(this.ioLayout === 'horizontal') return 'font-size:1em;';
                 const superHeight = this.speedContainer.get_parent()?.height ?? 0;
-                if (superHeight <= 20) return 'font-size:0.65em;';
+                if(superHeight <= 20) return 'font-size:0.65em;';
                 return `font-size:${Math.round(superHeight / 3)}px;`;
             };
             const style = calculateStyle();
 
-            if (this.speed.style !== style) {
+            if(this.speed.style !== style) {
                 this.speed.style = style;
                 this.speed.queue_relayout();
                 this.speedContainer.queue_relayout();
@@ -316,12 +316,12 @@ export default GObject.registerClass(
 
             this.maxWidths.push(width);
 
-            if (this.maxWidths.length > Utils.networkMonitor.updateFrequency * 30)
+            if(this.maxWidths.length > Utils.networkMonitor.updateFrequency * 30)
                 this.maxWidths.shift();
 
             let max = Math.max(...this.maxWidths);
-            if (max === this.speedContainer.width) return;
-            if (max <= 0) max = 1;
+            if(max === this.speedContainer.width) return;
+            if(max <= 0) max = 1;
             this.speedContainer.set_width(max);
         }
 
@@ -337,7 +337,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item',
+                style_class: 'astra-monitor-tooltip-item'
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;
@@ -345,18 +345,18 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::network-header-tooltip', () => {
-                if (!Config.get_boolean('network-header-tooltip')) this.tooltipMenu.close(true);
+                if(!Config.get_boolean('network-header-tooltip')) this.tooltipMenu.close(true);
             });
 
             Utils.networkMonitor.listen(this.tooltipMenu, 'networkIO', () => {
-                if (!Config.get_boolean('network-header-tooltip')) return;
+                if(!Config.get_boolean('network-header-tooltip')) return;
 
                 const values: string[] = [];
 
-                if (Config.get_boolean('network-header-tooltip-io')) {
+                if(Config.get_boolean('network-header-tooltip-io')) {
                     const usage = Utils.networkMonitor.getCurrentValue('networkIO');
 
-                    if (usage) {
+                    if(usage) {
                         const bytesUploadedPerSec = usage.bytesUploadedPerSec;
                         const bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
 
@@ -369,8 +369,8 @@ export default GObject.registerClass(
                                     bytesUploadedPerSec,
                                     unit as any,
                                     maxFigures,
-                                    true,
-                                ),
+                                    true
+                                )
                         );
                         values.push(
                             '↓' +
@@ -378,13 +378,13 @@ export default GObject.registerClass(
                                     bytesDownloadedPerSec,
                                     unit as any,
                                     maxFigures,
-                                    true,
-                                ),
+                                    true
+                                )
                         );
                     }
                 }
 
-                if (values.length === 0) values.push('-');
+                if(values.length === 0) values.push('-');
 
                 this.tooltipItem.label.text = values.join(' | ');
                 const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
@@ -393,15 +393,15 @@ export default GObject.registerClass(
         }
 
         showTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('network-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('network-header-tooltip')) return;
 
             this.tooltipMenu.open(false);
         }
 
         hideTooltip() {
-            if (!this.tooltipMenu) return;
-            if (!Config.get_boolean('network-header-tooltip')) return;
+            if(!this.tooltipMenu) return;
+            if(!Config.get_boolean('network-header-tooltip')) return;
             this.tooltipMenu.close(false);
         }
 
@@ -411,19 +411,19 @@ export default GObject.registerClass(
 
             Config.clear(this.icon);
 
-            if (this.bars) {
+            if(this.bars) {
                 Config.clear(this.bars);
                 Utils.networkMonitor.unlisten(this.bars);
             }
-            if (this.graph) {
+            if(this.graph) {
                 Config.clear(this.graph);
                 Utils.networkMonitor.unlisten(this.graph);
             }
-            if (this.speedContainer) {
+            if(this.speedContainer) {
                 Config.clear(this.speedContainer);
                 Utils.networkMonitor.unlisten(this.speedContainer);
             }
-            if (this.tooltipMenu) {
+            if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.networkMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
@@ -431,5 +431,5 @@ export default GObject.registerClass(
 
             super.destroy();
         }
-    },
+    }
 );

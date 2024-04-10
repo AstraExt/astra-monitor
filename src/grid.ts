@@ -41,22 +41,22 @@ export default GObject.registerClass(
 
         constructor(params: GridProps = {}) {
             //defaultParams
-            if (params.styleClass === undefined) params.styleClass = 'astra-monitor-menu-grid';
-            if (params.numCols === undefined) params.numCols = 2;
-            if (params.orientation === undefined) params.orientation = Clutter.Orientation.VERTICAL;
+            if(params.styleClass === undefined) params.styleClass = 'astra-monitor-menu-grid';
+            if(params.numCols === undefined) params.numCols = 2;
+            if(params.orientation === undefined) params.orientation = Clutter.Orientation.VERTICAL;
 
             const data: any = {
                 style_class: params.styleClass,
                 name: 'AstraMonitorGrid',
-                layout_manager: new Clutter.GridLayout({ orientation: params.orientation }),
+                layout_manager: new Clutter.GridLayout({ orientation: params.orientation })
             };
-            if (params.style) data.style = params.style;
-            if (params.x_expand) data.x_expand = params.x_expand;
+            if(params.style) data.style = params.style;
+            if(params.x_expand) data.x_expand = params.x_expand;
             else data.x_expand = true;
-            if (params.y_expand) data.y_expand = params.y_expand;
+            if(params.y_expand) data.y_expand = params.y_expand;
             else data.y_expand = true;
-            if (params.x_align) data.x_align = params.x_align;
-            if (params.y_align) data.y_align = params.y_align;
+            if(params.x_align) data.x_align = params.x_align;
+            if(params.y_align) data.y_align = params.y_align;
             super(data);
 
             // @ts-expect-error Clutter.GridLayout not updated in gjs
@@ -67,7 +67,7 @@ export default GObject.registerClass(
         }
 
         newLine() {
-            if (this.currentCol > 0) {
+            if(this.currentCol > 0) {
                 this.currentRow++;
                 this.currentCol = 0;
             }
@@ -76,7 +76,7 @@ export default GObject.registerClass(
         addToGrid(widget: any, colSpan = 1) {
             this.lm.attach(widget, this.currentCol, this.currentRow, colSpan, 1);
             this.currentCol += colSpan;
-            if (this.currentCol >= this.numCols) {
+            if(this.currentCol >= this.numCols) {
                 this.currentRow++;
                 this.currentCol = 0;
             }
@@ -89,5 +89,5 @@ export default GObject.registerClass(
         getNumCols() {
             return this.numCols;
         }
-    },
+    }
 );
