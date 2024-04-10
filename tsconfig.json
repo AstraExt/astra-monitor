@@ -3,7 +3,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "strict": true,
-    
+
     "lib": ["ES2020"],
     "target": "ES2020",
     "module": "NodeNext",
@@ -13,15 +13,10 @@
     "removeComments": true,
     "incremental": true,
     "sourceMap": false,
-    
+
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": [
-    "types/ambient.d.ts"
-  ],
-  "files": [
-    "extension.ts",
-    "prefs.ts"
-  ]
+  "include": ["types/ambient.d.ts"],
+  "files": ["extension.ts", "prefs.ts"]
 }

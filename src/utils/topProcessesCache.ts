@@ -18,40 +18,37 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-type Process = { pid: number, exec: string, cmd: string, notSeen: number };
+type Process = { pid: number; exec: string; cmd: string; notSeen: number };
 
 export default class TopProcessesCache {
     private updateTime: number;
     private processesCache: Map<number, Process> = new Map();
-    
+
     constructor(updateTime: number) {
         this.updateTime = updateTime;
     }
-    
+
     updateNotSeen(pidList: number[]) {
-        for(const [pid, process] of this.processesCache) {
-            
-            if(!pidList.includes(pid)) {
+        for (const [pid, process] of this.processesCache) {
+            if (!pidList.includes(pid)) {
                 process.notSeen++;
-                
+
                 // Remove process from cache if it hasn't been seen in a 5 minutes
-                if(process.notSeen > 300 / this.updateTime)
-                    this.processesCache.delete(pid);
-            }
-            else {
+                if (process.notSeen > 300 / this.updateTime) this.processesCache.delete(pid);
+            } else {
                 process.notSeen = 0;
             }
         }
     }
-    
-    getProcess(pid: number): Process|undefined {
+
+    getProcess(pid: number): Process | undefined {
         return this.processesCache.get(pid);
     }
-    
+
     setProcess(process: Process) {
         this.processesCache.set(process.pid, process);
     }
-    
+
     reset() {
         this.processesCache.clear();
     }

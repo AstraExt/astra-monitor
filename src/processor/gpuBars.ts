@@ -24,43 +24,41 @@ import BarsBase, { BarProps } from '../bars.js';
 import Config from '../config.js';
 
 type GpuUsage = {
-    percent: number,
-}
+    percent: number;
+};
 
 type GpuBarsParams = BarProps & {
-    layers?: number
+    layers?: number;
 };
 
 export default GObject.registerClass(
-class GpuBars extends BarsBase {
-    constructor(params: GpuBarsParams) {
-        //default params
-        if(params.layers === undefined)
-            params.layers = 1;
-        
-        super(params);
-        
-        Config.connect(this, 'changed::processor-menu-gpu-color', this.setStyle.bind(this));
-    }
-    
-    setStyle() {
-        super.setStyle();
-        
-        this.colors = [
-            Config.get_string('processor-menu-gpu-color') ?? 'rgba(29,172,214,1.0)'
-        ];
-    }
-    
-    setUsage(usage: GpuUsage[]) {
-        if(!usage || !Array.isArray(usage) || usage.length == 0) {
-            this.updateBars([]);
-            return;
+    class GpuBars extends BarsBase {
+        constructor(params: GpuBarsParams) {
+            //default params
+            if (params.layers === undefined) params.layers = 1;
+
+            super(params);
+
+            Config.connect(this, 'changed::processor-menu-gpu-color', this.setStyle.bind(this));
         }
-        
-        const values = [];
-        for(let i = 0; i < usage.length; i++) {
-            values.push([{ color: 0, value: usage[i].percent / 100 }]);
+
+        setStyle() {
+            super.setStyle();
+
+            this.colors = [Config.get_string('processor-menu-gpu-color') ?? 'rgba(29,172,214,1.0)'];
         }
-        this.updateBars(values);
-    }
-});
+
+        setUsage(usage: GpuUsage[]) {
+            if (!usage || !Array.isArray(usage) || usage.length == 0) {
+                this.updateBars([]);
+                return;
+            }
+
+            const values = [];
+            for (let i = 0; i < usage.length; i++) {
+                values.push([{ color: 0, value: usage[i].percent / 100 }]);
+            }
+            this.updateBars(values);
+        }
+    },
+);

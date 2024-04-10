@@ -25,49 +25,48 @@ import Config from '../config.js';
 import { ProcessorUsage } from './processorMonitor.js';
 
 type ProcessorBarsParams = BarProps & {
-    layers?: number
+    layers?: number;
 };
 
 export default GObject.registerClass(
-class ProcessorBars extends BarsBase {
-    constructor(params: ProcessorBarsParams) {
-        //default params
-        if(params.layers === undefined)
-            params.layers = 2;
-        
-        super(params);
-        
-        Config.connect(this, 'changed::processor-header-bars-color1', this.setStyle.bind(this));
-        Config.connect(this, 'changed::processor-header-bars-color2', this.setStyle.bind(this));
-    }
-    
-    setStyle() {
-        super.setStyle();
-        
-        this.colors = [
-            Config.get_string('processor-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
-            Config.get_string('processor-header-bars-color2') ?? 'rgba(214,29,29,1.0)'
-        ];
-    }
-    
-    setUsage(usage: ProcessorUsage[]) {
-        if(!usage || !Array.isArray(usage) || usage.length == 0) {
-            this.updateBars([]);
-            return;
+    class ProcessorBars extends BarsBase {
+        constructor(params: ProcessorBarsParams) {
+            //default params
+            if (params.layers === undefined) params.layers = 2;
+
+            super(params);
+
+            Config.connect(this, 'changed::processor-header-bars-color1', this.setStyle.bind(this));
+            Config.connect(this, 'changed::processor-header-bars-color2', this.setStyle.bind(this));
         }
-        
-        const values = [];
-        for(let i = 0; i < usage.length; i++) {
-            if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
-                values.push([
-                    { color: 0, value: usage[i].user / 100.0 },
-                    { color: 1, value: (usage[i].total - usage[i].user) / 100.0 },
-                ]);
-            }
-            else {
-                values.push([{ color: 0, value: usage[i].total / 100.0 }]);
-            }
+
+        setStyle() {
+            super.setStyle();
+
+            this.colors = [
+                Config.get_string('processor-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
+                Config.get_string('processor-header-bars-color2') ?? 'rgba(214,29,29,1.0)',
+            ];
         }
-        this.updateBars(values);
-    }
-});
+
+        setUsage(usage: ProcessorUsage[]) {
+            if (!usage || !Array.isArray(usage) || usage.length == 0) {
+                this.updateBars([]);
+                return;
+            }
+
+            const values = [];
+            for (let i = 0; i < usage.length; i++) {
+                if (!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
+                    values.push([
+                        { color: 0, value: usage[i].user / 100.0 },
+                        { color: 1, value: (usage[i].total - usage[i].user) / 100.0 },
+                    ]);
+                } else {
+                    values.push([{ color: 0, value: usage[i].total / 100.0 }]);
+                }
+            }
+            this.updateBars(values);
+        }
+    },
+);

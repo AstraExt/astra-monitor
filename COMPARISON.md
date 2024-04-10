@@ -11,7 +11,6 @@
 
 This document provides a comparative analysis of Astra Monitor against similar projects within our domain. Our primary aim with this comparison is twofold. Firstly, it serves as a critical tool for our project's ongoing development, helping us identify areas of improvement and opportunity to refine and enhance our offering. Secondly, it acts as a guide for users, offering greater insights and assisting them in making an informed decision when choosing the ideal tool for their needs. By highlighting the unique features, performance benchmarks, and key differences between Astra Monitor and its alternatives, we hope to foster a transparent and informative environment for both our development team and the user community at large.
 
-
 ## Performance and Benchmarks
 
 ### Methodology
@@ -27,6 +26,7 @@ For memory performance, we measured the memory usage of the GNOME Shell process 
 The results of the tests are shown in the table below. The values are the average of the 10 tests.
 
 #### Astra Monitor vs [Vitals](https://github.com/corecoding/Vitals/):
+
 <p style="font-size:12px" align="center"><b>Configuration:</b> Both extensions have Cpu perc usage, Memory perc, used value and free, Disk used value and free, Network IO values, Sensor temps values for cpu and gpu. Update frequency is the same on both extensions.</p>
 <table align="center">
     <tr>
@@ -62,6 +62,7 @@ The results of the tests are shown in the table below. The values are the averag
 <p style="font-size:12px" align="center"><i>* Value missing; I have already collected this data but I'm currently abroad. Details will be updated upon return.</i><br><i>The lower the values, the better the performance.</i></p>
 
 #### Astra Monitor vs [TopHat](https://github.com/fflewddur/tophat):
+
 <p style="font-size:12px" align="center"><b>Configuration:</b> Both extensions have Cpu perc usage and bar, Memory perc usage and bar, Disk bar and IO values, Network IO values. Update frequency is the same on both extensions.</p>
 <table align="center">
     <tr>
@@ -96,8 +97,8 @@ The results of the tests are shown in the table below. The values are the averag
 </table>
 <p style="font-size:12px" align="center"><i>The lower the values, the better the performance.</i></p>
 
-
 #### Astra Monitor vs [system-monitor-next](https://github.com/mgalgs/gnome-shell-system-monitor-applet):
+
 <p style="font-size:12px" align="center"><b>Configuration:</b> Both extensions have Cpu perc usage and graph, Memory perc usage and graph, Disk IO values and graph, Network IO values and graph, Sensor temps value for cpu and gpu fan speed value. Update frequency is the same on both extensions.</p>
 <table align="center">
     <tr>

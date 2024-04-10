@@ -29,36 +29,31 @@ type StorageBarsParams = BarProps & {
 };
 
 export default GObject.registerClass(
-class StorageBars extends BarsBase {
-    constructor(params: StorageBarsParams) {
-        
-        super(params);
-        
-        Config.connect(this, `changed::${this.colorConfig}`, this.setStyle.bind(this));
-    }
-    
-    get colorConfig() {
-        if(this.header)
-            return 'storage-header-bars-color1';
-        return 'storage-menu-device-color';
-    }
-    
-    setStyle() {
-        super.setStyle();
-        
-        this.colors = [
-            Config.get_string(this.colorConfig) ?? 'rgba(29,172,214,1.0)'
-        ];
-    }
-    
-    setUsage(usage: StorageUsage|null) {
-        if(!usage || !Object.prototype.hasOwnProperty.call(usage, 'usePercentage')) {
-            this.updateBars([]);
-            return;
+    class StorageBars extends BarsBase {
+        constructor(params: StorageBarsParams) {
+            super(params);
+
+            Config.connect(this, `changed::${this.colorConfig}`, this.setStyle.bind(this));
         }
-        
-        this.updateBars([
-            [{ color: 0, value: usage.usePercentage / 100.0 }],
-        ]);
-    }
-});
+
+        get colorConfig() {
+            if (this.header) return 'storage-header-bars-color1';
+            return 'storage-menu-device-color';
+        }
+
+        setStyle() {
+            super.setStyle();
+
+            this.colors = [Config.get_string(this.colorConfig) ?? 'rgba(29,172,214,1.0)'];
+        }
+
+        setUsage(usage: StorageUsage | null) {
+            if (!usage || !Object.prototype.hasOwnProperty.call(usage, 'usePercentage')) {
+                this.updateBars([]);
+                return;
+            }
+
+            this.updateBars([[{ color: 0, value: usage.usePercentage / 100.0 }]]);
+        }
+    },
+);

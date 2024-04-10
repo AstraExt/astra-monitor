@@ -25,53 +25,52 @@ import Config from '../config.js';
 import { MemoryUsage } from './memoryMonitor.js';
 
 type MemoryBarsParams = BarProps & {
-    layers?: number
+    layers?: number;
 };
 
 export default GObject.registerClass(
-class MemoryBars extends BarsBase {
-    constructor(params: MemoryBarsParams) {
-        //default params
-        if(params.layers === undefined)
-            params.layers = 2;
-        
-        super(params);
-        
-        Config.connect(this, 'changed::memory-header-bars-color1', this.setStyle.bind(this));
-        Config.connect(this, 'changed::memory-header-bars-color2', this.setStyle.bind(this));
-    }
-    
-    setStyle() {
-        super.setStyle();
-        
-        this.colors = [
-            Config.get_string('memory-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
-            Config.get_string('memory-header-bars-color2') ?? 'rgba(29,172,214,0.3)'
-        ];
-    }
-    
-    setUsage(usage: MemoryUsage[]) {
-        if(!usage || !Array.isArray(usage) || usage.length == 0) {
-            this.updateBars([]);
-            return;
+    class MemoryBars extends BarsBase {
+        constructor(params: MemoryBarsParams) {
+            //default params
+            if (params.layers === undefined) params.layers = 2;
+
+            super(params);
+
+            Config.connect(this, 'changed::memory-header-bars-color1', this.setStyle.bind(this));
+            Config.connect(this, 'changed::memory-header-bars-color2', this.setStyle.bind(this));
         }
-        
-        const values = [];
-        for(let i = 0; i < usage.length; i++) {
-            if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
-                const total = usage[i].total;
-                const used = usage[i].used / total;
-                const allocated = (usage[i].allocated - usage[i].used) / total;
-                
-                values.push([
-                    { color: 0, value: used },
-                    { color: 1, value: allocated },
-                ]);
-            }
-            else {
-                values.push([{ color: 0, value: usage[i].used / usage[i].total }]);
-            }
+
+        setStyle() {
+            super.setStyle();
+
+            this.colors = [
+                Config.get_string('memory-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
+                Config.get_string('memory-header-bars-color2') ?? 'rgba(29,172,214,0.3)',
+            ];
         }
-        this.updateBars(values);
-    }
-});
+
+        setUsage(usage: MemoryUsage[]) {
+            if (!usage || !Array.isArray(usage) || usage.length == 0) {
+                this.updateBars([]);
+                return;
+            }
+
+            const values = [];
+            for (let i = 0; i < usage.length; i++) {
+                if (!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
+                    const total = usage[i].total;
+                    const used = usage[i].used / total;
+                    const allocated = (usage[i].allocated - usage[i].used) / total;
+
+                    values.push([
+                        { color: 0, value: used },
+                        { color: 1, value: allocated },
+                    ]);
+                } else {
+                    values.push([{ color: 0, value: usage[i].used / usage[i].total }]);
+                }
+            }
+            this.updateBars(values);
+        }
+    },
+);

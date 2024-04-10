@@ -23,80 +23,71 @@ import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
 type GridProps = {
-    numCols?:number,
-    style?:string,
-    styleClass?:string,
-    x_expand?:boolean,
-    y_expand?:boolean,
-    x_align?:Clutter.ActorAlign,
-    y_align?:Clutter.ActorAlign,
-    orientation?:Clutter.Orientation
-}
+    numCols?: number;
+    style?: string;
+    styleClass?: string;
+    x_expand?: boolean;
+    y_expand?: boolean;
+    x_align?: Clutter.ActorAlign;
+    y_align?: Clutter.ActorAlign;
+    orientation?: Clutter.Orientation;
+};
 export default GObject.registerClass(
-class Grid extends St.Widget {
-    private lm: Clutter.GridLayout;
-    private currentRow: number;
-    private currentCol: number;
-    private numCols: number;
-    
-    constructor(params: GridProps = {}) {
-        //defaultParams
-        if(params.styleClass === undefined)
-            params.styleClass = 'astra-monitor-menu-grid';
-        if(params.numCols === undefined)
-            params.numCols = 2;
-        if(params.orientation === undefined)
-            params.orientation = Clutter.Orientation.VERTICAL;
-        
-        const data: any = {
-            style_class: params.styleClass,
-            name: 'AstraMonitorGrid',
-            layout_manager: new Clutter.GridLayout({orientation: params.orientation}),
-        };
-        if(params.style)
-            data.style = params.style;
-        if(params.x_expand)
-            data.x_expand = params.x_expand;
-        else
-            data.x_expand = true;
-        if(params.y_expand)
-            data.y_expand = params.y_expand;
-        else
-            data.y_expand = true;
-        if(params.x_align)
-            data.x_align = params.x_align;
-        if(params.y_align)
-            data.y_align = params.y_align;
-        super(data);
-        
-        // @ts-expect-error Clutter.GridLayout not updated in gjs
-        this.lm = this.layout_manager;
-        this.currentRow = 0;
-        this.currentCol = 0;
-        this.numCols = params.numCols;
-    }
-    
-    newLine() {
-        if(this.currentCol > 0) {
-            this.currentRow++;
+    class Grid extends St.Widget {
+        private lm: Clutter.GridLayout;
+        private currentRow: number;
+        private currentCol: number;
+        private numCols: number;
+
+        constructor(params: GridProps = {}) {
+            //defaultParams
+            if (params.styleClass === undefined) params.styleClass = 'astra-monitor-menu-grid';
+            if (params.numCols === undefined) params.numCols = 2;
+            if (params.orientation === undefined) params.orientation = Clutter.Orientation.VERTICAL;
+
+            const data: any = {
+                style_class: params.styleClass,
+                name: 'AstraMonitorGrid',
+                layout_manager: new Clutter.GridLayout({ orientation: params.orientation }),
+            };
+            if (params.style) data.style = params.style;
+            if (params.x_expand) data.x_expand = params.x_expand;
+            else data.x_expand = true;
+            if (params.y_expand) data.y_expand = params.y_expand;
+            else data.y_expand = true;
+            if (params.x_align) data.x_align = params.x_align;
+            if (params.y_align) data.y_align = params.y_align;
+            super(data);
+
+            // @ts-expect-error Clutter.GridLayout not updated in gjs
+            this.lm = this.layout_manager;
+            this.currentRow = 0;
             this.currentCol = 0;
+            this.numCols = params.numCols;
         }
-    }
-    
-    addToGrid(widget: any, colSpan = 1) {
-        this.lm.attach(widget, this.currentCol, this.currentRow, colSpan, 1);
-        this.currentCol += colSpan;
-        if(this.currentCol >= this.numCols) {
-            this.currentRow++;
-            this.currentCol = 0;
+
+        newLine() {
+            if (this.currentCol > 0) {
+                this.currentRow++;
+                this.currentCol = 0;
+            }
         }
-    }
-    
-    addGrid(widget: any, col: number, row: number, colSpan: number, rowSpan: number) {
-        this.lm.attach(widget, col, row, colSpan, rowSpan);
-    }
-    
-    getNumCols() {
-        return this.numCols;
-    }
-});
+
+        addToGrid(widget: any, colSpan = 1) {
+            this.lm.attach(widget, this.currentCol, this.currentRow, colSpan, 1);
+            this.currentCol += colSpan;
+            if (this.currentCol >= this.numCols) {
+                this.currentRow++;
+                this.currentCol = 0;
+            }
+        }
+
+        addGrid(widget: any, col: number, row: number, colSpan: number, rowSpan: number) {
+            this.lm.attach(widget, col, row, colSpan, rowSpan);
+        }
+
+        getNumCols() {
+            return this.numCols;
+        }
+    },
+);
