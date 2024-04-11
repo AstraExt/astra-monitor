@@ -26,16 +26,26 @@ import MenuBase from '../menu.js';
 import Utils from '../utils/utils.js';
 
 import Config from '../config.js';
+import GpuMenuComponent from './gpuMenuComponent.js';
 
 export default class GpuMenu extends MenuBase {
-    /*private gpuSectionLabel!: St.Label;*/
+    private gpuSectionLabel!: St.Label;
+    private gpuSection!: GpuMenuComponent;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
         super(sourceActor, arrowAlignment, { name: 'Gpu Menu', arrowSide });
 
-        /*this.gpuSectionLabel = */ this.addMenuSection(_('GPU'));
+        this.gpuSectionLabel = this.addMenuSection(_('GPU'));
+        this.gpuSection = new GpuMenuComponent({
+            parent: this,
+            title: this.gpuSectionLabel,
+            compact: false
+        });
+        this.addToMenu(this.gpuSection.container, 2);
 
         this.addUtilityButtons('gpu');
+
+        Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
     }
 
     async onOpen() {
@@ -45,10 +55,17 @@ export default class GpuMenu extends MenuBase {
     async onClose() {}
 
     clear() {
-        //Clear elements before updating them (in case of a lagging update)
+        this.gpuSection.clear();
     }
 
-    update(_code: string, ..._args: any[]) {}
+    update(code: string, ...args: any[]) {
+        if(code === 'gpuUpdate') {
+            const show = Config.get_boolean('gpu-header-show');
+            if(!show) return;
+
+            this.gpuSection.update(args[0]);
+        }
+    }
 
     destroy() {
         this.close(true);
