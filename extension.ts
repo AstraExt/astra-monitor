@@ -26,6 +26,7 @@ import AstraMonitorContainer from './src/container.js';
 import Utils from './src/utils/utils.js';
 
 import ProcessorMonitor from './src/processor/processorMonitor.js';
+import GpuMonitor from './src/gpu/gpuMonitor.js';
 import MemoryMonitor from './src/memory/memoryMonitor.js';
 import StorageMonitor from './src/storage/storageMonitor.js';
 import NetworkMonitor from './src/network/networkMonitor.js';
@@ -43,6 +44,7 @@ export default class AstraMonitorExtension extends Extension {
             settings: this.getSettings(),
 
             ProcessorMonitor,
+            GpuMonitor,
             MemoryMonitor,
             StorageMonitor,
             NetworkMonitor,

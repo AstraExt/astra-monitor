@@ -23,6 +23,7 @@ import Gio from 'gi://Gio';
 
 import Config from '../config.js';
 import ProcessorMonitor from '../processor/processorMonitor.js';
+import GpuMonitor from '../gpu/gpuMonitor.js';
 import MemoryMonitor from '../memory/memoryMonitor.js';
 import StorageMonitor, { BlockDevice } from '../storage/storageMonitor.js';
 import NetworkMonitor from '../network/networkMonitor.js';
@@ -45,6 +46,7 @@ type UtilsInitProps = {
     settings: Gio.Settings;
 
     ProcessorMonitor?: typeof ProcessorMonitor;
+    GpuMonitor?: typeof GpuMonitor;
     MemoryMonitor?: typeof MemoryMonitor;
     StorageMonitor?: typeof StorageMonitor;
     NetworkMonitor?: typeof NetworkMonitor;
@@ -129,9 +131,19 @@ export type UptimeTimer = { stop: () => void };
 
 export default class Utils {
     static debug = false;
-    static defaultMonitors = ['processor', 'memory', 'storage', 'network', 'sensors'];
+    static defaultMonitors = ['processor', 'gpu', 'memory', 'storage', 'network', 'sensors'];
     static defaultIndicators = {
         processor: ['icon', 'bar', 'graph', 'percentage'],
+        gpu: [
+            'icon',
+            'activity bar',
+            'activity graph',
+            'activity percentage',
+            'memory bar',
+            'memory graph',
+            'memory percentage',
+            'memory value'
+        ],
         memory: ['icon', 'bar', 'graph', 'percentage', 'value', 'free'],
         storage: ['icon', 'bar', 'percentage', 'value', 'free', 'IO bar', 'IO graph', 'IO speed'],
         network: ['icon', 'IO bar', 'IO graph', 'IO speed'],
@@ -145,6 +157,7 @@ export default class Utils {
     static container: Button;
 
     static processorMonitor: ProcessorMonitor;
+    static gpuMonitor: GpuMonitor;
     static memoryMonitor: MemoryMonitor;
     static storageMonitor: StorageMonitor;
     static networkMonitor: NetworkMonitor;
@@ -169,6 +182,7 @@ export default class Utils {
         settings,
 
         ProcessorMonitor,
+        GpuMonitor,
         MemoryMonitor,
         StorageMonitor,
         NetworkMonitor,
@@ -198,6 +212,7 @@ export default class Utils {
         Utils.configUpdateFixes();
 
         if(ProcessorMonitor) Utils.processorMonitor = new ProcessorMonitor();
+        if(GpuMonitor) Utils.gpuMonitor = new GpuMonitor();
         if(MemoryMonitor) Utils.memoryMonitor = new MemoryMonitor();
         if(StorageMonitor) Utils.storageMonitor = new StorageMonitor();
         if(NetworkMonitor) Utils.networkMonitor = new NetworkMonitor();
@@ -1393,7 +1408,7 @@ export default class Utils {
     }
 
     static getSelectedGPU(): GpuInfo | undefined {
-        const selected = Config.get_json('processor-menu-gpu');
+        const selected = Config.get_json('gpu-main');
         if(!selected) return;
 
         //Fix GPU domain missing (v9 => v10)
@@ -2318,7 +2333,6 @@ export default class Utils {
 
     static configUpdateFixes() {
         //Fix GPU domain missing (v9 => v10)
-        //TODO: remove in release
         const selectedGpu = Config.get_json('processor-menu-gpu');
         if(selectedGpu && selectedGpu.domain) {
             if(!selectedGpu.domain.includes(':')) {
@@ -2335,6 +2349,20 @@ export default class Utils {
         const barsColor2 = Config.get_string('memory-header-bars-color2');
         if(barsColor2 === 'rgba(214,29,29,1.0)') {
             Config.set('memory-header-bars-color2', 'rgba(29,172,214,0.3)', 'string');
+        }
+
+        //Fix GPU moved from processor (v19 => v20)
+        const processorMenuGpu = Config.get_json('processor-menu-gpu');
+        const gpuMain = Config.get_json('gpu-main');
+        if(processorMenuGpu && !gpuMain) {
+            Config.set('gpu-main', processorMenuGpu, 'json');
+            Config.set('processor-menu-gpu', '""', 'string');
+        }
+        const processorMenuGpuColor = Config.get_string('processor-menu-gpu-color');
+        if(processorMenuGpuColor) {
+            Config.set('gpu-header-activity-bar-color1', processorMenuGpuColor, 'string');
+            Config.set('gpu-header-activity-graph-color1', processorMenuGpuColor, 'string');
+            Config.set('processor-menu-gpu-color', '', 'string');
         }
     }
 }

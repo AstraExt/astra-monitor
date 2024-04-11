@@ -27,6 +27,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import Utils from './utils/utils.js';
 import Config from './config.js';
 import ProcessorHeader from './processor/processorHeader.js';
+import GpuHeader from './gpu/gpuHeader.js';
 import MemoryHeader from './memory/memoryHeader.js';
 import StorageHeader from './storage/storageHeader.js';
 import NetworkHeader from './network/networkHeader.js';
@@ -35,6 +36,7 @@ import MenuBase from './menu.js';
 
 type Widget =
     | InstanceType<typeof ProcessorHeader>
+    | InstanceType<typeof GpuHeader>
     | InstanceType<typeof MemoryHeader>
     | InstanceType<typeof StorageHeader>
     | InstanceType<typeof NetworkHeader>
@@ -128,6 +130,12 @@ export default GObject.registerClass(
                     const processorHeader = new ProcessorHeader();
                     this.addWidget('processor', processorHeader);
                     (Main.panel as any).menuManager.addMenu(processorHeader.getMenu());
+                    continue;
+                }
+                if(monitor === 'gpu') {
+                    const gpuHeader = new GpuHeader();
+                    this.addWidget('gpu', gpuHeader);
+                    (Main.panel as any).menuManager.addMenu(gpuHeader.getMenu());
                     continue;
                 }
                 if(monitor === 'memory') {

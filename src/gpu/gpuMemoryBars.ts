@@ -27,25 +27,27 @@ type GpuUsage = {
     percent: number;
 };
 
-type GpuBarsParams = BarProps & {
+type GpuMemoryBarsParams = BarProps & {
     layers?: number;
 };
 
 export default GObject.registerClass(
-    class GpuBars extends BarsBase {
-        constructor(params: GpuBarsParams) {
+    class GpuMemoryBars extends BarsBase {
+        constructor(params: GpuMemoryBarsParams) {
             //default params
             if(params.layers === undefined) params.layers = 1;
 
             super(params);
 
-            Config.connect(this, 'changed::processor-menu-gpu-color', this.setStyle.bind(this));
+            Config.connect(this, 'changed::gpu-header-memory-bar-color1', this.setStyle.bind(this));
         }
 
         setStyle() {
             super.setStyle();
 
-            this.colors = [Config.get_string('processor-menu-gpu-color') ?? 'rgba(29,172,214,1.0)'];
+            this.colors = [
+                Config.get_string('gpu-header-memory-bar-color1') ?? 'rgba(29,172,214,1.0)'
+            ];
         }
 
         setUsage(usage: GpuUsage[]) {

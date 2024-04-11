@@ -318,6 +318,16 @@
       <summary>CPU Top Processes Percentage per Single Core</summary>
       <description>Set the percentage on the top processes to single core</description>
     </key>
+    <key name="processor-gpu" type="b">
+      <default>true</default>
+      <summary>GPU</summary>
+      <description>Show the GPU info in the menu</description>
+    </key>
+    
+    <!-- DEPRECATED KEYS
+    VALUES ARE MOVED TO PROPER NEW KEYS AS SOON AS FIRST RUN (V20)
+    KEEP THEM FOR BACKWARD COMPATIBILITY
+    -->
     <key name="processor-menu-gpu" type="s">
       <default>'""'</default>
       <summary>GPU</summary>
@@ -327,6 +337,134 @@
       <default>'rgba(29,172,214,1.0)'</default>
       <summary>GPU Bars Color 1</summary>
       <description>Main color for GPU bars</description>
+    </key>
+    
+    <!-- GPU -->
+    <key name="gpu-header-show" type="b">
+      <default>false</default>
+      <summary>GPU Header</summary>
+      <description>Show the GPU header</description>
+    </key>
+    <key name="gpu-update" type="d">
+      <default>1.5</default>
+      <summary>GPU Update Frequency</summary>
+      <description>Seconds between GPU statistics updates</description>
+      <range min="1.0" max="10"/>
+    </key>
+    <key name="gpu-main" type="s">
+      <default>'""'</default>
+      <summary>Main GPU</summary>
+      <description>Main GPU</description>
+    </key>
+    <key name="gpu-indicators-order" type="s">
+      <default>'""'</default>
+      <summary>Order of the indicators</summary>
+      <description>From left to right, the order of the indicators</description>
+    </key>
+    <key name="gpu-header-icon" type="b">
+      <default>true</default>
+      <summary>GPU Header Icon</summary>
+      <description>Show the icon on the header of the GPU monitor</description>
+    </key>
+    <key name="gpu-header-icon-custom" type="s">
+      <default>''</default>
+      <summary>GPU Header Custom Icon</summary>
+      <description>Set a custom icon for the GPU monitor</description>
+    </key>
+    <key name="gpu-header-icon-color" type="s">
+      <default>''</default>
+      <summary>GPU Header Icon Color</summary>
+      <description>Set a custom color for the GPU monitor icon</description>
+    </key>
+    <key name="gpu-header-icon-alert-color" type="s">
+      <default>'rgba(235, 64, 52, 1)'</default>
+      <summary>Icon Alert Color</summary>
+      <description>Color of the alert icon</description>
+    </key>
+    <key name="gpu-header-icon-size" type="i">
+      <default>18</default>
+      <summary>Header Icon Size</summary>
+      <description>Size in pixel of the icon</description>
+      <range min="8" max="30"/>
+    </key>
+    <key name="gpu-header-activity-bar" type="b">
+      <default>true</default>
+      <summary>Show GPU Activity Bar</summary>
+      <description>Show realtime bar of GPU Activity usage</description>
+    </key>
+    <key name="gpu-header-activity-bar-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>GPU Activity Bar Color 1</summary>
+      <description>Main color for gpu realtime bar</description>
+    </key>
+    <key name="gpu-header-activity-graph" type="b">
+      <default>false</default>
+      <summary>Show Activity History Graph</summary>
+      <description>Show a graph of the GPU activity percentage through time</description>
+    </key>
+    <key name="gpu-header-activity-graph-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Activity Graph Color 1</summary>
+      <description>Main color for gpu history graph</description>
+    </key>
+    <key name="gpu-header-activity-graph-width" type="i">
+      <default>30</default>
+      <summary>Activity Graph Width</summary>
+      <description>The width in pixels of the header history graph</description>
+      <range min="10" max="500"/>
+    </key>
+    <key name="gpu-header-activity-percentage" type="b">
+      <default>false</default>
+      <summary>GPU Header Activity Percentage</summary>
+      <description>Show the percentage on the header of the GPU monitor</description>
+    </key>
+    <key name="gpu-header-activity-percentage-icon-alert-threshold" type="i">
+      <default>0</default>
+      <summary>Activity Percentage Icon Alert Threshold</summary>
+      <description>Threshold in percentage to show the alert icon</description>
+      <range min="0" max="100"/>
+    </key>
+    <key name="gpu-header-memory-bar" type="b">
+      <default>true</default>
+      <summary>Show GPU Memory Bar</summary>
+      <description>Show realtime bar of GPU Memory usage</description>
+    </key>
+    <key name="gpu-header-memory-bar-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>GPU Memory Bar Color 1</summary>
+      <description>Main color for gpu memory bar</description>
+    </key>
+    <key name="gpu-header-memory-graph" type="b">
+      <default>false</default>
+      <summary>Show Memory History Graph</summary>
+      <description>Show a graph of the GPU memory percentage through time</description>
+    </key>
+    <key name="gpu-header-memory-graph-color1" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>Memory Graph Color 1</summary>
+      <description>Main color for gpu memory history graph</description>
+    </key>
+    <key name="gpu-header-memory-graph-width" type="i">
+      <default>30</default>
+      <summary>Memory Graph Width</summary>
+      <description>The width in pixels of the GPU memory history graph</description>
+      <range min="10" max="500"/>
+    </key>
+    <key name="gpu-header-memory-percentage" type="b">
+      <default>false</default>
+      <summary>GPU Header Memory Percentage</summary>
+      <description>Show the percentage on the header of the GPU monitor</description>
+    </key>
+    <key name="gpu-header-memory-percentage-icon-alert-threshold" type="i">
+      <default>0</default>
+      <summary>Memory Percentage Icon Alert Threshold</summary>
+      <description>Threshold in percentage to show the alert icon</description>
+      <range min="0" max="100"/>
+    </key>
+    <key name="gpu-header-tooltip" type="b">
+      <default>true</default>
+      <summary>GPU Header Tooltip</summary>
+      <description>Show the tooltip on the header of the GPU monitor</description>
     </key>
     
     <!-- MEMORY -->

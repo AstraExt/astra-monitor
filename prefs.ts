@@ -99,6 +99,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const processorsPage = this.setupProcessors();
         window.add(processorsPage);
 
+        const gpuPage = this.setupGPU();
+        window.add(gpuPage);
+
         const memoryPage = this.setupMemory();
         window.add(memoryPage);
 
@@ -116,6 +119,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         if(defaultCategory) {
             if(defaultCategory === 'processors') window.set_visible_page(processorsPage);
+            else if(defaultCategory === 'gpu') window.set_visible_page(gpuPage);
             else if(defaultCategory === 'memory') window.set_visible_page(memoryPage);
             else if(defaultCategory === 'storage') window.set_visible_page(storagePage);
             else if(defaultCategory === 'network') window.set_visible_page(networkPage);
@@ -640,7 +644,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow(
             {
                 title: _('Icon Alert'),
-                subtitle: _('Set 0 to disable. Value is percentage of total cpu.'),
+                subtitle: _('Set 0 to disable. Value is percentage of total cpu usage.'),
                 tabs: 1
             },
             'processor-header-percentage-icon-alert-threshold',
@@ -770,7 +774,51 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             'processor-menu-top-processes-percentage-core',
             cpuSection
         );
+
         const gpuSection = this.addExpanderRow({ title: _('GPU') }, group);
+
+        this.addSwitchRow(
+            {
+                title: _('Show GPU info'),
+                subtitle: _('Only works if GPU header is disabled.'),
+                tabs: 1
+            },
+            'processor-gpu',
+            gpuSection
+        );
+
+        processorsPage.add(group);
+
+        return processorsPage;
+    }
+
+    private setupGPU() {
+        const gpuPage = new Adw.PreferencesPage({ title: _('GPU'), icon_name: 'am-gpu-symbolic' });
+
+        /* GPU */
+        let group = new Adw.PreferencesGroup({ title: _('GPU') });
+        this.addSwitchRow(
+            {
+                title: _('Show'),
+                subtitle:
+                    _('Showing GPU info in the panel requires continuous GPU monitoring.') +
+                    '\n' +
+                    'This may have a (minor) performance impact.' +
+                    '\n' +
+                    _("Hint: You can instead choose to show GPU stats in Processors' menu."),
+                icon_name: 'am-dialog-warning-symbolic'
+            },
+            'gpu-header-show',
+            group
+        );
+        this.addSpinRow(
+            { title: _('Update frequency (seconds)') },
+            'gpu-update',
+            group,
+            { min: 1, max: 10, digits: 1, step: 0.1, page: 1 },
+            true,
+            1.5
+        );
 
         const gpus = Utils.getGPUsList();
         const choicesSource = [{ value: '', text: _('None') }];
@@ -784,27 +832,194 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 }, {});
             choicesSource.push({ value: data, text: Utils.getGPUModelName(gpu) });
         }
-        this.addDropRow(
-            { title: _('Main GPU'), tabs: 1 },
-            choicesSource,
-            'processor-menu-gpu',
-            gpuSection,
-            'json'
+        this.addDropRow({ title: _('Main GPU') }, choicesSource, 'gpu-main', group, 'json');
+
+        gpuPage.add(group);
+
+        /* Header */
+        group = new Adw.PreferencesGroup({ title: _('Header') });
+
+        const orderSection = this.addExpanderRow({ title: _('Indicators Order') }, group);
+        Utils.getIndicatorsOrder('gpu');
+        this.addOrderingRows('gpu-indicators-order', orderSection);
+
+        const iconSection = this.addExpanderRow({ title: _('Icon') }, group);
+        this.addSwitchRow({ title: _('Show Icon'), tabs: 1 }, 'gpu-header-icon', iconSection);
+        this.addTextInputRow(
+            {
+                title: _('Icon Name'),
+                subtitle:
+                    _("Set icon name (ie: 'gpu-symbolic')") +
+                    '\n' +
+                    _('Set to empty to disable icon override'),
+                tabs: 1
+            },
+            'gpu-header-icon-custom',
+            iconSection,
+            ''
+        );
+        this.addColorRow(
+            { title: _('Icon Color'), tabs: 1 },
+            'gpu-header-icon-color',
+            iconSection,
+            ''
+        );
+        this.addColorRow(
+            { title: _('Icon Alert Color'), tabs: 1 },
+            'gpu-header-icon-alert-color',
+            iconSection,
+            'rgba(235, 64, 52, 1)'
+        );
+        this.addSpinRow(
+            {
+                title: _('Icon Size'),
+                subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+                icon_name: 'am-dialog-warning-symbolic',
+                tabs: 1
+            },
+            'gpu-header-icon-size',
+            iconSection,
+            { min: 8, max: 30, digits: 0, step: 1, page: 1 },
+            true,
+            18
+        );
+        gpuPage.add(group);
+
+        const activityPercentageSection = this.addExpanderRow(
+            { title: _('Activity Percentage') },
+            group
+        );
+        this.addSwitchRow(
+            { title: _('Show Activity Percentage'), tabs: 1 },
+            'gpu-header-activity-percentage',
+            activityPercentageSection
+        );
+        this.addSpinRow(
+            {
+                title: _('Icon Alert'),
+                subtitle: _('Set 0 to disable. Value is percentage of total GPU Activity usage.'),
+                tabs: 1
+            },
+            'gpu-header-activity-percentage-icon-alert-threshold',
+            activityPercentageSection,
+            { min: 0, max: 100, digits: 0, step: 1, page: 10 },
+            true,
+            0
+        );
+
+        const activityGraphSection = this.addExpanderRow(
+            { title: _('Activity History Graph') },
+            group
+        );
+        this.addSwitchRow(
+            { title: _('Show Activity History Graph'), tabs: 1 },
+            'gpu-header-activity-graph',
+            activityGraphSection
         );
         this.addColorRow(
             {
-                title: _('Bars Color'),
-                subtitle: _('GPU bars main color.'),
+                title: _('Main Color'),
+                subtitle: _('<b>Total usage</b> color.'),
                 tabs: 1
             },
-            'processor-menu-gpu-color',
-            gpuSection,
+            'gpu-header-activity-graph-color1',
+            activityGraphSection,
+            'rgba(29,172,214,1.0)'
+        );
+        this.addSpinRow(
+            { title: _('History Graph Width'), tabs: 1 },
+            'gpu-header-activity-graph-width',
+            activityGraphSection,
+            { min: 10, max: 500, digits: 0, step: 1, page: 10 },
+            true,
+            30
+        );
+
+        const activityBarsSection = this.addExpanderRow(
+            { title: _('Realtime Activity Bar') },
+            group
+        );
+        this.addSwitchRow(
+            { title: _('Show Activity Bar'), tabs: 1 },
+            'gpu-header-activity-bar',
+            activityBarsSection
+        );
+        this.addColorRow(
+            {
+                title: _('Bar Color'),
+                subtitle: _('GPU bar main color.'),
+                tabs: 1
+            },
+            'gpu-header-activity-bar-color1',
+            activityBarsSection,
             'rgba(29,172,214,1.0)'
         );
 
-        processorsPage.add(group);
+        const memoryPercentageSection = this.addExpanderRow(
+            { title: _('Memory Percentage') },
+            group
+        );
+        this.addSwitchRow(
+            { title: _('Show Memory Percentage'), tabs: 1 },
+            'gpu-header-memory-percentage',
+            memoryPercentageSection
+        );
+        this.addSpinRow(
+            {
+                title: _('Icon Alert'),
+                subtitle: _('Set 0 to disable. Value is percentage of total GPU Memory usage.'),
+                tabs: 1
+            },
+            'gpu-header-memory-percentage-icon-alert-threshold',
+            memoryPercentageSection,
+            { min: 0, max: 100, digits: 0, step: 1, page: 10 },
+            true,
+            0
+        );
 
-        return processorsPage;
+        const memoryGraphSection = this.addExpanderRow({ title: _('Memory History Graph') }, group);
+        this.addSwitchRow(
+            { title: _('Show Memory History Graph'), tabs: 1 },
+            'gpu-header-memory-graph',
+            memoryGraphSection
+        );
+        this.addColorRow(
+            {
+                title: _('Main Color'),
+                subtitle: _('<b>Total usage</b> color.'),
+                tabs: 1
+            },
+            'gpu-header-memory-graph-color1',
+            memoryGraphSection,
+            'rgba(29,172,214,1.0)'
+        );
+        this.addSpinRow(
+            { title: _('History Graph Width'), tabs: 1 },
+            'gpu-header-memory-graph-width',
+            memoryGraphSection,
+            { min: 10, max: 500, digits: 0, step: 1, page: 10 },
+            true,
+            30
+        );
+
+        const memoryBarsSection = this.addExpanderRow({ title: _('Realtime Memory Bar') }, group);
+        this.addSwitchRow(
+            { title: _('Show Memory Bar'), tabs: 1 },
+            'gpu-header-memory-bar',
+            memoryBarsSection
+        );
+        this.addColorRow(
+            {
+                title: _('Bar Color'),
+                subtitle: _('GPU bar main color.'),
+                tabs: 1
+            },
+            'gpu-header-memory-bar-color1',
+            memoryBarsSection,
+            'rgba(29,172,214,1.0)'
+        );
+
+        return gpuPage;
     }
 
     private setupMemory() {
@@ -2476,7 +2691,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             const mainColors = [
                 'processor-header-graph-color1',
                 'processor-header-bars-color1',
-                'processor-menu-gpu-color',
+                'gpu-header-activity-bar-color1',
+                'gpu-header-activity-graph-color1',
                 'memory-header-graph-color1',
                 'memory-header-bars-color1',
                 'memory-menu-swap-color',
@@ -2674,6 +2890,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     addSwitchRow(props: RowProps, setting: string, group: Adw.PreferencesGroup | Adw.ExpanderRow) {
         const tabs = props.tabs;
         delete props.tabs;
+
+        if(props.icon_name) {
+            if(props.title) props.title = '  ' + props.title;
+            if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
+        }
 
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));

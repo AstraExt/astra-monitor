@@ -29,9 +29,12 @@ import Grid from '../grid.js';
 
 import ProcessorGraph from './processorGraph.js';
 import ProcessorBars from './processorBars.js';
-import ProcessorMonitor, { CpuInfo, GenericGpuInfo } from './processorMonitor.js';
+import ProcessorMonitor, { CpuInfo } from './processorMonitor.js';
+import { GenericGpuInfo } from '../gpu/gpuMonitor.js';
+import GpuActivityBars from '../gpu/gpuActivityBars.js';
+import GpuMemoryBars from '../gpu/gpuMemoryBars.js';
+
 import Config from '../config.js';
-import GpuBars from './gpuBars.js';
 
 type CpuInfoPopup = MenuBase & {
     hideable?: {
@@ -89,13 +92,13 @@ type GpusSectionGpu = {
     info: GpuInfo;
     popup?: GpuInfoPopup;
     vram: {
-        bar?: InstanceType<typeof GpuBars>;
+        bar?: InstanceType<typeof GpuMemoryBars>;
         barLabel?: St.Label;
         usedLabel?: St.Label;
         totalLabel?: St.Label;
     };
     activity: {
-        gfxBar?: InstanceType<typeof GpuBars>;
+        gfxBar?: InstanceType<typeof GpuActivityBars>;
         gfxBarLabel?: St.Label;
     };
 };
@@ -103,6 +106,7 @@ type GpusSectionGpu = {
 type GpusSection = {
     label?: St.Label;
     noGPULabel?: St.Label;
+    container: InstanceType<typeof Grid>;
     gpus: GpusSectionGpu[];
 };
 
@@ -775,17 +779,19 @@ export default class ProcessorMenu extends MenuBase {
 
     addGPUs() {
         this.gpusSection = {
-            gpus: []
+            gpus: [],
+            container: new Grid({ numCols: 2, styleClass: 'astra-monitor-menu-subgrid' })
         };
 
         this.gpusSection.label = this.addMenuSection(_('GPU'));
-        Config.connect(this.gpusSection.label, 'changed::processor-menu-gpu', () => {
-            const gpu = Utils.getSelectedGPU();
+        Config.connect(this.gpusSection.label, 'changed::gpu-main', () => {
+            const gpu = Utils.gpuMonitor.getSelectedGpu();
             if(this.gpusSection.label) this.gpusSection.label.visible = !!gpu;
         });
 
-        const GPUsList = Utils.getGPUsList();
+        this.addToMenu(this.gpusSection.container, 2);
 
+        const GPUsList = Utils.getGPUsList();
         if(GPUsList.length === 0) {
             // Print No GPU found
             this.gpusSection.noGPULabel = new St.Label({
@@ -793,17 +799,17 @@ export default class ProcessorMenu extends MenuBase {
                 style_class: 'astra-monitor-menu-label-warning',
                 style: 'font-style:italic;'
             });
-            Config.connect(this.gpusSection, 'changed::processor-menu-gpu', () => {
-                const gpu = Utils.getSelectedGPU();
+            Config.connect(this.gpusSection.noGPULabel, 'changed::gpu-main', () => {
+                const gpu = Utils.gpuMonitor.getSelectedGpu();
                 if(this.gpusSection.noGPULabel) this.gpusSection.noGPULabel.visible = !!gpu;
             });
-            this.addToMenu(this.gpusSection.noGPULabel, 2);
+            this.gpusSection.container.addToGrid(this.gpusSection.noGPULabel, 2);
             return;
         }
 
         if(GPUsList.length > 1) this.gpusSection.label.text = _('GPUs');
 
-        const selectedGpu = Utils.getSelectedGPU();
+        const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
 
         this.gpuInfoPopups = [];
         for(let i = 0; i < GPUsList.length; i++) {
@@ -850,7 +856,7 @@ export default class ProcessorMenu extends MenuBase {
                         style: 'margin-left:0.5em;'
                     });
 
-                    const bar = new GpuBars({
+                    const bar = new GpuActivityBars({
                         numBars: 1,
                         width: 200 - 2,
                         height: 0.8,
@@ -888,7 +894,7 @@ export default class ProcessorMenu extends MenuBase {
                         style: 'margin-left:0.5em;'
                     });
 
-                    const bar = new GpuBars({
+                    const bar = new GpuMemoryBars({
                         numBars: 1,
                         width: 200 - 2,
                         height: 0.8,
@@ -993,10 +999,10 @@ export default class ProcessorMenu extends MenuBase {
                 hoverButton.style = defaultStyle;
                 if(gpuInfoPopup) gpuInfoPopup.close(true);
             });
-            this.addToMenu(hoverButton, 2);
+            this.gpusSection.container.addToGrid(hoverButton, 2);
 
             const updateSelectedGPU = () => {
-                const selectedGpu = Utils.getSelectedGPU();
+                const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
 
                 if(gpuInfo === selectedGpu) {
                     label.style_class = 'astra-monitor-menu-label';
@@ -1008,9 +1014,30 @@ export default class ProcessorMenu extends MenuBase {
             };
             updateSelectedGPU();
 
-            Config.connect(this.gpusSection, 'changed::processor-menu-gpu', updateSelectedGPU);
+            Config.connect(this.gpusSection, 'changed::gpu-main', updateSelectedGPU);
             this.gpusSection.gpus.push(gpu);
         }
+
+        const updateGpuVisibility = () => {
+            const processorShow = Config.get_boolean('processor-gpu');
+            const gpuHeaderShow = Config.get_boolean('gpu-header-show');
+
+            if(gpuHeaderShow || !processorShow) {
+                this.gpusSection.label?.hide();
+                this.gpusSection.container.hide();
+            } else {
+                this.gpusSection.label?.show();
+                this.gpusSection.container.show();
+            }
+        };
+
+        Config.connect(this.gpusSection, 'changed::processor-gpu', updateGpuVisibility.bind(this));
+        Config.connect(
+            this.gpusSection,
+            'changed::gpu-header-show',
+            updateGpuVisibility.bind(this)
+        );
+        updateGpuVisibility();
     }
 
     createGPUInfoPopup(sourceActor: St.Widget, gpuInfo: GpuInfo): GpuInfoPopup {
@@ -1197,7 +1224,10 @@ export default class ProcessorMenu extends MenuBase {
             this.menuUptime.text = Utils.formatUptime(bootTime);
         });
 
-        Utils.processorMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
+        const processorGpuShow = Config.get_boolean('processor-gpu');
+        const gpuHeaderShow = Config.get_boolean('gpu-header-show');
+        if(processorGpuShow && !gpuHeaderShow)
+            Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
     }
 
     async onClose() {
@@ -1206,7 +1236,7 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.unlisten(this, 'topProcesses');
         Utils.processorMonitor.unlisten(this, 'loadAverage');
 
-        Utils.processorMonitor.unlisten(this, 'gpuUpdate');
+        Utils.gpuMonitor.unlisten(this, 'gpuUpdate');
 
         this.queueTopProcessesUpdate = false;
 
@@ -1400,7 +1430,7 @@ export default class ProcessorMenu extends MenuBase {
             return;
         }
         if(code === 'gpuUpdate') {
-            const selectedGpu = Utils.getSelectedGPU();
+            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
             if(!selectedGpu) return;
             const data: Map<string, any> = args[0];
             if(!data) return;
@@ -1463,7 +1493,15 @@ export default class ProcessorMenu extends MenuBase {
         this.close(true);
         this.removeAll();
 
+        Utils.processorMonitor.unlisten(this);
+        Utils.processorMonitor.unlisten(this.graph);
+        Utils.gpuMonitor.unlisten(this);
+
+        Config.clear(this);
         Config.clear(this.gpusSection);
+
+        if(this.gpusSection.label) Config.clear(this.gpusSection.label);
+        if(this.gpusSection.noGPULabel) Config.clear(this.gpusSection.noGPULabel);
 
         if(this.cpuInfoPopup) {
             this.cpuInfoPopup.destroy();
