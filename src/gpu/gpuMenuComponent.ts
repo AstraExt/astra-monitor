@@ -53,10 +53,24 @@ type ActivityPopup = MenuBase & {
     updateData: (data: GenericGpuInfo) => void;
 };
 
+type VramPopup = MenuBase & {
+    addToMenu: (actor: St.Widget, priority?: number) => void;
+    pipes: {
+        grid: InstanceType<typeof Grid>;
+        title: St.Label;
+        bar: InstanceType<typeof GpuActivityBars>;
+        barLabel: St.Label;
+        usedValue: St.Label;
+        totalValue: St.Label;
+    }[];
+    updateData: (data: GenericGpuInfo) => void;
+};
+
 type Section = {
     info: GpuInfo;
     infoPopup?: InfoPopup;
     activityPopup?: ActivityPopup;
+    vramPopup?: VramPopup;
     vram: {
         bar?: InstanceType<typeof GpuMemoryBars>;
         barLabel?: St.Label;
@@ -77,6 +91,7 @@ export default class GpuMenuComponent {
     public container!: InstanceType<typeof Grid>;
     private infoPopups: InfoPopup[] = [];
     private activityPopups: ActivityPopup[] = [];
+    private vramPopups: VramPopup[] = [];
     private noGPULabel: St.Label | undefined;
 
     private sections: Section[] = [];
@@ -203,7 +218,6 @@ export default class GpuMenuComponent {
                 style_class: 'astra-monitor-menu-header-small',
                 style: 'padding-left:1em;'
             });
-
             activityGrid.addToGrid(activityTitle);
 
             // GFX Activity Bar
@@ -236,13 +250,38 @@ export default class GpuMenuComponent {
                 section.activity.gfxBarLabel = barUsagePercLabel;
             }
 
-            //VARM
-            grid.addToGrid(
-                new St.Label({
-                    text: _('VRAM'),
-                    style_class: 'astra-monitor-menu-header-small'
-                })
-            );
+            //VRAM
+            const vramButton = new St.Button({
+                reactive: true,
+                track_hover: true,
+                style: defaultStyle,
+                x_expand: true
+            });
+
+            const vramGrid = new Grid({ numCols: 1 });
+            vramButton.set_child(vramGrid);
+
+            const vramPopup = this.createVramPopup(vramButton, gpuInfo);
+            section.vramPopup = vramPopup;
+            this.vramPopups.push(vramPopup);
+
+            vramButton.connect('enter-event', () => {
+                vramButton.style = defaultStyle + this.parent.selectionStyle;
+                if(vramPopup) vramPopup.open(true);
+            });
+
+            vramButton.connect('leave-event', () => {
+                vramButton.style = defaultStyle;
+                if(vramPopup) vramPopup.close(true);
+            });
+            grid.addToGrid(vramButton);
+
+            const vramTitle = new St.Label({
+                text: _('VRAM'),
+                style_class: 'astra-monitor-menu-header-small',
+                style: 'padding-left:1em;'
+            });
+            vramGrid.addToGrid(vramTitle);
 
             // Bar
             {
@@ -268,7 +307,7 @@ export default class GpuMenuComponent {
                 });
                 barGrid.addToGrid(barUsagePercLabel);
 
-                grid.addToGrid(barGrid);
+                vramGrid.addToGrid(barGrid);
 
                 section.vram.bar = bar;
                 section.vram.barLabel = barUsagePercLabel;
@@ -334,7 +373,7 @@ export default class GpuMenuComponent {
 
                 vramContainer.add_child(totalContainer);
 
-                grid.addToGrid(vramContainer);
+                vramGrid.addToGrid(vramContainer);
 
                 section.vram.usedLabel = usedValueLabel;
                 section.vram.totalLabel = totalValueLabel;
@@ -567,6 +606,126 @@ export default class GpuMenuComponent {
         return popup;
     }
 
+    private createVramPopup(sourceActor: St.Widget, _gpuInfo: GpuInfo): VramPopup {
+        const popup = new MenuBase(sourceActor, 0.05) as VramPopup;
+        popup.addMenuSection(_('VRAM'));
+        popup.pipes = [];
+
+        for(let i = 0; i < 10; i++) {
+            const title = new St.Label({
+                text: 'Test',
+                style_class: 'astra-monitor-menu-header-small',
+                style: 'padding-left:0.5em;'
+            });
+            popup.addToMenu(title, 2);
+
+            const grid = new Grid({
+                styleClass: 'astra-monitor-menu-subgrid'
+            });
+
+            const bar = new GpuActivityBars({
+                numBars: 1,
+                width: 200 - 2,
+                height: 0.8,
+                mini: false,
+                layout: 'horizontal',
+                x_align: Clutter.ActorAlign.START,
+                style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
+            });
+            grid.addToGrid(bar);
+
+            const barLabel = new St.Label({
+                text: '-%',
+                style: 'width:2.7em;font-size:0.8em;text-align:right;'
+            });
+            grid.addToGrid(barLabel);
+
+            const footerContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({
+                    orientation: Clutter.Orientation.HORIZONTAL
+                }),
+                x_expand: true,
+                style: 'margin-left:0.5em;margin-right:0;'
+            });
+
+            const usedContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({
+                    orientation: Clutter.Orientation.HORIZONTAL
+                }),
+                x_expand: true,
+                style: 'margin-left:0;margin-right:0;'
+            });
+
+            const usedLabel = new St.Label({
+                text: _('Used:'),
+                style_class: 'astra-monitor-menu-label',
+                style: 'padding-right:0.15em;'
+            });
+            usedContainer.add_child(usedLabel);
+
+            const usedValue = new St.Label({
+                text: '-',
+                x_expand: true,
+                style_class: 'astra-monitor-menu-key-mid'
+            });
+            usedContainer.add_child(usedValue);
+            usedContainer.set_width(100);
+
+            footerContainer.add_child(usedContainer);
+
+            const totalContainer = new St.Widget({
+                layout_manager: new Clutter.GridLayout({
+                    orientation: Clutter.Orientation.HORIZONTAL
+                }),
+                x_expand: true,
+                style: 'margin-left:0;margin-right:0;'
+            });
+
+            const totalLabel = new St.Label({
+                text: _('Total:'),
+                style_class: 'astra-monitor-menu-label',
+                style: 'padding-right:0.15em;'
+            });
+            totalContainer.add_child(totalLabel);
+
+            const totalValue = new St.Label({
+                text: '-',
+                x_expand: true,
+                style_class: 'astra-monitor-menu-key-mid'
+            });
+            totalContainer.add_child(totalValue);
+            totalContainer.set_width(100);
+
+            footerContainer.add_child(totalContainer);
+
+            grid.addToGrid(footerContainer);
+
+            popup.addToMenu(grid, 2);
+
+            popup.pipes.push({ grid, title, bar, barLabel, usedValue, totalValue });
+        }
+
+        popup.updateData = (data: GenericGpuInfo) => {
+            const pipeCount = data.vram.pipes?.length || 0;
+            for(let i = 0; i < 10; i++) {
+                const pipe = popup.pipes[i];
+                if(i < pipeCount) {
+                    const pipeData = data.vram.pipes![i];
+                    pipe.title.text = pipeData.name;
+                    pipe.bar.setUsage([{ percent: pipeData.percent }]);
+                    pipe.barLabel.text = pipeData.percent.toFixed(0) + '%';
+                    pipe.usedValue.text = Utils.formatBytes(pipeData.used, 'kB-KB', 3);
+                    pipe.totalValue.text = Utils.formatBytes(pipeData.total, 'kB-KB', 3);
+                } else {
+                    pipe.title.hide();
+                    pipe.grid.hide();
+                }
+            }
+        };
+
+        return popup;
+    }
+
     public update(data?: Map<string, GenericGpuInfo>) {
         if(!data) return;
 
@@ -626,6 +785,7 @@ export default class GpuMenuComponent {
 
         if(section.infoPopup) section.infoPopup.updateData(gpuData);
         if(section.activityPopup) section.activityPopup.updateData(gpuData);
+        if(section.vramPopup) section.vramPopup.updateData(gpuData);
     }
 
     public clear() {}

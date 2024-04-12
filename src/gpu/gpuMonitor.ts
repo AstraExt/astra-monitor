@@ -31,6 +31,12 @@ export type GenericGpuInfo = {
         percent?: number;
         total?: number;
         used?: number;
+        pipes?: {
+            name: string;
+            percent: number;
+            used: number;
+            total: number;
+        }[];
     };
     activity: {
         GFX?: number;
@@ -42,25 +48,73 @@ export type GenericGpuInfo = {
     raw: any;
 };
 
+type AmdValue = {
+    unit?: string;
+    value?: number;
+};
+
 type AmdInfoRaw = {
-    GRBM?: any;
-    GRBM2?: any;
-    Info?: any;
-    Sensors?: any;
-    VRAM?: any;
-    fdinfo?: any;
-    gpu_activity?: any;
-    gpu_metrics?: any;
+    GRBM?: {
+        [key: string]: AmdValue;
+    };
+    GRBM2?: {
+        [key: string]: AmdValue;
+    };
+    Info?: {
+        PCI?: string;
+        VRAM?: {
+            [key: string]: AmdValue;
+        };
+    };
+    Sensors?: {
+        [key: string]: AmdValue;
+    };
+    VRAM?: {
+        [key: string]: AmdValue;
+    };
+    fdinfo?: {
+        [key: string]: {
+            name?: string;
+            usage: AmdValue;
+        };
+    };
+    gpu_activity?: {
+        [key: string]: AmdValue;
+    };
+    gpu_metrics?: {
+        [key: string]: AmdValue;
+    };
 };
 
 export type AmdInfo = GenericGpuInfo & {
     raw: AmdInfoRaw;
 };
 
+type NvidiaField = {
+    '#text'?: string;
+};
+
 type NvidiaInfoRaw = {
     '@id'?: string;
-    fb_memory_usage?: any;
-    utilization?: any;
+    fb_memory_usage?: {
+        total?: NvidiaField;
+        reserverd?: NvidiaField;
+        used?: NvidiaField;
+        free?: NvidiaField;
+    };
+    bar1_memory_usage?: {
+        total?: NvidiaField;
+        used?: NvidiaField;
+        free?: NvidiaField;
+    };
+    cc_protected_memory_usage?: {
+        total?: NvidiaField;
+        used?: NvidiaField;
+        free?: NvidiaField;
+    };
+    utilization?: {
+        [key: string]: NvidiaField;
+    };
 };
 
 export type NvidiaInfo = GenericGpuInfo & {
@@ -199,6 +253,7 @@ export default class GpuMonitor extends Monitor {
             const gpus = new Map<string, AmdInfo>();
             for(const gpuInfo of json.devices) {
                 const id = gpuInfo.Info?.PCI;
+                if(!id) continue;
 
                 const gpu: AmdInfo = {
                     id,
@@ -221,26 +276,22 @@ export default class GpuMonitor extends Monitor {
                         if(used >= 0) gpu.vram.used = used;
                     }
 
-                    if(gpu.vram.total !== undefined && gpu.vram.used !== undefined)
+                    if(gpu.vram.total != null && gpu.vram.used != null)
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
                 }
 
                 if(
-                    gpuInfo.gpu_activity &&
-                    gpuInfo.gpu_activity.GFX &&
-                    Object.prototype.hasOwnProperty.call(gpuInfo.gpu_activity.GFX, 'value') &&
+                    gpuInfo.gpu_activity?.GFX?.value != null &&
                     gpuInfo.gpu_activity.GFX.unit === '%'
                 ) {
                     const GFX = gpuInfo.gpu_activity.GFX.value;
                     if(typeof GFX === 'string') gpu.activity.GFX = parseFloat(GFX);
                     else gpu.activity.GFX = GFX;
                 } else if(
-                    gpuInfo.GRBM &&
-                    gpuInfo.GRBM['Graphics Pipe'] &&
-                    Object.prototype.hasOwnProperty.call(gpuInfo.GRBM['Graphics Pipe'], 'value') &&
+                    gpuInfo.GRBM?.['Graphics Pipe']?.value != null &&
                     gpuInfo.GRBM['Graphics Pipe'].unit === '%'
                 ) {
-                    const gfx = gpuInfo.GRBM['Graphics Pipe'].value;
+                    const gfx = gpuInfo.GRBM!['Graphics Pipe'].value;
                     if(typeof gfx === 'string') gpu.activity.GFX = parseFloat(gfx);
                     else gpu.activity.GFX = gfx;
                 }
@@ -249,12 +300,8 @@ export default class GpuMonitor extends Monitor {
                 if(gpuInfo.GRBM) {
                     for(const name in gpuInfo.GRBM) {
                         const pipe = gpuInfo.GRBM[name];
-                        if(
-                            pipe &&
-                            Object.prototype.hasOwnProperty.call(pipe, 'value') &&
-                            pipe.unit === '%'
-                        ) {
-                            const percent = parseFloat(pipe.value);
+                        if(pipe?.value != null && pipe.unit === '%') {
+                            const percent = pipe.value;
                             if(!isNaN(percent)) gpu.activity.pipes.push({ name, percent });
                         }
                     }
@@ -263,17 +310,37 @@ export default class GpuMonitor extends Monitor {
                 if(gpuInfo.GRBM2) {
                     for(const name in gpuInfo.GRBM2) {
                         const pipe = gpuInfo.GRBM2[name];
-                        if(
-                            pipe &&
-                            Object.prototype.hasOwnProperty.call(pipe, 'value') &&
-                            pipe.unit === '%'
-                        ) {
-                            const percent = parseFloat(pipe.value);
+                        if(pipe?.value != null && pipe.unit === '%') {
+                            const percent = pipe.value;
                             if(!isNaN(percent)) gpu.activity.pipes.push({ name, percent });
                         }
                     }
                 }
 
+                gpu.vram.pipes = [];
+                if(gpuInfo.VRAM) {
+                    for(const name in gpuInfo.VRAM) {
+                        const pipe = gpuInfo.VRAM[name];
+                        const usage = gpuInfo.VRAM[name + ' Usage'];
+
+                        if(
+                            pipe?.value != null &&
+                            pipe.unit &&
+                            usage?.value != null &&
+                            usage.unit
+                        ) {
+                            const total = Utils.convertToBytes(pipe.value, pipe.unit);
+                            const used = Utils.convertToBytes(usage.value, usage.unit);
+                            if(total && used != null)
+                                gpu.vram.pipes.push({
+                                    name,
+                                    percent: (used / total) * 100,
+                                    used,
+                                    total
+                                });
+                        }
+                    }
+                }
                 gpus.set(id, gpu);
             }
 
@@ -313,6 +380,7 @@ export default class GpuMonitor extends Monitor {
                     raw: gpuInfo
                 };
 
+                gpu.vram.pipes = [];
                 if(gpuInfo.fb_memory_usage) {
                     const toalData = gpuInfo.fb_memory_usage.total;
                     if(toalData && toalData['#text']) {
@@ -330,19 +398,72 @@ export default class GpuMonitor extends Monitor {
                         if(used >= 0) gpu.vram.used = used;
                     }
 
-                    if(gpu.vram.total !== undefined && gpu.vram.used !== undefined)
+                    if(gpu.vram.total !== undefined && gpu.vram.used !== undefined) {
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
+                        gpu.vram.pipes.push({
+                            name: 'fb_memory_usage',
+                            percent: gpu.vram.percent,
+                            used: gpu.vram.used,
+                            total: gpu.vram.total
+                        });
+                    }
+                }
+
+                if(gpuInfo.bar1_memory_usage) {
+                    let total: number | undefined;
+                    let used: number | undefined;
+
+                    const toalData = gpuInfo.bar1_memory_usage.total;
+                    if(toalData && toalData['#text']) {
+                        const [value, unit] = toalData['#text'].split(' ');
+                        total = Utils.convertToBytes(value, unit);
+                    }
+
+                    const usedData = gpuInfo.bar1_memory_usage.used;
+                    if(usedData && usedData['#text']) {
+                        const [value, unit] = usedData['#text'].split(' ');
+                        used = Utils.convertToBytes(value, unit);
+                    }
+
+                    if(total && used != null)
+                        gpu.vram.pipes.push({
+                            name: 'bar1_memory_usage',
+                            percent: (used / total) * 100,
+                            used,
+                            total
+                        });
+                }
+
+                if(gpuInfo.cc_protected_memory_usage) {
+                    let total: number | undefined;
+                    let used: number | undefined;
+
+                    const toalData = gpuInfo.cc_protected_memory_usage.total;
+                    if(toalData && toalData['#text']) {
+                        const [value, unit] = toalData['#text'].split(' ');
+                        total = Utils.convertToBytes(value, unit);
+                    }
+
+                    const usedData = gpuInfo.cc_protected_memory_usage.used;
+                    if(usedData && usedData['#text']) {
+                        const [value, unit] = usedData['#text'].split(' ');
+                        used = Utils.convertToBytes(value, unit);
+                    }
+
+                    if(total && used != null)
+                        gpu.vram.pipes.push({
+                            name: 'cc_protected_memory_usage',
+                            percent: (used / total) * 100,
+                            used,
+                            total
+                        });
                 }
 
                 if(gpuInfo.utilization) {
                     const pipes = [];
                     for(const key in gpuInfo.utilization) {
                         const value = gpuInfo.utilization[key];
-                        if(
-                            value &&
-                            Object.prototype.hasOwnProperty.call(gpuInfo.utilization, key) &&
-                            Object.prototype.hasOwnProperty.call(value, '#text')
-                        ) {
+                        if(gpuInfo.utilization.key != null && value?.['#text']) {
                             const [valueStr, unit] = value['#text'].split(' ');
                             if(unit === '%') {
                                 if(key === 'gpu_util') gpu.activity.GFX = parseFloat(valueStr);
