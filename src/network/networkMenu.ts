@@ -151,6 +151,12 @@ type DeviceWirelessPopup = MenuBase & {
     signalLevelValue?: St.Label;
 };
 
+enum RefreshStatus {
+    IDLE,
+    REFRESHING,
+    DONE
+}
+
 export default class NetworkMenu extends MenuBase {
     /*private networkSectionLabel!: St.Label;*/
     private networkActivityPopup!: NetworkActivityPopup;
@@ -169,6 +175,9 @@ export default class NetworkMenu extends MenuBase {
         label: St.Label;
         value1: St.Label;
         value2: St.Label;
+        refreshLabel: St.Label;
+        refreshStatus: RefreshStatus;
+        refreshTimer?: number;
     };
 
     private defaultRouteDevice!: St.Label;
@@ -413,10 +422,18 @@ export default class NetworkMenu extends MenuBase {
 
         grid.addToGrid(publicIpv6Grid, 2);
 
+        const refreshLabel = new St.Label({
+            text: _('Refresh'),
+            style_class: 'astra-monitor-menu-key-mid-center'
+        });
+        grid.addToGrid(refreshLabel, 2);
+
         this.publicIpv6 = {
             label: publicIpv6Label,
             value1: publicIpv6Value1,
-            value2: publicIpv6Value2
+            value2: publicIpv6Value2,
+            refreshLabel: refreshLabel,
+            refreshStatus: RefreshStatus.IDLE
         };
 
         this.publicIPContainer.connect('enter-event', () => {
@@ -425,6 +442,14 @@ export default class NetworkMenu extends MenuBase {
 
         this.publicIPContainer.connect('leave-event', () => {
             this.publicIPContainer.style = defaultStyle;
+        });
+
+        this.publicIPContainer.connect('clicked', () => {
+            if(this.publicIpv6.refreshStatus !== RefreshStatus.IDLE) return;
+
+            this.publicIpv6.refreshStatus = RefreshStatus.REFRESHING;
+            this.publicIpv6.refreshLabel.text = _('Refreshing...');
+            Utils.networkMonitor.updatePublicIps(true);
         });
 
         this.addToMenu(this.publicIPContainer, 2);
@@ -1688,6 +1713,7 @@ export default class NetworkMenu extends MenuBase {
 
         this.update('publicIps');
         Utils.networkMonitor.listen(this, 'publicIps', this.update.bind(this, 'publicIps'));
+        Utils.networkMonitor.requestUpdate('publicIps');
 
         this.update('routes');
         Utils.networkMonitor.listen(this, 'routes', this.update.bind(this, 'routes'));
@@ -1720,6 +1746,10 @@ export default class NetworkMenu extends MenuBase {
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
             this.updateTimer = 0;
+        }
+        if(this.publicIpv6.refreshTimer) {
+            GLib.source_remove(this.publicIpv6.refreshTimer);
+            this.publicIpv6.refreshTimer = 0;
         }
     }
 
@@ -1923,6 +1953,21 @@ export default class NetworkMenu extends MenuBase {
             return;
         }
         if(code === 'publicIps') {
+            if(this.publicIpv6.refreshStatus === RefreshStatus.REFRESHING) {
+                this.publicIpv6.refreshStatus = RefreshStatus.DONE;
+                this.publicIpv6.refreshLabel.text = _('Done');
+
+                this.publicIpv6.refreshTimer = GLib.timeout_add_seconds(
+                    GLib.PRIORITY_DEFAULT,
+                    2,
+                    () => {
+                        this.publicIpv6.refreshLabel.text = _('Refresh');
+                        this.publicIpv6.refreshStatus = RefreshStatus.IDLE;
+                        return GLib.SOURCE_REMOVE;
+                    }
+                );
+            }
+
             const publicIPv4 = Utils.networkMonitor.getCurrentValue('publicIpv4Address');
             if(publicIPv4) {
                 this.publicIPv4.label.show();
@@ -2215,11 +2260,18 @@ export default class NetworkMenu extends MenuBase {
         this.publicIPv4.value.text = '-';
         this.publicIpv6.value1.text = '-';
         this.publicIpv6.value2.hide();
+        this.publicIpv6.refreshStatus = RefreshStatus.IDLE;
+        this.publicIpv6.refreshLabel.text = _('Refresh');
     }
 
     destroy() {
         this.close(true);
         this.removeAll();
+
+        if(this.publicIpv6.refreshTimer) {
+            GLib.source_remove(this.publicIpv6.refreshTimer);
+            this.publicIpv6.refreshTimer = 0;
+        }
 
         super.destroy();
     }

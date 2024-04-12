@@ -88,6 +88,7 @@ export default class NetworkMonitor extends Monitor {
     private dataSources!: NetworkDataSources;
 
     private publicIpsUpdaterID: number | null = null;
+    private lastIpsUpdate: number = 0;
 
     constructor() {
         super('Network Monitor');
@@ -278,6 +279,10 @@ export default class NetworkMonitor extends Monitor {
         }
         if(key === 'wireless') {
             this.runUpdate('wireless');
+        }
+        if(key === 'publicIps') {
+            const time = this.secondsSinceLastIpsUpdate;
+            if(time > 60 && time < 60 * 5 - 30) this.updatePublicIps();
         }
         super.requestUpdate(key);
     }
@@ -633,13 +638,17 @@ export default class NetworkMonitor extends Monitor {
         }
     }
 
-    private updatePublicIps() {
+    public get secondsSinceLastIpsUpdate(): number {
+        return (GLib.get_monotonic_time() - this.lastIpsUpdate) / 1000000;
+    }
+
+    public updatePublicIps(force: boolean = false): boolean {
         (async () => {
             try {
+                this.lastIpsUpdate = GLib.get_monotonic_time();
                 const ipv4 = await this.updatePublicIpv4Address();
                 const ipv6 = await this.updatePublicIpv6Address();
-
-                if(ipv4 || ipv6) this.notify('publicIps');
+                if(ipv4 || ipv6 || force) this.notify('publicIps');
             } catch(e) {
                 /* EMPTY */
             }
