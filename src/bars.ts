@@ -229,19 +229,20 @@ export default GObject.registerClass(
                             if(value[l].value === 0) continue;
                         }
 
+                        const zero = Math.round(value[l].value * 100) < 1 ? 0 : 1;
                         const normalizedValue = value[l].value * size;
-                        let fillSize = 1;
+                        let fillSize = zero;
                         if(normalizedValue >= 0.5)
                             fillSize = Math.ceil(normalizedValue) / this.scaleFactor;
-                        if(isNaN(fillSize) || fillSize < 1) fillSize = 1;
+                        if(isNaN(fillSize) || fillSize < zero) fillSize = zero;
 
                         if(this.layout === 'vertical')
                             layer.set_position(0, size - start - fillSize);
                         else layer.set_position(start, 0);
 
+                        const color = fillSize === 0 ? 'transparent' : this.colors[value[l].color];
                         const style =
-                            this.computeStyle(start, fillSize, size) +
-                            `background-color:${this.colors[value[l].color]};`;
+                            this.computeStyle(start, fillSize, size) + `background-color:${color};`;
                         layer.set_style(style);
                         start += fillSize;
 
@@ -284,7 +285,8 @@ export default GObject.registerClass(
                     bordersHelper.bottomRight = border;
                 }
             }
-
+            
+            size = Math.max(size, 1);
             const style = `border-radius: ${bordersHelper.topLeft} ${bordersHelper.topRight} ${bordersHelper.bottomRight} ${bordersHelper.bottomLeft};`;
             if(this.layout === 'vertical')
                 return `${style}height:${size}px;width:${this.barSize}em;`;

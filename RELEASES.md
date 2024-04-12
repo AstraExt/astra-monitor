@@ -1,3 +1,9 @@
+# Astra Monitor 20 - TO BE RELEASED
+
+### Bug fixes
+
+-   Allow bars to be empty when the value is zero
+
 # Astra Monitor 19 - April 8 2024
 
 ### Bug fixes
