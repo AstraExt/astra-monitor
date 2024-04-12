@@ -285,7 +285,7 @@ export default GObject.registerClass(
                     bordersHelper.bottomRight = border;
                 }
             }
-            
+
             size = Math.max(size, 1);
             const style = `border-radius: ${bordersHelper.topLeft} ${bordersHelper.topRight} ${bordersHelper.bottomRight} ${bordersHelper.bottomLeft};`;
             if(this.layout === 'vertical')

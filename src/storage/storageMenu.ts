@@ -930,7 +930,7 @@ export default class StorageMenu extends MenuBase {
         const configuration = StorageMenu.deviceInfoPopupConfiguration;
 
         for(const section of configuration) {
-            popup[section.sectionNr] = popup.addMenuSection(section.title);
+            popup[section.sectionNr] = popup.addMenuSection(section.title, true, true);
             popup[section.labels] = [];
             popup[section.values] = [];
 
