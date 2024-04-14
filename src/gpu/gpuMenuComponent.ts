@@ -287,7 +287,7 @@ export default class GpuMenuComponent {
             {
                 const barGrid = new Grid({
                     styleClass: 'astra-monitor-menu-subgrid',
-                    style: 'margin-left:0.5em;'
+                    style: 'margin-left:0.3em;'
                 });
 
                 const bar = new GpuMemoryBars({
@@ -303,7 +303,7 @@ export default class GpuMenuComponent {
 
                 const barUsagePercLabel = new St.Label({
                     text: '0%',
-                    style: 'width:2.7em;font-size:0.8em;text-align:right;'
+                    style: 'width:2.8em;font-size:0.8em;text-align:right;'
                 });
                 barGrid.addToGrid(barUsagePercLabel);
 
@@ -320,7 +320,7 @@ export default class GpuMenuComponent {
                         orientation: Clutter.Orientation.HORIZONTAL
                     }),
                     x_expand: true,
-                    style: 'margin-left:0.5em;margin-right:0;'
+                    style: 'margin-left:0.3em;margin-right:0;'
                 });
 
                 const usedContainer = new St.Widget({
