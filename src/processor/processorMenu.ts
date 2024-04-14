@@ -465,15 +465,15 @@ export default class ProcessorMenu extends MenuBase {
                     'cpuCoresUsage',
                     this.update.bind(this, 'cpuCoresUsage')
                 );
-                
+
                 if(this.lazyCoresPopupTimer == null) {
-                    this.lazyCoresPopupTimer = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE+1, () => {
+                    this.lazyCoresPopupTimer = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE + 1, () => {
                         this.update('cpuCoresUsage');
                         this.lazyCoresPopupTimer = null;
                         return GLib.SOURCE_REMOVE;
                     });
                 }
-                
+
                 Utils.processorMonitor.listen(
                     hoverButton,
                     'cpuCoresFrequency',
@@ -1214,7 +1214,7 @@ export default class ProcessorMenu extends MenuBase {
             GLib.source_remove(this.lazyCoresPopupTimer);
             this.lazyCoresPopupTimer = null;
         }
-        
+
         Utils.processorMonitor.unlisten(this, 'cpuUsage');
         Utils.processorMonitor.unlisten(this.graph, 'cpuUsage');
         Utils.processorMonitor.unlisten(this, 'topProcesses');

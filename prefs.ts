@@ -3224,14 +3224,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         for(const key of keys) {
             const value = imported[key];
 
-            const schema = settings.settings_schema.get_key(key);
-            const type = schema.get_value_type();
+            try {
+                const schema = settings.settings_schema.get_key(key);
+                const type = schema.get_value_type();
 
-            if(type.equal(new GLib.VariantType('s'))) Config.set(key, value, 'string');
-            else if(type.equal(new GLib.VariantType('b'))) Config.set(key, value, 'boolean');
-            else if(type.equal(new GLib.VariantType('i'))) Config.set(key, value, 'int');
-            else if(type.equal(new GLib.VariantType('d'))) Config.set(key, value, 'number');
-            else Utils.log('Unsupported type: ' + type);
+                if(type.equal(new GLib.VariantType('s'))) Config.set(key, value, 'string');
+                else if(type.equal(new GLib.VariantType('b'))) Config.set(key, value, 'boolean');
+                else if(type.equal(new GLib.VariantType('i'))) Config.set(key, value, 'int');
+                else if(type.equal(new GLib.VariantType('d'))) Config.set(key, value, 'number');
+                else Utils.log('Unsupported type: ' + type);
+            } catch(e: any) {
+                Utils.error(e.message);
+            }
         }
     }
 
