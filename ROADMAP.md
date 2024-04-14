@@ -1,5 +1,52 @@
 # Project Roadmap
 
+## Current Release Cycle
+
+### Beta Phase
+
+<table style="text-align:center" align="center">
+    <tr>
+        <th style="text-align:center" colspan="3">Beta<br>2/7</th>
+    </tr>
+    <tr>
+        <th style="text-align:center">Early April 2024</th>
+        <th style="text-align:center">Mid April 2024</th>
+        <th style="text-align:center">Late April 2024</th>
+    </tr>
+    <tr>
+        <td style="text-align:center">✅<br>Advanced Network Monitoring</td>
+        <td style="text-align:center">⏳<br>Advanced GPU Monitoring</td>
+        <td style="text-align:center">🔲<br>Settings Profiles</td>
+    </tr>
+    <tr>
+        <td style="text-align:center">✅<br>Advanced Disk Monitoring</td>
+        <td style="text-align:center">🔲<br>Battery Monitoring</td>
+        <td style="text-align:center">🔲<br>Compact Mode</td>
+    </tr>
+    <tr>
+        <td style="text-align:center"></td>
+        <td style="text-align:center"></td>
+        <td style="text-align:center">🔲<br>Themes</td>
+    </tr>
+</table>
+
+### Release Phase
+
+<table style="text-align:center" align="center">
+    <tr>
+        <th style="text-align:center" colspan="1">Release<br>0/2</th>
+    </tr>
+    <tr>
+        <th style="text-align:center">May 2024</th>
+    </tr>
+    <tr>
+        <td style="text-align:center">🔲<br>User Custom Commands</td>
+    </tr>
+    <tr>
+        <td style="text-align:center">🔲<br>Continuos Monitoring Mode</td>
+    </tr>
+</table>
+
 ## Past Releases
 
 ### Alpha Phase
@@ -14,48 +61,18 @@
         <th style="text-align:center">Mid March 2024</th>
     </tr>
     <tr>
-        <td>✅<br>Graph Customization</td>
-        <td>✅<br>Import / Export / Reset Settings</td>
-        <td>✅<br>Improve performance</td>
+        <td style="text-align:center">✅<br>Graph Customization</td>
+        <td style="text-align:center">✅<br>Import / Export / Reset Settings</td>
+        <td style="text-align:center">✅<br>Improve performance</td>
     </tr>
     <tr>
-        <td>✅<br>Tooltips Customization</td>
-        <td>✅<br>CPU Load</td>
-        <td>✅<br>Pre-beta bugfixing</td>
+        <td style="text-align:center">✅<br>Tooltips Customization</td>
+        <td style="text-align:center">✅<br>CPU Load</td>
+        <td style="text-align:center">✅<br>Pre-beta bugfixing</td>
     </tr>
     <tr>
-        <td></td>
-        <td>✅<br>Add hwmon source</td>
-        <td></td>
-    </tr>
-</table>
-
-## Future Releases
-
-### Beta Phase
-
-<table style="text-align:center" align="center">
-    <tr>
-        <th style="text-align:center" colspan="3">Beta<br>2/7</th>
-    </tr>
-    <tr>
-        <th style="text-align:center">Early April 2024</th>
-        <th style="text-align:center">Mid April 2024</th>
-        <th style="text-align:center">Late April 2024</th>
-    </tr>
-    <tr>
-        <td>✅<br>Advanced Network Monitoring</td>
-        <td>🔲<br>Advanced GPU Monitoring</td>
-        <td>🔲<br>User Custom Commands</td>
-    </tr>
-    <tr>
-        <td>✅<br>Advanced Disk Monitoring</td>
-        <td>🔲<br>Battery Monitoring</td>
-        <td>🔲<br>Continuos Monitoring Mode</td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td>🔲<br>Settings Profiles</td>
+        <td style="text-align:center"></td>
+        <td style="text-align:center">✅<br>Add hwmon source</td>
+        <td style="text-align:center"></td>
     </tr>
 </table>

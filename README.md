@@ -64,49 +64,32 @@ _**NOTE**: The screenshots below are from an outdated version of the extension a
 
 # Roadmap
 
-As Astra Monitor is in the early stages of development, we have an ambitious roadmap planned:
+As Astra Monitor is in beta stage of development, we have an ambitious roadmap planned:
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Alpha<br>7/7</th>
-        <th style="text-align:center" colspan="3">Beta<br>2/7</th>
-        <th style="text-align:center">Release</th>
+        <th style="text-align:center" colspan="2">Beta<br>0/5</th>
+        <th style="text-align:center">Release<br>0/2</th>
     </tr>
     <tr>
-        <th style="text-align:center">Late February 2024</th>
-        <th style="text-align:center">Early March 2024</th>
-        <th style="text-align:center">Mid March 2024</th>
-        <th style="text-align:center">Early April 2024</th>
         <th style="text-align:center">Mid April 2024</th>
         <th style="text-align:center">Late April 2024</th>
         <th style="text-align:center">May 2024</th>
     </tr>
     <tr>
-        <td>✅<br>Graph Customization</td>
-        <td>✅<br>Import / Export / Reset Settings</td>
-        <td>✅<br>Improve performance</td>
-        <td>✅<br>Advanced Network Monitoring</td>
-        <td>🔲<br>Advanced GPU Monitoring</td>
-        <td>🔲<br>User Custom Commands</td>
-        <td></td>
+        <td style="text-align:center">⏳<br>Advanced GPU Monitoring</td>
+        <td style="text-align:center">🔲<br>Settings Profiles</td>
+        <td style="text-align:center">🔲<br>User Custom Commands</td>
     </tr>
     <tr>
-        <td>✅<br>Tooltips Customization</td>
-        <td>✅<br>CPU Load</td>
-        <td>✅<br>Pre-beta bugfixing</td>
-        <td>✅<br>Advanced Disk Monitoring</td>
-        <td>🔲<br>Battery Monitoring</td>
-        <td>🔲<br>Continuos Monitoring Mode</td>
-        <td></td>
+        <td style="text-align:center">🔲<br>Battery Monitoring</td>
+        <td style="text-align:center">🔲<br>Compact Mode</td>
+        <td style="text-align:center">🔲<br>Continuos Monitoring Mode</td>
     </tr>
     <tr>
-        <td></td>
-        <td>✅<br>Add hwmon source</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>🔲<br>Settings Profiles</td>
-        <td></td>
+        <td style="text-align:center"></td>
+        <td style="text-align:center">🔲<br>Themes</td>
+        <td style="text-align:center"></td>
     </tr>
 </table>
 <br>

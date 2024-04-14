@@ -2328,7 +2328,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         this.addLinkRow(
             { title: _('Roadmap') },
-            'https://github.com/AstraExt/astra-monitor#roadmap',
+            'https://github.com/AstraExt/astra-monitor/blob/main/ROADMAP.md',
             group
         );
         this.addLinkRow(
