@@ -280,10 +280,6 @@ export default class NetworkMonitor extends Monitor {
         if(key === 'wireless') {
             this.runUpdate('wireless');
         }
-        if(key === 'publicIps') {
-            const time = this.secondsSinceLastIpsUpdate;
-            if(time > 60 && time < 60 * 5 - 30) this.updatePublicIps();
-        }
         super.requestUpdate(key);
     }
 

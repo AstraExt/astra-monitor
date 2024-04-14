@@ -175,7 +175,7 @@ export default class NetworkMenu extends MenuBase {
         label: St.Label;
         value1: St.Label;
         value2: St.Label;
-        refreshLabel: St.Label;
+        footerLabel: St.Label;
         refreshStatus: RefreshStatus;
         refreshTimer?: number;
     };
@@ -422,17 +422,17 @@ export default class NetworkMenu extends MenuBase {
 
         grid.addToGrid(publicIpv6Grid, 2);
 
-        const refreshLabel = new St.Label({
-            text: _('Refresh'),
+        const footerLabel = new St.Label({
+            text: '',
             style_class: 'astra-monitor-menu-key-mid-center'
         });
-        grid.addToGrid(refreshLabel, 2);
+        grid.addToGrid(footerLabel, 2);
 
         this.publicIpv6 = {
             label: publicIpv6Label,
             value1: publicIpv6Value1,
             value2: publicIpv6Value2,
-            refreshLabel: refreshLabel,
+            footerLabel: footerLabel,
             refreshStatus: RefreshStatus.IDLE
         };
 
@@ -446,13 +446,31 @@ export default class NetworkMenu extends MenuBase {
 
         this.publicIPContainer.connect('clicked', () => {
             if(this.publicIpv6.refreshStatus !== RefreshStatus.IDLE) return;
-
             this.publicIpv6.refreshStatus = RefreshStatus.REFRESHING;
-            this.publicIpv6.refreshLabel.text = _('Refreshing...');
+            this.updateIpsFooterLablel();
             Utils.networkMonitor.updatePublicIps(true);
         });
 
         this.addToMenu(this.publicIPContainer, 2);
+    }
+
+    updateIpsFooterLablel() {
+        const seconds = Utils.networkMonitor.secondsSinceLastIpsUpdate;
+
+        let lastUpdate = _('Updated a long time ago');
+        if(seconds < 15) lastUpdate = _('Updated a few seconds ago');
+        else if(seconds < 45) lastUpdate = _('Updated less than a minute ago');
+        else if(seconds < 90) lastUpdate = _('Updated about a minute ago');
+        else if(seconds < 150) lastUpdate = _('Updated about 2 minutes ago');
+        else if(seconds < 330) lastUpdate = _('Updated about 5 minutes ago');
+        else if(seconds < 600) lastUpdate = _('Updated more than 5 minutes ago');
+
+        let refreshStatus = _('Click to refresh');
+        if(this.publicIpv6.refreshStatus === RefreshStatus.REFRESHING)
+            refreshStatus = _('Refreshing...');
+        else if(this.publicIpv6.refreshStatus === RefreshStatus.DONE) refreshStatus = _('Done');
+
+        this.publicIpv6.footerLabel.text = lastUpdate + ' - ' + refreshStatus;
     }
 
     createRoutes() {
@@ -1713,7 +1731,17 @@ export default class NetworkMenu extends MenuBase {
 
         this.update('publicIps');
         Utils.networkMonitor.listen(this, 'publicIps', this.update.bind(this, 'publicIps'));
-        Utils.networkMonitor.requestUpdate('publicIps');
+
+        Utils.log('this.publicIpv6.refreshStatus: ' + this.publicIpv6.refreshStatus);
+        if(this.publicIpv6.refreshStatus === RefreshStatus.IDLE) {
+            const updateSeconds = Utils.networkMonitor.secondsSinceLastIpsUpdate;
+            Utils.log('Public IPs update seconds: ' + updateSeconds);
+            if(updateSeconds > 60 && updateSeconds < 60 * 5 - 30) {
+                this.publicIpv6.refreshStatus = RefreshStatus.REFRESHING;
+                this.updateIpsFooterLablel();
+                Utils.networkMonitor.updatePublicIps(true);
+            }
+        }
 
         this.update('routes');
         Utils.networkMonitor.listen(this, 'routes', this.update.bind(this, 'routes'));
@@ -1955,17 +1983,19 @@ export default class NetworkMenu extends MenuBase {
         if(code === 'publicIps') {
             if(this.publicIpv6.refreshStatus === RefreshStatus.REFRESHING) {
                 this.publicIpv6.refreshStatus = RefreshStatus.DONE;
-                this.publicIpv6.refreshLabel.text = _('Done');
+                this.updateIpsFooterLablel();
 
                 this.publicIpv6.refreshTimer = GLib.timeout_add_seconds(
                     GLib.PRIORITY_DEFAULT,
                     2,
                     () => {
-                        this.publicIpv6.refreshLabel.text = _('Refresh');
                         this.publicIpv6.refreshStatus = RefreshStatus.IDLE;
+                        this.updateIpsFooterLablel();
                         return GLib.SOURCE_REMOVE;
                     }
                 );
+            } else {
+                this.updateIpsFooterLablel();
             }
 
             const publicIPv4 = Utils.networkMonitor.getCurrentValue('publicIpv4Address');
@@ -2261,7 +2291,7 @@ export default class NetworkMenu extends MenuBase {
         this.publicIpv6.value1.text = '-';
         this.publicIpv6.value2.hide();
         this.publicIpv6.refreshStatus = RefreshStatus.IDLE;
-        this.publicIpv6.refreshLabel.text = _('Refresh');
+        this.updateIpsFooterLablel();
     }
 
     destroy() {
