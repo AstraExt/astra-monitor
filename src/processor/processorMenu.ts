@@ -18,6 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import GLib from 'gi://GLib';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
@@ -93,6 +94,7 @@ export default class ProcessorMenu extends MenuBase {
     private processorBar!: InstanceType<typeof ProcessorBars>;
     private graph!: InstanceType<typeof ProcessorGraph>;
     private cpuCoresUsagePopup!: CpuCoresUsagePopup;
+    private lazyCoresPopupTimer: number | null = null;
 
     private topProcesses!: TopProcess[];
     private queueTopProcessesUpdate!: boolean;
@@ -430,14 +432,21 @@ export default class ProcessorMenu extends MenuBase {
             hoverButton.style = defaultStyle + this.selectionStyle;
 
             if(this.cpuCoresUsagePopup) {
-                this.cpuCoresUsagePopup.open(true);
+                this.cpuCoresUsagePopup.open(false);
 
                 Utils.processorMonitor.listen(
                     hoverButton,
                     'cpuCoresUsage',
                     this.update.bind(this, 'cpuCoresUsage')
                 );
-                this.update('cpuCoresUsage');
+
+                if(this.lazyCoresPopupTimer == null) {
+                    this.lazyCoresPopupTimer = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE + 1, () => {
+                        this.update('cpuCoresUsage');
+                        this.lazyCoresPopupTimer = null;
+                        return GLib.SOURCE_REMOVE;
+                    });
+                }
 
                 Utils.processorMonitor.listen(
                     hoverButton,
@@ -817,6 +826,11 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     async onClose() {
+        if(this.lazyCoresPopupTimer != null) {
+            GLib.source_remove(this.lazyCoresPopupTimer);
+            this.lazyCoresPopupTimer = null;
+        }
+
         Utils.processorMonitor.unlisten(this, 'cpuUsage');
         Utils.processorMonitor.unlisten(this.graph, 'cpuUsage');
         Utils.processorMonitor.unlisten(this, 'topProcesses');
@@ -1025,14 +1039,9 @@ export default class ProcessorMenu extends MenuBase {
 
     destroy() {
         this.close(true);
-        this.removeAll();
-
-        Utils.processorMonitor.unlisten(this);
-        Utils.processorMonitor.unlisten(this.graph);
-        Utils.gpuMonitor.unlisten(this);
-
         Config.clear(this);
         Config.clear(this.gpuSection);
+        this.removeAll();
 
         if(this.cpuInfoPopup) {
             this.cpuInfoPopup.destroy();

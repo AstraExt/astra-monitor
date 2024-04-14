@@ -6,6 +6,8 @@
 -   Fixed title label not being centered in storage info popup [[#107](https://github.com/AstraExt/astra-monitor/issues/107)]
 -   Allow bars to be empty when the value is zero
 -   Fixed graph clipping not properly clipping rounded corners
+-   Fixed Cpu Cores Bars occasionally exceeding borders on popup open
+-   Importing settings saved from a future version to a past version caused the settings to be just reset, now all settings are properly imported from V20 onwards
 
 # Astra Monitor 19 - April 8 2024
 

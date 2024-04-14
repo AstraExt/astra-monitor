@@ -49,8 +49,6 @@ export default GObject.registerClass(
         protected mini: boolean;
         protected colors!: string[];
         protected breakdownConfig?: string;
-        protected initialWidth: number;
-        protected initialHeight: number;
         protected scaleFactor: number;
         protected barSize: number;
         protected bars: St.Widget[][];
@@ -93,8 +91,6 @@ export default GObject.registerClass(
             this.header = params.header;
             this.mini = params.mini;
             this.breakdownConfig = params.breakdownConfig;
-            this.initialWidth = params.width;
-            this.initialHeight = params.height;
             this.hideEmpty = params.hideEmpty;
             this.setStyle();
 
@@ -183,13 +179,9 @@ export default GObject.registerClass(
             try {
                 // eslint-disable-next-line prefer-const
                 let [width, height] = this.get_size();
-                if(this.initialWidth && width > this.initialWidth) width = this.initialWidth;
 
                 if(this.layout === 'vertical' && this.header) {
-                    if(this.initialHeight && height > this.initialHeight)
-                        height = this.initialHeight;
-
-                    const parentHeight = this.get_parent()!.get_height();
+                    const parentHeight = this.get_parent()!.height;
                     if(height > parentHeight - 6) height = parentHeight - 6;
                 }
 
