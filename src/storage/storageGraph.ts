@@ -175,7 +175,7 @@ export default GObject.registerClass(
             const [width, height] = this.historyChart.get_surface_size();
             const ctx: CairoContext = this.historyChart.get_context();
 
-            this.setupClipping(ctx, width, height, 2);
+            this.setupClipping(ctx, width, height, 4);
 
             ctx.setSourceRGBA(
                 this.bgColor.red,
