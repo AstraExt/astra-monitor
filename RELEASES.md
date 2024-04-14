@@ -5,6 +5,7 @@
 -   Improved IPs refreshing in Network Menu: now it refreshes on menu open if it's not been queried recently and you can trigger a refresh by clicking on it [[#108](https://github.com/AstraExt/astra-monitor/issues/108)]
 -   Fixed title label not being centered in storage info popup [[#107](https://github.com/AstraExt/astra-monitor/issues/107)]
 -   Allow bars to be empty when the value is zero
+-   Fixed graph clipping not properly clipping rounded corners
 
 # Astra Monitor 19 - April 8 2024
 
