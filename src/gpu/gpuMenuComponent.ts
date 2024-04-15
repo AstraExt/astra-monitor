@@ -38,12 +38,10 @@ export type GpuComponentProps = {
 };
 
 type InfoPopup = MenuBase & {
-    addToMenu: (actor: St.Widget, priority?: number) => void;
     updateData: (data: GenericGpuInfo) => void;
 };
 
 type ActivityPopup = MenuBase & {
-    addToMenu: (actor: St.Widget, priority?: number) => void;
     pipes: {
         grid: InstanceType<typeof Grid>;
         title: St.Label;
@@ -54,7 +52,6 @@ type ActivityPopup = MenuBase & {
 };
 
 type VramPopup = MenuBase & {
-    addToMenu: (actor: St.Widget, priority?: number) => void;
     pipes: {
         grid: InstanceType<typeof Grid>;
         title: St.Label;
@@ -66,11 +63,26 @@ type VramPopup = MenuBase & {
     updateData: (data: GenericGpuInfo) => void;
 };
 
+type TopProcess = {
+    label: St.Label;
+    value1: St.Label;
+    value2: St.Label;
+};
+
+type TopProcessesPopup = MenuBase & {
+    headers: St.Label[];
+    processes: {
+        values: St.Label[];
+    }[];
+    updateData: (data: GenericGpuInfo) => void;
+};
+
 type Section = {
     info: GpuInfo;
     infoPopup?: InfoPopup;
     activityPopup?: ActivityPopup;
     vramPopup?: VramPopup;
+    topProcessesPopup?: TopProcessesPopup;
     vram: {
         bar?: InstanceType<typeof GpuMemoryBars>;
         barLabel?: St.Label;
@@ -92,7 +104,10 @@ export default class GpuMenuComponent {
     private infoPopups: InfoPopup[] = [];
     private activityPopups: ActivityPopup[] = [];
     private vramPopups: VramPopup[] = [];
+    private topProcessesPopups: TopProcessesPopup[] = [];
     private noGPULabel: St.Label | undefined;
+
+    private topProcesses!: TopProcess[];
 
     private sections: Section[] = [];
 
@@ -137,10 +152,6 @@ export default class GpuMenuComponent {
         for(let i = 0; i < GPUsList.length; i++) {
             const section = this.createSection(GPUsList[i], selectedGpu);
             this.sections.push(section);
-        }
-
-        if(this.compact) {
-            Utils.log('GPU compact mode');
         }
     }
 
@@ -215,16 +226,14 @@ export default class GpuMenuComponent {
 
             const activityTitle = new St.Label({
                 text: _('Activity'),
-                style_class: 'astra-monitor-menu-header-small',
-                style: 'padding-left:1em;'
+                style_class: 'astra-monitor-menu-header-small-centered'
             });
             activityGrid.addToGrid(activityTitle);
 
             // GFX Activity Bar
             {
                 const barGrid = new Grid({
-                    styleClass: 'astra-monitor-menu-subgrid',
-                    style: 'margin-left:0.3em;'
+                    styleClass: 'astra-monitor-menu-subgrid'
                 });
 
                 const bar = new GpuActivityBars({
@@ -234,13 +243,13 @@ export default class GpuMenuComponent {
                     mini: false,
                     layout: 'horizontal',
                     x_align: Clutter.ActorAlign.START,
-                    style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
+                    style: 'margin-bottom:0;margin-right:0;border:solid 1px #555;'
                 });
                 barGrid.addToGrid(bar);
 
                 const barUsagePercLabel = new St.Label({
                     text: '0%',
-                    style: 'width:2.8em;font-size:0.8em;text-align:right;'
+                    style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;'
                 });
                 barGrid.addToGrid(barUsagePercLabel);
 
@@ -278,16 +287,14 @@ export default class GpuMenuComponent {
 
             const vramTitle = new St.Label({
                 text: _('VRAM'),
-                style_class: 'astra-monitor-menu-header-small',
-                style: 'padding-left:1em;'
+                style_class: 'astra-monitor-menu-header-small-centered'
             });
             vramGrid.addToGrid(vramTitle);
 
             // Bar
             {
                 const barGrid = new Grid({
-                    styleClass: 'astra-monitor-menu-subgrid',
-                    style: 'margin-left:0.3em;'
+                    styleClass: 'astra-monitor-menu-subgrid'
                 });
 
                 const bar = new GpuMemoryBars({
@@ -297,13 +304,13 @@ export default class GpuMenuComponent {
                     mini: false,
                     layout: 'horizontal',
                     x_align: Clutter.ActorAlign.START,
-                    style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
+                    style: 'margin-bottom:0;margin-right:0;border:solid 1px #555;'
                 });
                 barGrid.addToGrid(bar);
 
                 const barUsagePercLabel = new St.Label({
                     text: '0%',
-                    style: 'width:2.8em;font-size:0.8em;text-align:right;'
+                    style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;'
                 });
                 barGrid.addToGrid(barUsagePercLabel);
 
@@ -320,7 +327,7 @@ export default class GpuMenuComponent {
                         orientation: Clutter.Orientation.HORIZONTAL
                     }),
                     x_expand: true,
-                    style: 'margin-left:0.3em;margin-right:0;'
+                    style: 'margin-right:0;'
                 });
 
                 const usedContainer = new St.Widget({
@@ -378,6 +385,73 @@ export default class GpuMenuComponent {
                 section.vram.usedLabel = usedValueLabel;
                 section.vram.totalLabel = totalValueLabel;
             }
+
+            // Top Processes
+            const topProcessesButton = new St.Button({
+                reactive: true,
+                track_hover: true,
+                style: defaultStyle,
+                x_expand: true
+            });
+
+            topProcessesButton.connect('enter-event', () => {
+                topProcessesButton.style = defaultStyle + this.parent.selectionStyle;
+                if(topProcessesPopup) topProcessesPopup.open(true);
+            });
+
+            topProcessesButton.connect('leave-event', () => {
+                topProcessesButton.style = defaultStyle;
+                if(topProcessesPopup) topProcessesPopup.close(true);
+            });
+
+            const topProcessesGrid = new Grid({ numCols: 1 });
+            topProcessesButton.set_child(topProcessesGrid);
+
+            const topProcessesPopup = this.createTopProcessesPopup(topProcessesButton, gpuInfo);
+            section.topProcessesPopup = topProcessesPopup;
+            this.topProcessesPopups.push(topProcessesPopup);
+
+            const topProcessesTitle = new St.Label({
+                text: _('Top Processes'),
+                style_class: 'astra-monitor-menu-header-small-centered'
+            });
+            topProcessesGrid.addToGrid(topProcessesTitle);
+
+            // Top Processes List
+            {
+                const listGrid = new Grid({
+                    numCols: 3,
+                    styleClass: 'astra-monitor-menu-subgrid'
+                });
+
+                this.topProcesses = [];
+
+                const numProcesses = this.compact ? 3 : 5;
+                for(let i = 0; i < numProcesses; i++) {
+                    const label = new St.Label({
+                        text: '-',
+                        style_class: 'astra-monitor-menu-cmd-name',
+                        x_expand: true
+                    });
+                    listGrid.addToGrid(label);
+                    const value1 = new St.Label({
+                        text: '-',
+                        style_class: 'astra-monitor-menu-cmd-usage',
+                        x_expand: true
+                    });
+                    listGrid.addToGrid(value1);
+                    const value2 = new St.Label({
+                        text: '-',
+                        style_class: 'astra-monitor-menu-cmd-usage',
+                        x_expand: true
+                    });
+                    listGrid.addToGrid(value2);
+
+                    this.topProcesses.push({ label, value1, value2 });
+                }
+                topProcessesGrid.addToGrid(listGrid);
+            }
+            grid.addToGrid(topProcessesButton);
         }
 
         this.container.addToGrid(grid, 2);
@@ -557,8 +631,7 @@ export default class GpuMenuComponent {
         for(let i = 0; i < 20; i++) {
             const title = new St.Label({
                 text: 'Test',
-                style_class: 'astra-monitor-menu-header-small',
-                style: 'padding-left:0.5em;'
+                style_class: 'astra-monitor-menu-header-small'
             });
             popup.addToMenu(title, 2);
 
@@ -614,8 +687,7 @@ export default class GpuMenuComponent {
         for(let i = 0; i < 10; i++) {
             const title = new St.Label({
                 text: 'Test',
-                style_class: 'astra-monitor-menu-header-small',
-                style: 'padding-left:0.5em;'
+                style_class: 'astra-monitor-menu-header-small'
             });
             popup.addToMenu(title, 2);
 
@@ -726,6 +798,109 @@ export default class GpuMenuComponent {
         return popup;
     }
 
+    private createTopProcessesPopup(sourceActor: St.Widget, _gpuInfo: GpuInfo): TopProcessesPopup {
+        const popup = new MenuBase(sourceActor, 0.05) as TopProcessesPopup;
+        popup.addMenuSection(_('Activity'));
+        popup.headers = [];
+        popup.processes = [];
+
+        const numProcesses = 10;
+        const numValues = 10;
+
+        const grid = new Grid({
+            x_expand: true,
+            x_align: Clutter.ActorAlign.START,
+            numCols: numValues,
+            styleClass: 'astra-monitor-menu-subgrid'
+        });
+
+        // Headers
+        for(let i = 0; i < numValues; i++) {
+            const text = i === 0 ? _('Name') : '';
+            const style = i === 0 ? 'min-width:10em;' : 'min-width:5.5em;';
+
+            const header = new St.Label({
+                text: text,
+                style_class: 'astra-monitor-menu-header-small-centered',
+                style: style
+            });
+            grid.addToGrid(header);
+            popup.headers.push(header);
+        }
+
+        // Processes
+        for(let i = 0; i < 10; i++) {
+            const values = [];
+            for(let i = 0; i < numValues; i++) {
+                const style =
+                    i === 0
+                        ? 'astra-monitor-menu-cmd-name'
+                        : 'astra-monitor-menu-cmd-usage-centered';
+                const lbl = new St.Label({
+                    text: '-',
+                    style_class: style,
+                    x_expand: true,
+                    y_align: Clutter.ActorAlign.CENTER
+                });
+                grid.addToGrid(lbl);
+                values.push(lbl);
+            }
+            popup.processes.push({ values });
+        }
+        popup.addToMenu(grid, 2);
+
+        popup.updateData = (data: GenericGpuInfo) => {
+            if(data.topProcesses.length > 0) {
+                //Fill headers
+                const processData = data.topProcesses[0];
+
+                popup.headers[0].text = _('Name');
+
+                for(let i = 1; i < numValues; i++) {
+                    const pipe = processData.pipes[i - 1];
+                    if(!pipe) {
+                        popup.headers[i].hide();
+                        continue;
+                    }
+                    popup.headers[i].show();
+                    popup.headers[i].text = pipe.name;
+                }
+            }
+
+            for(let processNum = 0; processNum < numProcesses; processNum++) {
+                const processData = data.topProcesses[processNum];
+                if(processData) {
+                    const process = popup.processes[processNum];
+                    for(let i = 0; i < numValues; i++) {
+                        process.values[i].show();
+                    }
+                } else {
+                    const process = popup.processes[processNum];
+                    for(let i = 0; i < numValues; i++) {
+                        process.values[i].hide();
+                    }
+                    continue;
+                }
+
+                const processValues = popup.processes[processNum].values;
+                processValues[0].text = processData.name;
+
+                for(let i = 1; i < numValues; i++) {
+                    const pipe = processData.pipes[i - 1];
+                    if(!pipe) {
+                        processValues[i].text = '-';
+                        continue;
+                    }
+
+                    if(pipe.unit === '%') processValues[i].text = pipe.value.toFixed(0) + '%';
+                    else processValues[i].text = Utils.formatBytes(pipe.value, 'kB-KB', 4);
+                }
+            }
+        };
+
+        return popup;
+    }
+
     public update(data?: Map<string, GenericGpuInfo>) {
         if(!data) return;
 
@@ -783,9 +958,43 @@ export default class GpuMenuComponent {
                 section.activity.gfxBarLabel.text = gpuData.activity.GFX.toFixed(0) + '%';
         }
 
+        const numProcesses = this.compact ? 3 : 5;
+        for(let index = 0; index < numProcesses; index++) {
+            const topProcess = this.topProcesses[index];
+            if(!topProcess) continue;
+
+            const topProcessData = gpuData.topProcesses[index];
+            if(!topProcessData) {
+                topProcess.label.text = '-';
+                topProcess.value1.text = '-';
+                topProcess.value2.text = '-';
+                continue;
+            }
+
+            topProcess.label.text = topProcessData.name;
+
+            const pipe0 = topProcessData.pipes[0];
+            if(!pipe0) {
+                topProcess.value1.text = '-';
+            } else {
+                if(pipe0.unit === '%') topProcess.value1.text = pipe0.value.toFixed(0) + '%';
+                else topProcess.value1.text = Utils.formatBytes(pipe0.value, 'kB-KB', 3);
+            }
+
+            const pipe1 = topProcessData.pipes[1];
+            if(!pipe1) {
+                topProcess.value2.hide();
+            } else {
+                topProcess.value2.show();
+                if(pipe1.unit === '%') topProcess.value2.text = pipe1.value.toFixed(0) + '%';
+                else topProcess.value2.text = Utils.formatBytes(pipe1.value, 'kB-KB', 3);
+            }
+        }
+
         if(section.infoPopup) section.infoPopup.updateData(gpuData);
         if(section.activityPopup) section.activityPopup.updateData(gpuData);
         if(section.vramPopup) section.vramPopup.updateData(gpuData);
+        if(section.topProcessesPopup) section.topProcessesPopup.updateData(gpuData);
     }
 
     public clear() {}

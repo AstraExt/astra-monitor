@@ -31,7 +31,7 @@ export type GenericGpuInfo = {
         percent?: number;
         total?: number;
         used?: number;
-        pipes?: {
+        pipes: {
             name: string;
             percent: number;
             used: number;
@@ -40,11 +40,20 @@ export type GenericGpuInfo = {
     };
     activity: {
         GFX?: number;
-        pipes?: {
+        pipes: {
             name: string;
             percent: number;
         }[];
     };
+    topProcesses: {
+        name: string;
+        pid: number;
+        pipes: {
+            name: string;
+            value: number;
+            unit: string;
+        }[];
+    }[];
     raw: any;
 };
 
@@ -62,6 +71,7 @@ type AmdInfoRaw = {
     };
     Info?: {
         PCI?: string;
+        'GTT Size': number;
         VRAM?: {
             [key: string]: AmdValue;
         };
@@ -75,7 +85,9 @@ type AmdInfoRaw = {
     fdinfo?: {
         [key: string]: {
             name?: string;
-            usage: AmdValue;
+            usage: {
+                [key: string]: AmdValue;
+            };
         };
     };
     gpu_activity?: {
@@ -115,6 +127,11 @@ type NvidiaInfoRaw = {
     utilization?: {
         [key: string]: NvidiaField;
     };
+    processes?: {
+        process_name: string;
+        pid: number;
+        used_memory: string;
+    }[];
 };
 
 export type NvidiaInfo = GenericGpuInfo & {
@@ -258,8 +275,9 @@ export default class GpuMonitor extends Monitor {
                 const gpu: AmdInfo = {
                     id,
                     family: 'AMD',
-                    vram: {},
-                    activity: {},
+                    vram: { pipes: [] },
+                    activity: { pipes: [] },
+                    topProcesses: [],
                     raw: gpuInfo
                 };
 
@@ -296,7 +314,6 @@ export default class GpuMonitor extends Monitor {
                     else gpu.activity.GFX = gfx;
                 }
 
-                gpu.activity.pipes = [];
                 if(gpuInfo.GRBM) {
                     for(const name in gpuInfo.GRBM) {
                         const pipe = gpuInfo.GRBM[name];
@@ -317,7 +334,6 @@ export default class GpuMonitor extends Monitor {
                     }
                 }
 
-                gpu.vram.pipes = [];
                 if(gpuInfo.VRAM) {
                     for(const name in gpuInfo.VRAM) {
                         const pipe = gpuInfo.VRAM[name];
@@ -339,6 +355,110 @@ export default class GpuMonitor extends Monitor {
                                     total
                                 });
                         }
+                    }
+
+                    if(gpuInfo.fdinfo) {
+                        for(const pid in gpuInfo.fdinfo) {
+                            const process = gpuInfo.fdinfo[pid];
+                            if(process?.name) {
+                                const topProcess = {
+                                    name: process.name,
+                                    pid: parseInt(pid),
+                                    pipes: [] as any[]
+                                };
+
+                                for(const name in process.usage) {
+                                    const pipe = process.usage[name];
+                                    if(pipe.value != null && pipe.unit) {
+                                        let value = pipe.value;
+                                        let unit = pipe.unit;
+
+                                        if(unit !== '%') {
+                                            value = Utils.convertToBytes(value, unit);
+                                            unit = 'B';
+                                            if(value < 0) continue;
+                                        }
+
+                                        if(!isNaN(value)) {
+                                            topProcess.pipes.push({ name, value, unit });
+                                        }
+                                    }
+                                }
+
+                                // Order pipes
+                                const defaultOrder = [
+                                    'GFX',
+                                    'VRAM',
+                                    'GTT',
+                                    'Compute',
+                                    'Media',
+                                    'Encode',
+                                    'Decode',
+                                    'DMA',
+                                    'CPU'
+                                ];
+                                topProcess.pipes.sort((a, b) => {
+                                    let aIndex = defaultOrder.indexOf(a.name);
+                                    if(aIndex < 0) aIndex = defaultOrder.length;
+                                    let bIndex = defaultOrder.indexOf(b.name);
+                                    if(bIndex < 0) bIndex = defaultOrder.length;
+                                    return aIndex - bIndex;
+                                });
+
+                                gpu.topProcesses.push(topProcess);
+                            }
+                        }
+
+                        // Order by points giving for every % usage these points:
+                        // GFX: 10, VRAM: 5, GTT: 3, Compute: 2, Media: 2, Encode: 1, Decode: 1, DMA: 1
+
+                        const totalVram = gpu.vram.total;
+                        const totalGtt: number | null = gpuInfo.Info?.['GTT Size'] ?? null;
+
+                        gpu.topProcesses.sort((a, b) => {
+                            let aPoints = 0;
+                            let bPoints = 0;
+
+                            const calculatePoints = (pipe: any) => {
+                                if(pipe.name === 'GFX' && pipe.unit === '%' && pipe.value)
+                                    return pipe.value * 10;
+                                if(
+                                    pipe.name === 'VRAM' &&
+                                    pipe.unit !== '%' &&
+                                    pipe.value &&
+                                    totalVram
+                                )
+                                    return (pipe.value / totalVram) * 5;
+                                if(
+                                    pipe.name === 'GTT' &&
+                                    pipe.unit !== '%' &&
+                                    pipe.value &&
+                                    totalGtt
+                                )
+                                    return (pipe.value / totalGtt) * 3;
+                                if(pipe.name === 'Compute' && pipe.unit === '%' && pipe.value)
+                                    return pipe.value * 2;
+                                if(pipe.name === 'Media' && pipe.unit === '%' && pipe.value)
+                                    return pipe.value * 2;
+                                if(pipe.name === 'Encode' && pipe.unit === '%' && pipe.value)
+                                    return pipe.value * 1;
+                                if(pipe.name === 'Decode' && pipe.unit === '%' && pipe.value)
+                                    return pipe.value * 1;
+                                if(pipe.name === 'DMA' && pipe.unit === '%' && pipe.value)
+                                    return pipe.value * 1;
+                                return 0;
+                            };
+
+                            for(const pipe of a.pipes) {
+                                aPoints += calculatePoints(pipe);
+                            }
+
+                            for(const pipe of b.pipes) {
+                                bPoints += calculatePoints(pipe);
+                            }
+
+                            return bPoints - aPoints;
+                        });
                     }
                 }
                 gpus.set(id, gpu);
@@ -375,12 +495,12 @@ export default class GpuMonitor extends Monitor {
                 const gpu: NvidiaInfo = {
                     id,
                     family: 'NVIDIA',
-                    vram: {},
-                    activity: {},
+                    vram: { pipes: [] },
+                    activity: { pipes: [] },
+                    topProcesses: [],
                     raw: gpuInfo
                 };
 
-                gpu.vram.pipes = [];
                 if(gpuInfo.fb_memory_usage) {
                     const toalData = gpuInfo.fb_memory_usage.total;
                     if(toalData && toalData['#text']) {
@@ -460,7 +580,6 @@ export default class GpuMonitor extends Monitor {
                 }
 
                 if(gpuInfo.utilization) {
-                    const pipes = [];
                     for(const key in gpuInfo.utilization) {
                         const value = gpuInfo.utilization[key];
                         if(gpuInfo.utilization.key != null && value?.['#text']) {
@@ -469,11 +588,64 @@ export default class GpuMonitor extends Monitor {
                                 if(key === 'gpu_util') gpu.activity.GFX = parseFloat(valueStr);
                                 const name = Utils.capitalize(key.replace('_util', ''));
                                 const percent = parseFloat(valueStr);
-                                pipes.push({ name, percent });
+                                gpu.activity.pipes.push({ name, percent });
                             }
                         }
                     }
-                    if(pipes.length > 0) gpu.activity.pipes = pipes;
+                }
+
+                if(gpuInfo.processes) {
+                    for(const process of gpuInfo.processes) {
+                        if(!process.used_memory) continue;
+                        const [valueStr, unit] = process.used_memory.split(' ');
+                        const value = parseInt(valueStr);
+                        if(!value || isNaN(value) || !unit) continue;
+
+                        const topProcess = {
+                            name: Utils.extractCommandName(process.process_name),
+                            pid: process.pid,
+                            pipes: [
+                                {
+                                    name: 'Used Memory',
+                                    value: Utils.convertToBytes(value, unit),
+                                    unit: 'B'
+                                }
+                            ]
+                        };
+
+                        gpu.topProcesses.push(topProcess);
+                    }
+
+                    // Order by points giving for every % usage these points:
+                    // Used Memory: 1
+
+                    const totalMemory = gpu.vram.total;
+
+                    gpu.topProcesses.sort((a, b) => {
+                        let aPoints = 0;
+                        let bPoints = 0;
+
+                        const calculatePoints = (pipe: any) => {
+                            if(
+                                pipe.name === 'Used Memory' &&
+                                pipe.unit !== '%' &&
+                                pipe.value &&
+                                totalMemory
+                            )
+                                return pipe.value / totalMemory;
+                            return 0;
+                        };
+
+                        for(const pipe of a.pipes) {
+                            aPoints = calculatePoints(pipe);
+                        }
+
+                        for(const pipe of b.pipes) {
+                            bPoints = calculatePoints(pipe);
+                        }
+
+                        return bPoints - aPoints;
+                    });
                 }
 
                 gpus.set(id, gpu);

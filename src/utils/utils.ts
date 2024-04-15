@@ -682,11 +682,11 @@ export default class Utils {
     };
 
     static unit2Map = {
-        'kB-kiB': { base: 1024, mult: 1, labels: ['B', 'kB', 'MB', 'GB', 'TB'] },
-        'kB-KB': { base: 1000, mult: 1, labels: ['B', 'kB', 'MB', 'GB', 'TB'] },
-        kiB: { base: 1024, mult: 1, labels: ['B', 'kiB', 'MiB', 'GiB', 'TiB'] },
-        KiB: { base: 1024, mult: 1, labels: ['B/s', 'KiB', 'MiB', 'GiB', 'TiB'] },
-        KB: { base: 1000, mult: 1, labels: ['B', 'KB', 'MB', 'GB', 'TB'] },
+        'kB-kiB': { base: 1024, mult: 1, labels: [' B', 'kB', 'MB', 'GB', 'TB'] },
+        'kB-KB': { base: 1000, mult: 1, labels: [' B', 'kB', 'MB', 'GB', 'TB'] },
+        kiB: { base: 1024, mult: 1, labels: [' B', 'kiB', 'MiB', 'GiB', 'TiB'] },
+        KiB: { base: 1024, mult: 1, labels: [' B/s', 'KiB', 'MiB', 'GiB', 'TiB'] },
+        KB: { base: 1000, mult: 1, labels: [' B', 'KB', 'MB', 'GB', 'TB'] },
         'k ': { base: 1000, mult: 1, labels: [' ', 'k', 'M', 'G', 'T'] },
         Ki: { base: 1024, mult: 1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti'] }
     };
