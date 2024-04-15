@@ -77,12 +77,30 @@ type TopProcessesPopup = MenuBase & {
     updateData: (data: GenericGpuInfo) => void;
 };
 
+type Sensor = {
+    label: St.Label;
+    value: St.Label;
+};
+
+type SensorsPopup = MenuBase & {
+    categories: {
+        name: St.Label;
+        sensors: {
+            icon: St.Icon;
+            label: St.Label;
+            value: St.Label;
+        }[];
+    }[];
+    updateData: (data: GenericGpuInfo) => void;
+};
+
 type Section = {
     info: GpuInfo;
     infoPopup?: InfoPopup;
     activityPopup?: ActivityPopup;
     vramPopup?: VramPopup;
     topProcessesPopup?: TopProcessesPopup;
+    sensorsPopup?: SensorsPopup;
     vram: {
         bar?: InstanceType<typeof GpuMemoryBars>;
         barLabel?: St.Label;
@@ -96,18 +114,18 @@ type Section = {
 };
 
 export default class GpuMenuComponent {
+    private shown: boolean = false;
+    private lastData: Map<string, GenericGpuInfo> | undefined;
+
     private parent: InstanceType<typeof MenuBase>;
     private title: St.Label | undefined;
     private compact: boolean = false;
 
     public container!: InstanceType<typeof Grid>;
-    private infoPopups: InfoPopup[] = [];
-    private activityPopups: ActivityPopup[] = [];
-    private vramPopups: VramPopup[] = [];
-    private topProcessesPopups: TopProcessesPopup[] = [];
     private noGPULabel: St.Label | undefined;
 
     private topProcesses!: TopProcess[];
+    private mainSensors!: Sensor[];
 
     private sections: Section[] = [];
 
@@ -177,7 +195,6 @@ export default class GpuMenuComponent {
 
         const infoPopup = this.createInfoPopup(infoButton, gpuInfo);
         section.infoPopup = infoPopup;
-        this.infoPopups.push(infoPopup);
 
         infoButton.connect('enter-event', () => {
             infoButton.style = defaultStyle + this.parent.selectionStyle;
@@ -211,7 +228,6 @@ export default class GpuMenuComponent {
 
             const activityPopup = this.createActivityPopup(activityButton, gpuInfo);
             section.activityPopup = activityPopup;
-            this.activityPopups.push(activityPopup);
 
             activityButton.connect('enter-event', () => {
                 activityButton.style = defaultStyle + this.parent.selectionStyle;
@@ -272,7 +288,6 @@ export default class GpuMenuComponent {
 
             const vramPopup = this.createVramPopup(vramButton, gpuInfo);
             section.vramPopup = vramPopup;
-            this.vramPopups.push(vramPopup);
 
             vramButton.connect('enter-event', () => {
                 vramButton.style = defaultStyle + this.parent.selectionStyle;
@@ -409,7 +424,6 @@ export default class GpuMenuComponent {
 
             const topProcessesPopup = this.createTopProcessesPopup(topProcessesButton, gpuInfo);
             section.topProcessesPopup = topProcessesPopup;
-            this.topProcessesPopups.push(topProcessesPopup);
 
             const topProcessesTitle = new St.Label({
                 text: _('Top Processes'),
@@ -452,6 +466,66 @@ export default class GpuMenuComponent {
                 topProcessesGrid.addToGrid(listGrid);
             }
             grid.addToGrid(topProcessesButton);
+
+            // Sensors
+            const sensorsButton = new St.Button({
+                reactive: true,
+                track_hover: true,
+                style: defaultStyle,
+                x_expand: true
+            });
+
+            const sensorsPopup = this.createSensorsPopup(sensorsButton, gpuInfo);
+            section.sensorsPopup = sensorsPopup;
+
+            sensorsButton.connect('enter-event', () => {
+                sensorsButton.style = defaultStyle + this.parent.selectionStyle;
+                if(sensorsPopup) sensorsPopup.open(true);
+            });
+
+            sensorsButton.connect('leave-event', () => {
+                sensorsButton.style = defaultStyle;
+                if(sensorsPopup) sensorsPopup.close(true);
+            });
+
+            const sensorsGrid = new Grid({ numCols: 1 });
+            sensorsButton.set_child(sensorsGrid);
+
+            const sensorsTitle = new St.Label({
+                text: _('Sensors'),
+                style_class: 'astra-monitor-menu-header-small-centered'
+            });
+            sensorsGrid.addToGrid(sensorsTitle);
+
+            // Main Sensors List
+            {
+                const listGrid = new Grid({
+                    numCols: 2,
+                    styleClass: 'astra-monitor-menu-subgrid'
+                });
+
+                this.mainSensors = [];
+
+                const numSensors = this.compact ? 1 : 3;
+                for(let i = 0; i < numSensors; i++) {
+                    const label = new St.Label({
+                        text: '-',
+                        style_class: 'astra-monitor-menu-cmd-name',
+                        x_expand: true
+                    });
+                    listGrid.addToGrid(label);
+                    const value = new St.Label({
+                        text: '-',
+                        style_class: 'astra-monitor-menu-cmd-usage',
+                        x_expand: true
+                    });
+                    listGrid.addToGrid(value);
+
+                    this.mainSensors.push({ label, value });
+                }
+                sensorsGrid.addToGrid(listGrid);
+            }
+            grid.addToGrid(sensorsButton);
         }
 
         this.container.addToGrid(grid, 2);
@@ -800,7 +874,7 @@ export default class GpuMenuComponent {
 
     private createTopProcessesPopup(sourceActor: St.Widget, _gpuInfo: GpuInfo): TopProcessesPopup {
         const popup = new MenuBase(sourceActor, 0.05) as TopProcessesPopup;
-        popup.addMenuSection(_('Activity'));
+        popup.addMenuSection(_('Top Processes'));
         popup.headers = [];
         popup.processes = [];
 
@@ -901,8 +975,120 @@ export default class GpuMenuComponent {
         return popup;
     }
 
+    private createSensorsPopup(sourceActor: St.Widget, _gpuInfo: GpuInfo): SensorsPopup {
+        const popup = new MenuBase(sourceActor, 0.05) as SensorsPopup;
+        popup.addMenuSection(_('Sensors'));
+        popup.categories = [];
+
+        const grid = new Grid({
+            numCols: 3,
+            x_expand: true,
+            x_align: Clutter.ActorAlign.START,
+            styleClass: 'astra-monitor-menu-subgrid'
+        });
+
+        for(let i = 0; i < 6; i++) {
+            const categoryLabel = new St.Label({
+                text: '',
+                style_class: 'astra-monitor-menu-sensors-category',
+                x_expand: true
+            });
+            if(i > 0) grid.newLine();
+            grid.addToGrid(categoryLabel, 3);
+
+            const values = [];
+            for(let k = 0; k < 10; k++) {
+                //Icon
+                const icon = new St.Icon({
+                    style_class: 'astra-monitor-menu-sensors-icon',
+                    content_gravity: Clutter.ContentGravity.CENTER
+                });
+                grid.addToGrid(icon);
+
+                //Name
+                const label = new St.Label({
+                    text: '',
+                    style_class: 'astra-monitor-menu-sensors-label',
+                    x_expand: true
+                });
+                grid.addToGrid(label);
+
+                //Value
+                const value = new St.Label({
+                    text: '-',
+                    style_class: 'astra-monitor-menu-sensors-key',
+                    x_expand: true
+                });
+                grid.addToGrid(value);
+                values.push({ icon, label, value });
+            }
+            popup.categories.push({ name: categoryLabel, sensors: values });
+        }
+        popup.addToMenu(grid, 2);
+
+        popup.updateData = (data: GenericGpuInfo) => {
+            for(let i = 0; i < 6; i++) {
+                const category = popup.categories[i];
+                const categoryData = data.sensors.categories[i];
+
+                if(!categoryData) {
+                    category.name.hide();
+                    for(let k = 0; k < 10; k++) {
+                        const sensor = category.sensors[k];
+                        sensor.icon.hide();
+                        sensor.label.hide();
+                        sensor.value.hide();
+                    }
+                    continue;
+                } else {
+                    category.name.text = categoryData.name;
+                }
+
+                for(let k = 0; k < 10; k++) {
+                    const sensor = category.sensors[k];
+                    const sensorData = categoryData.sensors[k];
+
+                    if(sensorData) {
+                        const icon = Utils.unitToIcon(sensorData.unit);
+                        if(icon.gicon) sensor.icon.gicon = icon.gicon;
+                        sensor.icon.fallback_icon_name = icon.fallback_icon_name;
+
+                        sensor.label.text = sensorData.name;
+
+                        let unit = sensorData.unit;
+                        if(unit === 'C') unit = '°C';
+
+                        let value = sensorData.value;
+                        if(
+                            unit == '°C' &&
+                            typeof value === 'number' &&
+                            Config.get_string('sensors-temperature-unit') === 'fahrenheit'
+                        ) {
+                            value = Utils.celsiusToFahrenheit(value as number);
+                            unit = '°F';
+                        }
+
+                        unit = unit === '' ? '' : ' ' + unit;
+                        sensor.value.text = value + unit;
+                    } else {
+                        sensor.icon.hide();
+                        sensor.label.hide();
+                        sensor.value.hide();
+                    }
+                }
+            }
+        };
+
+        return popup;
+    }
+
     public update(data?: Map<string, GenericGpuInfo>) {
         if(!data) return;
+
+        if(!this.shown) {
+            this.lastData = data;
+            return;
+        }
 
         const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
         if(!selectedGpu) return;
@@ -991,10 +1177,54 @@ export default class GpuMenuComponent {
             }
         }
 
+        const numSensors = this.compact ? 1 : 3;
+        for(let index = 0; index < numSensors; index++) {
+            const sensor = this.mainSensors[index];
+            if(!sensor) continue;
+
+            sensor.label.text = '-';
+            sensor.value.text = '-';
+
+            if(!gpuData.sensors.list) continue;
+
+            const sensorData = gpuData.sensors.list[index];
+            if(!sensorData) continue;
+
+            sensor.label.text = sensorData.name;
+
+            let unit = sensorData.unit;
+            if(unit === 'C') unit = '°C';
+
+            let value = sensorData.value;
+            if(
+                unit == '°C' &&
+                typeof value === 'number' &&
+                Config.get_string('sensors-temperature-unit') === 'fahrenheit'
+            ) {
+                value = Utils.celsiusToFahrenheit(value as number);
+                unit = '°F';
+            }
+
+            unit = unit === '' ? '' : ' ' + unit;
+            sensor.value.text = value + unit;
+        }
+
         if(section.infoPopup) section.infoPopup.updateData(gpuData);
         if(section.activityPopup) section.activityPopup.updateData(gpuData);
         if(section.vramPopup) section.vramPopup.updateData(gpuData);
         if(section.topProcessesPopup) section.topProcessesPopup.updateData(gpuData);
+        if(section.sensorsPopup) section.sensorsPopup.updateData(gpuData);
+    }
+
+    public onOpen() {
+        this.clear();
+
+        this.shown = true;
+        this.update(this.lastData);
+    }
+
+    public onClose() {
+        this.shown = false;
     }
 
     public clear() {}

@@ -798,6 +798,7 @@ export default class ProcessorMenu extends MenuBase {
 
     async onOpen() {
         this.clear();
+        this.gpuSection.onOpen();
 
         //Update cpu usage percentage label
         this.update('cpuUsage');
@@ -826,6 +827,8 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     async onClose() {
+        this.gpuSection.onClose();
+
         if(this.lazyCoresPopupTimer != null) {
             GLib.source_remove(this.lazyCoresPopupTimer);
             this.lazyCoresPopupTimer = null;

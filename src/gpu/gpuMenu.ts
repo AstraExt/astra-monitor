@@ -49,13 +49,11 @@ export default class GpuMenu extends MenuBase {
     }
 
     async onOpen() {
-        this.clear();
+        this.gpuSection.onOpen();
     }
 
-    async onClose() {}
-
-    clear() {
-        this.gpuSection.clear();
+    async onClose() {
+        this.gpuSection.onClose();
     }
 
     update(code: string, ...args: any[]) {
