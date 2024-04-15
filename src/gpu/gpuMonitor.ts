@@ -221,7 +221,7 @@ export default class GpuMonitor extends Monitor {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
             const path = Utils.commandPathLookup('amdgpu_top');
-            this.updateAmdGpuTask.start(`${path}amdgpu_top -J -u ${timer} -s ${timer} -n 0`);
+            this.updateAmdGpuTask.start(`${path}amdgpu_top -J -u 5 -s ${timer} -n 0`);
         }
 
         if(Utils.hasNVidiaGpu() && Utils.hasNvidiaSmi() && Utils.isNvidiaGpu(selectedGpu)) {
