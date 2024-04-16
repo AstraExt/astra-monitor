@@ -1019,6 +1019,26 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             'rgba(29,172,214,1.0)'
         );
 
+        /* Tooltip */
+        group = new Adw.PreferencesGroup({ title: _('Tooltip') });
+        this.addSwitchRow({ title: _('Show Tooltip'), tabs: 0 }, 'gpu-header-tooltip', group);
+        this.addSwitchRow(
+            { title: _('Activity Percentage'), tabs: 0 },
+            'gpu-header-tooltip-activity-percentage',
+            group
+        );
+        this.addSwitchRow(
+            { title: _('Memory Percentage'), tabs: 0 },
+            'gpu-header-tooltip-memory-percentage',
+            group
+        );
+        this.addSwitchRow(
+            { title: _('Memory Value'), tabs: 0 },
+            'gpu-header-tooltip-memory-value',
+            group
+        );
+        gpuPage.add(group);
+
         return gpuPage;
     }
 

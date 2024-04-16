@@ -507,31 +507,57 @@ export default GObject.registerClass(
                 if(!Config.get_boolean('gpu-header-tooltip')) this.tooltipMenu.close(true);
             });
 
-            //TODO:
-            /*Utils.processorMonitor.listen(this.tooltipMenu, 'cpuUsage', () => {
-            if(!Config.get_boolean('processor-header-tooltip'))
-                return;
-            
-            const values: string[] = [];
-            
-            if(Config.get_boolean('processor-header-tooltip-percentage')) {
-                const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
-                
-                let total = 0;
-                if(cpuUsage && cpuUsage.total && !isNaN(cpuUsage.total))
-                    total = cpuUsage.total;
-                if(Config.get_boolean('processor-header-tooltip-percentage-core'))
-                    total *= Utils.processorMonitor.getNumberOfCores();
-                values.push(Math.round(total) + '%');
-            }
-            
-            if(values.length === 0)
-                values.push('-');
-            
-            this.tooltipItem.label.text = values.join(' | ');
-            const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
-            this.tooltipMenu.actor.set_width(width);
-        });*/
+            Utils.gpuMonitor.listen(
+                this.tooltipMenu,
+                'gpuUpdate',
+                (data: Map<string, GenericGpuInfo>) => {
+                    if(!Config.get_boolean('gpu-header-tooltip')) return;
+
+                    const values: string[] = [];
+
+                    const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
+                    if(!selectedGpu) return;
+
+                    if(!data) return;
+
+                    const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
+                    const gpuData = data.get(selectedPci);
+                    if(!gpuData) return;
+
+                    if(
+                        Config.get_boolean('gpu-header-tooltip-activity-percentage') &&
+                        gpuData.activity &&
+                        gpuData.activity.GFX != null
+                    ) {
+                        values.push('GPU: ' + Math.round(gpuData.activity.GFX) + '%');
+                    }
+
+                    let vram = 'VRAM: ';
+                    if(
+                        Config.get_boolean('gpu-header-tooltip-memory-percentage') &&
+                        gpuData.vram &&
+                        gpuData.vram.percent != null
+                    ) {
+                        vram += Math.round(gpuData.vram.percent) + '%';
+                    }
+                    if(
+                        Config.get_boolean('gpu-header-tooltip-memory-value') &&
+                        gpuData.vram &&
+                        gpuData.vram.used != null
+                    ) {
+                        const value = Utils.formatBytes(gpuData.vram.used, 'kB-kiB', 3);
+                        if(vram.length > 6) vram += ` (${value})`;
+                        else vram += value;
+                    }
+                    if(vram) values.push(vram);
+
+                    if(values.length === 0) values.push('-');
+
+                    this.tooltipItem.label.text = values.join(' | ');
+                    const width = this.tooltipItem.get_preferred_width(-1)[1] + 30;
+                    this.tooltipMenu.actor.set_width(width);
+                }
+            );
         }
 
         showTooltip() {
@@ -556,6 +582,7 @@ export default GObject.registerClass(
             Utils.gpuMonitor.unlisten(this.memoryBar);
             Utils.gpuMonitor.unlisten(this.memoryGraph);
             Utils.gpuMonitor.unlisten(this.memoryPercentage);
+            Utils.gpuMonitor.unlisten(this.tooltipMenu);
 
             Config.clear(this.icon);
 

@@ -466,6 +466,21 @@
       <summary>GPU Header Tooltip</summary>
       <description>Show the tooltip on the header of the GPU monitor</description>
     </key>
+    <key name="gpu-header-tooltip-activity-percentage" type="b">
+      <default>true</default>
+      <summary>GPU Tooltip Activity Percentage</summary>
+      <description>Show the activity percentage on the Tooltip of the GPU monitor</description>
+    </key>
+    <key name="gpu-header-tooltip-memory-percentage" type="b">
+      <default>true</default>
+      <summary>GPU Tooltip Memory Percentage</summary>
+      <description>Show the memory percentage on the Tooltip of the GPU monitor</description>
+    </key>
+    <key name="gpu-header-tooltip-memory-value" type="b">
+      <default>true</default>
+      <summary>GPU Tooltip Memory Value</summary>
+      <description>Show the memory value on the Tooltip of the GPU monitor</description>
+    </key>
     
     <!-- MEMORY -->
     <key name="memory-update" type="d">
