@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import GLib from 'gi://GLib';
+
 import Config from '../config.js';
 import Utils, { GpuInfo } from '../utils/utils.js';
 import Monitor from '../monitor.js';
@@ -42,6 +44,12 @@ type GpuSensor = {
 export type GenericGpuInfo = {
     id: string;
     family: 'AMD' | 'NVIDIA' | 'Intel';
+    info: {
+        pipes: {
+            name: string;
+            data: string;
+        }[];
+    };
     vram: {
         percent?: number;
         total?: number;
@@ -97,7 +105,51 @@ type AmdInfoRaw = {
         [key: string]: AmdValue;
     };
     Info?: {
+        'ASIC Name'?: string;
+        'Chip Class'?: string;
+        DeviceID?: number;
+        DeviceName?: string;
+        'GL1 Cache per Shader Array'?: number;
+        'GPU Family'?: string;
+        'GPU Type'?: string;
+        'L1 Cache per CU'?: number;
+        'L2 Cache'?: number;
+        'L3 Cache'?: number;
+        'Power Profiles'?: string[];
         PCI?: string;
+        RenderBackend?: number;
+        ResizableBAR?: boolean;
+        RevisionID?: number;
+        'Shader Array per Shader Engine'?: number;
+        'Shader Engine'?: number;
+        'Total Compute Unit'?: number;
+        'Total ROP'?: number;
+        VBIOS?: {
+            date?: string;
+            name?: string;
+            pn?: string;
+            ver_str?: string;
+        };
+        'VRAM Bit width'?: number;
+        'VRAM Size'?: number;
+        'VRAM Type'?: string;
+        'Video Caps'?: {
+            [key: string]: {
+                Decode?: {
+                    height: number;
+                    width: number;
+                };
+                Encode?: {
+                    height: number;
+                    width: number;
+                };
+            };
+        };
+        drm_version?: {
+            major?: number;
+            minor?: number;
+            patchlevel?: number;
+        };
         'GTT Size': number;
         VRAM?: {
             [key: string]: AmdValue;
@@ -171,6 +223,38 @@ type GenericField = {
 
 type NvidiaInfoRaw = {
     '@id'?: string;
+    product_name?: NvidiaField;
+    product_brand?: NvidiaField;
+    product_architecture?: NvidiaField;
+    display_mode?: NvidiaField;
+    display_active?: NvidiaField;
+    persistence_mode?: NvidiaField;
+    addressing_mode?: NvidiaField;
+    mig_devices?: NvidiaField;
+    accounting_mode?: NvidiaField;
+    accounting_mode_buffer_size?: NvidiaField;
+    serial?: NvidiaField;
+    uuid?: NvidiaField;
+    minor_number?: NvidiaField;
+    vbios_version?: NvidiaField;
+    multigpu_board?: NvidiaField;
+    board_id?: NvidiaField;
+    board_part_number?: NvidiaField;
+    gpu_part_number?: NvidiaField;
+    gpu_fru_part_number?: NvidiaField;
+    gpu_module_id?: NvidiaField;
+    inforom_version?: {
+        img_version?: NvidiaField;
+        oem_object?: NvidiaField;
+        ecc_object?: NvidiaField;
+        pwr_object?: NvidiaField;
+    };
+    gsp_firmware_version?: NvidiaField;
+    gpu_virtualization_mode?: {
+        virtualization_mode?: NvidiaField;
+        host_vgpu_mode?: NvidiaField;
+    };
+    compute_mode?: NvidiaField;
     fb_memory_usage?: {
         total?: NvidiaField;
         reserverd?: NvidiaField;
@@ -250,6 +334,12 @@ export default class GpuMonitor extends Monitor {
     private updateAmdGpuTask: ContinuosTaskManager;
     private updateNvidiaGpuTask: ContinuosTaskManager;
 
+    private infoPipesCache?: {
+        name: string;
+        data: string;
+    }[];
+    private infoPipesCacheTime = 0;
+
     private selectedGpu?: GpuInfo | undefined;
 
     constructor() {
@@ -287,7 +377,10 @@ export default class GpuMonitor extends Monitor {
         else this.stop();
     }
 
-    reset() {}
+    reset() {
+        this.infoPipesCache = undefined;
+        this.infoPipesCacheTime = 0;
+    }
 
     start() {
         if(this.status) return;
@@ -431,6 +524,7 @@ export default class GpuMonitor extends Monitor {
                 const gpu: AmdInfo = {
                     id,
                     family: 'AMD',
+                    info: { pipes: [] },
                     vram: { pipes: [] },
                     activity: { pipes: [] },
                     topProcesses: [],
@@ -438,6 +532,176 @@ export default class GpuMonitor extends Monitor {
                     raw: gpuInfo
                 };
 
+                //Info
+                // Use cache if it's been update in the last 10 minutes
+                if(
+                    this.infoPipesCache &&
+                    GLib.get_monotonic_time() - this.infoPipesCacheTime < 600000
+                ) {
+                    gpu.info.pipes = this.infoPipesCache;
+                } else {
+                    if(gpuInfo.Info) {
+                        const asicName = gpuInfo.Info['ASIC Name'];
+                        if(asicName) gpu.info.pipes.push({ name: 'ASIC Name', data: asicName });
+
+                        const ChipClass = gpuInfo.Info['Chip Class'];
+                        if(ChipClass) gpu.info.pipes.push({ name: 'Chip Class', data: ChipClass });
+
+                        const deviceName = gpuInfo.Info.DeviceName;
+                        if(deviceName)
+                            gpu.info.pipes.push({ name: 'Device Name', data: deviceName });
+
+                        const deviceID = gpuInfo.Info.DeviceID;
+                        if(deviceID)
+                            gpu.info.pipes.push({ name: 'Device ID', data: deviceID.toString() });
+
+                        const gpuFamily = gpuInfo.Info['GPU Family'];
+                        if(gpuFamily) gpu.info.pipes.push({ name: 'GPU Family', data: gpuFamily });
+
+                        const gpuType = gpuInfo.Info['GPU Type'];
+                        if(gpuType) gpu.info.pipes.push({ name: 'GPU Type', data: gpuType });
+
+                        const revisionID = gpuInfo.Info.RevisionID;
+                        if(revisionID)
+                            gpu.info.pipes.push({
+                                name: 'Revision ID',
+                                data: revisionID.toString()
+                            });
+
+                        const vBios = gpuInfo.Info.VBIOS;
+                        if(vBios) {
+                            const name = vBios.name ?? '';
+                            const date = vBios.date ?? '';
+                            const pn = vBios.pn ?? '';
+                            const verStr = vBios.ver_str ?? '';
+
+                            const data = [];
+                            if(name) data.push('name: ' + name);
+                            if(date) data.push('date: ' + date);
+                            if(pn) data.push('pn: ' + pn);
+                            if(verStr) data.push('ver: ' + verStr);
+
+                            gpu.info.pipes.push({ name: 'VBIOS', data: data.join('\n') });
+                        }
+
+                        const drmVersion = gpuInfo.Info.drm_version;
+                        if(drmVersion) {
+                            const version = [];
+                            version.push(drmVersion.major ?? '');
+                            version.push(drmVersion.minor ?? '');
+                            version.push(drmVersion.patchlevel ?? '');
+                            gpu.info.pipes.push({
+                                name: 'DRM Version',
+                                data: version.join('.')
+                            });
+                        }
+
+                        const l1CachePerCU = gpuInfo.Info['L1 Cache per CU'];
+                        if(l1CachePerCU)
+                            gpu.info.pipes.push({
+                                name: 'L1 Cache per CU',
+                                data: l1CachePerCU.toString()
+                            });
+
+                        const l2Cache = gpuInfo.Info['L2 Cache'];
+                        if(l2Cache)
+                            gpu.info.pipes.push({ name: 'L2 Cache', data: l2Cache.toString() });
+
+                        const l3Cache = gpuInfo.Info['L3 Cache'];
+                        if(l3Cache)
+                            gpu.info.pipes.push({ name: 'L3 Cache', data: l3Cache.toString() });
+
+                        const renderBackend = gpuInfo.Info.RenderBackend;
+                        if(renderBackend)
+                            gpu.info.pipes.push({
+                                name: 'Render Backend',
+                                data: renderBackend.toString()
+                            });
+
+                        const shaderEngine = gpuInfo.Info['Shader Engine'];
+                        if(shaderEngine)
+                            gpu.info.pipes.push({
+                                name: 'Shader Engine',
+                                data: shaderEngine.toString()
+                            });
+
+                        const resizableBar = gpuInfo.Info.ResizableBAR;
+                        if(resizableBar)
+                            gpu.info.pipes.push({
+                                name: 'Resizable BAR',
+                                data: resizableBar.toString()
+                            });
+
+                        const vramBitWidth = gpuInfo.Info['VRAM Bit width'];
+                        if(vramBitWidth)
+                            gpu.info.pipes.push({
+                                name: 'VRAM Bit width',
+                                data: vramBitWidth.toString()
+                            });
+
+                        const vramType = gpuInfo.Info['VRAM Type'];
+                        if(vramType) gpu.info.pipes.push({ name: 'VRAM Type', data: vramType });
+
+                        const powerProfiles = gpuInfo.Info['Power Profiles'];
+                        if(powerProfiles && powerProfiles.length > 0) {
+                            const data = powerProfiles.join(', ');
+                            gpu.info.pipes.push({ name: 'Power Profiles', data });
+                        }
+
+                        const totalComputeUnit = gpuInfo.Info['Total Compute Unit'];
+                        if(totalComputeUnit)
+                            gpu.info.pipes.push({
+                                name: 'Total Compute Unit',
+                                data: totalComputeUnit.toString()
+                            });
+
+                        const totalROP = gpuInfo.Info['Total ROP'];
+                        if(totalROP)
+                            gpu.info.pipes.push({ name: 'Total ROP', data: totalROP.toString() });
+
+                        const gl1CachePerShaderArray = gpuInfo.Info['GL1 Cache per Shader Array'];
+                        if(gl1CachePerShaderArray)
+                            gpu.info.pipes.push({
+                                name: 'GL1 Cache per Shader Array',
+                                data: gl1CachePerShaderArray.toString()
+                            });
+
+                        const shaderArrayPerShaderEngine =
+                            gpuInfo.Info['Shader Array per Shader Engine'];
+                        if(shaderArrayPerShaderEngine)
+                            gpu.info.pipes.push({
+                                name: 'Shader Array per Shader Engine',
+                                data: shaderArrayPerShaderEngine.toString()
+                            });
+
+                        const videoCaps = gpuInfo.Info['Video Caps'];
+                        if(videoCaps) {
+                            const caps = [];
+                            for(const key in videoCaps) {
+                                const cap = videoCaps[key];
+                                if(cap.Encode || cap.Decode) {
+                                    const decenc = [];
+
+                                    if(cap.Decode)
+                                        decenc.push(
+                                            `[Dec] ${cap.Decode.width}x${cap.Decode.height}`
+                                        );
+                                    if(cap.Encode)
+                                        decenc.push(
+                                            `[Enc] ${cap.Encode.width}x${cap.Encode.height}`
+                                        );
+                                    caps.push(`${key} ${decenc.join(' ')}`);
+                                }
+                            }
+                            gpu.info.pipes.push({ name: 'Video Caps', data: caps.join('\n') });
+                        }
+
+                        this.infoPipesCache = gpu.info.pipes;
+                        this.infoPipesCacheTime = GLib.get_monotonic_time();
+                    }
+                }
+
+                // Vram
                 if(gpuInfo.VRAM) {
                     const toalData = gpuInfo.VRAM['Total VRAM'];
                     if(toalData && toalData.value && toalData.unit) {
@@ -453,8 +717,31 @@ export default class GpuMonitor extends Monitor {
 
                     if(gpu.vram.total != null && gpu.vram.used != null)
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
+
+                    for(const name in gpuInfo.VRAM) {
+                        const pipe = gpuInfo.VRAM[name];
+                        const usage = gpuInfo.VRAM[name + ' Usage'];
+
+                        if(
+                            pipe?.value != null &&
+                            pipe.unit &&
+                            usage?.value != null &&
+                            usage.unit
+                        ) {
+                            const total = Utils.convertToBytes(pipe.value, pipe.unit);
+                            const used = Utils.convertToBytes(usage.value, usage.unit);
+                            if(total && used != null)
+                                gpu.vram.pipes.push({
+                                    name,
+                                    percent: (used / total) * 100,
+                                    used,
+                                    total
+                                });
+                        }
+                    }
                 }
 
+                //Activity
                 if(
                     gpuInfo.gpu_activity?.GFX?.value != null &&
                     gpuInfo.gpu_activity.GFX.unit === '%'
@@ -491,30 +778,7 @@ export default class GpuMonitor extends Monitor {
                     }
                 }
 
-                if(gpuInfo.VRAM) {
-                    for(const name in gpuInfo.VRAM) {
-                        const pipe = gpuInfo.VRAM[name];
-                        const usage = gpuInfo.VRAM[name + ' Usage'];
-
-                        if(
-                            pipe?.value != null &&
-                            pipe.unit &&
-                            usage?.value != null &&
-                            usage.unit
-                        ) {
-                            const total = Utils.convertToBytes(pipe.value, pipe.unit);
-                            const used = Utils.convertToBytes(usage.value, usage.unit);
-                            if(total && used != null)
-                                gpu.vram.pipes.push({
-                                    name,
-                                    percent: (used / total) * 100,
-                                    used,
-                                    total
-                                });
-                        }
-                    }
-                }
-
+                //Top Processes
                 if(gpuInfo.fdinfo) {
                     for(const pid in gpuInfo.fdinfo) {
                         const process = gpuInfo.fdinfo[pid];
@@ -866,6 +1130,7 @@ export default class GpuMonitor extends Monitor {
                 const gpu: NvidiaInfo = {
                     id,
                     family: 'NVIDIA',
+                    info: { pipes: [] },
                     vram: { pipes: [] },
                     activity: { pipes: [] },
                     topProcesses: [],
@@ -873,22 +1138,228 @@ export default class GpuMonitor extends Monitor {
                     raw: gpuInfo
                 };
 
+                //Info
+                // Use cache if it's been update in the last 10 minutes
+                if(
+                    this.infoPipesCache &&
+                    GLib.get_monotonic_time() - this.infoPipesCacheTime < 600000
+                ) {
+                    gpu.info.pipes = this.infoPipesCache;
+                } else {
+                    const productName = GpuMonitor.nvidiaToGenericField(gpuInfo.product_name);
+                    if(productName && productName.value)
+                        gpu.info.pipes.push({
+                            name: 'Product Name',
+                            data: productName.value.toString()
+                        });
+
+                    const productBrand = GpuMonitor.nvidiaToGenericField(gpuInfo.product_brand);
+                    if(productBrand && productBrand.value)
+                        gpu.info.pipes.push({
+                            name: 'Product Brand',
+                            data: productBrand.value.toString()
+                        });
+
+                    const productArchitecture = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.product_architecture
+                    );
+                    if(productArchitecture && productArchitecture.value)
+                        gpu.info.pipes.push({
+                            name: 'Product Architecture',
+                            data: productArchitecture.value.toString()
+                        });
+
+                    const displayMode = GpuMonitor.nvidiaToGenericField(gpuInfo.display_mode);
+                    if(displayMode && displayMode.value)
+                        gpu.info.pipes.push({
+                            name: 'Display Mode',
+                            data: displayMode.value.toString()
+                        });
+
+                    const displayActive = GpuMonitor.nvidiaToGenericField(gpuInfo.display_active);
+                    if(displayActive && displayActive.value)
+                        gpu.info.pipes.push({
+                            name: 'Display Active',
+                            data: displayActive.value.toString()
+                        });
+
+                    const persistenceMode = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.persistence_mode
+                    );
+                    if(persistenceMode && persistenceMode.value)
+                        gpu.info.pipes.push({
+                            name: 'Persistence Mode',
+                            data: persistenceMode.value.toString()
+                        });
+
+                    const addressingMode = GpuMonitor.nvidiaToGenericField(gpuInfo.addressing_mode);
+                    if(addressingMode && addressingMode.value)
+                        gpu.info.pipes.push({
+                            name: 'Addressing Mode',
+                            data: addressingMode.value.toString()
+                        });
+
+                    const migDevices = GpuMonitor.nvidiaToGenericField(gpuInfo.mig_devices);
+                    if(migDevices && migDevices.value)
+                        gpu.info.pipes.push({
+                            name: 'Mig Devices',
+                            data: migDevices.value.toString()
+                        });
+
+                    const accountingMode = GpuMonitor.nvidiaToGenericField(gpuInfo.accounting_mode);
+                    if(accountingMode && accountingMode.value)
+                        gpu.info.pipes.push({
+                            name: 'Accounting Mode',
+                            data: accountingMode.value.toString()
+                        });
+
+                    const accountingModeBufferSize = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.accounting_mode_buffer_size
+                    );
+                    if(accountingModeBufferSize && accountingModeBufferSize.value)
+                        gpu.info.pipes.push({
+                            name: 'Accounting Mode Buffer Size',
+                            data: accountingModeBufferSize.value.toString()
+                        });
+
+                    const serial = GpuMonitor.nvidiaToGenericField(gpuInfo.serial);
+                    if(serial && serial.value)
+                        gpu.info.pipes.push({ name: 'Serial', data: serial.value.toString() });
+
+                    const uuid = GpuMonitor.nvidiaToGenericField(gpuInfo.uuid);
+                    if(uuid && uuid.value)
+                        gpu.info.pipes.push({ name: 'UUID', data: uuid.value.toString() });
+
+                    const minorNumber = GpuMonitor.nvidiaToGenericField(gpuInfo.minor_number);
+                    if(minorNumber && minorNumber.value)
+                        gpu.info.pipes.push({
+                            name: 'Minor Number',
+                            data: minorNumber.value.toString()
+                        });
+
+                    const vbiosVersion = GpuMonitor.nvidiaToGenericField(gpuInfo.vbios_version);
+                    if(vbiosVersion && vbiosVersion.value)
+                        gpu.info.pipes.push({
+                            name: 'VBIOS Version',
+                            data: vbiosVersion.value.toString()
+                        });
+
+                    const multigpuBoard = GpuMonitor.nvidiaToGenericField(gpuInfo.multigpu_board);
+                    if(multigpuBoard && multigpuBoard.value)
+                        gpu.info.pipes.push({
+                            name: 'Multigpu Board',
+                            data: multigpuBoard.value.toString()
+                        });
+
+                    const boardId = GpuMonitor.nvidiaToGenericField(gpuInfo.board_id);
+                    if(boardId && boardId.value)
+                        gpu.info.pipes.push({ name: 'Board ID', data: boardId.value.toString() });
+
+                    const boardPartNumber = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.board_part_number
+                    );
+                    if(boardPartNumber && boardPartNumber.value)
+                        gpu.info.pipes.push({
+                            name: 'Board Part Number',
+                            data: boardPartNumber.value.toString()
+                        });
+
+                    const gpuPartNumber = GpuMonitor.nvidiaToGenericField(gpuInfo.gpu_part_number);
+                    if(gpuPartNumber && gpuPartNumber.value)
+                        gpu.info.pipes.push({
+                            name: 'GPU Part Number',
+                            data: gpuPartNumber.value.toString()
+                        });
+
+                    const gpuFruPartNumber = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.gpu_fru_part_number
+                    );
+                    if(gpuFruPartNumber && gpuFruPartNumber.value)
+                        gpu.info.pipes.push({
+                            name: 'GPU FRU Part Number',
+                            data: gpuFruPartNumber.value.toString()
+                        });
+
+                    const gpuModuleId = GpuMonitor.nvidiaToGenericField(gpuInfo.gpu_module_id);
+                    if(gpuModuleId && gpuModuleId.value)
+                        gpu.info.pipes.push({
+                            name: 'GPU Module ID',
+                            data: gpuModuleId.value.toString()
+                        });
+
+                    if(gpuInfo.inforom_version) {
+                        const imgVersion = GpuMonitor.nvidiaToGenericField(
+                            gpuInfo.inforom_version.img_version
+                        );
+                        const oemObject = GpuMonitor.nvidiaToGenericField(
+                            gpuInfo.inforom_version.oem_object
+                        );
+                        const eccObject = GpuMonitor.nvidiaToGenericField(
+                            gpuInfo.inforom_version.ecc_object
+                        );
+                        const pwrObject = GpuMonitor.nvidiaToGenericField(
+                            gpuInfo.inforom_version.pwr_object
+                        );
+
+                        if(imgVersion || oemObject || eccObject || pwrObject) {
+                            const name = 'Inforom Version';
+                            const data = [];
+                            if(imgVersion && imgVersion.value)
+                                data.push(`Img: ${imgVersion.value}`);
+                            if(oemObject && oemObject.value) data.push(`OEM: ${oemObject.value}`);
+                            if(eccObject && eccObject.value) data.push(`ECC: ${eccObject.value}`);
+                            if(pwrObject && pwrObject.value) data.push(`PWR: ${pwrObject.value}`);
+
+                            gpu.info.pipes.push({ name, data: data.join('\n') });
+                        }
+
+                        const gspFirmwareVersion = GpuMonitor.nvidiaToGenericField(
+                            gpuInfo.gsp_firmware_version
+                        );
+                        if(gspFirmwareVersion && gspFirmwareVersion.value)
+                            gpu.info.pipes.push({
+                                name: 'GSP Firmware Version',
+                                data: gspFirmwareVersion.value.toString()
+                            });
+
+                        if(gpuInfo.gpu_virtualization_mode) {
+                            const virtualizationMode = GpuMonitor.nvidiaToGenericField(
+                                gpuInfo.gpu_virtualization_mode.virtualization_mode
+                            );
+                            const hostVgpuMode = GpuMonitor.nvidiaToGenericField(
+                                gpuInfo.gpu_virtualization_mode.host_vgpu_mode
+                            );
+
+                            if(virtualizationMode && virtualizationMode.value)
+                                gpu.info.pipes.push({
+                                    name: 'Virtualization Mode',
+                                    data: virtualizationMode.value.toString()
+                                });
+                            if(hostVgpuMode && hostVgpuMode.value)
+                                gpu.info.pipes.push({
+                                    name: 'Host VGPU Mode',
+                                    data: hostVgpuMode.value.toString()
+                                });
+                        }
+
+                        const computeMode = GpuMonitor.nvidiaToGenericField(gpuInfo.compute_mode);
+                        if(computeMode && computeMode.value)
+                            gpu.info.pipes.push({
+                                name: 'Compute Mode',
+                                data: computeMode.value.toString()
+                            });
+                    }
+                }
+
+                // Vram
                 if(gpuInfo.fb_memory_usage) {
-                    const toalData = gpuInfo.fb_memory_usage.total;
-                    if(toalData && toalData['#text']) {
-                        const [value, unit] = toalData['#text'].split(' ');
+                    const toalData = GpuMonitor.nvidiaToGenericField(gpuInfo.fb_memory_usage.total);
+                    if(toalData && toalData.value && toalData.unit)
+                        gpu.vram.total = Utils.convertToBytes(toalData.value, toalData.unit);
 
-                        const total = Utils.convertToBytes(value, unit);
-                        if(total >= 0) gpu.vram.total = total;
-                    }
-
-                    const usedData = gpuInfo.fb_memory_usage.used;
-                    if(usedData && usedData['#text']) {
-                        const [value, unit] = usedData['#text'].split(' ');
-
-                        const used = Utils.convertToBytes(value, unit);
-                        if(used >= 0) gpu.vram.used = used;
-                    }
+                    const usedData = GpuMonitor.nvidiaToGenericField(gpuInfo.fb_memory_usage.used);
+                    if(usedData && usedData.value != null && usedData.unit)
+                        gpu.vram.used = Utils.convertToBytes(usedData.value, usedData.unit);
 
                     if(gpu.vram.total !== undefined && gpu.vram.used !== undefined) {
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
@@ -905,17 +1376,17 @@ export default class GpuMonitor extends Monitor {
                     let total: number | undefined;
                     let used: number | undefined;
 
-                    const toalData = gpuInfo.bar1_memory_usage.total;
-                    if(toalData && toalData['#text']) {
-                        const [value, unit] = toalData['#text'].split(' ');
-                        total = Utils.convertToBytes(value, unit);
-                    }
+                    const toalData = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.bar1_memory_usage.total
+                    );
+                    if(toalData && toalData.value && toalData.unit)
+                        total = Utils.convertToBytes(toalData.value, toalData.unit);
 
-                    const usedData = gpuInfo.bar1_memory_usage.used;
-                    if(usedData && usedData['#text']) {
-                        const [value, unit] = usedData['#text'].split(' ');
-                        used = Utils.convertToBytes(value, unit);
-                    }
+                    const usedData = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.bar1_memory_usage.used
+                    );
+                    if(usedData && usedData.value != null && usedData.unit)
+                        used = Utils.convertToBytes(usedData.value, usedData.unit);
 
                     if(total && used != null)
                         gpu.vram.pipes.push({
@@ -930,17 +1401,17 @@ export default class GpuMonitor extends Monitor {
                     let total: number | undefined;
                     let used: number | undefined;
 
-                    const toalData = gpuInfo.cc_protected_memory_usage.total;
-                    if(toalData && toalData['#text']) {
-                        const [value, unit] = toalData['#text'].split(' ');
-                        total = Utils.convertToBytes(value, unit);
-                    }
+                    const toalData = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.cc_protected_memory_usage.total
+                    );
+                    if(toalData && toalData.value && toalData.unit)
+                        total = Utils.convertToBytes(toalData.value, toalData.unit);
 
-                    const usedData = gpuInfo.cc_protected_memory_usage.used;
-                    if(usedData && usedData['#text']) {
-                        const [value, unit] = usedData['#text'].split(' ');
-                        used = Utils.convertToBytes(value, unit);
-                    }
+                    const usedData = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.cc_protected_memory_usage.used
+                    );
+                    if(usedData && usedData.value != null && usedData.unit)
+                        used = Utils.convertToBytes(usedData.value, usedData.unit);
 
                     if(total && used != null)
                         gpu.vram.pipes.push({
@@ -951,21 +1422,20 @@ export default class GpuMonitor extends Monitor {
                         });
                 }
 
+                //Activity
                 if(gpuInfo.utilization) {
                     for(const key in gpuInfo.utilization) {
-                        const value = gpuInfo.utilization[key];
-                        if(gpuInfo.utilization.key != null && value?.['#text']) {
-                            const [valueStr, unit] = value['#text'].split(' ');
-                            if(unit === '%') {
-                                if(key === 'gpu_util') gpu.activity.GFX = parseFloat(valueStr);
-                                const name = Utils.capitalize(key.replace('_util', ''));
-                                const percent = parseFloat(valueStr);
-                                gpu.activity.pipes.push({ name, percent });
-                            }
+                        const field = GpuMonitor.nvidiaToGenericField(gpuInfo.utilization[key]);
+                        if(field && field.unit === '%') {
+                            if(key === 'gpu_util') gpu.activity.GFX = field.value as number;
+                            const name = Utils.capitalize(key.replace('_util', ''));
+                            const percent = field.value as number;
+                            gpu.activity.pipes.push({ name, percent });
                         }
                     }
                 }
 
+                //Top Processes
                 if(gpuInfo.processes) {
                     for(const process of gpuInfo.processes) {
                         if(!process.used_memory) continue;
@@ -1414,6 +1884,24 @@ export default class GpuMonitor extends Monitor {
                         });
                     }
                 }
+
+                // Sensors Sorting
+                for(const category of gpu.sensors.categories) {
+                    category.sensors.sort((a, b) => {
+                        if(a.priority === b.priority) return 0;
+                        return a.priority > b.priority ? -1 : 1;
+                    });
+                }
+                gpu.sensors.list?.sort((a, b) => {
+                    if(a.priority === b.priority) return 0;
+                    return a.priority > b.priority ? -1 : 1;
+                });
+                gpu.sensors.categories.sort((a, b) => {
+                    const maxPriorityA = a.sensors.length ? a.sensors[0].priority : 0;
+                    const maxPriorityB = b.sensors.length ? b.sensors[0].priority : 0;
+                    if(maxPriorityA === maxPriorityB) return 0;
+                    return maxPriorityA > maxPriorityB ? -1 : 1;
+                });
 
                 gpus.set(id, gpu);
             }

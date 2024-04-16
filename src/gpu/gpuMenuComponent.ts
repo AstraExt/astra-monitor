@@ -551,9 +551,11 @@ export default class GpuMenuComponent {
         const popup = new MenuBase(sourceActor, 0.05) as InfoPopup;
         popup.addMenuSection(_('GPU info'));
 
+        const GPUModelName = Utils.getGPUModelName(gpuInfo);
+
         popup.addToMenu(
             new St.Label({
-                text: Utils.getGPUModelName(gpuInfo),
+                text: GPUModelName,
                 style_class: 'astra-monitor-menu-sub-header'
             }),
             2
@@ -565,9 +567,33 @@ export default class GpuMenuComponent {
                 style_class: 'astra-monitor-menu-sub-key'
             })
         );
+
+        let vendor = gpuInfo.vendor;
+        if(vendor.length > 50) {
+            const splitCharacters = [
+                ' ',
+                '-',
+                '_',
+                '(',
+                ')',
+                '[',
+                ']',
+                '{',
+                '}',
+                ':',
+                ';',
+                ',',
+                '.',
+                '?',
+                '!',
+                ' '
+            ];
+            const lines = Utils.splitStringByLength(vendor, 50, splitCharacters, 15);
+            vendor = lines.join('\n');
+        }
         popup.addToMenu(
             new St.Label({
-                text: gpuInfo.vendor
+                text: vendor
             })
         );
 
@@ -577,9 +603,33 @@ export default class GpuMenuComponent {
                 style_class: 'astra-monitor-menu-sub-key'
             })
         );
+
+        let model = gpuInfo.model;
+        if(model.length > 50) {
+            const splitCharacters = [
+                ' ',
+                '-',
+                '_',
+                '(',
+                ')',
+                '[',
+                ']',
+                '{',
+                '}',
+                ':',
+                ';',
+                ',',
+                '.',
+                '?',
+                '!',
+                ' '
+            ];
+            const lines = Utils.splitStringByLength(model, 50, splitCharacters, 15);
+            model = lines.join('\n');
+        }
         popup.addToMenu(
             new St.Label({
-                text: gpuInfo.model
+                text: model
             })
         );
 
@@ -626,44 +676,23 @@ export default class GpuMenuComponent {
             );
         }
 
-        let domain = gpuInfo.domain;
-        if(domain.startsWith('0000:')) domain = domain.substring(5);
-
         popup.addToMenu(
             new St.Label({
-                text: _('Domain'),
+                text: _('PCI'),
                 style_class: 'astra-monitor-menu-sub-key'
             })
         );
-        popup.addToMenu(
-            new St.Label({
-                text: domain
-            })
-        );
 
-        popup.addToMenu(
-            new St.Label({
-                text: _('Bus'),
-                style_class: 'astra-monitor-menu-sub-key'
-            })
-        );
-        popup.addToMenu(
-            new St.Label({
-                text: gpuInfo.bus
-            })
-        );
-
-        popup.addToMenu(
-            new St.Label({
-                text: _('Slot'),
-                style_class: 'astra-monitor-menu-sub-key'
-            })
-        );
-        popup.addToMenu(
-            new St.Label({
-                text: gpuInfo.slot
-            })
-        );
+        const domain = gpuInfo.domain.split(':');
+        if(domain.length === 2) {
+            const pciLabel = new St.Label({ text: '' });
+            pciLabel.clutter_text.useMarkup = true;
+            pciLabel.clutter_text.set_markup(
+                // eslint-disable-next-line no-irregular-whitespace
+                `<span alpha="60%">${domain[0]}</span> : <b>${domain[1]}</b> : ${gpuInfo.bus} : <span font_scale="small-caps">${gpuInfo.slot}</span>`
+            );
+            popup.addToMenu(pciLabel);
+        }
 
         if(gpuInfo.drivers && Array.isArray(gpuInfo.drivers) && gpuInfo.drivers.length > 0) {
             popup.addToMenu(
@@ -693,7 +722,67 @@ export default class GpuMenuComponent {
             );
         }
 
-        popup.updateData = (_data: GenericGpuInfo) => {};
+        // Add spare labels for all other info
+        const keyLables: St.Label[] = [];
+        const valueLabels: St.Label[] = [];
+        for(let i = 0; i < 25; i++) {
+            const keyLabel = new St.Label({
+                text: '',
+                style_class: 'astra-monitor-menu-sub-key',
+                visible: false
+            });
+
+            keyLables.push(keyLabel);
+            popup.addToMenu(keyLabel);
+
+            const valueLabel = new St.Label({
+                text: '',
+                visible: false
+            });
+            valueLabels.push(valueLabel);
+            popup.addToMenu(valueLabel);
+        }
+
+        let otherInfoHash: unknown = null;
+        const splitCharacters = [' ', '-', '(', ')', '[', ']', '{', '}', ';'];
+
+        popup.updateData = (data: GenericGpuInfo) => {
+            // check if it's cached data
+            if(otherInfoHash === data.info.pipes) return;
+            // check if it's the very same data
+            if(Utils.deepEqual(otherInfoHash, data.info.pipes)) return;
+
+            otherInfoHash = data.info.pipes;
+
+            for(let i = 0; i < 25; i++) {
+                const keyLabel = keyLables[i];
+                const valueLabel = valueLabels[i];
+                const pipe = data.info.pipes[i];
+
+                if(!pipe) {
+                    keyLabel.hide();
+                    valueLabel.hide();
+                    continue;
+                }
+
+                keyLabel.text = pipe?.name || '';
+                keyLabel.show();
+
+                let textData;
+                if(pipe.data.length > 50 && !pipe.data.includes('\n')) {
+                    const lines = Utils.splitStringByLength(pipe.data, 50, splitCharacters, 20);
+                    textData = lines.join('\n');
+                } else {
+                    if(keyLabel.text.match(/^G*L[0-9]\sCache\b/)) {
+                        textData = Utils.formatBytes(parseInt(pipe.data), 'kB-kiB', 4);
+                    } else {
+                        textData = pipe.data;
+                    }
+                }
+                valueLabel.text = textData;
+                valueLabel.show();
+            }
+        };
         return popup;
     }
 
