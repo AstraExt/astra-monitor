@@ -812,8 +812,8 @@ export default class Utils {
     }
 
     static getCachedHwmonDevices(): HwMonDevices {
+        // 5 minutes
         if(Utils.lastCachedHwmonDevices + 300000 < Date.now()) {
-            // 5 minutes
             Utils.lastCachedHwmonDevices = Date.now();
             Utils.getHwmonDevices().then(devices => {
                 Utils.cachedHwmonDevices = devices;
@@ -2307,8 +2307,11 @@ export default class Utils {
     }
 
     static lowPriorityTasks: Array<number> = [];
-    static lowPriorityTask(callback: () => void): void {
-        const task = GLib.idle_add(GLib.PRIORITY_LOW, () => {
+    static lowPriorityTask(
+        callback: () => void,
+        priority: number = GLib.PRIORITY_DEFAULT_IDLE
+    ): void {
+        const task = GLib.idle_add(priority, () => {
             callback();
             Utils.lowPriorityTasks = Utils.lowPriorityTasks.filter(id => id !== task);
             return GLib.SOURCE_REMOVE;

@@ -59,7 +59,7 @@ export default class CancellableTaskManager<T> {
         const promise = new Promise<T>((resolve, reject) => {
             rejectFn = reject;
 
-            timeoutId = GLib.idle_add(GLib.PRIORITY_LOW, () => {
+            timeoutId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
                 timeoutId = undefined;
                 boundTask().then(resolve).catch(reject);
                 return GLib.SOURCE_REMOVE;

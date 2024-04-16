@@ -206,6 +206,13 @@ export default GObject.registerClass(
             this.sensors.clutter_text.line_wrap = false;
             this.valuesContainer.add_child(this.sensors);
 
+            Config.bind(
+                'sensors-header-sensor1-show',
+                this.valuesContainer,
+                'visible',
+                Gio.SettingsBindFlags.GET
+            );
+
             Utils.sensorsMonitor.listen(this.valuesContainer, 'sensorsData', () => {
                 if(
                     !Config.get_boolean('sensors-header-sensor1-show') &&

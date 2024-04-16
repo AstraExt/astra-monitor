@@ -1,5 +1,9 @@
 # Astra Monitor 20 - TO BE RELEASED
 
+### New features
+
+-   Greatly improved UI performance at the expense of data responsiveness: you might see outdated or empty data for a few milliseconds when opening menus. Soon this will become a choice in preferences. [[#102](https://github.com/AstraExt/astra-monitor/issues/102)]
+
 ### Bug fixes
 
 -   Improved IPs refreshing in Network Menu: now it refreshes on menu open if it's not been queried recently and you can trigger a refresh by clicking on it [[#108](https://github.com/AstraExt/astra-monitor/issues/108)]
