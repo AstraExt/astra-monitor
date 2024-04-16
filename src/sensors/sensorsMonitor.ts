@@ -208,7 +208,9 @@ export default class SensorsMonitor extends Monitor {
 
     requestUpdate(key: string) {
         if(key === 'sensorsData') {
-            const lmSensorsData = this.getLmSensorsDataAsync();
+            const lmSensorsData = new PromiseValueHolderStore<string | null>(
+                this.getLmSensorsDataAsync.bind(this)
+            );
             this.runUpdate('sensorsData', lmSensorsData);
         }
         super.requestUpdate(key);

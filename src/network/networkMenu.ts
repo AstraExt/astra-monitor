@@ -1732,10 +1732,8 @@ export default class NetworkMenu extends MenuBase {
         this.update('publicIps');
         Utils.networkMonitor.listen(this, 'publicIps', this.update.bind(this, 'publicIps'));
 
-        Utils.log('this.publicIpv6.refreshStatus: ' + this.publicIpv6.refreshStatus);
         if(this.publicIpv6.refreshStatus === RefreshStatus.IDLE) {
             const updateSeconds = Utils.networkMonitor.secondsSinceLastIpsUpdate;
-            Utils.log('Public IPs update seconds: ' + updateSeconds);
             if(updateSeconds > 60 && updateSeconds < 60 * 5 - 30) {
                 this.publicIpv6.refreshStatus = RefreshStatus.REFRESHING;
                 this.updateIpsFooterLablel();
