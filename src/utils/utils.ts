@@ -248,6 +248,9 @@ export default class Utils {
             Utils.processorMonitor?.stop();
             Utils.processorMonitor?.destroy();
 
+            Utils.gpuMonitor?.stop();
+            Utils.gpuMonitor?.destroy();
+
             Utils.memoryMonitor?.stop();
             Utils.memoryMonitor?.destroy();
 
@@ -266,6 +269,7 @@ export default class Utils {
         Utils.lastCachedHwmonDevices = 0;
         Utils.cachedHwmonDevices = new Map();
         (Utils.processorMonitor as any) = undefined;
+        (Utils.gpuMonitor as any) = undefined;
         (Utils.memoryMonitor as any) = undefined;
         (Utils.storageMonitor as any) = undefined;
         (Utils.networkMonitor as any) = undefined;
