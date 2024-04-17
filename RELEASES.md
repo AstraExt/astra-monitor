@@ -1,4 +1,4 @@
-# Astra Monitor 20 - TO BE RELEASED
+# Astra Monitor 20 - April 17 2024
 
 ### Advanced GPU Monitoring
 
@@ -28,7 +28,7 @@ _Since this is a major change, we recommend you to test and report any issues yo
 
 ### New features
 
--   Greatly improved UI performance at the expense of data responsiveness: you might see outdated or empty data for a few milliseconds when opening menus. Soon this will become a choice in preferences. [[#102](https://github.com/AstraExt/astra-monitor/issues/102)]
+-   Improved UI performance at the expense of data responsiveness: you might see outdated or empty data for a few milliseconds when opening menus. Soon this will become a choice in preferences. [[#102](https://github.com/AstraExt/astra-monitor/issues/102)]
 
 ### Bug fixes
 
