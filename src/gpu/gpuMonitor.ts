@@ -217,7 +217,8 @@ type NvidiaField = {
 };
 
 type GenericField = {
-    value: number | string;
+    text?: string;
+    value?: number;
     unit?: string;
 };
 
@@ -275,10 +276,12 @@ type NvidiaInfoRaw = {
         [key: string]: NvidiaField;
     };
     processes?: {
-        process_name: string;
-        pid: number;
-        used_memory: string;
-    }[];
+        process_info?: {
+            process_name: NvidiaField;
+            pid: NvidiaField;
+            used_memory: NvidiaField;
+        }[];
+    };
     pci?: {
         pci_gpu_link_info?: {
             max_link_gen?: NvidiaField;
@@ -461,15 +464,20 @@ export default class GpuMonitor extends Monitor {
         
     }*/
 
-    static nvidiaToGenericField(nvidia: NvidiaField | undefined): GenericField | undefined {
+    static nvidiaToGenericField(
+        nvidia: NvidiaField | undefined,
+        plainText: boolean = false
+    ): GenericField | undefined {
         if(!nvidia || !nvidia['#text'] || nvidia['#text'] === 'N/A') return undefined;
 
+        if(plainText) return { text: nvidia['#text'] };
+
         const tokens = nvidia['#text'].split(' ');
-        if(tokens.length < 1) {
+        if(tokens.length < 2) {
             if(Utils.isNumeric(tokens[0])) return { value: parseFloat(tokens[0]) };
-            else return { value: tokens[0] };
-        } else if(tokens.length > 1) {
-            return { value: nvidia['#text'] };
+            else return { text: tokens[0] };
+        } else if(tokens.length > 2) {
+            return { text: nvidia['#text'] };
         }
 
         //Look for a unit
@@ -505,9 +513,13 @@ export default class GpuMonitor extends Monitor {
             'RPM',
             '%'
         ];
-        if(units.includes(tokens[1])) return { value: tokens[0], unit: tokens[1] };
+        if(units.includes(tokens[1])) {
+            if(Utils.isNumeric(tokens[0]))
+                return { value: parseFloat(tokens[0]), unit: tokens[1] };
+            else return { text: nvidia['#text'] };
+        }
 
-        return { value: nvidia['#text'] };
+        return { text: nvidia['#text'] };
     }
 
     updateAmdGpu(data: ContinuosTaskManagerData) {
@@ -1146,207 +1158,244 @@ export default class GpuMonitor extends Monitor {
                 ) {
                     gpu.info.pipes = this.infoPipesCache;
                 } else {
-                    const productName = GpuMonitor.nvidiaToGenericField(gpuInfo.product_name);
-                    if(productName && productName.value)
+                    const productName = GpuMonitor.nvidiaToGenericField(gpuInfo.product_name, true);
+                    if(productName && productName.text)
                         gpu.info.pipes.push({
                             name: 'Product Name',
-                            data: productName.value.toString()
+                            data: productName.text
                         });
 
-                    const productBrand = GpuMonitor.nvidiaToGenericField(gpuInfo.product_brand);
-                    if(productBrand && productBrand.value)
+                    const productBrand = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.product_brand,
+                        true
+                    );
+                    if(productBrand && productBrand.text)
                         gpu.info.pipes.push({
                             name: 'Product Brand',
-                            data: productBrand.value.toString()
+                            data: productBrand.text
                         });
 
                     const productArchitecture = GpuMonitor.nvidiaToGenericField(
-                        gpuInfo.product_architecture
+                        gpuInfo.product_architecture,
+                        true
                     );
-                    if(productArchitecture && productArchitecture.value)
+                    if(productArchitecture && productArchitecture.text)
                         gpu.info.pipes.push({
                             name: 'Product Architecture',
-                            data: productArchitecture.value.toString()
+                            data: productArchitecture.text
                         });
 
-                    const displayMode = GpuMonitor.nvidiaToGenericField(gpuInfo.display_mode);
-                    if(displayMode && displayMode.value)
+                    const displayMode = GpuMonitor.nvidiaToGenericField(gpuInfo.display_mode, true);
+                    if(displayMode && displayMode.text)
                         gpu.info.pipes.push({
                             name: 'Display Mode',
-                            data: displayMode.value.toString()
+                            data: displayMode.text
                         });
 
-                    const displayActive = GpuMonitor.nvidiaToGenericField(gpuInfo.display_active);
-                    if(displayActive && displayActive.value)
+                    const displayActive = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.display_active,
+                        true
+                    );
+                    if(displayActive && displayActive.text)
                         gpu.info.pipes.push({
                             name: 'Display Active',
-                            data: displayActive.value.toString()
+                            data: displayActive.text
                         });
 
                     const persistenceMode = GpuMonitor.nvidiaToGenericField(
-                        gpuInfo.persistence_mode
+                        gpuInfo.persistence_mode,
+                        true
                     );
-                    if(persistenceMode && persistenceMode.value)
+                    if(persistenceMode && persistenceMode.text)
                         gpu.info.pipes.push({
                             name: 'Persistence Mode',
-                            data: persistenceMode.value.toString()
+                            data: persistenceMode.text
                         });
 
-                    const addressingMode = GpuMonitor.nvidiaToGenericField(gpuInfo.addressing_mode);
-                    if(addressingMode && addressingMode.value)
+                    const addressingMode = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.addressing_mode,
+                        true
+                    );
+                    if(addressingMode && addressingMode.text)
                         gpu.info.pipes.push({
                             name: 'Addressing Mode',
-                            data: addressingMode.value.toString()
+                            data: addressingMode.text
                         });
 
-                    const migDevices = GpuMonitor.nvidiaToGenericField(gpuInfo.mig_devices);
-                    if(migDevices && migDevices.value)
+                    const migDevices = GpuMonitor.nvidiaToGenericField(gpuInfo.mig_devices, true);
+                    if(migDevices && migDevices.text)
                         gpu.info.pipes.push({
                             name: 'Mig Devices',
-                            data: migDevices.value.toString()
+                            data: migDevices.text
                         });
 
-                    const accountingMode = GpuMonitor.nvidiaToGenericField(gpuInfo.accounting_mode);
-                    if(accountingMode && accountingMode.value)
+                    const accountingMode = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.accounting_mode,
+                        true
+                    );
+                    if(accountingMode && accountingMode.text)
                         gpu.info.pipes.push({
                             name: 'Accounting Mode',
-                            data: accountingMode.value.toString()
+                            data: accountingMode.text
                         });
 
                     const accountingModeBufferSize = GpuMonitor.nvidiaToGenericField(
-                        gpuInfo.accounting_mode_buffer_size
+                        gpuInfo.accounting_mode_buffer_size,
+                        true
                     );
-                    if(accountingModeBufferSize && accountingModeBufferSize.value)
+                    if(accountingModeBufferSize && accountingModeBufferSize.text)
                         gpu.info.pipes.push({
                             name: 'Accounting Mode Buffer Size',
-                            data: accountingModeBufferSize.value.toString()
+                            data: accountingModeBufferSize.text
                         });
 
-                    const serial = GpuMonitor.nvidiaToGenericField(gpuInfo.serial);
-                    if(serial && serial.value)
-                        gpu.info.pipes.push({ name: 'Serial', data: serial.value.toString() });
+                    const serial = GpuMonitor.nvidiaToGenericField(gpuInfo.serial, true);
+                    if(serial && serial.text)
+                        gpu.info.pipes.push({ name: 'Serial', data: serial.text });
 
-                    const uuid = GpuMonitor.nvidiaToGenericField(gpuInfo.uuid);
-                    if(uuid && uuid.value)
-                        gpu.info.pipes.push({ name: 'UUID', data: uuid.value.toString() });
+                    const uuid = GpuMonitor.nvidiaToGenericField(gpuInfo.uuid, true);
+                    if(uuid && uuid.text) gpu.info.pipes.push({ name: 'UUID', data: uuid.text });
 
-                    const minorNumber = GpuMonitor.nvidiaToGenericField(gpuInfo.minor_number);
-                    if(minorNumber && minorNumber.value)
+                    const minorNumber = GpuMonitor.nvidiaToGenericField(gpuInfo.minor_number, true);
+                    if(minorNumber && minorNumber.text)
                         gpu.info.pipes.push({
                             name: 'Minor Number',
-                            data: minorNumber.value.toString()
+                            data: minorNumber.text
                         });
 
-                    const vbiosVersion = GpuMonitor.nvidiaToGenericField(gpuInfo.vbios_version);
-                    if(vbiosVersion && vbiosVersion.value)
+                    const vbiosVersion = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.vbios_version,
+                        true
+                    );
+                    if(vbiosVersion && vbiosVersion.text)
                         gpu.info.pipes.push({
                             name: 'VBIOS Version',
-                            data: vbiosVersion.value.toString()
+                            data: vbiosVersion.text
                         });
 
-                    const multigpuBoard = GpuMonitor.nvidiaToGenericField(gpuInfo.multigpu_board);
-                    if(multigpuBoard && multigpuBoard.value)
+                    const multigpuBoard = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.multigpu_board,
+                        true
+                    );
+                    if(multigpuBoard && multigpuBoard.text)
                         gpu.info.pipes.push({
                             name: 'Multigpu Board',
-                            data: multigpuBoard.value.toString()
+                            data: multigpuBoard.text
                         });
 
-                    const boardId = GpuMonitor.nvidiaToGenericField(gpuInfo.board_id);
-                    if(boardId && boardId.value)
-                        gpu.info.pipes.push({ name: 'Board ID', data: boardId.value.toString() });
+                    const boardId = GpuMonitor.nvidiaToGenericField(gpuInfo.board_id, true);
+                    if(boardId && boardId.text)
+                        gpu.info.pipes.push({ name: 'Board ID', data: boardId.text });
 
                     const boardPartNumber = GpuMonitor.nvidiaToGenericField(
-                        gpuInfo.board_part_number
+                        gpuInfo.board_part_number,
+                        true
                     );
-                    if(boardPartNumber && boardPartNumber.value)
+                    if(boardPartNumber && boardPartNumber.text)
                         gpu.info.pipes.push({
                             name: 'Board Part Number',
-                            data: boardPartNumber.value.toString()
+                            data: boardPartNumber.text
                         });
 
-                    const gpuPartNumber = GpuMonitor.nvidiaToGenericField(gpuInfo.gpu_part_number);
-                    if(gpuPartNumber && gpuPartNumber.value)
+                    const gpuPartNumber = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.gpu_part_number,
+                        true
+                    );
+                    if(gpuPartNumber && gpuPartNumber.text)
                         gpu.info.pipes.push({
                             name: 'GPU Part Number',
-                            data: gpuPartNumber.value.toString()
+                            data: gpuPartNumber.text
                         });
 
                     const gpuFruPartNumber = GpuMonitor.nvidiaToGenericField(
-                        gpuInfo.gpu_fru_part_number
+                        gpuInfo.gpu_fru_part_number,
+                        true
                     );
-                    if(gpuFruPartNumber && gpuFruPartNumber.value)
+                    if(gpuFruPartNumber && gpuFruPartNumber.text)
                         gpu.info.pipes.push({
                             name: 'GPU FRU Part Number',
-                            data: gpuFruPartNumber.value.toString()
+                            data: gpuFruPartNumber.text
                         });
 
-                    const gpuModuleId = GpuMonitor.nvidiaToGenericField(gpuInfo.gpu_module_id);
-                    if(gpuModuleId && gpuModuleId.value)
+                    const gpuModuleId = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.gpu_module_id,
+                        true
+                    );
+                    if(gpuModuleId && gpuModuleId.text)
                         gpu.info.pipes.push({
                             name: 'GPU Module ID',
-                            data: gpuModuleId.value.toString()
+                            data: gpuModuleId.text
                         });
 
                     if(gpuInfo.inforom_version) {
                         const imgVersion = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.inforom_version.img_version
+                            gpuInfo.inforom_version.img_version,
+                            true
                         );
                         const oemObject = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.inforom_version.oem_object
+                            gpuInfo.inforom_version.oem_object,
+                            true
                         );
                         const eccObject = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.inforom_version.ecc_object
+                            gpuInfo.inforom_version.ecc_object,
+                            true
                         );
                         const pwrObject = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.inforom_version.pwr_object
+                            gpuInfo.inforom_version.pwr_object,
+                            true
                         );
 
                         if(imgVersion || oemObject || eccObject || pwrObject) {
                             const name = 'Inforom Version';
                             const data = [];
-                            if(imgVersion && imgVersion.value)
-                                data.push(`Img: ${imgVersion.value}`);
-                            if(oemObject && oemObject.value) data.push(`OEM: ${oemObject.value}`);
-                            if(eccObject && eccObject.value) data.push(`ECC: ${eccObject.value}`);
-                            if(pwrObject && pwrObject.value) data.push(`PWR: ${pwrObject.value}`);
+                            if(imgVersion && imgVersion.text) data.push(`Img: ${imgVersion.text}`);
+                            if(oemObject && oemObject.text) data.push(`OEM: ${oemObject.text}`);
+                            if(eccObject && eccObject.text) data.push(`ECC: ${eccObject.text}`);
+                            if(pwrObject && pwrObject.text) data.push(`PWR: ${pwrObject.text}`);
 
                             gpu.info.pipes.push({ name, data: data.join('\n') });
                         }
 
                         const gspFirmwareVersion = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.gsp_firmware_version
+                            gpuInfo.gsp_firmware_version,
+                            true
                         );
-                        if(gspFirmwareVersion && gspFirmwareVersion.value)
+                        if(gspFirmwareVersion && gspFirmwareVersion.text)
                             gpu.info.pipes.push({
                                 name: 'GSP Firmware Version',
-                                data: gspFirmwareVersion.value.toString()
+                                data: gspFirmwareVersion.text
                             });
 
                         if(gpuInfo.gpu_virtualization_mode) {
                             const virtualizationMode = GpuMonitor.nvidiaToGenericField(
-                                gpuInfo.gpu_virtualization_mode.virtualization_mode
+                                gpuInfo.gpu_virtualization_mode.virtualization_mode,
+                                true
                             );
                             const hostVgpuMode = GpuMonitor.nvidiaToGenericField(
-                                gpuInfo.gpu_virtualization_mode.host_vgpu_mode
+                                gpuInfo.gpu_virtualization_mode.host_vgpu_mode,
+                                true
                             );
 
-                            if(virtualizationMode && virtualizationMode.value)
+                            if(virtualizationMode && virtualizationMode.text)
                                 gpu.info.pipes.push({
                                     name: 'Virtualization Mode',
-                                    data: virtualizationMode.value.toString()
+                                    data: virtualizationMode.text
                                 });
-                            if(hostVgpuMode && hostVgpuMode.value)
+                            if(hostVgpuMode && hostVgpuMode.text)
                                 gpu.info.pipes.push({
                                     name: 'Host VGPU Mode',
-                                    data: hostVgpuMode.value.toString()
+                                    data: hostVgpuMode.text
                                 });
                         }
 
-                        const computeMode = GpuMonitor.nvidiaToGenericField(gpuInfo.compute_mode);
-                        if(computeMode && computeMode.value)
+                        const computeMode = GpuMonitor.nvidiaToGenericField(
+                            gpuInfo.compute_mode,
+                            true
+                        );
+                        if(computeMode && computeMode.text)
                             gpu.info.pipes.push({
                                 name: 'Compute Mode',
-                                data: computeMode.value.toString()
+                                data: computeMode.text
                             });
                     }
                 }
@@ -1364,7 +1413,7 @@ export default class GpuMonitor extends Monitor {
                     if(gpu.vram.total !== undefined && gpu.vram.used !== undefined) {
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
                         gpu.vram.pipes.push({
-                            name: 'fb_memory_usage',
+                            name: 'FB Memory Usage',
                             percent: gpu.vram.percent,
                             used: gpu.vram.used,
                             total: gpu.vram.total
@@ -1390,7 +1439,7 @@ export default class GpuMonitor extends Monitor {
 
                     if(total && used != null)
                         gpu.vram.pipes.push({
-                            name: 'bar1_memory_usage',
+                            name: 'Bar1 Memory Usage',
                             percent: (used / total) * 100,
                             used,
                             total
@@ -1415,7 +1464,7 @@ export default class GpuMonitor extends Monitor {
 
                     if(total && used != null)
                         gpu.vram.pipes.push({
-                            name: 'cc_protected_memory_usage',
+                            name: 'CC Protected Memory Usage',
                             percent: (used / total) * 100,
                             used,
                             total
@@ -1426,30 +1475,37 @@ export default class GpuMonitor extends Monitor {
                 if(gpuInfo.utilization) {
                     for(const key in gpuInfo.utilization) {
                         const field = GpuMonitor.nvidiaToGenericField(gpuInfo.utilization[key]);
-                        if(field && field.unit === '%') {
-                            if(key === 'gpu_util') gpu.activity.GFX = field.value as number;
+                        if(field && field.value != null && field.unit === '%') {
+                            if(key === 'gpu_util') gpu.activity.GFX = field.value;
                             const name = Utils.capitalize(key.replace('_util', ''));
-                            const percent = field.value as number;
+                            const percent = field.value;
                             gpu.activity.pipes.push({ name, percent });
                         }
                     }
                 }
 
                 //Top Processes
-                if(gpuInfo.processes) {
-                    for(const process of gpuInfo.processes) {
-                        if(!process.used_memory) continue;
-                        const [valueStr, unit] = process.used_memory.split(' ');
-                        const value = parseInt(valueStr);
-                        if(!value || isNaN(value) || !unit) continue;
+                if(gpuInfo.processes && gpuInfo.processes.process_info) {
+                    for(const process of gpuInfo.processes.process_info) {
+                        const usedMemory = GpuMonitor.nvidiaToGenericField(process.used_memory);
+                        if(!usedMemory || usedMemory.value == null || !usedMemory.unit) continue;
+
+                        const processName = GpuMonitor.nvidiaToGenericField(
+                            process.process_name,
+                            true
+                        );
+                        if(!processName || !processName.text) continue;
+
+                        const pid = GpuMonitor.nvidiaToGenericField(process.pid);
+                        if(!pid || pid.value == null) continue;
 
                         const topProcess = {
-                            name: Utils.extractCommandName(process.process_name),
-                            pid: process.pid,
+                            name: Utils.extractCommandName(processName.text),
+                            pid: pid.value,
                             pipes: [
                                 {
                                     name: 'Used Memory',
-                                    value: Utils.convertToBytes(value, unit),
+                                    value: Utils.convertToBytes(usedMemory.value, usedMemory.unit),
                                     unit: 'B'
                                 }
                             ]
@@ -1602,7 +1658,7 @@ export default class GpuMonitor extends Monitor {
                 }
 
                 const fanSpeed = GpuMonitor.nvidiaToGenericField(gpuInfo.fan_speed);
-                if(fanSpeed && fanSpeed.value && fanSpeed.unit) {
+                if(fanSpeed && fanSpeed.value != null && fanSpeed.unit) {
                     addSensor({
                         category: 'Fan Speed',
                         name: 'Fan',
@@ -1614,7 +1670,7 @@ export default class GpuMonitor extends Monitor {
 
                 if(gpuInfo.temperature) {
                     const gpuTemp = GpuMonitor.nvidiaToGenericField(gpuInfo.temperature.gpu_temp);
-                    if(gpuTemp && gpuTemp.value && gpuTemp.unit) {
+                    if(gpuTemp && gpuTemp.value != null && gpuTemp.unit) {
                         addSensor({
                             category: 'Temperature',
                             name: 'GPU Temp',
@@ -1627,7 +1683,7 @@ export default class GpuMonitor extends Monitor {
                     const gpuTempMax = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.temperature.gpu_temp_max_threshold
                     );
-                    if(gpuTempMax && gpuTempMax.value && gpuTempMax.unit) {
+                    if(gpuTempMax && gpuTempMax.value != null && gpuTempMax.unit) {
                         addSensor({
                             category: 'Temperature',
                             name: 'GPU Temp Max',
@@ -1640,7 +1696,7 @@ export default class GpuMonitor extends Monitor {
                     const gpuTempSlow = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.temperature.gpu_temp_slow_threshold
                     );
-                    if(gpuTempSlow && gpuTempSlow.value && gpuTempSlow.unit) {
+                    if(gpuTempSlow && gpuTempSlow.value != null && gpuTempSlow.unit) {
                         addSensor({
                             category: 'Temperature',
                             name: 'GPU Temp Throttle',
@@ -1653,7 +1709,7 @@ export default class GpuMonitor extends Monitor {
                     const gpuTargetTemp = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.temperature.gpu_target_temperature
                     );
-                    if(gpuTargetTemp && gpuTargetTemp.value && gpuTargetTemp.unit) {
+                    if(gpuTargetTemp && gpuTargetTemp.value != null && gpuTargetTemp.unit) {
                         addSensor({
                             category: 'Temperature',
                             name: 'GPU Target Temp',
@@ -1666,7 +1722,7 @@ export default class GpuMonitor extends Monitor {
                     const memoryTemp = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.temperature.memory_temp
                     );
-                    if(memoryTemp && memoryTemp.value && memoryTemp.unit) {
+                    if(memoryTemp && memoryTemp.value != null && memoryTemp.unit) {
                         addSensor({
                             category: 'Temperature',
                             name: 'Memory Temp',
@@ -1679,7 +1735,7 @@ export default class GpuMonitor extends Monitor {
                     const gpuTempMaxMem = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.temperature.gpu_temp_max_mem_threshold
                     );
-                    if(gpuTempMaxMem && gpuTempMaxMem.value && gpuTempMaxMem.unit) {
+                    if(gpuTempMaxMem && gpuTempMaxMem.value != null && gpuTempMaxMem.unit) {
                         addSensor({
                             category: 'Temperature',
                             name: 'Memory Temp Max',
@@ -1692,13 +1748,14 @@ export default class GpuMonitor extends Monitor {
 
                 if(gpuInfo.gpu_power_readings) {
                     const powerState = GpuMonitor.nvidiaToGenericField(
-                        gpuInfo.gpu_power_readings.power_state
+                        gpuInfo.gpu_power_readings.power_state,
+                        true
                     );
-                    if(powerState && powerState.value) {
+                    if(powerState && powerState.text) {
                         addSensor({
                             category: 'Power',
                             name: 'Power State',
-                            value: powerState.value,
+                            value: powerState.text,
                             unit: '',
                             priority: GpuSensorPriority.NONE
                         });
@@ -1707,7 +1764,7 @@ export default class GpuMonitor extends Monitor {
                     const powerDraw = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.gpu_power_readings.power_draw
                     );
-                    if(powerDraw && powerDraw.value && powerDraw.unit) {
+                    if(powerDraw && powerDraw.value != null && powerDraw.unit) {
                         addSensor({
                             category: 'Power',
                             name: 'Power Draw',
@@ -1720,7 +1777,11 @@ export default class GpuMonitor extends Monitor {
                     const currentPowerLimit = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.gpu_power_readings.current_power_limit
                     );
-                    if(currentPowerLimit && currentPowerLimit.value && currentPowerLimit.unit) {
+                    if(
+                        currentPowerLimit &&
+                        currentPowerLimit.value != null &&
+                        currentPowerLimit.unit
+                    ) {
                         addSensor({
                             category: 'Power',
                             name: 'Current Power Limit',
@@ -1735,7 +1796,7 @@ export default class GpuMonitor extends Monitor {
                     );
                     if(
                         requestedPowerLimit &&
-                        requestedPowerLimit.value &&
+                        requestedPowerLimit.value != null &&
                         requestedPowerLimit.unit
                     ) {
                         addSensor({
@@ -1750,7 +1811,11 @@ export default class GpuMonitor extends Monitor {
                     const defaultPowerLimit = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.gpu_power_readings.default_power_limit
                     );
-                    if(defaultPowerLimit && defaultPowerLimit.value && defaultPowerLimit.unit) {
+                    if(
+                        defaultPowerLimit &&
+                        defaultPowerLimit.value != null &&
+                        defaultPowerLimit.unit
+                    ) {
                         addSensor({
                             category: 'Power',
                             name: 'Default Power Limit',
@@ -1763,7 +1828,7 @@ export default class GpuMonitor extends Monitor {
                     const minPowerLimit = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.gpu_power_readings.min_power_limit
                     );
-                    if(minPowerLimit && minPowerLimit.value && minPowerLimit.unit) {
+                    if(minPowerLimit && minPowerLimit.value != null && minPowerLimit.unit) {
                         addSensor({
                             category: 'Power',
                             name: 'Min Power Limit',
@@ -1776,7 +1841,7 @@ export default class GpuMonitor extends Monitor {
                     const maxPowerLimit = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.gpu_power_readings.max_power_limit
                     );
-                    if(maxPowerLimit && maxPowerLimit.value && maxPowerLimit.unit) {
+                    if(maxPowerLimit && maxPowerLimit.value != null && maxPowerLimit.unit) {
                         addSensor({
                             category: 'Power',
                             name: 'Max Power Limit',
@@ -1789,7 +1854,7 @@ export default class GpuMonitor extends Monitor {
 
                 if(gpuInfo.clocks) {
                     const gpuClock = GpuMonitor.nvidiaToGenericField(gpuInfo.clocks.graphics_clock);
-                    if(gpuClock && gpuClock.value && gpuClock.unit) {
+                    if(gpuClock && gpuClock.value != null && gpuClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'GPU Clock',
@@ -1802,7 +1867,7 @@ export default class GpuMonitor extends Monitor {
                     const gpuMaxClock = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.max_clocks?.graphics_clock
                     );
-                    if(gpuMaxClock && gpuMaxClock.value && gpuMaxClock.unit) {
+                    if(gpuMaxClock && gpuMaxClock.value != null && gpuMaxClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'GPU Max Clock',
@@ -1813,7 +1878,7 @@ export default class GpuMonitor extends Monitor {
                     }
 
                     const smClock = GpuMonitor.nvidiaToGenericField(gpuInfo.clocks.sm_clock);
-                    if(smClock && smClock.value && smClock.unit) {
+                    if(smClock && smClock.value != null && smClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'SM Clock',
@@ -1826,7 +1891,7 @@ export default class GpuMonitor extends Monitor {
                     const smMaxClock = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.max_clocks?.sm_clock
                     );
-                    if(smMaxClock && smMaxClock.value && smMaxClock.unit) {
+                    if(smMaxClock && smMaxClock.value != null && smMaxClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'SM Max Clock',
@@ -1837,7 +1902,7 @@ export default class GpuMonitor extends Monitor {
                     }
 
                     const memoryClock = GpuMonitor.nvidiaToGenericField(gpuInfo.clocks.mem_clock);
-                    if(memoryClock && memoryClock.value && memoryClock.unit) {
+                    if(memoryClock && memoryClock.value != null && memoryClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'Memory Clock',
@@ -1850,7 +1915,7 @@ export default class GpuMonitor extends Monitor {
                     const memoryMaxClock = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.max_clocks?.mem_clock
                     );
-                    if(memoryMaxClock && memoryMaxClock.value && memoryMaxClock.unit) {
+                    if(memoryMaxClock && memoryMaxClock.value != null && memoryMaxClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'Memory Max Clock',
@@ -1861,7 +1926,7 @@ export default class GpuMonitor extends Monitor {
                     }
 
                     const videoClock = GpuMonitor.nvidiaToGenericField(gpuInfo.clocks.video_clock);
-                    if(videoClock && videoClock.value && videoClock.unit) {
+                    if(videoClock && videoClock.value != null && videoClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'Video Clock',
@@ -1874,7 +1939,7 @@ export default class GpuMonitor extends Monitor {
                     const videoMaxClock = GpuMonitor.nvidiaToGenericField(
                         gpuInfo.max_clocks?.video_clock
                     );
-                    if(videoMaxClock && videoMaxClock.value && videoMaxClock.unit) {
+                    if(videoMaxClock && videoMaxClock.value != null && videoMaxClock.unit) {
                         addSensor({
                             category: 'Clocks',
                             name: 'Video Max Clock',

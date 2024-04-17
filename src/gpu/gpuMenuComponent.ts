@@ -880,7 +880,7 @@ export default class GpuMenuComponent {
                     orientation: Clutter.Orientation.HORIZONTAL
                 }),
                 x_expand: true,
-                style: 'margin-left:0.5em;margin-right:0;'
+                style: 'margin-left:0.15em;margin-right:0;'
             });
 
             const usedContainer = new St.Widget({
@@ -933,7 +933,7 @@ export default class GpuMenuComponent {
 
             footerContainer.add_child(totalContainer);
 
-            grid.addToGrid(footerContainer);
+            grid.addToGrid(footerContainer, 2);
 
             popup.addToMenu(grid, 2);
 
@@ -1032,12 +1032,7 @@ export default class GpuMenuComponent {
 
             for(let processNum = 0; processNum < numProcesses; processNum++) {
                 const processData = data.topProcesses[processNum];
-                if(processData) {
-                    const process = popup.processes[processNum];
-                    for(let i = 0; i < numValues; i++) {
-                        process.values[i].show();
-                    }
-                } else {
+                if(!processData) {
                     const process = popup.processes[processNum];
                     for(let i = 0; i < numValues; i++) {
                         process.values[i].hide();
@@ -1052,11 +1047,16 @@ export default class GpuMenuComponent {
                     const pipe = processData.pipes[i - 1];
                     if(!pipe) {
                         processValues[i].text = '-';
+                        processValues[i].hide();
                         continue;
                     }
+                    processValues[i].show();
 
-                    if(pipe.unit === '%') processValues[i].text = pipe.value.toFixed(0) + '%';
-                    else processValues[i].text = Utils.formatBytes(pipe.value, 'kB-KB', 4);
+                    if(pipe.unit === '%') {
+                        processValues[i].text = pipe.value.toFixed(0) + '%';
+                    } else {
+                        processValues[i].text = Utils.formatBytes(pipe.value, 'kB-KB', 4);
+                    }
                 }
             }
         };
