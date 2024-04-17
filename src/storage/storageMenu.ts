@@ -1441,7 +1441,7 @@ export default class StorageMenu extends MenuBase {
                         else if(field.parent && info.parent && info.parent[field.key])
                             value = info.parent[field.key];
 
-                        if(field.checkNull ? value !== undefined && value !== null : value) {
+                        if(field.checkNull ? value != null : value) {
                             const formattedValue = formatValue(value, field.formatAsBytes);
                             labels[i].text = field.label;
                             labels[i].show();

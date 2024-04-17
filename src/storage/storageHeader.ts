@@ -492,7 +492,11 @@ export default GObject.registerClass(
         update() {}
 
         createTooltip() {
-            this.tooltipMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.TOP) as TooltipMenu;
+            this.tooltipMenu = new PopupMenu.PopupMenu(
+                this,
+                0.5,
+                MenuBase.arrowAlignement
+            ) as TooltipMenu;
 
             Main.uiGroup.add_child(this.tooltipMenu.actor);
             this.tooltipMenu.actor.add_style_class_name('astra-monitor-tooltip-menu');

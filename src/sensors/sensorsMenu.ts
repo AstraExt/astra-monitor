@@ -28,11 +28,6 @@ import Utils from '../utils/utils.js';
 import Config from '../config.js';
 import { SensorNode } from './sensorsMonitor.js';
 
-interface IconData {
-    gicon?: any;
-    fallback_icon_name: string;
-}
-
 type SensorInfo = {
     data: any;
     container: St.Button;
@@ -299,33 +294,7 @@ export default class SensorsMenu extends MenuBase {
                     if(value.attrs.unit !== undefined) unit = value.attrs.unit;
                     else unit = Utils.inferMeasurementUnit(valueName);
 
-                    const icon: IconData = {
-                        gicon: Utils.getLocalIcon('am-dialog-info-symbolic'),
-                        fallback_icon_name: 'dialog-info-symbolic'
-                    };
-                    if(unit === '°C') {
-                        icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
-                        icon.fallback_icon_name = 'temperature-symbolic';
-                    } else if(unit === 'RPM') {
-                        icon.gicon = Utils.getLocalIcon('am-fan-symbolic');
-                        icon.fallback_icon_name = 'fan-symbolic';
-                    } else if(unit === 'V') {
-                        icon.gicon = Utils.getLocalIcon('am-voltage-symbolic');
-                        icon.fallback_icon_name = 'battery-symbolic';
-                    } else if(unit === 'W') {
-                        icon.gicon = Utils.getLocalIcon('am-power-symbolic');
-                        icon.fallback_icon_name = 'plug-symbolic';
-                    } else if(unit === 'A') {
-                        icon.gicon = Utils.getLocalIcon('am-current-symbolic');
-                        icon.fallback_icon_name = 'battery-symbolic';
-                    } else if(unit === 'J') {
-                        icon.gicon = Utils.getLocalIcon('am-power-symbolic');
-                        icon.fallback_icon_name = 'battery-symbolic';
-                    } else if(unit === 'MHz') {
-                        icon.gicon = Utils.getLocalIcon('am-frequency-symbolic');
-                        icon.fallback_icon_name = 'battery-symbolic';
-                    }
-
+                    const icon = Utils.unitToIcon(unit);
                     if(icon.gicon) valueData.icon.gicon = icon.gicon;
                     valueData.icon.fallback_icon_name = icon.fallback_icon_name;
 

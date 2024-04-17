@@ -23,6 +23,7 @@ import Gio from 'gi://Gio';
 
 import Config from '../config.js';
 import ProcessorMonitor from '../processor/processorMonitor.js';
+import GpuMonitor from '../gpu/gpuMonitor.js';
 import MemoryMonitor from '../memory/memoryMonitor.js';
 import StorageMonitor, { BlockDevice } from '../storage/storageMonitor.js';
 import NetworkMonitor from '../network/networkMonitor.js';
@@ -45,6 +46,7 @@ type UtilsInitProps = {
     settings: Gio.Settings;
 
     ProcessorMonitor?: typeof ProcessorMonitor;
+    GpuMonitor?: typeof GpuMonitor;
     MemoryMonitor?: typeof MemoryMonitor;
     StorageMonitor?: typeof StorageMonitor;
     NetworkMonitor?: typeof NetworkMonitor;
@@ -127,11 +129,26 @@ export type Color = { red: number; green: number; blue: number; alpha: number };
 
 export type UptimeTimer = { stop: () => void };
 
+interface IconData {
+    gicon?: any;
+    fallback_icon_name: string;
+}
+
 export default class Utils {
     static debug = false;
-    static defaultMonitors = ['processor', 'memory', 'storage', 'network', 'sensors'];
+    static defaultMonitors = ['processor', 'gpu', 'memory', 'storage', 'network', 'sensors'];
     static defaultIndicators = {
         processor: ['icon', 'bar', 'graph', 'percentage'],
+        gpu: [
+            'icon',
+            'activity bar',
+            'activity graph',
+            'activity percentage',
+            'memory bar',
+            'memory graph',
+            'memory percentage',
+            'memory value'
+        ],
         memory: ['icon', 'bar', 'graph', 'percentage', 'value', 'free'],
         storage: ['icon', 'bar', 'percentage', 'value', 'free', 'IO bar', 'IO graph', 'IO speed'],
         network: ['icon', 'IO bar', 'IO graph', 'IO speed'],
@@ -145,6 +162,7 @@ export default class Utils {
     static container: Button;
 
     static processorMonitor: ProcessorMonitor;
+    static gpuMonitor: GpuMonitor;
     static memoryMonitor: MemoryMonitor;
     static storageMonitor: StorageMonitor;
     static networkMonitor: NetworkMonitor;
@@ -169,6 +187,7 @@ export default class Utils {
         settings,
 
         ProcessorMonitor,
+        GpuMonitor,
         MemoryMonitor,
         StorageMonitor,
         NetworkMonitor,
@@ -198,6 +217,7 @@ export default class Utils {
         Utils.configUpdateFixes();
 
         if(ProcessorMonitor) Utils.processorMonitor = new ProcessorMonitor();
+        if(GpuMonitor) Utils.gpuMonitor = new GpuMonitor();
         if(MemoryMonitor) Utils.memoryMonitor = new MemoryMonitor();
         if(StorageMonitor) Utils.storageMonitor = new StorageMonitor();
         if(NetworkMonitor) Utils.networkMonitor = new NetworkMonitor();
@@ -228,6 +248,9 @@ export default class Utils {
             Utils.processorMonitor?.stop();
             Utils.processorMonitor?.destroy();
 
+            Utils.gpuMonitor?.stop();
+            Utils.gpuMonitor?.destroy();
+
             Utils.memoryMonitor?.stop();
             Utils.memoryMonitor?.destroy();
 
@@ -246,6 +269,7 @@ export default class Utils {
         Utils.lastCachedHwmonDevices = 0;
         Utils.cachedHwmonDevices = new Map();
         (Utils.processorMonitor as any) = undefined;
+        (Utils.gpuMonitor as any) = undefined;
         (Utils.memoryMonitor as any) = undefined;
         (Utils.storageMonitor as any) = undefined;
         (Utils.networkMonitor as any) = undefined;
@@ -667,11 +691,11 @@ export default class Utils {
     };
 
     static unit2Map = {
-        'kB-kiB': { base: 1024, mult: 1, labels: ['B', 'kB', 'MB', 'GB', 'TB'] },
-        'kB-KB': { base: 1000, mult: 1, labels: ['B', 'kB', 'MB', 'GB', 'TB'] },
-        kiB: { base: 1024, mult: 1, labels: ['B', 'kiB', 'MiB', 'GiB', 'TiB'] },
-        KiB: { base: 1024, mult: 1, labels: ['B/s', 'KiB', 'MiB', 'GiB', 'TiB'] },
-        KB: { base: 1000, mult: 1, labels: ['B', 'KB', 'MB', 'GB', 'TB'] },
+        'kB-kiB': { base: 1024, mult: 1, labels: [' B', 'kB', 'MB', 'GB', 'TB'] },
+        'kB-KB': { base: 1000, mult: 1, labels: [' B', 'kB', 'MB', 'GB', 'TB'] },
+        kiB: { base: 1024, mult: 1, labels: [' B', 'kiB', 'MiB', 'GiB', 'TiB'] },
+        KiB: { base: 1024, mult: 1, labels: [' B/s', 'KiB', 'MiB', 'GiB', 'TiB'] },
+        KB: { base: 1000, mult: 1, labels: [' B', 'KB', 'MB', 'GB', 'TB'] },
         'k ': { base: 1000, mult: 1, labels: [' ', 'k', 'M', 'G', 'T'] },
         Ki: { base: 1024, mult: 1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti'] }
     };
@@ -1393,7 +1417,7 @@ export default class Utils {
     }
 
     static getSelectedGPU(): GpuInfo | undefined {
-        const selected = Config.get_json('processor-menu-gpu');
+        const selected = Config.get_json('gpu-main');
         if(!selected) return;
 
         //Fix GPU domain missing (v9 => v10)
@@ -2321,7 +2345,6 @@ export default class Utils {
 
     static configUpdateFixes() {
         //Fix GPU domain missing (v9 => v10)
-        //TODO: remove in release
         const selectedGpu = Config.get_json('processor-menu-gpu');
         if(selectedGpu && selectedGpu.domain) {
             if(!selectedGpu.domain.includes(':')) {
@@ -2339,5 +2362,102 @@ export default class Utils {
         if(barsColor2 === 'rgba(214,29,29,1.0)') {
             Config.set('memory-header-bars-color2', 'rgba(29,172,214,0.3)', 'string');
         }
+
+        //Fix GPU moved from processor (v19 => v20)
+        const processorMenuGpu = Config.get_json('processor-menu-gpu');
+        const gpuMain = Config.get_json('gpu-main');
+        if(processorMenuGpu && !gpuMain) {
+            Config.set('gpu-main', processorMenuGpu, 'json');
+            Config.set('processor-menu-gpu', '""', 'string');
+        }
+        const processorMenuGpuColor = Config.get_string('processor-menu-gpu-color');
+        if(processorMenuGpuColor) {
+            Config.set('gpu-header-activity-bar-color1', processorMenuGpuColor, 'string');
+            Config.set('gpu-header-activity-graph-color1', processorMenuGpuColor, 'string');
+            Config.set('processor-menu-gpu-color', '', 'string');
+        }
+    }
+
+    static unitToIcon(unit: string): IconData {
+        const icon: IconData = {
+            gicon: Utils.getLocalIcon('am-dialog-info-symbolic'),
+            fallback_icon_name: 'dialog-info-symbolic'
+        };
+        if(unit === '°C' || unit === 'C' || unit === '°F' || unit === 'F') {
+            icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
+            icon.fallback_icon_name = 'temperature-symbolic';
+        } else if(unit === 'RPM') {
+            icon.gicon = Utils.getLocalIcon('am-fan-symbolic');
+            icon.fallback_icon_name = 'fan-symbolic';
+        } else if(unit === 'V' || unit === 'mV') {
+            icon.gicon = Utils.getLocalIcon('am-voltage-symbolic');
+            icon.fallback_icon_name = 'battery-symbolic';
+        } else if(unit === 'kW' || unit === 'W') {
+            icon.gicon = Utils.getLocalIcon('am-power-symbolic');
+            icon.fallback_icon_name = 'plug-symbolic';
+        } else if(unit === 'A' || unit === 'mA') {
+            icon.gicon = Utils.getLocalIcon('am-current-symbolic');
+            icon.fallback_icon_name = 'battery-symbolic';
+        } else if(unit === 'J') {
+            icon.gicon = Utils.getLocalIcon('am-power-symbolic');
+            icon.fallback_icon_name = 'battery-symbolic';
+        } else if(unit === 'GHz' || unit === 'MHz' || unit === 'Hz') {
+            icon.gicon = Utils.getLocalIcon('am-frequency-symbolic');
+            icon.fallback_icon_name = 'battery-symbolic';
+        }
+        return icon;
+    }
+
+    static splitStringByLength(
+        str: string,
+        length: number,
+        splitters: string[],
+        range: number
+    ): string[] {
+        if(range >= length - 1) throw new Error('Range must be less than length');
+
+        const linesNum = Math.ceil(str.length / length);
+        const linesChars = Math.round(str.length / linesNum);
+        const lines = [];
+
+        for(let i = 1; i < linesNum; i++) {
+            let splitPoint = linesChars;
+            if(!splitters.includes(str[splitPoint])) {
+                for(let j = 0; j < range; j++) {
+                    if(splitters.includes(str[splitPoint + j])) {
+                        splitPoint = splitPoint + j;
+                        break;
+                    }
+                    if(splitters.includes(str[splitPoint - j])) {
+                        splitPoint = splitPoint - j;
+                        break;
+                    }
+                }
+            }
+
+            const line = str.substring(0, splitPoint + 1);
+            str = str.substring(splitPoint + 1);
+            lines.push(line.trim());
+        }
+        lines.push(str.trim());
+        return lines;
+    }
+
+    static deepEqual(obj1: any, obj2: any): boolean {
+        if(obj1 === obj2) return true;
+
+        if(typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null)
+            return false;
+
+        const keys1 = Object.keys(obj1) as Array<keyof typeof obj1>;
+        const keys2 = Object.keys(obj2) as Array<keyof typeof obj2>;
+
+        if(keys1.length !== keys2.length) return false;
+
+        for(const key of keys1) {
+            if(!keys2.includes(key) || !Utils.deepEqual(obj1[key], obj2[key])) return false;
+        }
+
+        return true;
     }
 }

@@ -25,14 +25,14 @@ import Clutter from 'gi://Clutter';
 import { gettext as _, pgettext } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import MenuBase from '../menu.js';
-import Utils, { GpuInfo, UptimeTimer } from '../utils/utils.js';
+import Utils, { UptimeTimer } from '../utils/utils.js';
 import Grid from '../grid.js';
+import Config from '../config.js';
 
 import ProcessorGraph from './processorGraph.js';
 import ProcessorBars from './processorBars.js';
-import ProcessorMonitor, { CpuInfo, GenericGpuInfo } from './processorMonitor.js';
-import Config from '../config.js';
-import GpuBars from './gpuBars.js';
+import ProcessorMonitor, { CpuInfo } from './processorMonitor.js';
+import GpuMenuComponent from '../gpu/gpuMenuComponent.js';
 
 type CpuInfoPopup = MenuBase & {
     hideable?: {
@@ -82,31 +82,6 @@ type TopProcessesPopup = MenuBase & {
     >;
 };
 
-type GpuInfoPopup = MenuBase & {
-    addToMenu: (actor: St.Widget, priority?: number) => void;
-};
-
-type GpusSectionGpu = {
-    info: GpuInfo;
-    popup?: GpuInfoPopup;
-    vram: {
-        bar?: InstanceType<typeof GpuBars>;
-        barLabel?: St.Label;
-        usedLabel?: St.Label;
-        totalLabel?: St.Label;
-    };
-    activity: {
-        gfxBar?: InstanceType<typeof GpuBars>;
-        gfxBarLabel?: St.Label;
-    };
-};
-
-type GpusSection = {
-    label?: St.Label;
-    noGPULabel?: St.Label;
-    gpus: GpusSectionGpu[];
-};
-
 export default class ProcessorMenu extends MenuBase {
     /*private cpuSectionLabel!: St.Label;*/
     private cpuInfoPopup!: CpuInfoPopup;
@@ -127,8 +102,7 @@ export default class ProcessorMenu extends MenuBase {
 
     private loadAverageValues!: St.Label[];
 
-    private gpusSection!: GpusSection;
-    private gpuInfoPopups!: GpuInfoPopup[];
+    private gpuSection!: GpuMenuComponent;
 
     private menuUptime!: St.Label;
     private menuUptimeTimer: UptimeTimer | null = null;
@@ -783,392 +757,31 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     addGPUs() {
-        this.gpusSection = {
-            gpus: []
+        const label = this.addMenuSection('');
+
+        this.gpuSection = new GpuMenuComponent({
+            parent: this,
+            title: label,
+            compact: true
+        });
+        this.addToMenu(this.gpuSection.container, 2);
+
+        const updateGpuVisibility = () => {
+            const processorShow = Config.get_boolean('processor-gpu');
+            const gpuHeaderShow = Config.get_boolean('gpu-header-show');
+
+            if(gpuHeaderShow || !processorShow) {
+                label?.hide();
+                this.gpuSection.container.hide();
+            } else {
+                label?.show();
+                this.gpuSection.container.show();
+            }
         };
 
-        this.gpusSection.label = this.addMenuSection(_('GPU'));
-        Config.connect(this.gpusSection.label, 'changed::processor-menu-gpu', () => {
-            const gpu = Utils.getSelectedGPU();
-            if(this.gpusSection.label) this.gpusSection.label.visible = !!gpu;
-        });
-
-        const GPUsList = Utils.getGPUsList();
-
-        if(GPUsList.length === 0) {
-            // Print No GPU found
-            this.gpusSection.noGPULabel = new St.Label({
-                text: _('No GPU found'),
-                style_class: 'astra-monitor-menu-label-warning',
-                style: 'font-style:italic;'
-            });
-            Config.connect(this.gpusSection, 'changed::processor-menu-gpu', () => {
-                const gpu = Utils.getSelectedGPU();
-                if(this.gpusSection.noGPULabel) this.gpusSection.noGPULabel.visible = !!gpu;
-            });
-            this.addToMenu(this.gpusSection.noGPULabel, 2);
-            return;
-        }
-
-        if(GPUsList.length > 1) this.gpusSection.label.text = _('GPUs');
-
-        const selectedGpu = Utils.getSelectedGPU();
-
-        this.gpuInfoPopups = [];
-        for(let i = 0; i < GPUsList.length; i++) {
-            const gpuInfo = GPUsList[i];
-            const gpu: GpusSectionGpu = {
-                info: gpuInfo,
-                vram: {},
-                activity: {}
-            };
-
-            const defaultStyle = 'max-width: 150px;';
-            const hoverButton = new St.Button({
-                reactive: true,
-                track_hover: true,
-                style: defaultStyle
-            });
-
-            const grid = new Grid({ numCols: 1, styleClass: 'astra-monitor-menu-subgrid' });
-            const label = new St.Label({
-                text: Utils.getGPUModelName(gpuInfo)
-            });
-            grid.addToGrid(label);
-
-            const selected =
-                selectedGpu?.domain === gpuInfo.domain &&
-                selectedGpu?.bus === gpuInfo.bus &&
-                selectedGpu?.slot === gpuInfo.slot;
-            const amd = Utils.isAmdGpu(gpuInfo) && Utils.hasAmdGpuTop();
-            const nvidia = Utils.isNvidiaGpu(gpuInfo) && Utils.hasNvidiaSmi();
-
-            if(selected && (amd || nvidia)) {
-                //ACTIVITY
-                grid.addToGrid(
-                    new St.Label({
-                        text: _('Activity'),
-                        style_class: 'astra-monitor-menu-header-small'
-                    })
-                );
-
-                // GFX Activity Bar
-                {
-                    const barGrid = new Grid({
-                        styleClass: 'astra-monitor-menu-subgrid',
-                        style: 'margin-left:0.5em;'
-                    });
-
-                    const bar = new GpuBars({
-                        numBars: 1,
-                        width: 200 - 2,
-                        height: 0.8,
-                        mini: false,
-                        layout: 'horizontal',
-                        x_align: Clutter.ActorAlign.START,
-                        style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
-                    });
-                    barGrid.addToGrid(bar);
-
-                    const barUsagePercLabel = new St.Label({
-                        text: '0%',
-                        style: 'width:2.7em;font-size:0.8em;text-align:right;'
-                    });
-                    barGrid.addToGrid(barUsagePercLabel);
-
-                    grid.addToGrid(barGrid);
-
-                    gpu.activity.gfxBar = bar;
-                    gpu.activity.gfxBarLabel = barUsagePercLabel;
-                }
-
-                //VARM
-                grid.addToGrid(
-                    new St.Label({
-                        text: _('VRAM'),
-                        style_class: 'astra-monitor-menu-header-small'
-                    })
-                );
-
-                // Bar
-                {
-                    const barGrid = new Grid({
-                        styleClass: 'astra-monitor-menu-subgrid',
-                        style: 'margin-left:0.5em;'
-                    });
-
-                    const bar = new GpuBars({
-                        numBars: 1,
-                        width: 200 - 2,
-                        height: 0.8,
-                        mini: false,
-                        layout: 'horizontal',
-                        x_align: Clutter.ActorAlign.START,
-                        style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
-                    });
-                    barGrid.addToGrid(bar);
-
-                    const barUsagePercLabel = new St.Label({
-                        text: '0%',
-                        style: 'width:2.7em;font-size:0.8em;text-align:right;'
-                    });
-                    barGrid.addToGrid(barUsagePercLabel);
-
-                    grid.addToGrid(barGrid);
-
-                    gpu.vram.bar = bar;
-                    gpu.vram.barLabel = barUsagePercLabel;
-                }
-
-                // VRAM Labels
-                {
-                    const vramContainer = new St.Widget({
-                        layout_manager: new Clutter.GridLayout({
-                            orientation: Clutter.Orientation.HORIZONTAL
-                        }),
-                        x_expand: true,
-                        style: 'margin-left:0.5em;margin-right:0;'
-                    });
-
-                    const usedContainer = new St.Widget({
-                        layout_manager: new Clutter.GridLayout({
-                            orientation: Clutter.Orientation.HORIZONTAL
-                        }),
-                        x_expand: true,
-                        style: 'margin-left:0;margin-right:0;'
-                    });
-
-                    const usedLabel = new St.Label({
-                        text: _('Used:'),
-                        style_class: 'astra-monitor-menu-label',
-                        style: 'padding-right:0.15em;'
-                    });
-                    usedContainer.add_child(usedLabel);
-
-                    const usedValueLabel = new St.Label({
-                        text: '-',
-                        x_expand: true,
-                        style_class: 'astra-monitor-menu-key-mid'
-                    });
-                    usedContainer.add_child(usedValueLabel);
-                    usedContainer.set_width(100);
-
-                    vramContainer.add_child(usedContainer);
-
-                    const totalContainer = new St.Widget({
-                        layout_manager: new Clutter.GridLayout({
-                            orientation: Clutter.Orientation.HORIZONTAL
-                        }),
-                        x_expand: true,
-                        style: 'margin-left:0;margin-right:0;'
-                    });
-
-                    const totalLabel = new St.Label({
-                        text: _('Total:'),
-                        style_class: 'astra-monitor-menu-label',
-                        style: 'padding-right:0.15em;'
-                    });
-                    totalContainer.add_child(totalLabel);
-
-                    const totalValueLabel = new St.Label({
-                        text: '-',
-                        x_expand: true,
-                        style_class: 'astra-monitor-menu-key-mid'
-                    });
-                    totalContainer.add_child(totalValueLabel);
-                    totalContainer.set_width(100);
-
-                    vramContainer.add_child(totalContainer);
-
-                    grid.addToGrid(vramContainer);
-
-                    gpu.vram.usedLabel = usedValueLabel;
-                    gpu.vram.totalLabel = totalValueLabel;
-                }
-            }
-
-            hoverButton.set_child(grid);
-
-            const gpuInfoPopup = this.createGPUInfoPopup(hoverButton, gpuInfo);
-            gpu.popup = gpuInfoPopup;
-            this.gpuInfoPopups.push(gpuInfoPopup);
-
-            hoverButton.connect('enter-event', () => {
-                hoverButton.style = defaultStyle + this.selectionStyle;
-                if(gpuInfoPopup) gpuInfoPopup.open(true);
-            });
-
-            hoverButton.connect('leave-event', () => {
-                hoverButton.style = defaultStyle;
-                if(gpuInfoPopup) gpuInfoPopup.close(true);
-            });
-            this.addToMenu(hoverButton, 2);
-
-            const updateSelectedGPU = () => {
-                const selectedGpu = Utils.getSelectedGPU();
-
-                if(gpuInfo === selectedGpu) {
-                    label.style_class = 'astra-monitor-menu-label';
-                } else {
-                    if(Utils.themeStyle === 'light')
-                        label.style_class = 'astra-monitor-menu-unmonitored-light';
-                    else label.style_class = 'astra-monitor-menu-unmonitored';
-                }
-            };
-            updateSelectedGPU();
-
-            Config.connect(this.gpusSection, 'changed::processor-menu-gpu', updateSelectedGPU);
-            this.gpusSection.gpus.push(gpu);
-        }
-    }
-
-    createGPUInfoPopup(sourceActor: St.Widget, gpuInfo: GpuInfo): GpuInfoPopup {
-        const popup = new MenuBase(sourceActor, 0.05);
-        popup.addMenuSection(_('GPU info'));
-
-        popup.addToMenu(
-            new St.Label({
-                text: Utils.getGPUModelName(gpuInfo),
-                style_class: 'astra-monitor-menu-sub-header'
-            }),
-            2
-        );
-
-        popup.addToMenu(
-            new St.Label({
-                text: _('Name'),
-                style_class: 'astra-monitor-menu-sub-key'
-            })
-        );
-        popup.addToMenu(
-            new St.Label({
-                text: gpuInfo.vendor
-            })
-        );
-
-        popup.addToMenu(
-            new St.Label({
-                text: _('Subsystem'),
-                style_class: 'astra-monitor-menu-sub-key'
-            })
-        );
-        popup.addToMenu(
-            new St.Label({
-                text: gpuInfo.model
-            })
-        );
-
-        if(gpuInfo.vendorId) {
-            const vendorNames = Utils.getVendorName('0x' + gpuInfo.vendorId);
-            if(vendorNames[0] !== 'Unknown') {
-                popup.addToMenu(
-                    new St.Label({
-                        text: _('Vendor'),
-                        style_class: 'astra-monitor-menu-sub-key'
-                    })
-                );
-                popup.addToMenu(
-                    new St.Label({
-                        text: vendorNames.join(' / ')
-                    })
-                );
-            }
-
-            popup.addToMenu(
-                new St.Label({
-                    text: _('Vendor ID'),
-                    style_class: 'astra-monitor-menu-sub-key'
-                })
-            );
-            popup.addToMenu(
-                new St.Label({
-                    text: gpuInfo.vendorId
-                })
-            );
-        }
-
-        if(gpuInfo.productId) {
-            popup.addToMenu(
-                new St.Label({
-                    text: _('Product ID'),
-                    style_class: 'astra-monitor-menu-sub-key'
-                })
-            );
-            popup.addToMenu(
-                new St.Label({
-                    text: gpuInfo.productId
-                })
-            );
-        }
-
-        let domain = gpuInfo.domain;
-        if(domain.startsWith('0000:')) domain = domain.substring(5);
-
-        popup.addToMenu(
-            new St.Label({
-                text: _('Domain'),
-                style_class: 'astra-monitor-menu-sub-key'
-            })
-        );
-        popup.addToMenu(
-            new St.Label({
-                text: domain
-            })
-        );
-
-        popup.addToMenu(
-            new St.Label({
-                text: _('Bus'),
-                style_class: 'astra-monitor-menu-sub-key'
-            })
-        );
-        popup.addToMenu(
-            new St.Label({
-                text: gpuInfo.bus
-            })
-        );
-
-        popup.addToMenu(
-            new St.Label({
-                text: _('Slot'),
-                style_class: 'astra-monitor-menu-sub-key'
-            })
-        );
-        popup.addToMenu(
-            new St.Label({
-                text: gpuInfo.slot
-            })
-        );
-
-        if(gpuInfo.drivers && Array.isArray(gpuInfo.drivers) && gpuInfo.drivers.length > 0) {
-            popup.addToMenu(
-                new St.Label({
-                    text: _('Drivers'),
-                    style_class: 'astra-monitor-menu-sub-key'
-                })
-            );
-            popup.addToMenu(
-                new St.Label({
-                    text: gpuInfo.drivers.join(', ')
-                })
-            );
-        }
-
-        if(gpuInfo.modules && Array.isArray(gpuInfo.modules) && gpuInfo.modules.length > 0) {
-            popup.addToMenu(
-                new St.Label({
-                    text: _('Modules'),
-                    style_class: 'astra-monitor-menu-sub-key'
-                })
-            );
-            popup.addToMenu(
-                new St.Label({
-                    text: gpuInfo.modules.join(', ')
-                })
-            );
-        }
-
-        return popup;
+        Config.connect(this.gpuSection, 'changed::processor-gpu', updateGpuVisibility.bind(this));
+        Config.connect(this.gpuSection, 'changed::gpu-header-show', updateGpuVisibility.bind(this));
+        updateGpuVisibility();
     }
 
     addSystemUptime() {
@@ -1185,6 +798,7 @@ export default class ProcessorMenu extends MenuBase {
 
     async onOpen() {
         this.clear();
+        this.gpuSection.onOpen();
 
         //Update cpu usage percentage label
         this.update('cpuUsage');
@@ -1206,10 +820,15 @@ export default class ProcessorMenu extends MenuBase {
             this.menuUptime.text = Utils.formatUptime(bootTime);
         });
 
-        Utils.processorMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
+        const processorGpuShow = Config.get_boolean('processor-gpu');
+        const gpuHeaderShow = Config.get_boolean('gpu-header-show');
+        if(processorGpuShow && !gpuHeaderShow)
+            Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
     }
 
     async onClose() {
+        this.gpuSection.onClose();
+
         if(this.lazyCoresPopupTimer != null) {
             GLib.source_remove(this.lazyCoresPopupTimer);
             this.lazyCoresPopupTimer = null;
@@ -1220,7 +839,7 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.unlisten(this, 'topProcesses');
         Utils.processorMonitor.unlisten(this, 'loadAverage');
 
-        Utils.processorMonitor.unlisten(this, 'gpuUpdate');
+        Utils.gpuMonitor.unlisten(this, 'gpuUpdate');
 
         this.queueTopProcessesUpdate = false;
 
@@ -1253,6 +872,8 @@ export default class ProcessorMenu extends MenuBase {
             this.loadAverageValues[i].text = '-';
 
         this.menuUptime.text = '';
+
+        this.gpuSection.clear();
     }
 
     update(code: string, ...args: any[]) {
@@ -1414,68 +1035,15 @@ export default class ProcessorMenu extends MenuBase {
             return;
         }
         if(code === 'gpuUpdate') {
-            const selectedGpu = Utils.getSelectedGPU();
-            if(!selectedGpu) return;
-            const data: Map<string, any> = args[0];
-            if(!data) return;
-
-            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-            const gpuData: GenericGpuInfo = data.get(selectedPci);
-
-            if(!gpuData) return;
-
-            const compareGpu = (gpu: GpusSectionGpu): boolean => {
-                return (
-                    gpu.info.domain === selectedGpu.domain &&
-                    gpu.info.bus === selectedGpu.bus &&
-                    gpu.info.slot === selectedGpu.slot
-                );
-            };
-            const gpu: GpusSectionGpu | undefined = this.gpusSection.gpus.find(compareGpu);
-            if(!gpu) return;
-
-            if(
-                gpu.vram.bar &&
-                gpuData.vram.percent !== undefined &&
-                !Number.isNaN(gpuData.vram.percent)
-            ) {
-                gpu.vram.bar.setUsage([{ percent: gpuData.vram.percent }]);
-                if(gpu.vram.barLabel)
-                    gpu.vram.barLabel.text = gpuData.vram.percent.toFixed(0) + '%';
-            }
-
-            if(
-                gpu.vram.usedLabel &&
-                gpuData.vram.used !== undefined &&
-                !Number.isNaN(gpuData.vram.used)
-            ) {
-                gpu.vram.usedLabel.text = Utils.formatBytes(gpuData.vram.used, 'kB-KB', 3);
-            }
-
-            if(
-                gpu.vram.totalLabel &&
-                gpuData.vram.total !== undefined &&
-                !Number.isNaN(gpuData.vram.total)
-            ) {
-                gpu.vram.totalLabel.text = Utils.formatBytes(gpuData.vram.total, 'kB-KB', 3);
-            }
-
-            if(
-                gpu.activity.gfxBar &&
-                gpuData.activity.GFX !== undefined &&
-                !Number.isNaN(gpuData.activity.GFX)
-            ) {
-                gpu.activity.gfxBar.setUsage([{ percent: gpuData.activity.GFX }]);
-                if(gpu.activity.gfxBarLabel)
-                    gpu.activity.gfxBarLabel.text = gpuData.activity.GFX.toFixed(0) + '%';
-            }
+            this.gpuSection.update(args[0]);
             return;
         }
     }
 
     destroy() {
         this.close(true);
-        Config.clear(this.gpusSection);
+        Config.clear(this);
+        Config.clear(this.gpuSection);
         this.removeAll();
 
         if(this.cpuInfoPopup) {

@@ -1,5 +1,31 @@
 # Astra Monitor 20 - TO BE RELEASED
 
+### Advanced GPU Monitoring
+
+As per our [Roadmap](https://github.com/AstraExt/astra-monitor/blob/main/ROADMAP.md), in this release we are focusing on improving the GPU monitoring capabilities of Astra Monitor.
+
+The new GPU monitoring is experimental right now and may cause some issues. You can disable it setting the **Main GPU** to `None` in the Preferences window.
+
+Both AMD and NVIDIA GPUs are supported, but AMD support might be more accurate and complete because it's been tested more extensively. Intel GPUs are not supported yet for a lack of hardware to test on, but they will be in the future.
+
+Here's a list of the new features and improvements:
+
+-   **GPU Headers**: also GPUs can now have their dedicated headers and be visible in the top bar with a lot options to customize them. By default this is disabled and you can see the GPU info in the CPU Menu. However, you can enable it from the Preferences window. Beware that enabling this feature can lead to a slight increase of CPU usage because GPU data will be queried continuously.
+
+-   **GPU Info**: hovering a the GPU name in the menu will show more info about it.
+
+-   **GPU Activities**: when you pass your mouse over the GPU bar in the menu you are able to monitor a lot of GPU usage details.
+
+-   **GPU VRAM**: also VRAM usage have its dedicated popup menu with a in-depth view of the VRAM usage.
+
+-   **GPU Top Processes**: there is a list of the top processes using the GPU in the GPU Section (3 elements in the CPU menu, 5 in the GPU menu). As before, the popup menu will show more details about the processes.
+
+-   **GPU Sensors**: a dedicated sensor section is available in the GPU section (1 element in the CPU menu, 3 in the GPU menu). To see all the sensors you can open the popup menu. Soon these sensors will be available in the sensors menu too.
+
+-   **Tooltips**: like the other monitors, you can customize the tooltip for the GPU headers.
+
+_Since this is a major change, we recommend you to test and report any issues you may encounter._
+
 ### New features
 
 -   Greatly improved UI performance at the expense of data responsiveness: you might see outdated or empty data for a few milliseconds when opening menus. Soon this will become a choice in preferences. [[#102](https://github.com/AstraExt/astra-monitor/issues/102)]
