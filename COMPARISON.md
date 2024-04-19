@@ -47,7 +47,7 @@ The results of the tests are shown in the table below. The values are the averag
         <td>868 🏆</td>
         <td>32.18</td>
         <td>780</td>
-        <td>?*</td>
+        <td>962</td>
         <td>1696</td>
     </tr>
     <tr>
