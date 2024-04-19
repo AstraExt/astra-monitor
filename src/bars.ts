@@ -164,8 +164,7 @@ export default GObject.registerClass(
             let styleClass;
             if(this.layout === 'vertical') {
                 styleClass = 'astra-monitor-bars-vertical';
-            }
-            else {
+            } else {
                 styleClass = 'astra-monitor-bars-horizontal';
             }
 
@@ -187,15 +186,14 @@ export default GObject.registerClass(
                 let [width, height] = this.get_size();
                 width /= this.scaleFactor;
                 height /= this.scaleFactor;
-                
+
                 let size;
                 if(this.layout === 'vertical') {
                     size = height - 4;
-                }
-                else {
+                } else {
                     size = width - 4;
                 }
-                
+
                 if(!values || values.length === 0) {
                     for(let i = 0; i < this.bars.length; i++) {
                         const bar = this.bars[i];
@@ -232,15 +230,13 @@ export default GObject.registerClass(
                         const zero = Math.round(value[l].value * 100) < 1 ? 0 : 1;
                         const normalizedValue = value[l].value * size;
                         let fillSize = zero;
-                        if(normalizedValue >= 0.5)
-                            fillSize = Math.ceil(normalizedValue);
+                        if(normalizedValue >= 0.5) fillSize = Math.ceil(normalizedValue);
                         if(isNaN(fillSize) || fillSize < zero) fillSize = zero;
-                        
+
                         if(this.layout === 'vertical') {
                             const position = size - start - fillSize;
                             layer.set_position(0, position * this.scaleFactor);
-                        }
-                        else {
+                        } else {
                             const position = start;
                             layer.set_position(position * this.scaleFactor, 0);
                         }

@@ -364,7 +364,7 @@ export default class GpuMonitor extends Monitor {
         };
         Config.connect(this, 'changed::gpu-main', updateGpu.bind(this));
         updateGpu();
-        
+
         this.updateMonitorStatus();
     }
 
@@ -379,12 +379,11 @@ export default class GpuMonitor extends Monitor {
     updateMonitorStatus() {
         if(Config.get_boolean('gpu-header-show') || this.isListeningFor('gpuUpdateProcessor')) {
             this.start();
-        }
-        else {
+        } else {
             this.stop();
         }
     }
-    
+
     restart() {
         if(!Config.get_boolean('gpu-header-show') && !this.isListeningFor('gpuUpdateProcessor'))
             return;
@@ -429,7 +428,7 @@ export default class GpuMonitor extends Monitor {
 
     private startGpuTask() {
         Utils.log('startGpuTask!');
-        
+
         const selectedGpu = Utils.getSelectedGPU();
         if(!selectedGpu) return;
 
