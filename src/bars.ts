@@ -77,7 +77,9 @@ export default GObject.registerClass(
             }
             style += params.style;
 
-            if(params.mini) params.y_align = Clutter.ActorAlign.FILL;
+            if(params.mini) {
+                params.y_align = Clutter.ActorAlign.FILL;
+            }
 
             super({
                 style: style,
@@ -160,8 +162,12 @@ export default GObject.registerClass(
 
         setStyle() {
             let styleClass;
-            if(this.layout === 'vertical') styleClass = 'astra-monitor-bars-vertical';
-            else styleClass = 'astra-monitor-bars-horizontal';
+            if(this.layout === 'vertical') {
+                styleClass = 'astra-monitor-bars-vertical';
+            }
+            else {
+                styleClass = 'astra-monitor-bars-horizontal';
+            }
 
             if(this.mini) styleClass += '-mini';
 
@@ -179,21 +185,23 @@ export default GObject.registerClass(
             try {
                 // eslint-disable-next-line prefer-const
                 let [width, height] = this.get_size();
-
-                if(this.layout === 'vertical' && this.header) {
-                    const parentHeight = this.get_parent()!.height;
-                    if(height > parentHeight - 6) height = parentHeight - 6;
-                }
-
+                width /= this.scaleFactor;
+                height /= this.scaleFactor;
+                
                 let size;
-                if(this.layout === 'vertical')
-                    size = height - (this.mini ? 2 : 4); // Remove 2px padding and 2px border
-                else size = width - (this.mini ? 2 : 4); // Remove 2px padding and 2px border
-
+                if(this.layout === 'vertical') {
+                    size = height - 4;
+                }
+                else {
+                    size = width - 4;
+                }
+                
                 if(!values || values.length === 0) {
                     for(let i = 0; i < this.bars.length; i++) {
                         const bar = this.bars[i];
-                        for(let l = 0; l < bar.length; l++) bar[l].visible = false;
+                        for(let l = 0; l < bar.length; l++) {
+                            bar[l].visible = false;
+                        }
                     }
                     return;
                 }
@@ -225,12 +233,17 @@ export default GObject.registerClass(
                         const normalizedValue = value[l].value * size;
                         let fillSize = zero;
                         if(normalizedValue >= 0.5)
-                            fillSize = Math.ceil(normalizedValue) / this.scaleFactor;
+                            fillSize = Math.ceil(normalizedValue);
                         if(isNaN(fillSize) || fillSize < zero) fillSize = zero;
-
-                        if(this.layout === 'vertical')
-                            layer.set_position(0, size - start - fillSize);
-                        else layer.set_position(start, 0);
+                        
+                        if(this.layout === 'vertical') {
+                            const position = size - start - fillSize;
+                            layer.set_position(0, position * this.scaleFactor);
+                        }
+                        else {
+                            const position = start;
+                            layer.set_position(position * this.scaleFactor, 0);
+                        }
 
                         const color = fillSize === 0 ? 'transparent' : this.colors[value[l].color];
                         const style =
@@ -265,10 +278,8 @@ export default GObject.registerClass(
                 }
             }
 
-            const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
-
-            const roundedSize = this.mini ? 3 : 4;
-            if(totalSize - (start + size) <= roundedSize * scaleFactor) {
+            const roundedSize = (this.mini ? 3 : 4) * this.scaleFactor;
+            if(totalSize - (start + size) <= roundedSize) {
                 if(this.layout === 'vertical') {
                     bordersHelper.topLeft = border;
                     bordersHelper.topRight = border;

@@ -822,8 +822,10 @@ export default class ProcessorMenu extends MenuBase {
 
         const processorGpuShow = Config.get_boolean('processor-gpu');
         const gpuHeaderShow = Config.get_boolean('gpu-header-show');
-        if(processorGpuShow && !gpuHeaderShow)
+        if(processorGpuShow && !gpuHeaderShow) {
+            Utils.gpuMonitor.listen(this, 'gpuUpdateProcessor', () => {});
             Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
+        }
     }
 
     async onClose() {
@@ -840,6 +842,7 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.unlisten(this, 'loadAverage');
 
         Utils.gpuMonitor.unlisten(this, 'gpuUpdate');
+        Utils.gpuMonitor.unlisten(this, 'gpuUpdateProcessor');
 
         this.queueTopProcessesUpdate = false;
 

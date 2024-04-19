@@ -313,8 +313,9 @@ export default GObject.registerClass(
                 if(this.sensorsNum === 1 || this.sensorsLayout === 'horizontal')
                     return 'font-size:1em;';
                 const superHeight = this.valuesContainer.get_parent()?.height ?? 0;
-                if(superHeight <= 20) return 'font-size:0.65em;';
-                return `font-size:${Math.round(superHeight / 3)}px;`;
+                const scaledHeight = superHeight / this.scaleFactor;
+                if(scaledHeight <= 20) return 'font-size:0.65em;';
+                return `font-size:${Math.round(scaledHeight / 3)}px;`;
             };
             const style = calculateStyle();
 

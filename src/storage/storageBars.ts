@@ -53,7 +53,7 @@ export default GObject.registerClass(
                 return;
             }
 
-            this.updateBars([[{ color: 0, value: usage.usePercentage / 100.0 }]]);
+            this.updateBars([[{ color: 0, value: 1/*usage.usePercentage / 100.0*/ }]]);
         }
     }
 );

@@ -364,6 +364,8 @@ export default class GpuMonitor extends Monitor {
         };
         Config.connect(this, 'changed::gpu-main', updateGpu.bind(this));
         updateGpu();
+        
+        this.updateMonitorStatus();
     }
 
     get updateFrequency() {
@@ -375,9 +377,18 @@ export default class GpuMonitor extends Monitor {
     }
 
     updateMonitorStatus() {
-        const show = Config.get_boolean('gpu-header-show');
-        if(show || this.isListeningFor('gpuUpdate')) this.start();
-        else this.stop();
+        if(Config.get_boolean('gpu-header-show') || this.isListeningFor('gpuUpdateProcessor')) {
+            this.start();
+        }
+        else {
+            this.stop();
+        }
+    }
+    
+    restart() {
+        if(!Config.get_boolean('gpu-header-show') && !this.isListeningFor('gpuUpdateProcessor'))
+            return;
+        super.restart();
     }
 
     reset() {
@@ -403,7 +414,7 @@ export default class GpuMonitor extends Monitor {
     }
 
     startListeningFor(key: string) {
-        if(key === 'gpuUpdate') {
+        if(key === 'gpuUpdateProcessor') {
             setTimeout(() => {
                 this.updateMonitorStatus();
             });
@@ -411,12 +422,14 @@ export default class GpuMonitor extends Monitor {
     }
 
     stopListeningFor(key: string) {
-        if(key === 'gpuUpdate') {
+        if(key === 'gpuUpdateProcessor') {
             this.updateMonitorStatus();
         }
     }
 
     private startGpuTask() {
+        Utils.log('startGpuTask!');
+        
         const selectedGpu = Utils.getSelectedGPU();
         if(!selectedGpu) return;
 
@@ -446,7 +459,6 @@ export default class GpuMonitor extends Monitor {
 
     private stopGpuTask() {
         if(this.updateAmdGpuTask.isRunning) this.updateAmdGpuTask.stop();
-
         if(this.updateNvidiaGpuTask.isRunning) this.updateNvidiaGpuTask.stop();
     }
 

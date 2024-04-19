@@ -178,6 +178,14 @@ export default GObject.registerClass(
         showTooltip() {}
 
         hideTooltip() {}
+        
+        get scaleFactor() {
+            const themeContext = St.ThemeContext.get_for_stage(global.get_stage());
+            if(themeContext.get_scale_factor) {
+                return themeContext.get_scale_factor();
+            }
+            return 1;
+        }
 
         destroy() {
             Config.clear(this);

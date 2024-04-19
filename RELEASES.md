@@ -1,3 +1,10 @@
+# Astra Monitor 21 - April 19 2024
+
+### Bug fixes
+-   Fixed visual bug for system with `scale-monitor-framebuffer` feature disabled [[#110](https://github.com/AstraExt/astra-monitor/issues/110)]
+
+-   Fixed GPU monitoring starting even when the GPU menu is disabled
+
 # Astra Monitor 20 - April 17 2024
 
 ### Advanced GPU Monitoring
