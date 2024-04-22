@@ -1,3 +1,9 @@
+# Astra Monitor 22 - TO BE RELEASED
+
+### Bug fixes
+
+-   Arrow colors in Storage Top Processes popup wasn't following menu's color settings [[#115](https://github.com/AstraExt/astra-monitor/issues/115)]
+
 # Astra Monitor 21 - April 19 2024
 
 ### Bug fixes

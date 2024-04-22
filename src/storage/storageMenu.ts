@@ -1373,7 +1373,10 @@ export default class StorageMenu extends MenuBase {
 
                             popupElement.read.container.show();
                             if(read > 0) {
-                                popupElement.read.icon.style = 'color:rgb(29,172,214);';
+                                const readColor =
+                                    Config.get_string('storage-menu-arrow-color1') ??
+                                    'rgba(29,172,214,1.0)';
+                                popupElement.read.icon.style = `color:${readColor};`;
                                 popupElement.read.value.text = Utils.formatBytesPerSec(
                                     read,
                                     unit as any,
@@ -1386,7 +1389,10 @@ export default class StorageMenu extends MenuBase {
 
                             popupElement.write.container.show();
                             if(write > 0) {
-                                popupElement.write.icon.style = 'color:rgb(214,29,29);';
+                                const writeColor =
+                                    Config.get_string('storage-menu-arrow-color2') ??
+                                    'rgba(214,29,29,1.0)';
+                                popupElement.write.icon.style = `color:${writeColor};`;
                                 popupElement.write.value.text = Utils.formatBytesPerSec(
                                     write,
                                     unit as any,
