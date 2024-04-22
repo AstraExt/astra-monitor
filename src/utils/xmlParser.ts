@@ -81,7 +81,7 @@ export default class XMLParser {
                         else
                             this.currentObj[this.currentTagName] = [
                                 this.currentObj[this.currentTagName] as XMLObject,
-                                newObj
+                                newObj,
                             ];
                     }
                     this.stack.push({ tagName: this.currentTagName, obj: newObj });

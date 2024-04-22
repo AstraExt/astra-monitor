@@ -5,6 +5,7 @@ module.exports = {
     endOfLine: 'lf',
     semi: true,
     tabWidth: 4,
-    trailingComma: 'none',
-    arrowParens: 'avoid'
+    trailingComma: 'es5',
+    arrowParens: 'avoid',
+    quoteProps: 'as-needed',
 };

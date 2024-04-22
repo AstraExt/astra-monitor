@@ -134,7 +134,7 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER
+                x_align: Clutter.ActorAlign.CENTER,
             });
 
             const setIconName = () => {
@@ -149,6 +149,12 @@ export default GObject.registerClass(
             let alertColor = '';
             const alerts = new Set();
 
+            const updateIconColor = () => {
+                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
+                else this.icon.style = defaultStyle;
+            };
+
             const setIconBaseColor = () => {
                 baseColor = Config.get_string('gpu-header-icon-color') || '';
                 updateIconColor();
@@ -156,11 +162,6 @@ export default GObject.registerClass(
             const setIconAlertColor = () => {
                 alertColor = Config.get_string('gpu-header-icon-alert-color') || '';
                 updateIconColor();
-            };
-            const updateIconColor = () => {
-                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
-                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
-                else this.icon.style = defaultStyle;
             };
 
             setIconBaseColor();
@@ -249,7 +250,7 @@ export default GObject.registerClass(
                 numBars: 1,
                 header: true,
                 mini: true,
-                width: 0.5
+                width: 0.5,
                 //breakdownConfig: 'gpu-header-activity-bar-breakdown'
             });
             Config.bind(
@@ -289,10 +290,11 @@ export default GObject.registerClass(
                 this.activityGraph.destroy();
             }
 
-            let graphWidth = Config.get_int('gpu-header-activity-graph-width');
-            graphWidth = Math.max(10, Math.min(500, graphWidth));
-
-            this.activityGraph = new GpuActivityGraph({ width: graphWidth, mini: true });
+            {
+                let graphWidth = Config.get_int('gpu-header-activity-graph-width');
+                graphWidth = Math.max(10, Math.min(500, graphWidth));
+                this.activityGraph = new GpuActivityGraph({ width: graphWidth, mini: true });
+            }
             Config.bind(
                 'gpu-header-activity-graph',
                 this.activityGraph,
@@ -318,7 +320,7 @@ export default GObject.registerClass(
             this.activityPercentage = new St.Label({
                 text: Utils.zeroStr + '%',
                 style_class: 'astra-monitor-header-percentage3',
-                y_align: Clutter.ActorAlign.CENTER
+                y_align: Clutter.ActorAlign.CENTER,
             });
             Config.bind(
                 'gpu-header-activity-percentage',
@@ -370,7 +372,7 @@ export default GObject.registerClass(
                 layers: 1,
                 header: true,
                 mini: true,
-                width: 0.5
+                width: 0.5,
             });
             Config.bind(
                 'gpu-header-memory-bar',
@@ -409,10 +411,11 @@ export default GObject.registerClass(
                 this.memoryGraph.destroy();
             }
 
-            let graphWidth = Config.get_int('gpu-header-memory-graph-width');
-            graphWidth = Math.max(10, Math.min(500, graphWidth));
-
-            this.memoryGraph = new GpuMemoryGraph({ width: graphWidth, mini: true });
+            {
+                let graphWidth = Config.get_int('gpu-header-memory-graph-width');
+                graphWidth = Math.max(10, Math.min(500, graphWidth));
+                this.memoryGraph = new GpuMemoryGraph({ width: graphWidth, mini: true });
+            }
             Config.bind(
                 'gpu-header-memory-graph',
                 this.memoryGraph,
@@ -438,7 +441,7 @@ export default GObject.registerClass(
             this.memoryPercentage = new St.Label({
                 text: Utils.zeroStr + '%',
                 style_class: 'astra-monitor-header-percentage3',
-                y_align: Clutter.ActorAlign.CENTER
+                y_align: Clutter.ActorAlign.CENTER,
             });
             Config.bind(
                 'gpu-header-memory-percentage',
@@ -496,7 +499,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item'
+                style_class: 'astra-monitor-tooltip-item',
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;

@@ -48,7 +48,7 @@ export default class AstraMonitorExtension extends Extension {
             MemoryMonitor,
             StorageMonitor,
             NetworkMonitor,
-            SensorsMonitor
+            SensorsMonitor,
         });
         Utils.log('AstraMonitor enabled');
 

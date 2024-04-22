@@ -74,7 +74,7 @@ export default class SensorsMenu extends MenuBase {
                 text: _('No sensor found'),
                 style_class: 'astra-monitor-menu-label-warning',
                 style: 'font-style:italic;',
-                x_expand: true
+                x_expand: true,
             });
             this.sensorsSection.addToGrid(this.noSensorsLabel, 2);
             this.sensors = new Map();
@@ -134,28 +134,28 @@ export default class SensorsMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({
             x_expand: true,
-            styleClass: 'astra-monitor-menu-subgrid'
+            styleClass: 'astra-monitor-menu-subgrid',
         });
         container.set_child(grid);
 
-        const name = new St.Label({
+        const nameLabel = new St.Label({
             text: '',
             style_class: 'astra-monitor-menu-sensors-name',
-            x_expand: true
+            x_expand: true,
         });
-        grid.addToGrid(name, 2);
+        grid.addToGrid(nameLabel, 2);
 
-        const adapter = new St.Label({
+        const adapterLabel = new St.Label({
             text: '',
             style_class: 'astra-monitor-menu-sensors-adapter',
-            x_expand: true
+            x_expand: true,
         });
-        grid.addToGrid(adapter, 2);
+        grid.addToGrid(adapterLabel, 2);
 
         //Pop-up menu
         //{
@@ -171,7 +171,7 @@ export default class SensorsMenu extends MenuBase {
         const popupGrid = new Grid({
             numCols: cols * 2,
             styleClass: 'astra-monitor-menu-subgrid',
-            x_expand: true
+            x_expand: true,
         });
 
         const categories = new Map();
@@ -187,13 +187,13 @@ export default class SensorsMenu extends MenuBase {
                 numCols: 3,
                 styleClass: 'astra-monitor-menu-subgrid',
                 style: style,
-                x_expand: true
+                x_expand: true,
             });
 
             const categoryLabel = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-sensors-category',
-                x_expand: true
+                x_expand: true,
             });
             categoryGrid.addToGrid(categoryLabel, 3);
 
@@ -202,7 +202,7 @@ export default class SensorsMenu extends MenuBase {
                 //Icon
                 const icon = new St.Icon({
                     style_class: 'astra-monitor-menu-sensors-icon',
-                    content_gravity: Clutter.ContentGravity.CENTER
+                    content_gravity: Clutter.ContentGravity.CENTER,
                 });
                 categoryGrid.addToGrid(icon);
 
@@ -210,7 +210,7 @@ export default class SensorsMenu extends MenuBase {
                 const name = new St.Label({
                     text: '',
                     style_class: 'astra-monitor-menu-sensors-label',
-                    x_expand: true
+                    x_expand: true,
                 });
                 categoryGrid.addToGrid(name);
 
@@ -218,7 +218,7 @@ export default class SensorsMenu extends MenuBase {
                 const value = new St.Label({
                     text: '-',
                     style_class: 'astra-monitor-menu-sensors-key',
-                    x_expand: true
+                    x_expand: true,
                 });
                 categoryGrid.addToGrid(value);
 
@@ -247,10 +247,10 @@ export default class SensorsMenu extends MenuBase {
         return {
             data: null,
             container,
-            name,
-            adapter,
+            name: nameLabel,
+            adapter: adapterLabel,
             popup,
-            categories
+            categories,
         };
     }
 
@@ -350,7 +350,7 @@ export default class SensorsMenu extends MenuBase {
                 ) {
                     for(const [
                         sensorName,
-                        sensorData
+                        sensorData,
                     ] of sensorsData.lm_sensors.children.entries()) {
                         sensorsList.set('sensors/' + sensorName, sensorData);
                     }

@@ -67,7 +67,7 @@ export default GObject.registerClass(
                 Utils.parseRGBA(
                     Config.get_string('gpu-header-memory-graph-color1'),
                     'rgba(29,172,214,1.0)'
-                )
+                ),
                 //Utils.parseRGBA(Config.get_string('gpu-header-memory-graph-color2'), 'rgba(214,29,29,1.0)')
             ];
 

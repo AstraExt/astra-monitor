@@ -28,7 +28,7 @@ import Gtk from 'gi://Gtk';
 import {
     ExtensionPreferences,
     gettext as _,
-    pgettext
+    pgettext,
 } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 import Utils, { GpuInfo } from './src/utils/utils.js';
@@ -51,9 +51,11 @@ type AdjustamentProps = {
 };
 
 type ColorCallback = (color: string) => void;
+
+// eslint-disable-next-line no-shadow
 enum ColorCategory {
     MAIN,
-    SECONDARY
+    SECONDARY,
 }
 
 type Choice = { value: any; text: string; disabled?: boolean };
@@ -81,7 +83,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         Utils.init({
             service: 'prefs',
             metadata: this.metadata,
-            settings: this.getSettings()
+            settings: this.getSettings(),
         });
 
         window.connect('close-request', () => {
@@ -134,7 +136,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private setupGeneral() {
         const generalPage = new Adw.PreferencesPage({
             title: _('General'),
-            iconName: 'am-settings-symbolic'
+            iconName: 'am-settings-symbolic',
         });
 
         let group = new Adw.PreferencesGroup({ title: _('Dependencies') });
@@ -189,7 +191,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     {
                         title: _(
                             'Cannot access /sys/class/hwmon: sensors monitoring will not work!'
-                        )
+                        ),
                     },
                     'am-dialog-error-symbolic',
                     group
@@ -221,7 +223,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     {
                         title: _(
                             'Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!'
-                        )
+                        ),
                     },
                     'am-dialog-warning-symbolic',
                     group
@@ -239,7 +241,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     {
                         title: _(
                             "'iwconfig' and 'iw' not installed: install one of them to enable wireless network info!"
-                        )
+                        ),
                     },
                     'am-dialog-warning-symbolic',
                     group
@@ -251,7 +253,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     {
                         title: _(
                             "AMD GPU detected but 'amdgpu_top' not installed: some optional features will be disabled!"
-                        )
+                        ),
                     },
                     'am-dialog-warning-symbolic',
                     group
@@ -262,7 +264,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     {
                         title: _(
                             "NVidia GPU detected but 'nvidia-smi' not installed: some optional features will be disabled!"
-                        )
+                        ),
                     },
                     'am-dialog-warning-symbolic',
                     group
@@ -311,7 +313,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const themeSection = this.addExpanderRow({ title: _('Theme') }, group);
         let choicesPanel = [
             { value: 'dark', text: _('Dark') },
-            { value: 'light', text: _('Light') }
+            { value: 'light', text: _('Light') },
         ];
         this.addComboRow(
             {
@@ -319,7 +321,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 subtitle: _(
                     'Set to "Dark" or "Light" based on your shell TOPBAR theme to improve readability.'
                 ),
-                tabs: 1
+                tabs: 1,
             },
             choicesPanel,
             'theme-style',
@@ -332,7 +334,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             { value: 'top', text: _('Top') },
             { value: 'bottom', text: _('Bottom') },
             { value: 'left', text: _('Left') },
-            { value: 'right', text: _('Right') }
+            { value: 'right', text: _('Right') },
         ];
         this.addComboRow(
             {
@@ -343,7 +345,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     ) +
                     '\n' +
                     _('Disable/Enable the extension to apply changes.'),
-                tabs: 1
+                tabs: 1,
             },
             choicesPanel,
             'shell-bar-position',
@@ -360,7 +362,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     '\n' +
                     _('Changing this will just replace all main colors.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             (color: string) => {
                 if(color) this.setAllColors(color, ColorCategory.MAIN);
@@ -376,7 +378,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     '\n' +
                     _('Changing this will just replace all secondary colors.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             (color: string) => {
                 if(color) this.setAllColors(color, ColorCategory.SECONDARY);
@@ -394,7 +396,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         choicesPanel = [
             { value: 'left', text: _('Left') },
             { value: 'center', text: _('Center') },
-            { value: 'right', text: _('Right') }
+            { value: 'right', text: _('Right') },
         ];
         this.addComboRow(
             { title: _('Position'), tabs: 1 },
@@ -415,7 +417,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Left Margin'),
                 subtitle: _('Experimental feature: may not function properly.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'panel-margin-left',
             panelSection,
@@ -428,7 +430,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Right Margin'),
                 subtitle: _('Experimental feature: may not function properly.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'panel-margin-right',
             panelSection,
@@ -443,7 +445,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Startup Delay (seconds)'),
                 subtitle: _('Increase if the extension is not properly formatted on startup.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'startup-delay',
             headersSection,
@@ -456,7 +458,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Headers Height'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'headers-height',
             headersSection,
@@ -472,7 +474,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     '\n' +
                     _('Set to empty to disable font override'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'headers-font-family',
             headersSection,
@@ -486,7 +488,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     '\n' +
                     _('Set to 0 to disable size override'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'headers-font-size',
             headersSection,
@@ -508,7 +510,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private setupProcessors() {
         const processorsPage = new Adw.PreferencesPage({
             title: _('Processors'),
-            icon_name: 'am-cpu-symbolic'
+            icon_name: 'am-cpu-symbolic',
         });
 
         /* Processors */
@@ -528,7 +530,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const cpuUsageSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'GTop', text: 'GTop' },
-            { value: 'proc', text: '/proc/stat' }
+            { value: 'proc', text: '/proc/stat' },
         ];
         this.addComboRow(
             { title: _('Cpu Usage'), tabs: 1 },
@@ -542,7 +544,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const cpuCoresUsageSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'GTop', text: 'GTop' },
-            { value: 'proc', text: '/proc/stat' }
+            { value: 'proc', text: '/proc/stat' },
         ];
         this.addComboRow(
             { title: _('Cpu Cores Usage'), tabs: 1 },
@@ -556,7 +558,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const cpuTopProcessesSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'GTop', text: 'GTop' },
-            { value: 'proc', text: '/proc/[pid]/stat' }
+            { value: 'proc', text: '/proc/[pid]/stat' },
         ];
         this.addComboRow(
             { title: _('Top Processes'), tabs: 1 },
@@ -569,7 +571,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const cpuLoadAverageSources = [
             { value: 'auto', text: _('Auto') },
-            { value: 'proc', text: '/proc/loadavg' }
+            { value: 'proc', text: '/proc/loadavg' },
         ];
         this.addComboRow(
             { title: _('Load Average'), tabs: 1 },
@@ -598,7 +600,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     _("Set icon name (ie: 'cpu-symbolic')") +
                     '\n' +
                     _('Set to empty to disable icon override'),
-                tabs: 1
+                tabs: 1,
             },
             'processor-header-icon-custom',
             iconSection,
@@ -621,7 +623,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'processor-header-icon-size',
             iconSection,
@@ -645,7 +647,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Icon Alert'),
                 subtitle: _('Set 0 to disable. Value is percentage of total cpu usage.'),
-                tabs: 1
+                tabs: 1,
             },
             'processor-header-percentage-icon-alert-threshold',
             percentageSection,
@@ -666,7 +668,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 subtitle: _(
                     '<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled).'
                 ),
-                tabs: 1
+                tabs: 1,
             },
             'processor-header-graph-color1',
             graphSection,
@@ -681,7 +683,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Secondary Color'),
                 subtitle: _('<b>System usage</b> color.'),
-                tabs: 1
+                tabs: 1,
             },
             'processor-header-graph-color2',
             graphSection,
@@ -713,7 +715,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 subtitle: _(
                     '<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled).'
                 ),
-                tabs: 1
+                tabs: 1,
             },
             'processor-header-bars-color1',
             barsSection,
@@ -728,7 +730,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Secondary Color'),
                 subtitle: _('<b>System usage</b> color.'),
-                tabs: 1
+                tabs: 1,
             },
             'processor-header-bars-color2',
             barsSection,
@@ -781,7 +783,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Show GPU info'),
                 subtitle: _('Only works if GPU header is disabled.'),
-                tabs: 1
+                tabs: 1,
             },
             'processor-gpu',
             gpuSection
@@ -806,7 +808,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     'This may have a (minor) performance impact.' +
                     '\n' +
                     _("Hint: You can instead choose to show GPU stats in Processors' menu."),
-                icon_name: 'am-dialog-warning-symbolic'
+                icon_name: 'am-dialog-warning-symbolic',
             },
             'gpu-header-show',
             group
@@ -852,7 +854,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     _("Set icon name (ie: 'gpu-symbolic')") +
                     '\n' +
                     _('Set to empty to disable icon override'),
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-icon-custom',
             iconSection,
@@ -875,7 +877,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-icon-size',
             iconSection,
@@ -898,7 +900,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Icon Alert'),
                 subtitle: _('Set 0 to disable. Value is percentage of total GPU Activity usage.'),
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-activity-percentage-icon-alert-threshold',
             activityPercentageSection,
@@ -920,7 +922,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Main Color'),
                 subtitle: _('<b>Total usage</b> color.'),
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-activity-graph-color1',
             activityGraphSection,
@@ -948,7 +950,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Bar Color'),
                 subtitle: _('GPU bar main color.'),
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-activity-bar-color1',
             activityBarsSection,
@@ -968,7 +970,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Icon Alert'),
                 subtitle: _('Set 0 to disable. Value is percentage of total GPU Memory usage.'),
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-memory-percentage-icon-alert-threshold',
             memoryPercentageSection,
@@ -987,7 +989,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Main Color'),
                 subtitle: _('<b>Total usage</b> color.'),
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-memory-graph-color1',
             memoryGraphSection,
@@ -1012,7 +1014,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Bar Color'),
                 subtitle: _('GPU bar main color.'),
-                tabs: 1
+                tabs: 1,
             },
             'gpu-header-memory-bar-color1',
             memoryBarsSection,
@@ -1045,7 +1047,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private setupMemory() {
         const memoryPage = new Adw.PreferencesPage({
             title: _('Memory'),
-            icon_name: 'am-memory-symbolic'
+            icon_name: 'am-memory-symbolic',
         });
 
         let group = new Adw.PreferencesGroup({ title: _('Memory') });
@@ -1066,7 +1068,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             { value: 'KiB', text: _('KiB') },
             { value: 'KB', text: _('KB') },
             { value: 'k ', text: _('k (as kB)') },
-            { value: 'Ki', text: _('Ki (as Ki)') }
+            { value: 'Ki', text: _('Ki (as Ki)') },
         ];
         this.addComboRow(
             { title: _('Data Unit') },
@@ -1080,11 +1082,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         choicesPanel = [
             {
                 value: 'total-free-buffers-cached',
-                text: _('Used = Total - Free - Buffers - Cached')
+                text: _('Used = Total - Free - Buffers - Cached'),
             },
             { value: 'total-free', text: _('Used = Total - Free') },
             { value: 'total-available', text: _('Used = Total - Available') },
-            { value: 'active', text: _('Used = Active') }
+            { value: 'active', text: _('Used = Active') },
         ];
         this.addComboRow(
             { title: _('Used Memory') },
@@ -1100,7 +1102,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const memoryUsageSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'GTop', text: 'GTop' },
-            { value: 'proc', text: '/proc/meminfo' }
+            { value: 'proc', text: '/proc/meminfo' },
         ];
         this.addComboRow(
             { title: _('Memory Usage'), tabs: 1 },
@@ -1114,7 +1116,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const memoryTopProcessesSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'GTop', text: 'GTop' },
-            { value: 'proc', text: 'ps + /proc/[pid]' }
+            { value: 'proc', text: 'ps + /proc/[pid]' },
         ];
         this.addComboRow(
             { title: _('Top Processes'), tabs: 1 },
@@ -1143,7 +1145,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     _("Set icon name (ie: 'memory-symbolic')") +
                     '\n' +
                     _('Set to empty to disable icon override'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-icon-custom',
             iconSection,
@@ -1166,7 +1168,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-icon-size',
             iconSection,
@@ -1185,7 +1187,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Icon Alert'),
                 subtitle: _('Set 0 to disable. Value is percentage of ram usage.'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-percentage-icon-alert-threshold',
             percentageSection,
@@ -1227,7 +1229,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Icon Alert'),
                 subtitle: _('Set 0 to disable. Value is free MB of ram.'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-free-icon-alert-threshold',
             freeSection,
@@ -1246,7 +1248,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Main Color'),
                 subtitle: _('<b>Used</b> memory color.'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-graph-color1',
             graphSection,
@@ -1261,7 +1263,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Alt Color'),
                 subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-graph-color2',
             graphSection,
@@ -1286,7 +1288,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Main Color'),
                 subtitle: _('<b>Used</b> memory color.'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-bars-color1',
             barsSection,
@@ -1301,7 +1303,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Alt Color'),
                 subtitle: _('<b>Allocated <u>unused</u></b> memory color.'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-header-bars-color2',
             barsSection,
@@ -1340,7 +1342,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Swap Bar Color'),
                 subtitle: _('Swap bar main color.'),
-                tabs: 1
+                tabs: 1,
             },
             'memory-menu-swap-color',
             swapSection,
@@ -1355,7 +1357,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private setupStorage() {
         const storagePage = new Adw.PreferencesPage({
             title: _('Storage'),
-            icon_name: 'am-harddisk-symbolic'
+            icon_name: 'am-harddisk-symbolic',
         });
 
         let group = new Adw.PreferencesGroup({ title: _('Storage') });
@@ -1380,7 +1382,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             { value: 'kbps', text: _('kbps') },
             { value: 'Kibitps', text: _('Kibitps') },
             { value: 'k ', text: _('k (as kB/s)') },
-            { value: 'Ki', text: _('Ki (as KiB/s)') }
+            { value: 'Ki', text: _('Ki (as KiB/s)') },
         ];
         this.addComboRow(
             { title: _('Data Unit') },
@@ -1420,7 +1422,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     '\n' +
                     _('Leave empty to disable. Usage example: ') +
                     "'md{1,3}'",
-                tabs: 1
+                tabs: 1,
             },
             'storage-ignored-regex',
             ignoredSection,
@@ -1453,7 +1455,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             const toggle = new Gtk.Switch({
                 active: !status,
                 halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER
+                valign: Gtk.Align.CENTER,
             });
 
             if(id === main) {
@@ -1462,25 +1464,25 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             }
 
             toggle.connect('state-set', (_switchObj, state) => {
+                let ignored = Config.get_json('storage-ignored');
+                if(ignored === null || !Array.isArray(ignoredDevices)) ignored = [];
+
                 if(state) {
                     row.subtitle = _('Ignored');
                     icon.icon_name = 'am-dialog-error-symbolic';
 
-                    let ignoredDevices = Config.get_json('storage-ignored');
-                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
-                        ignoredDevices = [];
-                    if(!ignoredDevices.includes(name)) ignoredDevices.push(name);
-                    Config.set('storage-ignored', JSON.stringify(ignoredDevices), 'string');
+                    if(!ignored.includes(name)) {
+                        ignored.push(name);
+                    }
+                    Config.set('storage-ignored', JSON.stringify(ignored), 'string');
                 } else {
                     row.subtitle = _('Active');
                     icon.icon_name = 'am-dialog-ok-symbolic';
 
-                    let ignoredDevices = Config.get_json('storage-ignored');
-                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
-                        ignoredDevices = [];
-                    if(ignoredDevices.includes(name))
-                        ignoredDevices = ignoredDevices.filter((device: string) => device !== name);
-                    Config.set('storage-ignored', JSON.stringify(ignoredDevices), 'string');
+                    if(ignored.includes(name)) {
+                        ignored = ignored.filter((deviceName: string) => deviceName !== name);
+                    }
+                    Config.set('storage-ignored', JSON.stringify(ignored), 'string');
                 }
             });
 
@@ -1493,7 +1495,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const storageUsageSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'GTop', text: 'GTop' },
-            { value: 'proc', text: 'lsblk' }
+            { value: 'proc', text: 'lsblk' },
         ];
         this.addComboRow(
             { title: _('Storage Usage'), tabs: 1 },
@@ -1506,7 +1508,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const storageTopProcessesSources = [
             { value: 'auto', text: _('Auto') },
-            { value: 'GTop', text: 'GTop' }
+            { value: 'GTop', text: 'GTop' },
         ];
         this.addComboRow(
             { title: _('Top Processes'), tabs: 1 },
@@ -1519,7 +1521,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const storageIOSources = [
             { value: 'auto', text: _('Auto') },
-            { value: 'proc', text: '/proc/diskstats' }
+            { value: 'proc', text: '/proc/diskstats' },
         ];
         this.addComboRow(
             { title: _('Storage IO'), tabs: 1 },
@@ -1548,7 +1550,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     _("Set icon name (ie: 'drive-harddisk-symbolic')") +
                     '\n' +
                     _('Set to empty to disable icon override'),
-                tabs: 1
+                tabs: 1,
             },
             'storage-header-icon-custom',
             iconSection,
@@ -1571,7 +1573,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'storage-header-icon-size',
             iconSection,
@@ -1592,7 +1594,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Main Color'),
                 subtitle: _('<b>Used</b> storage color.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-header-bars-color1',
             mainDiskSection,
@@ -1609,7 +1611,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Icon Alert'),
                 subtitle: _('Set 0 to disable. Value is percentage of disk usage.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-header-percentage-icon-alert-threshold',
             mainDiskSection,
@@ -1651,7 +1653,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Icon Alert'),
                 subtitle: _('Set 0 to disable. Value is free MB of storage.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-header-free-icon-alert-threshold',
             mainDiskSection,
@@ -1672,7 +1674,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Read Color'),
                 subtitle: _('<b>Read</b> IO Bar color.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-header-io-bars-color1',
             ioSection,
@@ -1682,7 +1684,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Write Color'),
                 subtitle: _('<b>Write</b> IO Bar color.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-header-io-bars-color2',
             ioSection,
@@ -1699,7 +1701,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Read Color'),
                 subtitle: _('<b>Read</b> IO History Graph color.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-header-io-graph-color1',
             ioSection,
@@ -1709,7 +1711,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Write Color'),
                 subtitle: _('<b>Write</b> IO History Graph color.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-header-io-graph-color2',
             ioSection,
@@ -1729,7 +1731,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const layouts = [
             { value: 'vertical', text: _('Vertical') },
-            { value: 'horizontal', text: _('Horizontal') }
+            { value: 'horizontal', text: _('Horizontal') },
         ];
         this.addComboRow(
             { title: _('IO Speed Layout'), tabs: 2 },
@@ -1788,7 +1790,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Read Color'),
                 subtitle: _('<b>Read</b> IO arrow color.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-menu-arrow-color1',
             ioArrows,
@@ -1798,7 +1800,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Write Color'),
                 subtitle: _('<b>Write</b> IO arrow color.'),
-                tabs: 2
+                tabs: 2,
             },
             'storage-menu-arrow-color2',
             ioArrows,
@@ -1809,7 +1811,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addColorRow(
             {
                 title: _('Device Usage Bar Color'),
-                tabs: 1
+                tabs: 1,
             },
             'storage-menu-device-color',
             devicesSection,
@@ -1824,7 +1826,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private setupNetwork() {
         const networkPage = new Adw.PreferencesPage({
             title: _('Network'),
-            icon_name: 'am-network-symbolic'
+            icon_name: 'am-network-symbolic',
         });
 
         let group = new Adw.PreferencesGroup({ title: _('Network') });
@@ -1849,7 +1851,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             { value: 'kbps', text: _('kbps') },
             { value: 'Kibitps', text: _('Kibitps') },
             { value: 'k ', text: _('k (as kB/s)') },
-            { value: 'Ki', text: _('Ki (as KiB/s)') }
+            { value: 'Ki', text: _('Ki (as KiB/s)') },
         ];
         this.addComboRow(
             { title: _('Data Unit') },
@@ -1873,7 +1875,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     '\n' +
                     _('Leave empty to disable. Usage example: ') +
                     "'veth\\w{3,16}'",
-                tabs: 1
+                tabs: 1,
             },
             'network-ignored-regex',
             ignoredSection,
@@ -1902,29 +1904,29 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             const toggle = new Gtk.Switch({
                 active: !status,
                 halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER
+                valign: Gtk.Align.CENTER,
             });
 
             toggle.connect('state-set', (_switchObj, state) => {
+                let ignored = Config.get_json('network-ignored');
+                if(ignored === null || !Array.isArray(ignored)) ignored = [];
+
                 if(state) {
                     row.subtitle = _('Ignored');
                     icon.icon_name = 'am-dialog-error-symbolic';
 
-                    let ignoredDevices = Config.get_json('network-ignored');
-                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
-                        ignoredDevices = [];
-                    if(!ignoredDevices.includes(name)) ignoredDevices.push(name);
-                    Config.set('network-ignored', JSON.stringify(ignoredDevices), 'string');
+                    if(!ignored.includes(name)) {
+                        ignored.push(name);
+                    }
+                    Config.set('network-ignored', JSON.stringify(ignored), 'string');
                 } else {
                     row.subtitle = _('Active');
                     icon.icon_name = 'am-dialog-ok-symbolic';
 
-                    let ignoredDevices = Config.get_json('network-ignored');
-                    if(ignoredDevices === null || !Array.isArray(ignoredDevices))
-                        ignoredDevices = [];
-                    if(ignoredDevices.includes(name))
-                        ignoredDevices = ignoredDevices.filter((device: string) => device !== name);
-                    Config.set('network-ignored', JSON.stringify(ignoredDevices), 'string');
+                    if(ignored.includes(name)) {
+                        ignored = ignored.filter((deviceName: string) => deviceName !== name);
+                    }
+                    Config.set('network-ignored', JSON.stringify(ignored), 'string');
                 }
             });
 
@@ -1936,7 +1938,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const networkIOSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'GTop', text: 'GTop' },
-            { value: 'proc', text: '/proc/net/dev' }
+            { value: 'proc', text: '/proc/net/dev' },
         ];
         this.addComboRow(
             { title: _('Network IO'), tabs: 1 },
@@ -1951,7 +1953,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Public IPv4 Address'),
                 subtitle: _('Set to empty to disable. Address will be regex matched.'),
-                tabs: 1
+                tabs: 1,
             },
             'network-source-public-ipv4',
             sourcesSection,
@@ -1962,7 +1964,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Public IPv6 Address'),
                 subtitle: _('Set to empty to disable. Address will be regex matched.'),
-                tabs: 1
+                tabs: 1,
             },
             'network-source-public-ipv6',
             sourcesSection,
@@ -1972,7 +1974,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const networkWirelessSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'iwconfig', text: 'iwconfig' },
-            { value: 'iw', text: 'iw' }
+            { value: 'iw', text: 'iw' },
         ];
         this.addComboRow(
             { title: _('Wireless Info'), tabs: 1 },
@@ -2001,7 +2003,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     _("Set icon name (ie: 'network-wired-symbolic')") +
                     '\n' +
                     _('Set to empty to disable icon override'),
-                tabs: 1
+                tabs: 1,
             },
             'network-header-icon-custom',
             iconSection,
@@ -2024,7 +2026,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'network-header-icon-size',
             iconSection,
@@ -2045,7 +2047,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Upload Color'),
                 subtitle: _('<b>Upload</b> IO Bar color.'),
-                tabs: 2
+                tabs: 2,
             },
             'network-header-io-bars-color1',
             ioSection,
@@ -2055,7 +2057,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Download Color'),
                 subtitle: _('<b>Download</b> IO Bar color.'),
-                tabs: 2
+                tabs: 2,
             },
             'network-header-io-bars-color2',
             ioSection,
@@ -2072,7 +2074,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Upload Color'),
                 subtitle: _('<b>Upload</b> IO History Graph color.'),
-                tabs: 2
+                tabs: 2,
             },
             'network-header-io-graph-color1',
             ioSection,
@@ -2082,7 +2084,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Download Color'),
                 subtitle: _('<b>Download</b> IO History Graph color.'),
-                tabs: 2
+                tabs: 2,
             },
             'network-header-io-graph-color2',
             ioSection,
@@ -2102,7 +2104,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const layouts = [
             { value: 'vertical', text: _('Vertical') },
-            { value: 'horizontal', text: _('Horizontal') }
+            { value: 'horizontal', text: _('Horizontal') },
         ];
         this.addComboRow(
             { title: _('IO Speed Layout'), tabs: 2 },
@@ -2146,7 +2148,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Upload Color'),
                 subtitle: _('<b>Upload</b> IO arrow color.'),
-                tabs: 2
+                tabs: 2,
             },
             'network-menu-arrow-color1',
             ioArrows,
@@ -2156,7 +2158,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Download Color'),
                 subtitle: _('<b>Download</b> IO arrow color.'),
-                tabs: 2
+                tabs: 2,
             },
             'network-menu-arrow-color2',
             ioArrows,
@@ -2171,7 +2173,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private setupSensors() {
         const sensorsPage = new Adw.PreferencesPage({
             title: _('Sensors'),
-            icon_name: 'am-temperature-symbolic'
+            icon_name: 'am-temperature-symbolic',
         });
 
         let group = new Adw.PreferencesGroup({ title: _('Sensors') });
@@ -2187,7 +2189,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const choicesUnit = [
             { value: 'celsius', text: pgettext('Celsius unit measure choice', 'Celsius') },
-            { value: 'fahrenheit', text: pgettext('Fahrenheit unit measure choice', 'Fahrenheit') }
+            { value: 'fahrenheit', text: pgettext('Fahrenheit unit measure choice', 'Fahrenheit') },
         ];
         this.addComboRow(
             { title: _('Temperature Unit') },
@@ -2201,7 +2203,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const sensorsSources = [
             { value: 'auto', text: _('Auto') },
             { value: 'hwmon', text: 'Hwmon' },
-            { value: 'lm-sensors', text: 'Lm-sensors', disabled: !Utils.hasLmSensors() }
+            { value: 'lm-sensors', text: 'Lm-sensors', disabled: !Utils.hasLmSensors() },
         ];
         this.addComboRow(
             { title: _('Sensors'), tabs: 1 },
@@ -2230,7 +2232,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     _("Set icon name (ie: 'temperature-symbolic')") +
                     '\n' +
                     _('Set to empty to disable icon override'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-icon-custom',
             iconSection,
@@ -2253,7 +2255,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
                 icon_name: 'am-dialog-warning-symbolic',
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-icon-size',
             iconSection,
@@ -2285,7 +2287,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true
+                use_markup: true,
             },
             sources,
             'sensors-header-sensor1',
@@ -2296,7 +2298,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Value Digits'),
                 subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-sensor1-digits',
             sensor1Section,
@@ -2314,7 +2316,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const layouts = [
             { value: 'vertical', text: _('Vertical') },
-            { value: 'horizontal', text: _('Horizontal') }
+            { value: 'horizontal', text: _('Horizontal') },
         ];
         this.addComboRow(
             { title: _('Sensor 2 Layout'), tabs: 1 },
@@ -2329,7 +2331,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true
+                use_markup: true,
             },
             sources,
             'sensors-header-sensor2',
@@ -2340,7 +2342,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Value Digits'),
                 subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-sensor2-digits',
             sensor2Section,
@@ -2359,7 +2361,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true
+                use_markup: true,
             },
             sources,
             'sensors-header-tooltip-sensor1',
@@ -2371,7 +2373,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Short Name'),
                 subtitle: _('Short name to display in the tooltip.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor1-name',
             tooltipSensor1Section,
@@ -2381,7 +2383,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Value Digits'),
                 subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor1-digits',
             tooltipSensor1Section,
@@ -2395,7 +2397,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true
+                use_markup: true,
             },
             sources,
             'sensors-header-tooltip-sensor2',
@@ -2407,7 +2409,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Short Name'),
                 subtitle: _('Short name to display in the tooltip.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor2-name',
             tooltipSensor2Section,
@@ -2417,7 +2419,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Value Digits'),
                 subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor2-digits',
             tooltipSensor2Section,
@@ -2431,7 +2433,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true
+                use_markup: true,
             },
             sources,
             'sensors-header-tooltip-sensor3',
@@ -2443,7 +2445,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Short Name'),
                 subtitle: _('Short name to display in the tooltip.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor3-name',
             tooltipSensor3Section,
@@ -2453,7 +2455,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Value Digits'),
                 subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor3-digits',
             tooltipSensor3Section,
@@ -2467,7 +2469,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true
+                use_markup: true,
             },
             sources,
             'sensors-header-tooltip-sensor4',
@@ -2479,7 +2481,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Short Name'),
                 subtitle: _('Short name to display in the tooltip.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor4-name',
             tooltipSensor4Section,
@@ -2489,7 +2491,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Value Digits'),
                 subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor4-digits',
             tooltipSensor4Section,
@@ -2503,7 +2505,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true
+                use_markup: true,
             },
             sources,
             'sensors-header-tooltip-sensor5',
@@ -2515,7 +2517,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Short Name'),
                 subtitle: _('Short name to display in the tooltip.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor5-name',
             tooltipSensor5Section,
@@ -2525,7 +2527,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             {
                 title: _('Value Digits'),
                 subtitle: _('Set -1 to auto. Number of digits after the decimal point.'),
-                tabs: 1
+                tabs: 1,
             },
             'sensors-header-tooltip-sensor5-digits',
             tooltipSensor5Section,
@@ -2542,7 +2544,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private setupAbout(window: Adw.PreferencesWindow) {
         const aboutPage = new Adw.PreferencesPage({
             title: _('About'),
-            icon_name: 'am-dialog-info-symbolic'
+            icon_name: 'am-dialog-info-symbolic',
         });
 
         let group = new Adw.PreferencesGroup({ title: _('Info') });
@@ -2601,7 +2603,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Export Settings'),
                 action: Gtk.FileChooserAction.SAVE,
                 transient_for: window,
-                modal: true
+                modal: true,
             });
             dialog.set_current_name('astra-monitor-settings.json');
 
@@ -2615,9 +2617,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
             dialog.show();
 
-            dialog.connect('response', (dialog, id) => {
-                if(id == Gtk.ResponseType.OK) {
-                    const path = dialog.get_file().get_path();
+            dialog.connect('response', (obj, id) => {
+                if(id === Gtk.ResponseType.OK) {
+                    const path = obj.get_file().get_path();
                     const file = Gio.file_new_for_path(path);
                     const stream = file.replace(
                         null,
@@ -2630,7 +2632,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     stream.write_all(data, null);
                     stream.close(null);
                 }
-                dialog.destroy();
+                obj.destroy();
             });
         });
 
@@ -2639,7 +2641,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Import Settings'),
                 action: Gtk.FileChooserAction.OPEN,
                 transient_for: window,
-                modal: true
+                modal: true,
             });
 
             const filter = new Gtk.FileFilter();
@@ -2652,10 +2654,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
             dialog.show();
 
-            dialog.connect('response', (dialog, id) => {
-                if(id == Gtk.ResponseType.OK) {
+            dialog.connect('response', (obj, id) => {
+                if(id === Gtk.ResponseType.OK) {
                     try {
-                        const path = dialog.get_file().get_path();
+                        const path = obj.get_file().get_path();
                         Utils.readFileAsync(path)
                             .then(data => {
                                 this.importSettings(data);
@@ -2668,7 +2670,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                         Utils.error(e.message);
                     }
                 }
-                dialog.destroy();
+                obj.destroy();
             });
         });
 
@@ -2679,7 +2681,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 buttons: Gtk.ButtonsType.YES_NO,
                 message_type: Gtk.MessageType.WARNING,
                 transient_for: window,
-                modal: true
+                modal: true,
             });
             dialog.connect('response', (_dialog, response) => {
                 if(response === Gtk.ResponseType.YES) {
@@ -2696,7 +2698,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 title: _('Debug Mode'),
                 subtitle: _(
                     'Warning: may affect performance, use only if you know what you are doing.'
-                )
+                ),
             },
             'debug-mode',
             group
@@ -2723,7 +2725,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 'storage-menu-device-color',
                 'network-header-io-bars-color1',
                 'network-header-io-graph-color1',
-                'network-menu-arrow-color1'
+                'network-menu-arrow-color1',
             ];
 
             for(const colorPref of mainColors) Config.set(colorPref, color, 'string');
@@ -2743,7 +2745,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 'storage-menu-arrow-color2',
                 'network-header-io-bars-color2',
                 'network-header-io-graph-color2',
-                'network-menu-arrow-color2'
+                'network-menu-arrow-color2',
             ];
 
             for(const colorPref of secondaryColors) Config.set(colorPref, color, 'string');
@@ -2756,7 +2758,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const data: any = {
             ...props,
-            use_markup: true
+            use_markup: true,
         };
 
         const section = new Adw.ExpanderRow(data);
@@ -2807,7 +2809,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const entry = new Gtk.Entry({
             text: Config.get_string(setting),
             halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
         });
         let timeoutId: GLib.Source;
 
@@ -2825,7 +2827,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 hexpand: false,
                 vexpand: false,
                 icon_name: 'edit-undo-symbolic',
-                sensitive: true
+                sensitive: true,
             });
             row.add_suffix(resetButton);
 
@@ -2864,7 +2866,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const row = new Adw.ActionRow({
             ...props,
-            use_markup: true
+            use_markup: true,
         });
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
 
@@ -2877,7 +2879,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             halign: Gtk.Align.END,
             widthRequest: 1,
             opacity: 0,
-            cursor: null
+            cursor: null,
         });
         row.add_suffix(linkBtn);
         row.activatable_widget = linkBtn;
@@ -2903,7 +2905,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         return {
             row: row,
-            icon: icon
+            icon: icon,
         };
     }
 
@@ -2925,7 +2927,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const toggle = new Gtk.Switch({
             active: Config.get_boolean(setting),
             halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
         });
         Config.bind(setting, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
 
@@ -2956,11 +2958,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         else (group as Adw.ExpanderRow).add_row(row);
 
         const button = new Gtk.ColorButton();
-        const rgba = new Gdk.RGBA();
-        if(isCallback) rgba.parse('rgba(0,0,0,0)');
-        else rgba.parse(Config.get_string(setting) || 'rgba(0,0,0,0)');
-        button.useAlpha = true;
-        button.set_rgba(rgba);
+        {
+            const rgba = new Gdk.RGBA();
+            if(isCallback) rgba.parse('rgba(0,0,0,0)');
+            else rgba.parse(Config.get_string(setting) || 'rgba(0,0,0,0)');
+            button.useAlpha = true;
+            button.set_rgba(rgba);
+        }
 
         button.connect('color-set', widget => {
             if(isCallback) setting(widget.get_rgba().to_string() || '');
@@ -2982,7 +2986,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 hexpand: false,
                 vexpand: false,
                 icon_name: 'edit-undo-symbolic',
-                sensitive: true
+                sensitive: true,
             });
             row.add_suffix(resetButton);
 
@@ -3002,7 +3006,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
     addDropRow(
         props: RowProps,
-        choices: Choice[] | Promise<Choice[]>,
+        values: Choice[] | Promise<Choice[]>,
         setting: string,
         group: Adw.PreferencesGroup | Adw.ExpanderRow,
         type: TypeEnumStr = 'int',
@@ -3045,7 +3049,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             const stringList = new Gtk.StringList();
 
             for(const choice of choices) stringList.append(choice.text);
-
             choices.forEach((choice, index) => {
                 let value = choice.value;
                 if(type === 'json') value = JSON.stringify(value);
@@ -3058,7 +3061,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
-                vexpand: false
+                vexpand: false,
             });
 
             if(reset !== undefined) {
@@ -3068,7 +3071,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     hexpand: false,
                     vexpand: false,
                     icon_name: 'edit-undo-symbolic',
-                    sensitive: true
+                    sensitive: true,
                 });
                 resetButton.connect('clicked', () => {
                     choices.forEach((choice, index) => {
@@ -3105,13 +3108,16 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             });
         };
 
-        if(choices instanceof Promise) choices.then(addChoices);
-        else addChoices(choices);
+        if(values instanceof Promise) {
+            values.then(addChoices);
+        } else {
+            addChoices(values);
+        }
     }
 
     addComboRow(
         props: RowProps,
-        choices: Choice[] | Promise<Choice[]>,
+        values: Choice[] | Promise<Choice[]>,
         setting: string,
         group: Adw.PreferencesGroup | Adw.ExpanderRow,
         type: TypeEnumStr = 'int',
@@ -3169,7 +3175,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
-                vexpand: false
+                vexpand: false,
             });
             select.set_active(selected);
 
@@ -3185,7 +3191,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                     hexpand: false,
                     vexpand: false,
                     icon_name: 'edit-undo-symbolic',
-                    sensitive: true
+                    sensitive: true,
                 });
                 resetButton.connect('clicked', () => {
                     for(let index = 0; index < choices.length; index++) {
@@ -3227,8 +3233,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             });
         };
 
-        if(choices instanceof Promise) choices.then(addChoices);
-        else addChoices(choices);
+        if(values instanceof Promise) {
+            values.then(addChoices);
+        } else {
+            addChoices(values);
+        }
     }
 
     addSpinRow(
@@ -3252,7 +3261,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             upper: adj.max,
             step_increment: adj.step ?? 1,
             page_increment: adj.page ?? 10,
-            value: (adj.digits || 0) === 0 ? Config.get_int(setting) : Config.get_double(setting)
+            value: (adj.digits || 0) === 0 ? Config.get_int(setting) : Config.get_double(setting),
         });
 
         const row = new Adw.ActionRow(props);
@@ -3266,7 +3275,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             xalign: 0.5,
             adjustment,
             digits: adj.digits || 0,
-            numeric
+            numeric,
         });
 
         if(reset !== undefined) {
@@ -3276,7 +3285,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 hexpand: false,
                 vexpand: false,
                 icon_name: 'edit-undo-symbolic',
-                sensitive: true
+                sensitive: true,
             });
             row.add_suffix(resetButton);
 
@@ -3324,7 +3333,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             use_size: false,
             level: Gtk.FontChooserLevel.FAMILY,
             preview_text: 'Astra Monitor v' + Utils.metadata.version,
-            font: Config.get_string(setting)
+            font: Config.get_string(setting),
         });
 
         fontButton.connect('font-set', widget => {
@@ -3338,7 +3347,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 hexpand: false,
                 vexpand: false,
                 icon_name: 'edit-undo-symbolic',
-                sensitive: true
+                sensitive: true,
             });
             resetButton.connect('clicked', () => {
                 Config.set(setting, reset, 'string');

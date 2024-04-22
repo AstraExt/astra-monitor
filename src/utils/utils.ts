@@ -147,12 +147,12 @@ export default class Utils {
             'memory bar',
             'memory graph',
             'memory percentage',
-            'memory value'
+            'memory value',
         ],
         memory: ['icon', 'bar', 'graph', 'percentage', 'value', 'free'],
         storage: ['icon', 'bar', 'percentage', 'value', 'free', 'IO bar', 'IO graph', 'IO speed'],
         network: ['icon', 'IO bar', 'IO graph', 'IO speed'],
-        sensors: ['icon', 'value']
+        sensors: ['icon', 'value'],
     };
 
     static GTop?: GTop | false;
@@ -186,12 +186,14 @@ export default class Utils {
         metadata,
         settings,
 
+        /* eslint-disable no-shadow */
         ProcessorMonitor,
         GpuMonitor,
         MemoryMonitor,
         StorageMonitor,
         NetworkMonitor,
-        SensorsMonitor
+        SensorsMonitor,
+        /* eslint-enable no-shadow */
     }: UtilsInitProps) {
         if(extension) Utils.extension = extension;
         Utils.metadata = metadata;
@@ -413,7 +415,7 @@ export default class Utils {
             '/usr/local/sbin/',
             '/opt/',
             '/opt/bin/',
-            '/opt/sbin/'
+            '/opt/sbin/',
         ]) {
             try {
                 const [result, stdout, stderr] = GLib.spawn_command_line_sync(path + fullCommand);
@@ -554,7 +556,12 @@ export default class Utils {
     }
 
     static async hasGTop(): Promise<boolean> {
-        while(Utils.GTop === undefined) await new Promise(r => setTimeout(r, 100));
+        while(Utils.GTop === undefined) {
+            // eslint-disable-next-line no-await-in-loop
+            await new Promise(r => {
+                setTimeout(r, 100);
+            });
+        }
         return Utils.GTop !== false;
     }
 
@@ -675,7 +682,7 @@ export default class Utils {
         'Kibit/s': {
             base: 1024,
             mult: 8,
-            labels: ['bit/s', 'Kibit/s', 'Mibit/s', 'Gibit/s', 'Tibit/s']
+            labels: ['bit/s', 'Kibit/s', 'Mibit/s', 'Gibit/s', 'Tibit/s'],
         },
         kBps: { base: 1000, mult: 1, labels: ['Bps', 'kBps', 'MBps', 'GBps', 'TBps'] },
         KiBps: { base: 1024, mult: 1, labels: ['Bps', 'KiBps', 'MiBps', 'GiBps', 'TiBps'] },
@@ -684,10 +691,10 @@ export default class Utils {
         Kibitps: {
             base: 1024,
             mult: 8,
-            labels: ['bitps', 'Kibitps', 'Mibitps', 'Gibitps', 'Tibitps']
+            labels: ['bitps', 'Kibitps', 'Mibitps', 'Gibitps', 'Tibitps'],
         },
         'k ': { base: 1000, mult: 1, labels: [' ', 'k', 'M', 'G', 'T'] },
-        Ki: { base: 1024, mult: 1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti'] }
+        Ki: { base: 1024, mult: 1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti'] },
     };
 
     static unit2Map = {
@@ -697,11 +704,11 @@ export default class Utils {
         KiB: { base: 1024, mult: 1, labels: [' B/s', 'KiB', 'MiB', 'GiB', 'TiB'] },
         KB: { base: 1000, mult: 1, labels: [' B', 'KB', 'MB', 'GB', 'TB'] },
         'k ': { base: 1000, mult: 1, labels: [' ', 'k', 'M', 'G', 'T'] },
-        Ki: { base: 1024, mult: 1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti'] }
+        Ki: { base: 1024, mult: 1, labels: ['  ', 'Ki', 'Mi', 'Gi', 'Ti'] },
     };
 
     static unit3Map = {
-        Q: { base: 1000, mult: 1, labels: ['', 'K', 'M', 'B', 'T', 'Q'] }
+        Q: { base: 1000, mult: 1, labels: ['', 'K', 'M', 'B', 'T', 'Q'] },
     };
 
     static formatBytesPerSec(
@@ -896,21 +903,23 @@ export default class Utils {
 
                     const files = await Utils.listDirAsync(`${baseDir}/${hwmon}`, {
                         folders: false,
-                        files: true
+                        files: true,
                     });
 
-                    for(const file of files) {
+                    const sensorPromises = files.map(async file => {
                         const fileName = file.name;
-                        if(fileName === 'name' || fileName === 'uevent') continue;
+                        if(fileName === 'name' || fileName === 'uevent') {
+                            return;
+                        }
 
-                        const prefix = Utils.sensorsPrefix.find(prefix =>
-                            fileName.startsWith(prefix)
-                        );
+                        const prefix = Utils.sensorsPrefix.find(str => fileName.startsWith(str));
                         if(prefix) {
                             let sensorName = fileName.split('_')[0];
                             let attrName = fileName.split('_')[1];
 
-                            if(attrName === 'label') continue;
+                            if(attrName === 'label') {
+                                return;
+                            }
 
                             if(files.find(a => a.name === `${sensorName}_label`)) {
                                 const label = await Utils.readFileAsync(
@@ -937,12 +946,14 @@ export default class Utils {
                             if(!attribute) {
                                 attribute = {
                                     type: prefix,
-                                    path: `${hwmon}/${fileName}`
+                                    path: `${hwmon}/${fileName}`,
                                 };
                                 sensor.set(attrName, attribute);
                             }
                         }
-                    }
+                    });
+
+                    await Promise.all(sensorPromises);
                 })
             );
 
@@ -987,9 +998,9 @@ export default class Utils {
                         sensors.push({
                             value: {
                                 service: 'hwmon',
-                                path: [deviceName, sensorName, attrName]
+                                path: [deviceName, sensorName, attrName],
                             },
-                            text: `[hwmon] ${deviceLabel} -> ${sensorLabel} -> ${type} ${attrLabel}`
+                            text: `[hwmon] ${deviceLabel} -> ${sensorLabel} -> ${type} ${attrLabel}`,
                         });
                     }
                 }
@@ -1017,9 +1028,9 @@ export default class Utils {
                                 sensors.push({
                                     value: {
                                         service: 'sensors',
-                                        path: [sensorName, sensor, sensorData]
+                                        path: [sensorName, sensor, sensorData],
                                     },
-                                    text: `[lm-sensors] ${sensorName} -> ${sensor} -> ${sensorData}`
+                                    text: `[lm-sensors] ${sensorName} -> ${sensor} -> ${sensorData}`,
                                 });
                             }
                         }
@@ -1162,7 +1173,7 @@ export default class Utils {
             '0x1013': ['Cirrus', 'Logic'], // Cirrus Logic - A hardware manufacturer known for producing graphics chips in the past
             '0x12d2': ['NVIDIA'], // NVIDIA (early products) - Identifier for some of NVIDIA's early graphics products
             '0x18ca': ['XGI'], // XGI Technology Inc. - A former graphics chipset manufacturer
-            '0x1de1': ['Tekram'] // Tekram Technology Co., Ltd. - A company known for various computer hardware, including graphics
+            '0x1de1': ['Tekram'], // Tekram Technology Co., Ltd. - A company known for various computer hardware, including graphics
         };
         return vendors[vendorId as keyof typeof vendors] || ['Unknown'];
     }
@@ -1284,7 +1295,7 @@ export default class Utils {
                     bus,
                     slot,
                     vendor,
-                    model
+                    model,
                 };
 
                 if(vendorId) gpu.vendorId = vendorId;
@@ -1418,7 +1429,7 @@ export default class Utils {
 
     static getSelectedGPU(): GpuInfo | undefined {
         const selected = Config.get_json('gpu-main');
-        if(!selected) return;
+        if(!selected) return undefined;
 
         //Fix GPU domain missing (v9 => v10)
         //TODO: remove in v12-v13
@@ -1437,7 +1448,7 @@ export default class Utils {
             )
                 return gpu;
         }
-        return;
+        return undefined;
     }
 
     static cachedUptimeSeconds: number = 0;
@@ -1475,7 +1486,7 @@ export default class Utils {
                     GLib.source_remove(Utils.uptimeTimer);
                     Utils.uptimeTimer = 0;
                 }
-            }
+            },
         };
     }
 
@@ -1484,7 +1495,7 @@ export default class Utils {
             days: Math.floor(seconds / (3600 * 24)),
             hours: Math.floor((seconds % (3600 * 24)) / 3600),
             minutes: Math.floor((seconds % 3600) / 60),
-            seconds: Math.floor(seconds % 60)
+            seconds: Math.floor(seconds % 60),
         };
 
         const formatPart = (value: number, isPadded: boolean) =>
@@ -1755,8 +1766,8 @@ export default class Utils {
                             const type = fileInfo.get_file_type();
                             const isFolder = type === Gio.FileType.DIRECTORY;
 
-                            if(options.folders == false && isFolder) continue;
-                            if(options.files == false && !isFolder) continue;
+                            if(options.folders === false && isFolder) continue;
+                            if(options.files === false && !isFolder) continue;
 
                             const name = fileInfo.get_name();
                             files.push({ name, isFolder });
@@ -1946,7 +1957,7 @@ export default class Utils {
             // Create a new subprocess
             const proc = new Gio.Subprocess({
                 argv: argv[1],
-                flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
+                flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
             });
 
             // Initialize the subprocess
@@ -1961,24 +1972,20 @@ export default class Utils {
             if(cancellableTaskManager) cancellableTaskManager.setSubprocess(proc);
 
             // Communicate with the subprocess asynchronously
-            proc.communicate_utf8_async(
-                null,
-                null,
-                (proc: Gio.Subprocess, res: Gio.AsyncResult) => {
-                    try {
-                        const [, stdout, stderr] = proc.communicate_utf8_finish(res);
-                        if(proc.get_exit_status() !== 0) {
-                            if(!stderr) throw new Error('No error output');
-                            reject(new Error(`Command failed with error: ${stderr.trim()}`));
-                            return;
-                        }
-                        if(!stdout) throw new Error('No output');
-                        resolve(stdout.trim());
-                    } catch(e: any) {
-                        reject(new Error(`Failed to communicate with subprocess: ${e.message}`));
+            proc.communicate_utf8_async(null, null, (sub: Gio.Subprocess, res: Gio.AsyncResult) => {
+                try {
+                    const [, stdout, stderr] = sub.communicate_utf8_finish(res);
+                    if(sub.get_exit_status() !== 0) {
+                        if(!stderr) throw new Error('No error output');
+                        reject(new Error(`Command failed with error: ${stderr.trim()}`));
+                        return;
                     }
+                    if(!stdout) throw new Error('No output');
+                    resolve(stdout.trim());
+                } catch(e: any) {
+                    reject(new Error(`Failed to communicate with subprocess: ${e.message}`));
                 }
-            );
+            });
         });
     }
 
@@ -2022,7 +2029,7 @@ export default class Utils {
                     const device: InterfaceInfo = {
                         name,
                         flags,
-                        ifindex
+                        ifindex,
                     };
 
                     if(data.mtu) device.mtu = data.mtu;
@@ -2094,7 +2101,7 @@ export default class Utils {
                         protocol: data.protocol,
                         scope: data.scope,
                         metric: data.metric || 0,
-                        flags: data.flags
+                        flags: data.flags,
                     };
                     routes.push(route);
                 }
@@ -2117,9 +2124,9 @@ export default class Utils {
         if(!Utils.hasLsblk()) return devices;
 
         try {
-            const path = Utils.commandPathLookup('lsblk');
+            const commandPath = Utils.commandPathLookup('lsblk');
             const [result, stdout, _stderr] = GLib.spawn_command_line_sync(
-                `${path}lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE`
+                `${commandPath}lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE`
             );
 
             if(result && stdout) {
@@ -2187,7 +2194,7 @@ export default class Utils {
                         size,
                         usage,
                         filesystem,
-                        parents: []
+                        parents: [],
                     };
 
                     if(parent) {
@@ -2381,7 +2388,7 @@ export default class Utils {
     static unitToIcon(unit: string): IconData {
         const icon: IconData = {
             gicon: Utils.getLocalIcon('am-dialog-info-symbolic'),
-            fallback_icon_name: 'dialog-info-symbolic'
+            fallback_icon_name: 'dialog-info-symbolic',
         };
         if(unit === '°C' || unit === 'C' || unit === '°F' || unit === 'F') {
             icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');

@@ -229,12 +229,14 @@ export default class StorageMonitor extends Monitor {
         });
 
         // Regex ignored devices
-        const regex = Config.get_string('storage-ignored-regex');
-        try {
-            if(regex === null || regex === '') this.ignoredRegex = null;
-            else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
-        } catch(e) {
-            this.ignoredRegex = null;
+        {
+            const regex = Config.get_string('storage-ignored-regex');
+            try {
+                if(regex === null || regex === '') this.ignoredRegex = null;
+                else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+            } catch(e) {
+                this.ignoredRegex = null;
+            }
         }
 
         Config.connect(this, 'changed::storage-ignored-regex', () => {
@@ -262,12 +264,12 @@ export default class StorageMonitor extends Monitor {
         this.previousStorageIO = {
             bytesRead: -1,
             bytesWritten: -1,
-            time: -1
+            time: -1,
         };
 
         this.previousDetailedStorageIO = {
             devices: null,
-            time: -1
+            time: -1,
         };
 
         this.topProcessesCache.reset();
@@ -310,7 +312,7 @@ export default class StorageMonitor extends Monitor {
         this.dataSources = {
             storageUsage: Config.get_string('storage-source-storage-usage') ?? undefined,
             topProcesses: Config.get_string('storage-source-top-processes') ?? undefined,
-            storageIO: Config.get_string('storage-source-storage-io') ?? undefined
+            storageIO: Config.get_string('storage-source-storage-io') ?? undefined,
         };
 
         Config.connect(this, 'changed::storage-source-storage-usage', () => {
@@ -337,11 +339,11 @@ export default class StorageMonitor extends Monitor {
             this.previousStorageIO = {
                 bytesRead: -1,
                 bytesWritten: -1,
-                time: -1
+                time: -1,
             };
             this.previousDetailedStorageIO = {
                 devices: null,
-                time: -1
+                time: -1,
             };
             this.resetUsageHistory('storageIO');
             this.resetUsageHistory('detailedStorageIO');
@@ -415,7 +417,7 @@ export default class StorageMonitor extends Monitor {
                 key,
                 task: this.updateStorageUsageTask,
                 run,
-                callback: this.notify.bind(this, 'storageUsage')
+                callback: this.notify.bind(this, 'storageUsage'),
             });
             return;
         }
@@ -429,7 +431,7 @@ export default class StorageMonitor extends Monitor {
                 key,
                 task: this.updateTopProcessesTask,
                 run,
-                callback: this.notify.bind(this, 'topProcesses')
+                callback: this.notify.bind(this, 'topProcesses'),
             });
             return;
         }
@@ -457,7 +459,7 @@ export default class StorageMonitor extends Monitor {
                 key,
                 task: this.updateStorageIOTask,
                 run,
-                callback
+                callback,
             });
             return;
         }
@@ -466,7 +468,7 @@ export default class StorageMonitor extends Monitor {
                 key,
                 task: this.updateStorageInfoTask,
                 run: this.updateStorageInfo.bind(this, ...params),
-                callback: this.notify.bind(this, 'storageInfo')
+                callback: this.notify.bind(this, 'storageInfo'),
             });
             return;
         }
@@ -523,7 +525,7 @@ export default class StorageMonitor extends Monitor {
                         size: size,
                         used: Math.round((size * usage) / 100),
                         free: Math.round((size * (100 - usage)) / 100),
-                        usePercentage: usage
+                        usePercentage: usage,
                     });
                     return true;
                 }
@@ -566,7 +568,7 @@ export default class StorageMonitor extends Monitor {
                 size: size,
                 used: size - free,
                 free: free,
-                usePercentage: Math.round(((size - free) / size) * 100)
+                usePercentage: Math.round(((size - free) / size) * 100),
             });
             return true;
         } catch(e: any) {
@@ -660,7 +662,7 @@ export default class StorageMonitor extends Monitor {
             if(detailed && devices !== null) {
                 devices.set(deviceName, {
                     bytesRead: readSectors * lastSectorSize,
-                    bytesWritten: writtenSectors * lastSectorSize
+                    bytesWritten: writtenSectors * lastSectorSize,
                 });
             }
 
@@ -694,26 +696,28 @@ export default class StorageMonitor extends Monitor {
             return false;
         }
 
-        const interval = (now - this.previousStorageIO.time) / 1000000;
-        const bytesReadPerSec = Math.round(
-            (bytesRead - this.previousStorageIO.bytesRead) / interval
-        );
-        const bytesWrittenPerSec = Math.round(
-            (bytesWritten - this.previousStorageIO.bytesWritten) / interval
-        );
-        const totalBytesRead = bytesRead;
-        const totalBytesWritten = bytesWritten;
+        {
+            const interval = (now - this.previousStorageIO.time) / 1000000;
+            const bytesReadPerSec = Math.round(
+                (bytesRead - this.previousStorageIO.bytesRead) / interval
+            );
+            const bytesWrittenPerSec = Math.round(
+                (bytesWritten - this.previousStorageIO.bytesWritten) / interval
+            );
+            const totalBytesRead = bytesRead;
+            const totalBytesWritten = bytesWritten;
 
-        this.previousStorageIO.bytesRead = bytesRead;
-        this.previousStorageIO.bytesWritten = bytesWritten;
-        this.previousStorageIO.time = now;
+            this.previousStorageIO.bytesRead = bytesRead;
+            this.previousStorageIO.bytesWritten = bytesWritten;
+            this.previousStorageIO.time = now;
 
-        this.pushUsageHistory('storageIO', {
-            bytesReadPerSec,
-            bytesWrittenPerSec,
-            totalBytesRead,
-            totalBytesWritten
-        });
+            this.pushUsageHistory('storageIO', {
+                bytesReadPerSec,
+                bytesWrittenPerSec,
+                totalBytesRead,
+                totalBytesWritten,
+            });
+        }
 
         if(detailed && devices !== null) {
             if(this.previousDetailedStorageIO.time === now) return false;
@@ -723,22 +727,25 @@ export default class StorageMonitor extends Monitor {
 
             const interval = (now - this.previousDetailedStorageIO.time) / 1000000;
 
-            for(const [deviceName, { bytesRead, bytesWritten }] of devices) {
+            for(const [
+                deviceName,
+                { bytesRead: deviceBytesRead, bytesWritten: deviceBytesWritten },
+            ] of devices) {
                 const previousData = this.previousDetailedStorageIO.devices.get(deviceName);
                 if(previousData) {
                     const bytesReadPerSec = Math.round(
-                        (bytesRead - previousData.bytesRead) / interval
+                        (deviceBytesRead - previousData.bytesRead) / interval
                     );
                     const bytesWrittenPerSec = Math.round(
-                        (bytesWritten - previousData.bytesWritten) / interval
+                        (deviceBytesWritten - previousData.bytesWritten) / interval
                     );
-                    const totalBytesRead = bytesRead;
-                    const totalBytesWritten = bytesWritten;
+                    const totalBytesRead = deviceBytesRead;
+                    const totalBytesWritten = deviceBytesWritten;
                     finalData.set(deviceName, {
                         bytesReadPerSec,
                         bytesWrittenPerSec,
                         totalBytesRead,
-                        totalBytesWritten
+                        totalBytesWritten,
                     });
                 }
             }
@@ -902,7 +909,7 @@ export default class StorageMonitor extends Monitor {
                     pid: pid,
                     exec: Utils.extractCommandName(cmd),
                     cmd: cmd,
-                    notSeen: 0
+                    notSeen: 0,
                 };
                 this.topProcessesCache.setProcess(process);
             }
@@ -915,7 +922,7 @@ export default class StorageMonitor extends Monitor {
             this.previousPidsIO.set(pid, {
                 read: currentRead,
                 write: currentWrite,
-                time: GLib.get_monotonic_time()
+                time: GLib.get_monotonic_time(),
             });
 
             if(!previous) continue;
@@ -953,7 +960,7 @@ export default class StorageMonitor extends Monitor {
         const disks = await Utils.listDisksAsync(this.updateMountpointCache);
 
         const disk = disks.get(device);
-        if(!disk || !disk.mountpoints || disk.mountpoints.length === 0) return;
+        if(!disk || !disk.mountpoints || disk.mountpoints.length === 0) return undefined;
 
         this.disksCache.set(device, disk);
         return disk;

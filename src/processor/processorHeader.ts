@@ -116,7 +116,7 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER
+                x_align: Clutter.ActorAlign.CENTER,
             });
 
             const setIconName = () => {
@@ -131,6 +131,12 @@ export default GObject.registerClass(
             let alertColor = '';
             const alerts = new Set();
 
+            const updateIconColor = () => {
+                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
+                else this.icon.style = defaultStyle;
+            };
+
             const setIconBaseColor = () => {
                 baseColor = Config.get_string('processor-header-icon-color') || '';
                 updateIconColor();
@@ -138,11 +144,6 @@ export default GObject.registerClass(
             const setIconAlertColor = () => {
                 alertColor = Config.get_string('processor-header-icon-alert-color') || '';
                 updateIconColor();
-            };
-            const updateIconColor = () => {
-                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
-                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
-                else this.icon.style = defaultStyle;
             };
 
             setIconBaseColor();
@@ -224,7 +225,7 @@ export default GObject.registerClass(
                 header: true,
                 mini: true,
                 width: 0.5,
-                breakdownConfig: 'processor-header-bars-breakdown'
+                breakdownConfig: 'processor-header-bars-breakdown',
             });
             Config.bind('processor-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -257,14 +258,15 @@ export default GObject.registerClass(
                 this.graph.destroy();
             }
 
-            let graphWidth = Config.get_int('processor-header-graph-width');
-            graphWidth = Math.max(10, Math.min(500, graphWidth));
-
-            this.graph = new ProcessorGraph({
-                width: graphWidth,
-                mini: true,
-                breakdownConfig: 'processor-header-graph-breakdown'
-            });
+            {
+                let graphWidth = Config.get_int('processor-header-graph-width');
+                graphWidth = Math.max(10, Math.min(500, graphWidth));
+                this.graph = new ProcessorGraph({
+                    width: graphWidth,
+                    mini: true,
+                    breakdownConfig: 'processor-header-graph-breakdown',
+                });
+            }
             Config.bind('processor-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
 
             Config.connect(this.graph, 'changed::processor-header-graph-width', () => {
@@ -281,14 +283,16 @@ export default GObject.registerClass(
         }
 
         buildPercentage() {
-            const useFourDigitStyle = Config.get_boolean('processor-header-percentage-core');
-            this.percentage = new St.Label({
-                text: Utils.zeroStr + '%',
-                style_class: useFourDigitStyle
-                    ? 'astra-monitor-header-percentage4'
-                    : 'astra-monitor-header-percentage3',
-                y_align: Clutter.ActorAlign.CENTER
-            });
+            {
+                const useFourDigitStyle = Config.get_boolean('processor-header-percentage-core');
+                this.percentage = new St.Label({
+                    text: Utils.zeroStr + '%',
+                    style_class: useFourDigitStyle
+                        ? 'astra-monitor-header-percentage4'
+                        : 'astra-monitor-header-percentage3',
+                    y_align: Clutter.ActorAlign.CENTER,
+                });
+            }
             Config.bind(
                 'processor-header-percentage',
                 this.percentage,
@@ -334,7 +338,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item'
+                style_class: 'astra-monitor-tooltip-item',
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;

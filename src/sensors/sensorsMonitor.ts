@@ -222,7 +222,7 @@ export default class SensorsMonitor extends Monitor {
                 key,
                 task: this.updateSensorsDataTask,
                 run: this.updateSensorsData.bind(this, ...params),
-                callback: this.notify.bind(this, 'sensorsData')
+                callback: this.notify.bind(this, 'sensorsData'),
             });
             return;
         }
@@ -231,7 +231,10 @@ export default class SensorsMonitor extends Monitor {
     getLmSensorsDataAsync(): PromiseValueHolder<string | null> {
         return new PromiseValueHolder(
             new Promise((resolve, reject) => {
-                if(!Utils.hasLmSensors()) return resolve(null);
+                if(!Utils.hasLmSensors()) {
+                    resolve(null);
+                    return;
+                }
 
                 try {
                     const path = Utils.commandPathLookup('sensors');
@@ -299,9 +302,6 @@ export default class SensorsMonitor extends Monitor {
     async updateSensorsData(lmSensorsData: PromiseValueHolder<string>): Promise<boolean> {
         const data: SensorsData = {};
 
-        // "hwmon" provider
-        // TODO: should get only listening devices
-
         if(this.shouldUpdate('hwmon')) {
             data.hwmon = { name: 'hwmon', children: new Map(), attrs: {} };
 
@@ -309,9 +309,7 @@ export default class SensorsMonitor extends Monitor {
                 const baseDir = '/sys/class/hwmon';
                 const hwmonDevices = Utils.getCachedHwmonDevices();
 
-                const deviceNames = [];
-                for(const deviceName of hwmonDevices.keys())
-                    deviceNames.push(deviceName.split('-{$')[0]);
+                const readPromises = [];
 
                 for(const [deviceName, hwmonDevice] of hwmonDevices) {
                     if(!this.shouldUpdate('hwmon', [deviceName])) continue;
@@ -320,6 +318,9 @@ export default class SensorsMonitor extends Monitor {
                     if(!device) {
                         let deviceLabel;
                         const split = deviceName.split('-{$');
+                        const deviceNames = Array.from(hwmonDevices.keys()).map(
+                            name => name.split('-{$')[0]
+                        );
                         if(deviceNames.filter(name => name === split[0]).length === 1)
                             deviceLabel = Utils.capitalize(split[0]);
                         else
@@ -344,42 +345,48 @@ export default class SensorsMonitor extends Monitor {
                                 !this.shouldUpdate('hwmon', [
                                     deviceName,
                                     categoryName,
-                                    attributeName
+                                    attributeName,
                                 ])
                             )
                                 continue;
 
-                            const strValue = await Utils.readFileAsync(
-                                `${baseDir}/${hwmonAttribute.path}`,
-                                true
-                            );
-                            if(strValue !== null && strValue !== '') {
-                                let value = parseFloat(strValue);
+                            readPromises.push(
+                                (async () => {
+                                    const strValue = await Utils.readFileAsync(
+                                        `${baseDir}/${hwmonAttribute.path}`,
+                                        true
+                                    );
+                                    if(strValue !== null && strValue !== '') {
+                                        let value = parseFloat(strValue);
 
-                                if(hwmonAttribute.type === 'temp') value = value / 1000;
-                                else if(hwmonAttribute.type === 'in') value = value / 1000;
-                                else if(hwmonAttribute.type === 'power') value = value / 1000000;
-                                else if(hwmonAttribute.type === 'curr') value = value / 1000;
-                                else if(hwmonAttribute.type === 'energy') value = value / 1000000;
-                                else if(hwmonAttribute.type === 'freq') value = value / 1000000;
+                                        if(hwmonAttribute.type === 'temp') value /= 1000;
+                                        else if(hwmonAttribute.type === 'in') value /= 1000;
+                                        else if(hwmonAttribute.type === 'power') value /= 1000000;
+                                        else if(hwmonAttribute.type === 'curr') value /= 1000;
+                                        else if(hwmonAttribute.type === 'energy') value /= 1000000;
+                                        else if(hwmonAttribute.type === 'freq') value /= 1000000;
 
-                                let unit = '';
-                                if(attributeName !== 'enable')
-                                    unit = Utils.inferMeasurementUnit(hwmonAttribute.type);
+                                        let unit = '';
+                                        if(attributeName !== 'enable')
+                                            unit = Utils.inferMeasurementUnit(hwmonAttribute.type);
 
-                                category.children.set(attributeName, {
-                                    name: attributeName,
-                                    children: new Map(),
-                                    attrs: {
-                                        type: hwmonAttribute.type,
-                                        value,
-                                        unit
+                                        category.children.set(attributeName, {
+                                            name: attributeName,
+                                            children: new Map(),
+                                            attrs: {
+                                                type: hwmonAttribute.type,
+                                                value,
+                                                unit,
+                                            },
+                                        });
                                     }
-                                });
-                            }
+                                })()
+                            );
                         }
                     }
                 }
+
+                await Promise.all(readPromises);
             } catch(e: any) {
                 Utils.error(`Update hwmon data error: ${e.message}`);
             }
@@ -435,7 +442,7 @@ export default class SensorsMonitor extends Monitor {
                                 category.children.set(attributeName, {
                                     name: attributeName,
                                     children: new Map(),
-                                    attrs: { value, unit }
+                                    attrs: { value, unit },
                                 });
                             }
                         }

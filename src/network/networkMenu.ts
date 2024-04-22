@@ -151,10 +151,11 @@ type DeviceWirelessPopup = MenuBase & {
     signalLevelValue?: St.Label;
 };
 
+// eslint-disable-next-line no-shadow
 enum RefreshStatus {
     IDLE,
     REFRESHING,
-    DONE
+    DONE,
 }
 
 export default class NetworkMenu extends MenuBase {
@@ -230,7 +231,7 @@ export default class NetworkMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -239,7 +240,7 @@ export default class NetworkMenu extends MenuBase {
         //TODO: make width customizable!?
         this.graph = new NetworkGraph({
             width: 200 - 2 - 15,
-            mini: false
+            mini: false,
         });
         grid.addToGrid(this.graph, 2);
 
@@ -247,26 +248,26 @@ export default class NetworkMenu extends MenuBase {
             text: _('Global Upload:'),
             x_expand: true,
             style_class: 'astra-monitor-menu-label',
-            style: 'margin-top:0.25em;'
+            style: 'margin-top:0.25em;',
         });
         grid.addToGrid(totalUploadSpeedLabel);
 
         this.totalUploadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.totalUploadSpeedValueLabel);
 
         const totalDownloadSpeedLabel = new St.Label({
             text: _('Global Download:'),
             x_expand: true,
-            style_class: 'astra-monitor-menu-label'
+            style_class: 'astra-monitor-menu-label',
         });
         grid.addToGrid(totalDownloadSpeedLabel);
 
         this.totalDownloadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.totalDownloadSpeedValueLabel);
 
@@ -293,7 +294,7 @@ export default class NetworkMenu extends MenuBase {
         this.networkActivityPopup.addToMenu(
             new St.Label({
                 text: _('Total'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -305,7 +306,7 @@ export default class NetworkMenu extends MenuBase {
         this.networkActivityPopup.addToMenu(
             new St.Label({
                 text: _('Packets'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -317,7 +318,7 @@ export default class NetworkMenu extends MenuBase {
         this.networkActivityPopup.addToMenu(
             new St.Label({
                 text: _('Errors/Dropped'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -331,7 +332,7 @@ export default class NetworkMenu extends MenuBase {
         this.networkActivityPopup.addToMenu(
             new St.Label({
                 text: _('Total'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -343,7 +344,7 @@ export default class NetworkMenu extends MenuBase {
         this.networkActivityPopup.addToMenu(
             new St.Label({
                 text: _('Packets'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -355,7 +356,7 @@ export default class NetworkMenu extends MenuBase {
         this.networkActivityPopup.addToMenu(
             new St.Label({
                 text: _('Errors/Dropped'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -372,7 +373,7 @@ export default class NetworkMenu extends MenuBase {
         this.publicIPContainer = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -382,19 +383,19 @@ export default class NetworkMenu extends MenuBase {
             text: _('Public IPv4:'),
             x_expand: true,
             style_class: 'astra-monitor-menu-label',
-            style: 'margin-top:0.25em;'
+            style: 'margin-top:0.25em;',
         });
         grid.addToGrid(publicIPv4Label);
 
         const publicIPv4Value = new St.Label({
             text: '-',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(publicIPv4Value);
 
         this.publicIPv4 = {
             label: publicIPv4Label,
-            value: publicIPv4Value
+            value: publicIPv4Value,
         };
 
         const publicIpv6Grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid', numCols: 2 });
@@ -402,21 +403,21 @@ export default class NetworkMenu extends MenuBase {
         const publicIpv6Label = new St.Label({
             text: _('Public IPv6:'),
             x_expand: true,
-            style_class: 'astra-monitor-menu-label'
+            style_class: 'astra-monitor-menu-label',
         });
         publicIpv6Grid.addGrid(publicIpv6Label, 1, 1, 1, 2);
 
         const publicIpv6Value1 = new St.Label({
             text: '-',
             x_expand: true,
-            style: 'font-size: 1em;'
+            style: 'font-size: 1em;',
         });
         publicIpv6Grid.addGrid(publicIpv6Value1, 2, 1, 1, 1);
 
         const publicIpv6Value2 = new St.Label({
             text: '-',
             x_expand: true,
-            style: 'font-size: 1em;'
+            style: 'font-size: 1em;',
         });
         publicIpv6Grid.addGrid(publicIpv6Value2, 2, 2, 1, 1);
 
@@ -424,7 +425,7 @@ export default class NetworkMenu extends MenuBase {
 
         const footerLabel = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-key-mid-center'
+            style_class: 'astra-monitor-menu-key-mid-center',
         });
         grid.addToGrid(footerLabel, 2);
 
@@ -433,7 +434,7 @@ export default class NetworkMenu extends MenuBase {
             value1: publicIpv6Value1,
             value2: publicIpv6Value2,
             footerLabel: footerLabel,
-            refreshStatus: RefreshStatus.IDLE
+            refreshStatus: RefreshStatus.IDLE,
         };
 
         this.publicIPContainer.connect('enter-event', () => {
@@ -481,7 +482,7 @@ export default class NetworkMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -491,13 +492,13 @@ export default class NetworkMenu extends MenuBase {
             text: '',
             x_expand: true,
             style_class: 'astra-monitor-menu-label',
-            style: 'margin-top:0.25em;'
+            style: 'margin-top:0.25em;',
         });
         grid.addToGrid(this.defaultRouteDevice);
 
         this.defaultRouteGateway = new St.Label({
             text: '-',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.defaultRouteGateway);
 
@@ -526,13 +527,13 @@ export default class NetworkMenu extends MenuBase {
             const titleLabel = new St.Label({
                 text: _('Route') + ` ${i}`,
                 style_class: 'astra-monitor-menu-header-centered',
-                x_expand: true
+                x_expand: true,
             });
             this.routesPopup.addToMenu(titleLabel, 2);
 
             const metricLabel = new St.Label({
                 text: _('Metric'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(metricLabel);
             const metricValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -540,7 +541,7 @@ export default class NetworkMenu extends MenuBase {
 
             const deviceLabel = new St.Label({
                 text: _('Device'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(deviceLabel);
             const deviceValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -548,7 +549,7 @@ export default class NetworkMenu extends MenuBase {
 
             const gatewayLabel = new St.Label({
                 text: _('Gateway'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(gatewayLabel);
             const gatewayValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -556,7 +557,7 @@ export default class NetworkMenu extends MenuBase {
 
             const typeLabel = new St.Label({
                 text: _('Type'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(typeLabel);
             const typeValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -564,7 +565,7 @@ export default class NetworkMenu extends MenuBase {
 
             const destinationLabel = new St.Label({
                 text: _('Destination'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(destinationLabel);
             const destinationValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -572,7 +573,7 @@ export default class NetworkMenu extends MenuBase {
 
             const protocolLabel = new St.Label({
                 text: _('Protocol'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(protocolLabel);
             const protocolValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -580,7 +581,7 @@ export default class NetworkMenu extends MenuBase {
 
             const scopeLabel = new St.Label({
                 text: _('Scope'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(scopeLabel);
             const scopeValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -588,7 +589,7 @@ export default class NetworkMenu extends MenuBase {
 
             const flagsLabel = new St.Label({
                 text: _('Flags'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             this.routesPopup.addToMenu(flagsLabel);
             const flagsValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -611,7 +612,7 @@ export default class NetworkMenu extends MenuBase {
                 scopeLabel,
                 scopeValue,
                 flagsLabel,
-                flagsValue
+                flagsValue,
             });
         }
     }
@@ -624,7 +625,7 @@ export default class NetworkMenu extends MenuBase {
             this.noDevicesLabel = new St.Label({
                 text: _('No network interface found'),
                 style_class: 'astra-monitor-menu-label-warning',
-                style: 'font-style:italic;'
+                style: 'font-style:italic;',
             });
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
@@ -773,27 +774,27 @@ export default class NetworkMenu extends MenuBase {
         const container = new Grid({
             x_expand: true,
             styleClass: 'astra-monitor-menu-subgrid',
-            style: 'padding-top:0.3em;margin-bottom:0.3em;'
+            style: 'padding-top:0.3em;margin-bottom:0.3em;',
         });
 
         //Header Grid
         //{
         const headerGrid = new Grid({
             numCols: 2,
-            styleClass: 'astra-monitor-menu-subgrid'
+            styleClass: 'astra-monitor-menu-subgrid',
         });
 
         const nameGrid = new Grid({
             numCols: 2,
             styleClass: 'astra-monitor-menu-subgrid',
-            style: 'backgrund-color:red;'
+            style: 'backgrund-color:red;',
         });
 
         const nameButton = new St.Button({
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: ''
+            style: '',
         });
         nameButton.set_child(nameGrid);
 
@@ -814,13 +815,13 @@ export default class NetworkMenu extends MenuBase {
 
         const icon = new St.Icon({
             style_class: 'astra-monitor-menu-icon',
-            style: 'padding-left:0.25em;'
+            style: 'padding-left:0.25em;',
         });
         nameGrid.addToGrid(icon);
 
         const label = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-label'
+            style_class: 'astra-monitor-menu-label',
         });
         nameGrid.addToGrid(label);
 
@@ -828,13 +829,13 @@ export default class NetworkMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: ''
+            style: '',
         });
 
         const label2 = new St.Label({
             text: '',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         ipButton.set_child(label2);
 
@@ -863,26 +864,26 @@ export default class NetworkMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: ''
+            style: '',
         });
 
         const rwContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
         rwButton.set_child(rwContainer);
 
         const uploadContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         const uploadLabel = new St.Label({
             text: pgettext('short for upload', 'U'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         uploadContainer.add_child(uploadLabel);
 
@@ -890,14 +891,14 @@ export default class NetworkMenu extends MenuBase {
             gicon: Utils.getLocalIcon('am-up-symbolic'),
             fallback_icon_name: 'network-transmit-symbolic',
             style_class: 'astra-monitor-menu-icon-mini',
-            style: 'color:rgba(255,255,255,0.5);'
+            style: 'color:rgba(255,255,255,0.5);',
         });
         uploadContainer.add_child(uploadActivityIcon);
 
         const uploadValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         uploadContainer.add_child(uploadValueLabel);
         uploadContainer.set_width(100);
@@ -907,13 +908,13 @@ export default class NetworkMenu extends MenuBase {
         const downloadContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         const downloadLabel = new St.Label({
             text: pgettext('short for download', 'D'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         downloadContainer.add_child(downloadLabel);
 
@@ -921,14 +922,14 @@ export default class NetworkMenu extends MenuBase {
             gicon: Utils.getLocalIcon('am-down-symbolic'),
             fallback_icon_name: 'network-receive-symbolic',
             style_class: 'astra-monitor-menu-icon-mini',
-            style: 'color:rgba(255,255,255,0.5);'
+            style: 'color:rgba(255,255,255,0.5);',
         });
         downloadContainer.add_child(downloadActivityIcon);
 
         const downloadValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         downloadContainer.add_child(downloadValueLabel);
         downloadContainer.set_width(100);
@@ -957,14 +958,14 @@ export default class NetworkMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: wirelessButtonStyle
+            style: wirelessButtonStyle,
         });
 
         const wirelessLabel = new St.Label({
             text: '',
             x_expand: true,
             style_class: 'astra-monitor-menu-special',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         wirelessButton.set_child(wirelessLabel);
 
@@ -995,13 +996,13 @@ export default class NetworkMenu extends MenuBase {
             downloadValueLabel,
             downloadActivityIcon,
             wirelessButton,
-            wirelessLabel
+            wirelessLabel,
         };
     }
 
     createDeviceInfoPopup(sourceActor: St.Widget): DeviceInfoPopup {
         const popup: DeviceInfoPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 2
+            numCols: 2,
         }) as DeviceInfoPopup;
 
         //Info
@@ -1011,7 +1012,7 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(
                 new St.Label({
                     text: _('Name'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
 
@@ -1022,7 +1023,7 @@ export default class NetworkMenu extends MenuBase {
             // Alt Names
             const altNamesLabel = new St.Label({
                 text: _('Alt Names'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(altNamesLabel);
             popup.altNamesLabel = altNamesLabel;
@@ -1034,7 +1035,7 @@ export default class NetworkMenu extends MenuBase {
             // Ifindex
             const ifindexLabel = new St.Label({
                 text: _('Interface Index'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(ifindexLabel);
             popup.ifindexLabel = ifindexLabel;
@@ -1046,7 +1047,7 @@ export default class NetworkMenu extends MenuBase {
             // Mac Address
             const macAddressLabel = new St.Label({
                 text: _('MAC Address'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(macAddressLabel);
             popup.macAddressLabel = macAddressLabel;
@@ -1058,7 +1059,7 @@ export default class NetworkMenu extends MenuBase {
             // Group
             const groupLabel = new St.Label({
                 text: _('Group'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(groupLabel);
             popup.groupLabel = groupLabel;
@@ -1070,7 +1071,7 @@ export default class NetworkMenu extends MenuBase {
             // Speed
             const speedLabel = new St.Label({
                 text: _('Speed'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(speedLabel);
             popup.speedLabel = speedLabel;
@@ -1082,7 +1083,7 @@ export default class NetworkMenu extends MenuBase {
             // Duplex
             const duplexLabel = new St.Label({
                 text: _('Duplex'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(duplexLabel);
             popup.duplexLabel = duplexLabel;
@@ -1094,7 +1095,7 @@ export default class NetworkMenu extends MenuBase {
             // MTU
             const mtuLabel = new St.Label({
                 text: _('MTU'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(mtuLabel);
             popup.mtuLabel = mtuLabel;
@@ -1106,7 +1107,7 @@ export default class NetworkMenu extends MenuBase {
             // Tx Queue Length
             const txQueueLabel = new St.Label({
                 text: _('Tx Queue Length'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(txQueueLabel);
             popup.txQueueLabel = txQueueLabel;
@@ -1118,7 +1119,7 @@ export default class NetworkMenu extends MenuBase {
             // Link Type
             const linkTypeLabel = new St.Label({
                 text: _('Link Type'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(linkTypeLabel);
             popup.linkTypeLabel = linkTypeLabel;
@@ -1130,7 +1131,7 @@ export default class NetworkMenu extends MenuBase {
             // Operative State
             const operativeStateLabel = new St.Label({
                 text: _('Operative State'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(operativeStateLabel);
             popup.operStateLabel = operativeStateLabel;
@@ -1142,7 +1143,7 @@ export default class NetworkMenu extends MenuBase {
             // Qdisc
             const qdiscLabel = new St.Label({
                 text: _('Qdisc'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(qdiscLabel);
             popup.qdiscLabel = qdiscLabel;
@@ -1154,7 +1155,7 @@ export default class NetworkMenu extends MenuBase {
             // Parent
             const parentLabel = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(parentLabel);
             popup.parentLabel = parentLabel;
@@ -1169,7 +1170,7 @@ export default class NetworkMenu extends MenuBase {
 
     createDeviceAddressesPopup(sourceActor: St.Widget): DeviceAddressesPopup {
         const popup: DeviceAddressesPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 2
+            numCols: 2,
         }) as DeviceAddressesPopup;
 
         //Addresses
@@ -1179,13 +1180,13 @@ export default class NetworkMenu extends MenuBase {
             const labelValue = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-header-centered',
-                x_expand: true
+                x_expand: true,
             });
             popup.addToMenu(labelValue, 2);
 
             const familyLabel = new St.Label({
                 text: _('Family'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(familyLabel);
             const familyValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -1193,7 +1194,7 @@ export default class NetworkMenu extends MenuBase {
 
             const localLabel = new St.Label({
                 text: _('Local'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(localLabel);
             const localValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -1201,7 +1202,7 @@ export default class NetworkMenu extends MenuBase {
 
             const prefixlenLabel = new St.Label({
                 text: _('Prefix Length'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(prefixlenLabel);
             const prefixlenValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -1209,7 +1210,7 @@ export default class NetworkMenu extends MenuBase {
 
             const broadcastLabel = new St.Label({
                 text: _('Broadcast'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(broadcastLabel);
             const broadcastValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -1217,7 +1218,7 @@ export default class NetworkMenu extends MenuBase {
 
             const scopeLabel = new St.Label({
                 text: _('Scope'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             });
             popup.addToMenu(scopeLabel);
             const scopeValue = new St.Label({ text: '', style: 'text-align:left;' });
@@ -1234,7 +1235,7 @@ export default class NetworkMenu extends MenuBase {
                 broadcastLabel,
                 broadcastValue,
                 scopeLabel,
-                scopeValue
+                scopeValue,
             });
         }
 
@@ -1243,7 +1244,7 @@ export default class NetworkMenu extends MenuBase {
 
     createDeviceTotalsPopup(sourceActor: St.Widget): DeviceTotalsPopup {
         const popup: DeviceTotalsPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 2
+            numCols: 2,
         }) as DeviceTotalsPopup;
 
         //Upload
@@ -1253,7 +1254,7 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(
                 new St.Label({
                     text: _('Total'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
 
@@ -1265,7 +1266,7 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(
                 new St.Label({
                     text: _('Packets'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
 
@@ -1277,7 +1278,7 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(
                 new St.Label({
                     text: _('Errors/Dropped'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
 
@@ -1293,7 +1294,7 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(
                 new St.Label({
                     text: _('Total'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
 
@@ -1305,13 +1306,13 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(
                 new St.Label({
                     text: _('Packets'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
 
             const packetsDownloadedValueLabel = new St.Label({
                 text: '',
-                style: 'text-align:left;'
+                style: 'text-align:left;',
             });
             popup.addToMenu(packetsDownloadedValueLabel);
             popup.packetsDownloadedValueLabel = packetsDownloadedValueLabel;
@@ -1320,7 +1321,7 @@ export default class NetworkMenu extends MenuBase {
             popup.addToMenu(
                 new St.Label({
                     text: _('Errors/Dropped'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
 
@@ -1334,131 +1335,131 @@ export default class NetworkMenu extends MenuBase {
 
     createDeviceWirelessPopup(sourceActor: St.Widget): DeviceWirelessPopup {
         const popup: DeviceWirelessPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 2
+            numCols: 2,
         }) as DeviceWirelessPopup;
 
         const IEEELabel = new St.Label({
             text: _('IEEE'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(IEEELabel);
         popup.IEEELabel = IEEELabel;
 
         const IEEEValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(IEEEValue);
         popup.IEEEValue = IEEEValue;
 
         const SSIDLabel = new St.Label({
             text: _('SSID'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(SSIDLabel);
         popup.SSIDLabel = SSIDLabel;
 
         const SSIDValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(SSIDValue);
         popup.SSIDValue = SSIDValue;
 
         const modeLabel = new St.Label({
             text: _('Mode'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(modeLabel);
         popup.modeLabel = modeLabel;
 
         const modeValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(modeValue);
         popup.modeValue = modeValue;
 
         const frequencyLabel = new St.Label({
             text: _('Frequency'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(frequencyLabel);
         popup.frequencyLabel = frequencyLabel;
 
         const frequencyValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(frequencyValue);
         popup.frequencyValue = frequencyValue;
 
         const accessPointLabel = new St.Label({
             text: _('Access Point'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(accessPointLabel);
         popup.accessPointLabel = accessPointLabel;
 
         const accessPointValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(accessPointValue);
         popup.accessPointValue = accessPointValue;
 
         const bitRateLabel = new St.Label({
             text: _('Bit Rate'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(bitRateLabel);
         popup.bitRateLabel = bitRateLabel;
 
         const bitRateValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(bitRateValue);
         popup.bitRateValue = bitRateValue;
 
         const txPowerLabel = new St.Label({
             text: _('TX Power'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(txPowerLabel);
         popup.txPowerLabel = txPowerLabel;
 
         const txPowerValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(txPowerValue);
         popup.txPowerValue = txPowerValue;
 
         const linkQualityLabel = new St.Label({
             text: _('Link Quality'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(linkQualityLabel);
         popup.linkQualityLabel = linkQualityLabel;
 
         const linkQualityValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(linkQualityValue);
         popup.linkQualityValue = linkQualityValue;
 
         const signalLevelLabel = new St.Label({
             text: _('Signal Level'),
-            style_class: 'astra-monitor-menu-sub-key'
+            style_class: 'astra-monitor-menu-sub-key',
         });
         popup.addToMenu(signalLevelLabel);
         popup.signalLevelLabel = signalLevelLabel;
 
         const signalLevelValue = new St.Label({
             text: '',
-            style: 'text-align:left;'
+            style: 'text-align:left;',
         });
         popup.addToMenu(signalLevelValue);
         popup.signalLevelValue = signalLevelValue;
@@ -1478,7 +1479,7 @@ export default class NetworkMenu extends MenuBase {
 
         const icon = {
             gicon: Utils.getLocalIcon('am-network-symbolic'),
-            fallback_icon_name: 'network-wired-symbolic'
+            fallback_icon_name: 'network-wired-symbolic',
         };
         if(deviceData.name.startsWith('wlan') || deviceData.name.startsWith('wl')) {
             icon.gicon = Utils.getLocalIcon('am-wireless-symbolic');
@@ -1705,7 +1706,7 @@ export default class NetworkMenu extends MenuBase {
             const button = new St.Button({ style_class: 'button' });
             button.child = new St.Icon({
                 gicon: Utils.getLocalIcon('am-network-symbolic'),
-                fallback_icon_name: 'network-wired-symbolic'
+                fallback_icon_name: 'network-wired-symbolic',
             });
 
             button.connect('clicked', () => {
@@ -2040,7 +2041,7 @@ export default class NetworkMenu extends MenuBase {
             }
             return;
         }
-        if(code == 'routes') {
+        if(code === 'routes') {
             const routes: RouteInfo[] = Utils.networkMonitor.getCurrentValue('routes');
             if(routes && routes.length > 0) {
                 for(let i = 0; i < 5; i++) {

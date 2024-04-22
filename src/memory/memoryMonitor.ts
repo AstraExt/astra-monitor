@@ -127,7 +127,7 @@ export default class MemoryMonitor extends Monitor {
     dataSourcesInit() {
         this.dataSources = {
             memoryUsage: Config.get_string('memory-source-memory-usage') ?? undefined,
-            topProcesses: Config.get_string('memory-source-top-processes') ?? undefined
+            topProcesses: Config.get_string('memory-source-top-processes') ?? undefined,
         };
 
         Config.connect(this, 'changed::memory-source-memory-usage', () => {
@@ -201,7 +201,7 @@ export default class MemoryMonitor extends Monitor {
                 key,
                 task: this.updateMemoryUsageTask,
                 run,
-                callback: this.notify.bind(this, 'memoryUsage')
+                callback: this.notify.bind(this, 'memoryUsage'),
             });
             return;
         }
@@ -217,7 +217,7 @@ export default class MemoryMonitor extends Monitor {
                 key,
                 task: this.updateTopProcessesTask,
                 run,
-                callback: this.notify.bind(this, 'topProcesses')
+                callback: this.notify.bind(this, 'topProcesses'),
             });
             return;
         }
@@ -226,7 +226,7 @@ export default class MemoryMonitor extends Monitor {
                 key,
                 task: this.updateSwapUsageTask,
                 run: this.updateSwapUsageProc.bind(this, ...params),
-                callback: this.notify.bind(this, 'swapUsage')
+                callback: this.notify.bind(this, 'swapUsage'),
             });
             return;
         }
@@ -315,7 +315,7 @@ export default class MemoryMonitor extends Monitor {
             available,
             free,
             buffers,
-            cached
+            cached,
         });
     }
 
@@ -325,7 +325,7 @@ export default class MemoryMonitor extends Monitor {
         available,
         free,
         buffers,
-        cached
+        cached,
     }: {
         active: number;
         total: number;
@@ -352,7 +352,7 @@ export default class MemoryMonitor extends Monitor {
             available,
             free,
             buffers,
-            cached
+            cached,
         });
         return true;
     }
@@ -365,6 +365,7 @@ export default class MemoryMonitor extends Monitor {
     async updateTopProcessesProc(): Promise<boolean> {
         const topProcesses = [];
         const seenPids = [];
+        const processPromises = [];
 
         try {
             const result = await Utils.executeCommandAsync(
@@ -394,34 +395,37 @@ export default class MemoryMonitor extends Monitor {
 
                     seenPids.push(pid);
 
-                    let process = this.topProcessesCache.getProcess(pid);
-                    if(!process) {
-                        try {
-                            let fileContent = await Utils.readFileAsync(`/proc/${pid}/cmdline`);
-                            if(fileContent === '') {
-                                fileContent = await Utils.readFileAsync(`/proc/${pid}/comm`);
-                                process = {
-                                    pid: pid,
-                                    exec: Utils.extractCommandName(fileContent),
-                                    cmd: fileContent,
-                                    notSeen: 0
-                                };
-                            } else {
-                                process = {
-                                    pid: pid,
-                                    exec: Utils.extractCommandName(fileContent),
-                                    cmd: fileContent,
-                                    notSeen: 0
-                                };
+                    processPromises.push(
+                        (async () => {
+                            let process = this.topProcessesCache.getProcess(pid);
+                            if(!process) {
+                                try {
+                                    let fileContent = await Utils.readFileAsync(
+                                        `/proc/${pid}/cmdline`
+                                    );
+                                    fileContent =
+                                        fileContent ||
+                                        (await Utils.readFileAsync(`/proc/${pid}/comm`));
+                                    process = {
+                                        pid: pid,
+                                        exec: Utils.extractCommandName(fileContent),
+                                        cmd: fileContent,
+                                        notSeen: 0,
+                                    };
+                                    this.topProcessesCache.setProcess(process);
+                                } catch(e) {
+                                    return null;
+                                }
                             }
-
-                            this.topProcessesCache.setProcess(process);
-                        } catch(e) {
-                            continue;
-                        }
-                    }
-                    topProcesses.push({ process, usage, percentage });
+                            return { process, usage, percentage };
+                        })()
+                    );
                 }
+
+                const resolvedProcesses = (await Promise.all(processPromises)).filter(
+                    p => p !== null
+                );
+                topProcesses.push(...resolvedProcesses);
             }
         } catch(e: any) {
             Utils.error(e.message);
@@ -478,7 +482,7 @@ export default class MemoryMonitor extends Monitor {
                     pid: pid,
                     exec: Utils.extractCommandName(cmd),
                     cmd: cmd,
-                    notSeen: 0
+                    notSeen: 0,
                 };
                 this.topProcessesCache.setProcess(process);
             }
@@ -533,15 +537,13 @@ export default class MemoryMonitor extends Monitor {
             }
         }
 
-        const used = total - free;
-
         const swapUsage: SwapUsage = {
             total,
-            used,
+            used: total - free,
             free,
             cached,
             zswap,
-            zswapped
+            zswapped,
         };
 
         try {
@@ -563,7 +565,7 @@ export default class MemoryMonitor extends Monitor {
                         type,
                         size: parseInt(size, 10) * 1024,
                         used: parseInt(used, 10) * 1024,
-                        priority: parseInt(priority, 10)
+                        priority: parseInt(priority, 10),
                     });
                 }
                 swapUsage.devices = swapDevices;

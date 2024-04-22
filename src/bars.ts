@@ -86,7 +86,7 @@ export default GObject.registerClass(
                 x_align: params.x_align,
                 x_expand: true,
                 y_align: params.y_align,
-                y_expand: true
+                y_expand: true,
             });
 
             this.layout = params.layout;
@@ -111,14 +111,14 @@ export default GObject.registerClass(
                         reactive: false,
                         track_hover: false,
                         can_focus: false,
-                        style: `width:${this.barSize}em;`
+                        style: `width:${this.barSize}em;`,
                     };
                 } else {
                     barConfig = {
                         reactive: false,
                         track_hover: false,
                         can_focus: false,
-                        style: `height:${this.barSize}em;`
+                        style: `height:${this.barSize}em;`,
                     };
                 }
 
@@ -130,12 +130,12 @@ export default GObject.registerClass(
                     if(this.layout === 'vertical') {
                         layerConfig = {
                             style_class: 'astra-monitor-bars-vertical-bar',
-                            x_expand: true
+                            x_expand: true,
                         };
                     } else {
                         layerConfig = {
                             style_class: 'astra-monitor-bars-horizontal-bar',
-                            y_expand: true
+                            y_expand: true,
                         };
                     }
 
@@ -222,8 +222,8 @@ export default GObject.registerClass(
                         }
 
                         if(this.hideEmpty) {
-                            for(let l = 0; l < bar.length; l++)
-                                bar[l].visible = l < value.length && value[l].value > 0;
+                            for(let k = 0; k < bar.length; k++)
+                                bar[k].visible = k < value.length && value[k].value > 0;
                             if(value[l].value === 0) continue;
                         }
 
@@ -261,7 +261,7 @@ export default GObject.registerClass(
                 topLeft: '0',
                 topRight: '0',
                 bottomRight: '0',
-                bottomLeft: '0'
+                bottomLeft: '0',
             };
 
             if(start === 0) {

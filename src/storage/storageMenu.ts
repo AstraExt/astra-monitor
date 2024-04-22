@@ -175,7 +175,7 @@ export default class StorageMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -184,7 +184,7 @@ export default class StorageMenu extends MenuBase {
         //TODO: make width customizable!?
         this.graph = new StorageGraph({
             width: 200 - 2 - 15,
-            mini: false
+            mini: false,
         });
         grid.addToGrid(this.graph, 2);
 
@@ -192,26 +192,26 @@ export default class StorageMenu extends MenuBase {
             text: _('Global Read:'),
             x_expand: true,
             style_class: 'astra-monitor-menu-label',
-            style: 'margin-top:0.25em;'
+            style: 'margin-top:0.25em;',
         });
         grid.addToGrid(totalReadSpeedLabel);
 
         this.totalReadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.totalReadSpeedValueLabel);
 
         const totalWriteSpeedLabel = new St.Label({
             text: _('Global Write:'),
             x_expand: true,
-            style_class: 'astra-monitor-menu-label'
+            style_class: 'astra-monitor-menu-label',
         });
         grid.addToGrid(totalWriteSpeedLabel);
 
         this.totalWriteSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.totalWriteSpeedValueLabel);
 
@@ -238,7 +238,7 @@ export default class StorageMenu extends MenuBase {
         this.storageActivityPopup.addToMenu(
             new St.Label({
                 text: _('Read'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -250,7 +250,7 @@ export default class StorageMenu extends MenuBase {
         this.storageActivityPopup.addToMenu(
             new St.Label({
                 text: _('Write'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -268,7 +268,7 @@ export default class StorageMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
         hoverButton.hide();
 
@@ -283,30 +283,30 @@ export default class StorageMenu extends MenuBase {
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-name',
                 style: 'max-width:85px;',
-                x_expand: true
+                x_expand: true,
             });
             grid.addToGrid(label);
 
             // READ
             const readContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL
+                    orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5.5em;'
+                style: 'margin-left:0;margin-right:0;width:5.5em;',
             });
 
             const readActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-up-symbolic'),
                 fallback_icon_name: 'go-up-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);'
+                style: 'color:rgba(255,255,255,0.5);',
             });
             readContainer.add_child(readActivityIcon);
 
             const readValue = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true
+                x_expand: true,
             });
             readContainer.add_child(readValue);
 
@@ -315,23 +315,23 @@ export default class StorageMenu extends MenuBase {
             // WRITE
             const writeContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL
+                    orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5.5em;'
+                style: 'margin-left:0;margin-right:0;width:5.5em;',
             });
 
             const writeActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-down-symbolic'),
                 fallback_icon_name: 'go-down-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);'
+                style: 'color:rgba(255,255,255,0.5);',
             });
             writeContainer.add_child(writeActivityIcon);
 
             const writeValue = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true
+                x_expand: true,
             });
             writeContainer.add_child(writeValue);
 
@@ -342,13 +342,13 @@ export default class StorageMenu extends MenuBase {
                 read: {
                     container: readContainer,
                     value: readValue,
-                    icon: readActivityIcon
+                    icon: readActivityIcon,
                 },
                 write: {
                     container: writeContainer,
                     value: writeValue,
-                    icon: writeActivityIcon
-                }
+                    icon: writeActivityIcon,
+                },
             });
         }
 
@@ -370,7 +370,7 @@ export default class StorageMenu extends MenuBase {
         this.topProcesses = {
             separator,
             labels,
-            hoverButton
+            hoverButton,
         };
     }
 
@@ -384,30 +384,30 @@ export default class StorageMenu extends MenuBase {
             x_expand: true,
             x_align: Clutter.ActorAlign.START,
             numCols: 2,
-            styleClass: 'astra-monitor-menu-subgrid'
+            styleClass: 'astra-monitor-menu-subgrid',
         });
 
         for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
             // READ
             const readContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL
+                    orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;'
+                style: 'margin-left:0;margin-right:0;width:5em;',
             });
 
             const readActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-up-symbolic'),
                 fallback_icon_name: 'go-up-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);'
+                style: 'color:rgba(255,255,255,0.5);',
             });
             readContainer.add_child(readActivityIcon);
 
             const readValue = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true
+                x_expand: true,
             });
             readContainer.add_child(readValue);
 
@@ -416,23 +416,23 @@ export default class StorageMenu extends MenuBase {
             // WRITE
             const writeContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL
+                    orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;'
+                style: 'margin-left:0;margin-right:0;width:5em;',
             });
 
             const writeActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-down-symbolic'),
                 fallback_icon_name: 'go-down-symbolic',
                 style_class: 'astra-monitor-menu-icon-mini',
-                style: 'color:rgba(255,255,255,0.5);'
+                style: 'color:rgba(255,255,255,0.5);',
             });
             writeContainer.add_child(writeActivityIcon);
 
             const writeValue = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true
+                x_expand: true,
             });
             writeContainer.add_child(writeValue);
 
@@ -440,13 +440,13 @@ export default class StorageMenu extends MenuBase {
 
             const label = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-name-full'
+                style_class: 'astra-monitor-menu-cmd-name-full',
             });
             grid.addGrid(label, 1, i * 2, 1, 1);
 
             const description = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-description'
+                style_class: 'astra-monitor-menu-cmd-description',
             });
             grid.addGrid(description, 1, i * 2 + 1, 1, 1);
 
@@ -456,13 +456,13 @@ export default class StorageMenu extends MenuBase {
                 read: {
                     container: readContainer,
                     value: readValue,
-                    icon: readActivityIcon
+                    icon: readActivityIcon,
                 },
                 write: {
                     container: writeContainer,
                     value: writeValue,
-                    icon: writeActivityIcon
-                }
+                    icon: writeActivityIcon,
+                },
             });
         }
 
@@ -477,7 +477,7 @@ export default class StorageMenu extends MenuBase {
             this.noDevicesLabel = new St.Label({
                 text: _('No storage device found'),
                 style_class: 'astra-monitor-menu-label-warning',
-                style: 'font-style:italic;'
+                style: 'font-style:italic;',
             });
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
             this.devices = new Map();
@@ -601,7 +601,7 @@ export default class StorageMenu extends MenuBase {
         const container = new Grid({
             x_expand: true,
             styleClass: 'astra-monitor-menu-subgrid',
-            style: 'padding-top:0.3em;margin-bottom:0.3em;'
+            style: 'padding-top:0.3em;margin-bottom:0.3em;',
         });
 
         const topInfoGrid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -609,7 +609,7 @@ export default class StorageMenu extends MenuBase {
         const topInfoButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: ''
+            style: '',
         });
         topInfoButton.set_child(topInfoGrid);
 
@@ -617,25 +617,25 @@ export default class StorageMenu extends MenuBase {
         //{
         const headerGrid = new Grid({
             numCols: 3,
-            styleClass: 'astra-monitor-menu-subgrid'
+            styleClass: 'astra-monitor-menu-subgrid',
         });
 
         const icon = new St.Icon({
             style_class: 'astra-monitor-menu-icon',
-            style: 'padding-left:0.25em;'
+            style: 'padding-left:0.25em;',
         });
         headerGrid.addToGrid(icon);
 
         const label = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-label'
+            style_class: 'astra-monitor-menu-label',
         });
         headerGrid.addToGrid(label);
 
         const name = new St.Label({
             text: '',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         headerGrid.addToGrid(name);
 
@@ -646,13 +646,13 @@ export default class StorageMenu extends MenuBase {
         //{
         const barGrid = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL }),
-            style: 'margin-left:0;'
+            style: 'margin-left:0;',
         });
 
         const sizeLabel = new St.Label({
             text: '',
             y_align: Clutter.ActorAlign.CENTER,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         (barGrid.layout_manager as any).attach(sizeLabel, 0, 0, 1, 1);
 
@@ -663,14 +663,14 @@ export default class StorageMenu extends MenuBase {
             mini: false,
             layout: 'horizontal',
             x_align: Clutter.ActorAlign.START,
-            style: 'margin-left:0;margin-bottom:0;margin-right:0;border:solid 1px #555;'
+            style: 'margin-left:0;margin-bottom:0;margin-right:0;border:solid 1px #555;',
         });
         (barGrid.layout_manager as any).attach(bar, 1, 0, 1, 1);
 
         const barLabel = new St.Label({
             text: '0%',
             y_align: Clutter.ActorAlign.CENTER,
-            style: 'width:2.7em;font-size:0.8em;text-align:right;margin-right:0.25em;margin-top:0.2em;'
+            style: 'width:2.7em;font-size:0.8em;text-align:right;margin-right:0.25em;margin-top:0.2em;',
         });
         (barGrid.layout_manager as any).attach(barLabel, 2, 0, 1, 1);
 
@@ -699,26 +699,26 @@ export default class StorageMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             x_expand: true,
-            style: ''
+            style: '',
         });
 
         const rwContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
         rwButton.set_child(rwContainer);
 
         const readContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         const readLabel = new St.Label({
             text: pgettext('short for read', 'R'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         readContainer.add_child(readLabel);
 
@@ -726,14 +726,14 @@ export default class StorageMenu extends MenuBase {
             gicon: Utils.getLocalIcon('am-up-symbolic'),
             fallback_icon_name: 'go-up-symbolic',
             style_class: 'astra-monitor-menu-icon-mini',
-            style: 'color:rgba(255,255,255,0.5);'
+            style: 'color:rgba(255,255,255,0.5);',
         });
         readContainer.add_child(readActivityIcon);
 
         const readValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         readContainer.add_child(readValueLabel);
         readContainer.set_width(100);
@@ -743,13 +743,13 @@ export default class StorageMenu extends MenuBase {
         const writeContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         const writeLabel = new St.Label({
             text: pgettext('short for write', 'W'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         writeContainer.add_child(writeLabel);
 
@@ -757,14 +757,14 @@ export default class StorageMenu extends MenuBase {
             gicon: Utils.getLocalIcon('am-down-symbolic'),
             fallback_icon_name: 'go-down-symbolic',
             style_class: 'astra-monitor-menu-icon-mini',
-            style: 'color:rgba(255,255,255,0.5);'
+            style: 'color:rgba(255,255,255,0.5);',
         });
         writeContainer.add_child(writeActivityIcon);
 
         const writeValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         writeContainer.add_child(writeValueLabel);
         writeContainer.set_width(100);
@@ -801,7 +801,7 @@ export default class StorageMenu extends MenuBase {
             readValueLabel,
             readActivityIcon,
             writeValueLabel,
-            writeActivityIcon
+            writeActivityIcon,
         };
     }
 
@@ -820,8 +820,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'serial', label: _('Serial'), parent: true },
                     { key: 'size', label: _('Size'), formatAsBytes: true },
                     { key: 'state', label: _('State'), parent: true },
-                    { key: 'subsystems', label: _('Subsystems') }
-                ]
+                    { key: 'subsystems', label: _('Subsystems') },
+                ],
             },
             {
                 title: _('File System and Mounting Info'),
@@ -838,8 +838,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'fsused', label: _('Used Space'), formatAsBytes: true },
                     { key: 'fsuse%', label: _('Used Space (%)') },
                     { key: 'fsver', label: _('File System Version') },
-                    { key: 'fsroots', label: _('File System Roots') }
-                ]
+                    { key: 'fsroots', label: _('File System Roots') },
+                ],
             },
             {
                 title: _('Physical and Disk Details'),
@@ -857,8 +857,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'disc-aln', label: _('Discard Alignment'), formatAsBytes: true },
                     { key: 'disc-gran', label: _('Discard Granularity'), formatAsBytes: true },
                     { key: 'disc-max', label: _('Discard Max Size'), formatAsBytes: true },
-                    { key: 'disc-zero', label: _('Discard Zeroes Data'), checkNull: true }
-                ]
+                    { key: 'disc-zero', label: _('Discard Zeroes Data'), checkNull: true },
+                ],
             },
             {
                 title: _('Partition Info'),
@@ -871,8 +871,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'partuuid', label: _('Partition UUID') },
                     { key: 'partn', label: _('Partition Number') },
                     { key: 'pttype', label: _('Partition Table Type') },
-                    { key: 'ptuuid', label: _('Partition Table UUID') }
-                ]
+                    { key: 'ptuuid', label: _('Partition Table UUID') },
+                ],
             },
             {
                 title: _('Performance and Settings'),
@@ -883,8 +883,8 @@ export default class StorageMenu extends MenuBase {
                     { key: 'ra', label: _('Read Ahead'), formatAsBytes: true },
                     { key: 'sched', label: _('Scheduler') },
                     { key: 'dax', label: _('Direct Access'), checkNull: true },
-                    { key: 'mq', label: _('Multiqueue'), checkNull: true }
-                ]
+                    { key: 'mq', label: _('Multiqueue'), checkNull: true },
+                ],
             },
             {
                 title: _('Advanced Identifiers and States'),
@@ -915,15 +915,15 @@ export default class StorageMenu extends MenuBase {
                     { key: 'zone-app', label: _('Zone Append'), checkNull: true },
                     { key: 'zone-nr', label: _('Zone Number') },
                     { key: 'zone-omax', label: _('Zone Open Max') },
-                    { key: 'zone-amax', label: _('Zone Active Max') }
-                ]
-            }
+                    { key: 'zone-amax', label: _('Zone Active Max') },
+                ],
+            },
         ];
     }
 
     createDeviceInfoPopup(sourceActor: St.Widget): DeviceInfoPopup {
         const popup: DeviceInfoPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 4
+            numCols: 4,
         }) as DeviceInfoPopup;
         popup.empty = true;
 
@@ -941,7 +941,7 @@ export default class StorageMenu extends MenuBase {
 
                 const value = new St.Label({
                     text: '',
-                    style_class: 'astra-monitor-menu-sub-value'
+                    style_class: 'astra-monitor-menu-sub-value',
                 });
                 popup.addToMenu(value);
                 popup[section.values].push(value);
@@ -952,7 +952,7 @@ export default class StorageMenu extends MenuBase {
 
     createDeviceTotalsPopup(sourceActor: St.Widget): DeviceTotalsPopup {
         const popup: DeviceTotalsPopup = new MenuBase(sourceActor, 0.05, {
-            numCols: 2
+            numCols: 2,
         }) as DeviceTotalsPopup;
 
         //Totals
@@ -962,7 +962,7 @@ export default class StorageMenu extends MenuBase {
         popup.addToMenu(
             new St.Label({
                 text: _('Read'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -974,7 +974,7 @@ export default class StorageMenu extends MenuBase {
         popup.addToMenu(
             new St.Label({
                 text: _('Write'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -990,7 +990,7 @@ export default class StorageMenu extends MenuBase {
 
         const icon = {
             gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
-            fallback_icon_name: 'drive-harddisk-symbolic'
+            fallback_icon_name: 'drive-harddisk-symbolic',
         };
 
         if(deviceData.removable) {
@@ -1060,7 +1060,7 @@ export default class StorageMenu extends MenuBase {
                 const button = new St.Button({ style_class: 'button' });
                 button.child = new St.Icon({
                     gicon: Utils.getLocalIcon('am-pie-symbolic'),
-                    fallback_icon_name: 'baobab-symbolic'
+                    fallback_icon_name: 'baobab-symbolic',
                 });
 
                 button.connect('clicked', () => {
@@ -1076,7 +1076,7 @@ export default class StorageMenu extends MenuBase {
                 const button = new St.Button({ style_class: 'button' });
                 button.child = new St.Icon({
                     gicon: Utils.getLocalIcon('am-disk-utility-symbolic'),
-                    fallback_icon_name: 'utilities-disk-utility-symbolic'
+                    fallback_icon_name: 'utilities-disk-utility-symbolic',
                 });
 
                 button.connect('clicked', () => {

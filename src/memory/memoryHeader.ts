@@ -121,7 +121,7 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER
+                x_align: Clutter.ActorAlign.CENTER,
             });
 
             const setIconName = () => {
@@ -136,6 +136,12 @@ export default GObject.registerClass(
             let alertColor = '';
             const alerts = new Set();
 
+            const updateIconColor = () => {
+                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
+                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
+                else this.icon.style = defaultStyle;
+            };
+
             const setIconBaseColor = () => {
                 baseColor = Config.get_string('memory-header-icon-color') || '';
                 updateIconColor();
@@ -143,11 +149,6 @@ export default GObject.registerClass(
             const setIconAlertColor = () => {
                 alertColor = Config.get_string('memory-header-icon-alert-color') || '';
                 updateIconColor();
-            };
-            const updateIconColor = () => {
-                if(alerts.size > 0) this.icon.style = defaultStyle + 'color:' + alertColor + ';';
-                else if(baseColor) this.icon.style = defaultStyle + 'color:' + baseColor + ';';
-                else this.icon.style = defaultStyle;
             };
 
             setIconBaseColor();
@@ -243,7 +244,7 @@ export default GObject.registerClass(
                 header: true,
                 mini: true,
                 width: 0.5,
-                breakdownConfig: 'memory-header-bars-breakdown'
+                breakdownConfig: 'memory-header-bars-breakdown',
             });
             Config.bind('memory-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -264,14 +265,15 @@ export default GObject.registerClass(
                 this.graph.destroy();
             }
 
-            let graphWidth = Config.get_int('memory-header-graph-width');
-            graphWidth = Math.max(10, Math.min(500, graphWidth));
-
-            this.graph = new MemoryGraph({
-                width: graphWidth,
-                mini: true,
-                breakdownConfig: 'memory-header-graph-breakdown'
-            });
+            {
+                let graphWidth = Config.get_int('memory-header-graph-width');
+                graphWidth = Math.max(10, Math.min(500, graphWidth));
+                this.graph = new MemoryGraph({
+                    width: graphWidth,
+                    mini: true,
+                    breakdownConfig: 'memory-header-graph-breakdown',
+                });
+            }
             Config.bind('memory-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
 
             Config.connect(this.graph, 'changed::memory-header-graph-width', () => {
@@ -291,7 +293,7 @@ export default GObject.registerClass(
             this.percentage = new St.Label({
                 text: Utils.zeroStr + '%',
                 style_class: 'astra-monitor-header-percentage3',
-                y_align: Clutter.ActorAlign.CENTER
+                y_align: Clutter.ActorAlign.CENTER,
             });
             Config.bind(
                 'memory-header-percentage',
@@ -320,7 +322,7 @@ export default GObject.registerClass(
             this.value = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-header-value',
-                y_align: Clutter.ActorAlign.CENTER
+                y_align: Clutter.ActorAlign.CENTER,
             });
             Config.bind('memory-header-value', this.value, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -340,7 +342,7 @@ export default GObject.registerClass(
             this.free = new St.Label({
                 text: '-',
                 style_class: 'astra-monitor-header-value',
-                y_align: Clutter.ActorAlign.CENTER
+                y_align: Clutter.ActorAlign.CENTER,
             });
             Config.bind('memory-header-free', this.free, 'visible', Gio.SettingsBindFlags.GET);
 
@@ -372,7 +374,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item'
+                style_class: 'astra-monitor-tooltip-item',
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;

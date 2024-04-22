@@ -140,7 +140,7 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER
+                x_align: Clutter.ActorAlign.CENTER,
             });
 
             const setIconName = () => {
@@ -206,10 +206,11 @@ export default GObject.registerClass(
                 this.graph.destroy();
             }
 
-            let graphWidth = Config.get_int('network-header-graph-width');
-            graphWidth = Math.max(10, Math.min(500, graphWidth));
-
-            this.graph = new NetworkGraph({ width: graphWidth, mini: true });
+            {
+                let graphWidth = Config.get_int('network-header-graph-width');
+                graphWidth = Math.max(10, Math.min(500, graphWidth));
+                this.graph = new NetworkGraph({ width: graphWidth, mini: true });
+            }
             Config.bind('network-header-graph', this.graph, 'visible', Gio.SettingsBindFlags.GET);
 
             Config.connect(this.graph, 'changed::network-header-graph-width', () => {
@@ -232,7 +233,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.FILL,
                 y_expand: true,
                 vertical: true,
-                width: 1
+                width: 1,
             });
 
             this.speed = new St.Label({
@@ -242,7 +243,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.CENTER,
                 x_align: Clutter.ActorAlign.END,
                 x_expand: true,
-                y_expand: true
+                y_expand: true,
             });
             this.speedContainer.add_child(this.speed);
 
@@ -338,7 +339,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item'
+                style_class: 'astra-monitor-tooltip-item',
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;

@@ -204,13 +204,13 @@ export default class Monitor {
 
     unlisten(subject: any, key?: string) {
         if(key === undefined) {
-            for(const key in this.listeners) {
-                const listeners = this.listeners.get(key);
+            for(const listenerKey in this.listeners) {
+                const listeners = this.listeners.get(listenerKey);
                 if(listeners) {
                     const newListeners = listeners.filter(listener => listener.subject !== subject);
-                    this.listeners.set(key, newListeners);
+                    this.listeners.set(listenerKey, newListeners);
 
-                    if(newListeners.length === 0) this.stopListeningFor(key);
+                    if(newListeners.length === 0) this.stopListeningFor(listenerKey);
                 }
             }
             return;

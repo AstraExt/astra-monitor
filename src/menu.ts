@@ -60,12 +60,12 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             const scrollView = new St.ScrollView({
                 x_expand: true,
                 y_expand: true,
-                y_align: Clutter.ActorAlign.START
+                y_align: Clutter.ActorAlign.START,
             });
             scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
             const boxLayout = new St.BoxLayout({
-                vertical: true
+                vertical: true,
             });
             scrollView.add_child(boxLayout);
 
@@ -122,7 +122,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             x: actorBox.x1,
             y: actorBox.y1,
             width: actorBox.x2 - actorBox.x1,
-            height: actorBox.y2 - actorBox.y1
+            height: actorBox.y2 - actorBox.y1,
         });
         let monitorIndex = display.get_monitor_index_for_rect(rect);
         if(monitorIndex === -1) monitorIndex = display.get_primary_monitor();
@@ -167,7 +167,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             style_class: 'astra-monitor-menu-button-box',
             x_align: Clutter.ActorAlign.CENTER,
             reactive: true,
-            x_expand: true
+            x_expand: true,
         });
 
         if(addButtons) addButtons(this.utilityBox);
@@ -179,7 +179,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             const button = new St.Button({ style_class: 'button' });
             button.child = new St.Icon({
                 gicon: Utils.getLocalIcon('am-system-monitor-symbolic'),
-                fallback_icon_name: 'org.gnome.SystemMonitor-symbolic'
+                fallback_icon_name: 'org.gnome.SystemMonitor-symbolic',
             });
 
             button.connect('clicked', () => {
@@ -193,7 +193,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         const button = new St.Button({ style_class: 'button' });
         button.child = new St.Icon({
             gicon: Utils.getLocalIcon('am-settings-symbolic'),
-            fallback_icon_name: 'preferences-system-symbolic'
+            fallback_icon_name: 'preferences-system-symbolic',
         });
         button.connect('clicked', () => {
             this.close(true);

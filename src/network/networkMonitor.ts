@@ -96,7 +96,7 @@ export default class NetworkMonitor extends Monitor {
         //TODO: let the user choose max speeds / save max speeds
         this.detectedMaxSpeedsValues = {
             bytesUploadedPerSec: 0,
-            bytesDownloadedPerSec: 0
+            bytesDownloadedPerSec: 0,
         };
 
         this.interfaceChecks = {};
@@ -133,12 +133,14 @@ export default class NetworkMonitor extends Monitor {
         });
 
         // Regex ignored interfaces
-        const regex = Config.get_string('network-ignored-regex');
-        try {
-            if(regex === null || regex === '') this.ignoredRegex = null;
-            else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
-        } catch(e) {
-            this.ignoredRegex = null;
+        {
+            const regex = Config.get_string('network-ignored-regex');
+            try {
+                if(regex === null || regex === '') this.ignoredRegex = null;
+                else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
+            } catch(e) {
+                this.ignoredRegex = null;
+            }
         }
 
         Config.connect(this, 'changed::network-ignored-regex', () => {
@@ -177,12 +179,12 @@ export default class NetworkMonitor extends Monitor {
         this.previousNetworkIO = {
             bytesUploaded: -1,
             bytesDownloaded: -1,
-            time: -1
+            time: -1,
         };
 
         this.previousDetailedNetworkIO = {
             devices: null,
-            time: -1
+            time: -1,
         };
 
         this.updateNetworkIOTask.cancel();
@@ -207,7 +209,7 @@ export default class NetworkMonitor extends Monitor {
     dataSourcesInit() {
         this.dataSources = {
             networkIO: Config.get_string('network-source-network-io') ?? undefined,
-            wireless: Config.get_string('network-source-wireless') ?? undefined
+            wireless: Config.get_string('network-source-wireless') ?? undefined,
         };
 
         Config.connect(this, 'changed::network-source-network-io', () => {
@@ -217,11 +219,11 @@ export default class NetworkMonitor extends Monitor {
             this.previousNetworkIO = {
                 bytesUploaded: -1,
                 bytesDownloaded: -1,
-                time: -1
+                time: -1,
             };
             this.previousDetailedNetworkIO = {
                 devices: null,
-                time: -1
+                time: -1,
             };
             this.resetUsageHistory('networkIO');
             this.resetUsageHistory('detailedNetworkIO');
@@ -302,7 +304,7 @@ export default class NetworkMonitor extends Monitor {
                 key,
                 task: this.updateNetworkIOTask,
                 run,
-                callback
+                callback,
             });
             return;
         }
@@ -311,7 +313,7 @@ export default class NetworkMonitor extends Monitor {
                 key,
                 task: this.updateRoutesTask,
                 run: this.updateRoutes.bind(this),
-                callback: () => this.notify('routes')
+                callback: () => this.notify('routes'),
             });
             return;
         }
@@ -327,7 +329,7 @@ export default class NetworkMonitor extends Monitor {
                 key,
                 task: this.updateWirelessTask,
                 run,
-                callback: () => this.notify('wireless')
+                callback: () => this.notify('wireless'),
             });
             return;
         }
@@ -407,7 +409,7 @@ export default class NetworkMonitor extends Monitor {
 
                     bytesDownloaded: parseInt(fields[1]),
                     packetsDownloaded: parseInt(fields[2]),
-                    errorsDownload: parseInt(fields[3]) + parseInt(fields[4])
+                    errorsDownload: parseInt(fields[3]) + parseInt(fields[4]),
                 });
             }
 
@@ -432,7 +434,7 @@ export default class NetworkMonitor extends Monitor {
             errorsDownload,
 
             detailed,
-            devices
+            devices,
         });
     }
 
@@ -472,7 +474,7 @@ export default class NetworkMonitor extends Monitor {
                     packetsUploaded: netload.packets_out,
                     packetsDownloaded: netload.packets_in,
                     errorsUpload: netload.errors_out,
-                    errorsDownload: netload.errors_in
+                    errorsDownload: netload.errors_in,
                 });
             }
 
@@ -497,7 +499,7 @@ export default class NetworkMonitor extends Monitor {
             errorsDownload,
 
             detailed,
-            devices
+            devices,
         });
     }
 
@@ -519,7 +521,7 @@ export default class NetworkMonitor extends Monitor {
             errorsUpload,
             errorsDownload,
             detailed,
-            devices
+            devices,
         } = data;
 
         const now = GLib.get_monotonic_time();
@@ -545,11 +547,11 @@ export default class NetworkMonitor extends Monitor {
             return false;
         }
 
-        const interval = (now - this.previousNetworkIO.time) / 1000000;
-        const bytesUploadedPerSec = Math.round(
+        let interval = (now - this.previousNetworkIO.time) / 1000000;
+        let bytesUploadedPerSec = Math.round(
             (bytesUploaded - this.previousNetworkIO.bytesUploaded) / interval
         );
-        const bytesDownloadedPerSec = Math.round(
+        let bytesDownloadedPerSec = Math.round(
             (bytesDownloaded - this.previousNetworkIO.bytesDownloaded) / interval
         );
 
@@ -570,7 +572,7 @@ export default class NetworkMonitor extends Monitor {
             errorsUpload: errorsUpload,
             errorsDownload: errorsDownload,
             bytesUploadedPerSec,
-            bytesDownloadedPerSec
+            bytesDownloadedPerSec,
         });
 
         if(detailed && devices !== null) {
@@ -579,34 +581,34 @@ export default class NetworkMonitor extends Monitor {
 
             const finalData = new Map();
 
-            const interval = (now - this.previousDetailedNetworkIO.time) / 1000000;
-            for(const [deviceName, data] of devices) {
+            interval = (now - this.previousDetailedNetworkIO.time) / 1000000;
+            for(const [deviceName, devicesData] of devices) {
                 const {
-                    bytesUploaded,
-                    bytesDownloaded,
-                    packetsUploaded,
-                    packetsDownloaded,
-                    errorsUpload,
-                    errorsDownload
-                } = data;
+                    bytesUploaded: deviceBytesUploaded,
+                    bytesDownloaded: deviceBytesDownloaded,
+                    packetsUploaded: devicePacketsUploaded,
+                    packetsDownloaded: devicePacketsDownloaded,
+                    errorsUpload: deviceErrorsUpload,
+                    errorsDownload: deviceErrorsDownload,
+                } = devicesData;
 
                 const previousData = this.previousDetailedNetworkIO.devices.get(deviceName);
                 if(previousData) {
-                    const bytesUploadedPerSec = Math.round(
-                        (bytesUploaded - previousData.bytesUploaded) / interval
+                    bytesUploadedPerSec = Math.round(
+                        (deviceBytesUploaded - previousData.bytesUploaded) / interval
                     );
-                    const bytesDownloadedPerSec = Math.round(
-                        (bytesDownloaded - previousData.bytesDownloaded) / interval
+                    bytesDownloadedPerSec = Math.round(
+                        (deviceBytesDownloaded - previousData.bytesDownloaded) / interval
                     );
                     finalData.set(deviceName, {
-                        totalBytesUploaded: bytesUploaded,
-                        totalBytesDownloaded: bytesDownloaded,
-                        packetsUploaded: packetsUploaded,
-                        packetsDownloaded: packetsDownloaded,
-                        errorsUpload: errorsUpload,
-                        errorsDownload: errorsDownload,
+                        totalBytesUploaded: deviceBytesUploaded,
+                        totalBytesDownloaded: deviceBytesDownloaded,
+                        packetsUploaded: devicePacketsUploaded,
+                        packetsDownloaded: devicePacketsDownloaded,
+                        errorsUpload: deviceErrorsUpload,
+                        errorsDownload: deviceErrorsDownload,
                         bytesUploadedPerSec,
-                        bytesDownloadedPerSec
+                        bytesDownloadedPerSec,
                     });
                 }
             }
@@ -773,6 +775,7 @@ export default class NetworkMonitor extends Monitor {
         if(!list) return false;
 
         const devices: Map<string, NetworkWirelessInfo> = new Map();
+        const devicePromises: Promise<void>[] = [];
 
         for(const { name: dev } of list) {
             if(this.ignored.includes(dev)) continue;
@@ -785,40 +788,49 @@ export default class NetworkMonitor extends Monitor {
             )
                 continue;
 
-            const path = Utils.commandPathLookup('iw');
-            const str = await Utils.executeCommandAsync(`${path}iw dev ${dev} link`);
-            if(!str) return false;
+            devicePromises.push(
+                (async () => {
+                    try {
+                        const path = Utils.commandPathLookup('iw');
+                        const str = await Utils.executeCommandAsync(`${path}iw dev ${dev} link`);
+                        if(!str) return;
 
-            //parse info
-            const data: NetworkWirelessInfo = { name: dev };
-            const lines = str.split('\n');
+                        // Parse info
+                        const data: NetworkWirelessInfo = { name: dev };
+                        const lines = str.split('\n');
+                        const firstLine = lines.shift();
+                        if(firstLine === undefined) return;
 
-            const firstLine = lines.shift();
-            if(firstLine === undefined) continue;
+                        const mac = firstLine.match(/([0-9a-f]{2}:){5}[0-9a-f]{2}/i);
+                        if(mac === null) return;
 
-            const mac = firstLine.match(/([0-9a-f]{2}:){5}[0-9a-f]{2}/i);
-            if(mac === null) continue;
+                        data.accessPoint = mac[0];
 
-            data.accessPoint = mac[0];
+                        for(const line of lines) {
+                            const parts = line.split(':');
+                            if(parts.length < 2) continue;
 
-            for(const line of lines) {
-                const parts = line.split(':');
-                if(parts.length < 2) continue;
+                            const key = parts[0].trim();
+                            const value = parts[1].trim();
 
-                const key = parts[0].trim();
-                const value = parts[1].trim();
+                            if(key === 'SSID') data.EESSID = value;
+                            else if(key === 'freq') data.frequency = value + ' MHz';
+                            else if(key === 'signal') data.signalLevel = value;
+                            else if(key === 'tx bitrate')
+                                data.bitRate = value.split(' ')[0] + ' MBit/s';
+                        }
 
-                if(key === 'SSID') data.EESSID = value;
-                else if(key === 'freq') data.frequency = value + ' MHz';
-                else if(key === 'signal') data.signalLevel = value;
-                else if(key === 'tx bitrate') data.bitRate = value.split(' ')[0] + ' MBit/s';
-            }
-
-            devices.set(dev, data);
+                        devices.set(dev, data);
+                    } catch(e) {
+                        /* EMPTY */
+                    }
+                })()
+            );
         }
 
-        this.setUsageValue('wireless', devices);
+        await Promise.all(devicePromises);
 
+        this.setUsageValue('wireless', devices);
         return true;
     }
 

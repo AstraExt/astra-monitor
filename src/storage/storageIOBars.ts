@@ -50,7 +50,7 @@ export default GObject.registerClass(
 
             this.colors = [
                 Config.get_string('storage-header-io-bars-color1') ?? 'rgba(29,172,214,1.0)',
-                Config.get_string('storage-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)'
+                Config.get_string('storage-header-io-bars-color2') ?? 'rgba(214,29,29,1.0)',
             ];
         }
 
@@ -70,7 +70,7 @@ export default GObject.registerClass(
 
             this.updateBars([
                 [{ color: 0, value: readSpeed / maxReadSpeed }],
-                [{ color: 1, value: writeSpeed / maxWriteSpeed }]
+                [{ color: 1, value: writeSpeed / maxWriteSpeed }],
             ]);
         }
     }

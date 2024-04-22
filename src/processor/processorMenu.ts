@@ -135,10 +135,10 @@ export default class ProcessorMenu extends MenuBase {
             reactive: true,
             track_hover: true,
             style_class: 'astra-monitor-menu-label astra-monitor-menu-section-end',
-            style: defaultStyle
+            style: defaultStyle,
         });
         const hoverLabel = new St.Label({
-            text: cpuName
+            text: cpuName,
         });
         hoverButton.set_child(hoverLabel);
 
@@ -182,7 +182,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuInfoPopup.addToMenu(
             new St.Label({
                 text: cpuName,
-                style_class: 'astra-monitor-menu-sub-header'
+                style_class: 'astra-monitor-menu-sub-header',
             }),
             2
         );
@@ -218,11 +218,11 @@ export default class ProcessorMenu extends MenuBase {
                 if(i === 0) {
                     keyLabel = new St.Label({
                         text: key,
-                        style_class: 'astra-monitor-menu-sub-key'
+                        style_class: 'astra-monitor-menu-sub-key',
                     });
                 } else {
                     keyLabel = new St.Label({
-                        text: ''
+                        text: '',
                     });
                 }
                 this.cpuInfoPopup.addToMenu(keyLabel);
@@ -238,7 +238,7 @@ export default class ProcessorMenu extends MenuBase {
                     this.cpuInfoPopup.hideable.push({
                         key: keyLabel,
                         value: valueLabel,
-                        reference
+                        reference,
                     });
                     reference = null;
                 } else {
@@ -262,7 +262,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuTotalPerc = new St.Label({
             text: '0%',
             style_class: 'astra-monitor-menu-value',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.cpuTotalPerc);
 
@@ -272,7 +272,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuUserPerc = new St.Label({
             text: '0%',
             style_class: 'astra-monitor-menu-value',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.cpuUserPerc);
 
@@ -282,14 +282,14 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuSystemPerc = new St.Label({
             text: '0%',
             style_class: 'astra-monitor-menu-value',
-            x_expand: true
+            x_expand: true,
         });
         grid.addToGrid(this.cpuSystemPerc);
 
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
         hoverButton.set_child(grid);
 
@@ -315,7 +315,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('User'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const userLabel = new St.Label({ text: '-' });
@@ -325,7 +325,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Nice'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const niceLabel = new St.Label({ text: '-' });
@@ -335,7 +335,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('System'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const systemLabel = new St.Label({ text: '-' });
@@ -345,7 +345,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Idle'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const idleLabel = new St.Label({ text: '-' });
@@ -355,7 +355,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('I/O wait'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const iowaitLabel = new St.Label({ text: '-' });
@@ -365,7 +365,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('IRQ'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const irqLabel = new St.Label({ text: '-' });
@@ -375,7 +375,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Soft IRQ'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const softirqLabel = new St.Label({ text: '-' });
@@ -385,7 +385,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCategoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Steal'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
         const stealLabel = new St.Label({ text: '-' });
@@ -399,7 +399,7 @@ export default class ProcessorMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -414,7 +414,7 @@ export default class ProcessorMenu extends MenuBase {
             layout: 'horizontal',
             x_align: Clutter.ActorAlign.START,
             style: 'margin-left:0.5em;margin-bottom:0;margin-right:0;border:solid 1px #555;',
-            breakdownConfig: 'processor-menu-bars-breakdown'
+            breakdownConfig: 'processor-menu-bars-breakdown',
         });
         grid.addGrid(this.processorBar, 0, 0, 2, 1);
 
@@ -422,7 +422,7 @@ export default class ProcessorMenu extends MenuBase {
         this.graph = new ProcessorGraph({
             width: 200,
             mini: false,
-            breakdownConfig: 'processor-menu-graph-breakdown'
+            breakdownConfig: 'processor-menu-graph-breakdown',
         });
         grid.addGrid(this.graph, 0, 1, 2, 1);
 
@@ -494,7 +494,7 @@ export default class ProcessorMenu extends MenuBase {
             const label = new St.Label({
                 text: 'Core' + (i + 1),
                 style_class: 'astra-monitor-menu-sub-core',
-                style: row ? defaultStyle + 'margin-top: 1em;' : defaultStyle
+                style: row ? defaultStyle + 'margin-top: 1em;' : defaultStyle,
             });
             grid.addGrid(label, col, row, 1, 1);
 
@@ -504,25 +504,25 @@ export default class ProcessorMenu extends MenuBase {
                 hideEmpty: true,
                 width: 1,
                 height: 3,
-                breakdownConfig: 'processor-menu-core-bars-breakdown'
+                breakdownConfig: 'processor-menu-core-bars-breakdown',
             });
             grid.addGrid(bar, col, row + 1, 1, 1);
 
             const percentage = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-sub-percentage'
+                style_class: 'astra-monitor-menu-sub-percentage',
             });
             grid.addGrid(percentage, col, row + 2, 1, 1);
 
             const value = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-sub-frequency-value'
+                style_class: 'astra-monitor-menu-sub-frequency-value',
             });
             grid.addGrid(value, col, row + 3, 1, 1);
 
             const unit = new St.Label({
                 text: _('GHz'),
-                style_class: 'astra-monitor-menu-sub-frequency-unit'
+                style_class: 'astra-monitor-menu-sub-frequency-unit',
             });
             grid.addGrid(unit, col, row + 4, 1, 1);
 
@@ -531,7 +531,7 @@ export default class ProcessorMenu extends MenuBase {
                 percentage,
                 value,
                 unit,
-                label
+                label,
             });
         }
         this.cpuCoresUsagePopup.addToMenu(grid);
@@ -545,7 +545,7 @@ export default class ProcessorMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -559,13 +559,13 @@ export default class ProcessorMenu extends MenuBase {
             const label = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-name',
-                x_expand: true
+                x_expand: true,
             });
             grid.addToGrid(label);
             const percentage = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true
+                x_expand: true,
             });
             grid.addToGrid(percentage);
 
@@ -598,7 +598,7 @@ export default class ProcessorMenu extends MenuBase {
             x_expand: true,
             x_align: Clutter.ActorAlign.START,
             numCols: 2,
-            styleClass: 'astra-monitor-menu-subgrid'
+            styleClass: 'astra-monitor-menu-subgrid',
         });
 
         for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
@@ -607,17 +607,17 @@ export default class ProcessorMenu extends MenuBase {
                 style_class: 'astra-monitor-menu-cmd-usage',
                 x_expand: true,
                 y_expand: true,
-                y_align: Clutter.ActorAlign.CENTER
+                y_align: Clutter.ActorAlign.CENTER,
             });
             grid.addGrid(percentage, 0, i * 2, 1, 2);
             const label = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-name-full'
+                style_class: 'astra-monitor-menu-cmd-name-full',
             });
             grid.addGrid(label, 1, i * 2, 1, 1);
             const description = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-description'
+                style_class: 'astra-monitor-menu-cmd-description',
             });
             grid.addGrid(description, 1, i * 2 + 1, 1, 1);
             this.topProcessesPopup.processes.set(i, { label, percentage, description });
@@ -634,7 +634,7 @@ export default class ProcessorMenu extends MenuBase {
         const hoverButton = new St.Button({
             reactive: true,
             track_hover: true,
-            style: defaultStyle
+            style: defaultStyle,
         });
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
@@ -646,7 +646,7 @@ export default class ProcessorMenu extends MenuBase {
         const loadsContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         // One minute
@@ -654,20 +654,20 @@ export default class ProcessorMenu extends MenuBase {
         const oneMinuteContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         const oneMinuteLabel = new St.Label({
             text: pgettext('short for 1 minute', '1m'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         oneMinuteContainer.add_child(oneMinuteLabel);
 
         const oneMinuteValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         oneMinuteContainer.add_child(oneMinuteValueLabel);
         oneMinuteContainer.set_width(50);
@@ -682,20 +682,20 @@ export default class ProcessorMenu extends MenuBase {
         const fiveMinutesContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         const fiveMinutesLabel = new St.Label({
             text: pgettext('short for 5 minutes', '5m'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         fiveMinutesContainer.add_child(fiveMinutesLabel);
 
         const fiveMinutesValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         fiveMinutesContainer.add_child(fiveMinutesValueLabel);
         fiveMinutesContainer.set_width(50);
@@ -710,20 +710,20 @@ export default class ProcessorMenu extends MenuBase {
         const fifteenMinutesContainer = new St.Widget({
             layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
             x_expand: true,
-            style: 'margin-left:0;margin-right:0;'
+            style: 'margin-left:0;margin-right:0;',
         });
 
         const fifteenMinutesLabel = new St.Label({
             text: pgettext('short for 15 minutes', '15m'),
             style_class: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;'
+            style: 'padding-right:0.15em;',
         });
         fifteenMinutesContainer.add_child(fifteenMinutesLabel);
 
         const fifteenMinutesValueLabel = new St.Label({
             text: '-',
             x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid'
+            style_class: 'astra-monitor-menu-key-mid',
         });
         fifteenMinutesContainer.add_child(fifteenMinutesValueLabel);
         fifteenMinutesContainer.set_width(50);
@@ -762,7 +762,7 @@ export default class ProcessorMenu extends MenuBase {
         this.gpuSection = new GpuMenuComponent({
             parent: this,
             title: label,
-            compact: true
+            compact: true,
         });
         this.addToMenu(this.gpuSection.container, 2);
 
@@ -789,7 +789,7 @@ export default class ProcessorMenu extends MenuBase {
 
         this.menuUptime = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-uptime astra-monitor-menu-section-end'
+            style_class: 'astra-monitor-menu-uptime astra-monitor-menu-section-end',
         });
         this.addToMenu(this.menuUptime, 2);
 
@@ -968,11 +968,11 @@ export default class ProcessorMenu extends MenuBase {
                         topProcess.percentage.text = '';
                     }
                     if(this.topProcessesPopup) {
-                        const topProcess = this.topProcessesPopup.processes?.get(i);
-                        if(!topProcess) continue;
-                        topProcess.label.text = '';
-                        topProcess.description.text = '';
-                        topProcess.percentage.text = '';
+                        const popup = this.topProcessesPopup.processes?.get(i);
+                        if(!popup) continue;
+                        popup.label.text = '';
+                        popup.description.text = '';
+                        popup.percentage.text = '';
                     }
                 }
             } else {
@@ -994,15 +994,15 @@ export default class ProcessorMenu extends MenuBase {
                         else this.topProcesses[i].percentage.text = cpu.toFixed(1) + '%';
                     }
                     if(this.topProcessesPopup) {
-                        const topProcess = this.topProcessesPopup.processes?.get(i);
-                        if(!topProcess) continue;
-                        topProcess.label.text = process.exec;
-                        topProcess.description.text = process.cmd;
+                        const popup = this.topProcessesPopup.processes?.get(i);
+                        if(!popup) continue;
+                        popup.label.text = process.exec;
+                        popup.description.text = process.cmd;
 
                         if(perCore)
-                            topProcess.percentage.text =
+                            popup.percentage.text =
                                 (cpu * Utils.processorMonitor.getNumberOfCores()).toFixed(1) + '%';
-                        else topProcess.percentage.text = cpu.toFixed(1) + '%';
+                        else popup.percentage.text = cpu.toFixed(1) + '%';
                     }
                 }
             }

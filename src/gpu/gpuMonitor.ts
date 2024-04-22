@@ -26,12 +26,13 @@ import Monitor from '../monitor.js';
 
 import ContinuosTaskManager, { ContinuosTaskManagerData } from '../utils/continuosTaskManager.js';
 
+// eslint-disable-next-line no-shadow
 enum GpuSensorPriority {
     NONE,
     LOW,
     MEDIUM,
     HIGH,
-    MAX
+    MAX,
 }
 
 type GpuSensor = {
@@ -522,7 +523,7 @@ export default class GpuMonitor extends Monitor {
             '°C',
             '°F',
             'RPM',
-            '%'
+            '%',
         ];
         if(units.includes(tokens[1])) {
             if(Utils.isNumeric(tokens[0]))
@@ -552,7 +553,7 @@ export default class GpuMonitor extends Monitor {
                     activity: { pipes: [] },
                     topProcesses: [],
                     sensors: { categories: [], list: [] },
-                    raw: gpuInfo
+                    raw: gpuInfo,
                 };
 
                 //Info
@@ -588,7 +589,7 @@ export default class GpuMonitor extends Monitor {
                         if(revisionID)
                             gpu.info.pipes.push({
                                 name: 'Revision ID',
-                                data: revisionID.toString()
+                                data: revisionID.toString(),
                             });
 
                         const vBios = gpuInfo.Info.VBIOS;
@@ -598,13 +599,13 @@ export default class GpuMonitor extends Monitor {
                             const pn = vBios.pn ?? '';
                             const verStr = vBios.ver_str ?? '';
 
-                            const data = [];
-                            if(name) data.push('name: ' + name);
-                            if(date) data.push('date: ' + date);
-                            if(pn) data.push('pn: ' + pn);
-                            if(verStr) data.push('ver: ' + verStr);
+                            const biosData = [];
+                            if(name) biosData.push('name: ' + name);
+                            if(date) biosData.push('date: ' + date);
+                            if(pn) biosData.push('pn: ' + pn);
+                            if(verStr) biosData.push('ver: ' + verStr);
 
-                            gpu.info.pipes.push({ name: 'VBIOS', data: data.join('\n') });
+                            gpu.info.pipes.push({ name: 'VBIOS', data: biosData.join('\n') });
                         }
 
                         const drmVersion = gpuInfo.Info.drm_version;
@@ -615,7 +616,7 @@ export default class GpuMonitor extends Monitor {
                             version.push(drmVersion.patchlevel ?? '');
                             gpu.info.pipes.push({
                                 name: 'DRM Version',
-                                data: version.join('.')
+                                data: version.join('.'),
                             });
                         }
 
@@ -623,7 +624,7 @@ export default class GpuMonitor extends Monitor {
                         if(l1CachePerCU)
                             gpu.info.pipes.push({
                                 name: 'L1 Cache per CU',
-                                data: l1CachePerCU.toString()
+                                data: l1CachePerCU.toString(),
                             });
 
                         const l2Cache = gpuInfo.Info['L2 Cache'];
@@ -638,28 +639,28 @@ export default class GpuMonitor extends Monitor {
                         if(renderBackend)
                             gpu.info.pipes.push({
                                 name: 'Render Backend',
-                                data: renderBackend.toString()
+                                data: renderBackend.toString(),
                             });
 
                         const shaderEngine = gpuInfo.Info['Shader Engine'];
                         if(shaderEngine)
                             gpu.info.pipes.push({
                                 name: 'Shader Engine',
-                                data: shaderEngine.toString()
+                                data: shaderEngine.toString(),
                             });
 
                         const resizableBar = gpuInfo.Info.ResizableBAR;
                         if(resizableBar)
                             gpu.info.pipes.push({
                                 name: 'Resizable BAR',
-                                data: resizableBar.toString()
+                                data: resizableBar.toString(),
                             });
 
                         const vramBitWidth = gpuInfo.Info['VRAM Bit width'];
                         if(vramBitWidth)
                             gpu.info.pipes.push({
                                 name: 'VRAM Bit width',
-                                data: vramBitWidth.toString()
+                                data: vramBitWidth.toString(),
                             });
 
                         const vramType = gpuInfo.Info['VRAM Type'];
@@ -667,15 +668,15 @@ export default class GpuMonitor extends Monitor {
 
                         const powerProfiles = gpuInfo.Info['Power Profiles'];
                         if(powerProfiles && powerProfiles.length > 0) {
-                            const data = powerProfiles.join(', ');
-                            gpu.info.pipes.push({ name: 'Power Profiles', data });
+                            const profileData = powerProfiles.join(', ');
+                            gpu.info.pipes.push({ name: 'Power Profiles', data: profileData });
                         }
 
                         const totalComputeUnit = gpuInfo.Info['Total Compute Unit'];
                         if(totalComputeUnit)
                             gpu.info.pipes.push({
                                 name: 'Total Compute Unit',
-                                data: totalComputeUnit.toString()
+                                data: totalComputeUnit.toString(),
                             });
 
                         const totalROP = gpuInfo.Info['Total ROP'];
@@ -686,7 +687,7 @@ export default class GpuMonitor extends Monitor {
                         if(gl1CachePerShaderArray)
                             gpu.info.pipes.push({
                                 name: 'GL1 Cache per Shader Array',
-                                data: gl1CachePerShaderArray.toString()
+                                data: gl1CachePerShaderArray.toString(),
                             });
 
                         const shaderArrayPerShaderEngine =
@@ -694,7 +695,7 @@ export default class GpuMonitor extends Monitor {
                         if(shaderArrayPerShaderEngine)
                             gpu.info.pipes.push({
                                 name: 'Shader Array per Shader Engine',
-                                data: shaderArrayPerShaderEngine.toString()
+                                data: shaderArrayPerShaderEngine.toString(),
                             });
 
                         const videoCaps = gpuInfo.Info['Video Caps'];
@@ -758,7 +759,7 @@ export default class GpuMonitor extends Monitor {
                                     name,
                                     percent: (used / total) * 100,
                                     used,
-                                    total
+                                    total,
                                 });
                         }
                     }
@@ -809,7 +810,7 @@ export default class GpuMonitor extends Monitor {
                             const topProcess = {
                                 name: process.name,
                                 pid: parseInt(pid),
-                                pipes: [] as any[]
+                                pipes: [] as any[],
                             };
 
                             for(const name in process.usage) {
@@ -840,7 +841,7 @@ export default class GpuMonitor extends Monitor {
                                 'Encode',
                                 'Decode',
                                 'DMA',
-                                'CPU'
+                                'CPU',
                             ];
                             topProcess.pipes.sort((a, b) => {
                                 let aIndex = defaultOrder.indexOf(a.name);
@@ -915,7 +916,7 @@ export default class GpuMonitor extends Monitor {
                     name,
                     value,
                     unit,
-                    priority
+                    priority,
                 }: { category: string } & GpuSensor) => {
                     const sensor = { name, value, unit, priority };
                     getOrAddCategory(category).sensors.push(sensor);
@@ -961,7 +962,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'PCIe Link Speed',
                                 value: `Gen${sensor.gen}x${sensor.width}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                     }
@@ -975,7 +976,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'GPU Clock Min',
                                 value: gpuClock.min,
                                 unit: 'MHz',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                         if(gpuClock.max != null) {
@@ -984,7 +985,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'GPU Clock Max',
                                 value: gpuClock.max,
                                 unit: 'MHz',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                     }
@@ -997,7 +998,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Memory Clock Min',
                                 value: memoryClock.min,
                                 unit: 'MHz',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                         if(memoryClock.max != null) {
@@ -1006,7 +1007,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Memory Clock Max',
                                 value: memoryClock.max,
                                 unit: 'MHz',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                     }
@@ -1023,7 +1024,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Min DPM Link',
                                 value: `Gen${pcieLink.min_dpm_link.gen}x${pcieLink.min_dpm_link.width}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                         if(
@@ -1036,7 +1037,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Max DPM Link',
                                 value: `Gen${pcieLink.max_dpm_link.gen}x${pcieLink.max_dpm_link.width}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                         if(
@@ -1049,7 +1050,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Max GPU Link',
                                 value: `Gen${pcieLink.max_gpu_link.gen}x${pcieLink.max_gpu_link.width}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                         if(
@@ -1062,7 +1063,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Max System Link',
                                 value: `Gen${pcieLink.max_system_link.gen}x${pcieLink.max_system_link.width}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                     }
@@ -1075,7 +1076,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Power Cap',
                                 value: powerCap.current,
                                 unit: 'W',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
 
@@ -1085,7 +1086,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Power Cap Min',
                                 value: powerCap.min,
                                 unit: 'W',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
 
@@ -1095,7 +1096,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Power Cap Max',
                                 value: powerCap.max,
                                 unit: 'W',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                     }
@@ -1158,7 +1159,7 @@ export default class GpuMonitor extends Monitor {
                     activity: { pipes: [] },
                     topProcesses: [],
                     sensors: { categories: [], list: [] },
-                    raw: gpuInfo
+                    raw: gpuInfo,
                 };
 
                 //Info
@@ -1173,7 +1174,7 @@ export default class GpuMonitor extends Monitor {
                     if(productName && productName.text)
                         gpu.info.pipes.push({
                             name: 'Product Name',
-                            data: productName.text
+                            data: productName.text,
                         });
 
                     const productBrand = GpuMonitor.nvidiaToGenericField(
@@ -1183,7 +1184,7 @@ export default class GpuMonitor extends Monitor {
                     if(productBrand && productBrand.text)
                         gpu.info.pipes.push({
                             name: 'Product Brand',
-                            data: productBrand.text
+                            data: productBrand.text,
                         });
 
                     const productArchitecture = GpuMonitor.nvidiaToGenericField(
@@ -1193,14 +1194,14 @@ export default class GpuMonitor extends Monitor {
                     if(productArchitecture && productArchitecture.text)
                         gpu.info.pipes.push({
                             name: 'Product Architecture',
-                            data: productArchitecture.text
+                            data: productArchitecture.text,
                         });
 
                     const displayMode = GpuMonitor.nvidiaToGenericField(gpuInfo.display_mode, true);
                     if(displayMode && displayMode.text)
                         gpu.info.pipes.push({
                             name: 'Display Mode',
-                            data: displayMode.text
+                            data: displayMode.text,
                         });
 
                     const displayActive = GpuMonitor.nvidiaToGenericField(
@@ -1210,7 +1211,7 @@ export default class GpuMonitor extends Monitor {
                     if(displayActive && displayActive.text)
                         gpu.info.pipes.push({
                             name: 'Display Active',
-                            data: displayActive.text
+                            data: displayActive.text,
                         });
 
                     const persistenceMode = GpuMonitor.nvidiaToGenericField(
@@ -1220,7 +1221,7 @@ export default class GpuMonitor extends Monitor {
                     if(persistenceMode && persistenceMode.text)
                         gpu.info.pipes.push({
                             name: 'Persistence Mode',
-                            data: persistenceMode.text
+                            data: persistenceMode.text,
                         });
 
                     const addressingMode = GpuMonitor.nvidiaToGenericField(
@@ -1230,14 +1231,14 @@ export default class GpuMonitor extends Monitor {
                     if(addressingMode && addressingMode.text)
                         gpu.info.pipes.push({
                             name: 'Addressing Mode',
-                            data: addressingMode.text
+                            data: addressingMode.text,
                         });
 
                     const migDevices = GpuMonitor.nvidiaToGenericField(gpuInfo.mig_devices, true);
                     if(migDevices && migDevices.text)
                         gpu.info.pipes.push({
                             name: 'Mig Devices',
-                            data: migDevices.text
+                            data: migDevices.text,
                         });
 
                     const accountingMode = GpuMonitor.nvidiaToGenericField(
@@ -1247,7 +1248,7 @@ export default class GpuMonitor extends Monitor {
                     if(accountingMode && accountingMode.text)
                         gpu.info.pipes.push({
                             name: 'Accounting Mode',
-                            data: accountingMode.text
+                            data: accountingMode.text,
                         });
 
                     const accountingModeBufferSize = GpuMonitor.nvidiaToGenericField(
@@ -1257,7 +1258,7 @@ export default class GpuMonitor extends Monitor {
                     if(accountingModeBufferSize && accountingModeBufferSize.text)
                         gpu.info.pipes.push({
                             name: 'Accounting Mode Buffer Size',
-                            data: accountingModeBufferSize.text
+                            data: accountingModeBufferSize.text,
                         });
 
                     const serial = GpuMonitor.nvidiaToGenericField(gpuInfo.serial, true);
@@ -1271,7 +1272,7 @@ export default class GpuMonitor extends Monitor {
                     if(minorNumber && minorNumber.text)
                         gpu.info.pipes.push({
                             name: 'Minor Number',
-                            data: minorNumber.text
+                            data: minorNumber.text,
                         });
 
                     const vbiosVersion = GpuMonitor.nvidiaToGenericField(
@@ -1281,7 +1282,7 @@ export default class GpuMonitor extends Monitor {
                     if(vbiosVersion && vbiosVersion.text)
                         gpu.info.pipes.push({
                             name: 'VBIOS Version',
-                            data: vbiosVersion.text
+                            data: vbiosVersion.text,
                         });
 
                     const multigpuBoard = GpuMonitor.nvidiaToGenericField(
@@ -1291,7 +1292,7 @@ export default class GpuMonitor extends Monitor {
                     if(multigpuBoard && multigpuBoard.text)
                         gpu.info.pipes.push({
                             name: 'Multigpu Board',
-                            data: multigpuBoard.text
+                            data: multigpuBoard.text,
                         });
 
                     const boardId = GpuMonitor.nvidiaToGenericField(gpuInfo.board_id, true);
@@ -1305,7 +1306,7 @@ export default class GpuMonitor extends Monitor {
                     if(boardPartNumber && boardPartNumber.text)
                         gpu.info.pipes.push({
                             name: 'Board Part Number',
-                            data: boardPartNumber.text
+                            data: boardPartNumber.text,
                         });
 
                     const gpuPartNumber = GpuMonitor.nvidiaToGenericField(
@@ -1315,7 +1316,7 @@ export default class GpuMonitor extends Monitor {
                     if(gpuPartNumber && gpuPartNumber.text)
                         gpu.info.pipes.push({
                             name: 'GPU Part Number',
-                            data: gpuPartNumber.text
+                            data: gpuPartNumber.text,
                         });
 
                     const gpuFruPartNumber = GpuMonitor.nvidiaToGenericField(
@@ -1325,7 +1326,7 @@ export default class GpuMonitor extends Monitor {
                     if(gpuFruPartNumber && gpuFruPartNumber.text)
                         gpu.info.pipes.push({
                             name: 'GPU FRU Part Number',
-                            data: gpuFruPartNumber.text
+                            data: gpuFruPartNumber.text,
                         });
 
                     const gpuModuleId = GpuMonitor.nvidiaToGenericField(
@@ -1335,7 +1336,7 @@ export default class GpuMonitor extends Monitor {
                     if(gpuModuleId && gpuModuleId.text)
                         gpu.info.pipes.push({
                             name: 'GPU Module ID',
-                            data: gpuModuleId.text
+                            data: gpuModuleId.text,
                         });
 
                     if(gpuInfo.inforom_version) {
@@ -1358,13 +1359,13 @@ export default class GpuMonitor extends Monitor {
 
                         if(imgVersion || oemObject || eccObject || pwrObject) {
                             const name = 'Inforom Version';
-                            const data = [];
-                            if(imgVersion && imgVersion.text) data.push(`Img: ${imgVersion.text}`);
-                            if(oemObject && oemObject.text) data.push(`OEM: ${oemObject.text}`);
-                            if(eccObject && eccObject.text) data.push(`ECC: ${eccObject.text}`);
-                            if(pwrObject && pwrObject.text) data.push(`PWR: ${pwrObject.text}`);
-
-                            gpu.info.pipes.push({ name, data: data.join('\n') });
+                            const romData = [];
+                            if(imgVersion && imgVersion.text)
+                                romData.push(`Img: ${imgVersion.text}`);
+                            if(oemObject && oemObject.text) romData.push(`OEM: ${oemObject.text}`);
+                            if(eccObject && eccObject.text) romData.push(`ECC: ${eccObject.text}`);
+                            if(pwrObject && pwrObject.text) romData.push(`PWR: ${pwrObject.text}`);
+                            gpu.info.pipes.push({ name, data: romData.join('\n') });
                         }
 
                         const gspFirmwareVersion = GpuMonitor.nvidiaToGenericField(
@@ -1374,7 +1375,7 @@ export default class GpuMonitor extends Monitor {
                         if(gspFirmwareVersion && gspFirmwareVersion.text)
                             gpu.info.pipes.push({
                                 name: 'GSP Firmware Version',
-                                data: gspFirmwareVersion.text
+                                data: gspFirmwareVersion.text,
                             });
 
                         if(gpuInfo.gpu_virtualization_mode) {
@@ -1390,12 +1391,12 @@ export default class GpuMonitor extends Monitor {
                             if(virtualizationMode && virtualizationMode.text)
                                 gpu.info.pipes.push({
                                     name: 'Virtualization Mode',
-                                    data: virtualizationMode.text
+                                    data: virtualizationMode.text,
                                 });
                             if(hostVgpuMode && hostVgpuMode.text)
                                 gpu.info.pipes.push({
                                     name: 'Host VGPU Mode',
-                                    data: hostVgpuMode.text
+                                    data: hostVgpuMode.text,
                                 });
                         }
 
@@ -1406,7 +1407,7 @@ export default class GpuMonitor extends Monitor {
                         if(computeMode && computeMode.text)
                             gpu.info.pipes.push({
                                 name: 'Compute Mode',
-                                data: computeMode.text
+                                data: computeMode.text,
                             });
                     }
                 }
@@ -1427,7 +1428,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'FB Memory Usage',
                             percent: gpu.vram.percent,
                             used: gpu.vram.used,
-                            total: gpu.vram.total
+                            total: gpu.vram.total,
                         });
                     }
                 }
@@ -1453,7 +1454,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Bar1 Memory Usage',
                             percent: (used / total) * 100,
                             used,
-                            total
+                            total,
                         });
                 }
 
@@ -1478,7 +1479,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'CC Protected Memory Usage',
                             percent: (used / total) * 100,
                             used,
-                            total
+                            total,
                         });
                 }
 
@@ -1517,9 +1518,9 @@ export default class GpuMonitor extends Monitor {
                                 {
                                     name: 'Used Memory',
                                     value: Utils.convertToBytes(usedMemory.value, usedMemory.unit),
-                                    unit: 'B'
-                                }
-                            ]
+                                    unit: 'B',
+                                },
+                            ],
                         };
 
                         gpu.topProcesses.push(topProcess);
@@ -1571,7 +1572,7 @@ export default class GpuMonitor extends Monitor {
                     name,
                     value,
                     unit,
-                    priority
+                    priority,
                 }: { category: string } & GpuSensor) => {
                     const sensor = { name, value, unit, priority };
                     getOrAddCategory(category).sensors.push(sensor);
@@ -1592,7 +1593,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'PCIe Max Link',
                                 value: `Gen${maxLinkGen.value}x${maxLinkWidth.value}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
 
@@ -1614,7 +1615,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'PCIe Current Link',
                                 value: `Gen${currentLinkGen.value}x${currentLinkWidth.value}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
 
@@ -1627,7 +1628,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Device Current Link Gen',
                                 value: `Gen${deviceCurrentLinkGen.value}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
 
@@ -1640,7 +1641,7 @@ export default class GpuMonitor extends Monitor {
                                 name: 'Device Current Link Width',
                                 value: `x${deviceCurrentLinkWidth.value}`,
                                 unit: '',
-                                priority: GpuSensorPriority.NONE
+                                priority: GpuSensorPriority.NONE,
                             });
                         }
                     }
@@ -1652,7 +1653,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'TX Util',
                             value: txUtil.value,
                             unit: txUtil.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1663,7 +1664,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'RX Util',
                             value: rxUtil.value,
                             unit: rxUtil.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
                 }
@@ -1675,7 +1676,7 @@ export default class GpuMonitor extends Monitor {
                         name: 'Fan',
                         value: fanSpeed.value,
                         unit: fanSpeed.unit,
-                        priority: GpuSensorPriority.MEDIUM
+                        priority: GpuSensorPriority.MEDIUM,
                     });
                 }
 
@@ -1687,7 +1688,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'GPU Temp',
                             value: gpuTemp.value,
                             unit: gpuTemp.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1700,7 +1701,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'GPU Temp Max',
                             value: gpuTempMax.value,
                             unit: gpuTempMax.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1713,7 +1714,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'GPU Temp Throttle',
                             value: gpuTempSlow.value,
                             unit: gpuTempSlow.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1726,7 +1727,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'GPU Target Temp',
                             value: gpuTargetTemp.value,
                             unit: gpuTargetTemp.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1739,7 +1740,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Memory Temp',
                             value: memoryTemp.value,
                             unit: memoryTemp.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1752,7 +1753,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Memory Temp Max',
                             value: gpuTempMaxMem.value,
                             unit: gpuTempMaxMem.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
                 }
@@ -1768,7 +1769,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Power State',
                             value: powerState.text,
                             unit: '',
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1781,7 +1782,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Power Draw',
                             value: powerDraw.value,
                             unit: powerDraw.unit,
-                            priority: GpuSensorPriority.HIGH
+                            priority: GpuSensorPriority.HIGH,
                         });
                     }
 
@@ -1798,7 +1799,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Current Power Limit',
                             value: currentPowerLimit.value,
                             unit: currentPowerLimit.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1815,7 +1816,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Requested Power Limit',
                             value: requestedPowerLimit.value,
                             unit: requestedPowerLimit.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1832,7 +1833,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Default Power Limit',
                             value: defaultPowerLimit.value,
                             unit: defaultPowerLimit.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1845,7 +1846,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Min Power Limit',
                             value: minPowerLimit.value,
                             unit: minPowerLimit.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1858,7 +1859,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Max Power Limit',
                             value: maxPowerLimit.value,
                             unit: maxPowerLimit.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
                 }
@@ -1871,7 +1872,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'GPU Clock',
                             value: gpuClock.value,
                             unit: gpuClock.unit,
-                            priority: GpuSensorPriority.MAX
+                            priority: GpuSensorPriority.MAX,
                         });
                     }
 
@@ -1884,7 +1885,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'GPU Max Clock',
                             value: gpuMaxClock.value,
                             unit: gpuMaxClock.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1895,7 +1896,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'SM Clock',
                             value: smClock.value,
                             unit: smClock.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1908,7 +1909,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'SM Max Clock',
                             value: smMaxClock.value,
                             unit: smMaxClock.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1919,7 +1920,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Memory Clock',
                             value: memoryClock.value,
                             unit: memoryClock.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1932,7 +1933,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Memory Max Clock',
                             value: memoryMaxClock.value,
                             unit: memoryMaxClock.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1943,7 +1944,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Video Clock',
                             value: videoClock.value,
                             unit: videoClock.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
 
@@ -1956,7 +1957,7 @@ export default class GpuMonitor extends Monitor {
                             name: 'Video Max Clock',
                             value: videoMaxClock.value,
                             unit: videoMaxClock.unit,
-                            priority: GpuSensorPriority.NONE
+                            priority: GpuSensorPriority.NONE,
                         });
                     }
                 }

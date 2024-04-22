@@ -46,7 +46,7 @@ export default GObject.registerClass(
                 accessible_role: Atk.Role.MENU,
                 layoutManager: new Clutter.BinLayout(),
                 x_expand: true,
-                y_expand: true
+                y_expand: true,
             });
             this.name = name;
 
@@ -57,7 +57,7 @@ export default GObject.registerClass(
                 y_expand: true,
                 x_align: Clutter.ActorAlign.START,
                 y_align: Clutter.ActorAlign.CENTER,
-                style_class: 'astra-monitor-header-box'
+                style_class: 'astra-monitor-header-box',
             });
             this.add_child(this.box);
 

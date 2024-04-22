@@ -62,7 +62,7 @@ export default GObject.registerClass(
                 vertical: false,
                 x_expand: true,
                 y_expand: true,
-                style: this.computeStyle()
+                style: this.computeStyle(),
             });
 
             this.add_child(this.box);
@@ -183,7 +183,7 @@ export default GObject.registerClass(
                 // @ts-expect-error _centerBox not in types
                 center: Main.panel._centerBox,
                 // @ts-expect-error _rightBox not in types
-                right: Main.panel._rightBox
+                right: Main.panel._rightBox,
             };
             // @ts-expect-error _rightBox not in types
             const boxContainer = boxes[panelBox] || Main.panel._rightBox;

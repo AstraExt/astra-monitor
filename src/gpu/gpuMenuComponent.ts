@@ -154,7 +154,7 @@ export default class GpuMenuComponent {
             this.noGPULabel = new St.Label({
                 text: _('No GPU found'),
                 style_class: 'astra-monitor-menu-label-warning',
-                style: 'font-style:italic;'
+                style: 'font-style:italic;',
             });
             Config.connect(this.noGPULabel, 'changed::gpu-main', () => {
                 const gpu = Utils.gpuMonitor.getSelectedGpu();
@@ -177,7 +177,7 @@ export default class GpuMenuComponent {
         const section: Section = {
             info: gpuInfo,
             vram: {},
-            activity: {}
+            activity: {},
         };
 
         const defaultStyle = 'max-width: 150px;';
@@ -188,10 +188,10 @@ export default class GpuMenuComponent {
             reactive: true,
             track_hover: true,
             style: defaultStyle,
-            x_expand: true
+            x_expand: true,
         });
-        const label = new St.Label({ text: Utils.getGPUModelName(gpuInfo) });
-        infoButton.set_child(label);
+        const infoLabel = new St.Label({ text: Utils.getGPUModelName(gpuInfo) });
+        infoButton.set_child(infoLabel);
 
         const infoPopup = this.createInfoPopup(infoButton, gpuInfo);
         section.infoPopup = infoPopup;
@@ -220,7 +220,7 @@ export default class GpuMenuComponent {
                 reactive: true,
                 track_hover: true,
                 style: defaultStyle,
-                x_expand: true
+                x_expand: true,
             });
 
             const activityGrid = new Grid({ numCols: 1 });
@@ -242,14 +242,14 @@ export default class GpuMenuComponent {
 
             const activityTitle = new St.Label({
                 text: _('Activity'),
-                style_class: 'astra-monitor-menu-header-small-centered'
+                style_class: 'astra-monitor-menu-header-small-centered',
             });
             activityGrid.addToGrid(activityTitle);
 
             // GFX Activity Bar
             {
                 const barGrid = new Grid({
-                    styleClass: 'astra-monitor-menu-subgrid'
+                    styleClass: 'astra-monitor-menu-subgrid',
                 });
 
                 const bar = new GpuActivityBars({
@@ -259,13 +259,13 @@ export default class GpuMenuComponent {
                     mini: false,
                     layout: 'horizontal',
                     x_align: Clutter.ActorAlign.START,
-                    style: 'margin-bottom:0;margin-right:0;border:solid 1px #555;'
+                    style: 'margin-bottom:0;margin-right:0;border:solid 1px #555;',
                 });
                 barGrid.addToGrid(bar);
 
                 const barUsagePercLabel = new St.Label({
                     text: '0%',
-                    style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;'
+                    style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;',
                 });
                 barGrid.addToGrid(barUsagePercLabel);
 
@@ -280,7 +280,7 @@ export default class GpuMenuComponent {
                 reactive: true,
                 track_hover: true,
                 style: defaultStyle,
-                x_expand: true
+                x_expand: true,
             });
 
             const vramGrid = new Grid({ numCols: 1 });
@@ -302,14 +302,14 @@ export default class GpuMenuComponent {
 
             const vramTitle = new St.Label({
                 text: _('VRAM'),
-                style_class: 'astra-monitor-menu-header-small-centered'
+                style_class: 'astra-monitor-menu-header-small-centered',
             });
             vramGrid.addToGrid(vramTitle);
 
             // Bar
             {
                 const barGrid = new Grid({
-                    styleClass: 'astra-monitor-menu-subgrid'
+                    styleClass: 'astra-monitor-menu-subgrid',
                 });
 
                 const bar = new GpuMemoryBars({
@@ -319,13 +319,13 @@ export default class GpuMenuComponent {
                     mini: false,
                     layout: 'horizontal',
                     x_align: Clutter.ActorAlign.START,
-                    style: 'margin-bottom:0;margin-right:0;border:solid 1px #555;'
+                    style: 'margin-bottom:0;margin-right:0;border:solid 1px #555;',
                 });
                 barGrid.addToGrid(bar);
 
                 const barUsagePercLabel = new St.Label({
                     text: '0%',
-                    style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;'
+                    style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;',
                 });
                 barGrid.addToGrid(barUsagePercLabel);
 
@@ -339,31 +339,31 @@ export default class GpuMenuComponent {
             {
                 const vramContainer = new St.Widget({
                     layout_manager: new Clutter.GridLayout({
-                        orientation: Clutter.Orientation.HORIZONTAL
+                        orientation: Clutter.Orientation.HORIZONTAL,
                     }),
                     x_expand: true,
-                    style: 'margin-right:0;'
+                    style: 'margin-right:0;',
                 });
 
                 const usedContainer = new St.Widget({
                     layout_manager: new Clutter.GridLayout({
-                        orientation: Clutter.Orientation.HORIZONTAL
+                        orientation: Clutter.Orientation.HORIZONTAL,
                     }),
                     x_expand: true,
-                    style: 'margin-left:0;margin-right:0;'
+                    style: 'margin-left:0;margin-right:0;',
                 });
 
                 const usedLabel = new St.Label({
                     text: _('Used:'),
                     style_class: 'astra-monitor-menu-label',
-                    style: 'padding-right:0.15em;'
+                    style: 'padding-right:0.15em;',
                 });
                 usedContainer.add_child(usedLabel);
 
                 const usedValueLabel = new St.Label({
                     text: '-',
                     x_expand: true,
-                    style_class: 'astra-monitor-menu-key-mid'
+                    style_class: 'astra-monitor-menu-key-mid',
                 });
                 usedContainer.add_child(usedValueLabel);
                 usedContainer.set_width(100);
@@ -372,23 +372,23 @@ export default class GpuMenuComponent {
 
                 const totalContainer = new St.Widget({
                     layout_manager: new Clutter.GridLayout({
-                        orientation: Clutter.Orientation.HORIZONTAL
+                        orientation: Clutter.Orientation.HORIZONTAL,
                     }),
                     x_expand: true,
-                    style: 'margin-left:0;margin-right:0;'
+                    style: 'margin-left:0;margin-right:0;',
                 });
 
                 const totalLabel = new St.Label({
                     text: _('Total:'),
                     style_class: 'astra-monitor-menu-label',
-                    style: 'padding-right:0.15em;'
+                    style: 'padding-right:0.15em;',
                 });
                 totalContainer.add_child(totalLabel);
 
                 const totalValueLabel = new St.Label({
                     text: '-',
                     x_expand: true,
-                    style_class: 'astra-monitor-menu-key-mid'
+                    style_class: 'astra-monitor-menu-key-mid',
                 });
                 totalContainer.add_child(totalValueLabel);
                 totalContainer.set_width(100);
@@ -406,8 +406,14 @@ export default class GpuMenuComponent {
                 reactive: true,
                 track_hover: true,
                 style: defaultStyle,
-                x_expand: true
+                x_expand: true,
             });
+
+            const topProcessesGrid = new Grid({ numCols: 1 });
+            topProcessesButton.set_child(topProcessesGrid);
+
+            const topProcessesPopup = this.createTopProcessesPopup(topProcessesButton, gpuInfo);
+            section.topProcessesPopup = topProcessesPopup;
 
             topProcessesButton.connect('enter-event', () => {
                 topProcessesButton.style = defaultStyle + this.parent.selectionStyle;
@@ -419,15 +425,9 @@ export default class GpuMenuComponent {
                 if(topProcessesPopup) topProcessesPopup.close(true);
             });
 
-            const topProcessesGrid = new Grid({ numCols: 1 });
-            topProcessesButton.set_child(topProcessesGrid);
-
-            const topProcessesPopup = this.createTopProcessesPopup(topProcessesButton, gpuInfo);
-            section.topProcessesPopup = topProcessesPopup;
-
             const topProcessesTitle = new St.Label({
                 text: _('Top Processes'),
-                style_class: 'astra-monitor-menu-header-small-centered'
+                style_class: 'astra-monitor-menu-header-small-centered',
             });
             topProcessesGrid.addToGrid(topProcessesTitle);
 
@@ -435,7 +435,7 @@ export default class GpuMenuComponent {
             {
                 const listGrid = new Grid({
                     numCols: 3,
-                    styleClass: 'astra-monitor-menu-subgrid'
+                    styleClass: 'astra-monitor-menu-subgrid',
                 });
 
                 this.topProcesses = [];
@@ -445,19 +445,19 @@ export default class GpuMenuComponent {
                     const label = new St.Label({
                         text: '-',
                         style_class: 'astra-monitor-menu-cmd-name',
-                        x_expand: true
+                        x_expand: true,
                     });
                     listGrid.addToGrid(label);
                     const value1 = new St.Label({
                         text: '-',
                         style_class: 'astra-monitor-menu-cmd-usage',
-                        x_expand: true
+                        x_expand: true,
                     });
                     listGrid.addToGrid(value1);
                     const value2 = new St.Label({
                         text: '-',
                         style_class: 'astra-monitor-menu-cmd-usage',
-                        x_expand: true
+                        x_expand: true,
                     });
                     listGrid.addToGrid(value2);
 
@@ -472,7 +472,7 @@ export default class GpuMenuComponent {
                 reactive: true,
                 track_hover: true,
                 style: defaultStyle,
-                x_expand: true
+                x_expand: true,
             });
 
             const sensorsPopup = this.createSensorsPopup(sensorsButton, gpuInfo);
@@ -493,7 +493,7 @@ export default class GpuMenuComponent {
 
             const sensorsTitle = new St.Label({
                 text: _('Sensors'),
-                style_class: 'astra-monitor-menu-header-small-centered'
+                style_class: 'astra-monitor-menu-header-small-centered',
             });
             sensorsGrid.addToGrid(sensorsTitle);
 
@@ -501,7 +501,7 @@ export default class GpuMenuComponent {
             {
                 const listGrid = new Grid({
                     numCols: 2,
-                    styleClass: 'astra-monitor-menu-subgrid'
+                    styleClass: 'astra-monitor-menu-subgrid',
                 });
 
                 this.mainSensors = [];
@@ -511,13 +511,13 @@ export default class GpuMenuComponent {
                     const label = new St.Label({
                         text: '-',
                         style_class: 'astra-monitor-menu-cmd-name',
-                        x_expand: true
+                        x_expand: true,
                     });
                     listGrid.addToGrid(label);
                     const value = new St.Label({
                         text: '-',
                         style_class: 'astra-monitor-menu-cmd-usage',
-                        x_expand: true
+                        x_expand: true,
                     });
                     listGrid.addToGrid(value);
 
@@ -531,14 +531,12 @@ export default class GpuMenuComponent {
         this.container.addToGrid(grid, 2);
 
         const updateSelectedGPU = () => {
-            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-
-            if(gpuInfo === selectedGpu) {
-                label.style_class = 'astra-monitor-menu-label';
+            if(gpuInfo === Utils.gpuMonitor.getSelectedGpu()) {
+                infoLabel.style_class = 'astra-monitor-menu-label';
             } else {
                 if(Utils.themeStyle === 'light')
-                    label.style_class = 'astra-monitor-menu-unmonitored-light';
-                else label.style_class = 'astra-monitor-menu-unmonitored';
+                    infoLabel.style_class = 'astra-monitor-menu-unmonitored-light';
+                else infoLabel.style_class = 'astra-monitor-menu-unmonitored';
             }
         };
         updateSelectedGPU();
@@ -556,7 +554,7 @@ export default class GpuMenuComponent {
         popup.addToMenu(
             new St.Label({
                 text: GPUModelName,
-                style_class: 'astra-monitor-menu-sub-header'
+                style_class: 'astra-monitor-menu-sub-header',
             }),
             2
         );
@@ -564,7 +562,7 @@ export default class GpuMenuComponent {
         popup.addToMenu(
             new St.Label({
                 text: _('Name'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -586,21 +584,21 @@ export default class GpuMenuComponent {
                 '.',
                 '?',
                 '!',
-                ' '
+                ' ',
             ];
             const lines = Utils.splitStringByLength(vendor, 50, splitCharacters, 15);
             vendor = lines.join('\n');
         }
         popup.addToMenu(
             new St.Label({
-                text: vendor
+                text: vendor,
             })
         );
 
         popup.addToMenu(
             new St.Label({
                 text: _('Subsystem'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -622,14 +620,14 @@ export default class GpuMenuComponent {
                 '.',
                 '?',
                 '!',
-                ' '
+                ' ',
             ];
             const lines = Utils.splitStringByLength(model, 50, splitCharacters, 15);
             model = lines.join('\n');
         }
         popup.addToMenu(
             new St.Label({
-                text: model
+                text: model,
             })
         );
 
@@ -639,12 +637,12 @@ export default class GpuMenuComponent {
                 popup.addToMenu(
                     new St.Label({
                         text: _('Vendor'),
-                        style_class: 'astra-monitor-menu-sub-key'
+                        style_class: 'astra-monitor-menu-sub-key',
                     })
                 );
                 popup.addToMenu(
                     new St.Label({
-                        text: vendorNames.join(' / ')
+                        text: vendorNames.join(' / '),
                     })
                 );
             }
@@ -652,12 +650,12 @@ export default class GpuMenuComponent {
             popup.addToMenu(
                 new St.Label({
                     text: _('Vendor ID'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
             popup.addToMenu(
                 new St.Label({
-                    text: gpuInfo.vendorId
+                    text: gpuInfo.vendorId,
                 })
             );
         }
@@ -666,12 +664,12 @@ export default class GpuMenuComponent {
             popup.addToMenu(
                 new St.Label({
                     text: _('Product ID'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
             popup.addToMenu(
                 new St.Label({
-                    text: gpuInfo.productId
+                    text: gpuInfo.productId,
                 })
             );
         }
@@ -679,7 +677,7 @@ export default class GpuMenuComponent {
         popup.addToMenu(
             new St.Label({
                 text: _('PCI'),
-                style_class: 'astra-monitor-menu-sub-key'
+                style_class: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -698,12 +696,12 @@ export default class GpuMenuComponent {
             popup.addToMenu(
                 new St.Label({
                     text: _('Drivers'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
             popup.addToMenu(
                 new St.Label({
-                    text: gpuInfo.drivers.join(', ')
+                    text: gpuInfo.drivers.join(', '),
                 })
             );
         }
@@ -712,12 +710,12 @@ export default class GpuMenuComponent {
             popup.addToMenu(
                 new St.Label({
                     text: _('Modules'),
-                    style_class: 'astra-monitor-menu-sub-key'
+                    style_class: 'astra-monitor-menu-sub-key',
                 })
             );
             popup.addToMenu(
                 new St.Label({
-                    text: gpuInfo.modules.join(', ')
+                    text: gpuInfo.modules.join(', '),
                 })
             );
         }
@@ -729,7 +727,7 @@ export default class GpuMenuComponent {
             const keyLabel = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-sub-key',
-                visible: false
+                visible: false,
             });
 
             keyLables.push(keyLabel);
@@ -737,7 +735,7 @@ export default class GpuMenuComponent {
 
             const valueLabel = new St.Label({
                 text: '',
-                visible: false
+                visible: false,
             });
             valueLabels.push(valueLabel);
             popup.addToMenu(valueLabel);
@@ -794,12 +792,12 @@ export default class GpuMenuComponent {
         for(let i = 0; i < 20; i++) {
             const title = new St.Label({
                 text: 'Test',
-                style_class: 'astra-monitor-menu-header-small'
+                style_class: 'astra-monitor-menu-header-small',
             });
             popup.addToMenu(title, 2);
 
             const grid = new Grid({
-                styleClass: 'astra-monitor-menu-subgrid'
+                styleClass: 'astra-monitor-menu-subgrid',
             });
 
             const bar = new GpuActivityBars({
@@ -809,13 +807,13 @@ export default class GpuMenuComponent {
                 mini: false,
                 layout: 'horizontal',
                 x_align: Clutter.ActorAlign.START,
-                style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
+                style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;',
             });
             grid.addToGrid(bar);
 
             const barLabel = new St.Label({
                 text: '-%',
-                style: 'width:2.7em;font-size:0.8em;text-align:right;'
+                style: 'width:2.7em;font-size:0.8em;text-align:right;',
             });
             grid.addToGrid(barLabel);
             popup.addToMenu(grid, 2);
@@ -850,12 +848,12 @@ export default class GpuMenuComponent {
         for(let i = 0; i < 10; i++) {
             const title = new St.Label({
                 text: 'Test',
-                style_class: 'astra-monitor-menu-header-small'
+                style_class: 'astra-monitor-menu-header-small',
             });
             popup.addToMenu(title, 2);
 
             const grid = new Grid({
-                styleClass: 'astra-monitor-menu-subgrid'
+                styleClass: 'astra-monitor-menu-subgrid',
             });
 
             const bar = new GpuActivityBars({
@@ -865,43 +863,43 @@ export default class GpuMenuComponent {
                 mini: false,
                 layout: 'horizontal',
                 x_align: Clutter.ActorAlign.START,
-                style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;'
+                style: 'margin-left:0.3em;margin-bottom:0;margin-right:0;border:solid 1px #555;',
             });
             grid.addToGrid(bar);
 
             const barLabel = new St.Label({
                 text: '-%',
-                style: 'width:2.7em;font-size:0.8em;text-align:right;'
+                style: 'width:2.7em;font-size:0.8em;text-align:right;',
             });
             grid.addToGrid(barLabel);
 
             const footerContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL
+                    orientation: Clutter.Orientation.HORIZONTAL,
                 }),
                 x_expand: true,
-                style: 'margin-left:0.15em;margin-right:0;'
+                style: 'margin-left:0.15em;margin-right:0;',
             });
 
             const usedContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL
+                    orientation: Clutter.Orientation.HORIZONTAL,
                 }),
                 x_expand: true,
-                style: 'margin-left:0;margin-right:0;'
+                style: 'margin-left:0;margin-right:0;',
             });
 
             const usedLabel = new St.Label({
                 text: _('Used:'),
                 style_class: 'astra-monitor-menu-label',
-                style: 'padding-right:0.15em;'
+                style: 'padding-right:0.15em;',
             });
             usedContainer.add_child(usedLabel);
 
             const usedValue = new St.Label({
                 text: '-',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key-mid'
+                style_class: 'astra-monitor-menu-key-mid',
             });
             usedContainer.add_child(usedValue);
             usedContainer.set_width(100);
@@ -910,23 +908,23 @@ export default class GpuMenuComponent {
 
             const totalContainer = new St.Widget({
                 layout_manager: new Clutter.GridLayout({
-                    orientation: Clutter.Orientation.HORIZONTAL
+                    orientation: Clutter.Orientation.HORIZONTAL,
                 }),
                 x_expand: true,
-                style: 'margin-left:0;margin-right:0;'
+                style: 'margin-left:0;margin-right:0;',
             });
 
             const totalLabel = new St.Label({
                 text: _('Total:'),
                 style_class: 'astra-monitor-menu-label',
-                style: 'padding-right:0.15em;'
+                style: 'padding-right:0.15em;',
             });
             totalContainer.add_child(totalLabel);
 
             const totalValue = new St.Label({
                 text: '-',
                 x_expand: true,
-                style_class: 'astra-monitor-menu-key-mid'
+                style_class: 'astra-monitor-menu-key-mid',
             });
             totalContainer.add_child(totalValue);
             totalContainer.set_width(100);
@@ -974,7 +972,7 @@ export default class GpuMenuComponent {
             x_expand: true,
             x_align: Clutter.ActorAlign.START,
             numCols: numValues,
-            styleClass: 'astra-monitor-menu-subgrid'
+            styleClass: 'astra-monitor-menu-subgrid',
         });
 
         // Headers
@@ -985,7 +983,7 @@ export default class GpuMenuComponent {
             const header = new St.Label({
                 text: text,
                 style_class: 'astra-monitor-menu-header-small-centered',
-                style: style
+                style: style,
             });
             grid.addToGrid(header);
             popup.headers.push(header);
@@ -994,16 +992,16 @@ export default class GpuMenuComponent {
         // Processes
         for(let i = 0; i < 10; i++) {
             const values = [];
-            for(let i = 0; i < numValues; i++) {
+            for(let n = 0; n < numValues; n++) {
                 const style =
-                    i === 0
+                    n === 0
                         ? 'astra-monitor-menu-cmd-name'
                         : 'astra-monitor-menu-cmd-usage-centered';
                 const lbl = new St.Label({
                     text: '-',
                     style_class: style,
                     x_expand: true,
-                    y_align: Clutter.ActorAlign.CENTER
+                    y_align: Clutter.ActorAlign.CENTER,
                 });
                 grid.addToGrid(lbl);
                 values.push(lbl);
@@ -1073,14 +1071,14 @@ export default class GpuMenuComponent {
             numCols: 3,
             x_expand: true,
             x_align: Clutter.ActorAlign.START,
-            styleClass: 'astra-monitor-menu-subgrid'
+            styleClass: 'astra-monitor-menu-subgrid',
         });
 
         for(let i = 0; i < 6; i++) {
             const categoryLabel = new St.Label({
                 text: '',
                 style_class: 'astra-monitor-menu-sensors-category',
-                x_expand: true
+                x_expand: true,
             });
             if(i > 0) grid.newLine();
             grid.addToGrid(categoryLabel, 3);
@@ -1090,7 +1088,7 @@ export default class GpuMenuComponent {
                 //Icon
                 const icon = new St.Icon({
                     style_class: 'astra-monitor-menu-sensors-icon',
-                    content_gravity: Clutter.ContentGravity.CENTER
+                    content_gravity: Clutter.ContentGravity.CENTER,
                 });
                 grid.addToGrid(icon);
 
@@ -1098,7 +1096,7 @@ export default class GpuMenuComponent {
                 const label = new St.Label({
                     text: '',
                     style_class: 'astra-monitor-menu-sensors-label',
-                    x_expand: true
+                    x_expand: true,
                 });
                 grid.addToGrid(label);
 
@@ -1106,7 +1104,7 @@ export default class GpuMenuComponent {
                 const value = new St.Label({
                     text: '-',
                     style_class: 'astra-monitor-menu-sensors-key',
-                    x_expand: true
+                    x_expand: true,
                 });
                 grid.addToGrid(value);
                 values.push({ icon, label, value });
@@ -1149,7 +1147,7 @@ export default class GpuMenuComponent {
 
                         let value = sensorData.value;
                         if(
-                            unit == '°C' &&
+                            unit === '°C' &&
                             typeof value === 'number' &&
                             Config.get_string('sensors-temperature-unit') === 'fahrenheit'
                         ) {
@@ -1286,7 +1284,7 @@ export default class GpuMenuComponent {
 
             let value = sensorData.value;
             if(
-                unit == '°C' &&
+                unit === '°C' &&
                 typeof value === 'number' &&
                 Config.get_string('sensors-temperature-unit') === 'fahrenheit'
             ) {

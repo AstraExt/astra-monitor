@@ -45,12 +45,12 @@ export default GObject.registerClass(
 
             this.colors = [
                 Config.get_string('memory-header-bars-color1') ?? 'rgba(29,172,214,1.0)',
-                Config.get_string('memory-header-bars-color2') ?? 'rgba(29,172,214,0.3)'
+                Config.get_string('memory-header-bars-color2') ?? 'rgba(29,172,214,0.3)',
             ];
         }
 
         setUsage(usage: MemoryUsage[]) {
-            if(!usage || !Array.isArray(usage) || usage.length == 0) {
+            if(!usage || !Array.isArray(usage) || usage.length === 0) {
                 this.updateBars([]);
                 return;
             }
@@ -64,7 +64,7 @@ export default GObject.registerClass(
 
                     values.push([
                         { color: 0, value: used },
-                        { color: 1, value: allocated }
+                        { color: 1, value: allocated },
                     ]);
                 } else {
                     values.push([{ color: 0, value: usage[i].used / usage[i].total }]);

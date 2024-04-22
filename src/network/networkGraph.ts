@@ -70,7 +70,7 @@ export default GObject.registerClass(
                 Utils.parseRGBA(
                     Config.get_string('network-header-io-graph-color2'),
                     'rgba(214,29,29,1.0)'
-                )
+                ),
             ];
 
             let line = 'rgba(255,255,255,0.2)';
@@ -109,19 +109,19 @@ export default GObject.registerClass(
 
             this.maxUploadSpeedLabel = new St.Label({
                 text: '-',
-                y_align: Clutter.ActorAlign.START
+                y_align: Clutter.ActorAlign.START,
             });
             this.historyGrid.attach(this.maxUploadSpeedLabel, 2, 0, 1, 1);
             this.maxDownloadSpeedLabel = new St.Label({
                 text: '',
                 y_align: Clutter.ActorAlign.CENTER,
-                style: 'margin-top:10px;'
+                style: 'margin-top:10px;',
             });
             this.historyGrid.attach(this.maxDownloadSpeedLabel, 2, 1, 1, 1);
             const label = new St.Label({
                 text: '',
                 y_align: Clutter.ActorAlign.END,
-                style_class: 'astra-monitor-graph-label'
+                style_class: 'astra-monitor-graph-label',
             });
             this.historyGrid.attach(label, 2, 2, 1, 1);
 

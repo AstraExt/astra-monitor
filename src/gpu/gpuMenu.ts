@@ -39,7 +39,7 @@ export default class GpuMenu extends MenuBase {
         this.gpuSection = new GpuMenuComponent({
             parent: this,
             title: this.gpuSectionLabel,
-            compact: false
+            compact: false,
         });
         this.addToMenu(this.gpuSection.container, 2);
 

@@ -70,7 +70,7 @@ export default GObject.registerClass(
                 Utils.parseRGBA(
                     Config.get_string('storage-header-io-graph-color2'),
                     'rgba(214,29,29,1.0)'
-                )
+                ),
             ];
 
             let line = 'rgba(255,255,255,0.2)';
@@ -112,13 +112,13 @@ export default GObject.registerClass(
 
             this.maxReadSpeedLabel = new St.Label({
                 text: '-',
-                y_align: Clutter.ActorAlign.START
+                y_align: Clutter.ActorAlign.START,
             });
             this.historyGrid.attach(this.maxReadSpeedLabel, 2, 0, 1, 1);
             this.maxWriteSpeedLabel = new St.Label({
                 text: '',
                 y_align: Clutter.ActorAlign.CENTER,
-                style: 'margin-top:10px;'
+                style: 'margin-top:10px;',
             });
             this.historyGrid.attach(this.maxWriteSpeedLabel, 2, 1, 1, 1);
             const label = new St.Label({ text: '', y_align: Clutter.ActorAlign.END });

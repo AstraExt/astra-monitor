@@ -65,7 +65,7 @@ export default GObject.registerClass(
                 Utils.parseRGBA(
                     Config.get_string('memory-header-graph-color2'),
                     'rgba(29,172,214,0.3)'
-                )
+                ),
             ];
 
             let bg = 'rgba(0,0,0,0.2)';

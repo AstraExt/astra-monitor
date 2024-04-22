@@ -125,7 +125,7 @@ export default class ProcessorMonitor extends Monitor {
             idle: -1,
             user: -1,
             system: -1,
-            total: -1
+            total: -1,
         };
         this.previousCpuCoresUsage = new Array(this.coresNum);
         for(let i = 0; i < this.coresNum; i++) {
@@ -133,7 +133,7 @@ export default class ProcessorMonitor extends Monitor {
                 idle: -1,
                 user: -1,
                 system: -1,
-                total: -1
+                total: -1,
             };
         }
 
@@ -163,7 +163,7 @@ export default class ProcessorMonitor extends Monitor {
             cpuUsage: Config.get_string('processor-source-cpu-usage') ?? undefined,
             cpuCoresUsage: Config.get_string('processor-source-cpu-cores-usage') ?? undefined,
             topProcesses: Config.get_string('processor-source-top-processes') ?? undefined,
-            loadAvg: Config.get_string('processor-source-load-avg') ?? undefined
+            loadAvg: Config.get_string('processor-source-load-avg') ?? undefined,
         };
 
         Config.connect(this, 'changed::processor-source-cpu-usage', () => {
@@ -174,7 +174,7 @@ export default class ProcessorMonitor extends Monitor {
                 idle: -1,
                 user: -1,
                 system: -1,
-                total: -1
+                total: -1,
             };
             this.resetUsageHistory('cpuUsage');
         });
@@ -189,7 +189,7 @@ export default class ProcessorMonitor extends Monitor {
                     idle: -1,
                     user: -1,
                     system: -1,
-                    total: -1
+                    total: -1,
                 };
             }
             this.resetUsageHistory('cpuCoresUsage');
@@ -292,7 +292,7 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateCpuUsageTask,
                 run,
-                callback: this.notify.bind(this, 'cpuUsage')
+                callback: this.notify.bind(this, 'cpuUsage'),
             });
             return;
         }
@@ -308,7 +308,7 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateCoresUsageTask,
                 run,
-                callback: this.notify.bind(this, 'cpuCoresUsage')
+                callback: this.notify.bind(this, 'cpuCoresUsage'),
             });
             return;
         }
@@ -317,7 +317,7 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateCoresFrequencyTask,
                 run: this.updateCpuCoresFrequencyProc.bind(this, ...params),
-                callback: this.notify.bind(this, 'cpuCoresFrequency')
+                callback: this.notify.bind(this, 'cpuCoresFrequency'),
             });
             return;
         }
@@ -343,7 +343,7 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateTopProcessesTask,
                 run,
-                callback: this.notify.bind(this, 'topProcesses')
+                callback: this.notify.bind(this, 'topProcesses'),
             });
             return;
         }
@@ -357,7 +357,7 @@ export default class ProcessorMonitor extends Monitor {
                 key,
                 task: this.updateLoadAvgTask,
                 run,
-                callback: this.notify.bind(this, 'loadAverage')
+                callback: this.notify.bind(this, 'loadAverage'),
             });
             return;
         }
@@ -425,7 +425,7 @@ export default class ProcessorMonitor extends Monitor {
             const decoder = new TextDecoder('utf8');
             const output = decoder.decode(stdout);
 
-            const lines = output.split('\n');
+            let lines = output.split('\n');
             const cpuInfo: CpuInfo = {};
             let currentCategory = cpuInfo;
             let lastKey: string | null = null;
@@ -467,8 +467,7 @@ export default class ProcessorMonitor extends Monitor {
 
                 const fileContents = GLib.file_get_contents('/proc/cpuinfo');
                 if(fileContents && fileContents[0]) {
-                    const decoder = new TextDecoder('utf8');
-                    const lines = decoder.decode(fileContents[1]).split('\n');
+                    lines = decoder.decode(fileContents[1]).split('\n');
 
                     for(const line of lines) {
                         if(line.startsWith('model name')) {
@@ -508,7 +507,7 @@ export default class ProcessorMonitor extends Monitor {
             iowait: parseInt(cpuLine[5], 10),
             irq: parseInt(cpuLine[6], 10),
             softirq: parseInt(cpuLine[7], 10),
-            steal: parseInt(cpuLine[8], 10)
+            steal: parseInt(cpuLine[8], 10),
         });
     }
 
@@ -527,7 +526,7 @@ export default class ProcessorMonitor extends Monitor {
             iowait: cpu.iowait,
             irq: cpu.irq,
             softirq: cpu.softirq,
-            steal: 0
+            steal: 0,
         });
     }
 
@@ -539,7 +538,7 @@ export default class ProcessorMonitor extends Monitor {
         iowait,
         irq,
         softirq,
-        steal
+        steal,
     }: {
         user: number;
         nice: number;
@@ -570,7 +569,7 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: iowait,
                 irq: irq,
                 softirq: softirq,
-                steal: steal
+                steal: steal,
             };
             return false;
         }
@@ -603,7 +602,7 @@ export default class ProcessorMonitor extends Monitor {
             iowait: iowait,
             irq: irq,
             softirq: softirq,
-            steal: steal
+            steal: steal,
         };
 
         // Calculate the percentage of CPU usage
@@ -635,8 +634,8 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: rawIowaitUsage,
                 irq: rawIrqUsage,
                 softirq: rawSoftirqUsage,
-                steal: rawStealUsage
-            }
+                steal: rawStealUsage,
+            },
         });
         return true;
     }
@@ -668,7 +667,7 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: parseInt(cpuLine[5], 10),
                 irq: parseInt(cpuLine[6], 10),
                 softirq: parseInt(cpuLine[7], 10),
-                steal: parseInt(cpuLine[8], 10)
+                steal: parseInt(cpuLine[8], 10),
             });
 
             if(cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
@@ -700,7 +699,7 @@ export default class ProcessorMonitor extends Monitor {
                 iowait: cpu.xcpu_iowait[i],
                 irq: cpu.xcpu_irq[i],
                 softirq: cpu.xcpu_softirq[i],
-                steal: 0
+                steal: 0,
             });
 
             if(cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
@@ -720,7 +719,7 @@ export default class ProcessorMonitor extends Monitor {
             iowait,
             irq,
             softirq,
-            steal
+            steal,
         }: {
             user: number;
             nice: number;
@@ -767,7 +766,7 @@ export default class ProcessorMonitor extends Monitor {
             total: cpuUsage,
             user: userUsage,
             system: systemUsage,
-            idle: idleUsage
+            idle: idleUsage,
         };
     }
 
@@ -877,14 +876,14 @@ export default class ProcessorMonitor extends Monitor {
                         pid: pid,
                         exec: Utils.extractCommandName(fileContent),
                         cmd: fileContent,
-                        notSeen: 0
+                        notSeen: 0,
                     };
                 } else {
                     process = {
                         pid: pid,
                         exec: Utils.extractCommandName(fileContent),
                         cmd: fileContent,
-                        notSeen: 0
+                        notSeen: 0,
                     };
                 }
                 return { process, cpu: cpuUsagePercent };
@@ -944,7 +943,7 @@ export default class ProcessorMonitor extends Monitor {
                     pid: pid,
                     exec: Utils.extractCommandName(cmd),
                     cmd: cmd,
-                    notSeen: 0
+                    notSeen: 0,
                 };
                 this.topProcessesCache.setProcess(process);
             }
@@ -1012,7 +1011,7 @@ export default class ProcessorMonitor extends Monitor {
             load5m: parseFloat(procLoadAvgValue[1]),
             load15m: parseFloat(procLoadAvgValue[2]),
             threadsActive: parseInt(procLoadAvgValue[3].split('/')[0], 10),
-            threadsTotal: parseInt(procLoadAvgValue[3].split('/')[1], 10)
+            threadsTotal: parseInt(procLoadAvgValue[3].split('/')[1], 10),
         });
         return true;
     }

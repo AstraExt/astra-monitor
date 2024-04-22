@@ -147,7 +147,7 @@ export default GObject.registerClass(
                 icon_size: iconSize,
                 y_expand: false,
                 y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER
+                x_align: Clutter.ActorAlign.CENTER,
             });
 
             const setIconName = () => {
@@ -190,7 +190,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.FILL,
                 y_expand: true,
                 vertical: true,
-                width: 1
+                width: 1,
             });
 
             this.sensors = new St.Label({
@@ -200,7 +200,7 @@ export default GObject.registerClass(
                 y_align: Clutter.ActorAlign.CENTER,
                 x_align: Clutter.ActorAlign.END,
                 x_expand: true,
-                y_expand: true
+                y_expand: true,
             });
             this.sensors.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
             this.sensors.clutter_text.line_wrap = false;
@@ -351,7 +351,7 @@ export default GObject.registerClass(
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
-                style_class: 'astra-monitor-tooltip-item'
+                style_class: 'astra-monitor-tooltip-item',
             }) as TooltipItem;
             this.tooltipItem.actor.x_expand = true;
             this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;

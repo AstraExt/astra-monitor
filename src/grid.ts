@@ -48,7 +48,7 @@ export default GObject.registerClass(
             const data: any = {
                 style_class: params.styleClass,
                 name: 'AstraMonitorGrid',
-                layout_manager: new Clutter.GridLayout({ orientation: params.orientation })
+                layout_manager: new Clutter.GridLayout({ orientation: params.orientation }),
             };
             if(params.style) data.style = params.style;
             if(params.x_expand) data.x_expand = params.x_expand;

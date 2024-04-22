@@ -72,7 +72,7 @@ export default class ContinuosTaskManager {
             // Create a new subprocess
             const proc = new Gio.Subprocess({
                 argv: argv[1],
-                flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
+                flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
             });
 
             // Initialize the subprocess
@@ -89,7 +89,7 @@ export default class ContinuosTaskManager {
             const stdinStream = proc.get_stdin_pipe();
             const stdoutStream = new Gio.DataInputStream({
                 base_stream: proc.get_stdout_pipe(),
-                close_base_stream: true
+                close_base_stream: true,
             });
 
             // Start the subprocess

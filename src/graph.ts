@@ -67,7 +67,7 @@ export default GObject.registerClass(
                 x_align: params.x_align,
                 x_expand: true,
                 y_align: params.y_align,
-                y_expand: true
+                y_expand: true,
             });
 
             this.mini = params.mini;
@@ -77,14 +77,14 @@ export default GObject.registerClass(
 
             this.historyChart = new St.DrawingArea({
                 style_class: style_class,
-                style: `width:${params.width}px;`
+                style: `width:${params.width}px;`,
             });
 
             if(!this.mini) {
                 this.grid = new St.Widget({
                     layout_manager: new Clutter.GridLayout({
-                        orientation: Clutter.Orientation.VERTICAL
-                    })
+                        orientation: Clutter.Orientation.VERTICAL,
+                    }),
                 });
                 // @ts-expect-error Clutter.GridLayout not updated in gjs
                 this.historyGrid = this.grid.layout_manager;

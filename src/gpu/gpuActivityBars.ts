@@ -50,12 +50,12 @@ export default GObject.registerClass(
             super.setStyle();
 
             this.colors = [
-                Config.get_string('gpu-header-activity-bar-color1') ?? 'rgba(29,172,214,1.0)'
+                Config.get_string('gpu-header-activity-bar-color1') ?? 'rgba(29,172,214,1.0)',
             ];
         }
 
         setUsage(usage: GpuUsage[]) {
-            if(!usage || !Array.isArray(usage) || usage.length == 0) {
+            if(!usage || !Array.isArray(usage) || usage.length === 0) {
                 this.updateBars([]);
                 return;
             }
