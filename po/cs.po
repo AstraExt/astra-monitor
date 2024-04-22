@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-17 04:01+0200\n"
+"POT-Creation-Date: 2024-04-22 23:08+0200\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Informace o CPU"
 
 #: src/processor/processorMenu.js:162 src/memory/memoryMenu.js:50
 #: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:244
-#: src/gpu/gpuMenuComponent.js:678
+#: src/gpu/gpuMenuComponent.js:677
 msgid "Total:"
 msgstr "Celkem:"
 
@@ -130,7 +130,7 @@ msgid "now"
 msgstr "teď"
 
 #: src/sensors/sensorsMenu.js:35 src/gpu/gpuMenuComponent.js:338
-#: src/gpu/gpuMenuComponent.js:803 prefs.js:1040 prefs.js:1043 prefs.js:1057
+#: src/gpu/gpuMenuComponent.js:802 prefs.js:1038 prefs.js:1041 prefs.js:1055
 msgid "Sensors"
 msgstr "Sensory"
 
@@ -146,7 +146,7 @@ msgstr[0] "sensory"
 msgstr[1] "sensory"
 msgstr[2] "sensory"
 
-#: src/network/networkMenu.js:39 prefs.js:865 prefs.js:868
+#: src/network/networkMenu.js:39 prefs.js:864 prefs.js:867
 msgid "Network"
 msgstr "Síť"
 
@@ -293,13 +293,13 @@ msgctxt "short for download"
 msgid "D"
 msgstr ""
 
-#: src/network/networkMenu.js:685 prefs.js:1209
+#: src/network/networkMenu.js:685 prefs.js:1207
 msgid "Info"
 msgstr ""
 
 #: src/network/networkMenu.js:688 src/storage/storageMenu.js:575
-#: src/gpu/gpuMenuComponent.js:394 src/gpu/gpuMenuComponent.js:729
-#: src/gpu/gpuMenuComponent.js:760
+#: src/gpu/gpuMenuComponent.js:393 src/gpu/gpuMenuComponent.js:728
+#: src/gpu/gpuMenuComponent.js:759
 msgid "Name"
 msgstr "Jméno"
 
@@ -431,7 +431,7 @@ msgstr "Čtení"
 msgid "Write"
 msgstr "Zápis"
 
-#: src/storage/storageMenu.js:294 prefs.js:855
+#: src/storage/storageMenu.js:294 prefs.js:854
 msgid "Devices"
 msgstr "Zařízení"
 
@@ -457,7 +457,7 @@ msgstr "Základní informace"
 msgid "Model"
 msgstr ""
 
-#: src/storage/storageMenu.js:578 src/gpu/gpuMenuComponent.js:457
+#: src/storage/storageMenu.js:578 src/gpu/gpuMenuComponent.js:456
 msgid "Vendor"
 msgstr "Výrobce"
 
@@ -734,7 +734,7 @@ msgid "Allocated:"
 msgstr "Alokováno:"
 
 #: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
-#: src/gpu/gpuMenuComponent.js:223 src/gpu/gpuMenuComponent.js:657
+#: src/gpu/gpuMenuComponent.js:223 src/gpu/gpuMenuComponent.js:656
 msgid "Used:"
 msgstr "Využito:"
 
@@ -766,7 +766,7 @@ msgstr "Dostupná"
 msgid "Allocatable"
 msgstr "Alokovatelná"
 
-#: src/memory/memoryMenu.js:216 prefs.js:689 prefs.js:722 prefs.js:900
+#: src/memory/memoryMenu.js:216 prefs.js:689 prefs.js:723 prefs.js:899
 #: prefs.js:925
 msgid "Active"
 msgstr "Aktivní"
@@ -812,44 +812,44 @@ msgstr "Nenalezeno žádné GPU"
 msgid "GPUs"
 msgstr ""
 
-#: src/gpu/gpuMenuComponent.js:131 src/gpu/gpuMenuComponent.js:567
+#: src/gpu/gpuMenuComponent.js:131 src/gpu/gpuMenuComponent.js:566
 msgid "Activity"
 msgstr "Aktivita"
 
-#: src/gpu/gpuMenuComponent.js:180 src/gpu/gpuMenuComponent.js:616
+#: src/gpu/gpuMenuComponent.js:180 src/gpu/gpuMenuComponent.js:615
 msgid "VRAM"
 msgstr "VRAM"
 
-#: src/gpu/gpuMenuComponent.js:282 src/gpu/gpuMenuComponent.js:717 prefs.js:316
-#: prefs.js:542 prefs.js:746
+#: src/gpu/gpuMenuComponent.js:282 src/gpu/gpuMenuComponent.js:716 prefs.js:316
+#: prefs.js:542 prefs.js:745
 msgid "Top Processes"
 msgstr "Procesy"
 
-#: src/gpu/gpuMenuComponent.js:387
+#: src/gpu/gpuMenuComponent.js:386
 msgid "GPU info"
 msgstr "Informace o GPU"
 
-#: src/gpu/gpuMenuComponent.js:424
+#: src/gpu/gpuMenuComponent.js:423
 msgid "Subsystem"
 msgstr "Subsystém"
 
-#: src/gpu/gpuMenuComponent.js:465
+#: src/gpu/gpuMenuComponent.js:464
 msgid "Vendor ID"
 msgstr "ID výrobce"
 
-#: src/gpu/gpuMenuComponent.js:474
+#: src/gpu/gpuMenuComponent.js:473
 msgid "Product ID"
 msgstr "ID produktu"
 
-#: src/gpu/gpuMenuComponent.js:482
+#: src/gpu/gpuMenuComponent.js:481
 msgid "PCI"
 msgstr ""
 
-#: src/gpu/gpuMenuComponent.js:494
+#: src/gpu/gpuMenuComponent.js:493
 msgid "Drivers"
 msgstr "Ovladače"
 
-#: src/gpu/gpuMenuComponent.js:503
+#: src/gpu/gpuMenuComponent.js:502
 msgid "Modules"
 msgstr "Moduly"
 
@@ -1013,7 +1013,7 @@ msgid "Disable/Enable the extension to apply changes."
 msgstr "Vypněte/zapněte rozšíření pro uplatnění změn."
 
 #: prefs.js:212 prefs.js:355 prefs.js:370 prefs.js:460 prefs.js:482
-#: prefs.js:586 prefs.js:600 prefs.js:778
+#: prefs.js:586 prefs.js:600 prefs.js:777
 msgid "Main Color"
 msgstr "Hlavní barva"
 
@@ -1082,7 +1082,7 @@ msgid "Headers Height"
 msgstr "Výška záhlaví"
 
 #: prefs.js:263 prefs.js:269 prefs.js:277 prefs.js:340 prefs.js:445
-#: prefs.js:561 prefs.js:770 prefs.js:979 prefs.js:1076
+#: prefs.js:561 prefs.js:769 prefs.js:977 prefs.js:1074
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
 
@@ -1110,23 +1110,23 @@ msgstr "Pořadí"
 msgid "Processors"
 msgstr "Procesor"
 
-#: prefs.js:296 prefs.js:405 prefs.js:508 prefs.js:635 prefs.js:869
-#: prefs.js:1044 prefs.js:1090 prefs.js:1102
+#: prefs.js:296 prefs.js:405 prefs.js:508 prefs.js:635 prefs.js:868
+#: prefs.js:1042 prefs.js:1088 prefs.js:1100
 msgid "Show"
 msgstr "Zobrazit"
 
-#: prefs.js:297 prefs.js:413 prefs.js:509 prefs.js:636 prefs.js:870
-#: prefs.js:1045
+#: prefs.js:297 prefs.js:413 prefs.js:509 prefs.js:636 prefs.js:869
+#: prefs.js:1043
 msgid "Update frequency (seconds)"
 msgstr "Frekvence aktualizace (sekundy)"
 
-#: prefs.js:298 prefs.js:530 prefs.js:735 prefs.js:938 prefs.js:1051
+#: prefs.js:298 prefs.js:530 prefs.js:734 prefs.js:936 prefs.js:1049
 msgid "Data Sources"
 msgstr "Zdroje dat"
 
 #: prefs.js:300 prefs.js:306 prefs.js:312 prefs.js:318 prefs.js:532
-#: prefs.js:538 prefs.js:737 prefs.js:743 prefs.js:748 prefs.js:940
-#: prefs.js:956 prefs.js:1053
+#: prefs.js:538 prefs.js:736 prefs.js:742 prefs.js:747 prefs.js:938
+#: prefs.js:954 prefs.js:1051
 msgid "Auto"
 msgstr "Automaticky"
 
@@ -1142,27 +1142,27 @@ msgstr "Využití jader CPU"
 msgid "Load Average"
 msgstr "Průměrné vytížení"
 
-#: prefs.js:323 prefs.js:428 prefs.js:544 prefs.js:753 prefs.js:1059
+#: prefs.js:323 prefs.js:428 prefs.js:544 prefs.js:752 prefs.js:1057
 msgid "Header"
 msgstr "Záhlaví"
 
-#: prefs.js:324 prefs.js:429 prefs.js:545 prefs.js:754 prefs.js:963
-#: prefs.js:1060
+#: prefs.js:324 prefs.js:429 prefs.js:545 prefs.js:753 prefs.js:961
+#: prefs.js:1058
 msgid "Indicators Order"
 msgstr "Pořadí indikátorů"
 
-#: prefs.js:327 prefs.js:432 prefs.js:548 prefs.js:757 prefs.js:966
-#: prefs.js:1063
+#: prefs.js:327 prefs.js:432 prefs.js:548 prefs.js:756 prefs.js:964
+#: prefs.js:1061
 msgid "Icon"
 msgstr "Ikona"
 
-#: prefs.js:328 prefs.js:433 prefs.js:549 prefs.js:758 prefs.js:967
-#: prefs.js:1064
+#: prefs.js:328 prefs.js:433 prefs.js:549 prefs.js:757 prefs.js:965
+#: prefs.js:1062
 msgid "Show Icon"
 msgstr "Zobrazit ikonu"
 
-#: prefs.js:330 prefs.js:435 prefs.js:551 prefs.js:760 prefs.js:969
-#: prefs.js:1066
+#: prefs.js:330 prefs.js:435 prefs.js:551 prefs.js:759 prefs.js:967
+#: prefs.js:1064
 msgid "Icon Name"
 msgstr "Název ikony"
 
@@ -1170,23 +1170,23 @@ msgstr "Název ikony"
 msgid "Set icon name (ie: 'cpu-symbolic')"
 msgstr "Nastavit název ikony (např. 'cpu-symbolic')"
 
-#: prefs.js:333 prefs.js:438 prefs.js:554 prefs.js:763 prefs.js:972
-#: prefs.js:1069
+#: prefs.js:333 prefs.js:438 prefs.js:554 prefs.js:762 prefs.js:970
+#: prefs.js:1067
 msgid "Set to empty to disable icon override"
 msgstr "Pro výchozí název nechte prázdné"
 
-#: prefs.js:336 prefs.js:441 prefs.js:557 prefs.js:766 prefs.js:975
-#: prefs.js:1072
+#: prefs.js:336 prefs.js:441 prefs.js:557 prefs.js:765 prefs.js:973
+#: prefs.js:1070
 msgid "Icon Color"
 msgstr "Barva ikony"
 
-#: prefs.js:337 prefs.js:442 prefs.js:558 prefs.js:767 prefs.js:976
-#: prefs.js:1073
+#: prefs.js:337 prefs.js:442 prefs.js:558 prefs.js:766 prefs.js:974
+#: prefs.js:1071
 msgid "Icon Alert Color"
 msgstr "Barva ikony při výstraze"
 
-#: prefs.js:339 prefs.js:444 prefs.js:560 prefs.js:769 prefs.js:978
-#: prefs.js:1075
+#: prefs.js:339 prefs.js:444 prefs.js:560 prefs.js:768 prefs.js:976
+#: prefs.js:1073
 msgid "Icon Size"
 msgstr "Velikost ikony"
 
@@ -1203,7 +1203,7 @@ msgid "Single Core Percentage"
 msgstr "Procenta jednoho jádra"
 
 #: prefs.js:348 prefs.js:453 prefs.js:475 prefs.js:568 prefs.js:579
-#: prefs.js:785 prefs.js:796
+#: prefs.js:784 prefs.js:795
 msgid "Icon Alert"
 msgstr "Ikona výstrahy"
 
@@ -1254,17 +1254,17 @@ msgstr "Aktuální stav jednotlivých jader"
 msgid "Realtime Bar Breakdown"
 msgstr "Rozdělení sloupců aktuálního stavu"
 
-#: prefs.js:381 prefs.js:494 prefs.js:611 prefs.js:836 prefs.js:1019
-#: prefs.js:1119
+#: prefs.js:381 prefs.js:494 prefs.js:611 prefs.js:835 prefs.js:1017
+#: prefs.js:1117
 msgid "Tooltip"
 msgstr "Nápověda"
 
-#: prefs.js:382 prefs.js:495 prefs.js:612 prefs.js:837 prefs.js:1020
-#: prefs.js:1120
+#: prefs.js:382 prefs.js:495 prefs.js:612 prefs.js:836 prefs.js:1018
+#: prefs.js:1118
 msgid "Show Tooltip"
 msgstr "Zobrazit nápovědu"
 
-#: prefs.js:386 prefs.js:617 prefs.js:843 prefs.js:1023
+#: prefs.js:386 prefs.js:617 prefs.js:842 prefs.js:1021
 msgid "Menu"
 msgstr ""
 
@@ -1297,7 +1297,7 @@ msgstr ""
 msgid "Hint: You can instead choose to show GPU stats in Processors' menu."
 msgstr ""
 
-#: prefs.js:415 prefs.js:1083
+#: prefs.js:415 prefs.js:1081
 msgid "None"
 msgstr "Žádné"
 
@@ -1428,7 +1428,7 @@ msgstr "k (jako kB)"
 msgid "Ki (as Ki)"
 msgstr "Ki (jako Ki)"
 
-#: prefs.js:519 prefs.js:650 prefs.js:884
+#: prefs.js:519 prefs.js:650 prefs.js:883
 msgid "Data Unit"
 msgstr "Datová jednotka"
 
@@ -1460,7 +1460,7 @@ msgstr "Využití paměti"
 msgid "Set icon name (ie: 'memory-symbolic')"
 msgstr "Nastavit jméno ikony (např. 'memory-symbolic')"
 
-#: prefs.js:565 prefs.js:613 prefs.js:782
+#: prefs.js:565 prefs.js:613 prefs.js:781
 msgid "Usage Percentage"
 msgstr "Využití v procentech"
 
@@ -1472,7 +1472,7 @@ msgstr "Zobrazit využití v procentech"
 msgid "Set 0 to disable. Value is percentage of ram usage."
 msgstr "Nastavte na 0 pro vypnutí. Hodnota je využití RAM v %."
 
-#: prefs.js:572 prefs.js:614 prefs.js:789
+#: prefs.js:572 prefs.js:614 prefs.js:788
 msgid "Usage Value"
 msgstr "Hodnota využití"
 
@@ -1480,11 +1480,11 @@ msgstr "Hodnota využití"
 msgid "Show Usage Value"
 msgstr "Zobrazit hodnotu využití"
 
-#: prefs.js:574 prefs.js:791
+#: prefs.js:574 prefs.js:790
 msgid "Usage Value Max Number of Figures"
 msgstr "Maximální počet číslic hodnoty využití"
 
-#: prefs.js:575 prefs.js:615 prefs.js:792
+#: prefs.js:575 prefs.js:615 prefs.js:791
 msgid "Free Value"
 msgstr "Volná paměť"
 
@@ -1492,7 +1492,7 @@ msgstr "Volná paměť"
 msgid "Show Free Value"
 msgstr "Zobrazit volnou paměť"
 
-#: prefs.js:577 prefs.js:794
+#: prefs.js:577 prefs.js:793
 msgid "Free Value Max Number of Figures"
 msgstr "Maximální počet číslic hodnoty volné paměti"
 
@@ -1520,51 +1520,51 @@ msgstr "Barva Swap sloupce"
 msgid "Swap bar main color."
 msgstr "Hlavní barva Swap sloupce"
 
-#: prefs.js:638 prefs.js:872
+#: prefs.js:638 prefs.js:871
 msgid "kB/s"
 msgstr ""
 
-#: prefs.js:639 prefs.js:873
+#: prefs.js:639 prefs.js:872
 msgid "KiB/s"
 msgstr ""
 
-#: prefs.js:640 prefs.js:874
+#: prefs.js:640 prefs.js:873
 msgid "kb/s"
 msgstr ""
 
-#: prefs.js:641 prefs.js:875
+#: prefs.js:641 prefs.js:874
 msgid "Kibit/s"
 msgstr ""
 
-#: prefs.js:642 prefs.js:876
+#: prefs.js:642 prefs.js:875
 msgid "kBps"
 msgstr ""
 
-#: prefs.js:643 prefs.js:877
+#: prefs.js:643 prefs.js:876
 msgid "KiBps"
 msgstr ""
 
-#: prefs.js:644 prefs.js:878
+#: prefs.js:644 prefs.js:877
 msgid "Kibps"
 msgstr ""
 
-#: prefs.js:645 prefs.js:879
+#: prefs.js:645 prefs.js:878
 msgid "kbps"
 msgstr ""
 
-#: prefs.js:646 prefs.js:880
+#: prefs.js:646 prefs.js:879
 msgid "Kibitps"
 msgstr ""
 
-#: prefs.js:647 prefs.js:881
+#: prefs.js:647 prefs.js:880
 msgid "k (as kB/s)"
 msgstr "k (jako kB/s)"
 
-#: prefs.js:648 prefs.js:882
+#: prefs.js:648 prefs.js:881
 msgid "Ki (as KiB/s)"
 msgstr "Ki (jako KiB/s)"
 
-#: prefs.js:671 prefs.js:774
+#: prefs.js:671 prefs.js:773
 msgid "Main Disk"
 msgstr "Hlavní disk"
 
@@ -1572,7 +1572,7 @@ msgstr "Hlavní disk"
 msgid "Ignored Storage Devices"
 msgstr "Ignorovaná zařízení uložiště"
 
-#: prefs.js:674 prefs.js:887
+#: prefs.js:674 prefs.js:886
 msgid "Regex"
 msgstr "Regulární výraz"
 
@@ -1580,11 +1580,11 @@ msgstr "Regulární výraz"
 msgid "Devices matching this regex will be ignored."
 msgstr "Zařízení odpovídající tomuto regulárnímu výrazu budou ignorována."
 
-#: prefs.js:677 prefs.js:890
+#: prefs.js:677 prefs.js:889
 msgid "Leave empty to disable. Usage example: "
 msgstr "Nechte prázdné pro vypnutí. Příklad použití: "
 
-#: prefs.js:689 prefs.js:712 prefs.js:900 prefs.js:915
+#: prefs.js:689 prefs.js:715 prefs.js:899 prefs.js:917
 msgid "Ignored"
 msgstr "Ignorovat"
 
@@ -1596,374 +1596,374 @@ msgstr "Hlavní"
 msgid "Main disk cannot be ignored"
 msgstr "Hlavní disk nelze ignorovat"
 
-#: prefs.js:741
+#: prefs.js:740
 msgid "Storage Usage"
 msgstr "Využití uložiště"
 
-#: prefs.js:751
+#: prefs.js:750
 msgid "Storage IO"
 msgstr "IO uložiště"
 
-#: prefs.js:761
+#: prefs.js:760
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr "Nastavit název ikony (např. 'drive-harddisk-symbolic')"
 
-#: prefs.js:775
+#: prefs.js:774
 msgid "Usage Bar"
 msgstr "Sloupec využití"
 
-#: prefs.js:776
+#: prefs.js:775
 msgid "Show Main Disk Usage Bar"
 msgstr "Zobrazit sloupec využití hlavního disku"
 
-#: prefs.js:779
+#: prefs.js:778
 msgid "<b>Used</b> storage color."
 msgstr "<b>Využito</b> - barva uložiště."
 
-#: prefs.js:783
+#: prefs.js:782
 msgid "Show Main Disk Usage Percentage"
 msgstr "Zobrazit využití hlavního disku v %"
 
-#: prefs.js:786
+#: prefs.js:785
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr "Nastavte na 0 pro vypnutí. Hodnota je využití disku v %."
 
-#: prefs.js:790
+#: prefs.js:789
 msgid "Show Main Disk Usage Value"
 msgstr "Zobrazit hodnotu využití hlavního disku"
 
-#: prefs.js:793
+#: prefs.js:792
 msgid "Show Main Disk Free Value"
 msgstr "Zobrazit hodnotu volné paměti hlavního disku"
 
-#: prefs.js:797
+#: prefs.js:796
 msgid "Set 0 to disable. Value is free MB of storage."
 msgstr "Nastavte na 0 pro vypnutí. Hodnota je volná paměť uložiště v MB."
 
-#: prefs.js:800 prefs.js:983
+#: prefs.js:799 prefs.js:981
 msgid "IO"
 msgstr "IO"
 
-#: prefs.js:801 prefs.js:984
+#: prefs.js:800 prefs.js:982
 msgid "Realtime IO Bar"
 msgstr "Aktuální stav IO"
 
-#: prefs.js:802 prefs.js:985
+#: prefs.js:801 prefs.js:983
 msgid "Show Realtime IO Bar"
 msgstr "Zobrazit aktuální stav IO rychlosti"
 
-#: prefs.js:804 prefs.js:816 prefs.js:846
+#: prefs.js:803 prefs.js:815 prefs.js:845
 msgid "Read Color"
 msgstr "Barva pro čtení"
 
-#: prefs.js:805
+#: prefs.js:804
 msgid "<b>Read</b> IO Bar color."
 msgstr "<b>Čtení</b> - barva IO sloupce"
 
-#: prefs.js:809 prefs.js:821 prefs.js:851
+#: prefs.js:808 prefs.js:820 prefs.js:850
 msgid "Write Color"
 msgstr "Barva pro zápis"
 
-#: prefs.js:810
+#: prefs.js:809
 msgid "<b>Write</b> IO Bar color."
 msgstr "<b>Zápis</b> - barva IO sloupce"
 
-#: prefs.js:813 prefs.js:996
+#: prefs.js:812 prefs.js:994
 msgid "IO History Graph"
 msgstr "IO historický graf"
 
-#: prefs.js:814 prefs.js:997
+#: prefs.js:813 prefs.js:995
 msgid "Show IO History Graph"
 msgstr "Zobrazit IO historický graf"
 
-#: prefs.js:817
+#: prefs.js:816
 msgid "<b>Read</b> IO History Graph color."
 msgstr "<b>Čtení</b> - barva IO historického grafu"
 
-#: prefs.js:822
+#: prefs.js:821
 msgid "<b>Write</b> IO History Graph color."
 msgstr "<b>Čtení</b> - barva IO historického grafu"
 
-#: prefs.js:825 prefs.js:1008
+#: prefs.js:824 prefs.js:1006
 msgid "IO History Graph Width"
 msgstr "Šířka IO historického grafu"
 
-#: prefs.js:826 prefs.js:841 prefs.js:1009 prefs.js:1021
+#: prefs.js:825 prefs.js:840 prefs.js:1007 prefs.js:1019
 msgid "IO Speed"
 msgstr "Rychlost IO"
 
-#: prefs.js:827 prefs.js:1010
+#: prefs.js:826 prefs.js:1008
 msgid "Show IO Speed"
 msgstr "Zobrazit rychlost IO"
 
-#: prefs.js:829 prefs.js:1012 prefs.js:1104
+#: prefs.js:828 prefs.js:1010 prefs.js:1102
 msgid "Vertical"
 msgstr "Svislé"
 
-#: prefs.js:830 prefs.js:1013 prefs.js:1105
+#: prefs.js:829 prefs.js:1011 prefs.js:1103
 msgid "Horizontal"
 msgstr "Vodorovné"
 
-#: prefs.js:832 prefs.js:1015
+#: prefs.js:831 prefs.js:1013
 msgid "IO Speed Layout"
 msgstr "IO rychlost - rozvržení"
 
-#: prefs.js:833 prefs.js:1016
+#: prefs.js:832 prefs.js:1014
 msgid "IO Speed Max Number of Figures"
 msgstr "Maximální počet číslic IO rychlosti"
 
-#: prefs.js:834 prefs.js:1017
+#: prefs.js:833 prefs.js:1015
 msgid "IO Speed Threshold"
 msgstr "Hranice IO rychlosti"
 
-#: prefs.js:834 prefs.js:1017
+#: prefs.js:833 prefs.js:1015
 msgid "in kB/s"
 msgstr "v kB/s"
 
-#: prefs.js:838
+#: prefs.js:837
 msgid "Main Disk Usage Percentage"
 msgstr "využití hlavního disku v %"
 
-#: prefs.js:839
+#: prefs.js:838
 msgid "Main Disk Usage Value"
 msgstr "Hodnota využití hlavního disku"
 
-#: prefs.js:840
+#: prefs.js:839
 msgid "Main Disk Free Value"
 msgstr "Volná paměť hlavního disku"
 
-#: prefs.js:844 prefs.js:1024
+#: prefs.js:843 prefs.js:1022
 msgid "IO Arrows"
 msgstr "IO šipky"
 
-#: prefs.js:847
+#: prefs.js:846
 msgid "<b>Read</b> IO arrow color."
 msgstr "<b>Čtení</b> - barva IO šipky."
 
-#: prefs.js:852
+#: prefs.js:851
 msgid "<b>Write</b> IO arrow color."
 msgstr "<b>Zápis</b> - barva IO šipky."
 
-#: prefs.js:857
+#: prefs.js:856
 msgid "Device Usage Bar Color"
 msgstr "Barva sloupce využití zařízení"
 
-#: prefs.js:885
+#: prefs.js:884
 msgid "Ignored Network Interfaces"
 msgstr "Ignorovaná síťová rozhraní"
 
-#: prefs.js:888
+#: prefs.js:887
 msgid "Interfaces matching this regex will be ignored."
 msgstr "Rozhraní odpovídající tomuto regulárnímu výrazu budou ignorována."
 
-#: prefs.js:944
+#: prefs.js:942
 msgid "Network IO"
 msgstr "IO síťe"
 
-#: prefs.js:946
+#: prefs.js:944
 msgid "Public IPv4 Address"
 msgstr "Veřejná IPv4 adresa"
 
-#: prefs.js:947 prefs.js:952
+#: prefs.js:945 prefs.js:950
 msgid "Set to empty to disable. Address will be regex matched."
 msgstr ""
 "Pro vypnutí nechejte prázdné. Adresa bude porovnávána regulárním výrazem."
 
-#: prefs.js:951
+#: prefs.js:949
 msgid "Public IPv6 Address"
 msgstr "Veřejná IPv6 adresa"
 
-#: prefs.js:960
+#: prefs.js:958
 msgid "Wireless Info"
 msgstr "Bezdrátová síť"
 
-#: prefs.js:970
+#: prefs.js:968
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr "Nastavit název ikony (např. 'network-wired-symbolic')"
 
-#: prefs.js:987 prefs.js:999 prefs.js:1026
+#: prefs.js:985 prefs.js:997 prefs.js:1024
 msgid "Upload Color"
 msgstr "Barva pro upload"
 
-#: prefs.js:988
+#: prefs.js:986
 msgid "<b>Upload</b> IO Bar color."
 msgstr "<b>Upload</b> - barva IO sloupce."
 
-#: prefs.js:992 prefs.js:1004 prefs.js:1031
+#: prefs.js:990 prefs.js:1002 prefs.js:1029
 msgid "Download Color"
 msgstr "Barva pro download"
 
-#: prefs.js:993
+#: prefs.js:991
 msgid "<b>Download</b> IO Bar color."
 msgstr "<b>Download</b> - barva IO sloupce."
 
-#: prefs.js:1000
+#: prefs.js:998
 msgid "<b>Upload</b> IO History Graph color."
 msgstr "<b>Upload</b> - barva IO historického grafu."
 
-#: prefs.js:1005
+#: prefs.js:1003
 msgid "<b>Download</b> IO History Graph color."
 msgstr "<b>Download</b> - barva IO historického grafu."
 
-#: prefs.js:1027
+#: prefs.js:1025
 msgid "<b>Upload</b> IO arrow color."
 msgstr "<b>Upload</b> - barva IO šipky."
 
-#: prefs.js:1032
+#: prefs.js:1030
 msgid "<b>Download</b> IO arrow color."
 msgstr "<b>Download</b> - barva IO šipky."
 
-#: prefs.js:1047
+#: prefs.js:1045
 msgctxt "Celsius unit measure choice"
 msgid "Celsius"
 msgstr ""
 
-#: prefs.js:1048
+#: prefs.js:1046
 msgctxt "Fahrenheit unit measure choice"
 msgid "Fahrenheit"
 msgstr ""
 
-#: prefs.js:1050
+#: prefs.js:1048
 msgid "Temperature Unit"
 msgstr "Jednotka teploty"
 
-#: prefs.js:1067
+#: prefs.js:1065
 msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "Nastavit jméno ikony (např. 'temperature-symbolic')"
 
-#: prefs.js:1089
+#: prefs.js:1087
 msgid "Sensor 1"
 msgstr ""
 
-#: prefs.js:1092 prefs.js:1109 prefs.js:1123 prefs.js:1139 prefs.js:1155
-#: prefs.js:1171 prefs.js:1187
+#: prefs.js:1090 prefs.js:1107 prefs.js:1121 prefs.js:1137 prefs.js:1153
+#: prefs.js:1169 prefs.js:1185
 msgid "Source"
 msgstr "Zdroj"
 
-#: prefs.js:1097 prefs.js:1114 prefs.js:1133 prefs.js:1149 prefs.js:1165
-#: prefs.js:1181 prefs.js:1197
+#: prefs.js:1095 prefs.js:1112 prefs.js:1131 prefs.js:1147 prefs.js:1163
+#: prefs.js:1179 prefs.js:1195
 msgid "Value Digits"
 msgstr "Počet číslic za desetinnou čárkou"
 
-#: prefs.js:1098 prefs.js:1115 prefs.js:1134 prefs.js:1150 prefs.js:1166
-#: prefs.js:1182 prefs.js:1198
+#: prefs.js:1096 prefs.js:1113 prefs.js:1132 prefs.js:1148 prefs.js:1164
+#: prefs.js:1180 prefs.js:1196
 msgid "Set -1 to auto. Number of digits after the decimal point."
 msgstr ""
 "Pro automatické nastavení nastavte na -1. Počet číslic za desetinnou čárkou."
 
-#: prefs.js:1101
+#: prefs.js:1099
 msgid "Sensor 2"
 msgstr ""
 
-#: prefs.js:1107
+#: prefs.js:1105
 msgid "Sensor 2 Layout"
 msgstr "Sensor 2 - rozvržení"
 
-#: prefs.js:1121
+#: prefs.js:1119
 msgid "Tooltip Sensor 1"
 msgstr "Sensor 1 - nápověda"
 
-#: prefs.js:1128 prefs.js:1144 prefs.js:1160 prefs.js:1176 prefs.js:1192
+#: prefs.js:1126 prefs.js:1142 prefs.js:1158 prefs.js:1174 prefs.js:1190
 msgid "Short Name"
 msgstr "Zkrácený název"
 
-#: prefs.js:1129 prefs.js:1145 prefs.js:1161 prefs.js:1177 prefs.js:1193
+#: prefs.js:1127 prefs.js:1143 prefs.js:1159 prefs.js:1175 prefs.js:1191
 msgid "Short name to display in the tooltip."
 msgstr "Zkrácený název pro zobrazení v nápovědě."
 
-#: prefs.js:1137
+#: prefs.js:1135
 msgid "Tooltip Sensor 2"
 msgstr "Sensor 2 - nápověda"
 
-#: prefs.js:1153
+#: prefs.js:1151
 msgid "Tooltip Sensor 3"
 msgstr "Sensor 3 - nápověda"
 
-#: prefs.js:1169
+#: prefs.js:1167
 msgid "Tooltip Sensor 4"
 msgstr "Sensor 4 - nápověda"
 
-#: prefs.js:1185
+#: prefs.js:1183
 msgid "Tooltip Sensor 5"
 msgstr "Sensor 5 - nápověda"
 
-#: prefs.js:1206
+#: prefs.js:1204
 msgid "About"
 msgstr "O rozšíření"
 
-#: prefs.js:1218
+#: prefs.js:1216
 msgid "Version"
 msgstr "Verze"
 
-#: prefs.js:1219
+#: prefs.js:1217
 msgid "GitHub"
 msgstr ""
 
-#: prefs.js:1220
+#: prefs.js:1218
 msgid "Changelog"
 msgstr ""
 
-#: prefs.js:1221
+#: prefs.js:1219
 msgid "Roadmap"
 msgstr "Roadmapa"
 
-#: prefs.js:1222
+#: prefs.js:1220
 msgid "Report a bug or suggest new feature"
 msgstr "Náhlasit chybu nebo navrhnout novou funkci"
 
-#: prefs.js:1223
+#: prefs.js:1221
 msgid "GNOME Extensions page"
 msgstr "Stránka GNOME rozšíření"
 
-#: prefs.js:1224
+#: prefs.js:1222
 msgid "Support us on Ko-Fi"
 msgstr "Podpořit na Ko-Fi"
 
-#: prefs.js:1225
+#: prefs.js:1223
 msgid "Buy us a coffee"
 msgstr "Podpořit na Buy me a coffee"
 
-#: prefs.js:1226
+#: prefs.js:1224
 msgid "Become a patron"
 msgstr "Podpořit na Patreonu"
 
-#: prefs.js:1228
+#: prefs.js:1226
 msgid "Utility"
 msgstr ""
 
-#: prefs.js:1229 prefs.js:1231
+#: prefs.js:1227 prefs.js:1229
 msgid "Export Settings"
 msgstr "Exportovat nastavení"
 
-#: prefs.js:1242
+#: prefs.js:1240
 msgid "Save"
 msgstr "Uložit"
 
-#: prefs.js:1243 prefs.js:1271
+#: prefs.js:1241 prefs.js:1269
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: prefs.js:1258 prefs.js:1260
+#: prefs.js:1256 prefs.js:1258
 msgid "Import Settings"
 msgstr "Importovat nastavení"
 
-#: prefs.js:1270
+#: prefs.js:1268
 msgid "Open"
 msgstr "Otevřít"
 
-#: prefs.js:1293 prefs.js:1295
+#: prefs.js:1291 prefs.js:1293
 msgid "Reset Settings"
 msgstr "Obnovit nastavení"
 
-#: prefs.js:1296
+#: prefs.js:1294
 msgid "Are you sure you want to reset all preferences?"
 msgstr "Určitě chcete obnovit všechna nastavení?"
 
-#: prefs.js:1312
+#: prefs.js:1310
 msgid "Debug Mode"
 msgstr "Režim ladění (Debug)"
 
-#: prefs.js:1313
+#: prefs.js:1311
 msgid ""
 "Warning: may affect performance, use only if you know what you are doing."
 msgstr "Varování: může ovlivnit výkon, použijte na vlastní nebezpečí."
