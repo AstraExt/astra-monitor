@@ -414,9 +414,9 @@ export default class GpuMonitor extends Monitor {
 
     startListeningFor(key: string) {
         if(key === 'gpuUpdateProcessor') {
-            setTimeout(() => {
+            Utils.lowPriorityTask(() => {
                 this.updateMonitorStatus();
-            });
+            }, GLib.PRIORITY_HIGH_IDLE);
         }
     }
 
