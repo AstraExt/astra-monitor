@@ -6,7 +6,7 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Beta<br>2/7</th>
+        <th style="text-align:center" colspan="3">Beta<br>3/6</th>
     </tr>
     <tr>
         <th style="text-align:center">Early April 2024</th>
@@ -15,18 +15,18 @@
     </tr>
     <tr>
         <td style="text-align:center">✅<br>Advanced Network Monitoring</td>
-        <td style="text-align:center">⏳<br>Advanced GPU Monitoring</td>
-        <td style="text-align:center">🔲<br>Settings Profiles</td>
+        <td style="text-align:center">✅<br>Advanced GPU Monitoring</td>
+        <td style="text-align:center">⏳<br>New Preferences Panel</td>
     </tr>
     <tr>
         <td style="text-align:center">✅<br>Advanced Disk Monitoring</td>
-        <td style="text-align:center">🔲<br>Battery Monitoring</td>
+        <td style="text-align:center"></td>
         <td style="text-align:center">🔲<br>Compact Mode</td>
     </tr>
     <tr>
         <td style="text-align:center"></td>
         <td style="text-align:center"></td>
-        <td style="text-align:center">🔲<br>Themes</td>
+        <td style="text-align:center">🔲<br>Settings Profiles</td>
     </tr>
 </table>
 
@@ -34,15 +34,18 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="1">Release<br>0/2</th>
+        <th style="text-align:center" colspan="2">Release<br>0/4</th>
     </tr>
     <tr>
-        <th style="text-align:center">May 2024</th>
+        <th style="text-align:center">Mid May 2024</th>
+        <th style="text-align:center">Late May 2024</th>
     </tr>
     <tr>
+        <td style="text-align:center">🔲<br>Battery Monitoring</td>
         <td style="text-align:center">🔲<br>User Custom Commands</td>
     </tr>
     <tr>
+        <td style="text-align:center">🔲<br>Themes</td>
         <td style="text-align:center">🔲<br>Continuos Monitoring Mode</td>
     </tr>
 </table>
