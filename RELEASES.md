@@ -1,8 +1,17 @@
+# Astra Monitor 23 - TO BE RELEASED
+
+### New features
+
+-   **_New Preferences Panel_**: In response to the need for more space to accommodate additional sections in our preferences panel, and the burgeoning size of the prefs.js file, which had grown to over 3,500 lines, we have taken the opportunity to reorganize both the code and the user interface of our settings. The new preferences panel now mirrors the layout of the system settings panel, enhancing usability and scalability. It is designed to easily integrate numerous additional sections, paving the way for the swift incorporation of future features
+\
+\
+This is an ongoing process and the panel is not yet in its final form; it may undergo significant changes in the upcoming updates. We highly welcome and value your feedback.
+
 # Astra Monitor 22 - April 23 2024
 
 ### Breaking changes
 
--   <u>**Headers Height** functionality has been changed</u>. Prior to this release, the default height was 28px and you could change it to fit your needs. Now it will defaults to disabled and the extension will try to accomodate the height of the panel. You still can override the value to be whatever you want in the settings. Upon update we automatically move your previous value to the new setting and disable it if it was set to 28px. **<u>We still suggest you to check the value and eventually reset it to 0 it's not already</u>, to check if the new behavior fits your needs**. [[#114](https://github.com/AstraExt/astra-monitor/issues/114)]
+-   <ins>**Headers Height** functionality has been changed</ins>. Prior to this release, the default height was 28px and you could change it to fit your needs. Now it will defaults to disabled and the extension will try to accomodate the height of the panel. You still can override the value to be whatever you want in the settings. Upon update we automatically move your previous value to the new setting and disable it if it was set to 28px. **<ins>We still suggest you to check the value and eventually reset it to 0 it's not already</ins>, to check if the new behavior fits your needs**. [[#114](https://github.com/AstraExt/astra-monitor/issues/114)]
 
 ### Bug fixes
 
