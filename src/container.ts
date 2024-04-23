@@ -20,6 +20,7 @@
 
 import GObject from 'gi://GObject';
 import St from 'gi://St';
+import Clutter from 'gi://Clutter';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
@@ -62,6 +63,8 @@ export default GObject.registerClass(
                 vertical: false,
                 x_expand: true,
                 y_expand: true,
+                x_align: Clutter.ActorAlign.START,
+                y_align: Clutter.ActorAlign.FILL,
                 style: this.computeStyle(),
             });
 

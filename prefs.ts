@@ -456,15 +456,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.addSpinRow(
             {
                 title: _('Headers Height'),
-                subtitle: _('Experimental feature: may require to disable/enable the extension.'),
+                subtitle:
+                    _('Experimental feature: may require to disable/enable the extension.') +
+                    '\n' +
+                    _('Set between 15 and 80 to enable height override'),
                 icon_name: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
-            'headers-height',
+            'headers-height-override',
             headersSection,
-            { min: 15, max: 80, digits: 0, step: 1, page: 5 },
+            { min: 0, max: 80, digits: 0, step: 1, page: 5 },
             true,
-            28
+            0
         );
         this.addFontRow(
             {

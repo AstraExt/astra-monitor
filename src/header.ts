@@ -34,10 +34,13 @@ declare const global: any;
 export default GObject.registerClass(
     class Header extends St.Widget {
         private menu?: MenuBase;
-        private box: St.Widget;
+        private box: St.BoxLayout;
+
+        private cachedHeight = { fill: -1, override: -1 };
 
         constructor(name: string) {
             super({
+                name: 'AstraMonitorHeader',
                 reactive: true,
                 can_focus: true,
                 track_hover: true,
@@ -47,14 +50,17 @@ export default GObject.registerClass(
                 layoutManager: new Clutter.BinLayout(),
                 x_expand: true,
                 y_expand: true,
+                x_align: Clutter.ActorAlign.START,
+                y_align: Clutter.ActorAlign.FILL,
             });
             this.name = name;
 
             Utils.verbose(`Creating ${this.name}`);
 
             this.box = new St.BoxLayout({
+                name: 'AstraMonitorHeaderBox',
                 x_expand: true,
-                y_expand: true,
+                y_expand: false,
                 x_align: Clutter.ActorAlign.START,
                 y_align: Clutter.ActorAlign.CENTER,
                 style_class: 'astra-monitor-header-box',
@@ -85,8 +91,10 @@ export default GObject.registerClass(
                 this.hideTooltip();
             });
 
-            Config.connect(this, 'changed::headers-height', this.setStyle.bind(this));
-            this.setStyle();
+            Config.connect(this, 'changed::headers-height-override', this.setStyle.bind(this));
+            this.box.connect('notify::allocation', () => {
+                Utils.lowPriorityTask(this.setStyle.bind(this));
+            });
         }
 
         public getMenu() {
@@ -94,14 +102,25 @@ export default GObject.registerClass(
         }
 
         setStyle() {
-            let style = '';
+            if(!this.box.get_parent()) return;
+            if(!this.box.has_allocation()) return;
 
-            let height = Config.get_int('headers-height');
-            if(height < 15 || height > 80) height = 32;
-            style += `height:${height}px;`;
+            let fillHeight = this.box.get_parent()!.height ?? 0;
+            const override = Config.get_int('headers-height-override');
+
+            if(this.cachedHeight.fill === fillHeight && this.cachedHeight.override === override) {
+                return;
+            }
+            this.cachedHeight = { fill: fillHeight, override };
+
+            fillHeight -= 4; // 2px padding top and bottom
+
+            const scaledFillHeight = Math.min(32, fillHeight) * this.scaleFactor;
+            let style = `height:${scaledFillHeight}px;`;
+
+            if(override > 15 && override < 80) style = `height:${override}px;`;
 
             this.box.set_style(style);
-            this.box.queue_relayout();
         }
 
         insert_child_above(child: any, sibling: any) {

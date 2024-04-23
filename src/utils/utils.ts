@@ -2383,6 +2383,16 @@ export default class Utils {
             Config.set('gpu-header-activity-graph-color1', processorMenuGpuColor, 'string');
             Config.set('processor-menu-gpu-color', '', 'string');
         }
+
+        //Fix headers-height moved to headers-height-override (v21 => v22)
+        const height = Config.get_int('headers-height');
+        if(height === 28) {
+            Config.set('headers-height-override', 0, 'int');
+            Config.set('headers-height', 0, 'int');
+        } else if(height > 15 && height < 80) {
+            Config.set('headers-height-override', height, 'int');
+            Config.set('headers-height', 0, 'int');
+        }
     }
 
     static unitToIcon(unit: string): IconData {

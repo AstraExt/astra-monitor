@@ -1,9 +1,14 @@
 # Astra Monitor 22 - TO BE RELEASED
 
+### Breaking changes
+
+-   <u>**Headers Height** functionality has been changed</u>. Prior to this release, the default height was 28px and you could change it to fit your needs. Now it will defaults to disabled and the extension will try to accomodate the height of the panel. You still can override the value to be whatever you want in the settings. Upon update we automatically move your previous value to the new setting and disable it if it was set to 28px. **<u>We still suggest you to check the value and eventually reset it to 0 it's not already</u>, to check if the new behavior fits your needs**. [[#114](https://github.com/AstraExt/astra-monitor/issues/114)]
+
 ### Bug fixes
 
 -   Fixed gpu monitoring not working on some AMD gpus [[#116](https://github.com/AstraExt/astra-monitor/issues/116)]
 -   Arrow colors in Storage Top Processes popup wasn't following menu's color settings [[#115](https://github.com/AstraExt/astra-monitor/issues/115)]
+-   Now Headers Font Size override apply to multiple lines values too
 
 # Astra Monitor 21 - April 19 2024
 

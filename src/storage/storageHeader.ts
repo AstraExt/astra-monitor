@@ -466,9 +466,13 @@ export default GObject.registerClass(
             const calculateStyle = () => {
                 if(this.ioLayout === 'horizontal') return 'font-size:1em;';
                 const superHeight = this.speedContainer.get_parent()?.height ?? 0;
-                const scaledHeight = superHeight / this.scaleFactor;
+                let scaledHeight = superHeight / this.scaleFactor;
                 if(scaledHeight <= 20) return 'font-size:0.65em;';
-                return `font-size:${Math.round(scaledHeight / 3)}px;`;
+                scaledHeight = Math.round(scaledHeight / 3);
+
+                const fontSize = Config.get_int('headers-font-size');
+                if(fontSize && fontSize < scaledHeight) return `font-size:${fontSize}px;`;
+                return `font-size:${scaledHeight}px;`;
             };
             const style = calculateStyle();
 

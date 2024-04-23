@@ -144,11 +144,11 @@
       <description>Set the font size of the headers (0 to disable override)</description>
       <range min="0" max="30"/>
     </key>
-    <key name="headers-height" type="i">
+    <key name="headers-height-override" type="i">
       <default>28</default>
       <summary>Headers Height</summary>
-      <description>Set the height of the headers</description>
-      <range min="15" max="80"/>
+      <description>Set between 15 and 80 to override the height of the headers</description>
+      <range min="0" max="80"/>
     </key>
     
     <!-- PROCESSOR -->
@@ -322,21 +322,6 @@
       <default>true</default>
       <summary>GPU</summary>
       <description>Show the GPU info in the menu</description>
-    </key>
-    
-    <!-- DEPRECATED KEYS
-    VALUES ARE MOVED TO PROPER NEW KEYS AS SOON AS FIRST RUN (V20)
-    KEEP THEM FOR BACKWARD COMPATIBILITY
-    -->
-    <key name="processor-menu-gpu" type="s">
-      <default>'""'</default>
-      <summary>GPU</summary>
-      <description>Show the GPU usage</description>
-    </key>
-    <key name="processor-menu-gpu-color" type="s">
-      <default>'rgba(29,172,214,1.0)'</default>
-      <summary>GPU Bars Color 1</summary>
-      <description>Main color for GPU bars</description>
     </key>
     
     <!-- GPU -->
@@ -1225,6 +1210,27 @@
       <summary>Sensors Tooltip Sensor 5 Digits</summary>
       <description>Fifth sensor digits to show on the Tooltip of the sensors monitor</description>
       <range min="-1" max="3"/>
+    </key>
+    
+    <!-- DEPRECATED KEYS
+    VALUES ARE MOVED TO PROPER NEW KEYS AS SOON AS FIRST RUN (V20)
+    KEEP THEM FOR BACKWARD COMPATIBILITY
+    -->
+    <key name="processor-menu-gpu" type="s">
+      <default>'""'</default>
+      <summary>GPU</summary>
+      <description>Show the GPU usage</description>
+    </key>
+    <key name="processor-menu-gpu-color" type="s">
+      <default>'rgba(29,172,214,1.0)'</default>
+      <summary>GPU Bars Color 1</summary>
+      <description>Main color for GPU bars</description>
+    </key>
+    <key name="headers-height" type="i">
+      <default>28</default>
+      <summary>Headers Height</summary>
+      <description>Set the height of the headers</description>
+      <range min="0" max="80"/>
     </key>
   </schema>
 </schemalist>
