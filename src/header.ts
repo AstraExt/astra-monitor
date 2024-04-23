@@ -40,7 +40,6 @@ export default GObject.registerClass(
 
         constructor(name: string) {
             super({
-                name: 'AstraMonitorHeader',
                 reactive: true,
                 can_focus: true,
                 track_hover: true,
@@ -58,7 +57,6 @@ export default GObject.registerClass(
             Utils.verbose(`Creating ${this.name}`);
 
             this.box = new St.BoxLayout({
-                name: 'AstraMonitorHeaderBox',
                 x_expand: true,
                 y_expand: false,
                 x_align: Clutter.ActorAlign.START,
