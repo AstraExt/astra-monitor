@@ -1,4 +1,4 @@
-# Astra Monitor 22 - TO BE RELEASED
+# Astra Monitor 22 - April 23 2024
 
 ### Breaking changes
 
