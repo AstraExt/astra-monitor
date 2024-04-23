@@ -815,7 +815,7 @@ export default class GpuMonitor extends Monitor {
 
                             for(const name in process.usage) {
                                 const pipe = process.usage[name];
-                                if(pipe.value != null && pipe.unit) {
+                                if(pipe && pipe.value != null && pipe.unit) {
                                     let value = pipe.value;
                                     let unit = pipe.unit;
 
