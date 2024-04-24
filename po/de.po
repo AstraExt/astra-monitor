@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-23 17:17+0200\n"
+"POT-Creation-Date: 2024-04-24 15:27+0200\n"
 "PO-Revision-Date: 2024-01-21 12:11+0100\n"
 "Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
 "Language-Team: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: src/processor/processorMenu.js:37 prefs.js:389
+#: src/processor/processorMenu.js:37 src/prefs/processors.js:186
 msgid "CPU"
 msgstr "CPU"
 
@@ -129,10 +129,1266 @@ msgstr[1] "Vor %d min"
 msgid "now"
 msgstr "jetzt"
 
+#: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
+#: src/prefs/sensors.js:82 src/prefs/sensors.js:96
 #: src/sensors/sensorsMenu.js:35 src/gpu/gpuMenuComponent.js:338
-#: src/gpu/gpuMenuComponent.js:802 prefs.js:1040 prefs.js:1043 prefs.js:1057
+#: src/gpu/gpuMenuComponent.js:802 prefs.js:319
 msgid "Sensors"
 msgstr "Sensoren"
+
+#: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
+#: src/prefs/network.js:82 src/prefs/gpu.js:80 src/prefs/processors.js:80
+#: src/prefs/processors.js:82 prefs.js:166 prefs.js:200 prefs.js:226
+#: prefs.js:260 prefs.js:294 prefs.js:328
+msgid "General"
+msgstr "Allgemein"
+
+#: src/prefs/sensors.js:83 src/prefs/sensors.js:135 src/prefs/sensors.js:147
+#: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
+#: src/prefs/gpu.js:84 src/prefs/processors.js:83
+msgid "Show"
+msgstr "Anzeigen"
+
+#: src/prefs/sensors.js:84 src/prefs/memory.js:84 src/prefs/storage.js:86
+#: src/prefs/network.js:86 src/prefs/gpu.js:92 src/prefs/processors.js:84
+msgid "Update frequency (seconds)"
+msgstr "Aktualisierungsrate (Sekunden)"
+
+#: src/prefs/sensors.js:86
+msgctxt "Celsius unit measure choice"
+msgid "Celsius"
+msgstr "Celsius"
+
+#: src/prefs/sensors.js:87
+msgctxt "Fahrenheit unit measure choice"
+msgid "Fahrenheit"
+msgstr "Fahrenheit"
+
+#: src/prefs/sensors.js:89
+msgid "Temperature Unit"
+msgstr "Temperatureinheit"
+
+#: src/prefs/sensors.js:90 src/prefs/memory.js:105 src/prefs/storage.js:184
+#: src/prefs/network.js:153 src/prefs/processors.js:85
+#, fuzzy
+msgid "Data Sources"
+msgstr "Quelle"
+
+#: src/prefs/sensors.js:92 src/prefs/memory.js:107 src/prefs/memory.js:113
+#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
+#: src/prefs/network.js:155 src/prefs/network.js:171 src/prefs/processors.js:87
+#: src/prefs/processors.js:93 src/prefs/processors.js:99
+#: src/prefs/processors.js:105
+msgid "Auto"
+msgstr ""
+
+#: src/prefs/sensors.js:102 src/prefs/sensors.js:104 src/prefs/memory.js:123
+#: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
+#: src/prefs/network.js:181 src/prefs/gpu.js:111 src/prefs/gpu.js:113
+#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:174
+#: prefs.js:208 prefs.js:234 prefs.js:268 prefs.js:302 prefs.js:336
+msgid "Header"
+msgstr ""
+
+#: src/prefs/sensors.js:105 src/prefs/memory.js:126 src/prefs/storage.js:209
+#: src/prefs/network.js:184 src/prefs/gpu.js:114 src/prefs/processors.js:117
+msgid "Indicators Order"
+msgstr ""
+
+#: src/prefs/sensors.js:108 src/prefs/memory.js:129 src/prefs/storage.js:212
+#: src/prefs/network.js:187 src/prefs/gpu.js:117 src/prefs/processors.js:120
+msgid "Icon"
+msgstr "Symbol"
+
+#: src/prefs/sensors.js:109 src/prefs/memory.js:130 src/prefs/storage.js:213
+#: src/prefs/network.js:188 src/prefs/gpu.js:118 src/prefs/processors.js:121
+msgid "Show Icon"
+msgstr "Symbol anzeigen"
+
+#: src/prefs/sensors.js:111 src/prefs/memory.js:132 src/prefs/storage.js:215
+#: src/prefs/network.js:190 src/prefs/gpu.js:120 src/prefs/processors.js:123
+#, fuzzy
+msgid "Icon Name"
+msgstr "Symbolgröße"
+
+#: src/prefs/sensors.js:112
+msgid "Set icon name (ie: 'temperature-symbolic')"
+msgstr ""
+
+#: src/prefs/sensors.js:114 src/prefs/memory.js:135 src/prefs/storage.js:218
+#: src/prefs/network.js:193 src/prefs/gpu.js:123 src/prefs/processors.js:126
+msgid "Set to empty to disable icon override"
+msgstr ""
+
+#: src/prefs/sensors.js:117 src/prefs/memory.js:138 src/prefs/storage.js:221
+#: src/prefs/network.js:196 src/prefs/gpu.js:126 src/prefs/processors.js:129
+msgid "Icon Color"
+msgstr ""
+
+#: src/prefs/sensors.js:118 src/prefs/memory.js:139 src/prefs/storage.js:222
+#: src/prefs/network.js:197 src/prefs/gpu.js:127 src/prefs/processors.js:130
+msgid "Icon Alert Color"
+msgstr ""
+
+#: src/prefs/sensors.js:120 src/prefs/memory.js:141 src/prefs/storage.js:224
+#: src/prefs/network.js:199 src/prefs/gpu.js:129 src/prefs/processors.js:132
+msgid "Icon Size"
+msgstr "Symbolgröße"
+
+#: src/prefs/sensors.js:121 src/prefs/memory.js:142 src/prefs/storage.js:225
+#: src/prefs/network.js:200 src/prefs/visualization.js:132
+#: src/prefs/visualization.js:140 src/prefs/visualization.js:148
+#: src/prefs/gpu.js:130 src/prefs/processors.js:133
+msgid "Experimental feature: may require to disable/enable the extension."
+msgstr ""
+"Experimentelle Funktion: Es könnte erforderlich sein, die Erweiterung neu zu "
+"aktivieren."
+
+#: src/prefs/sensors.js:128 src/prefs/gpu.js:94
+msgid "None"
+msgstr "Kein"
+
+#: src/prefs/sensors.js:134
+msgid "Sensor 1"
+msgstr "Sensor 1"
+
+#: src/prefs/sensors.js:137 src/prefs/sensors.js:154 src/prefs/sensors.js:168
+#: src/prefs/sensors.js:184 src/prefs/sensors.js:200 src/prefs/sensors.js:216
+#: src/prefs/sensors.js:232
+msgid "Source"
+msgstr "Quelle"
+
+#: src/prefs/sensors.js:142 src/prefs/sensors.js:159 src/prefs/sensors.js:178
+#: src/prefs/sensors.js:194 src/prefs/sensors.js:210 src/prefs/sensors.js:226
+#: src/prefs/sensors.js:242
+msgid "Value Digits"
+msgstr ""
+
+#: src/prefs/sensors.js:143 src/prefs/sensors.js:160 src/prefs/sensors.js:179
+#: src/prefs/sensors.js:195 src/prefs/sensors.js:211 src/prefs/sensors.js:227
+#: src/prefs/sensors.js:243
+msgid "Set -1 to auto. Number of digits after the decimal point."
+msgstr ""
+
+#: src/prefs/sensors.js:146
+msgid "Sensor 2"
+msgstr "Sensor 2"
+
+#: src/prefs/sensors.js:149 src/prefs/storage.js:284 src/prefs/network.js:233
+msgid "Vertical"
+msgstr ""
+
+#: src/prefs/sensors.js:150 src/prefs/storage.js:285 src/prefs/network.js:234
+msgid "Horizontal"
+msgstr ""
+
+#: src/prefs/sensors.js:152
+#, fuzzy
+msgid "Sensor 2 Layout"
+msgstr "Sensor 2"
+
+#: src/prefs/sensors.js:164 src/prefs/memory.js:192 src/prefs/storage.js:291
+#: src/prefs/network.js:240 src/prefs/gpu.js:179 src/prefs/processors.js:174
+msgid "Tooltip"
+msgstr "Minihilfe"
+
+#: src/prefs/sensors.js:165 src/prefs/memory.js:193 src/prefs/storage.js:292
+#: src/prefs/network.js:241 src/prefs/gpu.js:180 src/prefs/processors.js:175
+msgid "Show Tooltip"
+msgstr "Minihilfe anzeigen"
+
+#: src/prefs/sensors.js:166
+#, fuzzy
+msgid "Tooltip Sensor 1"
+msgstr "Sensor 1"
+
+#: src/prefs/sensors.js:173 src/prefs/sensors.js:189 src/prefs/sensors.js:205
+#: src/prefs/sensors.js:221 src/prefs/sensors.js:237
+#, fuzzy
+msgid "Short Name"
+msgstr "Symbolgröße"
+
+#: src/prefs/sensors.js:174 src/prefs/sensors.js:190 src/prefs/sensors.js:206
+#: src/prefs/sensors.js:222 src/prefs/sensors.js:238
+msgid "Short name to display in the tooltip."
+msgstr ""
+
+#: src/prefs/sensors.js:182
+#, fuzzy
+msgid "Tooltip Sensor 2"
+msgstr "Sensor 2"
+
+#: src/prefs/sensors.js:198
+#, fuzzy
+msgid "Tooltip Sensor 3"
+msgstr "Minihilfe"
+
+#: src/prefs/sensors.js:214
+#, fuzzy
+msgid "Tooltip Sensor 4"
+msgstr "Minihilfe"
+
+#: src/prefs/sensors.js:230
+#, fuzzy
+msgid "Tooltip Sensor 5"
+msgstr "Minihilfe"
+
+#: src/prefs/sensors.js:251 src/prefs/memory.js:202 src/prefs/memory.js:204
+#: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:248
+#: src/prefs/network.js:250 src/prefs/gpu.js:189 src/prefs/processors.js:183
+#: src/prefs/processors.js:185 prefs.js:182 prefs.js:242 prefs.js:276
+#: prefs.js:310
+msgid "Menu"
+msgstr "Menü"
+
+#: src/prefs/sensors.js:256 src/prefs/gpu.js:194
+msgid "Empty for now"
+msgstr ""
+
+#: src/prefs/utility.js:35 src/prefs/utility.js:48 src/prefs/utility.js:51
+#: prefs.js:352
+msgid "Utility"
+msgstr ""
+
+#: src/prefs/utility.js:52 src/prefs/utility.js:54
+msgid "Export Settings"
+msgstr ""
+
+#: src/prefs/utility.js:65
+msgid "Save"
+msgstr ""
+
+#: src/prefs/utility.js:66 src/prefs/utility.js:94
+msgid "Cancel"
+msgstr ""
+
+#: src/prefs/utility.js:81 src/prefs/utility.js:83
+msgid "Import Settings"
+msgstr ""
+
+#: src/prefs/utility.js:93
+msgid "Open"
+msgstr ""
+
+#: src/prefs/utility.js:116 src/prefs/utility.js:118
+msgid "Reset Settings"
+msgstr ""
+
+#: src/prefs/utility.js:119
+msgid "Are you sure you want to reset all preferences?"
+msgstr ""
+
+#: src/prefs/utility.js:135
+msgid "Debug Mode"
+msgstr "Debug-Modus"
+
+#: src/prefs/utility.js:136
+msgid ""
+"Warning: may affect performance, use only if you know what you are doing."
+msgstr ""
+
+#: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
+#: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
+#: prefs.js:217
+msgid "Memory"
+msgstr "Arbeitsspeicher"
+
+#: src/prefs/memory.js:86
+#, fuzzy
+msgid "kB (as kiB)"
+msgstr "k (als kB/s)"
+
+#: src/prefs/memory.js:87
+#, fuzzy
+msgid "kB (as KB)"
+msgstr "k (als kB/s)"
+
+#: src/prefs/memory.js:88
+msgid "kiB"
+msgstr ""
+
+#: src/prefs/memory.js:89
+#, fuzzy
+msgid "KiB"
+msgstr "KiB/s"
+
+#: src/prefs/memory.js:90
+msgid "KB"
+msgstr ""
+
+#: src/prefs/memory.js:91
+#, fuzzy
+msgid "k (as kB)"
+msgstr "k (als kB/s)"
+
+#: src/prefs/memory.js:92
+#, fuzzy
+msgid "Ki (as Ki)"
+msgstr "Ki (als KiB/s)"
+
+#: src/prefs/memory.js:94 src/prefs/storage.js:100 src/prefs/network.js:100
+msgid "Data Unit"
+msgstr "Dateneinheit"
+
+#: src/prefs/memory.js:98
+msgid "Used = Total - Free - Buffers - Cached"
+msgstr ""
+
+#: src/prefs/memory.js:100
+msgid "Used = Total - Free"
+msgstr ""
+
+#: src/prefs/memory.js:101
+msgid "Used = Total - Available"
+msgstr ""
+
+#: src/prefs/memory.js:102
+#, fuzzy
+msgid "Used = Active"
+msgstr "Aktiv"
+
+#: src/prefs/memory.js:104
+msgid "Used Memory"
+msgstr "Verwendeter Speicher"
+
+#: src/prefs/memory.js:111
+#, fuzzy
+msgid "Memory Usage"
+msgstr "Arbeitsspeicher"
+
+#: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
+#: src/gpu/gpuMenuComponent.js:282 src/gpu/gpuMenuComponent.js:716
+#, fuzzy
+msgid "Top Processes"
+msgstr "Prozessoren"
+
+#: src/prefs/memory.js:133
+msgid "Set icon name (ie: 'memory-symbolic')"
+msgstr ""
+
+#: src/prefs/memory.js:146 src/prefs/memory.js:194 src/prefs/storage.js:237
+#, fuzzy
+msgid "Usage Percentage"
+msgstr "Prozentwert"
+
+#: src/prefs/memory.js:147
+#, fuzzy
+msgid "Show Usage Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/memory.js:149 src/prefs/memory.js:160 src/prefs/storage.js:240
+#: src/prefs/storage.js:251 src/prefs/gpu.js:138 src/prefs/gpu.js:160
+#: src/prefs/processors.js:141
+#, fuzzy
+msgid "Icon Alert"
+msgstr "Symbolgröße"
+
+#: src/prefs/memory.js:150
+msgid "Set 0 to disable. Value is percentage of ram usage."
+msgstr ""
+
+#: src/prefs/memory.js:153 src/prefs/memory.js:195 src/prefs/storage.js:244
+msgid "Usage Value"
+msgstr ""
+
+#: src/prefs/memory.js:154
+msgid "Show Usage Value"
+msgstr ""
+
+#: src/prefs/memory.js:155 src/prefs/storage.js:246
+msgid "Usage Value Max Number of Figures"
+msgstr ""
+
+#: src/prefs/memory.js:156 src/prefs/memory.js:196 src/prefs/storage.js:247
+msgid "Free Value"
+msgstr ""
+
+#: src/prefs/memory.js:157
+#, fuzzy
+msgid "Show Free Value"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/memory.js:158 src/prefs/storage.js:249
+msgid "Free Value Max Number of Figures"
+msgstr ""
+
+#: src/prefs/memory.js:161
+msgid "Set 0 to disable. Value is free MB of ram."
+msgstr ""
+
+#: src/prefs/memory.js:164 src/prefs/processors.js:145
+msgid "History Graph"
+msgstr "Verlaufsdiagramm"
+
+#: src/prefs/memory.js:165 src/prefs/processors.js:146
+msgid "Show History Graph"
+msgstr "Verlaufsdiagramm anzeigen"
+
+#: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
+#: src/prefs/visualization.js:81 src/prefs/gpu.js:145 src/prefs/gpu.js:167
+#: src/prefs/processors.js:148 src/prefs/processors.js:163
+msgid "Main Color"
+msgstr ""
+
+#: src/prefs/memory.js:168 src/prefs/memory.js:182
+msgid "<b>Used</b> memory color."
+msgstr ""
+
+#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:152
+#: src/prefs/processors.js:188
+msgid "History Graph Breakdown"
+msgstr ""
+
+#: src/prefs/memory.js:173 src/prefs/memory.js:187
+msgid "Alt Color"
+msgstr ""
+
+#: src/prefs/memory.js:174 src/prefs/memory.js:188
+msgid "<b>Allocated <u>unused</u></b> memory color."
+msgstr ""
+
+#: src/prefs/memory.js:177 src/prefs/gpu.js:149 src/prefs/gpu.js:171
+#: src/prefs/processors.js:158
+msgid "History Graph Width"
+msgstr "Breite des Verlaufsdiagramms"
+
+#: src/prefs/memory.js:178 src/prefs/processors.js:159
+msgid "Realtime Bar"
+msgstr "Echtzeitbalken"
+
+#: src/prefs/memory.js:179 src/prefs/processors.js:160
+msgid "Show Realtime Bar"
+msgstr "Echtzeitbalken anzeigen"
+
+#: src/prefs/memory.js:185 src/prefs/processors.js:167
+msgid "Realtime Bar Breakdown"
+msgstr ""
+
+#: src/prefs/memory.js:207 src/memory/memoryMenu.js:329
+msgid "Swap"
+msgstr "Auslagerungsspeicher"
+
+#: src/prefs/memory.js:209
+msgid "Swap Bar Color"
+msgstr ""
+
+#: src/prefs/memory.js:210
+msgid "Swap bar main color."
+msgstr ""
+
+#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:360
+msgid "About"
+msgstr ""
+
+#: src/prefs/about.js:48 src/network/networkMenu.js:685
+msgid "Info"
+msgstr "Info"
+
+#: src/prefs/about.js:57
+msgid "Version"
+msgstr "Version"
+
+#: src/prefs/about.js:58
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/about.js:59
+msgid "Changelog"
+msgstr "Änderungsverlauf"
+
+#: src/prefs/about.js:60
+msgid "Roadmap"
+msgstr ""
+
+#: src/prefs/about.js:61
+msgid "Report a bug or suggest new feature"
+msgstr "Melden Sie einen Fehler oder schlagen Sie eine neue Funktion vor"
+
+#: src/prefs/about.js:62
+msgid "GNOME Extensions page"
+msgstr "GNOME Erweiterungen-Seite"
+
+#: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:251
+msgid "Storage"
+msgstr "Speicher"
+
+#: src/prefs/storage.js:88 src/prefs/network.js:88
+msgid "kB/s"
+msgstr "kB/s"
+
+#: src/prefs/storage.js:89 src/prefs/network.js:89
+msgid "KiB/s"
+msgstr "KiB/s"
+
+#: src/prefs/storage.js:90 src/prefs/network.js:90
+msgid "kb/s"
+msgstr "kb/s"
+
+#: src/prefs/storage.js:91 src/prefs/network.js:91
+msgid "Kibit/s"
+msgstr "Kibit/s"
+
+#: src/prefs/storage.js:92 src/prefs/network.js:92
+msgid "kBps"
+msgstr "kBps"
+
+#: src/prefs/storage.js:93 src/prefs/network.js:93
+msgid "KiBps"
+msgstr "KiBps"
+
+#: src/prefs/storage.js:94 src/prefs/network.js:94
+msgid "Kibps"
+msgstr "Kibps"
+
+#: src/prefs/storage.js:95 src/prefs/network.js:95
+msgid "kbps"
+msgstr "kbps"
+
+#: src/prefs/storage.js:96 src/prefs/network.js:96
+msgid "Kibitps"
+msgstr "Kibitps"
+
+#: src/prefs/storage.js:97 src/prefs/network.js:97
+msgid "k (as kB/s)"
+msgstr "k (als kB/s)"
+
+#: src/prefs/storage.js:98 src/prefs/network.js:98
+msgid "Ki (as KiB/s)"
+msgstr "Ki (als KiB/s)"
+
+#: src/prefs/storage.js:121 src/prefs/storage.js:229
+msgid "Main Disk"
+msgstr ""
+
+#: src/prefs/storage.js:122
+#, fuzzy
+msgid "Ignored Storage Devices"
+msgstr "Ignorierte Netzwerkschnittstellen"
+
+#: src/prefs/storage.js:124 src/prefs/network.js:103
+msgid "Regex"
+msgstr "Regex"
+
+#: src/prefs/storage.js:125
+#, fuzzy
+msgid "Devices matching this regex will be ignored."
+msgstr "Schnittstellen, die zu dieser Regex passen, werden ignoriert."
+
+#: src/prefs/storage.js:127 src/prefs/network.js:106
+msgid "Leave empty to disable. Usage example: "
+msgstr ""
+
+#: src/prefs/storage.js:139 src/prefs/storage.js:173 src/prefs/network.js:116
+#: src/prefs/network.js:142 src/memory/memoryMenu.js:216
+msgid "Active"
+msgstr "Aktiv"
+
+#: src/prefs/storage.js:139 src/prefs/storage.js:165 src/prefs/network.js:116
+#: src/prefs/network.js:134
+msgid "Ignored"
+msgstr "Ignoriert"
+
+#: src/prefs/storage.js:141
+#, fuzzy
+msgid "Main"
+msgstr "Haupt-GPU"
+
+#: src/prefs/storage.js:158
+msgid "Main disk cannot be ignored"
+msgstr ""
+
+#: src/prefs/storage.js:190
+#, fuzzy
+msgid "Storage Usage"
+msgstr "Speicher"
+
+#: src/prefs/storage.js:200
+#, fuzzy
+msgid "Storage IO"
+msgstr "Speicher"
+
+#: src/prefs/storage.js:216
+msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
+msgstr ""
+
+#: src/prefs/storage.js:230
+msgid "Usage Bar"
+msgstr ""
+
+#: src/prefs/storage.js:231
+msgid "Show Main Disk Usage Bar"
+msgstr ""
+
+#: src/prefs/storage.js:234
+msgid "<b>Used</b> storage color."
+msgstr ""
+
+#: src/prefs/storage.js:238
+#, fuzzy
+msgid "Show Main Disk Usage Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/storage.js:241
+msgid "Set 0 to disable. Value is percentage of disk usage."
+msgstr ""
+
+#: src/prefs/storage.js:245
+msgid "Show Main Disk Usage Value"
+msgstr ""
+
+#: src/prefs/storage.js:248
+msgid "Show Main Disk Free Value"
+msgstr ""
+
+#: src/prefs/storage.js:252
+msgid "Set 0 to disable. Value is free MB of storage."
+msgstr ""
+
+#: src/prefs/storage.js:255 src/prefs/network.js:204
+msgid "IO"
+msgstr "IO"
+
+#: src/prefs/storage.js:256 src/prefs/network.js:205
+#, fuzzy
+msgid "Realtime IO Bar"
+msgstr "Echtzeitbalken"
+
+#: src/prefs/storage.js:257 src/prefs/network.js:206
+msgid "Show Realtime IO Bar"
+msgstr ""
+
+#: src/prefs/storage.js:259 src/prefs/storage.js:271 src/prefs/storage.js:307
+msgid "Read Color"
+msgstr ""
+
+#: src/prefs/storage.js:260
+msgid "<b>Read</b> IO Bar color."
+msgstr ""
+
+#: src/prefs/storage.js:264 src/prefs/storage.js:276 src/prefs/storage.js:312
+msgid "Write Color"
+msgstr ""
+
+#: src/prefs/storage.js:265
+msgid "<b>Write</b> IO Bar color."
+msgstr ""
+
+#: src/prefs/storage.js:268 src/prefs/network.js:217
+#, fuzzy
+msgid "IO History Graph"
+msgstr "Verlaufsdiagramm"
+
+#: src/prefs/storage.js:269 src/prefs/network.js:218
+msgid "Show IO History Graph"
+msgstr ""
+
+#: src/prefs/storage.js:272
+msgid "<b>Read</b> IO History Graph color."
+msgstr ""
+
+#: src/prefs/storage.js:277
+msgid "<b>Write</b> IO History Graph color."
+msgstr ""
+
+#: src/prefs/storage.js:280 src/prefs/network.js:229
+msgid "IO History Graph Width"
+msgstr ""
+
+#: src/prefs/storage.js:281 src/prefs/storage.js:296 src/prefs/network.js:230
+#: src/prefs/network.js:242
+msgid "IO Speed"
+msgstr ""
+
+#: src/prefs/storage.js:282 src/prefs/network.js:231
+msgid "Show IO Speed"
+msgstr ""
+
+#: src/prefs/storage.js:287 src/prefs/network.js:236
+msgid "IO Speed Layout"
+msgstr ""
+
+#: src/prefs/storage.js:288 src/prefs/network.js:237
+msgid "IO Speed Max Number of Figures"
+msgstr ""
+
+#: src/prefs/storage.js:289 src/prefs/network.js:238
+msgid "IO Speed Threshold"
+msgstr ""
+
+#: src/prefs/storage.js:289 src/prefs/network.js:238
+msgid "in kB/s"
+msgstr "in kB/s"
+
+#: src/prefs/storage.js:293
+#, fuzzy
+msgid "Main Disk Usage Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/storage.js:294
+#, fuzzy
+msgid "Main Disk Usage Value"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/storage.js:295
+#, fuzzy
+msgid "Main Disk Free Value"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/storage.js:305 src/prefs/network.js:251
+msgid "IO Arrows"
+msgstr ""
+
+#: src/prefs/storage.js:308
+msgid "<b>Read</b> IO arrow color."
+msgstr ""
+
+#: src/prefs/storage.js:313
+msgid "<b>Write</b> IO arrow color."
+msgstr ""
+
+#: src/prefs/storage.js:316 src/storage/storageMenu.js:294
+msgid "Devices"
+msgstr "Geräte"
+
+#: src/prefs/storage.js:318
+msgid "Device Usage Bar Color"
+msgstr ""
+
+#: src/prefs/prefsUtils.js:605
+msgid "Move up"
+msgstr ""
+
+#: src/prefs/prefsUtils.js:624
+msgid "Move down"
+msgstr ""
+
+#: src/prefs/welcome.js:33 prefs.js:124
+msgid "Welcome"
+msgstr ""
+
+#: src/prefs/welcome.js:46
+msgid "Dependencies"
+msgstr "Abhängigkeiten"
+
+#: src/prefs/welcome.js:50
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr ""
+"Zugriff auf /proc/stat nicht möglich: Diese Erweiterung wird nicht "
+"funktionieren!"
+
+#: src/prefs/welcome.js:54
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
+msgstr ""
+"Zugriff auf /proc/cpuinfo nicht möglich: Diese Erweiterung wird nicht "
+"funktionieren!"
+
+#: src/prefs/welcome.js:58
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr ""
+"Zugriff auf /proc/meminfo nicht möglich: Diese Erweiterung wird nicht "
+"funktionieren!"
+
+#: src/prefs/welcome.js:62
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr ""
+"Zugriff auf /proc/diskstats nicht möglich: Diese Erweiterung wird nicht "
+"funktionieren!"
+
+#: src/prefs/welcome.js:66
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr ""
+"Zugriff auf /proc/net/dev nicht möglich: Diese Erweiterung wird nicht "
+"funktionieren!"
+
+#: src/prefs/welcome.js:70
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr ""
+"Zugriff auf »ps« nicht möglich: Diese Erweiterung wird nicht funktionieren!"
+
+#: src/prefs/welcome.js:75
+#, fuzzy
+msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
+msgstr ""
+"Zugriff auf /proc/meminfo nicht möglich: Diese Erweiterung wird nicht "
+"funktionieren!"
+
+#: src/prefs/welcome.js:80
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:84
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "»lspci« nicht installiert: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:88
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "»lsblk« nicht installiert: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:93
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
+msgstr ""
+"Zugriff auf /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq nicht "
+"möglich: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:98
+#, fuzzy
+msgid "'iproute2' not installed: some features will be disabled!"
+msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:103
+msgid ""
+"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
+"network info!"
+msgstr ""
+
+#: src/prefs/welcome.js:109
+#, fuzzy
+msgid ""
+"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
+"be disabled!"
+msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:115
+#, fuzzy
+msgid ""
+"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
+"will be disabled!"
+msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:118
+msgid "Checking GTop dependency..."
+msgstr ""
+
+#: src/prefs/welcome.js:122 src/prefs/welcome.js:132
+#, fuzzy
+msgid ""
+"'GTop' not installed, some optional features will be disabled! For a better "
+"experience and performance, install it from your package manager."
+msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
+
+#: src/prefs/welcome.js:126
+msgid "'GTop' successfully detected and added to Data Sources list."
+msgstr ""
+
+#: src/prefs/welcome.js:136
+#, fuzzy
+msgid "All other dependencies are met!"
+msgstr "Alle Abhängigkeiten sind erfüllt!"
+
+#: src/prefs/welcome.js:139
+msgid "Support Us"
+msgstr ""
+
+#: src/prefs/welcome.js:140
+msgid "Support us on Ko-Fi"
+msgstr ""
+
+#: src/prefs/welcome.js:141
+msgid "Buy us a coffee"
+msgstr "Spendieren Sie uns einen Kaffee"
+
+#: src/prefs/welcome.js:142
+msgid "Become a patron"
+msgstr "Werden Sie ein Unterstützer"
+
+#: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
+#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:285
+msgid "Network"
+msgstr "Netzwerk"
+
+#: src/prefs/network.js:101
+msgid "Ignored Network Interfaces"
+msgstr "Ignorierte Netzwerkschnittstellen"
+
+#: src/prefs/network.js:104
+msgid "Interfaces matching this regex will be ignored."
+msgstr "Schnittstellen, die zu dieser Regex passen, werden ignoriert."
+
+#: src/prefs/network.js:159
+#, fuzzy
+msgid "Network IO"
+msgstr "Netzwerk"
+
+#: src/prefs/network.js:161
+msgid "Public IPv4 Address"
+msgstr ""
+
+#: src/prefs/network.js:162 src/prefs/network.js:167
+msgid "Set to empty to disable. Address will be regex matched."
+msgstr ""
+
+#: src/prefs/network.js:166
+msgid "Public IPv6 Address"
+msgstr ""
+
+#: src/prefs/network.js:175
+msgid "Wireless Info"
+msgstr ""
+
+#: src/prefs/network.js:191
+msgid "Set icon name (ie: 'network-wired-symbolic')"
+msgstr ""
+
+#: src/prefs/network.js:208 src/prefs/network.js:220 src/prefs/network.js:253
+msgid "Upload Color"
+msgstr ""
+
+#: src/prefs/network.js:209
+msgid "<b>Upload</b> IO Bar color."
+msgstr ""
+
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:258
+msgid "Download Color"
+msgstr ""
+
+#: src/prefs/network.js:214
+msgid "<b>Download</b> IO Bar color."
+msgstr ""
+
+#: src/prefs/network.js:221
+msgid "<b>Upload</b> IO History Graph color."
+msgstr ""
+
+#: src/prefs/network.js:226
+msgid "<b>Download</b> IO History Graph color."
+msgstr ""
+
+#: src/prefs/network.js:254
+msgid "<b>Upload</b> IO arrow color."
+msgstr ""
+
+#: src/prefs/network.js:259
+msgid "<b>Download</b> IO arrow color."
+msgstr ""
+
+#: src/prefs/visualization.js:40 src/prefs/visualization.js:53
+#: src/prefs/visualization.js:56 prefs.js:140
+msgid "Visualization"
+msgstr "Visualisierung"
+
+#: src/prefs/visualization.js:57
+msgid "Theme"
+msgstr "Thema"
+
+#: src/prefs/visualization.js:59
+msgid "Dark"
+msgstr "Dunkel"
+
+#: src/prefs/visualization.js:60
+msgid "Light"
+msgstr "Hell"
+
+#: src/prefs/visualization.js:63
+msgid "Shell TOPBAR Theme Style"
+msgstr ""
+
+#: src/prefs/visualization.js:64
+msgid ""
+"Set to \"Dark\" or \"Light\" based on your shell TOPBAR theme to improve "
+"readability."
+msgstr ""
+
+#: src/prefs/visualization.js:68
+#, fuzzy
+msgid "Top"
+msgstr "Minihilfe"
+
+#: src/prefs/visualization.js:69
+msgid "Bottom"
+msgstr ""
+
+#: src/prefs/visualization.js:70 src/prefs/visualization.js:105
+msgid "Left"
+msgstr "Links"
+
+#: src/prefs/visualization.js:71 src/prefs/visualization.js:107
+msgid "Right"
+msgstr "Rechts"
+
+#: src/prefs/visualization.js:74
+msgid "Shell TOPBAR/DASH/PANEL Position"
+msgstr ""
+
+#: src/prefs/visualization.js:75
+msgid ""
+"Set this if you moved your shell to another position to improve the layout."
+msgstr ""
+
+#: src/prefs/visualization.js:77
+msgid "Disable/Enable the extension to apply changes."
+msgstr ""
+
+#: src/prefs/visualization.js:82 src/prefs/visualization.js:93
+msgid "This is an utility rather than a setting."
+msgstr ""
+
+#: src/prefs/visualization.js:84
+msgid "Changing this will just replace all main colors."
+msgstr ""
+
+#: src/prefs/visualization.js:92 src/prefs/processors.js:154
+#: src/prefs/processors.js:169
+msgid "Secondary Color"
+msgstr ""
+
+#: src/prefs/visualization.js:95
+msgid "Changing this will just replace all secondary colors."
+msgstr ""
+
+#: src/prefs/visualization.js:102
+msgid "Show 0 instead of -"
+msgstr ""
+
+#: src/prefs/visualization.js:103
+msgid "Panel Box"
+msgstr ""
+
+#: src/prefs/visualization.js:106
+msgid "Center"
+msgstr "Mitte"
+
+#: src/prefs/visualization.js:109
+msgid "Position"
+msgstr "Position"
+
+#: src/prefs/visualization.js:110
+msgid "Order"
+msgstr "Reihenfolge"
+
+#: src/prefs/visualization.js:112
+msgid "Left Margin"
+msgstr ""
+
+#: src/prefs/visualization.js:113 src/prefs/visualization.js:119
+msgid "Experimental feature: may not function properly."
+msgstr ""
+
+#: src/prefs/visualization.js:118
+msgid "Right Margin"
+msgstr ""
+
+#: src/prefs/visualization.js:123
+msgid "Headers"
+msgstr ""
+
+#: src/prefs/visualization.js:125
+#, fuzzy
+msgid "Startup Delay (seconds)"
+msgstr "Aktualisierungsrate (Sekunden)"
+
+#: src/prefs/visualization.js:126
+msgid "Increase if the extension is not properly formatted on startup."
+msgstr ""
+
+#: src/prefs/visualization.js:131
+msgid "Headers Height"
+msgstr ""
+
+#: src/prefs/visualization.js:134
+msgid "Set between 15 and 80 to enable height override"
+msgstr ""
+
+#: src/prefs/visualization.js:139
+msgid "Headers Font"
+msgstr ""
+
+#: src/prefs/visualization.js:142
+msgid "Set to empty to disable font override"
+msgstr ""
+
+#: src/prefs/visualization.js:147
+msgid "Headers Font Size"
+msgstr ""
+
+#: src/prefs/visualization.js:150
+msgid "Set to 0 to disable size override"
+msgstr ""
+
+#: src/prefs/visualization.js:155
+msgid "Monitor Ordering"
+msgstr ""
+
+#: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
+#: src/prefs/gpu.js:82 src/prefs/processors.js:191 src/gpu/gpuMenu.js:28
+#: src/gpu/gpuMenuComponent.js:43 prefs.js:191
+msgid "GPU"
+msgstr "GPU"
+
+#: src/prefs/gpu.js:85
+msgid "Showing GPU info in the panel requires continuous GPU monitoring."
+msgstr ""
+
+#: src/prefs/gpu.js:89
+msgid "Hint: You can instead choose to show GPU stats in Processors' menu."
+msgstr ""
+
+#: src/prefs/gpu.js:105
+msgid "Main GPU"
+msgstr "Haupt-GPU"
+
+#: src/prefs/gpu.js:121
+msgid "Set icon name (ie: 'gpu-symbolic')"
+msgstr ""
+
+#: src/prefs/gpu.js:135 src/prefs/gpu.js:181
+#, fuzzy
+msgid "Activity Percentage"
+msgstr "Prozentwert"
+
+#: src/prefs/gpu.js:136
+#, fuzzy
+msgid "Show Activity Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/gpu.js:139
+msgid "Set 0 to disable. Value is percentage of total GPU Activity usage."
+msgstr ""
+
+#: src/prefs/gpu.js:142
+#, fuzzy
+msgid "Activity History Graph"
+msgstr "Verlaufsdiagramm"
+
+#: src/prefs/gpu.js:143
+#, fuzzy
+msgid "Show Activity History Graph"
+msgstr "Verlaufsdiagramm anzeigen"
+
+#: src/prefs/gpu.js:146 src/prefs/gpu.js:168
+msgid "<b>Total usage</b> color."
+msgstr ""
+
+#: src/prefs/gpu.js:150
+#, fuzzy
+msgid "Realtime Activity Bar"
+msgstr "Echtzeitbalken"
+
+#: src/prefs/gpu.js:151
+#, fuzzy
+msgid "Show Activity Bar"
+msgstr "Aktiv"
+
+#: src/prefs/gpu.js:153 src/prefs/gpu.js:175
+msgid "Bar Color"
+msgstr ""
+
+#: src/prefs/gpu.js:154 src/prefs/gpu.js:176
+msgid "GPU bar main color."
+msgstr ""
+
+#: src/prefs/gpu.js:157 src/prefs/gpu.js:182
+#, fuzzy
+msgid "Memory Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/gpu.js:158
+#, fuzzy
+msgid "Show Memory Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/gpu.js:161
+msgid "Set 0 to disable. Value is percentage of total GPU Memory usage."
+msgstr ""
+
+#: src/prefs/gpu.js:164
+#, fuzzy
+msgid "Memory History Graph"
+msgstr "Verlaufsdiagramm anzeigen"
+
+#: src/prefs/gpu.js:165
+#, fuzzy
+msgid "Show Memory History Graph"
+msgstr "Verlaufsdiagramm anzeigen"
+
+#: src/prefs/gpu.js:172
+#, fuzzy
+msgid "Realtime Memory Bar"
+msgstr "Echtzeitbalken"
+
+#: src/prefs/gpu.js:173
+#, fuzzy
+msgid "Show Memory Bar"
+msgstr "Echtzeitbalken anzeigen"
+
+#: src/prefs/gpu.js:183
+#, fuzzy
+msgid "Memory Value"
+msgstr "Arbeitsspeicher"
+
+#: src/prefs/processors.js:41 src/prefs/processors.js:54
+#: src/prefs/processors.js:67 prefs.js:157
+msgid "Processors"
+msgstr "Prozessoren"
+
+#: src/prefs/processors.js:91
+msgid "Cpu Usage"
+msgstr ""
+
+#: src/prefs/processors.js:97
+msgid "Cpu Cores Usage"
+msgstr ""
+
+#: src/prefs/processors.js:108
+msgid "Load Average"
+msgstr ""
+
+#: src/prefs/processors.js:124
+msgid "Set icon name (ie: 'cpu-symbolic')"
+msgstr ""
+
+#: src/prefs/processors.js:137 src/prefs/processors.js:176
+msgid "Percentage"
+msgstr "Prozentwert"
+
+#: src/prefs/processors.js:138
+msgid "Show Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/processors.js:139 src/prefs/processors.js:177
+#, fuzzy
+msgid "Single Core Percentage"
+msgstr "Prozentwert anzeigen"
+
+#: src/prefs/processors.js:142
+msgid "Set 0 to disable. Value is percentage of total cpu usage."
+msgstr ""
+
+#: src/prefs/processors.js:149 src/prefs/processors.js:164
+msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
+msgstr ""
+
+#: src/prefs/processors.js:155 src/prefs/processors.js:170
+msgid "<b>System usage</b> color."
+msgstr ""
+
+#: src/prefs/processors.js:161
+msgid "Realtime per-core Bars"
+msgstr ""
+
+#: src/prefs/processors.js:187
+msgid "Realtime Bars Breakdown"
+msgstr ""
+
+#: src/prefs/processors.js:189
+msgid "Core Bars Breakdown"
+msgstr ""
+
+#: src/prefs/processors.js:190
+#, fuzzy
+msgid "Top Processes Single Core"
+msgstr "Prozessoren"
+
+#: src/prefs/processors.js:193
+#, fuzzy
+msgid "Show GPU info"
+msgstr "GPU-Info"
+
+#: src/prefs/processors.js:194
+msgid "Only works if GPU header is disabled."
+msgstr ""
 
 #: src/sensors/sensorsMenu.js:38
 msgid "No sensor found"
@@ -144,10 +1400,6 @@ msgid "%d sensor"
 msgid_plural "%d sensors"
 msgstr[0] "Sensoren"
 msgstr[1] "Sensoren"
-
-#: src/network/networkMenu.js:39 prefs.js:866 prefs.js:869
-msgid "Network"
-msgstr "Netzwerk"
 
 #: src/network/networkMenu.js:73
 msgid "Global Upload:"
@@ -297,10 +1549,6 @@ msgctxt "short for download"
 msgid "D"
 msgstr "D"
 
-#: src/network/networkMenu.js:685 prefs.js:1209
-msgid "Info"
-msgstr "Info"
-
 #: src/network/networkMenu.js:688 src/storage/storageMenu.js:575
 #: src/gpu/gpuMenuComponent.js:393 src/gpu/gpuMenuComponent.js:728
 #: src/gpu/gpuMenuComponent.js:759
@@ -415,10 +1663,6 @@ msgstr ""
 msgid "Signal Level"
 msgstr ""
 
-#: src/storage/storageMenu.js:37 prefs.js:633 prefs.js:636
-msgid "Storage"
-msgstr "Speicher"
-
 #: src/storage/storageMenu.js:66
 msgid "Global Read:"
 msgstr "Globaler Read:"
@@ -439,10 +1683,6 @@ msgstr ""
 #: src/storage/storageMenu.js:112 src/storage/storageMenu.js:719
 msgid "Write"
 msgstr ""
-
-#: src/storage/storageMenu.js:294 prefs.js:856
-msgid "Devices"
-msgstr "Geräte"
 
 #: src/storage/storageMenu.js:297
 msgid "No storage device found"
@@ -747,10 +1987,6 @@ msgstr ""
 msgid "No"
 msgstr "Kein"
 
-#: src/memory/memoryMenu.js:34 prefs.js:506 prefs.js:509 prefs.js:620
-msgid "Memory"
-msgstr "Arbeitsspeicher"
-
 #: src/memory/memoryMenu.js:62
 msgid "Allocated:"
 msgstr "Zugewiesen:"
@@ -788,11 +2024,6 @@ msgstr "Verfügbar"
 msgid "Allocatable"
 msgstr "Zuweisbar"
 
-#: src/memory/memoryMenu.js:216 prefs.js:691 prefs.js:725 prefs.js:901
-#: prefs.js:927
-msgid "Active"
-msgstr "Aktiv"
-
 #: src/memory/memoryMenu.js:226
 msgid "Buffers"
 msgstr "Puffer"
@@ -800,10 +2031,6 @@ msgstr "Puffer"
 #: src/memory/memoryMenu.js:236 src/memory/memoryMenu.js:428
 msgid "Cached"
 msgstr "Cached"
-
-#: src/memory/memoryMenu.js:329 prefs.js:622
-msgid "Swap"
-msgstr "Auslagerungsspeicher"
 
 #: src/memory/memoryMenu.js:396
 msgid "Swap Info"
@@ -821,11 +2048,6 @@ msgstr ""
 msgid "Swap Devices"
 msgstr "Swap-Geräte"
 
-#: src/gpu/gpuMenu.js:28 src/gpu/gpuMenuComponent.js:43 prefs.js:394
-#: prefs.js:404 prefs.js:405
-msgid "GPU"
-msgstr "GPU"
-
 #: src/gpu/gpuMenuComponent.js:54
 msgid "No GPU found"
 msgstr "Keine GPU gefunden"
@@ -842,12 +2064,6 @@ msgstr "Aktiv"
 #: src/gpu/gpuMenuComponent.js:180 src/gpu/gpuMenuComponent.js:615
 msgid "VRAM"
 msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:282 src/gpu/gpuMenuComponent.js:716 prefs.js:318
-#: prefs.js:544 prefs.js:747
-#, fuzzy
-msgid "Top Processes"
-msgstr "Prozessoren"
 
 #: src/gpu/gpuMenuComponent.js:386
 msgid "GPU info"
@@ -876,1163 +2092,6 @@ msgstr "Treiber"
 #: src/gpu/gpuMenuComponent.js:502
 msgid "Modules"
 msgstr "Module"
-
-#: prefs.js:107
-msgid "General"
-msgstr "Allgemein"
-
-#: prefs.js:110
-msgid "Dependencies"
-msgstr "Abhängigkeiten"
-
-#: prefs.js:114
-msgid "Cannot access /proc/stat: this extension will not work!"
-msgstr ""
-"Zugriff auf /proc/stat nicht möglich: Diese Erweiterung wird nicht "
-"funktionieren!"
-
-#: prefs.js:117
-msgid "Cannot access /proc/cpuinfo: this extension will not work!"
-msgstr ""
-"Zugriff auf /proc/cpuinfo nicht möglich: Diese Erweiterung wird nicht "
-"funktionieren!"
-
-#: prefs.js:120
-msgid "Cannot access /proc/meminfo: this extension will not work!"
-msgstr ""
-"Zugriff auf /proc/meminfo nicht möglich: Diese Erweiterung wird nicht "
-"funktionieren!"
-
-#: prefs.js:123
-msgid "Cannot access /proc/diskstats: this extension will not work!"
-msgstr ""
-"Zugriff auf /proc/diskstats nicht möglich: Diese Erweiterung wird nicht "
-"funktionieren!"
-
-#: prefs.js:126
-msgid "Cannot access /proc/net/dev: this extension will not work!"
-msgstr ""
-"Zugriff auf /proc/net/dev nicht möglich: Diese Erweiterung wird nicht "
-"funktionieren!"
-
-#: prefs.js:129
-msgid "Cannot access 'ps': this extension will not work!"
-msgstr ""
-"Zugriff auf »ps« nicht möglich: Diese Erweiterung wird nicht funktionieren!"
-
-#: prefs.js:133
-#, fuzzy
-msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
-msgstr ""
-"Zugriff auf /proc/meminfo nicht möglich: Diese Erweiterung wird nicht "
-"funktionieren!"
-
-#: prefs.js:137
-msgid "'lscpu' not installed: some features will be disabled!"
-msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:140
-msgid "'lspci' not installed: some features will be disabled!"
-msgstr "»lspci« nicht installiert: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:143
-msgid "'lsblk' not installed: some features will be disabled!"
-msgstr "»lsblk« nicht installiert: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:147
-msgid ""
-"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
-"features will be disabled!"
-msgstr ""
-"Zugriff auf /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq nicht "
-"möglich: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:151
-#, fuzzy
-msgid "'iproute2' not installed: some features will be disabled!"
-msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:155
-msgid ""
-"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
-"network info!"
-msgstr ""
-
-#: prefs.js:160
-#, fuzzy
-msgid ""
-"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
-"be disabled!"
-msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:165
-#, fuzzy
-msgid ""
-"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
-"will be disabled!"
-msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:167
-msgid "Checking GTop dependency..."
-msgstr ""
-
-#: prefs.js:171 prefs.js:181
-#, fuzzy
-msgid ""
-"'GTop' not installed, some optional features will be disabled! For a better "
-"experience and performance, install it from your package manager."
-msgstr "»lscpu« nicht installiert: Einige Funktionen sind deaktiviert!"
-
-#: prefs.js:175
-msgid "'GTop' successfully detected and added to Data Sources list."
-msgstr ""
-
-#: prefs.js:185
-#, fuzzy
-msgid "All other dependencies are met!"
-msgstr "Alle Abhängigkeiten sind erfüllt!"
-
-#: prefs.js:187
-msgid "Visualization"
-msgstr "Visualisierung"
-
-#: prefs.js:188
-msgid "Theme"
-msgstr "Thema"
-
-#: prefs.js:190
-msgid "Dark"
-msgstr "Dunkel"
-
-#: prefs.js:191
-msgid "Light"
-msgstr "Hell"
-
-#: prefs.js:194
-msgid "Shell TOPBAR Theme Style"
-msgstr ""
-
-#: prefs.js:195
-msgid ""
-"Set to \"Dark\" or \"Light\" based on your shell TOPBAR theme to improve "
-"readability."
-msgstr ""
-
-#: prefs.js:199
-#, fuzzy
-msgid "Top"
-msgstr "Minihilfe"
-
-#: prefs.js:200
-msgid "Bottom"
-msgstr ""
-
-#: prefs.js:201 prefs.js:236
-msgid "Left"
-msgstr "Links"
-
-#: prefs.js:202 prefs.js:238
-msgid "Right"
-msgstr "Rechts"
-
-#: prefs.js:205
-msgid "Shell TOPBAR/DASH/PANEL Position"
-msgstr ""
-
-#: prefs.js:206
-msgid ""
-"Set this if you moved your shell to another position to improve the layout."
-msgstr ""
-
-#: prefs.js:208
-msgid "Disable/Enable the extension to apply changes."
-msgstr ""
-
-#: prefs.js:212 prefs.js:357 prefs.js:372 prefs.js:462 prefs.js:484
-#: prefs.js:588 prefs.js:602 prefs.js:779
-msgid "Main Color"
-msgstr ""
-
-#: prefs.js:213 prefs.js:224
-msgid "This is an utility rather than a setting."
-msgstr ""
-
-#: prefs.js:215
-msgid "Changing this will just replace all main colors."
-msgstr ""
-
-#: prefs.js:223 prefs.js:363 prefs.js:378
-msgid "Secondary Color"
-msgstr ""
-
-#: prefs.js:226
-msgid "Changing this will just replace all secondary colors."
-msgstr ""
-
-#: prefs.js:233
-msgid "Show 0 instead of -"
-msgstr ""
-
-#: prefs.js:234
-msgid "Panel Box"
-msgstr ""
-
-#: prefs.js:237
-msgid "Center"
-msgstr "Mitte"
-
-#: prefs.js:240
-msgid "Position"
-msgstr "Position"
-
-#: prefs.js:241
-msgid "Order"
-msgstr "Reihenfolge"
-
-#: prefs.js:243
-msgid "Left Margin"
-msgstr ""
-
-#: prefs.js:244 prefs.js:250
-msgid "Experimental feature: may not function properly."
-msgstr ""
-
-#: prefs.js:249
-msgid "Right Margin"
-msgstr ""
-
-#: prefs.js:254
-msgid "Headers"
-msgstr ""
-
-#: prefs.js:256
-#, fuzzy
-msgid "Startup Delay (seconds)"
-msgstr "Aktualisierungsrate (Sekunden)"
-
-#: prefs.js:257
-msgid "Increase if the extension is not properly formatted on startup."
-msgstr ""
-
-#: prefs.js:262
-msgid "Headers Height"
-msgstr ""
-
-#: prefs.js:263 prefs.js:271 prefs.js:279 prefs.js:342 prefs.js:447
-#: prefs.js:563 prefs.js:771 prefs.js:979 prefs.js:1076
-msgid "Experimental feature: may require to disable/enable the extension."
-msgstr ""
-"Experimentelle Funktion: Es könnte erforderlich sein, die Erweiterung neu zu "
-"aktivieren."
-
-#: prefs.js:265
-msgid "Set between 15 and 80 to enable height override"
-msgstr ""
-
-#: prefs.js:270
-msgid "Headers Font"
-msgstr ""
-
-#: prefs.js:273
-msgid "Set to empty to disable font override"
-msgstr ""
-
-#: prefs.js:278
-msgid "Headers Font Size"
-msgstr ""
-
-#: prefs.js:281
-msgid "Set to 0 to disable size override"
-msgstr ""
-
-#: prefs.js:286
-msgid "Monitor Ordering"
-msgstr ""
-
-#: prefs.js:294 prefs.js:297
-msgid "Processors"
-msgstr "Prozessoren"
-
-#: prefs.js:298 prefs.js:407 prefs.js:510 prefs.js:637 prefs.js:870
-#: prefs.js:1044 prefs.js:1090 prefs.js:1102
-msgid "Show"
-msgstr "Anzeigen"
-
-#: prefs.js:299 prefs.js:415 prefs.js:511 prefs.js:638 prefs.js:871
-#: prefs.js:1045
-msgid "Update frequency (seconds)"
-msgstr "Aktualisierungsrate (Sekunden)"
-
-#: prefs.js:300 prefs.js:532 prefs.js:736 prefs.js:938 prefs.js:1051
-#, fuzzy
-msgid "Data Sources"
-msgstr "Quelle"
-
-#: prefs.js:302 prefs.js:308 prefs.js:314 prefs.js:320 prefs.js:534
-#: prefs.js:540 prefs.js:738 prefs.js:744 prefs.js:749 prefs.js:940
-#: prefs.js:956 prefs.js:1053
-msgid "Auto"
-msgstr ""
-
-#: prefs.js:306
-msgid "Cpu Usage"
-msgstr ""
-
-#: prefs.js:312
-msgid "Cpu Cores Usage"
-msgstr ""
-
-#: prefs.js:323
-msgid "Load Average"
-msgstr ""
-
-#: prefs.js:325 prefs.js:430 prefs.js:546 prefs.js:754 prefs.js:1059
-msgid "Header"
-msgstr ""
-
-#: prefs.js:326 prefs.js:431 prefs.js:547 prefs.js:755 prefs.js:963
-#: prefs.js:1060
-msgid "Indicators Order"
-msgstr ""
-
-#: prefs.js:329 prefs.js:434 prefs.js:550 prefs.js:758 prefs.js:966
-#: prefs.js:1063
-msgid "Icon"
-msgstr "Symbol"
-
-#: prefs.js:330 prefs.js:435 prefs.js:551 prefs.js:759 prefs.js:967
-#: prefs.js:1064
-msgid "Show Icon"
-msgstr "Symbol anzeigen"
-
-#: prefs.js:332 prefs.js:437 prefs.js:553 prefs.js:761 prefs.js:969
-#: prefs.js:1066
-#, fuzzy
-msgid "Icon Name"
-msgstr "Symbolgröße"
-
-#: prefs.js:333
-msgid "Set icon name (ie: 'cpu-symbolic')"
-msgstr ""
-
-#: prefs.js:335 prefs.js:440 prefs.js:556 prefs.js:764 prefs.js:972
-#: prefs.js:1069
-msgid "Set to empty to disable icon override"
-msgstr ""
-
-#: prefs.js:338 prefs.js:443 prefs.js:559 prefs.js:767 prefs.js:975
-#: prefs.js:1072
-msgid "Icon Color"
-msgstr ""
-
-#: prefs.js:339 prefs.js:444 prefs.js:560 prefs.js:768 prefs.js:976
-#: prefs.js:1073
-msgid "Icon Alert Color"
-msgstr ""
-
-#: prefs.js:341 prefs.js:446 prefs.js:562 prefs.js:770 prefs.js:978
-#: prefs.js:1075
-msgid "Icon Size"
-msgstr "Symbolgröße"
-
-#: prefs.js:346 prefs.js:385
-msgid "Percentage"
-msgstr "Prozentwert"
-
-#: prefs.js:347
-msgid "Show Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:348 prefs.js:386
-#, fuzzy
-msgid "Single Core Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:350 prefs.js:455 prefs.js:477 prefs.js:570 prefs.js:581
-#: prefs.js:786 prefs.js:797
-#, fuzzy
-msgid "Icon Alert"
-msgstr "Symbolgröße"
-
-#: prefs.js:351
-msgid "Set 0 to disable. Value is percentage of total cpu usage."
-msgstr ""
-
-#: prefs.js:354 prefs.js:585
-msgid "History Graph"
-msgstr "Verlaufsdiagramm"
-
-#: prefs.js:355 prefs.js:586
-msgid "Show History Graph"
-msgstr "Verlaufsdiagramm anzeigen"
-
-#: prefs.js:358 prefs.js:373
-msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
-msgstr ""
-
-#: prefs.js:361 prefs.js:391 prefs.js:592 prefs.js:621
-msgid "History Graph Breakdown"
-msgstr ""
-
-#: prefs.js:364 prefs.js:379
-msgid "<b>System usage</b> color."
-msgstr ""
-
-#: prefs.js:367 prefs.js:466 prefs.js:488 prefs.js:598
-msgid "History Graph Width"
-msgstr "Breite des Verlaufsdiagramms"
-
-#: prefs.js:368 prefs.js:599
-msgid "Realtime Bar"
-msgstr "Echtzeitbalken"
-
-#: prefs.js:369 prefs.js:600
-msgid "Show Realtime Bar"
-msgstr "Echtzeitbalken anzeigen"
-
-#: prefs.js:370
-msgid "Realtime per-core Bars"
-msgstr ""
-
-#: prefs.js:376 prefs.js:606
-msgid "Realtime Bar Breakdown"
-msgstr ""
-
-#: prefs.js:383 prefs.js:496 prefs.js:613 prefs.js:837 prefs.js:1019
-#: prefs.js:1119
-msgid "Tooltip"
-msgstr "Minihilfe"
-
-#: prefs.js:384 prefs.js:497 prefs.js:614 prefs.js:838 prefs.js:1020
-#: prefs.js:1120
-msgid "Show Tooltip"
-msgstr "Minihilfe anzeigen"
-
-#: prefs.js:388 prefs.js:619 prefs.js:844 prefs.js:1023
-msgid "Menu"
-msgstr "Menü"
-
-#: prefs.js:390
-msgid "Realtime Bars Breakdown"
-msgstr ""
-
-#: prefs.js:392
-msgid "Core Bars Breakdown"
-msgstr ""
-
-#: prefs.js:393
-#, fuzzy
-msgid "Top Processes Single Core"
-msgstr "Prozessoren"
-
-#: prefs.js:396
-#, fuzzy
-msgid "Show GPU info"
-msgstr "GPU-Info"
-
-#: prefs.js:397
-msgid "Only works if GPU header is disabled."
-msgstr ""
-
-#: prefs.js:408
-msgid "Showing GPU info in the panel requires continuous GPU monitoring."
-msgstr ""
-
-#: prefs.js:412
-msgid "Hint: You can instead choose to show GPU stats in Processors' menu."
-msgstr ""
-
-#: prefs.js:417 prefs.js:1083
-msgid "None"
-msgstr "Kein"
-
-#: prefs.js:428
-msgid "Main GPU"
-msgstr "Haupt-GPU"
-
-#: prefs.js:438
-msgid "Set icon name (ie: 'gpu-symbolic')"
-msgstr ""
-
-#: prefs.js:452 prefs.js:498
-#, fuzzy
-msgid "Activity Percentage"
-msgstr "Prozentwert"
-
-#: prefs.js:453
-#, fuzzy
-msgid "Show Activity Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:456
-msgid "Set 0 to disable. Value is percentage of total GPU Activity usage."
-msgstr ""
-
-#: prefs.js:459
-#, fuzzy
-msgid "Activity History Graph"
-msgstr "Verlaufsdiagramm"
-
-#: prefs.js:460
-#, fuzzy
-msgid "Show Activity History Graph"
-msgstr "Verlaufsdiagramm anzeigen"
-
-#: prefs.js:463 prefs.js:485
-msgid "<b>Total usage</b> color."
-msgstr ""
-
-#: prefs.js:467
-#, fuzzy
-msgid "Realtime Activity Bar"
-msgstr "Echtzeitbalken"
-
-#: prefs.js:468
-#, fuzzy
-msgid "Show Activity Bar"
-msgstr "Aktiv"
-
-#: prefs.js:470 prefs.js:492
-msgid "Bar Color"
-msgstr ""
-
-#: prefs.js:471 prefs.js:493
-msgid "GPU bar main color."
-msgstr ""
-
-#: prefs.js:474 prefs.js:499
-#, fuzzy
-msgid "Memory Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:475
-#, fuzzy
-msgid "Show Memory Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:478
-msgid "Set 0 to disable. Value is percentage of total GPU Memory usage."
-msgstr ""
-
-#: prefs.js:481
-#, fuzzy
-msgid "Memory History Graph"
-msgstr "Verlaufsdiagramm anzeigen"
-
-#: prefs.js:482
-#, fuzzy
-msgid "Show Memory History Graph"
-msgstr "Verlaufsdiagramm anzeigen"
-
-#: prefs.js:489
-#, fuzzy
-msgid "Realtime Memory Bar"
-msgstr "Echtzeitbalken"
-
-#: prefs.js:490
-#, fuzzy
-msgid "Show Memory Bar"
-msgstr "Echtzeitbalken anzeigen"
-
-#: prefs.js:500
-#, fuzzy
-msgid "Memory Value"
-msgstr "Arbeitsspeicher"
-
-#: prefs.js:513
-#, fuzzy
-msgid "kB (as kiB)"
-msgstr "k (als kB/s)"
-
-#: prefs.js:514
-#, fuzzy
-msgid "kB (as KB)"
-msgstr "k (als kB/s)"
-
-#: prefs.js:515
-msgid "kiB"
-msgstr ""
-
-#: prefs.js:516
-#, fuzzy
-msgid "KiB"
-msgstr "KiB/s"
-
-#: prefs.js:517
-msgid "KB"
-msgstr ""
-
-#: prefs.js:518
-#, fuzzy
-msgid "k (as kB)"
-msgstr "k (als kB/s)"
-
-#: prefs.js:519
-#, fuzzy
-msgid "Ki (as Ki)"
-msgstr "Ki (als KiB/s)"
-
-#: prefs.js:521 prefs.js:652 prefs.js:885
-msgid "Data Unit"
-msgstr "Dateneinheit"
-
-#: prefs.js:525
-msgid "Used = Total - Free - Buffers - Cached"
-msgstr ""
-
-#: prefs.js:527
-msgid "Used = Total - Free"
-msgstr ""
-
-#: prefs.js:528
-msgid "Used = Total - Available"
-msgstr ""
-
-#: prefs.js:529
-#, fuzzy
-msgid "Used = Active"
-msgstr "Aktiv"
-
-#: prefs.js:531
-msgid "Used Memory"
-msgstr "Verwendeter Speicher"
-
-#: prefs.js:538
-#, fuzzy
-msgid "Memory Usage"
-msgstr "Arbeitsspeicher"
-
-#: prefs.js:554
-msgid "Set icon name (ie: 'memory-symbolic')"
-msgstr ""
-
-#: prefs.js:567 prefs.js:615 prefs.js:783
-#, fuzzy
-msgid "Usage Percentage"
-msgstr "Prozentwert"
-
-#: prefs.js:568
-#, fuzzy
-msgid "Show Usage Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:571
-msgid "Set 0 to disable. Value is percentage of ram usage."
-msgstr ""
-
-#: prefs.js:574 prefs.js:616 prefs.js:790
-msgid "Usage Value"
-msgstr ""
-
-#: prefs.js:575
-msgid "Show Usage Value"
-msgstr ""
-
-#: prefs.js:576 prefs.js:792
-msgid "Usage Value Max Number of Figures"
-msgstr ""
-
-#: prefs.js:577 prefs.js:617 prefs.js:793
-msgid "Free Value"
-msgstr ""
-
-#: prefs.js:578
-#, fuzzy
-msgid "Show Free Value"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:579 prefs.js:795
-msgid "Free Value Max Number of Figures"
-msgstr ""
-
-#: prefs.js:582
-msgid "Set 0 to disable. Value is free MB of ram."
-msgstr ""
-
-#: prefs.js:589 prefs.js:603
-msgid "<b>Used</b> memory color."
-msgstr ""
-
-#: prefs.js:594 prefs.js:608
-msgid "Alt Color"
-msgstr ""
-
-#: prefs.js:595 prefs.js:609
-msgid "<b>Allocated <u>unused</u></b> memory color."
-msgstr ""
-
-#: prefs.js:624
-msgid "Swap Bar Color"
-msgstr ""
-
-#: prefs.js:625
-msgid "Swap bar main color."
-msgstr ""
-
-#: prefs.js:640 prefs.js:873
-msgid "kB/s"
-msgstr "kB/s"
-
-#: prefs.js:641 prefs.js:874
-msgid "KiB/s"
-msgstr "KiB/s"
-
-#: prefs.js:642 prefs.js:875
-msgid "kb/s"
-msgstr "kb/s"
-
-#: prefs.js:643 prefs.js:876
-msgid "Kibit/s"
-msgstr "Kibit/s"
-
-#: prefs.js:644 prefs.js:877
-msgid "kBps"
-msgstr "kBps"
-
-#: prefs.js:645 prefs.js:878
-msgid "KiBps"
-msgstr "KiBps"
-
-#: prefs.js:646 prefs.js:879
-msgid "Kibps"
-msgstr "Kibps"
-
-#: prefs.js:647 prefs.js:880
-msgid "kbps"
-msgstr "kbps"
-
-#: prefs.js:648 prefs.js:881
-msgid "Kibitps"
-msgstr "Kibitps"
-
-#: prefs.js:649 prefs.js:882
-msgid "k (as kB/s)"
-msgstr "k (als kB/s)"
-
-#: prefs.js:650 prefs.js:883
-msgid "Ki (as KiB/s)"
-msgstr "Ki (als KiB/s)"
-
-#: prefs.js:673 prefs.js:775
-msgid "Main Disk"
-msgstr ""
-
-#: prefs.js:674
-#, fuzzy
-msgid "Ignored Storage Devices"
-msgstr "Ignorierte Netzwerkschnittstellen"
-
-#: prefs.js:676 prefs.js:888
-msgid "Regex"
-msgstr "Regex"
-
-#: prefs.js:677
-#, fuzzy
-msgid "Devices matching this regex will be ignored."
-msgstr "Schnittstellen, die zu dieser Regex passen, werden ignoriert."
-
-#: prefs.js:679 prefs.js:891
-msgid "Leave empty to disable. Usage example: "
-msgstr ""
-
-#: prefs.js:691 prefs.js:717 prefs.js:901 prefs.js:919
-msgid "Ignored"
-msgstr "Ignoriert"
-
-#: prefs.js:693
-#, fuzzy
-msgid "Main"
-msgstr "Haupt-GPU"
-
-#: prefs.js:710
-msgid "Main disk cannot be ignored"
-msgstr ""
-
-#: prefs.js:742
-#, fuzzy
-msgid "Storage Usage"
-msgstr "Speicher"
-
-#: prefs.js:752
-#, fuzzy
-msgid "Storage IO"
-msgstr "Speicher"
-
-#: prefs.js:762
-msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
-msgstr ""
-
-#: prefs.js:776
-msgid "Usage Bar"
-msgstr ""
-
-#: prefs.js:777
-msgid "Show Main Disk Usage Bar"
-msgstr ""
-
-#: prefs.js:780
-msgid "<b>Used</b> storage color."
-msgstr ""
-
-#: prefs.js:784
-#, fuzzy
-msgid "Show Main Disk Usage Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:787
-msgid "Set 0 to disable. Value is percentage of disk usage."
-msgstr ""
-
-#: prefs.js:791
-msgid "Show Main Disk Usage Value"
-msgstr ""
-
-#: prefs.js:794
-msgid "Show Main Disk Free Value"
-msgstr ""
-
-#: prefs.js:798
-msgid "Set 0 to disable. Value is free MB of storage."
-msgstr ""
-
-#: prefs.js:801 prefs.js:983
-msgid "IO"
-msgstr "IO"
-
-#: prefs.js:802 prefs.js:984
-#, fuzzy
-msgid "Realtime IO Bar"
-msgstr "Echtzeitbalken"
-
-#: prefs.js:803 prefs.js:985
-msgid "Show Realtime IO Bar"
-msgstr ""
-
-#: prefs.js:805 prefs.js:817 prefs.js:847
-msgid "Read Color"
-msgstr ""
-
-#: prefs.js:806
-msgid "<b>Read</b> IO Bar color."
-msgstr ""
-
-#: prefs.js:810 prefs.js:822 prefs.js:852
-msgid "Write Color"
-msgstr ""
-
-#: prefs.js:811
-msgid "<b>Write</b> IO Bar color."
-msgstr ""
-
-#: prefs.js:814 prefs.js:996
-#, fuzzy
-msgid "IO History Graph"
-msgstr "Verlaufsdiagramm"
-
-#: prefs.js:815 prefs.js:997
-msgid "Show IO History Graph"
-msgstr ""
-
-#: prefs.js:818
-msgid "<b>Read</b> IO History Graph color."
-msgstr ""
-
-#: prefs.js:823
-msgid "<b>Write</b> IO History Graph color."
-msgstr ""
-
-#: prefs.js:826 prefs.js:1008
-msgid "IO History Graph Width"
-msgstr ""
-
-#: prefs.js:827 prefs.js:842 prefs.js:1009 prefs.js:1021
-msgid "IO Speed"
-msgstr ""
-
-#: prefs.js:828 prefs.js:1010
-msgid "Show IO Speed"
-msgstr ""
-
-#: prefs.js:830 prefs.js:1012 prefs.js:1104
-msgid "Vertical"
-msgstr ""
-
-#: prefs.js:831 prefs.js:1013 prefs.js:1105
-msgid "Horizontal"
-msgstr ""
-
-#: prefs.js:833 prefs.js:1015
-msgid "IO Speed Layout"
-msgstr ""
-
-#: prefs.js:834 prefs.js:1016
-msgid "IO Speed Max Number of Figures"
-msgstr ""
-
-#: prefs.js:835 prefs.js:1017
-msgid "IO Speed Threshold"
-msgstr ""
-
-#: prefs.js:835 prefs.js:1017
-msgid "in kB/s"
-msgstr "in kB/s"
-
-#: prefs.js:839
-#, fuzzy
-msgid "Main Disk Usage Percentage"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:840
-#, fuzzy
-msgid "Main Disk Usage Value"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:841
-#, fuzzy
-msgid "Main Disk Free Value"
-msgstr "Prozentwert anzeigen"
-
-#: prefs.js:845 prefs.js:1024
-msgid "IO Arrows"
-msgstr ""
-
-#: prefs.js:848
-msgid "<b>Read</b> IO arrow color."
-msgstr ""
-
-#: prefs.js:853
-msgid "<b>Write</b> IO arrow color."
-msgstr ""
-
-#: prefs.js:858
-msgid "Device Usage Bar Color"
-msgstr ""
-
-#: prefs.js:886
-msgid "Ignored Network Interfaces"
-msgstr "Ignorierte Netzwerkschnittstellen"
-
-#: prefs.js:889
-msgid "Interfaces matching this regex will be ignored."
-msgstr "Schnittstellen, die zu dieser Regex passen, werden ignoriert."
-
-#: prefs.js:944
-#, fuzzy
-msgid "Network IO"
-msgstr "Netzwerk"
-
-#: prefs.js:946
-msgid "Public IPv4 Address"
-msgstr ""
-
-#: prefs.js:947 prefs.js:952
-msgid "Set to empty to disable. Address will be regex matched."
-msgstr ""
-
-#: prefs.js:951
-msgid "Public IPv6 Address"
-msgstr ""
-
-#: prefs.js:960
-msgid "Wireless Info"
-msgstr ""
-
-#: prefs.js:970
-msgid "Set icon name (ie: 'network-wired-symbolic')"
-msgstr ""
-
-#: prefs.js:987 prefs.js:999 prefs.js:1026
-msgid "Upload Color"
-msgstr ""
-
-#: prefs.js:988
-msgid "<b>Upload</b> IO Bar color."
-msgstr ""
-
-#: prefs.js:992 prefs.js:1004 prefs.js:1031
-msgid "Download Color"
-msgstr ""
-
-#: prefs.js:993
-msgid "<b>Download</b> IO Bar color."
-msgstr ""
-
-#: prefs.js:1000
-msgid "<b>Upload</b> IO History Graph color."
-msgstr ""
-
-#: prefs.js:1005
-msgid "<b>Download</b> IO History Graph color."
-msgstr ""
-
-#: prefs.js:1027
-msgid "<b>Upload</b> IO arrow color."
-msgstr ""
-
-#: prefs.js:1032
-msgid "<b>Download</b> IO arrow color."
-msgstr ""
-
-#: prefs.js:1047
-msgctxt "Celsius unit measure choice"
-msgid "Celsius"
-msgstr "Celsius"
-
-#: prefs.js:1048
-msgctxt "Fahrenheit unit measure choice"
-msgid "Fahrenheit"
-msgstr "Fahrenheit"
-
-#: prefs.js:1050
-msgid "Temperature Unit"
-msgstr "Temperatureinheit"
-
-#: prefs.js:1067
-msgid "Set icon name (ie: 'temperature-symbolic')"
-msgstr ""
-
-#: prefs.js:1089
-msgid "Sensor 1"
-msgstr "Sensor 1"
-
-#: prefs.js:1092 prefs.js:1109 prefs.js:1123 prefs.js:1139 prefs.js:1155
-#: prefs.js:1171 prefs.js:1187
-msgid "Source"
-msgstr "Quelle"
-
-#: prefs.js:1097 prefs.js:1114 prefs.js:1133 prefs.js:1149 prefs.js:1165
-#: prefs.js:1181 prefs.js:1197
-msgid "Value Digits"
-msgstr ""
-
-#: prefs.js:1098 prefs.js:1115 prefs.js:1134 prefs.js:1150 prefs.js:1166
-#: prefs.js:1182 prefs.js:1198
-msgid "Set -1 to auto. Number of digits after the decimal point."
-msgstr ""
-
-#: prefs.js:1101
-msgid "Sensor 2"
-msgstr "Sensor 2"
-
-#: prefs.js:1107
-#, fuzzy
-msgid "Sensor 2 Layout"
-msgstr "Sensor 2"
-
-#: prefs.js:1121
-#, fuzzy
-msgid "Tooltip Sensor 1"
-msgstr "Sensor 1"
-
-#: prefs.js:1128 prefs.js:1144 prefs.js:1160 prefs.js:1176 prefs.js:1192
-#, fuzzy
-msgid "Short Name"
-msgstr "Symbolgröße"
-
-#: prefs.js:1129 prefs.js:1145 prefs.js:1161 prefs.js:1177 prefs.js:1193
-msgid "Short name to display in the tooltip."
-msgstr ""
-
-#: prefs.js:1137
-#, fuzzy
-msgid "Tooltip Sensor 2"
-msgstr "Sensor 2"
-
-#: prefs.js:1153
-#, fuzzy
-msgid "Tooltip Sensor 3"
-msgstr "Minihilfe"
-
-#: prefs.js:1169
-#, fuzzy
-msgid "Tooltip Sensor 4"
-msgstr "Minihilfe"
-
-#: prefs.js:1185
-#, fuzzy
-msgid "Tooltip Sensor 5"
-msgstr "Minihilfe"
-
-#: prefs.js:1206
-msgid "About"
-msgstr ""
-
-#: prefs.js:1218
-msgid "Version"
-msgstr "Version"
-
-#: prefs.js:1219
-msgid "GitHub"
-msgstr "GitHub"
-
-#: prefs.js:1220
-msgid "Changelog"
-msgstr "Änderungsverlauf"
-
-#: prefs.js:1221
-msgid "Roadmap"
-msgstr ""
-
-#: prefs.js:1222
-msgid "Report a bug or suggest new feature"
-msgstr "Melden Sie einen Fehler oder schlagen Sie eine neue Funktion vor"
-
-#: prefs.js:1223
-msgid "GNOME Extensions page"
-msgstr "GNOME Erweiterungen-Seite"
-
-#: prefs.js:1224
-msgid "Support us on Ko-Fi"
-msgstr ""
-
-#: prefs.js:1225
-msgid "Buy us a coffee"
-msgstr "Spendieren Sie uns einen Kaffee"
-
-#: prefs.js:1226
-msgid "Become a patron"
-msgstr "Werden Sie ein Unterstützer"
-
-#: prefs.js:1228
-msgid "Utility"
-msgstr ""
-
-#: prefs.js:1229 prefs.js:1231
-msgid "Export Settings"
-msgstr ""
-
-#: prefs.js:1242
-msgid "Save"
-msgstr ""
-
-#: prefs.js:1243 prefs.js:1271
-msgid "Cancel"
-msgstr ""
-
-#: prefs.js:1258 prefs.js:1260
-msgid "Import Settings"
-msgstr ""
-
-#: prefs.js:1270
-msgid "Open"
-msgstr ""
-
-#: prefs.js:1293 prefs.js:1295
-msgid "Reset Settings"
-msgstr ""
-
-#: prefs.js:1296
-msgid "Are you sure you want to reset all preferences?"
-msgstr ""
-
-#: prefs.js:1312
-msgid "Debug Mode"
-msgstr "Debug-Modus"
-
-#: prefs.js:1313
-msgid ""
-"Warning: may affect performance, use only if you know what you are doing."
-msgstr ""
 
 #~ msgid "Domain"
 #~ msgstr "Domain"

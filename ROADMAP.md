@@ -6,7 +6,7 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Beta<br>3/6</th>
+        <th style="text-align:center" colspan="3">Beta<br>4/6</th>
     </tr>
     <tr>
         <th style="text-align:center">Early April 2024</th>
@@ -16,7 +16,7 @@
     <tr>
         <td style="text-align:center">✅<br>Advanced Network Monitoring</td>
         <td style="text-align:center">✅<br>Advanced GPU Monitoring</td>
-        <td style="text-align:center">⏳<br>New Preferences Panel</td>
+        <td style="text-align:center">✅<br>New Preferences Panel</td>
     </tr>
     <tr>
         <td style="text-align:center">✅<br>Advanced Disk Monitoring</td>
