@@ -109,6 +109,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.utility = new Utility(this, window);
         this.about = new About(this);
 
+        AstraMonitorPrefs.addCss(`
+            .am-active {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+        `);
+
         this.setupSidebar(navigation);
 
         window.set_default_size(this.defaultSize.width, this.defaultSize.height);
@@ -145,7 +151,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const welcomeBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Welcome') + '</span>',
+                title: _('Welcome'),
                 icon_name: 'am-home-symbolic',
             },
             welcomeGroup,
@@ -167,7 +173,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const visualizationBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Visualization') + '</span>',
+                title: _('Visualization'),
                 icon_name: 'am-ui-symbolic',
             },
             generalGroup,
@@ -206,7 +212,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         processorsDefaultBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('General') + '</span>',
+                title: _('General'),
                 tabs: 1,
             },
             processors,
@@ -218,7 +224,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Header') + '</span>',
+                title: _('Header'),
                 tabs: 1,
             },
             processors,
@@ -230,7 +236,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Menu') + '</span>',
+                title: _('Menu'),
                 tabs: 1,
             },
             processors,
@@ -260,7 +266,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         gpuDefaultBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('General') + '</span>',
+                title: _('General'),
                 tabs: 1,
             },
             gpu,
@@ -272,7 +278,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Header') + '</span>',
+                title: _('Header'),
                 tabs: 1,
             },
             gpu,
@@ -284,7 +290,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         /*PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Menu') + '</span>',
+                title: _('Menu'),
                 tabs: 1,
             },
             gpu,
@@ -314,7 +320,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         memoryDefaultBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('General') + '</span>',
+                title: _('General'),
                 tabs: 1,
             },
             memory,
@@ -326,7 +332,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Header') + '</span>',
+                title: _('Header'),
                 tabs: 1,
             },
             memory,
@@ -338,7 +344,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Menu') + '</span>',
+                title: _('Menu'),
                 tabs: 1,
             },
             memory,
@@ -368,7 +374,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         storageDefaultBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('General') + '</span>',
+                title: _('General'),
                 tabs: 1,
             },
             storage,
@@ -380,7 +386,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Header') + '</span>',
+                title: _('Header'),
                 tabs: 1,
             },
             storage,
@@ -392,7 +398,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Menu') + '</span>',
+                title: _('Menu'),
                 tabs: 1,
             },
             storage,
@@ -422,7 +428,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         networkDefaultBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('General') + '</span>',
+                title: _('General'),
                 tabs: 1,
             },
             network,
@@ -434,7 +440,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Header') + '</span>',
+                title: _('Header'),
                 tabs: 1,
             },
             network,
@@ -446,7 +452,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Menu') + '</span>',
+                title: _('Menu'),
                 tabs: 1,
             },
             network,
@@ -476,7 +482,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         sensorsDefaultBtn = PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('General') + '</span>',
+                title: _('General'),
                 tabs: 1,
             },
             sensors,
@@ -488,7 +494,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Header') + '</span>',
+                title: _('Header'),
                 tabs: 1,
             },
             sensors,
@@ -500,7 +506,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         );
         /*PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Menu') + '</span>',
+                title: _('Menu'),
                 tabs: 1,
             },
             sensors,
@@ -523,7 +529,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         // Utility
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('Utility') + '</span>',
+                title: _('Utility'),
                 icon_name: 'am-tools-symbolic',
             },
             aboutGroup,
@@ -537,7 +543,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         // About
         PrefsUtils.addButtonRow(
             {
-                title: '<span>' + _('About') + '</span>',
+                title: _('About'),
                 icon_name: 'am-dialog-info-symbolic',
             },
             aboutGroup,
@@ -591,13 +597,13 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     }
 
     public activateItem(item: Adw.ActionRow | null) {
-        const selectedStyle = 'weight="bold" underline="single"';
         if(!item) return;
+
         if(this.active && this.active.title) {
-            this.active.title = this.active.title.replace(`<span ${selectedStyle}>`, '<span>');
+            this.active.remove_css_class('am-active');
         }
 
-        if(item.title) item.title = item.title.replace('<span>', `<span ${selectedStyle}>`);
+        item.add_css_class('am-active');
         this.active = item;
     }
 
@@ -691,5 +697,19 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         widget
             .get_style_context()
             .add_provider(cssProvider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    private static addCss(cssData: string) {
+        const display = Gdk.Display.get_default();
+        if(display) {
+            const cssProvider = new Gtk.CssProvider();
+            cssProvider.load_from_data(cssData, cssData.length);
+
+            Gtk.StyleContext.add_provider_for_display(
+                display,
+                cssProvider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
+        }
     }
 }

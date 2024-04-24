@@ -3,9 +3,9 @@
 ### New features
 
 -   **_New Preferences Panel_**: In response to the need for more space to accommodate additional sections in our preferences panel, and the burgeoning size of the prefs.js file, which had grown to over 3,500 lines, we have taken the opportunity to reorganize both the code and the user interface of our settings. The new preferences panel now mirrors the layout of the system settings panel, enhancing usability and scalability. It is designed to easily integrate numerous additional sections, paving the way for the swift incorporation of future features
-\
-\
-This is an ongoing process and the panel is not yet in its final form; it may undergo significant changes in the upcoming updates. We highly welcome and value your feedback.
+    \
+    \
+    This is an ongoing process and the panel is not yet in its final form; it may undergo significant changes in the upcoming updates. We highly welcome and value your feedback.
 
 # Astra Monitor 22 - April 23 2024
 
