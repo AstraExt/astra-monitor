@@ -84,6 +84,18 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         window.connect('close-request', () => {
             Utils.clear();
+
+            this.active = null;
+            (this.welcome as any) = null;
+            (this.visualization as any) = null;
+            (this.processors as any) = null;
+            (this.gpu as any) = null;
+            (this.memory as any) = null;
+            (this.storage as any) = null;
+            (this.network as any) = null;
+            (this.sensors as any) = null;
+            (this.utility as any) = null;
+            (this.about as any) = null;
             (PrefsUtils.expanded as any) = null;
         });
 
