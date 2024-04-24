@@ -21,7 +21,7 @@
     <tr>
         <td style="text-align:center">✅<br>Advanced Disk Monitoring</td>
         <td style="text-align:center"></td>
-        <td style="text-align:center">🔲<br>Compact Mode</td>
+        <td style="text-align:center">⏳<br>Compact Mode</td>
     </tr>
     <tr>
         <td style="text-align:center"></td>

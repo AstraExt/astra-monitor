@@ -82,7 +82,7 @@ As Astra Monitor is in beta stage of development, we have an ambitious roadmap p
         <td style="text-align:center">🔲<br>User Custom Commands</td>
     </tr>
     <tr>
-        <td style="text-align:center">🔲<br>Compact Mode</td>
+        <td style="text-align:center">⏳<br>Compact Mode</td>
         <td style="text-align:center">🔲<br>Themes</td>
         <td style="text-align:center">🔲<br>Continuos Monitoring Mode</td>
     </tr>
