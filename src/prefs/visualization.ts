@@ -305,6 +305,34 @@ export default class Visualization {
             compactModeSection
         );
 
+        PrefsUtils.addTextInputRow(
+            {
+                title: _('Compact Icon Name'),
+                subtitle:
+                    _("Set icon name (ie: 'arrow-left-symbolic')") +
+                    '\n' +
+                    _('Set to empty to disable icon override'),
+                tabs: 1,
+            },
+            'compact-mode-compact-icon-custom',
+            compactModeSection,
+            ''
+        );
+
+        PrefsUtils.addTextInputRow(
+            {
+                title: _('Expanded Icon Name'),
+                subtitle:
+                    _("Set icon name (ie: 'arrow-right-symbolic')") +
+                    '\n' +
+                    _('Set to empty to disable icon override'),
+                tabs: 1,
+            },
+            'compact-mode-expanded-icon-custom',
+            compactModeSection,
+            ''
+        );
+
         visualizationPage.add(group);
 
         group = new Adw.PreferencesGroup({ title: _('Monitor Ordering') });

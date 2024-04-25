@@ -170,6 +170,16 @@
       <summary>Compact Mode Start Expanded</summary>
       <description>Start with the headers expanded</description>
     </key>
+    <key name="compact-mode-compact-icon-custom" type="s">
+      <default>''</default>
+      <summary>Compact Mode Custom Compact Icon</summary>
+      <description>Set a custom compact icon for the compact mode</description>
+    </key>
+    <key name="compact-mode-expanded-icon-custom" type="s">
+      <default>''</default>
+      <summary>Compact Mode Custom Expanded Icon</summary>
+      <description>Set a custom expanded icon for the compact mode</description>
+    </key>
     
     <!-- PROCESSOR -->
     <key name="processor-update" type="d">

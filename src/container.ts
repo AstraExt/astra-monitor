@@ -211,6 +211,8 @@ export default GObject.registerClass(
 
             Utils.log(`Placing container in ${panelBox} box at position ${order}`);
             Main.panel.addToStatusArea(this.uuid, this, order, panelBox);
+
+            this.compactHeader.startup();
         }
 
         updatePanel() {

@@ -30,8 +30,6 @@ import Utils from './utils/utils.js';
 export default GObject.registerClass(
     class CompactHeader extends Header {
         protected icon!: St.Icon;
-        protected iconIndex = 0;
-
         protected iconNames = ['am-arrow-left-symbolic', 'am-arrow-right-symbolic'];
 
         protected panel = 'right';
@@ -44,9 +42,7 @@ export default GObject.registerClass(
             super('Compact Header');
             this.panel = Config.get_string('panel-box') ?? 'right';
             this.activation = Config.get_string('compact-mode-activation') ?? 'both';
-
             this.compacted = Config.get_boolean('compact-mode');
-            if(Config.get_boolean('compact-mode-start-expanded')) this.compacted = false;
 
             this.buildIcon();
 
@@ -54,7 +50,7 @@ export default GObject.registerClass(
                 this.compacted = Config.get_boolean('compact-mode');
                 if(Config.get_boolean('compact-mode-start-expanded')) this.compacted = false;
 
-                this.calculateIconIndex();
+                this.refreshIcon();
                 Utils.lowPriorityTask(() => {
                     this.compactCallback?.(this.compacted);
                 }, GLib.PRIORITY_DEFAULT_IDLE);
@@ -83,13 +79,24 @@ export default GObject.registerClass(
             Config.connect(this, 'changed::panel-box', () => {
                 this.panel = Config.get_string('panel-box') ?? 'right';
             });
+
+            Config.connect(
+                this,
+                'changed::compact-mode-compact-icon-custom',
+                this.refreshIcon.bind(this)
+            );
+            Config.connect(
+                this,
+                'changed::compact-mode-expanded-icon-custom',
+                this.refreshIcon.bind(this)
+            );
         }
 
         click() {
             if(this.activation === 'hover') return;
 
             this.compacted = !this.compacted;
-            this.calculateIconIndex();
+            this.refreshIcon();
             Utils.lowPriorityTask(() => {
                 this.compactCallback?.(this.compacted);
             }, GLib.PRIORITY_DEFAULT_IDLE);
@@ -117,6 +124,17 @@ export default GObject.registerClass(
             }
         }
 
+        startup() {
+            if(Config.get_boolean('compact-mode-start-expanded')) {
+                this.compacted = false;
+                this.refreshIcon();
+
+                Utils.lowPriorityTask(() => {
+                    this.compactCallback?.(this.compacted);
+                }, GLib.PRIORITY_DEFAULT_IDLE);
+            }
+        }
+
         buildIcon() {
             this.icon = new St.Icon({
                 icon_size: 28,
@@ -128,17 +146,33 @@ export default GObject.registerClass(
             });
             this.add_child(this.icon);
 
-            this.calculateIconIndex();
-            Config.connect(this, 'changed::panel-box', this.calculateIconIndex.bind(this));
+            this.refreshIcon();
+            Config.connect(this, 'changed::panel-box', this.refreshIcon.bind(this));
         }
 
-        calculateIconIndex() {
+        refreshIcon() {
+            let iconIndex = 0;
             const panelBox = Config.get_string('panel-box');
-            if(panelBox === 'left') this.iconIndex = this.compacted ? 1 : 0;
-            else this.iconIndex = this.compacted ? 0 : 1;
+            if(panelBox === 'left') iconIndex = this.compacted ? 1 : 0;
+            else iconIndex = this.compacted ? 0 : 1;
+            const iconName = this.iconNames[iconIndex];
+            const gicon = Utils.getLocalIcon(iconName);
+            if(gicon) {
+                this.icon.icon_name = '';
+                this.icon.gicon = gicon;
+            }
 
-            const gicon = Utils.getLocalIcon(this.iconNames[this.iconIndex]);
-            if(gicon) this.icon.gicon = gicon;
+            if(this.compacted) {
+                const compactIcon = Config.get_string('compact-mode-compact-icon-custom');
+                if(compactIcon) {
+                    this.icon.icon_name = compactIcon;
+                }
+            } else if(!this.compacted) {
+                const expandedIcon = Config.get_string('compact-mode-expanded-icon-custom');
+                if(expandedIcon) {
+                    this.icon.icon_name = expandedIcon;
+                }
+            }
         }
 
         update() {}
