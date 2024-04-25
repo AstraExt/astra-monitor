@@ -76,7 +76,6 @@ export default GObject.registerClass(
                 'changed::network-indicators-order',
                 this.addOrReorderIndicators.bind(this)
             );
-            Config.bind('network-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
 
             Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
             Config.connect(this, 'changed::network-header-io', this.resetMaxWidths.bind(this));
@@ -90,6 +89,10 @@ export default GObject.registerClass(
             };
             Config.connect(this, 'changed::network-header-io-layout', updateIOLayout.bind(this));
             updateIOLayout();
+        }
+
+        get showConfig() {
+            return 'network-header-show';
         }
 
         addOrReorderIndicators() {
@@ -219,12 +222,15 @@ export default GObject.registerClass(
                 this.graph.setWidth(graphWidth);
             });
 
-            Utils.networkMonitor.listen(this.graph, 'networkIO', () => {
-                if(!Config.get_boolean('network-header-graph')) return;
+            Utils.networkMonitor.listen(this.graph, 'networkIO', this.updateGraph.bind(this));
+        }
 
-                const usage = Utils.networkMonitor.getUsageHistory('networkIO');
-                this.graph.setUsageHistory(usage);
-            });
+        updateGraph() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('network-header-graph')) return;
+
+            const usage = Utils.networkMonitor.getUsageHistory('networkIO');
+            this.graph.setUsageHistory(usage);
         }
 
         buildSpeed() {
@@ -254,44 +260,51 @@ export default GObject.registerClass(
                 Gio.SettingsBindFlags.GET
             );
 
-            Utils.networkMonitor.listen(this.speedContainer, 'networkIO', () => {
-                if(!Config.get_boolean('network-header-io')) return;
+            Utils.networkMonitor.listen(
+                this.speedContainer,
+                'networkIO',
+                this.updateSpeed.bind(this)
+            );
+        }
 
-                let upload = Utils.zeroStr + ' B/s';
-                let download = Utils.zeroStr + ' B/s';
+        updateSpeed() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('network-header-io')) return;
 
-                const usage = Utils.networkMonitor.getCurrentValue('networkIO');
-                if(usage) {
-                    let bytesUploadedPerSec = usage.bytesUploadedPerSec;
-                    let bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
+            let upload = Utils.zeroStr + ' B/s';
+            let download = Utils.zeroStr + ' B/s';
 
-                    const threshold = Config.get_int('network-header-io-threshold');
+            const usage = Utils.networkMonitor.getCurrentValue('networkIO');
+            if(usage) {
+                let bytesUploadedPerSec = usage.bytesUploadedPerSec;
+                let bytesDownloadedPerSec = usage.bytesDownloadedPerSec;
 
-                    if(bytesUploadedPerSec < threshold * 1000) bytesUploadedPerSec = 0;
+                const threshold = Config.get_int('network-header-io-threshold');
 
-                    if(bytesDownloadedPerSec < threshold * 100) bytesDownloadedPerSec = 0;
+                if(bytesUploadedPerSec < threshold * 1000) bytesUploadedPerSec = 0;
 
-                    const unit = Config.get_string('network-io-unit');
-                    let maxFigures = Config.get_int('network-header-io-figures');
-                    maxFigures = Math.max(1, Math.min(4, maxFigures));
-                    upload = Utils.formatBytesPerSec(
-                        bytesUploadedPerSec,
-                        unit as any,
-                        maxFigures,
-                        true
-                    );
-                    download = Utils.formatBytesPerSec(
-                        bytesDownloadedPerSec,
-                        unit as any,
-                        maxFigures,
-                        true
-                    );
-                }
+                if(bytesDownloadedPerSec < threshold * 100) bytesDownloadedPerSec = 0;
 
-                if(this.ioLayout === 'horizontal') this.speed.text = `${upload} | ${download}`;
-                else this.speed.text = `${upload}\n${download}`;
-                this.fixSpeedContainerStyle();
-            });
+                const unit = Config.get_string('network-io-unit');
+                let maxFigures = Config.get_int('network-header-io-figures');
+                maxFigures = Math.max(1, Math.min(4, maxFigures));
+                upload = Utils.formatBytesPerSec(
+                    bytesUploadedPerSec,
+                    unit as any,
+                    maxFigures,
+                    true
+                );
+                download = Utils.formatBytesPerSec(
+                    bytesDownloadedPerSec,
+                    unit as any,
+                    maxFigures,
+                    true
+                );
+            }
+
+            if(this.ioLayout === 'horizontal') this.speed.text = `${upload} | ${download}`;
+            else this.speed.text = `${upload}\n${download}`;
+            this.fixSpeedContainerStyle();
         }
 
         fixSpeedContainerStyle() {
@@ -331,7 +344,17 @@ export default GObject.registerClass(
             this.speedContainer.set_width(max);
         }
 
-        update() {}
+        update() {
+            this.maxWidths = [];
+
+            this.updateGraph();
+            this.updateSpeed();
+        }
+
+        redraw(): void {
+            this.maxWidths = [];
+            this.fixSpeedContainerStyle();
+        }
 
         createTooltip() {
             this.tooltipMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.TOP) as TooltipMenu;

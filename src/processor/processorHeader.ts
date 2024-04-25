@@ -70,12 +70,15 @@ export default GObject.registerClass(
                 'changed::processor-indicators-order',
                 this.addOrReorderIndicators.bind(this)
             );
-            Config.bind('processor-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
             Config.connect(
                 this,
                 'changed::processor-header-bars-core',
                 this.rebuildBars.bind(this)
             );
+        }
+
+        get showConfig() {
+            return 'processor-header-show';
         }
 
         addOrReorderIndicators() {
@@ -230,24 +233,33 @@ export default GObject.registerClass(
             Config.bind('processor-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
             if(perCoreBars) {
-                Utils.processorMonitor.listen(this.bars, 'cpuCoresUsage', () => {
-                    if(!Config.get_boolean('processor-header-bars')) return;
-
-                    const usage = Utils.processorMonitor.getCurrentValue('cpuCoresUsage');
-                    const cores = Utils.processorMonitor.getNumberOfCores();
-                    if(!usage || !Array.isArray(usage) || usage.length < cores)
-                        this.bars.setUsage([]);
-                    else this.bars.setUsage(usage);
-                });
+                Utils.processorMonitor.listen(
+                    this.bars,
+                    'cpuCoresUsage',
+                    this.updateBarsCores.bind(this)
+                );
             } else {
-                Utils.processorMonitor.listen(this.bars, 'cpuUsage', () => {
-                    if(!Config.get_boolean('processor-header-bars')) return;
-
-                    const usage = Utils.processorMonitor.getCurrentValue('cpuUsage');
-                    if(!usage || !usage.total || isNaN(usage.total)) this.bars.setUsage([]);
-                    else this.bars.setUsage([usage]);
-                });
+                Utils.processorMonitor.listen(this.bars, 'cpuUsage', this.updateBars.bind(this));
             }
+        }
+
+        updateBarsCores() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('processor-header-bars')) return;
+
+            const usage = Utils.processorMonitor.getCurrentValue('cpuCoresUsage');
+            const cores = Utils.processorMonitor.getNumberOfCores();
+            if(!usage || !Array.isArray(usage) || usage.length < cores) this.bars.setUsage([]);
+            else this.bars.setUsage(usage);
+        }
+
+        updateBars() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('processor-header-bars')) return;
+
+            const usage = Utils.processorMonitor.getCurrentValue('cpuUsage');
+            if(!usage || !usage.total || isNaN(usage.total)) this.bars.setUsage([]);
+            else this.bars.setUsage([usage]);
         }
 
         buildGraph() {
@@ -275,11 +287,14 @@ export default GObject.registerClass(
                 this.graph.setWidth(graphWidth);
             });
 
-            Utils.processorMonitor.listen(this.graph, 'cpuUsage', () => {
-                if(!Config.get_boolean('processor-header-graph')) return;
-                const usage = Utils.processorMonitor.getUsageHistory('cpuUsage');
-                this.graph.setUsageHistory(usage);
-            });
+            Utils.processorMonitor.listen(this.graph, 'cpuUsage', this.updateGraph.bind(this));
+        }
+
+        updateGraph() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('processor-header-graph')) return;
+            const usage = Utils.processorMonitor.getUsageHistory('cpuUsage');
+            this.graph.setUsageHistory(usage);
         }
 
         buildPercentage() {
@@ -307,26 +322,43 @@ export default GObject.registerClass(
                     : 'astra-monitor-header-percentage3';
             });
 
-            Utils.processorMonitor.listen(this.percentage, 'cpuUsage', () => {
-                if(!Config.get_boolean('processor-header-percentage')) return;
-
-                const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
-
-                if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
-                    this.percentage.text = '0%';
-                    return;
-                }
-
-                if(Config.get_boolean('processor-header-percentage-core')) {
-                    const numberOfCores = Utils.processorMonitor.getNumberOfCores();
-                    this.percentage.text = (cpuUsage.total * numberOfCores).toFixed(0) + '%';
-                } else {
-                    this.percentage.text = cpuUsage.total.toFixed(0) + '%';
-                }
-            });
+            Utils.processorMonitor.listen(
+                this.percentage,
+                'cpuUsage',
+                this.updatePercentage.bind(this)
+            );
         }
 
-        update() {}
+        updatePercentage() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('processor-header-percentage')) return;
+
+            const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
+
+            if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
+                this.percentage.text = '0%';
+                return;
+            }
+
+            if(Config.get_boolean('processor-header-percentage-core')) {
+                const numberOfCores = Utils.processorMonitor.getNumberOfCores();
+                this.percentage.text = (cpuUsage.total * numberOfCores).toFixed(0) + '%';
+            } else {
+                this.percentage.text = cpuUsage.total.toFixed(0) + '%';
+            }
+        }
+
+        update() {
+            const perCoreBars = Config.get_boolean('processor-header-bars-core');
+            if(perCoreBars) {
+                this.updateBarsCores();
+            } else {
+                this.updateBars();
+            }
+
+            this.updateGraph();
+            this.updatePercentage();
+        }
 
         createTooltip() {
             this.tooltipMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.TOP) as TooltipMenu;

@@ -77,7 +77,6 @@ export default GObject.registerClass(
                 'changed::sensors-indicators-order',
                 this.addOrReorderIndicators.bind(this)
             );
-            Config.bind('sensors-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
 
             Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
             Config.connect(
@@ -105,6 +104,10 @@ export default GObject.registerClass(
                 updateSensorsLayout.bind(this)
             );
             updateSensorsLayout();
+        }
+
+        get showConfig() {
+            return 'sensors-header-show';
         }
 
         addOrReorderIndicators() {
@@ -213,43 +216,50 @@ export default GObject.registerClass(
                 Gio.SettingsBindFlags.GET
             );
 
-            Utils.sensorsMonitor.listen(this.valuesContainer, 'sensorsData', () => {
-                if(
-                    !Config.get_boolean('sensors-header-sensor1-show') &&
-                    !Config.get_boolean('sensors-header-sensor2-show')
-                )
-                    return;
+            Utils.sensorsMonitor.listen(
+                this.valuesContainer,
+                'sensorsData',
+                this.updateValues.bind(this)
+            );
+        }
 
-                let sensor1 = '-';
-                let sensor2 = '-';
+        updateValues() {
+            if(!this.visible) return;
+            if(
+                !Config.get_boolean('sensors-header-sensor1-show') &&
+                !Config.get_boolean('sensors-header-sensor2-show')
+            )
+                return;
 
-                const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
-                if(sensorsData) {
-                    const sensor1Source = Config.get_json('sensors-header-sensor1');
-                    const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
-                    sensor1 = this.applySource(sensorsData, sensor1Source, sensor1Digits);
+            let sensor1 = '-';
+            let sensor2 = '-';
 
-                    if(Config.get_boolean('sensors-header-sensor2-show')) {
-                        const sensor2Source = Config.get_json('sensors-header-sensor2');
-                        const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
-                        sensor2 = this.applySource(sensorsData, sensor2Source, sensor2Digits);
-                    } else {
-                        sensor2 = '';
-                    }
-                }
+            const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
+            if(sensorsData) {
+                const sensor1Source = Config.get_json('sensors-header-sensor1');
+                const sensor1Digits = Config.get_int('sensors-header-sensor1-digits');
+                sensor1 = this.applySource(sensorsData, sensor1Source, sensor1Digits);
 
-                if(sensor2) {
-                    this.sensorsNum = 2;
-
-                    if(this.sensorsLayout === 'horizontal')
-                        this.sensors.text = `${sensor1} | ${sensor2}`;
-                    else this.sensors.text = `${sensor1}\n${sensor2}`;
+                if(Config.get_boolean('sensors-header-sensor2-show')) {
+                    const sensor2Source = Config.get_json('sensors-header-sensor2');
+                    const sensor2Digits = Config.get_int('sensors-header-sensor2-digits');
+                    sensor2 = this.applySource(sensorsData, sensor2Source, sensor2Digits);
                 } else {
-                    this.sensorsNum = 1;
-                    this.sensors.text = sensor1;
+                    sensor2 = '';
                 }
-                this.fixContainerStyle();
-            });
+            }
+
+            if(sensor2) {
+                this.sensorsNum = 2;
+
+                if(this.sensorsLayout === 'horizontal')
+                    this.sensors.text = `${sensor1} | ${sensor2}`;
+                else this.sensors.text = `${sensor1}\n${sensor2}`;
+            } else {
+                this.sensorsNum = 1;
+                this.sensors.text = sensor1;
+            }
+            this.fixContainerStyle();
         }
 
         applySource(
@@ -343,7 +353,10 @@ export default GObject.registerClass(
             this.valuesContainer.set_width(max);
         }
 
-        update() {}
+        update() {
+            this.maxWidths = [];
+            this.updateValues();
+        }
 
         createTooltip() {
             this.tooltipMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.TOP) as TooltipMenu;

@@ -19,6 +19,7 @@
  */
 
 import GObject from 'gi://GObject';
+import Gio from 'gi://Gio';
 import St from 'gi://St';
 import Atk from 'gi://Atk';
 import Clutter from 'gi://Clutter';
@@ -37,6 +38,7 @@ export default GObject.registerClass(
         private box: St.BoxLayout;
 
         private cachedHeight = { fill: -1, override: -1 };
+        private waitForAllocation = false;
 
         constructor(name: string) {
             super({
@@ -93,6 +95,18 @@ export default GObject.registerClass(
             this.box.connect('notify::allocation', () => {
                 Utils.lowPriorityTask(this.setStyle.bind(this));
             });
+
+            if(this.showConfig)
+                Config.bind(this.showConfig, this, 'visible', Gio.SettingsBindFlags.GET);
+
+            this.connect_after('notify::allocation', () => {
+                if(this.waitForAllocation) {
+                    this.waitForAllocation = false;
+                    Utils.lowPriorityTask(() => {
+                        this.update();
+                    });
+                }
+            });
         }
 
         public getMenu() {
@@ -139,6 +153,27 @@ export default GObject.registerClass(
         remove_child(child: any) {
             if(this.box) this.box.remove_child(child);
             else super.remove_child(child);
+        }
+
+        get showConfig() {
+            return '';
+        }
+
+        setCompacted(compacted: boolean) {
+            if(compacted) {
+                this.visible = false;
+            } else {
+                const show = this.showConfig;
+                this.visible = show === '' ? false : Config.get_boolean(show);
+                if(this.visible) {
+                    this.waitForAllocation = true;
+
+                    /*! Fallback update after 2 frames at 60fps */
+                    Utils.timeoutTask(() => {
+                        this.update();
+                    }, 33);
+                }
+            }
         }
 
         update() {

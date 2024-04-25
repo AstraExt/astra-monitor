@@ -239,6 +239,10 @@ export default class Utils {
         Utils.commandsPath = null;
 
         for(const task of Utils.lowPriorityTasks) GLib.source_remove(task);
+        Utils.lowPriorityTasks = [];
+
+        for(const task of Utils.timeoutTasks) GLib.source_remove(task);
+        Utils.timeoutTasks = [];
 
         try {
             Config.clearAll();
@@ -2348,6 +2352,20 @@ export default class Utils {
             return GLib.SOURCE_REMOVE;
         });
         Utils.lowPriorityTasks.push(task);
+    }
+
+    static timeoutTasks: Array<number> = [];
+    static timeoutTask(
+        callback: () => void,
+        timeout: number,
+        priority: number = GLib.PRIORITY_DEFAULT
+    ): void {
+        const task = GLib.timeout_add(priority, timeout, () => {
+            callback();
+            Utils.timeoutTasks = Utils.timeoutTasks.filter(id => id !== task);
+            return GLib.SOURCE_REMOVE;
+        });
+        Utils.timeoutTasks.push(task);
     }
 
     static configUpdateFixes() {

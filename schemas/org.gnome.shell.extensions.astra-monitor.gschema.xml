@@ -25,6 +25,11 @@
     <value nick="total-available" value="2"/>
     <value nick="active" value="3"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.compact-mode-activation">
+    <value nick="both" value="0"/>
+    <value nick="click" value="1"/>
+    <value nick="hover" value="2"/>
+  </enum>
   <enum id="org.gnome.shell.extensions.astra-monitor.enum.data-unit">
     <value nick="kB/s" value="0"/>
     <value nick="KiB/s" value="1"/>
@@ -149,6 +154,21 @@
       <summary>Headers Height</summary>
       <description>Set between 15 and 80 to override the height of the headers</description>
       <range min="0" max="80"/>
+    </key>
+    <key name="compact-mode" type="b">
+      <default>false</default>
+      <summary>Compact Mode</summary>
+      <description>Enable compact mode</description>
+    </key>
+    <key name="compact-mode-activation" enum="org.gnome.shell.extensions.astra-monitor.enum.compact-mode-activation">
+      <default>'both'</default>
+      <summary>Compact Mode Activation</summary>
+      <description>How to expand the headers</description>
+    </key>
+    <key name="compact-mode-start-expanded" type="b">
+      <default>false</default>
+      <summary>Compact Mode Start Expanded</summary>
+      <description>Start with the headers expanded</description>
     </key>
     
     <!-- PROCESSOR -->

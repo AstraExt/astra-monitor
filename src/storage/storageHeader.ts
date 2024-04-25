@@ -86,7 +86,6 @@ export default GObject.registerClass(
                 'changed::storage-indicators-order',
                 this.addOrReorderIndicators.bind(this)
             );
-            Config.bind('storage-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
 
             Config.connect(this, 'changed::visible', this.resetMaxWidths.bind(this));
             Config.connect(this, 'changed::storage-header-io', this.resetMaxWidths.bind(this));
@@ -100,6 +99,10 @@ export default GObject.registerClass(
             };
             Config.connect(this, 'changed::storage-header-io-layout', updateIOLayout.bind(this));
             updateIOLayout();
+        }
+
+        get showConfig() {
+            return 'storage-header-show';
         }
 
         addOrReorderIndicators() {
@@ -146,7 +149,6 @@ export default GObject.registerClass(
             this.maxWidths = [];
 
             if(!Config.get_boolean('storage-header-io')) return;
-
             if(!this.speed.get_stage()) return;
 
             this.fixSpeedContainerStyle();
@@ -279,12 +281,15 @@ export default GObject.registerClass(
             this.bars = new StorageBars({ numBars: 1, header: true, mini: true, width: 0.5 });
             Config.bind('storage-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
-            Utils.storageMonitor.listen(this.bars, 'storageUsage', () => {
-                if(!Config.get_boolean('storage-header-bars')) return;
+            Utils.storageMonitor.listen(this.bars, 'storageUsage', this.updateBars.bind(this));
+        }
 
-                const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                this.bars.setUsage(usage);
-            });
+        updateBars() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('storage-header-bars')) return;
+
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            this.bars.setUsage(usage);
         }
 
         buildPercentage() {
@@ -301,14 +306,21 @@ export default GObject.registerClass(
                 Gio.SettingsBindFlags.GET
             );
 
-            Utils.storageMonitor.listen(this.percentage, 'storageUsage', () => {
-                if(!Config.get_boolean('storage-header-percentage')) return;
+            Utils.storageMonitor.listen(
+                this.percentage,
+                'storageUsage',
+                this.updatePercentage.bind(this)
+            );
+        }
 
-                const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
-                    this.percentage.text = '';
-                else this.percentage.text = `${Math.round(usage.usePercentage)}%`;
-            });
+        updatePercentage() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('storage-header-percentage')) return;
+
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            if(!usage || !usage.usePercentage || isNaN(usage.usePercentage))
+                this.percentage.text = '';
+            else this.percentage.text = `${Math.round(usage.usePercentage)}%`;
         }
 
         buildValue() {
@@ -319,15 +331,18 @@ export default GObject.registerClass(
             });
             Config.bind('storage-header-value', this.value, 'visible', Gio.SettingsBindFlags.GET);
 
-            Utils.storageMonitor.listen(this.value, 'storageUsage', () => {
-                if(!Config.get_boolean('storage-header-value')) return;
+            Utils.storageMonitor.listen(this.value, 'storageUsage', this.updateValue.bind(this));
+        }
 
-                const figures = Config.get_int('storage-header-value-figures');
+        updateValue() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('storage-header-value')) return;
 
-                const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                if(!usage || !usage.used || isNaN(usage.used)) this.value.text = '-';
-                else this.value.text = `${Utils.formatBytes(usage.used, 'kB-KB', figures)}`;
-            });
+            const figures = Config.get_int('storage-header-value-figures');
+
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            if(!usage || !usage.used || isNaN(usage.used)) this.value.text = '-';
+            else this.value.text = `${Utils.formatBytes(usage.used, 'kB-KB', figures)}`;
         }
 
         buildFree() {
@@ -338,15 +353,18 @@ export default GObject.registerClass(
             });
             Config.bind('storage-header-free', this.free, 'visible', Gio.SettingsBindFlags.GET);
 
-            Utils.storageMonitor.listen(this.free, 'storageUsage', () => {
-                if(!Config.get_boolean('storage-header-free')) return;
+            Utils.storageMonitor.listen(this.free, 'storageUsage', this.updateFree.bind(this));
+        }
 
-                const figures = Config.get_int('storage-header-free-figures');
+        updateFree() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('storage-header-free')) return;
 
-                const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
-                if(!usage || !usage.free || isNaN(usage.free)) this.free.text = '-';
-                else this.free.text = `${Utils.formatBytes(usage.free, 'kB-KB', figures)}`;
-            });
+            const figures = Config.get_int('storage-header-free-figures');
+
+            const usage = Utils.storageMonitor.getCurrentValue('storageUsage');
+            if(!usage || !usage.free || isNaN(usage.free)) this.free.text = '-';
+            else this.free.text = `${Utils.formatBytes(usage.free, 'kB-KB', figures)}`;
         }
 
         buildIOBars() {
@@ -365,11 +383,14 @@ export default GObject.registerClass(
                 Gio.SettingsBindFlags.GET
             );
 
-            Utils.storageMonitor.listen(this.ioBars, 'storageIO', () => {
-                if(!Config.get_boolean('storage-header-io-bars')) return;
-                const usage = Utils.storageMonitor.getUsageHistory('storageIO') as StorageIO[];
-                this.ioBars.setUsage(usage);
-            });
+            Utils.storageMonitor.listen(this.ioBars, 'storageIO', this.updateIOBars.bind(this));
+        }
+
+        updateIOBars() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('storage-header-io-bars')) return;
+            const usage = Utils.storageMonitor.getUsageHistory('storageIO') as StorageIO[];
+            this.ioBars.setUsage(usage);
         }
 
         buildGraph() {
@@ -393,12 +414,14 @@ export default GObject.registerClass(
                 this.graph.setWidth(graphWidth);
             });
 
-            Utils.storageMonitor.listen(this.graph, 'storageIO', () => {
-                if(!Config.get_boolean('storage-header-graph')) return;
+            Utils.storageMonitor.listen(this.graph, 'storageIO', this.updateGraph.bind(this));
+        }
 
-                const usage = Utils.storageMonitor.getUsageHistory('storageIO');
-                this.graph.setUsageHistory(usage);
-            });
+        updateGraph() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('storage-header-graph')) return;
+            const usage = Utils.storageMonitor.getUsageHistory('storageIO');
+            this.graph.setUsageHistory(usage);
         }
 
         buildSpeed() {
@@ -428,35 +451,41 @@ export default GObject.registerClass(
                 Gio.SettingsBindFlags.GET
             );
 
-            Utils.storageMonitor.listen(this.speedContainer, 'storageIO', () => {
-                if(!Config.get_boolean('storage-header-io')) return;
+            Utils.storageMonitor.listen(
+                this.speedContainer,
+                'storageIO',
+                this.updateSpeed.bind(this)
+            );
+        }
 
-                let read = Utils.zeroStr + ' B/s';
-                let write = Utils.zeroStr + ' B/s';
+        updateSpeed() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('storage-header-io')) return;
 
-                const usage = Utils.storageMonitor.getCurrentValue('storageIO');
-                if(usage) {
-                    let bytesReadPerSec = usage.bytesReadPerSec;
-                    let bytesWrittenPerSec = usage.bytesWrittenPerSec;
+            let read = Utils.zeroStr + ' B/s';
+            let write = Utils.zeroStr + ' B/s';
 
-                    const threshold = Config.get_int('storage-header-io-threshold');
+            const usage = Utils.storageMonitor.getCurrentValue('storageIO');
+            if(usage) {
+                let bytesReadPerSec = usage.bytesReadPerSec;
+                let bytesWrittenPerSec = usage.bytesWrittenPerSec;
 
-                    if(bytesReadPerSec < threshold * 1000) bytesReadPerSec = 0;
+                const threshold = Config.get_int('storage-header-io-threshold');
 
-                    if(bytesWrittenPerSec < threshold * 1000) bytesWrittenPerSec = 0;
+                if(bytesReadPerSec < threshold * 1000) bytesReadPerSec = 0;
+                if(bytesWrittenPerSec < threshold * 1000) bytesWrittenPerSec = 0;
 
-                    const unit = Config.get_string('storage-io-unit');
-                    let maxFigures = Config.get_int('storage-header-io-figures');
-                    maxFigures = Math.max(1, Math.min(4, maxFigures));
+                const unit = Config.get_string('storage-io-unit');
+                let maxFigures = Config.get_int('storage-header-io-figures');
+                maxFigures = Math.max(1, Math.min(4, maxFigures));
 
-                    read = Utils.formatBytesPerSec(bytesReadPerSec, unit as any, maxFigures);
-                    write = Utils.formatBytesPerSec(bytesWrittenPerSec, unit as any, maxFigures);
-                }
+                read = Utils.formatBytesPerSec(bytesReadPerSec, unit as any, maxFigures);
+                write = Utils.formatBytesPerSec(bytesWrittenPerSec, unit as any, maxFigures);
+            }
 
-                if(this.ioLayout === 'horizontal') this.speed.text = `${read} | ${write}`;
-                else this.speed.text = `${read}\n${write}`;
-                this.fixSpeedContainerStyle();
-            });
+            if(this.ioLayout === 'horizontal') this.speed.text = `${read} | ${write}`;
+            else this.speed.text = `${read}\n${write}`;
+            this.fixSpeedContainerStyle();
         }
 
         fixSpeedContainerStyle() {
@@ -496,7 +525,17 @@ export default GObject.registerClass(
             this.speedContainer.set_width(max);
         }
 
-        update() {}
+        update() {
+            this.maxWidths = [];
+
+            this.updateBars();
+            this.updatePercentage();
+            this.updateValue();
+            this.updateFree();
+            this.updateIOBars();
+            this.updateGraph();
+            this.updateSpeed();
+        }
 
         createTooltip() {
             this.tooltipMenu = new PopupMenu.PopupMenu(

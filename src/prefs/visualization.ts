@@ -271,6 +271,40 @@ export default class Visualization {
             0
         );
 
+        const compactModeSection = PrefsUtils.addExpanderRow(
+            { title: _('Compact Mode') },
+            group,
+            'visualization'
+        );
+        PrefsUtils.addSwitchRow(
+            { title: _('Enable Compact Mode'), tabs: 1 },
+            'compact-mode',
+            compactModeSection
+        );
+
+        choicesPanel = [
+            { value: 'both', text: _('Click & Hover') },
+            { value: 'click', text: _('Click') },
+            { value: 'hover', text: _('Hover') },
+        ];
+        PrefsUtils.addComboRow(
+            {
+                title: _('Compact Mode Activation'),
+                subtitle: _('Hover will not work for Panel Box Position "Center".'),
+                tabs: 1,
+            },
+            choicesPanel,
+            'compact-mode-activation',
+            compactModeSection,
+            'string'
+        );
+
+        PrefsUtils.addSwitchRow(
+            { title: _('Start Expanded'), tabs: 1 },
+            'compact-mode-start-expanded',
+            compactModeSection
+        );
+
         visualizationPage.add(group);
 
         group = new Adw.PreferencesGroup({ title: _('Monitor Ordering') });

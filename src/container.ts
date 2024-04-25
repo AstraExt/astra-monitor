@@ -27,6 +27,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
 import Utils from './utils/utils.js';
 import Config from './config.js';
+import CompactHeader from './compact.js';
 import ProcessorHeader from './processor/processorHeader.js';
 import GpuHeader from './gpu/gpuHeader.js';
 import MemoryHeader from './memory/memoryHeader.js';
@@ -41,12 +42,14 @@ type Widget =
     | InstanceType<typeof MemoryHeader>
     | InstanceType<typeof StorageHeader>
     | InstanceType<typeof NetworkHeader>
-    | InstanceType<typeof SensorsHeader>;
+    | InstanceType<typeof SensorsHeader>
+    | InstanceType<typeof CompactHeader>;
 
 export default GObject.registerClass(
     class AstraMonitorContainer extends PanelMenu.Button {
         private widgets: Map<string, Widget> = new Map();
         private uuid: string = '';
+        private compactHeader!: InstanceType<typeof CompactHeader>;
 
         declare box: St.BoxLayout;
 
@@ -117,16 +120,29 @@ export default GObject.registerClass(
             const monitors = Utils.getMonitorsOrder();
 
             let position = 0;
+
+            if(Config.get_string('panel-box') === 'left') {
+                this.box.remove_child(this.compactHeader);
+                this.box.insert_child_at_index(this.compactHeader, position++);
+            }
+
             for(const monitor of monitors) {
                 const widget = this.widgets.get(monitor);
                 if(!widget) continue;
                 this.box.remove_child(widget);
                 this.box.insert_child_at_index(widget, position++);
             }
+
+            if(Config.get_string('panel-box') !== 'left') {
+                this.box.remove_child(this.compactHeader);
+                this.box.insert_child_at_index(this.compactHeader, position++);
+            }
         }
 
         setup() {
             const monitors = Utils.getMonitorsOrder();
+
+            if(Config.get_string('panel-box') === 'left') this.addCompactHeader();
 
             for(const monitor of monitors) {
                 if(monitor === 'processor') {
@@ -166,6 +182,26 @@ export default GObject.registerClass(
                     continue;
                 }
             }
+
+            if(Config.get_string('panel-box') !== 'left') this.addCompactHeader();
+        }
+
+        addCompactHeader() {
+            this.compactHeader = new CompactHeader();
+            this.compactHeader.visible = Config.get_boolean('compact-mode');
+            this.addWidget('compact', this.compactHeader);
+            this.compactHeader.compact(this.compact.bind(this));
+
+            Config.connect(this, 'changed::compact-mode', () => {
+                this.compactHeader.visible = Config.get_boolean('compact-mode');
+            });
+        }
+
+        compact(compacted: boolean) {
+            for(const monitor of this.widgets.values()) {
+                if(monitor instanceof CompactHeader) continue;
+                monitor.setCompacted(compacted);
+            }
         }
 
         place(uuid: string) {
@@ -194,6 +230,7 @@ export default GObject.registerClass(
 
             Utils.log(`Reordering container in ${panelBox} box at position ${order}`);
             Main.panel._addToPanelBox(this.uuid, this, order, boxContainer);
+            this.reorderWidgets();
         }
 
         destroy() {

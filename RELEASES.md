@@ -1,3 +1,12 @@
+# Astra Monitor 24 - TO BE RELEASED
+
+### New features
+
+-   **_Compact Mode_**: Astra Monitor now gains a **Compact Mode**. This new mode is designed to have a minimalistic footprint on your GNOME panel, until you decide to interact with it. If enabled you will see only an arrow icon on the panel. Hovering over it will reveal the full array of monitors you setup up. They will disappear when you move your mouse away. You can toggle to _"permanently"_ show the monitors by clicking on the arrow. Once you are done, you can click on the arrow again to hide them. Like the other features this is very customizable and you can choose a full array of options to make it fit your needs.
+    \
+    \
+    You may find the new **Compact Mode** in the **Visualization** section of the **Preferences** panel. We hope you enjoy this new feature and we are looking forward to your feedback.
+
 # Astra Monitor 23 - April 24 2024
 
 ### New features

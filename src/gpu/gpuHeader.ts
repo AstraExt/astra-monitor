@@ -81,7 +81,10 @@ export default GObject.registerClass(
                 'changed::gpu-indicators-order',
                 this.addOrReorderIndicators.bind(this)
             );
-            Config.bind('gpu-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+        }
+
+        get showConfig() {
+            return 'gpu-header-show';
         }
 
         addOrReorderIndicators() {
@@ -263,23 +266,26 @@ export default GObject.registerClass(
             Utils.gpuMonitor.listen(
                 this.activityBar,
                 'gpuUpdate',
-                (data: Map<string, GenericGpuInfo>) => {
-                    if(!Config.get_boolean('gpu-header-activity-bar')) return;
-
-                    const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-                    if(!selectedGpu) return;
-
-                    if(!data) return;
-
-                    const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-                    const gpuData = data.get(selectedPci);
-                    if(!gpuData) return;
-
-                    if(!gpuData.activity || gpuData.activity.GFX === undefined)
-                        this.activityBar.setUsage([]);
-                    else this.activityBar.setUsage([{ percent: gpuData.activity.GFX }]);
-                }
+                this.updateActivityBar.bind(this)
             );
+        }
+
+        updateActivityBar(data: Map<string, GenericGpuInfo>) {
+            if(!this.visible) return;
+            if(!Config.get_boolean('gpu-header-activity-bar')) return;
+
+            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
+            if(!selectedGpu) return;
+
+            if(!data) return;
+
+            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
+            const gpuData = data.get(selectedPci);
+            if(!gpuData) return;
+
+            if(!gpuData.activity || gpuData.activity.GFX === undefined)
+                this.activityBar.setUsage([]);
+            else this.activityBar.setUsage([{ percent: gpuData.activity.GFX }]);
         }
 
         buildActivityGraph() {
@@ -308,12 +314,18 @@ export default GObject.registerClass(
                 this.activityGraph.setWidth(graphWidth);
             });
 
-            Utils.gpuMonitor.listen(this.activityGraph, 'gpuUpdate', () => {
-                if(!Config.get_boolean('gpu-header-activity-graph')) return;
-                const usage: Map<string, GenericGpuInfo>[] =
-                    Utils.gpuMonitor.getUsageHistory('gpu');
-                this.activityGraph.setUsageHistory(usage);
-            });
+            Utils.gpuMonitor.listen(
+                this.activityGraph,
+                'gpuUpdate',
+                this.updateActivityGraph.bind(this)
+            );
+        }
+
+        updateActivityGraph() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('gpu-header-activity-graph')) return;
+            const usage: Map<string, GenericGpuInfo>[] = Utils.gpuMonitor.getUsageHistory('gpu');
+            this.activityGraph.setUsageHistory(usage);
         }
 
         buildActivityPercentage() {
@@ -332,32 +344,35 @@ export default GObject.registerClass(
             Utils.gpuMonitor.listen(
                 this.activityPercentage,
                 'gpuUpdate',
-                (data: Map<string, GenericGpuInfo>) => {
-                    if(!Config.get_boolean('gpu-header-activity-percentage')) return;
-
-                    const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-                    if(!selectedGpu) {
-                        this.activityPercentage.text = '-%';
-                        return;
-                    }
-
-                    if(!data) {
-                        this.activityPercentage.text = '-%';
-                        return;
-                    }
-
-                    const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-                    const gpuData = data.get(selectedPci);
-                    if(!gpuData) {
-                        this.activityPercentage.text = '-%';
-                        return;
-                    }
-
-                    if(!gpuData.activity || gpuData.activity.GFX === undefined)
-                        this.activityPercentage.text = Utils.zeroStr + '%';
-                    else this.activityPercentage.text = gpuData.activity.GFX + '%';
-                }
+                this.updateActivityPercentage.bind(this)
             );
+        }
+
+        updateActivityPercentage(data: Map<string, GenericGpuInfo>) {
+            if(!this.visible) return;
+            if(!Config.get_boolean('gpu-header-activity-percentage')) return;
+
+            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
+            if(!selectedGpu) {
+                this.activityPercentage.text = '-%';
+                return;
+            }
+
+            if(!data) {
+                this.activityPercentage.text = '-%';
+                return;
+            }
+
+            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
+            const gpuData = data.get(selectedPci);
+            if(!gpuData) {
+                this.activityPercentage.text = '-%';
+                return;
+            }
+
+            if(!gpuData.activity || gpuData.activity.GFX === undefined)
+                this.activityPercentage.text = Utils.zeroStr + '%';
+            else this.activityPercentage.text = gpuData.activity.GFX + '%';
         }
 
         buildMemoryBar() {
@@ -381,26 +396,24 @@ export default GObject.registerClass(
                 Gio.SettingsBindFlags.GET
             );
 
-            Utils.gpuMonitor.listen(
-                this.memoryBar,
-                'gpuUpdate',
-                (data: Map<string, GenericGpuInfo>) => {
-                    if(!Config.get_boolean('gpu-header-memory-bar')) return;
+            Utils.gpuMonitor.listen(this.memoryBar, 'gpuUpdate', this.updateMemoryBar.bind(this));
+        }
 
-                    const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-                    if(!selectedGpu) return;
+        updateMemoryBar(data: Map<string, GenericGpuInfo>) {
+            if(!this.visible) return;
+            if(!Config.get_boolean('gpu-header-memory-bar')) return;
 
-                    if(!data) return;
+            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
+            if(!selectedGpu) return;
 
-                    const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-                    const gpuData = data.get(selectedPci);
-                    if(!gpuData) return;
+            if(!data) return;
 
-                    if(!gpuData.vram || gpuData.vram.percent === undefined)
-                        this.memoryBar.setUsage([]);
-                    else this.memoryBar.setUsage([{ percent: gpuData.vram.percent }]);
-                }
-            );
+            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
+            const gpuData = data.get(selectedPci);
+            if(!gpuData) return;
+
+            if(!gpuData.vram || gpuData.vram.percent === undefined) this.memoryBar.setUsage([]);
+            else this.memoryBar.setUsage([{ percent: gpuData.vram.percent }]);
         }
 
         buildMemoryGraph() {
@@ -429,12 +442,18 @@ export default GObject.registerClass(
                 this.memoryGraph.setWidth(graphWidth);
             });
 
-            Utils.gpuMonitor.listen(this.memoryGraph, 'gpuUpdate', () => {
-                if(!Config.get_boolean('gpu-header-memory-graph')) return;
-                const usage: Map<string, GenericGpuInfo>[] =
-                    Utils.gpuMonitor.getUsageHistory('gpu');
-                this.memoryGraph.setUsageHistory(usage);
-            });
+            Utils.gpuMonitor.listen(
+                this.memoryGraph,
+                'gpuUpdate',
+                this.updateMemoryGraph.bind(this)
+            );
+        }
+
+        updateMemoryGraph() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('gpu-header-memory-graph')) return;
+            const usage: Map<string, GenericGpuInfo>[] = Utils.gpuMonitor.getUsageHistory('gpu');
+            this.memoryGraph.setUsageHistory(usage);
         }
 
         buildMemoryPercentage() {
@@ -453,37 +472,48 @@ export default GObject.registerClass(
             Utils.gpuMonitor.listen(
                 this.memoryPercentage,
                 'gpuUpdate',
-                (data: Map<string, GenericGpuInfo>) => {
-                    if(!Config.get_boolean('gpu-header-memory-percentage')) return;
-
-                    const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-                    if(!selectedGpu) {
-                        this.memoryPercentage.text = '-%';
-                        return;
-                    }
-
-                    if(!data) {
-                        this.memoryPercentage.text = '-%';
-                        return;
-                    }
-
-                    const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-                    const gpuData = data.get(selectedPci);
-                    if(!gpuData) {
-                        this.memoryPercentage.text = '-%';
-                        return;
-                    }
-
-                    if(!gpuData.vram || gpuData.vram.percent === undefined)
-                        this.memoryPercentage.text = Utils.zeroStr + '%';
-                    else this.memoryPercentage.text = Math.round(gpuData.vram.percent) + '%';
-                }
+                this.updateMemoryPercentage.bind(this)
             );
+        }
+
+        updateMemoryPercentage(data: Map<string, GenericGpuInfo>) {
+            if(!this.visible) return;
+            if(!Config.get_boolean('gpu-header-memory-percentage')) return;
+
+            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
+            if(!selectedGpu) {
+                this.memoryPercentage.text = '-%';
+                return;
+            }
+
+            if(!data) {
+                this.memoryPercentage.text = '-%';
+                return;
+            }
+
+            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
+            const gpuData = data.get(selectedPci);
+            if(!gpuData) {
+                this.memoryPercentage.text = '-%';
+                return;
+            }
+
+            if(!gpuData.vram || gpuData.vram.percent === undefined)
+                this.memoryPercentage.text = Utils.zeroStr + '%';
+            else this.memoryPercentage.text = Math.round(gpuData.vram.percent) + '%';
         }
 
         buildMemoryValue() {}
 
-        update() {}
+        update() {
+            const data = Utils.gpuMonitor.getCurrentValue('gpu');
+            this.updateActivityBar(data);
+            this.updateActivityGraph();
+            this.updateActivityPercentage(data);
+            this.updateMemoryBar(data);
+            this.updateMemoryGraph();
+            this.updateMemoryPercentage(data);
+        }
 
         createTooltip() {
             this.tooltipMenu = new PopupMenu.PopupMenu(

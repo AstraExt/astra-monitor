@@ -74,7 +74,10 @@ export default GObject.registerClass(
                 'changed::memory-indicators-order',
                 this.addOrReorderIndicators.bind(this)
             );
-            Config.bind('memory-header-show', this, 'visible', Gio.SettingsBindFlags.GET);
+        }
+
+        get showConfig() {
+            return 'memory-header-show';
         }
 
         addOrReorderIndicators() {
@@ -248,13 +251,16 @@ export default GObject.registerClass(
             });
             Config.bind('memory-header-bars', this.bars, 'visible', Gio.SettingsBindFlags.GET);
 
-            Utils.memoryMonitor.listen(this.bars, 'memoryUsage', () => {
-                if(!Config.get_boolean('memory-header-bars')) return;
+            Utils.memoryMonitor.listen(this.bars, 'memoryUsage', this.updateBars.bind(this));
+        }
 
-                const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
-                if(!usage || !usage.total || isNaN(usage.total)) this.bars.setUsage([]);
-                else this.bars.setUsage([usage]);
-            });
+        updateBars() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('memory-header-bars')) return;
+
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            if(!usage || !usage.total || isNaN(usage.total)) this.bars.setUsage([]);
+            else this.bars.setUsage([usage]);
         }
 
         buildGraph() {
@@ -282,11 +288,14 @@ export default GObject.registerClass(
                 this.graph.setWidth(graphWidth);
             });
 
-            Utils.memoryMonitor.listen(this.graph, 'memoryUsage', () => {
-                if(!Config.get_boolean('memory-header-graph')) return;
-                const usage = Utils.memoryMonitor.getUsageHistory('memoryUsage');
-                this.graph.setUsageHistory(usage);
-            });
+            Utils.memoryMonitor.listen(this.graph, 'memoryUsage', this.updateGraph.bind(this));
+        }
+
+        updateGraph() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('memory-header-graph')) return;
+            const usage = Utils.memoryMonitor.getUsageHistory('memoryUsage');
+            this.graph.setUsageHistory(usage);
         }
 
         buildPercentage() {
@@ -302,20 +311,21 @@ export default GObject.registerClass(
                 Gio.SettingsBindFlags.GET
             );
 
-            Utils.memoryMonitor.listen(this.percentage, 'memoryUsage', () => {
-                if(!Config.get_boolean('memory-header-percentage')) return;
+            Utils.memoryMonitor.listen(
+                this.percentage,
+                'memoryUsage',
+                this.updatePercentage.bind(this)
+            );
+        }
 
-                const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
-                if(
-                    !usage ||
-                    !usage.total ||
-                    isNaN(usage.total) ||
-                    !usage.used ||
-                    isNaN(usage.used)
-                )
-                    this.percentage.text = '';
-                else this.percentage.text = `${Math.round((usage.used / usage.total) * 100)}%`;
-            });
+        updatePercentage() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('memory-header-percentage')) return;
+
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            if(!usage || !usage.total || isNaN(usage.total) || !usage.used || isNaN(usage.used))
+                this.percentage.text = '';
+            else this.percentage.text = `${Math.round((usage.used / usage.total) * 100)}%`;
         }
 
         buildValue() {
@@ -326,16 +336,19 @@ export default GObject.registerClass(
             });
             Config.bind('memory-header-value', this.value, 'visible', Gio.SettingsBindFlags.GET);
 
-            Utils.memoryMonitor.listen(this.value, 'memoryUsage', () => {
-                if(!Config.get_boolean('memory-header-value')) return;
+            Utils.memoryMonitor.listen(this.value, 'memoryUsage', this.updateValue.bind(this));
+        }
 
-                const unit = Config.get_string('memory-unit');
-                const figures = Config.get_int('memory-header-value-figures');
+        updateValue() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('memory-header-value')) return;
 
-                const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
-                if(!usage || !usage.used || isNaN(usage.used)) this.value.text = '-';
-                else this.value.text = `${Utils.formatBytes(usage.used, unit as any, figures)}`;
-            });
+            const unit = Config.get_string('memory-unit');
+            const figures = Config.get_int('memory-header-value-figures');
+
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            if(!usage || !usage.used || isNaN(usage.used)) this.value.text = '-';
+            else this.value.text = `${Utils.formatBytes(usage.used, unit as any, figures)}`;
         }
 
         buildFree() {
@@ -346,19 +359,28 @@ export default GObject.registerClass(
             });
             Config.bind('memory-header-free', this.free, 'visible', Gio.SettingsBindFlags.GET);
 
-            Utils.memoryMonitor.listen(this.free, 'memoryUsage', () => {
-                if(!Config.get_boolean('memory-header-free')) return;
-
-                const unit = Config.get_string('memory-unit');
-                const figures = Config.get_int('memory-header-free-figures');
-
-                const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
-                if(!usage || !usage.used || isNaN(usage.used)) this.free.text = '-';
-                else this.free.text = `${Utils.formatBytes(usage.free, unit as any, figures)}`;
-            });
+            Utils.memoryMonitor.listen(this.free, 'memoryUsage', this.updateFree.bind(this));
         }
 
-        update() {}
+        updateFree() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('memory-header-free')) return;
+
+            const unit = Config.get_string('memory-unit');
+            const figures = Config.get_int('memory-header-free-figures');
+
+            const usage = Utils.memoryMonitor.getCurrentValue('memoryUsage');
+            if(!usage || !usage.used || isNaN(usage.used)) this.free.text = '-';
+            else this.free.text = `${Utils.formatBytes(usage.free, unit as any, figures)}`;
+        }
+
+        update() {
+            this.updateBars();
+            this.updateGraph();
+            this.updatePercentage();
+            this.updateValue();
+            this.updateFree();
+        }
 
         createTooltip() {
             this.tooltipMenu = new PopupMenu.PopupMenu(
