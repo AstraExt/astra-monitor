@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-25 01:44+0200\n"
+"POT-Creation-Date: 2024-04-25 16:32+0200\n"
 "PO-Revision-Date: 2024-02-13 12:28+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -216,7 +216,9 @@ msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "Установите имя значка (например, 'temperature-symbolic')"
 
 #: src/prefs/sensors.js:114 src/prefs/memory.js:135 src/prefs/storage.js:218
-#: src/prefs/network.js:193 src/prefs/gpu.js:123 src/prefs/processors.js:126
+#: src/prefs/network.js:193 src/prefs/visualization.js:171
+#: src/prefs/visualization.js:178 src/prefs/gpu.js:123
+#: src/prefs/processors.js:126
 msgid "Set to empty to disable icon override"
 msgstr "Установите пустое значение, чтобы отключить переопределение значков"
 
@@ -1224,7 +1226,59 @@ msgstr "Размер шрифта заголовков"
 msgid "Set to 0 to disable size override"
 msgstr "Установите значение 0, чтобы отключить переопределение размера"
 
+#: src/prefs/visualization.js:154
+msgid "Compact Mode"
+msgstr ""
+
 #: src/prefs/visualization.js:155
+msgid "Enable Compact Mode"
+msgstr ""
+
+#: src/prefs/visualization.js:157
+msgid "Click & Hover"
+msgstr ""
+
+#: src/prefs/visualization.js:158
+msgid "Click"
+msgstr ""
+
+#: src/prefs/visualization.js:159
+msgid "Hover"
+msgstr ""
+
+#: src/prefs/visualization.js:162
+msgid "Compact Mode Activation"
+msgstr ""
+
+#: src/prefs/visualization.js:163
+msgid "Hover will not work for Panel Box Position \"Center\"."
+msgstr ""
+
+#: src/prefs/visualization.js:166
+msgid "Start Expanded"
+msgstr ""
+
+#: src/prefs/visualization.js:168
+#, fuzzy
+msgid "Compact Icon Name"
+msgstr "Имя значка"
+
+#: src/prefs/visualization.js:169
+#, fuzzy
+msgid "Set icon name (ie: 'arrow-left-symbolic')"
+msgstr "Установите имя значка (например, 'cpu-symbolic')"
+
+#: src/prefs/visualization.js:175
+#, fuzzy
+msgid "Expanded Icon Name"
+msgstr "Имя значка"
+
+#: src/prefs/visualization.js:176
+#, fuzzy
+msgid "Set icon name (ie: 'arrow-right-symbolic')"
+msgstr "Установите имя значка (например, 'cpu-symbolic')"
+
+#: src/prefs/visualization.js:182
 msgid "Monitor Ordering"
 msgstr "Порядок мониторинга"
 

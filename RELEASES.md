@@ -1,4 +1,4 @@
-# Astra Monitor 24 - TO BE RELEASED
+# Astra Monitor 24 - April 25 2024
 
 ### New features
 
