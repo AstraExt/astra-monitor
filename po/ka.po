@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-25 16:32+0200\n"
+"POT-Creation-Date: 2024-04-26 15:54+0200\n"
 "PO-Revision-Date: 2024-02-19 09:43+0100\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -135,14 +135,14 @@ msgstr "ახლა"
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:96
 #: src/sensors/sensorsMenu.js:35 src/gpu/gpuMenuComponent.js:338
-#: src/gpu/gpuMenuComponent.js:802 prefs.js:330
+#: src/gpu/gpuMenuComponent.js:802 prefs.js:339
 msgid "Sensors"
 msgstr "სენსორები"
 
 #: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
 #: src/prefs/network.js:82 src/prefs/gpu.js:80 src/prefs/processors.js:80
-#: src/prefs/processors.js:82 prefs.js:177 prefs.js:211 prefs.js:237
-#: prefs.js:271 prefs.js:305 prefs.js:339
+#: src/prefs/processors.js:82 prefs.js:186 prefs.js:220 prefs.js:246
+#: prefs.js:280 prefs.js:314 prefs.js:348
 msgid "General"
 msgstr "საერთო"
 
@@ -187,8 +187,8 @@ msgstr "ავტო"
 #: src/prefs/sensors.js:102 src/prefs/sensors.js:104 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
 #: src/prefs/network.js:181 src/prefs/gpu.js:111 src/prefs/gpu.js:113
-#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:185
-#: prefs.js:219 prefs.js:245 prefs.js:279 prefs.js:313 prefs.js:347
+#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:194
+#: prefs.js:228 prefs.js:254 prefs.js:288 prefs.js:322 prefs.js:356
 msgid "Header"
 msgstr "სათაური"
 
@@ -339,8 +339,8 @@ msgstr "Показать датчик 1"
 #: src/prefs/sensors.js:251 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:248
 #: src/prefs/network.js:250 src/prefs/gpu.js:189 src/prefs/processors.js:183
-#: src/prefs/processors.js:185 prefs.js:193 prefs.js:253 prefs.js:287
-#: prefs.js:321
+#: src/prefs/processors.js:185 prefs.js:202 prefs.js:262 prefs.js:296
+#: prefs.js:330
 msgid "Menu"
 msgstr "მენიუ"
 
@@ -349,7 +349,7 @@ msgid "Empty for now"
 msgstr ""
 
 #: src/prefs/utility.js:35 src/prefs/utility.js:48 src/prefs/utility.js:51
-#: prefs.js:363
+#: prefs.js:372
 msgid "Utility"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgstr ""
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
-#: prefs.js:228
+#: prefs.js:237
 msgid "Memory"
 msgstr "მეხსიერება"
 
@@ -583,7 +583,7 @@ msgstr ""
 msgid "Swap bar main color."
 msgstr ""
 
-#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:371
+#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:380
 msgid "About"
 msgstr ""
 
@@ -616,7 +616,7 @@ msgid "GNOME Extensions page"
 msgstr "GNOME-ს გაფართოებების გვერდი"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:262
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:271
 msgid "Storage"
 msgstr "მეხსიერება"
 
@@ -880,7 +880,7 @@ msgstr ""
 msgid "Move down"
 msgstr ""
 
-#: src/prefs/welcome.js:33 prefs.js:135
+#: src/prefs/welcome.js:33 prefs.js:144
 msgid "Welcome"
 msgstr ""
 
@@ -1002,7 +1002,7 @@ msgid "Become a patron"
 msgstr "გახდით მეცენატი"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:296
+#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:305
 msgid "Network"
 msgstr "ქსელი"
 
@@ -1079,7 +1079,7 @@ msgid "<b>Download</b> IO arrow color."
 msgstr ""
 
 #: src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56 prefs.js:151
+#: src/prefs/visualization.js:56 prefs.js:160
 msgid "Visualization"
 msgstr "ვიზუალიზაცია"
 
@@ -1285,7 +1285,7 @@ msgstr "მონიტორის დალაგება"
 
 #: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
 #: src/prefs/gpu.js:82 src/prefs/processors.js:191 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:43 prefs.js:202
+#: src/gpu/gpuMenuComponent.js:43 prefs.js:211
 msgid "GPU"
 msgstr "GPU"
 
@@ -1397,7 +1397,7 @@ msgid "Memory Value"
 msgstr "ინფორმაცია მეხსიერების გამოყენების შესახებ"
 
 #: src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67 prefs.js:168
+#: src/prefs/processors.js:67 prefs.js:177
 msgid "Processors"
 msgstr "პროცესორები"
 

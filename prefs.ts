@@ -120,15 +120,14 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.sensors = new Sensors(this);
         this.utility = new Utility(this, window);
         this.about = new About(this);
-        
+
         if(Gtk.Settings.get_default()?.gtk_application_prefer_dark_theme ?? false) {
             AstraMonitorPrefs.addCss(`
                 .am-active {
                     background-color: rgba(255, 255, 255, 0.1);
                 }
             `);
-        }
-        else {
+        } else {
             AstraMonitorPrefs.addCss(`
                 .am-active {
                     background-color: rgba(0, 0, 0, 0.1);

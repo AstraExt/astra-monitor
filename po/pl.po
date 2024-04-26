@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 15:27+0200\n"
+"POT-Creation-Date: 2024-04-26 15:54+0200\n"
 "PO-Revision-Date: 2024-04-24 18:28+0200\n"
 "Last-Translator: awumii <awumii@protonmail.com>\n"
 "Language-Team: awumii <awumii@protonmail.com>\n"
@@ -136,14 +136,14 @@ msgstr "teraz"
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:96
 #: src/sensors/sensorsMenu.js:35 src/gpu/gpuMenuComponent.js:338
-#: src/gpu/gpuMenuComponent.js:802 prefs.js:319
+#: src/gpu/gpuMenuComponent.js:802 prefs.js:339
 msgid "Sensors"
 msgstr "Czujniki"
 
 #: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
 #: src/prefs/network.js:82 src/prefs/gpu.js:80 src/prefs/processors.js:80
-#: src/prefs/processors.js:82 prefs.js:166 prefs.js:200 prefs.js:226
-#: prefs.js:260 prefs.js:294 prefs.js:328
+#: src/prefs/processors.js:82 prefs.js:186 prefs.js:220 prefs.js:246
+#: prefs.js:280 prefs.js:314 prefs.js:348
 msgid "General"
 msgstr "Ogólne"
 
@@ -188,8 +188,8 @@ msgstr "Automatyczne"
 #: src/prefs/sensors.js:102 src/prefs/sensors.js:104 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
 #: src/prefs/network.js:181 src/prefs/gpu.js:111 src/prefs/gpu.js:113
-#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:174
-#: prefs.js:208 prefs.js:234 prefs.js:268 prefs.js:302 prefs.js:336
+#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:194
+#: prefs.js:228 prefs.js:254 prefs.js:288 prefs.js:322 prefs.js:356
 msgid "Header"
 msgstr "Nagłówek"
 
@@ -218,7 +218,9 @@ msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "Ustaw nazwę ikony (np. 'temperature-symbolic')"
 
 #: src/prefs/sensors.js:114 src/prefs/memory.js:135 src/prefs/storage.js:218
-#: src/prefs/network.js:193 src/prefs/gpu.js:123 src/prefs/processors.js:126
+#: src/prefs/network.js:193 src/prefs/visualization.js:171
+#: src/prefs/visualization.js:178 src/prefs/gpu.js:123
+#: src/prefs/processors.js:126
 msgid "Set to empty to disable icon override"
 msgstr "Ustaw puste, aby nie zmieniać ikony"
 
@@ -330,8 +332,8 @@ msgstr "Czujnik 5w podpowiedzi"
 #: src/prefs/sensors.js:251 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:248
 #: src/prefs/network.js:250 src/prefs/gpu.js:189 src/prefs/processors.js:183
-#: src/prefs/processors.js:185 prefs.js:182 prefs.js:242 prefs.js:276
-#: prefs.js:310
+#: src/prefs/processors.js:185 prefs.js:202 prefs.js:262 prefs.js:296
+#: prefs.js:330
 msgid "Menu"
 msgstr "Menu"
 
@@ -340,7 +342,7 @@ msgid "Empty for now"
 msgstr "Pusto na razie"
 
 #: src/prefs/utility.js:35 src/prefs/utility.js:48 src/prefs/utility.js:51
-#: prefs.js:352
+#: prefs.js:372
 msgid "Utility"
 msgstr "Narzędzia"
 
@@ -384,7 +386,7 @@ msgstr ""
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
-#: prefs.js:217
+#: prefs.js:237
 msgid "Memory"
 msgstr "Pamięć"
 
@@ -559,7 +561,7 @@ msgstr "Kolor paska pamięci wymiany"
 msgid "Swap bar main color."
 msgstr "Główny kolor paska pamięci wymiany."
 
-#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:360
+#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:380
 msgid "About"
 msgstr "Informacje"
 
@@ -592,7 +594,7 @@ msgid "GNOME Extensions page"
 msgstr "Strona rozszerzenia GNOME"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:251
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:271
 msgid "Storage"
 msgstr "Dyski"
 
@@ -835,7 +837,7 @@ msgstr "Przesuń w górę"
 msgid "Move down"
 msgstr "Przesuń w dół"
 
-#: src/prefs/welcome.js:33 prefs.js:124
+#: src/prefs/welcome.js:33 prefs.js:144
 msgid "Welcome"
 msgstr "Witaj"
 
@@ -954,7 +956,6 @@ msgstr "Wszystkie pozostałe wymagania są spełnione!"
 
 #: src/prefs/welcome.js:139
 #, fuzzy
-#| msgid "Support us on Ko-Fi"
 msgid "Support Us"
 msgstr "Wesprzyj nas na Ko-Fi"
 
@@ -971,7 +972,7 @@ msgid "Become a patron"
 msgstr "Zostań patronem"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:285
+#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:305
 msgid "Network"
 msgstr "Sieć"
 
@@ -1040,7 +1041,7 @@ msgid "<b>Download</b> IO arrow color."
 msgstr "Kolor strzałki <b>Pobierania<b>."
 
 #: src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56 prefs.js:140
+#: src/prefs/visualization.js:56 prefs.js:160
 msgid "Visualization"
 msgstr "Wygląd"
 
@@ -1184,13 +1185,66 @@ msgstr "Rozmiar czcionki nagłówków"
 msgid "Set to 0 to disable size override"
 msgstr "Ustaw na 0, aby wyłączyć zmianę rozmiaru"
 
+#: src/prefs/visualization.js:154
+msgid "Compact Mode"
+msgstr ""
+
 #: src/prefs/visualization.js:155
+msgid "Enable Compact Mode"
+msgstr ""
+
+#: src/prefs/visualization.js:157
+#, fuzzy
+msgid "Click & Hover"
+msgstr "Kliknij, aby odświeżyć"
+
+#: src/prefs/visualization.js:158
+msgid "Click"
+msgstr ""
+
+#: src/prefs/visualization.js:159
+msgid "Hover"
+msgstr ""
+
+#: src/prefs/visualization.js:162
+msgid "Compact Mode Activation"
+msgstr ""
+
+#: src/prefs/visualization.js:163
+msgid "Hover will not work for Panel Box Position \"Center\"."
+msgstr ""
+
+#: src/prefs/visualization.js:166
+msgid "Start Expanded"
+msgstr ""
+
+#: src/prefs/visualization.js:168
+#, fuzzy
+msgid "Compact Icon Name"
+msgstr "Nazwa ikony"
+
+#: src/prefs/visualization.js:169
+#, fuzzy
+msgid "Set icon name (ie: 'arrow-left-symbolic')"
+msgstr "Ustaw nazwę ikony (np.: 'gpu-symbolic')"
+
+#: src/prefs/visualization.js:175
+#, fuzzy
+msgid "Expanded Icon Name"
+msgstr "Nazwa ikony"
+
+#: src/prefs/visualization.js:176
+#, fuzzy
+msgid "Set icon name (ie: 'arrow-right-symbolic')"
+msgstr "Ustaw nazwę ikony (np.: 'gpu-symbolic')"
+
+#: src/prefs/visualization.js:182
 msgid "Monitor Ordering"
 msgstr "Kolejność monitorów"
 
 #: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
 #: src/prefs/gpu.js:82 src/prefs/processors.js:191 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:43 prefs.js:191
+#: src/gpu/gpuMenuComponent.js:43 prefs.js:211
 msgid "GPU"
 msgstr "GPU"
 
@@ -1289,7 +1343,7 @@ msgid "Memory Value"
 msgstr "Wartość pamięci"
 
 #: src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67 prefs.js:157
+#: src/prefs/processors.js:67 prefs.js:177
 msgid "Processors"
 msgstr "Procesory"
 
