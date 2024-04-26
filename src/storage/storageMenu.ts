@@ -165,8 +165,8 @@ export default class StorageMenu extends MenuBase {
         const lightTheme = Utils.themeStyle === 'light';
 
         const styleClass = lightTheme ? 'astra-monitor-menu-key-light' : 'astra-monitor-menu-key';
-        this.totalReadSpeedValueLabel.style_class = styleClass;
-        this.totalWriteSpeedValueLabel.style_class = styleClass;
+        this.totalReadSpeedValueLabel.styleClass = styleClass;
+        this.totalWriteSpeedValueLabel.styleClass = styleClass;
     }
 
     createActivitySection() {
@@ -174,7 +174,7 @@ export default class StorageMenu extends MenuBase {
 
         const hoverButton = new St.Button({
             reactive: true,
-            track_hover: true,
+            trackHover: true,
             style: defaultStyle,
         });
 
@@ -190,28 +190,28 @@ export default class StorageMenu extends MenuBase {
 
         const totalReadSpeedLabel = new St.Label({
             text: _('Global Read:'),
-            x_expand: true,
-            style_class: 'astra-monitor-menu-label',
+            xExpand: true,
+            styleClass: 'astra-monitor-menu-label',
             style: 'margin-top:0.25em;',
         });
         grid.addToGrid(totalReadSpeedLabel);
 
         this.totalReadSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
+            xExpand: true,
         });
         grid.addToGrid(this.totalReadSpeedValueLabel);
 
         const totalWriteSpeedLabel = new St.Label({
             text: _('Global Write:'),
-            x_expand: true,
-            style_class: 'astra-monitor-menu-label',
+            xExpand: true,
+            styleClass: 'astra-monitor-menu-label',
         });
         grid.addToGrid(totalWriteSpeedLabel);
 
         this.totalWriteSpeedValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
+            xExpand: true,
         });
         grid.addToGrid(this.totalWriteSpeedValueLabel);
 
@@ -238,7 +238,7 @@ export default class StorageMenu extends MenuBase {
         this.storageActivityPopup.addToMenu(
             new St.Label({
                 text: _('Read'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -250,7 +250,7 @@ export default class StorageMenu extends MenuBase {
         this.storageActivityPopup.addToMenu(
             new St.Label({
                 text: _('Write'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -267,7 +267,7 @@ export default class StorageMenu extends MenuBase {
 
         const hoverButton = new St.Button({
             reactive: true,
-            track_hover: true,
+            trackHover: true,
             style: defaultStyle,
         });
         hoverButton.hide();
@@ -281,15 +281,15 @@ export default class StorageMenu extends MenuBase {
         for(let i = 0; i < numProcesses; i++) {
             const label = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-name',
+                styleClass: 'astra-monitor-menu-cmd-name',
                 style: 'max-width:85px;',
-                x_expand: true,
+                xExpand: true,
             });
             grid.addToGrid(label);
 
             // READ
             const readContainer = new St.Widget({
-                layout_manager: new Clutter.GridLayout({
+                layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
                 style: 'margin-left:0;margin-right:0;width:5.5em;',
@@ -297,16 +297,16 @@ export default class StorageMenu extends MenuBase {
 
             const readActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-up-symbolic'),
-                fallback_icon_name: 'go-up-symbolic',
-                style_class: 'astra-monitor-menu-icon-mini',
+                fallbackIconName: 'go-up-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);',
             });
             readContainer.add_child(readActivityIcon);
 
             const readValue = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
             });
             readContainer.add_child(readValue);
 
@@ -314,7 +314,7 @@ export default class StorageMenu extends MenuBase {
 
             // WRITE
             const writeContainer = new St.Widget({
-                layout_manager: new Clutter.GridLayout({
+                layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
                 style: 'margin-left:0;margin-right:0;width:5.5em;',
@@ -322,16 +322,16 @@ export default class StorageMenu extends MenuBase {
 
             const writeActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-down-symbolic'),
-                fallback_icon_name: 'go-down-symbolic',
-                style_class: 'astra-monitor-menu-icon-mini',
+                fallbackIconName: 'go-down-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);',
             });
             writeContainer.add_child(writeActivityIcon);
 
             const writeValue = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
             });
             writeContainer.add_child(writeValue);
 
@@ -381,8 +381,8 @@ export default class StorageMenu extends MenuBase {
         this.topProcessesPopup.processes = new Map();
 
         const grid = new Grid({
-            x_expand: true,
-            x_align: Clutter.ActorAlign.START,
+            xExpand: true,
+            xAlign: Clutter.ActorAlign.START,
             numCols: 2,
             styleClass: 'astra-monitor-menu-subgrid',
         });
@@ -390,7 +390,7 @@ export default class StorageMenu extends MenuBase {
         for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
             // READ
             const readContainer = new St.Widget({
-                layout_manager: new Clutter.GridLayout({
+                layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
                 style: 'margin-left:0;margin-right:0;width:5em;',
@@ -398,16 +398,16 @@ export default class StorageMenu extends MenuBase {
 
             const readActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-up-symbolic'),
-                fallback_icon_name: 'go-up-symbolic',
-                style_class: 'astra-monitor-menu-icon-mini',
+                fallbackIconName: 'go-up-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);',
             });
             readContainer.add_child(readActivityIcon);
 
             const readValue = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
             });
             readContainer.add_child(readValue);
 
@@ -415,7 +415,7 @@ export default class StorageMenu extends MenuBase {
 
             // WRITE
             const writeContainer = new St.Widget({
-                layout_manager: new Clutter.GridLayout({
+                layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
                 style: 'margin-left:0;margin-right:0;width:5em;',
@@ -423,16 +423,16 @@ export default class StorageMenu extends MenuBase {
 
             const writeActivityIcon = new St.Icon({
                 gicon: Utils.getLocalIcon('am-down-symbolic'),
-                fallback_icon_name: 'go-down-symbolic',
-                style_class: 'astra-monitor-menu-icon-mini',
+                fallbackIconName: 'go-down-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
                 style: 'color:rgba(255,255,255,0.5);',
             });
             writeContainer.add_child(writeActivityIcon);
 
             const writeValue = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-usage',
-                x_expand: true,
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
             });
             writeContainer.add_child(writeValue);
 
@@ -440,13 +440,13 @@ export default class StorageMenu extends MenuBase {
 
             const label = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-name-full',
+                styleClass: 'astra-monitor-menu-cmd-name-full',
             });
             grid.addGrid(label, 1, i * 2, 1, 1);
 
             const description = new St.Label({
                 text: '-',
-                style_class: 'astra-monitor-menu-cmd-description',
+                styleClass: 'astra-monitor-menu-cmd-description',
             });
             grid.addGrid(description, 1, i * 2 + 1, 1, 1);
 
@@ -476,7 +476,7 @@ export default class StorageMenu extends MenuBase {
             this.deviceSection = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
             this.noDevicesLabel = new St.Label({
                 text: _('No storage device found'),
-                style_class: 'astra-monitor-menu-label-warning',
+                styleClass: 'astra-monitor-menu-label-warning',
                 style: 'font-style:italic;',
             });
             this.deviceSection.addToGrid(this.noDevicesLabel, 2);
@@ -599,7 +599,7 @@ export default class StorageMenu extends MenuBase {
 
     createBlockDevice(id: string): BlockDeviceInfo {
         const container = new Grid({
-            x_expand: true,
+            xExpand: true,
             styleClass: 'astra-monitor-menu-subgrid',
             style: 'padding-top:0.3em;margin-bottom:0.3em;',
         });
@@ -608,7 +608,7 @@ export default class StorageMenu extends MenuBase {
 
         const topInfoButton = new St.Button({
             reactive: true,
-            track_hover: true,
+            trackHover: true,
             style: '',
         });
         topInfoButton.set_child(topInfoGrid);
@@ -621,21 +621,21 @@ export default class StorageMenu extends MenuBase {
         });
 
         const icon = new St.Icon({
-            style_class: 'astra-monitor-menu-icon',
+            styleClass: 'astra-monitor-menu-icon',
             style: 'padding-left:0.25em;',
         });
         headerGrid.addToGrid(icon);
 
         const label = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-label',
+            styleClass: 'astra-monitor-menu-label',
         });
         headerGrid.addToGrid(label);
 
         const name = new St.Label({
             text: '',
-            x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid',
+            xExpand: true,
+            styleClass: 'astra-monitor-menu-key-mid',
         });
         headerGrid.addToGrid(name);
 
@@ -645,16 +645,16 @@ export default class StorageMenu extends MenuBase {
         //Bar
         //{
         const barGrid = new St.Widget({
-            layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL }),
+            layoutManager: new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL }),
             style: 'margin-left:0;',
         });
 
         const sizeLabel = new St.Label({
             text: '',
-            y_align: Clutter.ActorAlign.CENTER,
-            style_class: 'astra-monitor-menu-key-mid',
+            yAlign: Clutter.ActorAlign.CENTER,
+            styleClass: 'astra-monitor-menu-key-mid',
         });
-        (barGrid.layout_manager as any).attach(sizeLabel, 0, 0, 1, 1);
+        (barGrid.layoutManager as any).attach(sizeLabel, 0, 0, 1, 1);
 
         const bar = new StorageBars({
             numBars: 1,
@@ -662,17 +662,17 @@ export default class StorageMenu extends MenuBase {
             height: 0.5,
             mini: false,
             layout: 'horizontal',
-            x_align: Clutter.ActorAlign.START,
+            xAlign: Clutter.ActorAlign.START,
             style: 'margin-left:0;margin-bottom:0;margin-right:0;border:solid 1px #555;',
         });
-        (barGrid.layout_manager as any).attach(bar, 1, 0, 1, 1);
+        (barGrid.layoutManager as any).attach(bar, 1, 0, 1, 1);
 
         const barLabel = new St.Label({
             text: '0%',
-            y_align: Clutter.ActorAlign.CENTER,
+            yAlign: Clutter.ActorAlign.CENTER,
             style: 'width:2.7em;font-size:0.8em;text-align:right;margin-right:0.25em;margin-top:0.2em;',
         });
-        (barGrid.layout_manager as any).attach(barLabel, 2, 0, 1, 1);
+        (barGrid.layoutManager as any).attach(barLabel, 2, 0, 1, 1);
 
         topInfoGrid.addToGrid(barGrid, 2);
         //}
@@ -697,43 +697,43 @@ export default class StorageMenu extends MenuBase {
         //{
         const rwButton = new St.Button({
             reactive: true,
-            track_hover: true,
-            x_expand: true,
+            trackHover: true,
+            xExpand: true,
             style: '',
         });
 
         const rwContainer = new St.Widget({
-            layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
-            x_expand: true,
+            layoutManager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
+            xExpand: true,
             style: 'margin-left:0;margin-right:0;',
         });
         rwButton.set_child(rwContainer);
 
         const readContainer = new St.Widget({
-            layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
-            x_expand: true,
+            layoutManager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
+            xExpand: true,
             style: 'margin-left:0;margin-right:0;',
         });
 
         const readLabel = new St.Label({
             text: pgettext('short for read', 'R'),
-            style_class: 'astra-monitor-menu-label',
+            styleClass: 'astra-monitor-menu-label',
             style: 'padding-right:0.15em;',
         });
         readContainer.add_child(readLabel);
 
         const readActivityIcon = new St.Icon({
             gicon: Utils.getLocalIcon('am-up-symbolic'),
-            fallback_icon_name: 'go-up-symbolic',
-            style_class: 'astra-monitor-menu-icon-mini',
+            fallbackIconName: 'go-up-symbolic',
+            styleClass: 'astra-monitor-menu-icon-mini',
             style: 'color:rgba(255,255,255,0.5);',
         });
         readContainer.add_child(readActivityIcon);
 
         const readValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid',
+            xExpand: true,
+            styleClass: 'astra-monitor-menu-key-mid',
         });
         readContainer.add_child(readValueLabel);
         readContainer.set_width(100);
@@ -741,30 +741,30 @@ export default class StorageMenu extends MenuBase {
         rwContainer.add_child(readContainer);
 
         const writeContainer = new St.Widget({
-            layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
-            x_expand: true,
+            layoutManager: new Clutter.GridLayout({ orientation: Clutter.Orientation.HORIZONTAL }),
+            xExpand: true,
             style: 'margin-left:0;margin-right:0;',
         });
 
         const writeLabel = new St.Label({
             text: pgettext('short for write', 'W'),
-            style_class: 'astra-monitor-menu-label',
+            styleClass: 'astra-monitor-menu-label',
             style: 'padding-right:0.15em;',
         });
         writeContainer.add_child(writeLabel);
 
         const writeActivityIcon = new St.Icon({
             gicon: Utils.getLocalIcon('am-down-symbolic'),
-            fallback_icon_name: 'go-down-symbolic',
-            style_class: 'astra-monitor-menu-icon-mini',
+            fallbackIconName: 'go-down-symbolic',
+            styleClass: 'astra-monitor-menu-icon-mini',
             style: 'color:rgba(255,255,255,0.5);',
         });
         writeContainer.add_child(writeActivityIcon);
 
         const writeValueLabel = new St.Label({
             text: '-',
-            x_expand: true,
-            style_class: 'astra-monitor-menu-key-mid',
+            xExpand: true,
+            styleClass: 'astra-monitor-menu-key-mid',
         });
         writeContainer.add_child(writeValueLabel);
         writeContainer.set_width(100);
@@ -935,13 +935,13 @@ export default class StorageMenu extends MenuBase {
             popup[section.values] = [];
 
             for(let i = 0; i < section.fields.length; i++) {
-                const label = new St.Label({ text: '', style_class: 'astra-monitor-menu-sub-key' });
+                const label = new St.Label({ text: '', styleClass: 'astra-monitor-menu-sub-key' });
                 popup.addToMenu(label);
                 popup[section.labels].push(label);
 
                 const value = new St.Label({
                     text: '',
-                    style_class: 'astra-monitor-menu-sub-value',
+                    styleClass: 'astra-monitor-menu-sub-value',
                 });
                 popup.addToMenu(value);
                 popup[section.values].push(value);
@@ -962,7 +962,7 @@ export default class StorageMenu extends MenuBase {
         popup.addToMenu(
             new St.Label({
                 text: _('Read'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -974,7 +974,7 @@ export default class StorageMenu extends MenuBase {
         popup.addToMenu(
             new St.Label({
                 text: _('Write'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -990,38 +990,38 @@ export default class StorageMenu extends MenuBase {
 
         const icon = {
             gicon: Utils.getLocalIcon('am-harddisk-symbolic'),
-            fallback_icon_name: 'drive-harddisk-symbolic',
+            fallbackIconName: 'drive-harddisk-symbolic',
         };
 
         if(deviceData.removable) {
             icon.gicon = Utils.getLocalIcon('am-media-removable-symbolic');
-            icon.fallback_icon_name = 'media-removable-symbolic';
+            icon.fallbackIconName = 'media-removable-symbolic';
         } else if(
             (deviceData.filesystem && deviceData.filesystem.startsWith('swap')) ||
             deviceData.mountpoints.includes('/boot') ||
             deviceData.mountpoints.includes('[SWAP]')
         ) {
             icon.gicon = Utils.getLocalIcon('am-linux-symbolic');
-            icon.fallback_icon_name = 'drive-harddisk-system-symbolic';
+            icon.fallbackIconName = 'drive-harddisk-system-symbolic';
         } else if(
             deviceData.type.startsWith('raid') ||
             deviceData.type.startsWith('lvm') ||
             deviceData.type.startsWith('md')
         ) {
             icon.gicon = Utils.getLocalIcon('am-raid-symbolic');
-            icon.fallback_icon_name = 'drive-harddisk-raid-symbolic';
+            icon.fallbackIconName = 'drive-harddisk-raid-symbolic';
         } else if(
             deviceData.type.startsWith('cdrom') ||
             deviceData.type.startsWith('rom') ||
             deviceData.type.endsWith('rom')
         ) {
-            icon.fallback_icon_name = 'drive-optical-symbolic';
+            icon.fallbackIconName = 'drive-optical-symbolic';
         } else if(deviceData.type.startsWith('floppy')) {
-            icon.fallback_icon_name = 'media-floppy-symbolic';
+            icon.fallbackIconName = 'media-floppy-symbolic';
         }
 
         if(icon.gicon) device.icon.gicon = icon.gicon;
-        device.icon.fallback_icon_name = icon.fallback_icon_name;
+        device.icon.fallbackIconName = icon.fallbackIconName;
 
         let label = deviceData.label || '';
         if(!label) {
@@ -1057,10 +1057,10 @@ export default class StorageMenu extends MenuBase {
             // Disk Usage Analyzer
             const baobabApp = appSys.lookup_app('org.gnome.baobab.desktop');
             if(baobabApp) {
-                const button = new St.Button({ style_class: 'button' });
+                const button = new St.Button({ styleClass: 'button' });
                 button.child = new St.Icon({
                     gicon: Utils.getLocalIcon('am-pie-symbolic'),
-                    fallback_icon_name: 'baobab-symbolic',
+                    fallbackIconName: 'baobab-symbolic',
                 });
 
                 button.connect('clicked', () => {
@@ -1073,10 +1073,10 @@ export default class StorageMenu extends MenuBase {
             // Disk Utility
             const diskApp = appSys.lookup_app('org.gnome.DiskUtility.desktop');
             if(diskApp) {
-                const button = new St.Button({ style_class: 'button' });
+                const button = new St.Button({ styleClass: 'button' });
                 button.child = new St.Icon({
                     gicon: Utils.getLocalIcon('am-disk-utility-symbolic'),
-                    fallback_icon_name: 'utilities-disk-utility-symbolic',
+                    fallbackIconName: 'utilities-disk-utility-symbolic',
                 });
 
                 button.connect('clicked', () => {

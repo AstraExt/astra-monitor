@@ -26,10 +26,10 @@ type GridProps = {
     numCols?: number;
     style?: string;
     styleClass?: string;
-    x_expand?: boolean;
-    y_expand?: boolean;
-    x_align?: Clutter.ActorAlign;
-    y_align?: Clutter.ActorAlign;
+    xExpand?: boolean;
+    yExpand?: boolean;
+    xAlign?: Clutter.ActorAlign;
+    yAlign?: Clutter.ActorAlign;
     orientation?: Clutter.Orientation;
 };
 export default GObject.registerClass(
@@ -46,21 +46,21 @@ export default GObject.registerClass(
             if(params.orientation === undefined) params.orientation = Clutter.Orientation.VERTICAL;
 
             const data: any = {
-                style_class: params.styleClass,
+                styleClass: params.styleClass,
                 name: 'AstraMonitorGrid',
-                layout_manager: new Clutter.GridLayout({ orientation: params.orientation }),
+                layoutManager: new Clutter.GridLayout({ orientation: params.orientation }),
             };
             if(params.style) data.style = params.style;
-            if(params.x_expand) data.x_expand = params.x_expand;
-            else data.x_expand = true;
-            if(params.y_expand) data.y_expand = params.y_expand;
-            else data.y_expand = true;
-            if(params.x_align) data.x_align = params.x_align;
-            if(params.y_align) data.y_align = params.y_align;
+            if(params.xExpand) data.xExpand = params.xExpand;
+            else data.xExpand = true;
+            if(params.yExpand) data.yExpand = params.yExpand;
+            else data.yExpand = true;
+            if(params.xAlign) data.xAlign = params.xAlign;
+            if(params.yAlign) data.yAlign = params.yAlign;
             super(data);
 
             // @ts-expect-error Clutter.GridLayout not updated in gjs
-            this.lm = this.layout_manager;
+            this.lm = this.layoutManager;
             this.currentRow = 0;
             this.currentCol = 0;
             this.numCols = params.numCols;

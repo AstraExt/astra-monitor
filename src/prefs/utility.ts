@@ -67,7 +67,7 @@ export default class Utility {
             const dialog = new Gtk.FileChooserDialog({
                 title: _('Export Settings'),
                 action: Gtk.FileChooserAction.SAVE,
-                transient_for: window,
+                transientFor: window,
                 modal: true,
             });
             dialog.set_current_name('astra-monitor-settings.json');
@@ -105,7 +105,7 @@ export default class Utility {
             const dialog = new Gtk.FileChooserDialog({
                 title: _('Import Settings'),
                 action: Gtk.FileChooserAction.OPEN,
-                transient_for: window,
+                transientFor: window,
                 modal: true,
             });
 
@@ -144,8 +144,8 @@ export default class Utility {
                 title: _('Reset Settings'),
                 text: _('Are you sure you want to reset all preferences?'),
                 buttons: Gtk.ButtonsType.YES_NO,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: window,
+                messageType: Gtk.MessageType.WARNING,
+                transientFor: window,
                 modal: true,
             });
             dialog.connect('response', (_dialog, response) => {

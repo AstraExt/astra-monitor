@@ -126,7 +126,7 @@ export default class MemoryMenu extends MenuBase {
 
         const hoverButton = new St.Button({
             reactive: true,
-            track_hover: true,
+            trackHover: true,
             style: defaultStyle,
         });
 
@@ -136,13 +136,13 @@ export default class MemoryMenu extends MenuBase {
         // Total Memory
         let label = new St.Label({
             text: _('Total:'),
-            style_class: 'astra-monitor-menu-label',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-label',
+            xExpand: true,
         });
         grid.addToGrid(label);
         this.memoryTotalQty = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-value',
+            styleClass: 'astra-monitor-menu-value',
             style: 'width:4em;',
         });
         grid.addToGrid(this.memoryTotalQty);
@@ -150,13 +150,13 @@ export default class MemoryMenu extends MenuBase {
         // Allocated Memory
         label = new St.Label({
             text: _('Allocated:'),
-            style_class: 'astra-monitor-menu-label',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-label',
+            xExpand: true,
         });
         grid.addToGrid(label);
         this.memoryAllocatedQty = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-value',
+            styleClass: 'astra-monitor-menu-value',
             style: 'width:4em;',
         });
         grid.addToGrid(this.memoryAllocatedQty);
@@ -164,26 +164,26 @@ export default class MemoryMenu extends MenuBase {
         // Used Memory
         label = new St.Label({
             text: _('Used:'),
-            style_class: 'astra-monitor-menu-label',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-label',
+            xExpand: true,
         });
         grid.addToGrid(label);
         this.memoryUsedQty = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-value',
+            styleClass: 'astra-monitor-menu-value',
             style: 'width:4em;',
         });
         grid.addToGrid(this.memoryUsedQty);
         // Free Memory
         label = new St.Label({
             text: _('Free:'),
-            style_class: 'astra-monitor-menu-label',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-label',
+            xExpand: true,
         });
         grid.addToGrid(label);
         this.memoryFreeQty = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-value',
+            styleClass: 'astra-monitor-menu-value',
             style: 'width:4em;',
         });
         grid.addToGrid(this.memoryFreeQty);
@@ -192,7 +192,7 @@ export default class MemoryMenu extends MenuBase {
         {
             //TODO: replace with Grid
             const barGrid = new St.Widget({
-                layout_manager: new Clutter.GridLayout({
+                layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.VERTICAL,
                 }),
                 style: 'margin-left:0;',
@@ -205,16 +205,16 @@ export default class MemoryMenu extends MenuBase {
                 height: 0.8,
                 mini: false,
                 layout: 'horizontal',
-                x_align: Clutter.ActorAlign.START,
+                xAlign: Clutter.ActorAlign.START,
                 style: 'margin-left:0.5em;margin-bottom:0;margin-right:0;border:solid 1px #555;',
             });
-            (barGrid.layout_manager as any).attach(this.memoryBar, 0, 0, 1, 1);
+            (barGrid.layoutManager as any).attach(this.memoryBar, 0, 0, 1, 1);
 
             this.memoryUsagePercLabel = new St.Label({
                 text: '0%',
                 style: 'width:2.7em;font-size:0.8em;text-align:right;',
             });
-            (barGrid.layout_manager as any).attach(this.memoryUsagePercLabel, 1, 0, 1, 1);
+            (barGrid.layoutManager as any).attach(this.memoryUsagePercLabel, 1, 0, 1, 1);
 
             grid.addToGrid(barGrid, 2);
         }
@@ -250,7 +250,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Total'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -266,7 +266,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Allocated'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -285,7 +285,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Used'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -301,7 +301,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Free'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -317,7 +317,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Available'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -336,7 +336,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Allocatable'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -358,7 +358,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Active'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -374,7 +374,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Buffers'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -390,7 +390,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsagePopup.addToMenu(
             new St.Label({
                 text: _('Cached'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -410,7 +410,7 @@ export default class MemoryMenu extends MenuBase {
 
         const hoverButton = new St.Button({
             reactive: true,
-            track_hover: true,
+            trackHover: true,
             style: defaultStyle,
         });
 
@@ -423,19 +423,19 @@ export default class MemoryMenu extends MenuBase {
         for(let i = 0; i < numProcesses; i++) {
             const label = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-name',
-                x_expand: true,
+                styleClass: 'astra-monitor-menu-cmd-name',
+                xExpand: true,
             });
             grid.addToGrid(label);
             const usage = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-usage',
+                styleClass: 'astra-monitor-menu-cmd-usage',
                 style: 'width:4.5em;',
             });
             grid.addToGrid(usage);
             const percentage = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-usage',
+                styleClass: 'astra-monitor-menu-cmd-usage',
                 style: 'width:4em;',
             });
             grid.addToGrid(percentage);
@@ -468,28 +468,28 @@ export default class MemoryMenu extends MenuBase {
         for(let i = 0; i < MemoryMonitor.TOP_PROCESSES_LIMIT; i++) {
             const usage = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-usage',
+                styleClass: 'astra-monitor-menu-cmd-usage',
                 style: 'width:4em;',
-                y_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
+                yExpand: true,
+                yAlign: Clutter.ActorAlign.CENTER,
             });
             grid.addGrid(usage, 0, i * 2, 1, 2);
             const percentage = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-usage',
+                styleClass: 'astra-monitor-menu-cmd-usage',
                 style: 'width:3.5em;',
-                y_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
+                yExpand: true,
+                yAlign: Clutter.ActorAlign.CENTER,
             });
             grid.addGrid(percentage, 1, i * 2, 1, 2);
             const label = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-name-full',
+                styleClass: 'astra-monitor-menu-cmd-name-full',
             });
             grid.addGrid(label, 2, i * 2, 1, 1);
             const description = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-cmd-description',
+                styleClass: 'astra-monitor-menu-cmd-description',
             });
             grid.addGrid(description, 2, i * 2 + 1, 1, 1);
             this.topProcessesPopup.processes.set(i, { label, usage, percentage, description });
@@ -505,7 +505,7 @@ export default class MemoryMenu extends MenuBase {
 
         const hoverButton = new St.Button({
             reactive: true,
-            track_hover: true,
+            trackHover: true,
             style: defaultStyle,
         });
 
@@ -513,7 +513,7 @@ export default class MemoryMenu extends MenuBase {
 
         //{
         const swapGrid = new St.Widget({
-            layout_manager: new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL }),
+            layoutManager: new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL }),
         });
 
         this.swapBar = new SwapBars({
@@ -522,44 +522,44 @@ export default class MemoryMenu extends MenuBase {
             height: 0.8,
             mini: false,
             layout: 'horizontal',
-            x_align: Clutter.ActorAlign.START,
+            xAlign: Clutter.ActorAlign.START,
             style: 'margin-left:0.5em;margin-bottom:0;margin-right:0;border:solid 1px #555;',
         });
-        (swapGrid.layout_manager as any).attach(this.swapBar, 0, 0, 1, 1);
+        (swapGrid.layoutManager as any).attach(this.swapBar, 0, 0, 1, 1);
 
         this.swapPercLabel = new St.Label({
             text: '0%',
             style: 'width:2.7em;font-size:0.8em;text-align:right;',
         });
-        (swapGrid.layout_manager as any).attach(this.swapPercLabel, 1, 0, 1, 1);
+        (swapGrid.layoutManager as any).attach(this.swapPercLabel, 1, 0, 1, 1);
 
         grid.addToGrid(swapGrid, 2);
         //}
 
         const swapUsedLabel = new St.Label({
             text: _('Used:'),
-            style_class: 'astra-monitor-menu-label',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-label',
+            xExpand: true,
         });
         grid.addToGrid(swapUsedLabel);
 
         this.swapUsedQty = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-value',
+            styleClass: 'astra-monitor-menu-value',
             style: 'width:4em;',
         });
         grid.addToGrid(this.swapUsedQty);
 
         const swapTotalLabel = new St.Label({
             text: _('Total:'),
-            style_class: 'astra-monitor-menu-label',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-label',
+            xExpand: true,
         });
         grid.addToGrid(swapTotalLabel);
 
         this.swapTotalQty = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-value',
+            styleClass: 'astra-monitor-menu-value',
             style: 'width:4em;',
         });
         grid.addToGrid(this.swapTotalQty);
@@ -588,7 +588,7 @@ export default class MemoryMenu extends MenuBase {
         this.memorySwapPopup.addToMenu(
             new St.Label({
                 text: _('Total'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -604,7 +604,7 @@ export default class MemoryMenu extends MenuBase {
         this.memorySwapPopup.addToMenu(
             new St.Label({
                 text: _('Used'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -620,7 +620,7 @@ export default class MemoryMenu extends MenuBase {
         this.memorySwapPopup.addToMenu(
             new St.Label({
                 text: _('Free'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -636,7 +636,7 @@ export default class MemoryMenu extends MenuBase {
         this.memorySwapPopup.addToMenu(
             new St.Label({
                 text: _('Cached'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -652,7 +652,7 @@ export default class MemoryMenu extends MenuBase {
         this.memorySwapPopup.addToMenu(
             new St.Label({
                 text: _('Zswap'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -668,7 +668,7 @@ export default class MemoryMenu extends MenuBase {
         this.memorySwapPopup.addToMenu(
             new St.Label({
                 text: _('Zswapped'),
-                style_class: 'astra-monitor-menu-sub-key',
+                styleClass: 'astra-monitor-menu-sub-key',
             })
         );
 
@@ -687,7 +687,7 @@ export default class MemoryMenu extends MenuBase {
         const devicesGrid = new Grid({
             numCols: 1,
             styleClass: 'astra-monitor-menu-subgrid',
-            x_expand: true,
+            xExpand: true,
         });
         this.memorySwapPopup.devicesGrid = devicesGrid;
         this.memorySwapPopup.devices = '';
@@ -995,14 +995,14 @@ export default class MemoryMenu extends MenuBase {
                                     const deviceGrid = new Grid({
                                         numCols: 2,
                                         styleClass: 'astra-monitor-menu-subgrid',
-                                        x_expand: true,
+                                        xExpand: true,
                                     });
 
                                     deviceGrid.addToGrid(
                                         new St.Label({
                                             text: device.device,
-                                            style_class: 'astra-monitor-menu-label',
-                                            x_expand: true,
+                                            styleClass: 'astra-monitor-menu-label',
+                                            xExpand: true,
                                         }),
                                         2
                                     );
@@ -1010,8 +1010,8 @@ export default class MemoryMenu extends MenuBase {
                                     deviceGrid.addToGrid(
                                         new St.Label({
                                             text: Utils.capitalize(device.type),
-                                            style_class: 'astra-monitor-menu-unmonitored',
-                                            x_expand: true,
+                                            styleClass: 'astra-monitor-menu-unmonitored',
+                                            xExpand: true,
                                         })
                                     );
 
@@ -1021,8 +1021,8 @@ export default class MemoryMenu extends MenuBase {
                                                 Utils.formatBytes(device.used, unit as any, 3) +
                                                 ' / ' +
                                                 Utils.formatBytes(device.size, unit as any, 3),
-                                            style_class: 'astra-monitor-menu-value',
-                                            x_expand: true,
+                                            styleClass: 'astra-monitor-menu-value',
+                                            xExpand: true,
                                         })
                                     );
 

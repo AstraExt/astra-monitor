@@ -83,24 +83,24 @@ export default GObject.registerClass(
 
             if(this.maxUploadSpeedLabel) {
                 if(lightTheme)
-                    this.maxUploadSpeedLabel.style_class = 'astra-monitor-graph-label-light';
-                else this.maxUploadSpeedLabel.style_class = 'astra-monitor-graph-label';
+                    this.maxUploadSpeedLabel.styleClass = 'astra-monitor-graph-label-light';
+                else this.maxUploadSpeedLabel.styleClass = 'astra-monitor-graph-label';
             }
 
             if(this.maxDownloadSpeedLabel) {
                 if(lightTheme)
-                    this.maxDownloadSpeedLabel.style_class = 'astra-monitor-graph-label-light';
-                else this.maxDownloadSpeedLabel.style_class = 'astra-monitor-graph-label';
+                    this.maxDownloadSpeedLabel.styleClass = 'astra-monitor-graph-label-light';
+                else this.maxDownloadSpeedLabel.styleClass = 'astra-monitor-graph-label';
             }
 
             if(this.thenLabel) {
-                if(lightTheme) this.thenLabel.style_class = 'astra-monitor-graph-label-then-light';
-                else this.thenLabel.style_class = 'astra-monitor-graph-label-then';
+                if(lightTheme) this.thenLabel.styleClass = 'astra-monitor-graph-label-then-light';
+                else this.thenLabel.styleClass = 'astra-monitor-graph-label-then';
             }
 
             if(this.nowLabel) {
-                if(lightTheme) this.nowLabel.style_class = 'astra-monitor-graph-label-now-light';
-                else this.nowLabel.style_class = 'astra-monitor-graph-label-now';
+                if(lightTheme) this.nowLabel.styleClass = 'astra-monitor-graph-label-now-light';
+                else this.nowLabel.styleClass = 'astra-monitor-graph-label-now';
             }
         }
 
@@ -109,19 +109,19 @@ export default GObject.registerClass(
 
             this.maxUploadSpeedLabel = new St.Label({
                 text: '-',
-                y_align: Clutter.ActorAlign.START,
+                yAlign: Clutter.ActorAlign.START,
             });
             this.historyGrid.attach(this.maxUploadSpeedLabel, 2, 0, 1, 1);
             this.maxDownloadSpeedLabel = new St.Label({
                 text: '',
-                y_align: Clutter.ActorAlign.CENTER,
+                yAlign: Clutter.ActorAlign.CENTER,
                 style: 'margin-top:10px;',
             });
             this.historyGrid.attach(this.maxDownloadSpeedLabel, 2, 1, 1, 1);
             const label = new St.Label({
                 text: '',
-                y_align: Clutter.ActorAlign.END,
-                style_class: 'astra-monitor-graph-label',
+                yAlign: Clutter.ActorAlign.END,
+                styleClass: 'astra-monitor-graph-label',
             });
             this.historyGrid.attach(label, 2, 2, 1, 1);
 

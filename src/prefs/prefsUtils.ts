@@ -33,9 +33,9 @@ import Utils from '../utils/utils.js';
 type RowProps = {
     title: string;
     subtitle?: string;
-    icon_name?: string;
+    iconName?: string;
     tabs?: number;
-    use_markup?: boolean;
+    useMarkup?: boolean;
 };
 
 type AdjustamentProps = {
@@ -62,14 +62,14 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.icon_name) {
+        if(props.iconName) {
             if(props.title) props.title = '  ' + props.title;
             if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
         }
 
         const data: any = {
             ...props,
-            use_markup: true,
+            useMarkup: true,
         };
 
         const section = new Adw.ExpanderRow(data);
@@ -149,7 +149,7 @@ export default class PrefsUtils {
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
                 vexpand: false,
-                icon_name: 'edit-undo-symbolic',
+                iconName: 'edit-undo-symbolic',
                 sensitive: true,
             });
             row.add_suffix(resetButton);
@@ -162,7 +162,7 @@ export default class PrefsUtils {
         }
 
         row.add_suffix(entry);
-        row.activatable_widget = entry;
+        row.activatableWidget = entry;
     }
 
     public static addButtonRow(
@@ -173,7 +173,7 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.icon_name) {
+        if(props.iconName) {
             if(props.title) props.title = '  ' + props.title;
             if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
         }
@@ -199,7 +199,7 @@ export default class PrefsUtils {
 
         const row = new Adw.ActionRow({
             ...props,
-            use_markup: true,
+            useMarkup: true,
         });
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
 
@@ -215,7 +215,7 @@ export default class PrefsUtils {
             cursor: null,
         });
         row.add_suffix(linkBtn);
-        row.activatable_widget = linkBtn;
+        row.activatableWidget = linkBtn;
     }
 
     public static addStatusLabel(
@@ -228,7 +228,7 @@ export default class PrefsUtils {
 
         const row = new Adw.ActionRow(props);
         const box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
-        const icon = new Gtk.Image({ icon_name: iconName });
+        const icon = new Gtk.Image({ iconName: iconName });
         icon.set_margin_end(10);
         box.append(icon);
         row.add_prefix(box);
@@ -250,7 +250,7 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.icon_name) {
+        if(props.iconName) {
             if(props.title) props.title = '  ' + props.title;
             if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
         }
@@ -269,7 +269,7 @@ export default class PrefsUtils {
         Config.bind(setting, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         row.add_suffix(toggle);
-        row.activatable_widget = toggle;
+        row.activatableWidget = toggle;
     }
 
     public static addColorRow(
@@ -281,7 +281,7 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.icon_name) {
+        if(props.iconName) {
             if(props.title) props.title = '  ' + props.title;
             if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
         }
@@ -322,7 +322,7 @@ export default class PrefsUtils {
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
                 vexpand: false,
-                icon_name: 'edit-undo-symbolic',
+                iconName: 'edit-undo-symbolic',
                 sensitive: true,
             });
             row.add_suffix(resetButton);
@@ -338,7 +338,7 @@ export default class PrefsUtils {
         }
 
         row.add_suffix(button);
-        row.activatable_widget = button;
+        row.activatableWidget = button;
     }
 
     public static addDropRow(
@@ -408,7 +408,7 @@ export default class PrefsUtils {
                     valign: Gtk.Align.CENTER,
                     hexpand: false,
                     vexpand: false,
-                    icon_name: 'edit-undo-symbolic',
+                    iconName: 'edit-undo-symbolic',
                     sensitive: true,
                 });
                 resetButton.connect('clicked', () => {
@@ -429,7 +429,7 @@ export default class PrefsUtils {
             }
 
             row.add_suffix(select);
-            row.activatable_widget = select;
+            row.activatableWidget = select;
 
             if(choices[selected] && choices[selected].text)
                 select.set_tooltip_text(choices[selected].text);
@@ -528,7 +528,7 @@ export default class PrefsUtils {
                     valign: Gtk.Align.CENTER,
                     hexpand: false,
                     vexpand: false,
-                    icon_name: 'edit-undo-symbolic',
+                    iconName: 'edit-undo-symbolic',
                     sensitive: true,
                 });
                 resetButton.connect('clicked', () => {
@@ -554,7 +554,7 @@ export default class PrefsUtils {
             }
 
             row.add_suffix(select);
-            row.activatable_widget = select;
+            row.activatableWidget = select;
 
             if(choices[selected] && choices[selected].text)
                 select.set_tooltip_text(choices[selected].text);
@@ -589,7 +589,7 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.icon_name) {
+        if(props.iconName) {
             if(props.title) props.title = '  ' + props.title;
             if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
         }
@@ -597,8 +597,8 @@ export default class PrefsUtils {
         const adjustment = new Gtk.Adjustment({
             lower: adj.min,
             upper: adj.max,
-            step_increment: adj.step ?? 1,
-            page_increment: adj.page ?? 10,
+            stepIncrement: adj.step ?? 1,
+            pageIncrement: adj.page ?? 10,
             value: (adj.digits || 0) === 0 ? Config.get_int(setting) : Config.get_double(setting),
         });
 
@@ -622,7 +622,7 @@ export default class PrefsUtils {
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
                 vexpand: false,
-                icon_name: 'edit-undo-symbolic',
+                iconName: 'edit-undo-symbolic',
                 sensitive: true,
             });
             row.add_suffix(resetButton);
@@ -637,7 +637,7 @@ export default class PrefsUtils {
             Config.set(setting, widget.value, (adj.digits || 0) === 0 ? 'int' : 'number');
         });
         row.add_suffix(spinButton);
-        row.activatable_widget = spinButton;
+        row.activatableWidget = spinButton;
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -654,7 +654,7 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.icon_name) {
+        if(props.iconName) {
             if(props.title) props.title = '  ' + props.title;
             if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
         }
@@ -668,14 +668,14 @@ export default class PrefsUtils {
             valign: Gtk.Align.CENTER,
             hexpand: false,
             vexpand: false,
-            use_size: false,
+            useSize: false,
             level: Gtk.FontChooserLevel.FAMILY,
-            preview_text: 'Astra Monitor v' + Utils.metadata.version,
+            previewText: 'Astra Monitor v' + Utils.metadata.version,
             font: Config.get_string(setting),
         });
 
         fontButton.connect('font-set', widget => {
-            Config.set(setting, widget.font_desc.get_family(), 'string');
+            Config.set(setting, widget.fontDesc.get_family(), 'string');
         });
 
         if(reset !== undefined) {
@@ -684,7 +684,7 @@ export default class PrefsUtils {
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
                 vexpand: false,
-                icon_name: 'edit-undo-symbolic',
+                iconName: 'edit-undo-symbolic',
                 sensitive: true,
             });
             resetButton.connect('clicked', () => {
@@ -695,7 +695,7 @@ export default class PrefsUtils {
         }
 
         row.add_suffix(fontButton);
-        row.activatable_widget = fontButton;
+        row.activatableWidget = fontButton;
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -726,7 +726,7 @@ export default class PrefsUtils {
 
         let buttonUp;
         if(index > 0) {
-            buttonUp = new Gtk.Button({ tooltip_text: _('Move up') });
+            buttonUp = new Gtk.Button({ tooltipText: _('Move up') });
 
             buttonUp.connect('clicked', () => {
                 const list = Config.get_json(config);
@@ -740,14 +740,14 @@ export default class PrefsUtils {
             buttonUp.set_opacity(0.0);
         }
 
-        const upImg = new Gtk.Image({ icon_name: 'go-up-symbolic', pixel_size: 12 });
+        const upImg = new Gtk.Image({ iconName: 'go-up-symbolic', pixelSize: 12 });
         buttonUp.set_child(upImg);
         buttonUp.set_margin_top(10);
         buttonUp.set_margin_bottom(10);
 
         let buttonDown;
         if(index < count - 1) {
-            buttonDown = new Gtk.Button({ tooltip_text: _('Move down') });
+            buttonDown = new Gtk.Button({ tooltipText: _('Move down') });
             buttonDown.connect('clicked', () => {
                 const list = Config.get_json(config);
                 const removed = list[index];
@@ -760,7 +760,7 @@ export default class PrefsUtils {
             buttonDown.set_opacity(0.0);
         }
 
-        const downImg = new Gtk.Image({ icon_name: 'go-down-symbolic', pixel_size: 12 });
+        const downImg = new Gtk.Image({ iconName: 'go-down-symbolic', pixelSize: 12 });
         buttonDown.set_child(downImg);
         buttonDown.set_margin_start(10);
         buttonDown.set_margin_top(10);

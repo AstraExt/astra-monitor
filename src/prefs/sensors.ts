@@ -199,7 +199,7 @@ export default class Sensors {
             {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'sensors-header-icon-size',
@@ -236,7 +236,7 @@ export default class Sensors {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true,
+                useMarkup: true,
             },
             sources,
             'sensors-header-sensor1',
@@ -284,7 +284,7 @@ export default class Sensors {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true,
+                useMarkup: true,
             },
             sources,
             'sensors-header-sensor2',
@@ -322,7 +322,7 @@ export default class Sensors {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true,
+                useMarkup: true,
             },
             sources,
             'sensors-header-tooltip-sensor1',
@@ -362,7 +362,7 @@ export default class Sensors {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true,
+                useMarkup: true,
             },
             sources,
             'sensors-header-tooltip-sensor2',
@@ -402,7 +402,7 @@ export default class Sensors {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true,
+                useMarkup: true,
             },
             sources,
             'sensors-header-tooltip-sensor3',
@@ -442,7 +442,7 @@ export default class Sensors {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true,
+                useMarkup: true,
             },
             sources,
             'sensors-header-tooltip-sensor4',
@@ -482,7 +482,7 @@ export default class Sensors {
             {
                 title: _('Source'),
                 tabs: 1,
-                use_markup: true,
+                useMarkup: true,
             },
             sources,
             'sensors-header-tooltip-sensor5',

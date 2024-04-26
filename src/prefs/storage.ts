@@ -196,10 +196,10 @@ export default class Storage {
             const row = new Adw.ActionRow({ title: name, subtitle });
             ignoredSection.add_row(row);
 
-            let icon_name = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
-            if(id === main) icon_name = 'am-star-symbolic';
+            let iconName = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
+            if(id === main) iconName = 'am-star-symbolic';
 
-            const icon = new Gtk.Image({ icon_name: icon_name });
+            const icon = new Gtk.Image({ iconName: iconName });
             icon.set_margin_start(15);
             icon.set_margin_end(10);
             row.add_prefix(icon);
@@ -212,7 +212,7 @@ export default class Storage {
 
             if(id === main) {
                 toggle.sensitive = false;
-                toggle.tooltip_text = _('Main disk cannot be ignored');
+                toggle.tooltipText = _('Main disk cannot be ignored');
             }
 
             toggle.connect('state-set', (_switchObj, state) => {
@@ -221,7 +221,7 @@ export default class Storage {
 
                 if(state) {
                     row.subtitle = _('Ignored');
-                    icon.icon_name = 'am-dialog-error-symbolic';
+                    icon.iconName = 'am-dialog-error-symbolic';
 
                     if(!ignored.includes(name)) {
                         ignored.push(name);
@@ -229,7 +229,7 @@ export default class Storage {
                     Config.set('storage-ignored', JSON.stringify(ignored), 'string');
                 } else {
                     row.subtitle = _('Active');
-                    icon.icon_name = 'am-dialog-ok-symbolic';
+                    icon.iconName = 'am-dialog-ok-symbolic';
 
                     if(ignored.includes(name)) {
                         ignored = ignored.filter((deviceName: string) => deviceName !== name);
@@ -239,7 +239,7 @@ export default class Storage {
             });
 
             row.add_suffix(toggle);
-            row.activatable_widget = toggle;
+            row.activatableWidget = toggle;
         }
 
         const sourcesSection = PrefsUtils.addExpanderRow(
@@ -342,7 +342,7 @@ export default class Storage {
             {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'storage-header-icon-size',

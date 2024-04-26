@@ -168,9 +168,9 @@ export default class Network {
             const row = new Adw.ActionRow({ title: name, subtitle });
             ignoredSection.add_row(row);
 
-            const icon_name = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
+            const iconName = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
 
-            const icon = new Gtk.Image({ icon_name: icon_name });
+            const icon = new Gtk.Image({ iconName: iconName });
             icon.set_margin_start(15);
             icon.set_margin_end(10);
             row.add_prefix(icon);
@@ -187,14 +187,14 @@ export default class Network {
 
                 if(state) {
                     row.subtitle = _('Ignored');
-                    icon.icon_name = 'am-dialog-error-symbolic';
+                    icon.iconName = 'am-dialog-error-symbolic';
                     if(!ignored.includes(name)) {
                         ignored.push(name);
                     }
                     Config.set('network-ignored', JSON.stringify(ignored), 'string');
                 } else {
                     row.subtitle = _('Active');
-                    icon.icon_name = 'am-dialog-ok-symbolic';
+                    icon.iconName = 'am-dialog-ok-symbolic';
 
                     if(ignored.includes(name)) {
                         ignored = ignored.filter((deviceName: string) => deviceName !== name);
@@ -204,7 +204,7 @@ export default class Network {
             });
 
             row.add_suffix(toggle);
-            row.activatable_widget = toggle;
+            row.activatableWidget = toggle;
         }
 
         const sourcesSection = PrefsUtils.addExpanderRow(
@@ -316,7 +316,7 @@ export default class Network {
             {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'network-header-icon-size',

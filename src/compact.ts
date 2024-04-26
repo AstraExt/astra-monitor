@@ -137,11 +137,11 @@ export default GObject.registerClass(
 
         buildIcon() {
             this.icon = new St.Icon({
-                icon_size: 28,
-                y_expand: true,
-                x_expand: false,
-                y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER,
+                iconSize: 28,
+                yExpand: true,
+                xExpand: false,
+                yAlign: Clutter.ActorAlign.CENTER,
+                xAlign: Clutter.ActorAlign.CENTER,
                 style: 'margin-left:0;margin-right:0;',
             });
             this.add_child(this.icon);
@@ -158,19 +158,19 @@ export default GObject.registerClass(
             const iconName = this.iconNames[iconIndex];
             const gicon = Utils.getLocalIcon(iconName);
             if(gicon) {
-                this.icon.icon_name = '';
+                this.icon.iconName = '';
                 this.icon.gicon = gicon;
             }
 
             if(this.compacted) {
                 const compactIcon = Config.get_string('compact-mode-compact-icon-custom');
                 if(compactIcon) {
-                    this.icon.icon_name = compactIcon;
+                    this.icon.iconName = compactIcon;
                 }
             } else if(!this.compacted) {
                 const expandedIcon = Config.get_string('compact-mode-expanded-icon-custom');
                 if(expandedIcon) {
-                    this.icon.icon_name = expandedIcon;
+                    this.icon.iconName = expandedIcon;
                 }
             }
         }

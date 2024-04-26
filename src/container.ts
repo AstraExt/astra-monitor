@@ -64,10 +64,10 @@ export default GObject.registerClass(
 
             this.box = new St.BoxLayout({
                 vertical: false,
-                x_expand: true,
-                y_expand: true,
-                x_align: Clutter.ActorAlign.START,
-                y_align: Clutter.ActorAlign.FILL,
+                xExpand: true,
+                yExpand: true,
+                xAlign: Clutter.ActorAlign.START,
+                yAlign: Clutter.ActorAlign.FILL,
                 style: this.computeStyle(),
             });
 

@@ -58,9 +58,9 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         if(params.scrollable) {
             // SCROLLABLE
             const scrollView = new St.ScrollView({
-                x_expand: true,
-                y_expand: true,
-                y_align: Clutter.ActorAlign.START,
+                xExpand: true,
+                yExpand: true,
+                yAlign: Clutter.ActorAlign.START,
             });
             scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
@@ -74,18 +74,14 @@ export default class MenuBase extends PopupMenu.PopupMenu {
 
             const scrollActor = new St.Bin({ child: scrollView });
 
-            // @ts-expect-error actor not in types
             this.statusMenu.actor.add_child(scrollActor);
 
             this.grid = new Grid({ numCols: params.numCols || 2 });
             boxLayout.add_child(this.grid);
 
-            // @ts-expect-error actor not in types
             this.actor.add_style_class_name('panel-menu');
 
-            // @ts-expect-error actor not in types
             Main.uiGroup.add_child(this.actor);
-            // @ts-expect-error actor not in types
             this.actor.hide();
         } else {
             // NON-SCROLLABLE
@@ -95,13 +91,10 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             this.statusMenu.box.add_child(this.grid);
             this.addMenuItem(this.statusMenu);
 
-            // @ts-expect-error actor not in types
             this.actor.add_style_class_name('panel-menu');
 
-            // @ts-expect-error actor not in types
             Main.uiGroup.add_child(this.actor);
 
-            // @ts-expect-error actor not in types
             this.actor.hide();
         }
     }
@@ -131,7 +124,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     }
 
     addMenuSection(text: string, add: boolean = true, newLine: boolean = false): St.Label {
-        const label = new St.Label({ text, style_class: 'astra-monitor-menu-header-centered' });
+        const label = new St.Label({ text, styleClass: 'astra-monitor-menu-header-centered' });
         if(add) {
             if(newLine) this.grid.newLine();
             this.addToMenu(label, this.grid.getNumCols());
@@ -164,10 +157,10 @@ export default class MenuBase extends PopupMenu.PopupMenu {
 
     addUtilityButtons(category?: string, addButtons?: (box: St.BoxLayout) => void) {
         this.utilityBox = new St.BoxLayout({
-            style_class: 'astra-monitor-menu-button-box',
-            x_align: Clutter.ActorAlign.CENTER,
+            styleClass: 'astra-monitor-menu-button-box',
+            xAlign: Clutter.ActorAlign.CENTER,
             reactive: true,
-            x_expand: true,
+            xExpand: true,
         });
 
         if(addButtons) addButtons(this.utilityBox);
@@ -176,10 +169,10 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         const appSys = Shell.AppSystem.get_default();
         const app = appSys.lookup_app('gnome-system-monitor.desktop');
         if(app) {
-            const button = new St.Button({ style_class: 'button' });
+            const button = new St.Button({ styleClass: 'button' });
             button.child = new St.Icon({
                 gicon: Utils.getLocalIcon('am-system-monitor-symbolic'),
-                fallback_icon_name: 'org.gnome.SystemMonitor-symbolic',
+                fallbackIconName: 'org.gnome.SystemMonitor-symbolic',
             });
 
             button.connect('clicked', () => {
@@ -190,10 +183,10 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         }
 
         // Astra Monitor preferences
-        const button = new St.Button({ style_class: 'button' });
+        const button = new St.Button({ styleClass: 'button' });
         button.child = new St.Icon({
             gicon: Utils.getLocalIcon('am-settings-symbolic'),
-            fallback_icon_name: 'preferences-system-symbolic',
+            fallbackIconName: 'preferences-system-symbolic',
         });
         button.connect('clicked', () => {
             this.close(true);

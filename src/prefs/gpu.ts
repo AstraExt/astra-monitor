@@ -110,7 +110,7 @@ export default class Gpu {
                     'This may have a (minor) performance impact.' +
                     '\n' +
                     _("Hint: You can instead choose to show GPU stats in Processors' menu."),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
             },
             'gpu-header-show',
             group
@@ -188,7 +188,7 @@ export default class Gpu {
             {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'gpu-header-icon-size',

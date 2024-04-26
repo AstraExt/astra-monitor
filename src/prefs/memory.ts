@@ -235,7 +235,7 @@ export default class Memory {
             {
                 title: _('Icon Size'),
                 subtitle: _('Experimental feature: may require to disable/enable the extension.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'memory-header-icon-size',

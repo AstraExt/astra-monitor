@@ -145,17 +145,17 @@ export default GObject.registerClass(
             let iconSize = Config.get_int('sensors-header-icon-size');
             iconSize = Math.max(8, Math.min(30, iconSize));
             this.icon = new St.Icon({
-                fallback_gicon: Utils.getLocalIcon('am-temperature-symbolic'),
+                fallbackGicon: Utils.getLocalIcon('am-temperature-symbolic'),
                 style: defaultStyle,
-                icon_size: iconSize,
-                y_expand: false,
-                y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.CENTER,
+                iconSize: iconSize,
+                yExpand: false,
+                yAlign: Clutter.ActorAlign.CENTER,
+                xAlign: Clutter.ActorAlign.CENTER,
             });
 
             const setIconName = () => {
                 const iconCustom = Config.get_string('sensors-header-icon-custom');
-                if(iconCustom) this.icon.icon_name = iconCustom;
+                if(iconCustom) this.icon.iconName = iconCustom;
                 // @ts-expect-error gicon shouldn't be null, but we do have a fallback icon
                 else this.icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
             };
@@ -189,24 +189,24 @@ export default GObject.registerClass(
 
         buildValues() {
             this.valuesContainer = new St.BoxLayout({
-                x_align: Clutter.ActorAlign.START,
-                y_align: Clutter.ActorAlign.FILL,
-                y_expand: true,
+                xAlign: Clutter.ActorAlign.START,
+                yAlign: Clutter.ActorAlign.FILL,
+                yExpand: true,
                 vertical: true,
                 width: 1,
             });
 
             this.sensors = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-header-sensors-values-label',
+                styleClass: 'astra-monitor-header-sensors-values-label',
                 style: 'font-size: 0.65em;',
-                y_align: Clutter.ActorAlign.CENTER,
-                x_align: Clutter.ActorAlign.END,
-                x_expand: true,
-                y_expand: true,
+                yAlign: Clutter.ActorAlign.CENTER,
+                xAlign: Clutter.ActorAlign.END,
+                xExpand: true,
+                yExpand: true,
             });
-            this.sensors.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-            this.sensors.clutter_text.line_wrap = false;
+            this.sensors.clutterText.ellipsize = Pango.EllipsizeMode.NONE;
+            this.sensors.clutterText.lineWrap = false;
             this.valuesContainer.add_child(this.sensors);
 
             Config.bind(
@@ -363,15 +363,15 @@ export default GObject.registerClass(
 
             Main.uiGroup.add_child(this.tooltipMenu.actor);
             this.tooltipMenu.actor.add_style_class_name('astra-monitor-tooltip-menu');
-            this.tooltipMenu.actor.x_expand = true;
+            this.tooltipMenu.actor.xExpand = true;
             this.tooltipMenu.actor.hide();
 
             this.tooltipItem = new PopupMenu.PopupMenuItem('', {
                 reactive: true,
                 style_class: 'astra-monitor-tooltip-item',
             }) as TooltipItem;
-            this.tooltipItem.actor.x_expand = true;
-            this.tooltipItem.actor.x_align = Clutter.ActorAlign.CENTER;
+            this.tooltipItem.actor.xExpand = true;
+            this.tooltipItem.actor.xAlign = Clutter.ActorAlign.CENTER;
             this.tooltipItem.sensitive = true;
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 

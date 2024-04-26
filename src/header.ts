@@ -43,27 +43,27 @@ export default GObject.registerClass(
         constructor(name: string) {
             super({
                 reactive: true,
-                can_focus: true,
-                track_hover: true,
-                style_class: 'panel-button astra-monitor-header',
-                accessible_name: name,
-                accessible_role: Atk.Role.MENU,
+                canFocus: true,
+                trackHover: true,
+                styleClass: 'panel-button astra-monitor-header',
+                accessibleName: name,
+                accessibleRole: Atk.Role.MENU,
                 layoutManager: new Clutter.BinLayout(),
-                x_expand: true,
-                y_expand: true,
-                x_align: Clutter.ActorAlign.START,
-                y_align: Clutter.ActorAlign.FILL,
+                xExpand: true,
+                yExpand: true,
+                xAlign: Clutter.ActorAlign.START,
+                yAlign: Clutter.ActorAlign.FILL,
             });
             this.name = name;
 
             Utils.verbose(`Creating ${this.name}`);
 
             this.box = new St.BoxLayout({
-                x_expand: true,
-                y_expand: false,
-                x_align: Clutter.ActorAlign.START,
-                y_align: Clutter.ActorAlign.CENTER,
-                style_class: 'astra-monitor-header-box',
+                xExpand: true,
+                yExpand: false,
+                xAlign: Clutter.ActorAlign.START,
+                yAlign: Clutter.ActorAlign.CENTER,
+                styleClass: 'astra-monitor-header-box',
             });
             this.add_child(this.box);
 
@@ -212,14 +212,13 @@ export default GObject.registerClass(
             const workArea = Main.layoutManager.getWorkAreaForMonitor(
                 Main.layoutManager.primaryIndex
             );
-            const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+            const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scaleFactor;
             // @ts-expect-error actor not in types
             const verticalMargins = this.menu.actor.margin_top + this.menu.actor.margin_bottom;
 
             // The workarea and margin dimensions are in physical pixels, but CSS
             // measures are in logical pixels, so make sure to consider the scale
             // factor when computing max-height
-            // @ts-expect-error getWorkAreaForMonitor not updated
             const maxHeight = Math.round((workArea.height - verticalMargins) / scaleFactor);
             // @ts-expect-error actor not in types
             this.menu.actor.style = `max-height: ${maxHeight}px;`;

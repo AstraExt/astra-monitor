@@ -72,9 +72,9 @@ export default class SensorsMenu extends MenuBase {
             this.sensorsSection = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
             this.noSensorsLabel = new St.Label({
                 text: _('No sensor found'),
-                style_class: 'astra-monitor-menu-label-warning',
+                styleClass: 'astra-monitor-menu-label-warning',
                 style: 'font-style:italic;',
-                x_expand: true,
+                xExpand: true,
             });
             this.sensorsSection.addToGrid(this.noSensorsLabel, 2);
             this.sensors = new Map();
@@ -132,28 +132,28 @@ export default class SensorsMenu extends MenuBase {
         const defaultStyle = 'padding-top:0.25em;margin-bottom:0.25em;';
         const container = new St.Button({
             reactive: true,
-            track_hover: true,
-            x_expand: true,
+            trackHover: true,
+            xExpand: true,
             style: defaultStyle,
         });
 
         const grid = new Grid({
-            x_expand: true,
+            xExpand: true,
             styleClass: 'astra-monitor-menu-subgrid',
         });
         container.set_child(grid);
 
         const nameLabel = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-sensors-name',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-sensors-name',
+            xExpand: true,
         });
         grid.addToGrid(nameLabel, 2);
 
         const adapterLabel = new St.Label({
             text: '',
-            style_class: 'astra-monitor-menu-sensors-adapter',
-            x_expand: true,
+            styleClass: 'astra-monitor-menu-sensors-adapter',
+            xExpand: true,
         });
         grid.addToGrid(adapterLabel, 2);
 
@@ -171,7 +171,7 @@ export default class SensorsMenu extends MenuBase {
         const popupGrid = new Grid({
             numCols: cols * 2,
             styleClass: 'astra-monitor-menu-subgrid',
-            x_expand: true,
+            xExpand: true,
         });
 
         const categories = new Map();
@@ -187,13 +187,13 @@ export default class SensorsMenu extends MenuBase {
                 numCols: 3,
                 styleClass: 'astra-monitor-menu-subgrid',
                 style: style,
-                x_expand: true,
+                xExpand: true,
             });
 
             const categoryLabel = new St.Label({
                 text: '',
-                style_class: 'astra-monitor-menu-sensors-category',
-                x_expand: true,
+                styleClass: 'astra-monitor-menu-sensors-category',
+                xExpand: true,
             });
             categoryGrid.addToGrid(categoryLabel, 3);
 
@@ -201,24 +201,24 @@ export default class SensorsMenu extends MenuBase {
             for(const valueId of category) {
                 //Icon
                 const icon = new St.Icon({
-                    style_class: 'astra-monitor-menu-sensors-icon',
-                    content_gravity: Clutter.ContentGravity.CENTER,
+                    styleClass: 'astra-monitor-menu-sensors-icon',
+                    contentGravity: Clutter.ContentGravity.CENTER,
                 });
                 categoryGrid.addToGrid(icon);
 
                 //Name
                 const name = new St.Label({
                     text: '',
-                    style_class: 'astra-monitor-menu-sensors-label',
-                    x_expand: true,
+                    styleClass: 'astra-monitor-menu-sensors-label',
+                    xExpand: true,
                 });
                 categoryGrid.addToGrid(name);
 
                 //Value
                 const value = new St.Label({
                     text: '-',
-                    style_class: 'astra-monitor-menu-sensors-key',
-                    x_expand: true,
+                    styleClass: 'astra-monitor-menu-sensors-key',
+                    xExpand: true,
                 });
                 categoryGrid.addToGrid(value);
 
@@ -296,7 +296,7 @@ export default class SensorsMenu extends MenuBase {
 
                     const icon = Utils.unitToIcon(unit);
                     if(icon.gicon) valueData.icon.gicon = icon.gicon;
-                    valueData.icon.fallback_icon_name = icon.fallback_icon_name;
+                    valueData.icon.fallbackIconName = icon.fallbackIconName;
 
                     let numericValue = value.attrs.value;
                     if(numericValue === undefined) numericValue = 0;

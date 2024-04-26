@@ -124,7 +124,7 @@ export default class Visualization {
                     _('This is an utility rather than a setting.') +
                     '\n' +
                     _('Changing this will just replace all main colors.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             (color: string) => {
@@ -140,7 +140,7 @@ export default class Visualization {
                     _('This is an utility rather than a setting.') +
                     '\n' +
                     _('Changing this will just replace all secondary colors.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             (color: string) => {
@@ -183,7 +183,7 @@ export default class Visualization {
             {
                 title: _('Left Margin'),
                 subtitle: _('Experimental feature: may not function properly.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'panel-margin-left',
@@ -196,7 +196,7 @@ export default class Visualization {
             {
                 title: _('Right Margin'),
                 subtitle: _('Experimental feature: may not function properly.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'panel-margin-right',
@@ -215,7 +215,7 @@ export default class Visualization {
             {
                 title: _('Startup Delay (seconds)'),
                 subtitle: _('Increase if the extension is not properly formatted on startup.'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'startup-delay',
@@ -231,7 +231,7 @@ export default class Visualization {
                     _('Experimental feature: may require to disable/enable the extension.') +
                     '\n' +
                     _('Set between 15 and 80 to enable height override'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'headers-height-override',
@@ -247,7 +247,7 @@ export default class Visualization {
                     _('Experimental feature: may require to disable/enable the extension.') +
                     '\n' +
                     _('Set to empty to disable font override'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'headers-font-family',
@@ -261,7 +261,7 @@ export default class Visualization {
                     _('Experimental feature: may require to disable/enable the extension.') +
                     '\n' +
                     _('Set to 0 to disable size override'),
-                icon_name: 'am-dialog-warning-symbolic',
+                iconName: 'am-dialog-warning-symbolic',
                 tabs: 1,
             },
             'headers-font-size',

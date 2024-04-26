@@ -120,8 +120,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.sensors = new Sensors(this);
         this.utility = new Utility(this, window);
         this.about = new About(this);
-
-        if(Gtk.Settings.get_default()?.gtk_application_prefer_dark_theme ?? false) {
+        
+        if(
+            (Gtk.Settings.get_default()?.gtkApplicationPreferDarkTheme ?? false) ||
+            Adw.StyleManager.get_default().dark
+        ) {
             AstraMonitorPrefs.addCss(`
                 .am-active {
                     background-color: rgba(255, 255, 255, 0.1);
@@ -153,25 +156,25 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const menu = new Adw.PreferencesPage({
             vexpand: true,
             hexpand: true,
-            margin_top: 0,
-            margin_bottom: 0,
-            margin_start: 0,
-            margin_end: 0,
+            marginTop: 0,
+            marginBottom: 0,
+            marginStart: 0,
+            marginEnd: 0,
         });
 
         const welcomeGroup = new Adw.PreferencesGroup({
             hexpand: true,
-            margin_top: 0,
-            margin_bottom: 0,
-            margin_start: 10,
-            margin_end: 10,
+            marginTop: 0,
+            marginBottom: 0,
+            marginStart: 10,
+            marginEnd: 10,
         });
         menu.add(welcomeGroup);
 
         const welcomeBtn = PrefsUtils.addButtonRow(
             {
                 title: _('Welcome'),
-                icon_name: 'am-home-symbolic',
+                iconName: 'am-home-symbolic',
             },
             welcomeGroup,
             btn => {
@@ -183,17 +186,17 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const generalGroup = new Adw.PreferencesGroup({
             hexpand: true,
-            margin_top: 0,
-            margin_bottom: 0,
-            margin_start: 10,
-            margin_end: 10,
+            marginTop: 0,
+            marginBottom: 0,
+            marginStart: 10,
+            marginEnd: 10,
         });
         menu.add(generalGroup);
 
         const visualizationBtn = PrefsUtils.addButtonRow(
             {
                 title: _('Visualization'),
-                icon_name: 'am-ui-symbolic',
+                iconName: 'am-ui-symbolic',
             },
             generalGroup,
             () => {
@@ -205,10 +208,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const monitorsGroup = new Adw.PreferencesGroup({
             hexpand: true,
-            margin_top: 0,
-            margin_bottom: 0,
-            margin_start: 10,
-            margin_end: 10,
+            marginTop: 0,
+            marginBottom: 0,
+            marginStart: 10,
+            marginEnd: 10,
         });
         menu.add(monitorsGroup);
 
@@ -218,7 +221,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const processors = PrefsUtils.addExpanderRow(
             {
                 title: _('Processors'),
-                icon_name: 'am-cpu-symbolic',
+                iconName: 'am-cpu-symbolic',
             },
             monitorsGroup,
             'menu',
@@ -272,7 +275,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const gpu = PrefsUtils.addExpanderRow(
             {
                 title: _('GPU'),
-                icon_name: 'am-gpu-symbolic',
+                iconName: 'am-gpu-symbolic',
             },
             monitorsGroup,
             'menu',
@@ -326,7 +329,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const memory = PrefsUtils.addExpanderRow(
             {
                 title: _('Memory'),
-                icon_name: 'am-memory-symbolic',
+                iconName: 'am-memory-symbolic',
             },
             monitorsGroup,
             'menu',
@@ -380,7 +383,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const storage = PrefsUtils.addExpanderRow(
             {
                 title: _('Storage'),
-                icon_name: 'am-harddisk-symbolic',
+                iconName: 'am-harddisk-symbolic',
             },
             monitorsGroup,
             'menu',
@@ -434,7 +437,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const network = PrefsUtils.addExpanderRow(
             {
                 title: _('Network'),
-                icon_name: 'am-network-symbolic',
+                iconName: 'am-network-symbolic',
             },
             monitorsGroup,
             'menu',
@@ -488,7 +491,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         const sensors = PrefsUtils.addExpanderRow(
             {
                 title: _('Sensors'),
-                icon_name: 'am-temperature-symbolic',
+                iconName: 'am-temperature-symbolic',
             },
             monitorsGroup,
             'menu',
@@ -538,10 +541,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const aboutGroup = new Adw.PreferencesGroup({
             hexpand: true,
-            margin_top: 0,
-            margin_bottom: 0,
-            margin_start: 10,
-            margin_end: 10,
+            marginTop: 0,
+            marginBottom: 0,
+            marginStart: 10,
+            marginEnd: 10,
         });
         menu.add(aboutGroup);
 
@@ -549,7 +552,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         PrefsUtils.addButtonRow(
             {
                 title: _('Utility'),
-                icon_name: 'am-tools-symbolic',
+                iconName: 'am-tools-symbolic',
             },
             aboutGroup,
             btn => {
@@ -563,7 +566,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         PrefsUtils.addButtonRow(
             {
                 title: _('About'),
-                icon_name: 'am-dialog-info-symbolic',
+                iconName: 'am-dialog-info-symbolic',
             },
             aboutGroup,
             btn => {
@@ -636,7 +639,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         for(const key of keys) {
             const value = settings.get_value(key);
-            const schema = settings.settings_schema.get_key(key);
+            const schema = settings.settingsSchema.get_key(key);
             const type = schema.get_value_type();
 
             if(type.equal(new GLib.VariantType('s'))) exported[key] = value.get_string()[0];
@@ -674,7 +677,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             const value = imported[key];
 
             try {
-                const schema = settings.settings_schema.get_key(key);
+                const schema = settings.settingsSchema.get_key(key);
                 const type = schema.get_value_type();
 
                 if(type.equal(new GLib.VariantType('s'))) Config.set(key, value, 'string');
@@ -694,7 +697,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const keys = settings.list_keys();
         for(const key of keys) {
-            const schema = settings.settings_schema.get_key(key);
+            const schema = settings.settingsSchema.get_key(key);
             const type = schema.get_value_type();
 
             if(type.equal(new GLib.VariantType('s')))

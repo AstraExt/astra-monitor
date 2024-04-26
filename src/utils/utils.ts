@@ -131,7 +131,7 @@ export type UptimeTimer = { stop: () => void };
 
 interface IconData {
     gicon?: any;
-    fallback_icon_name: string;
+    fallbackIconName: string;
 }
 
 export default class Utils {
@@ -1993,10 +1993,10 @@ export default class Utils {
         });
     }
 
-    static getLocalIcon(icon_name: string): Gio.Icon | null {
+    static getLocalIcon(iconName: string): Gio.Icon | null {
         if(!Utils.metadata || !(Utils.metadata as any).path) return null;
         return Gio.icon_new_for_string(
-            `${(Utils.metadata as any).path}/icons/hicolor/scalable/actions/${icon_name}.svg`
+            `${(Utils.metadata as any).path}/icons/hicolor/scalable/actions/${iconName}.svg`
         );
     }
 
@@ -2416,29 +2416,29 @@ export default class Utils {
     static unitToIcon(unit: string): IconData {
         const icon: IconData = {
             gicon: Utils.getLocalIcon('am-dialog-info-symbolic'),
-            fallback_icon_name: 'dialog-info-symbolic',
+            fallbackIconName: 'dialog-info-symbolic',
         };
         if(unit === '°C' || unit === 'C' || unit === '°F' || unit === 'F') {
             icon.gicon = Utils.getLocalIcon('am-temperature-symbolic');
-            icon.fallback_icon_name = 'temperature-symbolic';
+            icon.fallbackIconName = 'temperature-symbolic';
         } else if(unit === 'RPM') {
             icon.gicon = Utils.getLocalIcon('am-fan-symbolic');
-            icon.fallback_icon_name = 'fan-symbolic';
+            icon.fallbackIconName = 'fan-symbolic';
         } else if(unit === 'V' || unit === 'mV') {
             icon.gicon = Utils.getLocalIcon('am-voltage-symbolic');
-            icon.fallback_icon_name = 'battery-symbolic';
+            icon.fallbackIconName = 'battery-symbolic';
         } else if(unit === 'kW' || unit === 'W') {
             icon.gicon = Utils.getLocalIcon('am-power-symbolic');
-            icon.fallback_icon_name = 'plug-symbolic';
+            icon.fallbackIconName = 'plug-symbolic';
         } else if(unit === 'A' || unit === 'mA') {
             icon.gicon = Utils.getLocalIcon('am-current-symbolic');
-            icon.fallback_icon_name = 'battery-symbolic';
+            icon.fallbackIconName = 'battery-symbolic';
         } else if(unit === 'J') {
             icon.gicon = Utils.getLocalIcon('am-power-symbolic');
-            icon.fallback_icon_name = 'battery-symbolic';
+            icon.fallbackIconName = 'battery-symbolic';
         } else if(unit === 'GHz' || unit === 'MHz' || unit === 'Hz') {
             icon.gicon = Utils.getLocalIcon('am-frequency-symbolic');
-            icon.fallback_icon_name = 'battery-symbolic';
+            icon.fallbackIconName = 'battery-symbolic';
         }
         return icon;
     }
