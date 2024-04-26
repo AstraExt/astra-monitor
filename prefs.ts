@@ -120,7 +120,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.sensors = new Sensors(this);
         this.utility = new Utility(this, window);
         this.about = new About(this);
-        
+
         if(
             (Gtk.Settings.get_default()?.gtkApplicationPreferDarkTheme ?? false) ||
             Adw.StyleManager.get_default().dark
