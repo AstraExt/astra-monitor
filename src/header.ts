@@ -39,6 +39,7 @@ export default GObject.registerClass(
 
         private cachedHeight = { fill: -1, override: -1 };
         private waitForAllocation = false;
+        private firstAllocation = true;
 
         constructor(name: string) {
             super({
@@ -102,6 +103,7 @@ export default GObject.registerClass(
             this.connect_after('notify::allocation', () => {
                 if(this.waitForAllocation) {
                     this.waitForAllocation = false;
+                    if(this.firstAllocation) this.firstAllocation = false;
                     Utils.lowPriorityTask(() => {
                         this.update();
                     });
@@ -167,8 +169,9 @@ export default GObject.registerClass(
                 this.visible = show === '' ? false : Config.get_boolean(show);
                 if(this.visible) {
                     this.waitForAllocation = true;
+                    if(this.firstAllocation) return;
 
-                    /*! Fallback update after 2 frames at 60fps */
+                    /**! Fallback update after 2 frames at 60fps */
                     Utils.timeoutTask(() => {
                         this.update();
                     }, 33);

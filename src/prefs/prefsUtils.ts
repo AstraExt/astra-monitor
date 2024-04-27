@@ -152,7 +152,6 @@ export default class PrefsUtils {
                 iconName: 'edit-undo-symbolic',
                 sensitive: true,
             });
-            row.add_suffix(resetButton);
 
             resetButton.connect('clicked', () => {
                 Config.set(setting, reset, 'string');

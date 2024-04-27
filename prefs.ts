@@ -22,6 +22,7 @@ import GLib from 'gi://GLib';
 import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
 import Gtk from 'gi://Gtk';
+import Gio from 'gi://Gio';
 
 import {
     ExtensionPreferences,
@@ -121,7 +122,11 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         this.utility = new Utility(this, window);
         this.about = new About(this);
 
+        const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
+        const colorScheme = settings.get_string('color-scheme');
+
         if(
+            colorScheme === 'prefer-dark' ||
             (Gtk.Settings.get_default()?.gtkApplicationPreferDarkTheme ?? false) ||
             Adw.StyleManager.get_default().dark
         ) {
