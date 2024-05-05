@@ -1,3 +1,8 @@
+# Astra Monitor 25 - TO BE RELEASED
+
+### Bug fixes
+-   Icon was missing for sensors header in the default settings
+
 # Astra Monitor 24 - April 25 2024
 
 ### New features

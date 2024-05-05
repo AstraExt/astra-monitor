@@ -1093,7 +1093,7 @@
       <description>From left to right, the order of the indicators</description>
     </key>
     <key name="sensors-header-icon" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Sensors Header Icon</summary>
       <description>Show the icon on the header of the sensors monitor</description>
     </key>
