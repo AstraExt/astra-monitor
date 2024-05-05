@@ -2,6 +2,7 @@
 
 ### Bug fixes
 
+-   Fix edge case of multiline font size calculation for headers on HIDPI displays [[#109](https://github.com/AstraExt/astra-monitor/issues/109)][[#112](https://github.com/AstraExt/astra-monitor/issues/112)][[#114](https://github.com/AstraExt/astra-monitor/issues/114)]
 -   Icon was missing for sensors header in the default settings
 -   Missing file in hwmon monitoring could result in sensor listing returning an empty list.
 
