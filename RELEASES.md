@@ -1,7 +1,9 @@
 # Astra Monitor 25 - TO BE RELEASED
 
 ### Bug fixes
+
 -   Icon was missing for sensors header in the default settings
+-   Missing file in hwmon monitoring could result in sensor listing returning an empty list.
 
 # Astra Monitor 24 - April 25 2024
 
