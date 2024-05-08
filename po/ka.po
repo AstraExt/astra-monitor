@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-27 04:41+0200\n"
+"POT-Creation-Date: 2024-05-08 02:16+0200\n"
 "PO-Revision-Date: 2024-04-27 11:41+0200\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -135,18 +135,18 @@ msgstr "ახლა"
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:96
 #: src/sensors/sensorsMenu.js:35 src/gpu/gpuMenuComponent.js:338
-#: src/gpu/gpuMenuComponent.js:802 prefs.js:344
+#: src/gpu/gpuMenuComponent.js:802 prefs.js:373
 msgid "Sensors"
 msgstr "სენსორები"
 
 #: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
 #: src/prefs/network.js:82 src/prefs/gpu.js:80 src/prefs/processors.js:80
-#: src/prefs/processors.js:82 prefs.js:191 prefs.js:225 prefs.js:251
-#: prefs.js:285 prefs.js:319 prefs.js:353
+#: src/prefs/processors.js:82 prefs.js:220 prefs.js:254 prefs.js:280
+#: prefs.js:314 prefs.js:348 prefs.js:382
 msgid "General"
 msgstr "საერთო"
 
-#: src/prefs/sensors.js:83 src/prefs/sensors.js:135 src/prefs/sensors.js:147
+#: src/prefs/sensors.js:83 src/prefs/sensors.js:134 src/prefs/sensors.js:146
 #: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
 #: src/prefs/gpu.js:84 src/prefs/processors.js:83
 msgid "Show"
@@ -187,8 +187,8 @@ msgstr "ავტო"
 #: src/prefs/sensors.js:102 src/prefs/sensors.js:104 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
 #: src/prefs/network.js:181 src/prefs/gpu.js:111 src/prefs/gpu.js:113
-#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:199
-#: prefs.js:233 prefs.js:259 prefs.js:293 prefs.js:327 prefs.js:361
+#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:228
+#: prefs.js:262 prefs.js:288 prefs.js:322 prefs.js:356 prefs.js:390
 msgid "Header"
 msgstr "სათაური"
 
@@ -243,155 +243,173 @@ msgstr "ხატულას ზომა"
 #: src/prefs/visualization.js:140 src/prefs/visualization.js:148
 #: src/prefs/gpu.js:130 src/prefs/processors.js:133
 msgid "Experimental feature: may require to disable/enable the extension."
-msgstr "ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
+msgstr ""
+"ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
 
 #: src/prefs/sensors.js:128 src/prefs/gpu.js:94
 msgid "None"
 msgstr "არცერთი"
 
-#: src/prefs/sensors.js:134
+#: src/prefs/sensors.js:133
 msgid "Sensor 1"
 msgstr "სენსორი 1"
 
-#: src/prefs/sensors.js:137 src/prefs/sensors.js:154 src/prefs/sensors.js:168
-#: src/prefs/sensors.js:184 src/prefs/sensors.js:200 src/prefs/sensors.js:216
-#: src/prefs/sensors.js:232
+#: src/prefs/sensors.js:136 src/prefs/sensors.js:153 src/prefs/sensors.js:167
+#: src/prefs/sensors.js:183 src/prefs/sensors.js:199 src/prefs/sensors.js:215
+#: src/prefs/sensors.js:231
 msgid "Source"
 msgstr "წყარო"
+
+#: src/prefs/sensors.js:141 src/prefs/sensors.js:158 src/prefs/sensors.js:177
+#: src/prefs/sensors.js:193 src/prefs/sensors.js:209 src/prefs/sensors.js:225
+#: src/prefs/sensors.js:241
+msgid "Value Digits"
+msgstr "მნიშვნელობის ციფრები"
 
 #: src/prefs/sensors.js:142 src/prefs/sensors.js:159 src/prefs/sensors.js:178
 #: src/prefs/sensors.js:194 src/prefs/sensors.js:210 src/prefs/sensors.js:226
 #: src/prefs/sensors.js:242
-msgid "Value Digits"
-msgstr "მნიშვნელობის ციფრები"
-
-#: src/prefs/sensors.js:143 src/prefs/sensors.js:160 src/prefs/sensors.js:179
-#: src/prefs/sensors.js:195 src/prefs/sensors.js:211 src/prefs/sensors.js:227
-#: src/prefs/sensors.js:243
 msgid "Set -1 to auto. Number of digits after the decimal point."
-msgstr "დააყენეთ -1 ავტომატურისთვის. ციფრთა რაოდენობა ათწილადი გამყოფის შემდეგ."
+msgstr ""
+"დააყენეთ -1 ავტომატურისთვის. ციფრთა რაოდენობა ათწილადი გამყოფის შემდეგ."
 
-#: src/prefs/sensors.js:146
+#: src/prefs/sensors.js:145
 msgid "Sensor 2"
 msgstr "სენსორი 2"
 
-#: src/prefs/sensors.js:149 src/prefs/storage.js:284 src/prefs/network.js:233
+#: src/prefs/sensors.js:148 src/prefs/storage.js:284 src/prefs/network.js:233
 msgid "Vertical"
 msgstr "ვერტუკალური"
 
-#: src/prefs/sensors.js:150 src/prefs/storage.js:285 src/prefs/network.js:234
+#: src/prefs/sensors.js:149 src/prefs/storage.js:285 src/prefs/network.js:234
 msgid "Horizontal"
 msgstr "ჰორიზონტალური"
 
-#: src/prefs/sensors.js:152
+#: src/prefs/sensors.js:151
 #, fuzzy
 msgid "Sensor 2 Layout"
 msgstr "სენსორი 2-ის განლაგება"
 
-#: src/prefs/sensors.js:164 src/prefs/memory.js:192 src/prefs/storage.js:291
+#: src/prefs/sensors.js:163 src/prefs/memory.js:192 src/prefs/storage.js:291
 #: src/prefs/network.js:240 src/prefs/gpu.js:179 src/prefs/processors.js:174
 msgid "Tooltip"
 msgstr "მინიშნება"
 
-#: src/prefs/sensors.js:165 src/prefs/memory.js:193 src/prefs/storage.js:292
+#: src/prefs/sensors.js:164 src/prefs/memory.js:193 src/prefs/storage.js:292
 #: src/prefs/network.js:241 src/prefs/gpu.js:180 src/prefs/processors.js:175
 msgid "Show Tooltip"
 msgstr "მინიშნების ჩვენება"
 
-#: src/prefs/sensors.js:166
+#: src/prefs/sensors.js:165
 #, fuzzy
 msgid "Tooltip Sensor 1"
 msgstr "სენსორი 1-ის მინიშნება"
 
-#: src/prefs/sensors.js:173 src/prefs/sensors.js:189 src/prefs/sensors.js:205
-#: src/prefs/sensors.js:221 src/prefs/sensors.js:237
+#: src/prefs/sensors.js:172 src/prefs/sensors.js:188 src/prefs/sensors.js:204
+#: src/prefs/sensors.js:220 src/prefs/sensors.js:236
 #, fuzzy
 msgid "Short Name"
 msgstr "მოკლე სახელი"
 
-#: src/prefs/sensors.js:174 src/prefs/sensors.js:190 src/prefs/sensors.js:206
-#: src/prefs/sensors.js:222 src/prefs/sensors.js:238
+#: src/prefs/sensors.js:173 src/prefs/sensors.js:189 src/prefs/sensors.js:205
+#: src/prefs/sensors.js:221 src/prefs/sensors.js:237
 msgid "Short name to display in the tooltip."
 msgstr "მოკლე სახელი მინიშნებაში საჩვენებლად"
 
-#: src/prefs/sensors.js:182
+#: src/prefs/sensors.js:181
 #, fuzzy
 msgid "Tooltip Sensor 2"
 msgstr "სენსორი 2-ის მინიშნება"
 
-#: src/prefs/sensors.js:198
+#: src/prefs/sensors.js:197
 #, fuzzy
 msgid "Tooltip Sensor 3"
 msgstr "სენსორი 3-ის მინიშნება"
 
-#: src/prefs/sensors.js:214
+#: src/prefs/sensors.js:213
 #, fuzzy
 msgid "Tooltip Sensor 4"
 msgstr "სენსორი 4-ის მინიშნება"
 
-#: src/prefs/sensors.js:230
+#: src/prefs/sensors.js:229
 #, fuzzy
 msgid "Tooltip Sensor 5"
 msgstr "სენსორი 5-ის მინიშნება"
 
-#: src/prefs/sensors.js:251 src/prefs/memory.js:202 src/prefs/memory.js:204
+#: src/prefs/sensors.js:250 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:248
 #: src/prefs/network.js:250 src/prefs/gpu.js:189 src/prefs/processors.js:183
-#: src/prefs/processors.js:185 prefs.js:207 prefs.js:267 prefs.js:301
-#: prefs.js:335
+#: src/prefs/processors.js:185 prefs.js:236 prefs.js:296 prefs.js:330
+#: prefs.js:364
 msgid "Menu"
 msgstr "მენიუ"
 
-#: src/prefs/sensors.js:256 src/prefs/gpu.js:194
+#: src/prefs/sensors.js:255 src/prefs/gpu.js:194
 msgid "Empty for now"
 msgstr "ამჟამად ცარიელი"
 
-#: src/prefs/utility.js:35 src/prefs/utility.js:48 src/prefs/utility.js:51
-#: prefs.js:377
+#: src/prefs/utility.js:36 src/prefs/utility.js:49 src/prefs/utility.js:52
+#: prefs.js:406
 msgid "Utility"
 msgstr "ხელსაწყოები"
 
-#: src/prefs/utility.js:52 src/prefs/utility.js:54
+#: src/prefs/utility.js:54 src/prefs/utility.js:58
 msgid "Export Settings"
 msgstr "პარამეტრების ექსპორტი"
 
-#: src/prefs/utility.js:65
+#: src/prefs/utility.js:55
+#, fuzzy
+msgid "Warning: this will export all profiles."
+msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
+
+#: src/prefs/utility.js:69
 msgid "Save"
 msgstr "შენახვა"
 
-#: src/prefs/utility.js:66 src/prefs/utility.js:94
+#: src/prefs/utility.js:70 src/prefs/utility.js:101
 msgid "Cancel"
 msgstr "გაუქმება"
 
-#: src/prefs/utility.js:81 src/prefs/utility.js:83
+#: src/prefs/utility.js:86 src/prefs/utility.js:90
 msgid "Import Settings"
 msgstr "პარამეტრების იმპორტი"
 
-#: src/prefs/utility.js:93
+#: src/prefs/utility.js:87
+#, fuzzy
+msgid "Warning: this will overwrite all profiles."
+msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
+
+#: src/prefs/utility.js:100
 msgid "Open"
 msgstr "გახსნა"
 
-#: src/prefs/utility.js:116 src/prefs/utility.js:118
+#: src/prefs/utility.js:123 src/prefs/utility.js:127
 msgid "Reset Settings"
 msgstr "პარამეტრების ჩამოყრა"
 
-#: src/prefs/utility.js:119
+#: src/prefs/utility.js:124
+#, fuzzy
+msgid "Warning: this will reset all profiles."
+msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
+
+#: src/prefs/utility.js:128
 msgid "Are you sure you want to reset all preferences?"
 msgstr "დარწმუნებული ხართ, რომ გსურთ ყველა პარამეტრების ჩამოყრა?"
 
-#: src/prefs/utility.js:135
+#: src/prefs/utility.js:143
 msgid "Debug Mode"
 msgstr "დებაგის რეჟიმი"
 
-#: src/prefs/utility.js:136
+#: src/prefs/utility.js:144
 msgid ""
 "Warning: may affect performance, use only if you know what you are doing."
 msgstr ""
-"ყურადღება: შეიძლება შეეხოს წარმადობას, გამოიყენეთ მხოლოდ თუ იცით, რას აკეთებთ."
+"ყურადღება: შეიძლება შეეხოს წარმადობას, გამოიყენეთ მხოლოდ თუ იცით, რას "
+"აკეთებთ."
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
-#: prefs.js:242
+#: prefs.js:271
 msgid "Memory"
 msgstr "მეხსიერება"
 
@@ -482,7 +500,9 @@ msgstr "ხატულას გაფღტხილება"
 
 #: src/prefs/memory.js:150
 msgid "Set 0 to disable. Value is percentage of ram usage."
-msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების გამოყენების პროცენტი"
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების გამოყენების "
+"პროცენტი"
 
 #: src/prefs/memory.js:153 src/prefs/memory.js:195 src/prefs/storage.js:244
 msgid "Usage Value"
@@ -514,7 +534,9 @@ msgstr "თავისუფალის მნიშვნელობის �
 #: src/prefs/memory.js:161
 #, fuzzy
 msgid "Set 0 to disable. Value is free MB of ram."
-msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების თავისუფალი მბ."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების თავისუფალი "
+"მბ."
 
 #: src/prefs/memory.js:164 src/prefs/processors.js:145
 msgid "History Graph"
@@ -578,7 +600,7 @@ msgstr "Swap-ის სვეტის ფერი"
 msgid "Swap bar main color."
 msgstr "Swap-ის სვეტის ძირითადი ფერი."
 
-#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:385
+#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:414
 msgid "About"
 msgstr "შესახებ"
 
@@ -611,7 +633,7 @@ msgid "GNOME Extensions page"
 msgstr "GNOME-ს გაფართოებების გვერდი"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:276
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:305
 msgid "Storage"
 msgstr "მეხსიერება"
 
@@ -673,7 +695,9 @@ msgstr "რეგულარული გამონათქვამი"
 
 #: src/prefs/storage.js:125
 msgid "Devices matching this regex will be ignored."
-msgstr "მოწყობილობები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს იქნება იგნორირებული."
+msgstr ""
+"მოწყობილობები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს იქნება "
+"იგნორირებული."
 
 #: src/prefs/storage.js:127 src/prefs/network.js:106
 msgid "Leave empty to disable. Usage example: "
@@ -863,15 +887,68 @@ msgstr "მოწყობილობები"
 msgid "Device Usage Bar Color"
 msgstr "მოწყობილობის გამოყენების სვეტის ფერი"
 
-#: src/prefs/prefsUtils.js:604
+#: src/prefs/prefsUtils.js:632
 msgid "Move up"
 msgstr "ზემოთ გადატანა"
 
-#: src/prefs/prefsUtils.js:623
+#: src/prefs/prefsUtils.js:651
 msgid "Move down"
 msgstr "ქვემოთ გადატანა"
 
-#: src/prefs/welcome.js:33 prefs.js:149
+#: src/prefs/profiles.js:36 src/prefs/profiles.js:49
+#: src/profiles/profilesMenu.js:32 prefs.js:178
+msgid "Profiles"
+msgstr ""
+
+#: src/prefs/profiles.js:62
+msgid "Current profile"
+msgstr ""
+
+#: src/prefs/profiles.js:98
+msgid "Rename profile"
+msgstr ""
+
+#: src/prefs/profiles.js:110
+msgid "Apply"
+msgstr ""
+
+#: src/prefs/profiles.js:133
+msgid "Reset profile"
+msgstr ""
+
+#: src/prefs/profiles.js:134
+msgid "Warning: this will reset the current profile to default settings."
+msgstr ""
+
+#: src/prefs/profiles.js:137
+msgid "Reset"
+msgstr ""
+
+#: src/prefs/profiles.js:147
+msgid "Clone profile"
+msgstr ""
+
+#: src/prefs/profiles.js:148
+msgid "Create a copy of the current profile."
+msgstr ""
+
+#: src/prefs/profiles.js:151
+msgid "Clone"
+msgstr ""
+
+#: src/prefs/profiles.js:176
+msgid "Delete profile"
+msgstr ""
+
+#: src/prefs/profiles.js:177
+msgid "Warning: this operation is irreversible."
+msgstr ""
+
+#: src/prefs/profiles.js:180
+msgid "Delete"
+msgstr ""
+
+#: src/prefs/welcome.js:33 prefs.js:162
 msgid "Welcome"
 msgstr "კეთილი იყოს თქვენი მობრძანება"
 
@@ -937,8 +1014,8 @@ msgid ""
 "'iwconfig' and 'iw' not installed: install one of them to enable wireless "
 "network info!"
 msgstr ""
-"'iwconfig' და 'iw' არ არის დაყენებული: დააყენეთ ერთ ერთი უკაბელო "
-"ქსელის ინფორმაციის ჩასართავად!"
+"'iwconfig' და 'iw' არ არის დაყენებული: დააყენეთ ერთ ერთი უკაბელო ქსელის "
+"ინფორმაციის ჩასართავად!"
 
 #: src/prefs/welcome.js:109
 msgid ""
@@ -995,7 +1072,7 @@ msgid "Become a patron"
 msgstr "გახდით მეცენატი"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:310
+#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:339
 msgid "Network"
 msgstr "ქსელი"
 
@@ -1005,7 +1082,9 @@ msgstr "იგნორირებული ქსლური ინტერ�
 
 #: src/prefs/network.js:104
 msgid "Interfaces matching this regex will be ignored."
-msgstr "ინტერფეისები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება იგნრირებული."
+msgstr ""
+"ინტერფეისები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება "
+"იგნრირებული."
 
 #: src/prefs/network.js:159
 #, fuzzy
@@ -1019,7 +1098,8 @@ msgstr "საჯარო IPv4 მისამართი"
 #: src/prefs/network.js:162 src/prefs/network.js:167
 #, fuzzy
 msgid "Set to empty to disable. Address will be regex matched."
-msgstr "დააყენეთ ცარიელზე გასათიშად. მისამართი დაემთხვევა რეგულარულ გამონათქვამს."
+msgstr ""
+"დააყენეთ ცარიელზე გასათიშად. მისამართი დაემთხვევა რეგულარულ გამონათქვამს."
 
 #: src/prefs/network.js:166
 msgid "Public IPv6 Address"
@@ -1070,7 +1150,7 @@ msgid "<b>Download</b> IO arrow color."
 msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
 
 #: src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56 prefs.js:165
+#: src/prefs/visualization.js:56 prefs.js:194
 msgid "Visualization"
 msgstr "ვიზუალიზაცია"
 
@@ -1097,8 +1177,8 @@ msgid ""
 "Set to \"Dark\" or \"Light\" based on your shell TOPBAR theme to improve "
 "readability."
 msgstr ""
-"დააყენეთ \"მუქზე\" ან \"ღიაზე\" თქვენი ინტერფეისის TOPBAR-ის "
-"თემისმიხედვით წაკითხვადობის გასაუმჯობესებლად."
+"დააყენეთ \"მუქზე\" ან \"ღიაზე\" თქვენი ინტერფეისის TOPBAR-ის თემისმიხედვით "
+"წაკითხვადობის გასაუმჯობესებლად."
 
 #: src/prefs/visualization.js:68
 #, fuzzy
@@ -1125,7 +1205,8 @@ msgstr "ინტერფეისის TOPBAR/DASH/PANEL-ის პოზი�
 msgid ""
 "Set this if you moved your shell to another position to improve the layout."
 msgstr ""
-"დააყენეთ ეს, თუ გადაადგილეთ თქვენი ინტერფეისი სხვა პოზიციაზე განლაგების გასაუმჯობესებლად."
+"დააყენეთ ეს, თუ გადაადგილეთ თქვენი ინტერფეისი სხვა პოზიციაზე განლაგების "
+"გასაუმჯობესებლად."
 
 #: src/prefs/visualization.js:77
 msgid "Disable/Enable the extension to apply changes."
@@ -1277,7 +1358,7 @@ msgstr "მონიტორის დალაგება"
 
 #: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
 #: src/prefs/gpu.js:82 src/prefs/processors.js:191 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:43 prefs.js:216
+#: src/gpu/gpuMenuComponent.js:43 prefs.js:245
 msgid "GPU"
 msgstr "GPU"
 
@@ -1287,7 +1368,9 @@ msgstr "GPU-ს ინფორმაციის ჩვენება პა�
 
 #: src/prefs/gpu.js:89
 msgid "Hint: You can instead choose to show GPU stats in Processors' menu."
-msgstr "მითითება: შეგიძლიათ ამის მაგივრად აირჩიოთ GPU-ს სტატისტიკის ჩვენება პროცესორთა მენიუში."
+msgstr ""
+"მითითება: შეგიძლიათ ამის მაგივრად აირჩიოთ GPU-ს სტატისტიკის ჩვენება "
+"პროცესორთა მენიუში."
 
 #: src/prefs/gpu.js:105
 msgid "Main GPU"
@@ -1311,7 +1394,9 @@ msgstr "აქტივობის პროცენტის ჩვენე�
 #: src/prefs/gpu.js:139
 #, fuzzy
 msgid "Set 0 to disable. Value is percentage of total GPU Activity usage."
-msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს აქტივობის გამოყენების პროცენტია."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს აქტივობის გამოყენების "
+"პროცენტია."
 
 #: src/prefs/gpu.js:142
 #, fuzzy
@@ -1359,7 +1444,9 @@ msgstr "მეხსიერების პროცენტის ჩვე�
 #: src/prefs/gpu.js:161
 #, fuzzy
 msgid "Set 0 to disable. Value is percentage of total GPU Memory usage."
-msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის GPU-ს მეხსიერების ჯამური გამოყენება."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის GPU-ს მეხსიერების ჯამური "
+"გამოყენება."
 
 #: src/prefs/gpu.js:164
 #, fuzzy
@@ -1387,7 +1474,7 @@ msgid "Memory Value"
 msgstr "მეხსიერების მნიშვნელობა"
 
 #: src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67 prefs.js:182
+#: src/prefs/processors.js:67 prefs.js:211
 msgid "Processors"
 msgstr "პროცესორები"
 
@@ -1422,11 +1509,14 @@ msgstr "ერთი ბირთვის პროცენტი"
 #: src/prefs/processors.js:142
 #, fuzzy
 msgid "Set 0 to disable. Value is percentage of total cpu usage."
-msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს გამოყენების პროცენტია."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს გამოყენების პროცენტია."
 
 #: src/prefs/processors.js:149 src/prefs/processors.js:164
 msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
-msgstr "<b>ჯამური გამოყენების</b> ფერი (<b>მომხმარებლის გამოყენება</b>, როდესაც დაყოფა ჩართულია)."
+msgstr ""
+"<b>ჯამური გამოყენების</b> ფერი (<b>მომხმარებლის გამოყენება</b>, როდესაც "
+"დაყოფა ჩართულია)."
 
 #: src/prefs/processors.js:155 src/prefs/processors.js:170
 msgid "<b>System usage</b> color."
