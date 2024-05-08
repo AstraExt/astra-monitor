@@ -68,7 +68,7 @@ As Astra Monitor is in beta stage of development, we have an ambitious roadmap p
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center">Beta<br>2/3</th>
+        <th style="text-align:center">Beta<br>3/3</th>
         <th style="text-align:center" colspan="2">Release<br>0/4</th>
     </tr>
     <tr>
@@ -87,7 +87,7 @@ As Astra Monitor is in beta stage of development, we have an ambitious roadmap p
         <td style="text-align:center">🔲<br>Continuos Monitoring Mode</td>
     </tr>
     <tr>
-        <td style="text-align:center">⏳<br>Settings Profiles</td>
+        <td style="text-align:center">✅<br>Settings Profiles</td>
         <td style="text-align:center"></td>
         <td style="text-align:center"></td>
     </tr>

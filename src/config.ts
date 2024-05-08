@@ -115,9 +115,9 @@ export default class Config {
 
         const schema = settings.settingsSchema.get_key(key);
         const type = schema.get_value_type();
-        
+
         // not using settings.reset(key) because it's clearing all bindings
-        
+
         if(type.equal(new GLib.VariantType('s'))) {
             if(Config.get_string(key) !== schema.get_default_value().get_string()[0]) {
                 Config.settings?.set_string(key, schema.get_default_value().get_string()[0]);
@@ -140,7 +140,7 @@ export default class Config {
             }
         } else Utils.log('Unsupported type: ' + type);
     }
-    
+
     static delay() {
         Config.settings?.delay();
     }
@@ -316,7 +316,7 @@ export default class Config {
         // Apply eventual fixes
         Utils.configUpdateFixes();
         Config.settingsTransaction = false;
-        
+
         Config.syncCurrentProfile();
     }
 
@@ -335,7 +335,7 @@ export default class Config {
 
         Config.apply();
         Config.settingsTransaction = false;
-        
+
         Config.syncCurrentProfile();
     }
 
@@ -350,7 +350,7 @@ export default class Config {
             const keys = settings.list_keys();
             for(const key of keys) {
                 if(Config.globalSettingsKeys.includes(key)) continue;
-                
+
                 Config.reset(key);
                 Config.updatedProfilesConfig(key, true);
             }
@@ -360,7 +360,7 @@ export default class Config {
 
         Config.apply();
         Config.settingsTransaction = false;
-        
+
         Config.syncCurrentProfile();
     }
 

@@ -6,7 +6,7 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Beta<br>5/6</th>
+        <th style="text-align:center" colspan="3">Beta<br>6/6</th>
     </tr>
     <tr>
         <th style="text-align:center">Early April 2024</th>
@@ -26,7 +26,7 @@
     <tr>
         <td style="text-align:center"></td>
         <td style="text-align:center"></td>
-        <td style="text-align:center">⏳<br>Settings Profiles</td>
+        <td style="text-align:center">✅<br>Settings Profiles</td>
     </tr>
 </table>
 

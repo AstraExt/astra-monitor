@@ -1,5 +1,13 @@
 # Astra Monitor 25 - TO BE RELEASED
 
+### New features
+
+-   **_Profiles_**: Astra Monitor now gains a **Profiles** feature. This new feature is designed to allow you to save and load different configurations of the extension. You can create as many profiles as you want and switch between them very easily. Right-clicking on an header, including the compact mode arrow, you can open the profiles menu and switch to another profile. You can also click on `Profiles` in the context menu to open the Profiles Settings page to create a new profile, clone the current one, rename it or delete it. We hope you enjoy this new feature and we are looking forward to your feedback.
+    \
+    \
+    ⚠️ **WARNING** ⚠️ **_`Profiles` is a very experimental feature and it may have some bugs or break your configuration. Please export all your settings before experimenting with it._**
+    You will always be able to recover your full settings if you exported them before starting to use experment with Profiles.
+
 ### Bug fixes
 
 -   Fix edge case of multiline font size calculation for headers on HIDPI displays [[#109](https://github.com/AstraExt/astra-monitor/issues/109)][[#112](https://github.com/AstraExt/astra-monitor/issues/112)][[#114](https://github.com/AstraExt/astra-monitor/issues/114)]
