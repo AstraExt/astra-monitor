@@ -24,8 +24,6 @@ import St from 'gi://St';
 import Atk from 'gi://Atk';
 import Clutter from 'gi://Clutter';
 
-import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-
 import Utils from './utils/utils.js';
 import Config from './config.js';
 import MenuBase from './menu.js';
@@ -204,12 +202,6 @@ export default GObject.registerClass(
             this.menu.connect('open-state-changed', this.onOpenMenu.bind(this));
         }
 
-        /**!
-         * FUNCTION FROM TOPHAT: https://github.com/fflewddur/tophat
-         * Not really working no my end, it needs a deeper look
-         * Right now it's not a priority, menus are very short
-         * Keep it here for future reference
-         */
         onOpenMenu(_menu: any, open: boolean) {
             if(open) {
                 this.add_style_pseudo_class('active');
@@ -223,6 +215,14 @@ export default GObject.registerClass(
                 });
             }
 
+            return;
+
+            /*
+             * FUNCTION FROM TOPHAT: https://github.com/fflewddur/tophat
+             * Not really working on my end, it needs a deeper look
+             * Right now it's not a priority, menus are very short
+             * Keep it here for future reference
+            
             // Setting the max-height won't do any good if the minimum height of the
             // menu is higher then the screen; it's useful if part of the menu is
             // scrollable so the minimum height is smaller than the natural height
@@ -230,15 +230,14 @@ export default GObject.registerClass(
                 Main.layoutManager.primaryIndex
             );
             const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scaleFactor;
-            // @ts-expect-error actor not in types
             const verticalMargins = this.menu.actor.margin_top + this.menu.actor.margin_bottom;
 
             // The workarea and margin dimensions are in physical pixels, but CSS
             // measures are in logical pixels, so make sure to consider the scale
             // factor when computing max-height
             const maxHeight = Math.round((workArea.height - verticalMargins) / scaleFactor);
-            // @ts-expect-error actor not in types
             this.menu.actor.style = `max-height: ${maxHeight}px;`;
+            */
         }
 
         createTooltip() {}

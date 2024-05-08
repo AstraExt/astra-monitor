@@ -798,7 +798,10 @@ export default class ProcessorMenu extends MenuBase {
 
     async onOpen() {
         this.clear();
-        this.gpuSection.onOpen();
+
+        if(this.gpuSection.container.visible) {
+            this.gpuSection.onOpen();
+        }
 
         //Update cpu usage percentage label
         this.update('cpuUsage');
@@ -810,11 +813,10 @@ export default class ProcessorMenu extends MenuBase {
 
         Utils.processorMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
         Utils.processorMonitor.requestUpdate('topProcesses');
+        this.queueTopProcessesUpdate = true;
 
         Utils.processorMonitor.listen(this, 'loadAverage', this.update.bind(this, 'loadAverage'));
         Utils.processorMonitor.requestUpdate('loadAverage');
-
-        this.queueTopProcessesUpdate = true;
 
         this.menuUptimeTimer = Utils.getUptime(bootTime => {
             this.menuUptime.text = Utils.formatUptime(bootTime);

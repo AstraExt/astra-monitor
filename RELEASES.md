@@ -1,3 +1,9 @@
+# Astra Monitor 26 - TO BE RELEASED
+
+### Bug fixes
+
+-   Performance improvements for the Processors Menu
+
 # Astra Monitor 25 - May 8 2024
 
 ### New features

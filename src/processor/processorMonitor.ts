@@ -907,22 +907,31 @@ export default class ProcessorMonitor extends Monitor {
         if(!GTop) return false;
 
         const buf = new GTop.glibtop_proclist();
-        const pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0); // GLIBTOP_EXCLUDE_IDLE
+        const pids = GTop.glibtop_get_proclist(buf, GTop.GLIBTOP_KERN_PROC_ALL, 0);
+
         pids.length = buf.number;
 
         const topProcesses = [];
         const seenPids = [];
+
+        const cpuData = new GTop.glibtop_cpu();
+        GTop.glibtop_get_cpu(cpuData);
+        const totalCpuTime = cpuData.total;
+
+        const time = new GTop.glibtop_proc_time();
+        let procState = null;
+        let argSize = null;
 
         for(const pid of pids) {
             seenPids.push(pid);
 
             let process = this.topProcessesCache.getProcess(pid);
             if(!process) {
-                const argSize = new GTop.glibtop_proc_args();
+                if(!argSize) argSize = new GTop.glibtop_proc_args();
                 let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
 
                 if(!cmd) {
-                    const procState = new GTop.glibtop_proc_state();
+                    if(!procState) procState = new GTop.glibtop_proc_state();
                     GTop.glibtop_get_proc_state(procState, pid);
                     if(procState && procState.cmd) {
                         let str = '';
@@ -948,11 +957,6 @@ export default class ProcessorMonitor extends Monitor {
                 this.topProcessesCache.setProcess(process);
             }
 
-            const cpuData = new GTop.glibtop_cpu();
-            GTop.glibtop_get_cpu(cpuData);
-            const totalCpuTime = cpuData.total;
-
-            const time = new GTop.glibtop_proc_time();
             GTop.glibtop_get_proc_time(time, pid);
 
             const cpuTime = { processTime: time.utime + time.stime, totalCpuTime };
