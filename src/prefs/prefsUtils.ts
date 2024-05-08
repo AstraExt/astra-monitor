@@ -48,7 +48,7 @@ type AdjustamentProps = {
 
 type ColorCallback = (color: string) => void;
 
-type Choice = { value: any; text: string; disabled?: boolean };
+export type Choice = { value: any; text: string; disabled?: boolean };
 
 export default class PrefsUtils {
     public static expanded: Map<string, any>;
@@ -342,7 +342,7 @@ export default class PrefsUtils {
 
     public static addDropRow(
         props: RowProps,
-        values: Choice[] | Promise<Choice[]>,
+        values: Choice[] | (() => Promise<Choice[]>),
         setting: string,
         group: Adw.PreferencesGroup | Adw.ExpanderRow,
         type: TypeEnumStr = 'int',
@@ -351,88 +351,101 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        let selected = -1;
-        let savedValue: any;
-
-        switch(type) {
-            case 'boolean':
-                savedValue = Config.get_boolean(setting);
-                break;
-            case 'string':
-                savedValue = Config.get_string(setting);
-                break;
-            case 'int':
-                savedValue = Config.get_int(setting);
-                break;
-            case 'number':
-                savedValue = Config.get_double(setting);
-                break;
-            case 'json':
-                savedValue = Config.get_string(setting);
-                break;
-            default:
-                savedValue = Config.get_value(setting);
-                break;
-        }
-
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
 
+        let resetButton: Gtk.Button | undefined;
+        if(reset !== undefined) {
+            resetButton = new Gtk.Button({
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+                hexpand: false,
+                vexpand: false,
+                iconName: 'edit-undo-symbolic',
+                sensitive: true,
+            });
+            row.add_suffix(resetButton);
+        }
+
+        const select = new Gtk.DropDown({
+            selected: -1,
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: false,
+            vexpand: false,
+        });
+
+        row.add_suffix(select);
+        row.activatableWidget = select;
+
+        let resetSignal: number | undefined;
+        let selectSignal: number | undefined;
+
         const addChoices = (choices: Choice[]) => {
+            if(resetSignal !== undefined) {
+                resetButton?.disconnect(resetSignal);
+            }
+            if(selectSignal !== undefined) {
+                select.disconnect(selectSignal);
+            }
+
+            let savedValue: any;
+            switch(type) {
+                case 'boolean':
+                    savedValue = Config.get_boolean(setting);
+                    break;
+                case 'string':
+                    savedValue = Config.get_string(setting);
+                    break;
+                case 'int':
+                    savedValue = Config.get_int(setting);
+                    break;
+                case 'number':
+                    savedValue = Config.get_double(setting);
+                    break;
+                case 'json':
+                    savedValue = Config.get_string(setting);
+                    break;
+                default:
+                    savedValue = Config.get_value(setting);
+                    break;
+            }
+
             const stringList = new Gtk.StringList();
 
             for(const choice of choices) stringList.append(choice.text);
 
+            let selected = -1;
             choices.forEach((choice, index) => {
                 let value = choice.value;
                 if(type === 'json') value = JSON.stringify(value);
                 if(value === savedValue) selected = index;
             });
 
-            const select = new Gtk.DropDown({
-                model: stringList,
-                selected,
-                halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER,
-                hexpand: false,
-                vexpand: false,
+            select.set_model(stringList);
+            select.selected = selected;
+
+            resetSignal = resetButton?.connect('clicked', () => {
+                choices.forEach((choice, index) => {
+                    let value = choice.value;
+                    if(type === 'json') value = JSON.stringify(value);
+                    if(value === reset) selected = index;
+                });
+                select.selected = selected;
+                const selectedChoice = choices[selected];
+                if(selectedChoice !== undefined) {
+                    if(type === 'json')
+                        Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
+                    else Config.set(setting, selectedChoice.value, type);
+                }
             });
-
-            if(reset !== undefined) {
-                const resetButton = new Gtk.Button({
-                    halign: Gtk.Align.END,
-                    valign: Gtk.Align.CENTER,
-                    hexpand: false,
-                    vexpand: false,
-                    iconName: 'edit-undo-symbolic',
-                    sensitive: true,
-                });
-                resetButton.connect('clicked', () => {
-                    choices.forEach((choice, index) => {
-                        let value = choice.value;
-                        if(type === 'json') value = JSON.stringify(value);
-                        if(value === reset) selected = index;
-                    });
-                    select.selected = selected;
-                    const selectedChoice = choices[selected];
-                    if(selectedChoice !== undefined) {
-                        if(type === 'json')
-                            Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
-                        else Config.set(setting, selectedChoice.value, type);
-                    }
-                });
-                row.add_suffix(resetButton);
-            }
-
-            row.add_suffix(select);
-            row.activatableWidget = select;
 
             if(choices[selected] && choices[selected].text)
                 select.set_tooltip_text(choices[selected].text);
-            select.connect('notify::selected', widget => {
+            selectSignal = select.connect('notify::selected', widget => {
                 const selectedIndex = widget.selected;
                 const selectedChoice = choices[selectedIndex];
                 if(selectedChoice !== undefined) {
@@ -445,16 +458,22 @@ export default class PrefsUtils {
             });
         };
 
-        if(values instanceof Promise) {
-            values.then(addChoices);
-        } else {
-            addChoices(values);
-        }
+        const update = () => {
+            if(typeof values === 'function') {
+                values().then(addChoices);
+            } else {
+                addChoices(values);
+            }
+        };
+        update();
+        Config.connect(row, 'changed::' + setting, update);
+
+        return { update };
     }
 
     public static addComboRow(
         props: RowProps,
-        values: Choice[] | Promise<Choice[]>,
+        values: Choice[] | (() => Promise<Choice[]>),
         setting: string,
         group: Adw.PreferencesGroup | Adw.ExpanderRow,
         type: TypeEnumStr = 'int',
@@ -463,106 +482,121 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        let selected = -1;
-        let savedValue: any;
-
-        switch(type) {
-            case 'boolean':
-                savedValue = Config.get_boolean(setting);
-                break;
-            case 'string':
-                savedValue = Config.get_string(setting);
-                break;
-            case 'int':
-                savedValue = Config.get_int(setting);
-                break;
-            case 'number':
-                savedValue = Config.get_double(setting);
-                break;
-            case 'json':
-                savedValue = Config.get_string(setting);
-                break;
-            default:
-                savedValue = Config.get_value(setting);
-                break;
-        }
-
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
 
-        const addChoices = (choices: Choice[]) => {
-            const store = new Gtk.ListStore();
-            store.set_column_types([GObject.TYPE_STRING, GObject.TYPE_BOOLEAN]);
-
-            for(const choice of choices) {
-                const iter = store.append();
-                store.set(iter, [0, 1], [choice.text, choice.disabled !== true]);
-            }
-            choices.forEach((choice, index) => {
-                let value = choice.value;
-                if(type === 'json') value = JSON.stringify(value);
-                if(value === savedValue) selected = index;
-            });
-
-            const select = new Gtk.ComboBox({
-                model: store,
+        let resetButton: Gtk.Button | undefined;
+        if(reset !== undefined) {
+            resetButton = new Gtk.Button({
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
                 hexpand: false,
                 vexpand: false,
+                iconName: 'edit-undo-symbolic',
+                sensitive: true,
             });
-            select.set_active(selected);
+            row.add_suffix(resetButton);
+        }
 
-            const renderer = new Gtk.CellRendererText();
-            select.pack_start(renderer, true);
-            select.add_attribute(renderer, 'text', 0);
-            select.add_attribute(renderer, 'sensitive', 1);
+        const select = new Gtk.ComboBox({
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: false,
+            vexpand: false,
+        });
 
-            if(reset !== undefined) {
-                const resetButton = new Gtk.Button({
-                    halign: Gtk.Align.END,
-                    valign: Gtk.Align.CENTER,
-                    hexpand: false,
-                    vexpand: false,
-                    iconName: 'edit-undo-symbolic',
-                    sensitive: true,
-                });
-                resetButton.connect('clicked', () => {
-                    for(let index = 0; index < choices.length; index++) {
-                        const choice = choices[index];
-                        let value = choice.value;
-                        if(type === 'json') value = JSON.stringify(value);
+        row.add_suffix(select);
+        //row.activatableWidget = select;
 
-                        if(value === reset) {
-                            selected = index;
-                            break;
-                        }
-                    }
-                    select.set_active(selected);
-                    const selectedChoice = choices[selected];
-                    if(selectedChoice !== undefined) {
-                        if(type === 'json')
-                            Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
-                        else Config.set(setting, selectedChoice.value, type);
-                    }
-                });
-                row.add_suffix(resetButton);
+        const renderer = new Gtk.CellRendererText();
+        select.pack_start(renderer, true);
+        select.add_attribute(renderer, 'text', 0);
+        select.add_attribute(renderer, 'sensitive', 1);
+
+        let resetSignal: number | undefined;
+        let selectSignal: number | undefined;
+
+        const addChoices = (choices: Choice[]) => {
+            if(resetSignal !== undefined) {
+                resetButton?.disconnect(resetSignal);
+            }
+            if(selectSignal !== undefined) {
+                select.disconnect(selectSignal);
             }
 
-            row.add_suffix(select);
-            row.activatableWidget = select;
+            let savedValue: any;
+            switch(type) {
+                case 'boolean':
+                    savedValue = Config.get_boolean(setting);
+                    break;
+                case 'string':
+                    savedValue = Config.get_string(setting);
+                    break;
+                case 'int':
+                    savedValue = Config.get_int(setting);
+                    break;
+                case 'number':
+                    savedValue = Config.get_double(setting);
+                    break;
+                case 'json':
+                    savedValue = Config.get_string(setting);
+                    break;
+                default:
+                    savedValue = Config.get_value(setting);
+                    break;
+            }
+
+            const store = new Gtk.ListStore();
+            store.set_column_types([GObject.TYPE_STRING, GObject.TYPE_BOOLEAN]);
+
+            let selected = -1;
+            choices.forEach((choice, index) => {
+                let value = choice.value;
+                if(type === 'json') value = JSON.stringify(value);
+                if(value === savedValue) selected = index;
+
+                const iter = store.append();
+
+                const text = choice.text;
+                const disabled = choice.disabled !== true;
+                store.set(iter, [0, 1], [text, disabled]);
+            });
+
+            select.set_model(store);
+            select.set_active(selected);
+
+            resetSignal = resetButton?.connect('clicked', () => {
+                for(let index = 0; index < choices.length; index++) {
+                    const choice = choices[index];
+                    let value = choice.value;
+                    if(type === 'json') value = JSON.stringify(value);
+
+                    if(value === reset) {
+                        selected = index;
+                        break;
+                    }
+                }
+                select.set_active(selected);
+                const selectedChoice = choices[selected];
+                if(selectedChoice !== undefined) {
+                    if(type === 'json')
+                        Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
+                    else Config.set(setting, selectedChoice.value, type);
+                }
+            });
 
             if(choices[selected] && choices[selected].text)
                 select.set_tooltip_text(choices[selected].text);
-            select.connect('notify::active', () => {
+
+            selectSignal = select.connect('notify::active', () => {
                 const selectedIndex = select.get_active();
                 const selectedChoice = choices[selectedIndex];
+
                 if(selectedChoice !== undefined) {
                     row.set_tooltip_text(selectedChoice.text);
-
                     if(type === 'json')
                         Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
                     else Config.set(setting, selectedChoice.value, type);
@@ -570,11 +604,17 @@ export default class PrefsUtils {
             });
         };
 
-        if(values instanceof Promise) {
-            values.then(addChoices);
-        } else {
-            addChoices(values);
-        }
+        const update = () => {
+            if(typeof values === 'function') {
+                values().then(addChoices);
+            } else {
+                addChoices(values);
+            }
+        };
+        update();
+        Config.connect(row, 'changed::' + setting, update);
+
+        return { update };
     }
 
     public static addSpinRow(

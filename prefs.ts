@@ -18,7 +18,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import GLib from 'gi://GLib';
 import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
 import Gtk from 'gi://Gtk';
@@ -34,6 +33,7 @@ import Config from './src/config.js';
 
 import PrefsUtils from './src/prefs/prefsUtils.js';
 import Welcome from './src/prefs/welcome.js';
+import Profiles from './src/prefs/profiles.js';
 import Visualization from './src/prefs/visualization.js';
 import Processors from './src/prefs/processors.js';
 import Gpu from './src/prefs/gpu.js';
@@ -51,6 +51,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
     private active: Adw.ActionRow | null = null;
 
     private welcome!: Welcome;
+    private profiles!: Profiles;
     private visualization!: Visualization;
     private processors!: Processors;
     private gpu!: Gpu;
@@ -88,6 +89,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
             this.active = null;
             (this.welcome as any) = null;
+            (this.profiles as any) = null;
             (this.visualization as any) = null;
             (this.processors as any) = null;
             (this.gpu as any) = null;
@@ -112,6 +114,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         window.set_content(navigation);
 
         this.welcome = new Welcome(this);
+        this.profiles = new Profiles(this);
         this.visualization = new Visualization(this);
         this.processors = new Processors(this);
         this.gpu = new Gpu(this);
@@ -143,6 +146,17 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             `);
         }
         this.setupSidebar(navigation);
+
+        Config.connect(this, 'changed', (_settings: Gio.Settings, key: string) => {
+            try {
+                if(Config.globalSettingsKeys.includes(key)) {
+                    return;
+                }
+                Config.updatedProfilesConfig(key);
+            } catch(e: any) {
+                Utils.error(e);
+            }
+        });
 
         window.set_default_size(this.defaultSize.width, this.defaultSize.height);
         window.set_size_request(this.minimumSize.width, this.minimumSize.height);
@@ -198,16 +212,38 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         });
         menu.add(generalGroup);
 
-        const visualizationBtn = PrefsUtils.addButtonRow(
+        const profilesBtn = PrefsUtils.addButtonRow(
+            {
+                title: _('Profiles'),
+                iconName: 'am-profile-symbolic',
+            },
+            generalGroup,
+            btn => {
+                if(navigation.content !== this.profiles.page)
+                    navigation.set_content(this.profiles.page);
+                this.activateItem(btn);
+            }
+        );
+
+        {
+            const currentProfile = Config.get_string('current-profile') ?? 'default';
+            profilesBtn.subtitle = '  ' + currentProfile;
+        }
+        Config.connect(this, 'changed::current-profile', () => {
+            const currentProfile = Config.get_string('current-profile') ?? 'default';
+            profilesBtn.subtitle = '  ' + currentProfile;
+        });
+
+        PrefsUtils.addButtonRow(
             {
                 title: _('Visualization'),
                 iconName: 'am-ui-symbolic',
             },
             generalGroup,
-            () => {
+            btn => {
                 if(navigation.content !== this.visualization.page)
                     navigation.set_content(this.visualization.page);
-                this.activateItem(visualizationBtn);
+                this.activateItem(btn);
             }
         );
 
@@ -609,6 +645,10 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 if(sensors) {
                     sensors.activate();
                 }
+            } else if(defaultCategory === 'profiles') {
+                if(profilesBtn) {
+                    profilesBtn.activate();
+                }
             } else {
                 if(welcomeBtn) {
                     welcomeBtn.activate();
@@ -632,89 +672,6 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         item.add_css_class('am-active');
         this.active = item;
-    }
-
-    public exportSettings() {
-        const settings = Config.settings;
-        const exported: any = {};
-
-        if(!settings) return JSON.stringify(exported);
-
-        const keys = settings.list_keys();
-
-        for(const key of keys) {
-            const value = settings.get_value(key);
-            const schema = settings.settingsSchema.get_key(key);
-            const type = schema.get_value_type();
-
-            if(type.equal(new GLib.VariantType('s'))) exported[key] = value.get_string()[0];
-            else if(type.equal(new GLib.VariantType('b'))) exported[key] = value.get_boolean();
-            else if(type.equal(new GLib.VariantType('i'))) exported[key] = value.get_int32();
-            else if(type.equal(new GLib.VariantType('d')))
-                exported[key] = Utils.roundFloatingPointNumber(value.get_double());
-            else Utils.log('Unsupported type: ' + type);
-        }
-
-        //order keys alphabetically
-        const ordered: any = {};
-        Object.keys(exported)
-            .sort()
-            .forEach(key => {
-                ordered[key] = exported[key];
-            });
-        return JSON.stringify(ordered);
-    }
-
-    public importSettings(data: string) {
-        if(!data) return;
-
-        const imported = JSON.parse(data);
-        if(!imported) return;
-
-        //Reset settings before importing
-        this.resetSettings();
-
-        const settings = Config.settings;
-        if(!settings) return;
-
-        const keys = Object.keys(imported);
-        for(const key of keys) {
-            const value = imported[key];
-
-            try {
-                const schema = settings.settingsSchema.get_key(key);
-                const type = schema.get_value_type();
-
-                if(type.equal(new GLib.VariantType('s'))) Config.set(key, value, 'string');
-                else if(type.equal(new GLib.VariantType('b'))) Config.set(key, value, 'boolean');
-                else if(type.equal(new GLib.VariantType('i'))) Config.set(key, value, 'int');
-                else if(type.equal(new GLib.VariantType('d'))) Config.set(key, value, 'number');
-                else Utils.log('Unsupported type: ' + type);
-            } catch(e: any) {
-                Utils.error(e.message);
-            }
-        }
-    }
-
-    public resetSettings() {
-        const settings = Config.settings;
-        if(!settings) return;
-
-        const keys = settings.list_keys();
-        for(const key of keys) {
-            const schema = settings.settingsSchema.get_key(key);
-            const type = schema.get_value_type();
-
-            if(type.equal(new GLib.VariantType('s')))
-                Config.set(key, schema.get_default_value().get_string()[0], 'string');
-            else if(type.equal(new GLib.VariantType('b')))
-                Config.set(key, schema.get_default_value().get_boolean(), 'boolean');
-            else if(type.equal(new GLib.VariantType('i')))
-                Config.set(key, schema.get_default_value().get_int32(), 'int');
-            else if(type.equal(new GLib.VariantType('d')))
-                Config.set(key, schema.get_default_value().get_double(), 'number');
-            else Utils.log('Unsupported type: ' + type);
-        }
     }
 
     // @ts-expect-error never used

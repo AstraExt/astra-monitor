@@ -29,6 +29,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Utils from './utils/utils.js';
 import Config from './config.js';
 import MenuBase from './menu.js';
+import ProfilesMenu from './profiles/profilesMenu.js';
 
 declare const global: any;
 
@@ -70,13 +71,17 @@ export default GObject.registerClass(
 
             this.createTooltip();
 
-            this.connect('button-press-event', (_widget, _event) => {
-                if(this.menu) this.menu.toggle();
+            this.connect('button-press-event', (_widget, event) => {
+                if(event.get_button() === 1) {
+                    this.click();
+                } else {
+                    this.clickAlt();
+                }
                 return Clutter.EVENT_PROPAGATE;
             });
 
             this.connect('touch-event', (_widget, _event) => {
-                if(this.menu) this.menu.toggle();
+                this.click();
                 return Clutter.EVENT_PROPAGATE;
             });
 
@@ -159,6 +164,15 @@ export default GObject.registerClass(
 
         get showConfig() {
             return '';
+        }
+
+        click() {
+            if(this.menu) this.menu.toggle();
+        }
+
+        clickAlt() {
+            const profilesMenu = new ProfilesMenu(this, 0.5);
+            profilesMenu.open(true);
         }
 
         setCompacted(compacted: boolean) {

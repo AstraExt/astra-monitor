@@ -88,6 +88,18 @@
       <description>Default category when open Extension Settings</description>
     </key>
     
+    <!-- PROFILES -->
+    <key name="current-profile" type="s">
+      <default>'default'</default>
+      <summary>Current Profile</summary>
+      <description>Current profile</description>
+    </key>
+    <key name="profiles" type="s">
+      <default>''</default>
+      <summary>Profiles</summary>
+      <description>Profiles</description>
+    </key>
+    
     <!-- GENERAL -->
     <key name="startup-delay" type="d">
       <default>2</default>

@@ -119,7 +119,7 @@ export default class Monitor {
                     //TODO: manage canceled update
                     Utils.log(this.name + ' update canceled: ' + key);
                 } else {
-                    Utils.error(e.message);
+                    Utils.error(`${this.name} - ${key}: ${e.message}`);
                 }
             });
     }

@@ -2406,6 +2406,15 @@ export default class Utils {
             Config.set('headers-height-override', height, 'int');
             Config.set('headers-height', 0, 'int');
         }
+
+        //Fix profiles missing (v24 => v25)
+        let profiles = Config.get_json('profiles');
+        if(!profiles) {
+            profiles = {};
+            const currentProfile = Config.get_string('current-profile') || 'default';
+            profiles[currentProfile] = Config.getCurrentSettingsData(Config.globalSettingsKeys);
+            Config.set('profiles', profiles, 'json');
+        }
     }
 
     static unitToIcon(unit: string): IconData {

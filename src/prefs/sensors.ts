@@ -220,8 +220,6 @@ export default class Sensors {
             return choicesSource;
         };
 
-        const sources = generateSensorSources();
-
         const sensor1Section = PrefsUtils.addExpanderRow(
             { title: _('Sensor 1') },
             group,
@@ -238,7 +236,7 @@ export default class Sensors {
                 tabs: 1,
                 useMarkup: true,
             },
-            sources,
+            generateSensorSources,
             'sensors-header-sensor1',
             sensor1Section,
             'json'
@@ -286,7 +284,7 @@ export default class Sensors {
                 tabs: 1,
                 useMarkup: true,
             },
-            sources,
+            generateSensorSources,
             'sensors-header-sensor2',
             sensor2Section,
             'json'
@@ -324,7 +322,7 @@ export default class Sensors {
                 tabs: 1,
                 useMarkup: true,
             },
-            sources,
+            generateSensorSources,
             'sensors-header-tooltip-sensor1',
             tooltipSensor1Section,
             'json',
@@ -364,7 +362,7 @@ export default class Sensors {
                 tabs: 1,
                 useMarkup: true,
             },
-            sources,
+            generateSensorSources,
             'sensors-header-tooltip-sensor2',
             tooltipSensor2Section,
             'json',
@@ -404,7 +402,7 @@ export default class Sensors {
                 tabs: 1,
                 useMarkup: true,
             },
-            sources,
+            generateSensorSources,
             'sensors-header-tooltip-sensor3',
             tooltipSensor3Section,
             'json',
@@ -444,7 +442,7 @@ export default class Sensors {
                 tabs: 1,
                 useMarkup: true,
             },
-            sources,
+            generateSensorSources,
             'sensors-header-tooltip-sensor4',
             tooltipSensor4Section,
             'json',
@@ -484,7 +482,7 @@ export default class Sensors {
                 tabs: 1,
                 useMarkup: true,
             },
-            sources,
+            generateSensorSources,
             'sensors-header-tooltip-sensor5',
             tooltipSensor5Section,
             'json',

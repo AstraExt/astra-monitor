@@ -21,6 +21,7 @@
 import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
@@ -188,13 +189,9 @@ export default GObject.registerClass(
 
         addCompactHeader() {
             this.compactHeader = new CompactHeader();
-            this.compactHeader.visible = Config.get_boolean('compact-mode');
+            Config.bind('compact-mode', this.compactHeader, 'visible', Gio.SettingsBindFlags.GET);
             this.addWidget('compact', this.compactHeader);
             this.compactHeader.compact(this.compact.bind(this));
-
-            Config.connect(this, 'changed::compact-mode', () => {
-                this.compactHeader.visible = Config.get_boolean('compact-mode');
-            });
         }
 
         compact(compacted: boolean) {
@@ -212,7 +209,7 @@ export default GObject.registerClass(
             Utils.log(`Placing container in ${panelBox} box at position ${order}`);
             Main.panel.addToStatusArea(this.uuid, this, order, panelBox);
 
-            this.compactHeader.startup();
+            this.compactHeader.refresh();
         }
 
         updatePanel() {

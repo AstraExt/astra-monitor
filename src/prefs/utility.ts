@@ -26,6 +26,7 @@ import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensio
 
 import PrefsUtils from './prefsUtils.js';
 import Utils from '../utils/utils.js';
+import Config from '../config.js';
 
 type AstraMonitorPrefs = import('../../prefs.js').default;
 
@@ -40,7 +41,7 @@ export default class Utility {
         return this.utility;
     }
 
-    private setupUtility(prefs: AstraMonitorPrefs, window: Gtk.Window) {
+    private setupUtility(_prefs: AstraMonitorPrefs, window: Gtk.Window) {
         this.utility = new Adw.NavigationPage({
             title: _('Utility'),
             tag: 'utility',
@@ -50,12 +51,12 @@ export default class Utility {
         header.showTitle = true;
         toolbar.add_top_bar(header);
 
-        const utilityPage = this.getUtilityPage(prefs, window);
+        const utilityPage = this.getUtilityPage(window);
         toolbar.set_content(utilityPage);
         this.utility.set_child(toolbar);
     }
 
-    private getUtilityPage(prefs: AstraMonitorPrefs, window: Gtk.Window) {
+    private getUtilityPage(window: Gtk.Window) {
         const utilityPage = new Adw.PreferencesPage({
             title: _('Utility'),
             iconName: 'am-settings-symbolic',
@@ -63,100 +64,119 @@ export default class Utility {
 
         const group = new Adw.PreferencesGroup({ title: _('Utility') });
 
-        PrefsUtils.addButtonRow({ title: _('Export Settings') }, group, () => {
-            const dialog = new Gtk.FileChooserDialog({
+        PrefsUtils.addButtonRow(
+            {
                 title: _('Export Settings'),
-                action: Gtk.FileChooserAction.SAVE,
-                transientFor: window,
-                modal: true,
-            });
-            dialog.set_current_name('astra-monitor-settings.json');
+                subtitle: _('Warning: this will export all profiles.'),
+            },
+            group,
+            () => {
+                const dialog = new Gtk.FileChooserDialog({
+                    title: _('Export Settings'),
+                    action: Gtk.FileChooserAction.SAVE,
+                    transientFor: window,
+                    modal: true,
+                });
+                dialog.set_current_name('astra-monitor-settings.json');
 
-            const filter = new Gtk.FileFilter();
-            filter.set_name('JSON Files');
-            filter.add_mime_type('application/json');
-            filter.add_pattern('*.json');
-            dialog.add_filter(filter);
+                const filter = new Gtk.FileFilter();
+                filter.set_name('JSON Files');
+                filter.add_mime_type('application/json');
+                filter.add_pattern('*.json');
+                dialog.add_filter(filter);
 
-            dialog.add_button(_('Save'), Gtk.ResponseType.OK);
-            dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
-            dialog.show();
+                dialog.add_button(_('Save'), Gtk.ResponseType.OK);
+                dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
+                dialog.show();
 
-            dialog.connect('response', (subject, id) => {
-                if(id === Gtk.ResponseType.OK) {
-                    const path = subject.get_file().get_path();
-                    const file = Gio.file_new_for_path(path);
-                    const stream = file.replace(
-                        null,
-                        false,
-                        Gio.FileCreateFlags.REPLACE_DESTINATION,
-                        null
-                    );
-                    const settings = prefs.exportSettings();
-                    const data: Uint8Array = new TextEncoder().encode(settings);
-                    stream.write_all(data, null);
-                    stream.close(null);
-                }
-                subject.destroy();
-            });
-        });
-
-        PrefsUtils.addButtonRow({ title: _('Import Settings') }, group, () => {
-            const dialog = new Gtk.FileChooserDialog({
-                title: _('Import Settings'),
-                action: Gtk.FileChooserAction.OPEN,
-                transientFor: window,
-                modal: true,
-            });
-
-            const filter = new Gtk.FileFilter();
-            filter.set_name('JSON Files');
-            filter.add_mime_type('application/json');
-            filter.add_pattern('*.json');
-            dialog.add_filter(filter);
-
-            dialog.add_button(_('Open'), Gtk.ResponseType.OK);
-            dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
-            dialog.show();
-
-            dialog.connect('response', (subject, id) => {
-                if(id === Gtk.ResponseType.OK) {
-                    try {
+                dialog.connect('response', (subject, id) => {
+                    if(id === Gtk.ResponseType.OK) {
                         const path = subject.get_file().get_path();
-                        Utils.readFileAsync(path)
-                            .then(data => {
-                                prefs.importSettings(data);
-                                window.close();
-                            })
-                            .catch(e => {
-                                Utils.error(e.message);
-                            });
-                    } catch(e: any) {
-                        Utils.error(e.message);
+                        const file = Gio.file_new_for_path(path);
+                        const stream = file.replace(
+                            null,
+                            false,
+                            Gio.FileCreateFlags.REPLACE_DESTINATION,
+                            null
+                        );
+                        const settings = Config.exportSettings();
+                        const data: Uint8Array = new TextEncoder().encode(settings);
+                        stream.write_all(data, null);
+                        stream.close(null);
                     }
-                }
-                subject.destroy();
-            });
-        });
+                    subject.destroy();
+                });
+            }
+        );
 
-        PrefsUtils.addButtonRow({ title: _('Reset Settings') }, group, () => {
-            const dialog = new Gtk.MessageDialog({
+        PrefsUtils.addButtonRow(
+            {
+                title: _('Import Settings'),
+                subtitle: _('Warning: this will overwrite all profiles.'),
+            },
+            group,
+            () => {
+                const dialog = new Gtk.FileChooserDialog({
+                    title: _('Import Settings'),
+                    action: Gtk.FileChooserAction.OPEN,
+                    transientFor: window,
+                    modal: true,
+                });
+
+                const filter = new Gtk.FileFilter();
+                filter.set_name('JSON Files');
+                filter.add_mime_type('application/json');
+                filter.add_pattern('*.json');
+                dialog.add_filter(filter);
+
+                dialog.add_button(_('Open'), Gtk.ResponseType.OK);
+                dialog.add_button(_('Cancel'), Gtk.ResponseType.CANCEL);
+                dialog.show();
+
+                dialog.connect('response', (subject, id) => {
+                    if(id === Gtk.ResponseType.OK) {
+                        try {
+                            const path = subject.get_file().get_path();
+                            Utils.readFileAsync(path)
+                                .then(data => {
+                                    Config.importSettings(data);
+                                })
+                                .catch(e => {
+                                    Utils.error(e.message);
+                                });
+                        } catch(e: any) {
+                            Utils.error(e.message);
+                        }
+                    }
+                    subject.destroy();
+                });
+            }
+        );
+
+        PrefsUtils.addButtonRow(
+            {
                 title: _('Reset Settings'),
-                text: _('Are you sure you want to reset all preferences?'),
-                buttons: Gtk.ButtonsType.YES_NO,
-                messageType: Gtk.MessageType.WARNING,
-                transientFor: window,
-                modal: true,
-            });
-            dialog.connect('response', (_dialog, response) => {
-                if(response === Gtk.ResponseType.YES) {
-                    prefs.resetSettings();
-                    window.close();
-                }
-                dialog.close();
-            });
-            dialog.show();
-        });
+                subtitle: _('Warning: this will reset all profiles.'),
+            },
+            group,
+            () => {
+                const dialog = new Gtk.MessageDialog({
+                    title: _('Reset Settings'),
+                    text: _('Are you sure you want to reset all preferences?'),
+                    buttons: Gtk.ButtonsType.YES_NO,
+                    messageType: Gtk.MessageType.WARNING,
+                    transientFor: window,
+                    modal: true,
+                });
+                dialog.connect('response', (_dialog, response) => {
+                    if(response === Gtk.ResponseType.YES) {
+                        Config.resetSettings();
+                    }
+                    dialog.close();
+                });
+                dialog.show();
+            }
+        );
 
         PrefsUtils.addSwitchRow(
             {

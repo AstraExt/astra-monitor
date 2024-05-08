@@ -49,7 +49,7 @@ export default class Visualization {
     private setupVisualization(_prefs: AstraMonitorPrefs) {
         this.visualization = new Adw.NavigationPage({
             title: _('Visualization'),
-            tag: 'general',
+            tag: 'visualization',
         });
         const toolbar = new Adw.ToolbarView();
         const header = new Adw.HeaderBar();

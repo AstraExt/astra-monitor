@@ -725,12 +725,11 @@ export default class NetworkMonitor extends Monitor {
 
     private async updateWirelessIwconfig(): Promise<boolean> {
         const path = Utils.commandPathLookup('iwconfig');
-        
+
         let result = '';
         try {
             result = await Utils.executeCommandAsync(`${path}iwconfig`);
-        }
-        catch(e) {
+        } catch(e) {
             /* NO NETWORK FOUND */
         }
         if(!result) return false;
