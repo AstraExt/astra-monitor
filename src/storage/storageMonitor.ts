@@ -878,17 +878,19 @@ export default class StorageMonitor extends Monitor {
         const seenPids = [];
 
         const io = new GTop.glibtop_proc_io();
+        let procState = null;
+        let argSize = null;
 
         for(const pid of pids) {
             seenPids.push(pid);
 
             let process = this.topProcessesCache.getProcess(pid);
             if(!process) {
-                const argSize = new GTop.glibtop_proc_args();
+                if(!argSize) argSize = new GTop.glibtop_proc_args();
                 let cmd = GTop.glibtop_get_proc_args(argSize, pid, 0);
 
                 if(!cmd) {
-                    const procState = new GTop.glibtop_proc_state();
+                    if(!procState) procState = new GTop.glibtop_proc_state();
                     GTop.glibtop_get_proc_state(procState, pid);
                     if(procState && procState.cmd) {
                         let str = '';

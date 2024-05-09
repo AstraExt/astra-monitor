@@ -2,7 +2,7 @@
 
 ### Bug fixes
 
--   Performance improvements for the Processors Menu
+-   Overall Performance improvements
 
 # Astra Monitor 25 - May 8 2024
 
