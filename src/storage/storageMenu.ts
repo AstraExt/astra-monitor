@@ -376,7 +376,9 @@ export default class StorageMenu extends MenuBase {
 
     createTopProcessesPopup(sourceActor: St.Widget) {
         this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
-        const section = this.topProcessesPopup.addMenuSection(_('Top processes')  + ` (${GLib.get_user_name()})`);
+        const section = this.topProcessesPopup.addMenuSection(
+            _('Top processes') + ` (${GLib.get_user_name()})`
+        );
         section.style = 'min-width:500px;';
         this.topProcessesPopup.processes = new Map();
 

@@ -683,9 +683,9 @@ export default class ProcessorMonitor extends Monitor {
 
         const buf = new GTop.glibtop_cpu();
         GTop.glibtop_get_cpu(buf);
-        
+
         const cpu = new GTop.glibtop_cpu();
-        
+
         const cpuCoresUsage = [];
         for(let i = 0; i < this.coresNum; i++) {
             GTop.glibtop_get_cpu(cpu);

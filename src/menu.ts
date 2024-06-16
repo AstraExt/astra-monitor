@@ -167,7 +167,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
 
         // System Monitor
         const appSys = Shell.AppSystem.get_default();
-        const app = appSys.lookup_app('gnome-system-monitor.desktop');
+        let app = appSys.lookup_app('org.gnome.SystemMonitor.desktop');
         if(app) {
             const button = new St.Button({ styleClass: 'button' });
             button.child = new St.Icon({
@@ -180,6 +180,22 @@ export default class MenuBase extends PopupMenu.PopupMenu {
                 app.activate();
             });
             this.utilityBox.add_child(button);
+        } else {
+            // GNOME <=45
+            app = appSys.lookup_app('gnome-system-monitor.desktop');
+            if(app) {
+                const button = new St.Button({ styleClass: 'button' });
+                button.child = new St.Icon({
+                    gicon: Utils.getLocalIcon('am-system-monitor-symbolic'),
+                    fallbackIconName: 'org.gnome.SystemMonitor-symbolic',
+                });
+
+                button.connect('clicked', () => {
+                    this.close(true);
+                    app.activate();
+                });
+                this.utilityBox.add_child(button);
+            }
         }
 
         // Astra Monitor preferences
