@@ -1016,7 +1016,10 @@ export default class Utils {
                 );
                 if(stdout.length > 0) {
                     const decoder = new TextDecoder('utf8');
-                    const stdoutString = decoder.decode(stdout);
+                    let stdoutString = decoder.decode(stdout);
+                    
+                    // remove trailing commas
+                    stdoutString = stdoutString.replace(/,\s*(?=}|])/g, '');
                     const parsedData = JSON.parse(stdoutString);
 
                     for(const sensorName in parsedData) {

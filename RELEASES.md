@@ -3,6 +3,7 @@
 ### Bug fixes
 
 -   Fix GNOME System Monitor icon missing for GNOME 46 and later [[#128](https://github.com/AstraExt/astra-monitor/issues/128)]
+-   Fix lm-sensors output bug (trailing commas) [[#133](https://github.com/AstraExt/astra-monitor/issues/133)]
 -   Overall Performance improvements
 
 # Astra Monitor 25 - May 8 2024

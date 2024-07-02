@@ -397,8 +397,11 @@ export default class SensorsMonitor extends Monitor {
 
             // "lm-sensors" provider
             try {
-                const lmSensorsDataValue = await lmSensorsData.getValue();
+                let lmSensorsDataValue = await lmSensorsData.getValue();
                 if(!lmSensorsDataValue) return false;
+                
+                // remove trailing commas
+                lmSensorsDataValue = lmSensorsDataValue.replace(/,\s*(?=}|])/g, '');
 
                 const parsedData = JSON.parse(lmSensorsDataValue) as any;
                 if(parsedData) {
