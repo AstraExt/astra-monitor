@@ -167,7 +167,8 @@ export default class SensorsMenu extends MenuBase {
 
         let cols = 1;
         if(valueTreeExtimatedHeight > monitorSize.height * 0.8) cols = 2;
-
+        if(valueTreeExtimatedHeight > monitorSize.height * 0.8 * 2) cols = 3;
+        
         const popupGrid = new Grid({
             numCols: cols * 2,
             styleClass: 'astra-monitor-menu-subgrid',
@@ -179,9 +180,8 @@ export default class SensorsMenu extends MenuBase {
         let num = 0;
         for(const [categoryName, category] of valueTree.entries()) {
             let style = '';
-            if(cols === 2) {
-                if(num % 2 === 0) style = 'margin-right:1em;';
-            }
+            if(cols > 1 && num % cols < cols-1)
+                style = 'margin-right:0.5em;';
 
             const categoryGrid = new Grid({
                 numCols: 3,
@@ -223,11 +223,11 @@ export default class SensorsMenu extends MenuBase {
                 categoryGrid.addToGrid(value);
 
                 values.set(valueId, { icon, name, value });
-                num++;
             }
             popupGrid.addToGrid(categoryGrid, 2);
 
             categories.set(categoryName, { categoryLabel, values });
+            num++;
         }
         popup.addToMenu(popupGrid, 2);
         //}
