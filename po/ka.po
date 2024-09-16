@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 02:16+0200\n"
+"POT-Creation-Date: 2024-09-16 14:52+0200\n"
 "PO-Revision-Date: 2024-04-27 11:41+0200\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -2251,6 +2251,10 @@ msgstr "დრაივერები"
 #: src/gpu/gpuMenuComponent.js:502
 msgid "Modules"
 msgstr "მოდულები"
+
+#, fuzzy
+#~ msgid "What's Shell TOPBAR/DASH/PANEL Position?"
+#~ msgstr "ინტერფეისის TOPBAR/DASH/PANEL-ის პოზიცია"
 
 #~ msgid "Domain"
 #~ msgstr "დომენი"

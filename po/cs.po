@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 02:16+0200\n"
+"POT-Creation-Date: 2024-09-16 14:52+0200\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -2154,6 +2154,10 @@ msgstr "Ovladače"
 #: src/gpu/gpuMenuComponent.js:502
 msgid "Modules"
 msgstr "Moduly"
+
+#, fuzzy
+#~ msgid "What's Shell TOPBAR/DASH/PANEL Position?"
+#~ msgstr "Pozice lišty shellu"
 
 #~ msgid "Domain"
 #~ msgstr "Doména"

@@ -1017,7 +1017,7 @@ export default class Utils {
                 if(stdout.length > 0) {
                     const decoder = new TextDecoder('utf8');
                     let stdoutString = decoder.decode(stdout);
-                    
+
                     // remove trailing commas
                     stdoutString = stdoutString.replace(/,\s*(?=}|])/g, '');
                     const parsedData = JSON.parse(stdoutString);
@@ -1158,17 +1158,17 @@ export default class Utils {
                 return value;
         }
     }
-    
+
     static getCPUModelShortify(model: string): string {
         // replace (R)
         model = model.replace(/\(R\)/g, '');
-        
+
         // replace (TM)
         model = model.replace(/\(TM\)/g, '');
-        
+
         // replace (C)
         model = model.replace(/\(C\)/g, '');
-        
+
         // replace multiple spaces with single space
         model = model.replace(/\s+/g, ' ');
 
@@ -1366,10 +1366,10 @@ export default class Utils {
 
         // replace '(R)'
         model = model.replace('(R)', '');
-        
+
         // replace '(TM)'
         model = model.replace('(TM)', '');
-        
+
         // replace '(C)'
         model = model.replace('(C)', '');
 

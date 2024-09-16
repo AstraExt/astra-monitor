@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 02:16+0200\n"
+"POT-Creation-Date: 2024-09-16 14:52+0200\n"
 "PO-Revision-Date: 2024-04-24 18:28+0200\n"
 "Last-Translator: awumii <awumii@protonmail.com>\n"
 "Language-Team: awumii <awumii@protonmail.com>\n"
@@ -2181,3 +2181,7 @@ msgstr "Sterowniki"
 #: src/gpu/gpuMenuComponent.js:502
 msgid "Modules"
 msgstr "Moduły"
+
+#, fuzzy
+#~ msgid "What's Shell TOPBAR/DASH/PANEL Position?"
+#~ msgstr "Pozycja panelu/paska powłoki"

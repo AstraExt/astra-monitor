@@ -1,6 +1,7 @@
-# Astra Monitor 26 - TO BE RELEASED
+# Astra Monitor 26 - September 16 2024
 
 ### New features
+
 -   GNOME 47 support [[#143](https://github.com/AstraExt/astra-monitor/issues/143)]
 
 ### Bug fixes

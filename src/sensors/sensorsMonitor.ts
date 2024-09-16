@@ -399,7 +399,7 @@ export default class SensorsMonitor extends Monitor {
             try {
                 let lmSensorsDataValue = await lmSensorsData.getValue();
                 if(!lmSensorsDataValue) return false;
-                
+
                 // remove trailing commas
                 lmSensorsDataValue = lmSensorsDataValue.replace(/,\s*(?=}|])/g, '');
 
