@@ -1,5 +1,8 @@
 # Astra Monitor 26 - TO BE RELEASED
 
+### New features
+-   GNOME 47 support [[#143](https://github.com/AstraExt/astra-monitor/issues/143)]
+
 ### Bug fixes
 
 -   Fix GNOME System Monitor icon missing for GNOME 46 and later [[#128](https://github.com/AstraExt/astra-monitor/issues/128)]
