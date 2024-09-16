@@ -1158,6 +1158,28 @@ export default class Utils {
                 return value;
         }
     }
+    
+    static getCPUModelShortify(model: string): string {
+        // replace (R)
+        model = model.replace(/\(R\)/g, '');
+        
+        // replace (TM)
+        model = model.replace(/\(TM\)/g, '');
+        
+        // replace (C)
+        model = model.replace(/\(C\)/g, '');
+        
+        // replace multiple spaces with single space
+        model = model.replace(/\s+/g, ' ');
+
+        // replace repeated words
+        model = model.replace(/\b(\w+)\s+\1\b/g, '$1');
+
+        // trim
+        model = model.trim();
+
+        return model;
+    }
 
     static getVendorName(vendorId: string): string[] {
         const vendors = {
@@ -1344,6 +1366,12 @@ export default class Utils {
 
         // replace '(R)'
         model = model.replace('(R)', '');
+        
+        // replace '(TM)'
+        model = model.replace('(TM)', '');
+        
+        // replace '(C)'
+        model = model.replace('(C)', '');
 
         // replace 'Inc.'
         model = model.replace(/\bInc\./g, '');

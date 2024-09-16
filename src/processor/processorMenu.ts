@@ -138,7 +138,7 @@ export default class ProcessorMenu extends MenuBase {
             style: defaultStyle,
         });
         const hoverLabel = new St.Label({
-            text: cpuName,
+            text: Utils.getCPUModelShortify(cpuName),
         });
         hoverButton.set_child(hoverLabel);
 

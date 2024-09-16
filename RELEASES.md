@@ -9,6 +9,7 @@
 -   Fix lm-sensors output bug (trailing commas) [[#133](https://github.com/AstraExt/astra-monitor/issues/133)]
 -   Overall Performance improvements
 -   Enable 3rd column in sensors list and fix a graphical bug
+-   Improved CPU & GPU model name shortening [[#140](https://github.com/AstraExt/astra-monitor/issues/140)]
 
 # Astra Monitor 25 - May 8 2024
 
