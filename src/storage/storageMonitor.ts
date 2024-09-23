@@ -26,6 +26,7 @@ import Monitor from '../monitor.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 import TopProcessesCache from '../utils/topProcessesCache.js';
+import ContinuosTaskManager, { ContinuosTaskManagerData } from '../utils/continuosTaskManager.js';
 
 export type StorageUsage = {
     size: number;
@@ -178,6 +179,8 @@ export default class StorageMonitor extends Monitor {
     private updateStorageIOTask: CancellableTaskManager<boolean>;
     private updateStorageInfoTask: CancellableTaskManager<boolean>;
 
+    private updateStorageIOTopTask: ContinuosTaskManager;
+
     private previousStorageIO!: PreviousStorageIO;
     private previousDetailedStorageIO!: PreviousDetailedStorageIO;
     private previousPidsIO!: Map<number, PidIO>;
@@ -202,6 +205,9 @@ export default class StorageMonitor extends Monitor {
         this.updateTopProcessesTask = new CancellableTaskManager();
         this.updateStorageIOTask = new CancellableTaskManager();
         this.updateStorageInfoTask = new CancellableTaskManager();
+
+        this.updateStorageIOTopTask = new ContinuosTaskManager();
+        this.updateStorageIOTopTask.listen(this, this.updateStorageIOTop.bind(this));
 
         this.checkMainDisk();
 
@@ -305,7 +311,35 @@ export default class StorageMonitor extends Monitor {
 
     stop() {
         super.stop();
+        this.stopIOTop();
         this.reset();
+    }
+
+    startIOTop() {
+        if(this.updateStorageIOTopTask.isRunning) {
+            return;
+        }
+        
+        const pkexecPath = Utils.commandPathLookup('pkexec --version');
+        if(pkexecPath === false) {
+            Utils.error('pkexec not found');
+            return;
+        }
+        
+        const iotopPath = Utils.commandPathLookup('iotop --version');
+        const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 10));
+        const num = Math.max(1, Math.round(60 / interval));
+
+        const command = `${pkexecPath}pkexec ${iotopPath}iotop -bPokq -d ${interval} -n ${num}`;
+        this.updateStorageIOTopTask.start(command, {
+            flush: { idle: 250 },
+        });
+    }
+
+    stopIOTop() {
+        if(this.updateStorageIOTopTask.isRunning) {
+            this.updateStorageIOTopTask.stop();
+        }
     }
 
     dataSourcesInit() {
@@ -954,6 +988,56 @@ export default class StorageMonitor extends Monitor {
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);
         return true;
+    }
+
+    async updateStorageIOTop(data: ContinuosTaskManagerData) {
+        if(data.exit) {
+            this.notify('topProcessesIOTopStop');
+            return;
+        }
+
+        if(!data.result) return;
+
+        try {
+            const output = data.result;
+
+            const lines = output.split('\n');
+            const topProcesses = [];
+
+            for(const line of lines) {
+                const fields = line.trim().split(/\s+/);
+                if(fields.length < 9 || !Utils.isNumeric(fields[0])) {
+                    continue;
+                }
+
+                const pid = parseInt(fields[0]);
+                //const priority = parseInt(fields[1]);
+                //const user = fields[2];
+                const read = parseFloat(fields[3]) * 1024;
+                //const readUnit = fields[4];
+                const write = parseFloat(fields[5]) * 1024;
+                //const writeUnit = fields[6];
+                //const device = fields[7];
+                const command = fields.slice(8).join(' ');
+
+                topProcesses.push({
+                    process: {
+                        pid,
+                        exec: command.split(' ')[0],
+                        cmd: command,
+                    },
+                    read,
+                    write,
+                });
+            }
+
+            topProcesses.sort((a, b) => b.read + b.write - (a.read + a.write));
+            topProcesses.splice(StorageMonitor.TOP_PROCESSES_LIMIT);
+            this.setUsageValue('topProcessesIOTop', topProcesses);
+            this.notify('topProcessesIOTop', topProcesses);
+        } catch(e: any) {
+            Utils.error(e);
+        }
     }
 
     async getCachedDisk(device: string): Promise<DiskInfo | undefined> {

@@ -237,7 +237,7 @@ export default class SensorsMonitor extends Monitor {
                 }
 
                 try {
-                    const path = Utils.commandPathLookup('sensors');
+                    const path = Utils.commandPathLookup('sensors -v');
                     Utils.executeCommandAsync(`${path}sensors -j`, this.updateSensorsDataTask)
                         .then(result => {
                             resolve(result);

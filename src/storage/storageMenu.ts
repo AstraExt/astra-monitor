@@ -118,11 +118,13 @@ type TopProcess = {
 
 type TopProcesses = {
     separator: St.Label;
+    subSeparator: St.Label;
     labels: TopProcess[];
     hoverButton: St.Button;
 };
 
 type TopProcessesPopup = MenuBase & {
+    section?: St.Label;
     processes?: Map<number, TopProcess>;
 };
 
@@ -136,6 +138,7 @@ export default class StorageMenu extends MenuBase {
 
     private topProcesses!: TopProcesses;
     private topProcessesPopup!: TopProcessesPopup;
+    private privilegedTopProcesses: boolean = false;
 
     private deviceSection!: InstanceType<typeof Grid>;
     private noDevicesLabel!: St.Label;
@@ -260,8 +263,37 @@ export default class StorageMenu extends MenuBase {
     }
 
     addTopProcesses() {
-        const separator = this.addMenuSection(_('Top processes') + ` (${GLib.get_user_name()})`);
+        const separator = this.addMenuSection(
+            _('Top processes') + ` (${GLib.get_user_name()})`,
+            false,
+            false
+        );
+        separator.style = 'margin-bottom:0;padding-bottom:0;';
+        separator.xExpand = true;
         separator.hide();
+
+        const subSeparator = new St.Label({
+            text: _('(click to show all system processes)'),
+            styleClass: 'astra-monitor-menu-key-mid-center',
+            xExpand: true,
+        });
+        subSeparator.hide();
+
+        const separatorGrid = new Grid({ numCols: 1, styleClass: 'astra-monitor-menu-subgrid' });
+        separatorGrid.addToGrid(separator);
+        separatorGrid.addToGrid(subSeparator);
+
+        const separatorButton = new St.Button({
+            reactive: true,
+            trackHover: true,
+        });
+        separatorButton.set_child(separatorGrid);
+        separatorButton.connect('clicked', () => {
+            if(Utils.hasIotop()) {
+                Utils.storageMonitor.startIOTop();
+            }
+        });
+        this.addToMenu(separatorButton, 2);
 
         const defaultStyle = '';
 
@@ -369,6 +401,7 @@ export default class StorageMenu extends MenuBase {
 
         this.topProcesses = {
             separator,
+            subSeparator,
             labels,
             hoverButton,
         };
@@ -376,10 +409,11 @@ export default class StorageMenu extends MenuBase {
 
     createTopProcessesPopup(sourceActor: St.Widget) {
         this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
-        const section = this.topProcessesPopup.addMenuSection(
+        this.topProcessesPopup.section = this.topProcessesPopup.addMenuSection(
             _('Top processes') + ` (${GLib.get_user_name()})`
         );
-        section.style = 'min-width:500px;';
+        this.topProcessesPopup.section.style = 'min-width:500px;';
+        
         this.topProcessesPopup.processes = new Map();
 
         const grid = new Grid({
@@ -1107,12 +1141,27 @@ export default class StorageMenu extends MenuBase {
             this.topProcesses.separator.show();
             this.topProcesses.hoverButton.show();
 
+            if(Utils.hasIotop()) {
+                this.topProcesses.subSeparator.show();
+            }
+
             Utils.storageMonitor.listen(
                 this,
                 'topProcesses',
                 this.update.bind(this, 'topProcesses')
             );
             Utils.storageMonitor.requestUpdate('topProcesses');
+
+            Utils.storageMonitor.listen(
+                this,
+                'topProcessesIOTop',
+                this.update.bind(this, 'topProcessesIOTop')
+            );
+            Utils.storageMonitor.listen(
+                this,
+                'topProcessesIOTopStop',
+                this.update.bind(this, 'topProcessesIOTopStop')
+            );
         }
 
         this.update('deviceList');
@@ -1136,7 +1185,9 @@ export default class StorageMenu extends MenuBase {
         Utils.storageMonitor.unlisten(this, 'storageIO');
         Utils.storageMonitor.unlisten(this, 'detailedStorageIO');
         Utils.storageMonitor.unlisten(this, 'topProcesses');
+        Utils.storageMonitor.unlisten(this, 'topProcessesIOTop');
         Utils.storageMonitor.unlisten(this, 'storageInfo');
+        this.stopPrivilegedTopProcesses();
 
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
@@ -1289,8 +1340,20 @@ export default class StorageMenu extends MenuBase {
             }
             return;
         }
-        if(code === 'topProcesses') {
-            const topProcesses = Utils.storageMonitor.getCurrentValue('topProcesses');
+        if(code === 'topProcessesIOTopStop') {
+            this.stopPrivilegedTopProcesses();
+            return;
+        }
+        if(code === 'topProcesses' || code === 'topProcessesIOTop') {
+            let topProcesses: any[];
+
+            if(code === 'topProcessesIOTop') {
+                this.startPrivilegedTopProcesses();
+                topProcesses = Utils.storageMonitor.getCurrentValue('topProcessesIOTop');
+            } else {
+                if(this.privilegedTopProcesses) return;
+                topProcesses = Utils.storageMonitor.getCurrentValue('topProcesses');
+            }
 
             for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
                 if(
@@ -1470,6 +1533,25 @@ export default class StorageMenu extends MenuBase {
             }
             return;
         }
+    }
+
+    startPrivilegedTopProcesses() {
+        if(this.privilegedTopProcesses) return;
+
+        this.privilegedTopProcesses = true;
+        this.topProcesses.subSeparator.text = _('(showing all system processes)');
+        this.topProcesses.separator.text = _('Top processes') + ` (root)`;
+        this.topProcessesPopup.section!.text = _('Top processes') + ` (root)`;
+    }
+
+    stopPrivilegedTopProcesses() {
+        if(!this.privilegedTopProcesses) return;
+
+        this.privilegedTopProcesses = false;
+        Utils.storageMonitor.stopIOTop();
+        this.topProcesses.subSeparator.text = _('(click to show all system processes)');
+        this.topProcesses.separator.text = _('Top processes') + ` (${GLib.get_user_name()})`;
+        this.topProcessesPopup.section!.text = _('Top processes') + ` (${GLib.get_user_name()})`;
     }
 
     clear() {

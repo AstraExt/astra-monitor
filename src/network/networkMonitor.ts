@@ -724,7 +724,7 @@ export default class NetworkMonitor extends Monitor {
     }
 
     private async updateWirelessIwconfig(): Promise<boolean> {
-        const path = Utils.commandPathLookup('iwconfig');
+        const path = Utils.commandPathLookup('iwconfig --version');
 
         let result = '';
         try {
@@ -797,7 +797,7 @@ export default class NetworkMonitor extends Monitor {
             devicePromises.push(
                 (async () => {
                     try {
-                        const path = Utils.commandPathLookup('iw');
+                        const path = Utils.commandPathLookup('iw --version');
                         const str = await Utils.executeCommandAsync(`${path}iw dev ${dev} link`);
                         if(!str) return;
 

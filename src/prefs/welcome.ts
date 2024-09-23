@@ -173,6 +173,16 @@ export default class Welcome {
                 group
             );
         }
+        if(!Utils.hasIotop()) {
+            check = false;
+            PrefsUtils.addStatusLabel(
+                {
+                    title: _("'iotop' not installed: some optional features will be disabled!"),
+                },
+                'am-dialog-warning-symbolic',
+                group
+            );
+        }
         if(Utils.hasAMDGpu() && !Utils.hasAmdGpuTop()) {
             check = false;
             PrefsUtils.addStatusLabel(

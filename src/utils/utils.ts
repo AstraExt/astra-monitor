@@ -407,7 +407,9 @@ export default class Utils {
 
     static commandPathLookup(fullCommand: string): string | false {
         const [command, ..._args] = fullCommand.split(' ');
-        if(Utils.commandsPath!.has(command)) return Utils.commandsPath!.get(command) ?? false;
+        if(Utils.commandsPath!.has(command)) {
+            return Utils.commandsPath!.get(command) ?? false;
+        }
 
         for(const path of [
             '',
@@ -504,7 +506,7 @@ export default class Utils {
     }
 
     static hasLspci(): boolean {
-        return Utils.commandPathLookup('lspci -n') !== false;
+        return Utils.commandPathLookup('lspci --version') !== false;
     }
 
     static hasLsblk(): boolean {
@@ -521,6 +523,10 @@ export default class Utils {
 
     static hasIwconfig(): boolean {
         return Utils.commandPathLookup('iwconfig --version') !== false;
+    }
+
+    static hasIotop(): boolean {
+        return Utils.commandPathLookup('iotop --version') !== false;
     }
 
     static hasAMDGpu(): boolean {
@@ -1009,7 +1015,7 @@ export default class Utils {
              * lm-sensors
              */
             if(Utils.hasLmSensors()) {
-                const path = Utils.commandPathLookup('sensors');
+                const path = Utils.commandPathLookup('sensors -v');
 
                 const [_result, stdout, _stderr] = GLib.spawn_command_line_sync(
                     `${path}sensors -j`
@@ -1045,7 +1051,7 @@ export default class Utils {
             /*if(Utils.hasAMDGpu()) {
                 //TODO: add support for radeontop
                 if(Utils.hasAmdGpuTop()) {
-                    const path = Utils.commandPathLookup('amdgpu_top');
+                    const path = Utils.commandPathLookup('amdgpu_top --version');
                     const [result, stdout, stderr] = GLib.spawn_command_line_sync(`${path}amdgpu_top -J -n 1`);
                     
                     if(stdout.length > 0) {
@@ -1214,7 +1220,7 @@ export default class Utils {
             const decoder = new TextDecoder('utf8');
 
             // Cannot use -mm because it doesn't show the driver and module
-            const path = Utils.commandPathLookup('lspci');
+            const path = Utils.commandPathLookup('lspci --version');
             const [result, stdout, stderr] = GLib.spawn_command_line_sync(`${path}lspci -nnk`);
             if(!result || !stdout) {
                 const lspciError = decoder.decode(stderr);
@@ -1565,7 +1571,7 @@ export default class Utils {
         if(!Utils.hasLsblk()) return disks;
 
         try {
-            const path = Utils.commandPathLookup('lsblk');
+            const path = Utils.commandPathLookup('lsblk -V');
             const [_result, stdout, _stderr] = GLib.spawn_command_line_sync(
                 `${path}lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH`
             );
@@ -1610,7 +1616,7 @@ export default class Utils {
         if(!Utils.hasLsblk()) return disks;
 
         try {
-            const path = Utils.commandPathLookup('lsblk');
+            const path = Utils.commandPathLookup('lsblk -V');
             const result = await Utils.executeCommandAsync(
                 `${path}lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH`,
                 task
@@ -1992,14 +1998,18 @@ export default class Utils {
 
             // Initialize the subprocess
             try {
-                proc.init(cancellableTaskManager?.cancellable || null);
+                const init = proc.init(cancellableTaskManager?.cancellable || null);
+                if(!init) {
+                    reject(new Error('Failed to initialize subprocess'));
+                    return;
+                }
             } catch(e: any) {
                 // Handle errors in subprocess initialization
                 reject(new Error(`Failed to initialize subprocess: ${e.message}`));
                 return;
             }
 
-            if(cancellableTaskManager) cancellableTaskManager.setSubprocess(proc);
+            cancellableTaskManager?.setSubprocess(proc);
 
             // Communicate with the subprocess asynchronously
             proc.communicate_utf8_async(null, null, (sub: Gio.Subprocess, res: Gio.AsyncResult) => {
@@ -2037,7 +2047,7 @@ export default class Utils {
         if(!Utils.hasIp()) return devices;
 
         try {
-            const path = Utils.commandPathLookup('ip');
+            const path = Utils.commandPathLookup('ip -V');
             const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}ip -d -j addr`);
 
             if(result && stdout) {
@@ -2112,7 +2122,7 @@ export default class Utils {
         if(!Utils.hasIp()) return routes;
 
         try {
-            const path = Utils.commandPathLookup('ip');
+            const path = Utils.commandPathLookup('ip -V');
             const result = await Utils.executeCommandAsync(
                 `${path}ip -d -j route show default`,
                 task
@@ -2154,7 +2164,7 @@ export default class Utils {
         if(!Utils.hasLsblk()) return devices;
 
         try {
-            const commandPath = Utils.commandPathLookup('lsblk');
+            const commandPath = Utils.commandPathLookup('lsblk -V');
             const [result, stdout, _stderr] = GLib.spawn_command_line_sync(
                 `${commandPath}lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE`
             );

@@ -417,7 +417,7 @@ export default class ProcessorMonitor extends Monitor {
             if(!Utils.hasLscpu()) return this.cpuInfo;
 
             //TODO: switch to lscpu --json!?
-            const path = Utils.commandPathLookup('lscpu');
+            const path = Utils.commandPathLookup('lscpu --version');
             const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}lscpu`);
 
             if(!result || !stdout) return this.cpuInfo;

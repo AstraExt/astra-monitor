@@ -30,18 +30,32 @@ export type ContinuosTaskManagerData = {
 
 type ContinuosTaskManagerListener = (data: ContinuosTaskManagerData) => void;
 
+type FlushOptions = {
+    trigger?: string;
+    interval?: number;
+    idle?: number;
+};
+
+type Options = {
+    flush: FlushOptions;
+    stdin?: boolean;
+    script?: boolean;
+};
+
 export default class ContinuosTaskManager {
     private currentTask?: CancellableTaskManager<boolean>;
     private command?: string;
-    private flushTrigger?: string;
     private output: string = '';
     private listeners: Map<any, ContinuosTaskManagerListener> = new Map();
 
-    public start(command: string, flushTrigger: string = '') {
+    private options?: Options;
+    private timerId?: number;
+
+    public start(command: string, options?: Options) {
         if(this.currentTask) this.currentTask.cancel();
         this.currentTask = new CancellableTaskManager();
         this.command = command;
-        this.flushTrigger = flushTrigger;
+        this.options = options;
         this.output = '';
         this.currentTask
             .run(this.task.bind(this))
@@ -49,35 +63,58 @@ export default class ContinuosTaskManager {
             .finally(() => {
                 this.stop();
             });
+
+        if(this.options?.flush?.interval) {
+            this.startTimer();
+        }
     }
 
     private task(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            if(this.command === undefined) {
-                reject('No command');
+            if(!this.command) {
+                reject('No command or script provided');
                 return;
             }
 
             let argv;
-            try {
-                // Parse the command line to properly create an argument vector
-                argv = GLib.shell_parse_argv(this.command);
-                if(!argv[0]) throw new Error('Invalid command');
-            } catch(e: any) {
-                // Handle errors in command parsing
-                reject(`Failed to parse command: ${e.message}`);
+            if(this.options?.script) {
+                argv = ['bash', '-c', this.command];
+            } else {
+                try {
+                    argv = GLib.shell_parse_argv(this.command);
+                    if(!argv[0]) throw new Error('Invalid command');
+                    argv = argv[1];
+                } catch(e: any) {
+                    reject(`Failed to parse command: ${e.message}`);
+                    return;
+                }
+            }
+
+            if(!argv) {
+                reject('Failed to parse command');
                 return;
             }
 
+            let flags = Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE;
+            if(this.options?.stdin) {
+                flags |= Gio.SubprocessFlags.STDIN_PIPE;
+            }
+
             // Create a new subprocess
-            const proc = new Gio.Subprocess({
-                argv: argv[1],
-                flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
-            });
+            const proc = new Gio.Subprocess({ argv, flags });
+
+            if(!proc) {
+                reject('Failed to create subprocess');
+                return;
+            }
 
             // Initialize the subprocess
             try {
-                proc.init(this.currentTask?.cancellable || null);
+                const init = proc.init(this.currentTask?.cancellable || null);
+                if(!init) {
+                    reject('Failed to initialize subprocess');
+                    return;
+                }
             } catch(e: any) {
                 // Handle errors in subprocess initialization
                 reject(`Failed to initialize subprocess: ${e.message}`);
@@ -92,7 +129,6 @@ export default class ContinuosTaskManager {
                 closeBaseStream: true,
             });
 
-            // Start the subprocess
             this.readOutput(resolve, reject, stdoutStream, stdinStream);
         });
     }
@@ -103,34 +139,47 @@ export default class ContinuosTaskManager {
         stdout: Gio.DataInputStream,
         stdin: Gio.OutputStream | null
     ) {
-        stdout.read_line_async(GLib.PRIORITY_LOW, null, (stream, result) => {
-            try {
-                const [line] = stream.read_line_finish_utf8(result);
+        stdout.read_line_async(
+            GLib.PRIORITY_LOW,
+            this.currentTask?.cancellable || null,
+            (stream, result) => {
+                try {
+                    const [line] = stream.read_line_finish_utf8(result);
 
-                if(line !== null) {
-                    if(this.output.length) this.output += '\n' + line;
-                    else this.output += line;
+                    if(line !== null) {
+                        if(this.output.length) this.output += '\n' + line;
+                        else this.output += line;
 
-                    if(!this.flushTrigger || line.lastIndexOf(this.flushTrigger) !== -1) {
+                        if(this.options?.flush?.idle) {
+                            this.startTimer();
+                        }
+
+                        if(
+                            this.options?.flush?.trigger &&
+                            line.includes(this.options.flush.trigger)
+                        ) {
+                            this.listeners.forEach((callback, _subject) => {
+                                callback({ result: this.output, exit: false });
+                            });
+                            this.output = '';
+                        }
+                        this.readOutput(resolve, reject, stdout, stdin);
+                    } else {
+                        this.stopTimer();
                         this.listeners.forEach((callback, _subject) => {
-                            callback({ result: this.output, exit: false });
+                            callback({ exit: true });
                         });
-                        this.output = '';
+                        resolve(true);
                     }
-                    this.readOutput(resolve, reject, stdout, stdin);
-                } else {
+                } catch(e: any) {
+                    this.stopTimer();
                     this.listeners.forEach((callback, _subject) => {
                         callback({ exit: true });
                     });
-                    resolve(true);
+                    resolve(false);
                 }
-            } catch(e: any) {
-                this.listeners.forEach((callback, _subject) => {
-                    callback({ exit: true });
-                });
-                resolve(false);
             }
-        });
+        );
     }
 
     public listen(subject: any, callback: ContinuosTaskManagerListener) {
@@ -141,8 +190,34 @@ export default class ContinuosTaskManager {
         this.listeners.delete(subject);
     }
 
+    private startTimer() {
+        this.stopTimer();
+
+        const time = this.options?.flush?.idle ?? this.options?.flush?.interval ?? 1000;
+        this.timerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, time, () => {
+            if(this.output.length > 0) {
+                this.listeners.forEach((callback, _subject) => {
+                    callback({ result: this.output, exit: false });
+                });
+                this.output = '';
+            }
+            return GLib.SOURCE_CONTINUE;
+        });
+    }
+
+    private stopTimer() {
+        if(this.timerId !== undefined) {
+            GLib.source_remove(this.timerId);
+            this.timerId = undefined;
+        }
+    }
+
     public stop() {
-        if(this.currentTask) this.currentTask.cancel();
+        this.stopTimer();
+
+        if(this.currentTask) {
+            this.currentTask.cancel();
+        }
         this.currentTask = undefined;
     }
 
