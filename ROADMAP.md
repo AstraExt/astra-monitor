@@ -49,7 +49,7 @@
     <tr>
         <td style="text-align:center"></td>
         <td style="text-align:center">🔲<br>Themes</td>
-        <td style="text-align:center">🔲<br>Continuos Monitoring Mode</td>
+        <td style="text-align:center">🔲<br>Continuous Monitoring Mode</td>
     </tr>
 </table>
 

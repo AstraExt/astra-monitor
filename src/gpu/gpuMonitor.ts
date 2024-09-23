@@ -24,7 +24,9 @@ import Config from '../config.js';
 import Utils, { GpuInfo } from '../utils/utils.js';
 import Monitor from '../monitor.js';
 
-import ContinuosTaskManager, { ContinuosTaskManagerData } from '../utils/continuosTaskManager.js';
+import ContinuousTaskManager, {
+    ContinuousTaskManagerData,
+} from '../utils/continuousTaskManager.js';
 
 // eslint-disable-next-line no-shadow
 enum GpuSensorPriority {
@@ -335,8 +337,8 @@ export type NvidiaInfo = GenericGpuInfo & {
 
 export default class GpuMonitor extends Monitor {
     private status = false;
-    private updateAmdGpuTask: ContinuosTaskManager;
-    private updateNvidiaGpuTask: ContinuosTaskManager;
+    private updateAmdGpuTask: ContinuousTaskManager;
+    private updateNvidiaGpuTask: ContinuousTaskManager;
 
     private infoPipesCache?: {
         name: string;
@@ -349,10 +351,10 @@ export default class GpuMonitor extends Monitor {
     constructor() {
         super('Gpu Monitor');
 
-        this.updateAmdGpuTask = new ContinuosTaskManager();
+        this.updateAmdGpuTask = new ContinuousTaskManager();
         this.updateAmdGpuTask.listen(this, this.updateAmdGpu.bind(this));
 
-        this.updateNvidiaGpuTask = new ContinuosTaskManager();
+        this.updateNvidiaGpuTask = new ContinuousTaskManager();
         this.updateNvidiaGpuTask.listen(this, this.updateNvidiaGpu.bind(this));
 
         this.reset();
@@ -434,8 +436,16 @@ export default class GpuMonitor extends Monitor {
         if(Utils.hasAMDGpu() && Utils.hasAmdGpuTop() && Utils.isAmdGpu(selectedGpu)) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
-            const path = Utils.commandPathLookup('mdgpu_top --version');
-            this.updateAmdGpuTask.start(`${path}amdgpu_top -J -u 5 -s ${timer} -n 0`);
+            const path = Utils.commandPathLookup('amdgpu_top --version');
+
+            if(path === false) {
+                Utils.error('Failed to find amdgpu_top');
+                return;
+            }
+
+            this.updateAmdGpuTask.start(`${path}amdgpu_top -J -u 5 -s ${timer} -n 0`, {
+                flush: { always: true },
+            });
         }
 
         if(Utils.hasNVidiaGpu() && Utils.hasNvidiaSmi() && Utils.isNvidiaGpu(selectedGpu)) {
@@ -531,7 +541,7 @@ export default class GpuMonitor extends Monitor {
         return { text: nvidia['#text'] };
     }
 
-    updateAmdGpu(data: ContinuosTaskManagerData) {
+    updateAmdGpu(data: ContinuousTaskManagerData) {
         if(data.exit || !data.result) return;
 
         try {
@@ -1127,7 +1137,7 @@ export default class GpuMonitor extends Monitor {
         }
     }
 
-    updateNvidiaGpu(data: ContinuosTaskManagerData) {
+    updateNvidiaGpu(data: ContinuousTaskManagerData) {
         if(data.exit || !data.result) return;
 
         try {

@@ -23,14 +23,15 @@ import Gio from 'gi://Gio';
 
 import CancellableTaskManager from './cancellableTaskManager.js';
 
-export type ContinuosTaskManagerData = {
+export type ContinuousTaskManagerData = {
     result?: string;
     exit: boolean;
 };
 
-type ContinuosTaskManagerListener = (data: ContinuosTaskManagerData) => void;
+type ContinuousTaskManagerListener = (data: ContinuousTaskManagerData) => void;
 
 type FlushOptions = {
+    always?: boolean;
     trigger?: string;
     interval?: number;
     idle?: number;
@@ -42,11 +43,11 @@ type Options = {
     script?: boolean;
 };
 
-export default class ContinuosTaskManager {
+export default class ContinuousTaskManager {
     private currentTask?: CancellableTaskManager<boolean>;
     private command?: string;
     private output: string = '';
-    private listeners: Map<any, ContinuosTaskManagerListener> = new Map();
+    private listeners: Map<any, ContinuousTaskManagerListener> = new Map();
 
     private options?: Options;
     private timerId?: number;
@@ -150,13 +151,16 @@ export default class ContinuosTaskManager {
                         if(this.output.length) this.output += '\n' + line;
                         else this.output += line;
 
-                        if(this.options?.flush?.idle) {
+                        if(this.options?.flush?.always) {
+                            this.listeners.forEach((callback, _subject) => {
+                                callback({ result: this.output, exit: false });
+                            });
+                            this.output = '';
+                        } else if(this.options?.flush?.idle) {
                             this.startTimer();
-                        }
-
-                        if(
+                        } else if(
                             this.options?.flush?.trigger &&
-                            line.includes(this.options.flush.trigger)
+                            line.lastIndexOf(this.options.flush.trigger) !== -1
                         ) {
                             this.listeners.forEach((callback, _subject) => {
                                 callback({ result: this.output, exit: false });
@@ -182,7 +186,7 @@ export default class ContinuosTaskManager {
         );
     }
 
-    public listen(subject: any, callback: ContinuosTaskManagerListener) {
+    public listen(subject: any, callback: ContinuousTaskManagerListener) {
         this.listeners.set(subject, callback);
     }
 

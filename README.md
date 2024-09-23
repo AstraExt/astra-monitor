@@ -87,7 +87,7 @@ As Astra Monitor is in beta stage of development, we have an ambitious roadmap p
         <td style="text-align:center">✅<br>Compact Mode</td>
         <td style="text-align:center"></td>
         <td style="text-align:center">🔲<br>Battery Monitoring</td>
-        <td style="text-align:center">🔲<br>Continuos Monitoring Mode</td>
+        <td style="text-align:center">🔲<br>Continuous Monitoring Mode</td>
     </tr>
     <tr>
         <td style="text-align:center">✅<br>Settings Profiles</td>

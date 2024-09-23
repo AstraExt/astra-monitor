@@ -26,7 +26,9 @@ import Monitor from '../monitor.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
 import TopProcessesCache from '../utils/topProcessesCache.js';
-import ContinuosTaskManager, { ContinuosTaskManagerData } from '../utils/continuosTaskManager.js';
+import ContinuousTaskManager, {
+    ContinuousTaskManagerData,
+} from '../utils/continuousTaskManager.js';
 
 export type StorageUsage = {
     size: number;
@@ -179,7 +181,7 @@ export default class StorageMonitor extends Monitor {
     private updateStorageIOTask: CancellableTaskManager<boolean>;
     private updateStorageInfoTask: CancellableTaskManager<boolean>;
 
-    private updateStorageIOTopTask: ContinuosTaskManager;
+    private updateStorageIOTopTask: ContinuousTaskManager;
 
     private previousStorageIO!: PreviousStorageIO;
     private previousDetailedStorageIO!: PreviousDetailedStorageIO;
@@ -206,7 +208,7 @@ export default class StorageMonitor extends Monitor {
         this.updateStorageIOTask = new CancellableTaskManager();
         this.updateStorageInfoTask = new CancellableTaskManager();
 
-        this.updateStorageIOTopTask = new ContinuosTaskManager();
+        this.updateStorageIOTopTask = new ContinuousTaskManager();
         this.updateStorageIOTopTask.listen(this, this.updateStorageIOTop.bind(this));
 
         this.checkMainDisk();
@@ -319,13 +321,13 @@ export default class StorageMonitor extends Monitor {
         if(this.updateStorageIOTopTask.isRunning) {
             return;
         }
-        
+
         const pkexecPath = Utils.commandPathLookup('pkexec --version');
         if(pkexecPath === false) {
             Utils.error('pkexec not found');
             return;
         }
-        
+
         const iotopPath = Utils.commandPathLookup('iotop --version');
         const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 10));
         const num = Math.max(1, Math.round(60 / interval));
@@ -990,7 +992,7 @@ export default class StorageMonitor extends Monitor {
         return true;
     }
 
-    async updateStorageIOTop(data: ContinuosTaskManagerData) {
+    async updateStorageIOTop(data: ContinuousTaskManagerData) {
         if(data.exit) {
             this.notify('topProcessesIOTopStop');
             return;

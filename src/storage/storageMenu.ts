@@ -413,7 +413,7 @@ export default class StorageMenu extends MenuBase {
             _('Top processes') + ` (${GLib.get_user_name()})`
         );
         this.topProcessesPopup.section.style = 'min-width:500px;';
-        
+
         this.topProcessesPopup.processes = new Map();
 
         const grid = new Grid({
