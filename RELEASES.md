@@ -4,6 +4,10 @@
 
 -   **_I/O Monitoring for Root Processes_**: A new feature has been added to monitor disk I/O activity of root processes. You can now click on the storage top processes header to view root processes with the highest I/O activity for a 60-second window. This feature addresses the security limitations in Linux that restrict access to precise I/O data for root processes. To use this functionality, user permission is required to access the privileged `iotop` utility, which is now a new _(optional)_ dependency for the extension.
 
+### Bug fixes
+
+-   Addressed `amdgpu_top` v0.8.5 data structure change, now top processes are correctly displayed
+
 # Astra Monitor 26 - September 16 2024
 
 ### New features

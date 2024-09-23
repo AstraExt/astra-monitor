@@ -198,9 +198,15 @@ type AmdInfoRaw = {
     fdinfo?: {
         [key: string]: {
             name?: string;
-            usage: {
-                [key: string]: AmdValue;
-            };
+            usage:
+                | {
+                      [key: string]: AmdValue;
+                  }
+                | {
+                      usage: {
+                          [key: string]: AmdValue;
+                      };
+                  };
         };
     };
     gpu_activity?: {
@@ -820,8 +826,14 @@ export default class GpuMonitor extends Monitor {
                                 pipes: [] as any[],
                             };
 
-                            for(const name in process.usage) {
-                                const pipe = process.usage[name];
+                            let usage: { [key: string]: AmdValue } = process.usage;
+                            //support for new format
+                            if('name' in usage && 'usage' in usage) {
+                                usage = process.usage.usage as { [key: string]: AmdValue };
+                            }
+
+                            for(const name in usage) {
+                                const pipe = usage[name];
                                 if(pipe && pipe.value != null && pipe.unit) {
                                     let value = pipe.value;
                                     let unit = pipe.unit;
