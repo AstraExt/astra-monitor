@@ -434,7 +434,7 @@ export default class GpuMonitor extends Monitor {
         if(Utils.hasAMDGpu() && Utils.hasAmdGpuTop() && Utils.isAmdGpu(selectedGpu)) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
-            const path = Utils.commandPathLookup('amdgpu_top');
+            const path = Utils.commandPathLookup('mdgpu_top --version');
             this.updateAmdGpuTask.start(`${path}amdgpu_top -J -u 5 -s ${timer} -n 0`);
         }
 
@@ -447,11 +447,10 @@ export default class GpuMonitor extends Monitor {
              * It also doesn't support processes monitoring and other features we might want
              * to add in the future.
              */
-            const path = Utils.commandPathLookup('nvidia-smi');
-            this.updateNvidiaGpuTask.start(
-                `${path}nvidia-smi -q -x -lms ${timer}`,
-                '</nvidia_smi_log>'
-            );
+            const path = Utils.commandPathLookup('nvidia-smi --version');
+            this.updateNvidiaGpuTask.start(`${path}nvidia-smi -q -x -lms ${timer}`, {
+                flush: { trigger: '</nvidia_smi_log>' },
+            });
         }
     }
 

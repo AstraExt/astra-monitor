@@ -83,7 +83,9 @@ export default class CancellableTaskManager<T> {
     }
 
     public cancel() {
-        if(this.currentTask) this.currentTask.cancel();
+        if(this.currentTask) {
+            this.currentTask.cancel();
+        }
     }
 
     public get isRunning() {

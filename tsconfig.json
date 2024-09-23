@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "compileOnSave": true,
+    "compileOnSave": false,
     "compilerOptions": {
         "strict": true,
 

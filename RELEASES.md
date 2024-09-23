@@ -1,3 +1,9 @@
+# Astra Monitor 27 - TO BE RELEASED
+
+### New features
+
+-   **_I/O Monitoring for Root Processes_**: A new feature has been added to monitor disk I/O activity of root processes. Users can now click on the storage top processes header to view root processes with the highest I/O activity for a 60-second window. This feature addresses the security limitations in Linux that restrict access to precise I/O data for root processes. To use this functionality, user permission is required to access the privileged `iotop` utility, which is now a new _(optional)_ dependency for the extension.
+
 # Astra Monitor 26 - September 16 2024
 
 ### New features
