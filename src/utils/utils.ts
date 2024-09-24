@@ -513,6 +513,11 @@ export default class Utils {
         return Utils.commandPathLookup('lsblk -V') !== false;
     }
 
+    static hasNethogs(): boolean {
+        Utils.nethogsHasCaps();
+        return Utils.commandPathLookup('nethogs -V') !== false;
+    }
+
     static hasIp(): boolean {
         return Utils.commandPathLookup('ip -V') !== false;
     }
@@ -2539,5 +2544,39 @@ export default class Utils {
         }
 
         return true;
+    }
+
+    private static nethogsCaps: string[] | undefined = undefined;
+    static nethogsHasCaps(): boolean {
+        if(Utils.nethogsCaps !== undefined)
+            return (
+                Utils.nethogsCaps.includes('cap_net_admin') &&
+                Utils.nethogsCaps.includes('cap_net_raw=ep')
+            );
+
+        let [result, stdout] = GLib.spawn_command_line_sync('which nethogs');
+        if(result === false) {
+            Utils.nethogsCaps = [];
+            return false;
+        }
+
+        const decoder = new TextDecoder();
+        const nethogs = decoder.decode(stdout).trim();
+        if(nethogs === '') {
+            Utils.nethogsCaps = [];
+            return false;
+        }
+
+        [result, stdout] = GLib.spawn_command_line_sync(`getcap ${nethogs}`);
+        if(result === false) {
+            Utils.nethogsCaps = [];
+            return false;
+        }
+
+        Utils.nethogsCaps = decoder.decode(stdout).split(/\s+|,/).slice(1);
+        return (
+            Utils.nethogsCaps.includes('cap_net_admin') &&
+            Utils.nethogsCaps.includes('cap_net_raw=ep')
+        );
     }
 }

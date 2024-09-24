@@ -4,6 +4,13 @@
 
 -   **_I/O Monitoring for Root Processes_**: A new feature has been added to monitor disk I/O activity of root processes. You can now click on the storage top processes header to view root processes with the highest I/O activity for a 60-second window. This feature addresses the security limitations in Linux that restrict access to precise I/O data for root processes. To use this functionality, user permission is required to access the privileged `iotop` utility, which is now a new _(optional)_ dependency for the extension.
 
+-   **_Network Top Processes_**: Introduced the ability to monitor network I/O activity of individual processes. This feature relies on `nethogs`, a new optional dependency for the extension. Due to `nethogs` requiring root access, it can be utilized in two ways:
+
+    1. On-demand: Click the network top processes header to grant permission and start `nethogs` with elevated privileges for about 60 seconds.
+    2. Always-on: Grant `nethogs` the necessary capabilities (`cap_net_admin` and `cap_net_raw=ep`) to run as a privileged service. The extension will automatically detect and use it in this configuration.
+
+    _Check the [documentation](https://github.com/AstraExt/astra-monitor/blob/main/README.md#nethogs) for more details._
+
 ### Bug fixes
 
 -   Addressed `amdgpu_top` v0.8.5 data structure change, now top processes are correctly displayed

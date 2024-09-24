@@ -183,6 +183,62 @@ environment.systemPackages = with pkgs; [
 ];
 ```
 
+### Nethogs
+
+Nethogs is an optional dependency for the extension. It is required to monitor network I/O activity of processes. If you want to use this feature, you may need to install `nethogs` package. Nethogs requires root access, which can be achieved in two ways:
+
+1. On-demand: Click the network top processes header to grant permission and start `nethogs` with elevated privileges for about 60 seconds.
+2. Always-on: Grant `nethogs` the necessary capabilities (`cap_net_admin` and `cap_net_raw=ep`) to run as a privileged service. The extension will automatically detect and use it in this configuration.
+
+Here's how to grant the necessary capabilities to `nethogs` on most distros:
+
+1. First, locate the `nethogs` binary:
+
+    ```bash
+    which nethogs
+    ```
+
+2. Grant the capabilities using `setcap`:
+
+    ```bash
+    sudo setcap cap_net_admin,cap_net_raw=ep $(which nethogs)
+    ```
+
+3. Verify the capabilities were set correctly:
+    ```bash
+    getcap $(which nethogs)
+    ```
+    You should see output similar to:
+    ```
+    /usr/sbin/nethogs = cap_net_admin,cap_net_raw=ep
+    ```
+
+_Note: The exact path to `nethogs` may vary depending on your system. Adjust the commands accordingly if `which nethogs` returns a different path._
+
+After granting these capabilities, restart GNOME Shell and Astra Monitor will automatically detect and use `nethogs` without requiring elevated privileges each time.
+
+#### NixOS
+
+On NixOS, to grant the capabilities to `nethogs`, you may need to add the following to your `configuration.nix`:
+
+```nix
+environment.systemPackages = with pkgs; [
+    nethogs
+];
+
+security.wrappers = {
+    nethogs = {
+        source = "${pkgs.nethogs}/bin/nethogs";
+        capabilities = "cap_net_admin=ep cap_net_raw=ep";
+        owner = "root";
+        group = "root";
+        permissions = "u+rx,g+x,o+x";
+    };
+};
+```
+
+_Note: This is an example configuration and may vary depending on your specific NixOS setup. Adjust the configuration as needed for your system._
+
 # Usage
 
 Once installed, Astra Monitor can be accessed and configured directly from the GNOME extensions tool. You can customize what system resources to monitor and how the information is displayed, tailoring the experience to your need.

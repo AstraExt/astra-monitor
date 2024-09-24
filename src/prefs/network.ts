@@ -226,6 +226,19 @@ export default class Network {
             'auto'
         );
 
+        const networkTopProcessesSources = [
+            { value: 'auto', text: _('Auto') },
+            { value: 'nethogs', text: 'NetHogs' },
+        ];
+        PrefsUtils.addComboRow(
+            { title: _('Network Top Processes'), tabs: 1 },
+            networkTopProcessesSources,
+            'network-source-top-processes',
+            sourcesSection,
+            'string',
+            'auto'
+        );
+
         PrefsUtils.addTextInputRow(
             {
                 title: _('Public IPv4 Address'),

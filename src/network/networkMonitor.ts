@@ -25,6 +25,9 @@ import Utils from '../utils/utils.js';
 import Monitor from '../monitor.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
+import ContinuousTaskManager, {
+    ContinuousTaskManagerData,
+} from '../utils/continuousTaskManager.js';
 
 export type NetworkIO = {
     bytesUploadedPerSec: number;
@@ -57,6 +60,7 @@ type PreviousDetailedNetworkIO = {
 type NetworkDataSources = {
     networkIO?: string;
     wireless?: string;
+    topProcesses?: string;
 };
 
 export type NetworkWirelessInfo = {
@@ -73,6 +77,11 @@ export type NetworkWirelessInfo = {
 };
 
 export default class NetworkMonitor extends Monitor {
+    //TODO: maybe make this configurable
+    static get TOP_PROCESSES_LIMIT() {
+        return 10;
+    }
+
     private detectedMaxSpeedsValues: MaxSpeeds;
     private interfaceChecks: Record<string, boolean>;
     private ignored: string[];
@@ -81,6 +90,8 @@ export default class NetworkMonitor extends Monitor {
     private updateNetworkIOTask: CancellableTaskManager<boolean>;
     private updateRoutesTask: CancellableTaskManager<boolean>;
     private updateWirelessTask: CancellableTaskManager<boolean>;
+
+    private updateNethogsTask: ContinuousTaskManager;
 
     private previousNetworkIO!: PreviousNetworkIO;
     private previousDetailedNetworkIO!: PreviousDetailedNetworkIO;
@@ -105,6 +116,9 @@ export default class NetworkMonitor extends Monitor {
         this.updateNetworkIOTask = new CancellableTaskManager();
         this.updateRoutesTask = new CancellableTaskManager();
         this.updateWirelessTask = new CancellableTaskManager();
+
+        this.updateNethogsTask = new ContinuousTaskManager();
+        this.updateNethogsTask.listen(this, this.updateNethogs.bind(this));
 
         this.reset();
         this.dataSourcesInit();
@@ -210,6 +224,7 @@ export default class NetworkMonitor extends Monitor {
         this.dataSources = {
             networkIO: Config.get_string('network-source-network-io') ?? undefined,
             wireless: Config.get_string('network-source-wireless') ?? undefined,
+            topProcesses: Config.get_string('network-source-top-processes') ?? undefined,
         };
 
         Config.connect(this, 'changed::network-source-network-io', () => {
@@ -234,6 +249,28 @@ export default class NetworkMonitor extends Monitor {
             this.updateWirelessTask.cancel();
             this.resetUsageHistory('wireless');
         });
+
+        Config.connect(this, 'changed::network-source-top-processes', () => {
+            this.dataSources.topProcesses =
+                Config.get_string('network-source-top-processes') ?? undefined;
+            this.topProcessesSourceChanged();
+            this.resetUsageHistory('topProcesses');
+        });
+    }
+
+    startListeningFor(key: string) {
+        super.startListeningFor(key);
+
+        if(key === 'topProcesses') {
+            if(Utils.nethogsHasCaps()) {
+                if(
+                    this.dataSources.networkIO === 'nethogs' ||
+                    this.dataSources.networkIO === 'auto'
+                ) {
+                    this.startNethogs();
+                }
+            }
+        }
     }
 
     stopListeningFor(key: string) {
@@ -242,6 +279,16 @@ export default class NetworkMonitor extends Monitor {
         if(key === 'detailedNetworkIO') {
             this.previousDetailedNetworkIO.devices = null;
             this.previousDetailedNetworkIO.time = -1;
+        }
+        if(key === 'topProcesses') {
+            if(Utils.nethogsHasCaps()) {
+                if(
+                    this.dataSources.networkIO === 'nethogs' ||
+                    this.dataSources.networkIO === 'auto'
+                ) {
+                    this.stopNethogs();
+                }
+            }
         }
     }
 
@@ -838,6 +885,123 @@ export default class NetworkMonitor extends Monitor {
 
         this.setUsageValue('wireless', devices);
         return true;
+    }
+
+    topProcessesSourceChanged() {
+        if(
+            this.dataSources.topProcesses === 'nethogs' ||
+            this.dataSources.topProcesses === 'auto'
+        ) {
+            //TODO: for continuous monitoring, start nethogs
+        } else {
+            this.stopNethogs();
+        }
+    }
+
+    startNethogs() {
+        if(this.updateNethogsTask.isRunning) return;
+        const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 15));
+        const path = Utils.commandPathLookup('nethogs -V');
+
+        if(Utils.nethogsHasCaps()) {
+            if(path !== false) {
+                const command = `nethogs -tb -d ${interval}`;
+                this.updateNethogsTask.start(command, {
+                    flush: { idle: 100 },
+                });
+            }
+        } else {
+            const pkexecPath = Utils.commandPathLookup('pkexec --version');
+            if(pkexecPath === false) {
+                Utils.error('pkexec not found');
+                return;
+            }
+            const num = Math.max(1, Math.round(60 / interval));
+
+            const command = `${pkexecPath}pkexec ${path}nethogs -tb -d ${interval} -c ${num}`;
+            this.updateNethogsTask.start(command, {
+                flush: { idle: 100 },
+            });
+        }
+    }
+
+    stopNethogs() {
+        if(!this.updateNethogsTask.isRunning) return;
+        this.updateNethogsTask.stop();
+    }
+
+    async updateNethogs(data: ContinuousTaskManagerData) {
+        if(data.exit) {
+            if(!Utils.nethogsHasCaps()) {
+                this.notify('topProcessesStop');
+            }
+            return;
+        }
+        if(!data.result) return;
+
+        const topProcesses = [];
+
+        try {
+            const output = data.result;
+
+            if(!output.startsWith('Refreshing:')) {
+                //Not a data update
+                return;
+            }
+
+            const lines = output.substring(output.indexOf('\n') + 1).split('\n');
+            for(const line of lines) {
+                if(line === '') continue;
+
+                const fields = line.trim().split(/\s+/);
+
+                if(fields.length < 3) continue;
+
+                const processInfo = fields[0].replace(/^"|"$/g, '').split('/');
+                const pid = parseInt(processInfo[processInfo.length - 2], 10);
+
+                if(Number.isNaN(pid)) continue;
+
+                const uid = parseInt(processInfo[processInfo.length - 1], 10);
+                if(Number.isNaN(uid)) continue;
+
+                const cmd = processInfo.slice(0, -2).join('/');
+                const exec = Utils.extractCommandName(cmd);
+
+                const interfacePattern =
+                    /^(\d{1,3}\.){3}\d{1,3}:\d+-\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+$/;
+                const ipv6Pattern = /^[a-fA-F0-9:]+:\d+-[a-fA-F0-9:]+:\d+$/;
+                if(interfacePattern.test(exec) || ipv6Pattern.test(exec)) {
+                    continue;
+                }
+
+                const uploadKB = parseFloat(fields[1].replace(/^"|"$/g, ''));
+                if(Number.isNaN(uploadKB)) continue;
+                const upload = Math.floor(uploadKB * 1024);
+
+                const downloadKB = parseFloat(fields[2].replace(/^"|"$/g, ''));
+                if(Number.isNaN(downloadKB)) continue;
+                const download = Math.floor(downloadKB * 1024);
+
+                if(download === 0 && download === 0) continue;
+
+                const process = {
+                    pid,
+                    exec,
+                    cmd,
+                };
+
+                topProcesses.push({ process, upload, download });
+            }
+
+            topProcesses.sort((a, b) => b.upload + b.download - (a.upload + a.download));
+            topProcesses.splice(NetworkMonitor.TOP_PROCESSES_LIMIT);
+        } catch(e) {
+            /* EMPTY */
+        }
+
+        this.setUsageValue('topProcesses', topProcesses);
+        this.notify('topProcesses');
     }
 
     destroy() {

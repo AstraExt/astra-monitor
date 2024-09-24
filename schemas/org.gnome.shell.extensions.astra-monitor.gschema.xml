@@ -75,6 +75,10 @@
     <value nick="iwconfig" value="1"/>
     <value nick="iw" value="2"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list6">
+    <value nick="auto" value="0"/>
+    <value nick="nethogs" value="1"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.astra-monitor" path="/org/gnome/shell/extensions/astra-monitor/">
     <!-- UTILS -->
     <key name="debug-mode" type="b">
@@ -944,6 +948,11 @@
       <default>'auto'</default>
       <summary>Network IO Source</summary>
       <description>Source of the network IO</description>
+    </key>
+    <key name="network-source-top-processes" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list6">
+      <default>'auto'</default>
+      <summary>Top Processes Source</summary>
+      <description>Source of the top processes</description>
     </key>
     <key name="network-source-wireless" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list5">
       <default>'auto'</default>

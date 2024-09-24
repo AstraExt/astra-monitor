@@ -28,7 +28,7 @@ import NetworkGraph from './networkGraph.js';
 import Grid from '../grid.js';
 import Utils, { InterfaceInfo, RouteInfo } from '../utils/utils.js';
 import Config from '../config.js';
-import { NetworkWirelessInfo } from './networkMonitor.js';
+import NetworkMonitor, { NetworkWirelessInfo } from './networkMonitor.js';
 
 type InterfaceDeviceInfo = {
     data: InterfaceInfo | null;
@@ -53,6 +53,33 @@ type NetworkActivityPopup = MenuBase & {
 
     errorsUploadValueLabel?: St.Label;
     errorsDownloadValueLabel?: St.Label;
+};
+
+type TopProcess = {
+    label: St.Label;
+    description?: St.Label;
+    upload: {
+        container: St.Widget;
+        value: St.Label;
+        icon: St.Icon;
+    };
+    download: {
+        container: St.Widget;
+        value: St.Label;
+        icon: St.Icon;
+    };
+};
+
+type TopProcesses = {
+    container: St.Widget;
+    subSeparator?: St.Label;
+    labels: TopProcess[];
+    hoverButton: St.Button;
+};
+
+type TopProcessesPopup = MenuBase & {
+    section?: St.Label;
+    processes?: Map<number, TopProcess>;
 };
 
 type RoutesPopup = MenuBase & {
@@ -166,6 +193,10 @@ export default class NetworkMenu extends MenuBase {
     private totalUploadSpeedValueLabel!: St.Label;
     private totalDownloadSpeedValueLabel!: St.Label;
 
+    private topProcesses!: TopProcesses;
+    private topProcessesPopup!: TopProcessesPopup;
+    private privilegedTopProcesses: boolean = false;
+
     private publicIPLabel!: St.Label;
     private publicIPContainer!: St.Button;
     private publicIPv4!: {
@@ -201,6 +232,7 @@ export default class NetworkMenu extends MenuBase {
 
         /*this.networkSectionLabel = */ this.addMenuSection(_('Network'));
         this.createActivitySection();
+        this.createTopProcessesSection();
         this.createPublicIps();
         this.createRoutes();
         this.createDeviceList();
@@ -363,6 +395,276 @@ export default class NetworkMenu extends MenuBase {
         const errorsDownloadValueLabel = new St.Label({ text: '', style: 'text-align:left;' });
         this.networkActivityPopup.addToMenu(errorsDownloadValueLabel);
         this.networkActivityPopup.errorsDownloadValueLabel = errorsDownloadValueLabel;
+    }
+
+    createTopProcessesSection() {
+        const container = new Grid({ numCols: 1 });
+        container.hide();
+
+        const separator = this.addMenuSection(_('Top Processes'), false, false);
+        separator.xExpand = true;
+
+        let subSeparator: St.Label | undefined;
+
+        if(!Utils.nethogsHasCaps()) {
+            separator.style = 'padding-top:0.15em;margin-bottom:0;padding-bottom:0;';
+
+            subSeparator = new St.Label({
+                text: _('(click to show)'),
+                styleClass: 'astra-monitor-menu-key-mid-center',
+                xExpand: true,
+            });
+
+            const separatorGrid = new Grid({
+                numCols: 1,
+                styleClass: 'astra-monitor-menu-subgrid',
+            });
+            separatorGrid.addToGrid(separator);
+            separatorGrid.addToGrid(subSeparator);
+
+            const btnDefaultStyle = 'margin-top:0.1em;';
+
+            const separatorButton = new St.Button({
+                reactive: true,
+                trackHover: true,
+                xExpand: true,
+                style: btnDefaultStyle,
+            });
+            separatorButton.set_child(separatorGrid);
+            separatorButton.connect('clicked', () => {
+                if(!Utils.nethogsHasCaps()) {
+                    Utils.networkMonitor.startNethogs();
+                }
+            });
+
+            separatorButton.connect('enter-event', () => {
+                separatorButton.style = btnDefaultStyle + this.selectionStyle;
+            });
+
+            separatorButton.connect('leave-event', () => {
+                separatorButton.style = btnDefaultStyle;
+            });
+
+            container.addToGrid(separatorButton);
+        } else {
+            container.addToGrid(separator);
+        }
+
+        const defaultStyle = '';
+
+        const hoverButton = new St.Button({
+            reactive: true,
+            trackHover: true,
+            style: defaultStyle,
+        });
+        hoverButton.hide();
+
+        const grid = new Grid({ numCols: 3, styleClass: 'astra-monitor-menu-subgrid' });
+
+        const labels = [];
+
+        //TODO: allow to customize number of processes to show in the menu
+        const numProcesses = 3;
+        for(let i = 0; i < numProcesses; i++) {
+            const label = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-cmd-name',
+                style: 'max-width:85px;',
+                xExpand: true,
+            });
+            grid.addToGrid(label);
+
+            // UPLOAD
+            const uploadContainer = new St.Widget({
+                layoutManager: new Clutter.GridLayout({
+                    orientation: Clutter.Orientation.HORIZONTAL,
+                }),
+                style: 'margin-left:0;margin-right:0;width:6em;',
+            });
+
+            const uploadActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-up-symbolic'),
+                fallbackIconName: 'go-up-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);',
+            });
+            uploadContainer.add_child(uploadActivityIcon);
+
+            const uploadValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
+            });
+            uploadContainer.add_child(uploadValue);
+
+            grid.addToGrid(uploadContainer);
+
+            // DOWNLOAD
+            const downloadContainer = new St.Widget({
+                layoutManager: new Clutter.GridLayout({
+                    orientation: Clutter.Orientation.HORIZONTAL,
+                }),
+                style: 'margin-left:0;margin-right:0;width:6em;',
+            });
+
+            const downloadActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-down-symbolic'),
+                fallbackIconName: 'go-down-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);',
+            });
+            downloadContainer.add_child(downloadActivityIcon);
+
+            const downloadValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
+            });
+            downloadContainer.add_child(downloadValue);
+
+            grid.addToGrid(downloadContainer);
+
+            labels.push({
+                label,
+                upload: {
+                    container: uploadContainer,
+                    value: uploadValue,
+                    icon: uploadActivityIcon,
+                },
+                download: {
+                    container: downloadContainer,
+                    value: downloadValue,
+                    icon: downloadActivityIcon,
+                },
+            });
+        }
+
+        hoverButton.set_child(grid);
+
+        this.createTopProcessesPopup(hoverButton);
+
+        hoverButton.connect('enter-event', () => {
+            hoverButton.style = defaultStyle + this.selectionStyle;
+            if(this.topProcessesPopup) this.topProcessesPopup.open(true);
+        });
+
+        hoverButton.connect('leave-event', () => {
+            hoverButton.style = defaultStyle;
+            if(this.topProcessesPopup) this.topProcessesPopup.close(true);
+        });
+        container.addToGrid(hoverButton);
+
+        this.addToMenu(container, 2);
+
+        this.topProcesses = {
+            container,
+            subSeparator,
+            labels,
+            hoverButton,
+        };
+    }
+
+    createTopProcessesPopup(sourceActor: St.Widget) {
+        this.topProcessesPopup = new MenuBase(sourceActor, 0.05, { numCols: 2 });
+        this.topProcessesPopup.addMenuSection(_('Top Processes'));
+
+        this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
+        this.topProcessesPopup.section = this.topProcessesPopup.addMenuSection(_('Top Processes'));
+        this.topProcessesPopup.section.style = 'min-width:500px;';
+
+        this.topProcessesPopup.processes = new Map();
+
+        const grid = new Grid({
+            xExpand: true,
+            xAlign: Clutter.ActorAlign.START,
+            numCols: 2,
+            styleClass: 'astra-monitor-menu-subgrid',
+        });
+
+        for(let i = 0; i < NetworkMonitor.TOP_PROCESSES_LIMIT; i++) {
+            // UPLOAD
+            const uploadContainer = new St.Widget({
+                layoutManager: new Clutter.GridLayout({
+                    orientation: Clutter.Orientation.HORIZONTAL,
+                }),
+                style: 'margin-left:0;margin-right:0;width:5em;',
+            });
+            uploadContainer.hide();
+
+            const uploadActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-up-symbolic'),
+                fallbackIconName: 'go-up-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);',
+            });
+            uploadContainer.add_child(uploadActivityIcon);
+
+            const uploadValue = new St.Label({
+                text: '-',
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
+            });
+            uploadContainer.add_child(uploadValue);
+
+            grid.addGrid(uploadContainer, 0, i * 2, 1, 1);
+
+            // DOWNLOAD
+            const downloadContainer = new St.Widget({
+                layoutManager: new Clutter.GridLayout({
+                    orientation: Clutter.Orientation.HORIZONTAL,
+                }),
+                style: 'margin-left:0;margin-right:0;width:5em;',
+            });
+            downloadContainer.hide();
+
+            const downloadActivityIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-down-symbolic'),
+                fallbackIconName: 'go-down-symbolic',
+                styleClass: 'astra-monitor-menu-icon-mini',
+                style: 'color:rgba(255,255,255,0.5);',
+            });
+            downloadContainer.add_child(downloadActivityIcon);
+
+            const downloadValue = new St.Label({
+                text: '-',
+                styleClass: 'astra-monitor-menu-cmd-usage',
+                xExpand: true,
+            });
+            downloadContainer.add_child(downloadValue);
+
+            grid.addGrid(downloadContainer, 0, i * 2 + 1, 1, 1);
+
+            const label = new St.Label({
+                text: '-',
+                styleClass: 'astra-monitor-menu-cmd-name-full',
+            });
+            grid.addGrid(label, 1, i * 2, 1, 1);
+            label.hide();
+
+            const description = new St.Label({
+                text: '-',
+                styleClass: 'astra-monitor-menu-cmd-description',
+            });
+            grid.addGrid(description, 1, i * 2 + 1, 1, 1);
+            description.hide();
+
+            this.topProcessesPopup.processes.set(i, {
+                label,
+                description,
+                upload: {
+                    container: uploadContainer,
+                    value: uploadValue,
+                    icon: uploadActivityIcon,
+                },
+                download: {
+                    container: downloadContainer,
+                    value: downloadValue,
+                    icon: downloadActivityIcon,
+                },
+            });
+        }
+
+        this.topProcessesPopup.addToMenu(grid, 2);
     }
 
     createPublicIps() {
@@ -1720,6 +2022,13 @@ export default class NetworkMenu extends MenuBase {
     async onOpen() {
         this.clear();
 
+        if(Utils.hasNethogs()) {
+            this.topProcesses.container.show();
+            if(Utils.nethogsHasCaps()) {
+                this.topProcesses.hoverButton.show();
+            }
+        }
+
         this.update('networkIO');
         Utils.networkMonitor.listen(this, 'networkIO', this.update.bind(this, 'networkIO'));
 
@@ -1729,6 +2038,13 @@ export default class NetworkMenu extends MenuBase {
             this.update.bind(this, 'detailedNetworkIO')
         );
         Utils.networkMonitor.requestUpdate('detailedNetworkIO');
+
+        Utils.networkMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
+        Utils.networkMonitor.listen(
+            this,
+            'topProcessesStop',
+            this.update.bind(this, 'topProcessesStop')
+        );
 
         this.update('publicIps');
         Utils.networkMonitor.listen(this, 'publicIps', this.update.bind(this, 'publicIps'));
@@ -1769,6 +2085,7 @@ export default class NetworkMenu extends MenuBase {
         Utils.networkMonitor.unlisten(this, 'publicIps');
         Utils.networkMonitor.unlisten(this, 'routes');
         Utils.networkMonitor.unlisten(this, 'wireless');
+        Utils.networkMonitor.unlisten(this, 'topProcesses');
 
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
@@ -1973,6 +2290,133 @@ export default class NetworkMenu extends MenuBase {
                                 totalsPopup.errorsUploadValueLabel.text = '-';
                             if(totalsPopup.errorsDownloadValueLabel)
                                 totalsPopup.errorsDownloadValueLabel.text = '-';
+                        }
+                    }
+                }
+            }
+            return;
+        }
+        if(code === 'topProcessesStop') {
+            this.stopPrivilegedTopProcesses();
+            return;
+        }
+        if(code === 'topProcesses') {
+            const topProcesses = Utils.networkMonitor.getCurrentValue('topProcesses');
+
+            if(!Utils.nethogsHasCaps()) {
+                this.startPrivilegedTopProcesses();
+            }
+
+            for(let i = 0; i < NetworkMonitor.TOP_PROCESSES_LIMIT; i++) {
+                if(
+                    !topProcesses ||
+                    !Array.isArray(topProcesses) ||
+                    !topProcesses[i] ||
+                    !topProcesses[i].process
+                ) {
+                    if(i < 3) {
+                        this.topProcesses.labels[i].label.text = '-';
+                        this.topProcesses.labels[i].upload.value.text = '-';
+                        this.topProcesses.labels[i].upload.icon.style =
+                            'color:rgba(255,255,255,0.5);';
+                        this.topProcesses.labels[i].download.value.text = '-';
+                        this.topProcesses.labels[i].download.icon.style =
+                            'color:rgba(255,255,255,0.5);';
+                    }
+
+                    if(this.topProcessesPopup && this.topProcessesPopup.processes) {
+                        const popupElement = this.topProcessesPopup.processes.get(i);
+                        if(popupElement) {
+                            popupElement.label.hide();
+                            popupElement.description?.hide();
+                            popupElement.upload.container.hide();
+                            popupElement.download.container.hide();
+                        }
+                    }
+                } else {
+                    const unit = 'kB/s';
+
+                    const topProcess = topProcesses[i];
+                    const process = topProcess.process;
+                    const upload = topProcess.upload;
+                    const download = topProcess.download;
+
+                    if(i < 3) {
+                        this.topProcesses.labels[i].label.text = process.exec;
+
+                        if(upload > 0) {
+                            const uploadColor =
+                                Config.get_string('network-menu-arrow-color1') ??
+                                'rgba(29,172,214,1.0)';
+                            this.topProcesses.labels[i].upload.icon.style = `color:${uploadColor};`;
+                            this.topProcesses.labels[i].upload.value.text = Utils.formatBytesPerSec(
+                                upload,
+                                unit as any,
+                                3
+                            );
+                        } else {
+                            this.topProcesses.labels[i].upload.icon.style =
+                                'color:rgba(255,255,255,0.5);';
+                            this.topProcesses.labels[i].upload.value.text = '-';
+                        }
+
+                        if(download > 0) {
+                            const downloadColor =
+                                Config.get_string('network-menu-arrow-color2') ??
+                                'rgba(214,29,29,1.0)';
+                            this.topProcesses.labels[i].download.icon.style =
+                                `color:${downloadColor};`;
+                            this.topProcesses.labels[i].download.value.text =
+                                Utils.formatBytesPerSec(download, unit as any, 3);
+                        } else {
+                            this.topProcesses.labels[i].download.icon.style =
+                                'color:rgba(255,255,255,0.5);';
+                            this.topProcesses.labels[i].download.value.text = '-';
+                        }
+                    }
+
+                    if(this.topProcessesPopup && this.topProcessesPopup.processes) {
+                        const popupElement = this.topProcessesPopup.processes.get(i);
+                        if(popupElement) {
+                            popupElement.label.show();
+                            popupElement.label.text = process.exec;
+
+                            if(popupElement.description) {
+                                popupElement.description.show();
+                                popupElement.description.text = process.cmd;
+                            }
+
+                            popupElement.upload.container.show();
+                            if(upload > 0) {
+                                const uploadColor =
+                                    Config.get_string('network-menu-arrow-color1') ??
+                                    'rgba(29,172,214,1.0)';
+                                popupElement.upload.icon.style = `color:${uploadColor};`;
+                                popupElement.upload.value.text = Utils.formatBytesPerSec(
+                                    upload,
+                                    unit as any,
+                                    3
+                                );
+                            } else {
+                                popupElement.upload.icon.style = 'color:rgba(255,255,255,0.5);';
+                                popupElement.upload.value.text = '-';
+                            }
+
+                            popupElement.download.container.show();
+                            if(download > 0) {
+                                const downloadColor =
+                                    Config.get_string('network-menu-arrow-color2') ??
+                                    'rgba(214,29,29,1.0)';
+                                popupElement.download.icon.style = `color:${downloadColor};`;
+                                popupElement.download.value.text = Utils.formatBytesPerSec(
+                                    download,
+                                    unit as any,
+                                    3
+                                );
+                            } else {
+                                popupElement.download.icon.style = 'color:rgba(255,255,255,0.5);';
+                                popupElement.download.value.text = '-';
+                            }
                         }
                     }
                 }
@@ -2246,6 +2690,31 @@ export default class NetworkMenu extends MenuBase {
             }
             return;
         }
+    }
+
+    startPrivilegedTopProcesses() {
+        if(Utils.nethogsHasCaps() || this.privilegedTopProcesses) {
+            return;
+        }
+
+        this.privilegedTopProcesses = true;
+        if(this.topProcesses.subSeparator) {
+            this.topProcesses.subSeparator.hide();
+        }
+        this.topProcesses.hoverButton.show();
+    }
+
+    stopPrivilegedTopProcesses() {
+        if(Utils.nethogsHasCaps() || !this.privilegedTopProcesses) {
+            return;
+        }
+
+        this.privilegedTopProcesses = false;
+        Utils.networkMonitor.stopNethogs();
+        if(this.topProcesses.subSeparator) {
+            this.topProcesses.subSeparator.show();
+        }
+        this.topProcesses.hoverButton.hide();
     }
 
     clear() {

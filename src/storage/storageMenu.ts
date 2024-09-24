@@ -309,7 +309,7 @@ export default class StorageMenu extends MenuBase {
         const labels = [];
 
         //TODO: allow to customize number of processes to show in the menu
-        const numProcesses = 5;
+        const numProcesses = 3;
         for(let i = 0; i < numProcesses; i++) {
             const label = new St.Label({
                 text: '',
@@ -1187,7 +1187,6 @@ export default class StorageMenu extends MenuBase {
         Utils.storageMonitor.unlisten(this, 'topProcesses');
         Utils.storageMonitor.unlisten(this, 'topProcessesIOTop');
         Utils.storageMonitor.unlisten(this, 'storageInfo');
-        this.stopPrivilegedTopProcesses();
 
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
@@ -1362,7 +1361,7 @@ export default class StorageMenu extends MenuBase {
                     !topProcesses[i] ||
                     !topProcesses[i].process
                 ) {
-                    if(i < 5) {
+                    if(i < 3) {
                         this.topProcesses.labels[i].label.text = '-';
                         this.topProcesses.labels[i].read.value.text = '-';
                         this.topProcesses.labels[i].read.icon.style =
@@ -1389,7 +1388,7 @@ export default class StorageMenu extends MenuBase {
                     const read = topProcess.read;
                     const write = topProcess.write;
 
-                    if(i < 5) {
+                    if(i < 3) {
                         this.topProcesses.labels[i].label.text = process.exec;
 
                         if(read > 0) {
@@ -1536,7 +1535,9 @@ export default class StorageMenu extends MenuBase {
     }
 
     startPrivilegedTopProcesses() {
-        if(this.privilegedTopProcesses) return;
+        if(this.privilegedTopProcesses) {
+            return;
+        }
 
         this.privilegedTopProcesses = true;
         this.topProcesses.subSeparator.text = _('(showing all system processes)');
@@ -1545,7 +1546,9 @@ export default class StorageMenu extends MenuBase {
     }
 
     stopPrivilegedTopProcesses() {
-        if(!this.privilegedTopProcesses) return;
+        if(!this.privilegedTopProcesses) {
+            return;
+        }
 
         this.privilegedTopProcesses = false;
         Utils.storageMonitor.stopIOTop();
