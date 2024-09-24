@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-16 14:52+0200\n"
+"POT-Creation-Date: 2024-09-25 01:24+0200\n"
 "PO-Revision-Date: 2024-04-24 18:28+0200\n"
 "Last-Translator: awumii <awumii@protonmail.com>\n"
 "Language-Team: awumii <awumii@protonmail.com>\n"
@@ -89,7 +89,9 @@ msgid "GHz"
 msgstr "GHz"
 
 #: src/processor/processorMenu.js:377 src/processor/processorMenu.js:419
-#: src/storage/storageMenu.js:120 src/storage/storageMenu.js:215
+#: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
+#: src/storage/storageMenu.js:1163 src/storage/storageMenu.js:1164
+#: src/storage/storageMenu.js:1173 src/storage/storageMenu.js:1174
 #: src/memory/memoryMenu.js:247 src/memory/memoryMenu.js:294
 msgid "Top processes"
 msgstr "Topowe procesy"
@@ -179,37 +181,37 @@ msgstr "Źródła danych"
 
 #: src/prefs/sensors.js:92 src/prefs/memory.js:107 src/prefs/memory.js:113
 #: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
-#: src/prefs/network.js:155 src/prefs/network.js:171 src/prefs/processors.js:87
-#: src/prefs/processors.js:93 src/prefs/processors.js:99
-#: src/prefs/processors.js:105
+#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
+#: src/prefs/processors.js:87 src/prefs/processors.js:93
+#: src/prefs/processors.js:99 src/prefs/processors.js:105
 msgid "Auto"
 msgstr "Automatyczne"
 
 #: src/prefs/sensors.js:102 src/prefs/sensors.js:104 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
-#: src/prefs/network.js:181 src/prefs/gpu.js:111 src/prefs/gpu.js:113
+#: src/prefs/network.js:186 src/prefs/gpu.js:111 src/prefs/gpu.js:113
 #: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:228
 #: prefs.js:262 prefs.js:288 prefs.js:322 prefs.js:356 prefs.js:390
 msgid "Header"
 msgstr "Nagłówek"
 
 #: src/prefs/sensors.js:105 src/prefs/memory.js:126 src/prefs/storage.js:209
-#: src/prefs/network.js:184 src/prefs/gpu.js:114 src/prefs/processors.js:117
+#: src/prefs/network.js:189 src/prefs/gpu.js:114 src/prefs/processors.js:117
 msgid "Indicators Order"
 msgstr "Kolejność wskaźników"
 
 #: src/prefs/sensors.js:108 src/prefs/memory.js:129 src/prefs/storage.js:212
-#: src/prefs/network.js:187 src/prefs/gpu.js:117 src/prefs/processors.js:120
+#: src/prefs/network.js:192 src/prefs/gpu.js:117 src/prefs/processors.js:120
 msgid "Icon"
 msgstr "Ikona"
 
 #: src/prefs/sensors.js:109 src/prefs/memory.js:130 src/prefs/storage.js:213
-#: src/prefs/network.js:188 src/prefs/gpu.js:118 src/prefs/processors.js:121
+#: src/prefs/network.js:193 src/prefs/gpu.js:118 src/prefs/processors.js:121
 msgid "Show Icon"
 msgstr "Wyświetlaj ikonę"
 
 #: src/prefs/sensors.js:111 src/prefs/memory.js:132 src/prefs/storage.js:215
-#: src/prefs/network.js:190 src/prefs/gpu.js:120 src/prefs/processors.js:123
+#: src/prefs/network.js:195 src/prefs/gpu.js:120 src/prefs/processors.js:123
 msgid "Icon Name"
 msgstr "Nazwa ikony"
 
@@ -218,29 +220,29 @@ msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "Ustaw nazwę ikony (np. 'temperature-symbolic')"
 
 #: src/prefs/sensors.js:114 src/prefs/memory.js:135 src/prefs/storage.js:218
-#: src/prefs/network.js:193 src/prefs/visualization.js:171
+#: src/prefs/network.js:198 src/prefs/visualization.js:171
 #: src/prefs/visualization.js:178 src/prefs/gpu.js:123
 #: src/prefs/processors.js:126
 msgid "Set to empty to disable icon override"
 msgstr "Ustaw puste, aby nie zmieniać ikony"
 
 #: src/prefs/sensors.js:117 src/prefs/memory.js:138 src/prefs/storage.js:221
-#: src/prefs/network.js:196 src/prefs/gpu.js:126 src/prefs/processors.js:129
+#: src/prefs/network.js:201 src/prefs/gpu.js:126 src/prefs/processors.js:129
 msgid "Icon Color"
 msgstr "Kolor ikony"
 
 #: src/prefs/sensors.js:118 src/prefs/memory.js:139 src/prefs/storage.js:222
-#: src/prefs/network.js:197 src/prefs/gpu.js:127 src/prefs/processors.js:130
+#: src/prefs/network.js:202 src/prefs/gpu.js:127 src/prefs/processors.js:130
 msgid "Icon Alert Color"
 msgstr "Kolor ikony ostrzeżenia"
 
 #: src/prefs/sensors.js:120 src/prefs/memory.js:141 src/prefs/storage.js:224
-#: src/prefs/network.js:199 src/prefs/gpu.js:129 src/prefs/processors.js:132
+#: src/prefs/network.js:204 src/prefs/gpu.js:129 src/prefs/processors.js:132
 msgid "Icon Size"
 msgstr "Rozmiar ikony"
 
 #: src/prefs/sensors.js:121 src/prefs/memory.js:142 src/prefs/storage.js:225
-#: src/prefs/network.js:200 src/prefs/visualization.js:132
+#: src/prefs/network.js:205 src/prefs/visualization.js:132
 #: src/prefs/visualization.js:140 src/prefs/visualization.js:148
 #: src/prefs/gpu.js:130 src/prefs/processors.js:133
 msgid "Experimental feature: may require to disable/enable the extension."
@@ -277,11 +279,11 @@ msgstr "Ustaw -1 dla automatycznej. Liczba cyfr po przecinku dziesiętnym."
 msgid "Sensor 2"
 msgstr "Czujnik 2"
 
-#: src/prefs/sensors.js:148 src/prefs/storage.js:284 src/prefs/network.js:233
+#: src/prefs/sensors.js:148 src/prefs/storage.js:284 src/prefs/network.js:238
 msgid "Vertical"
 msgstr "Pionowo"
 
-#: src/prefs/sensors.js:149 src/prefs/storage.js:285 src/prefs/network.js:234
+#: src/prefs/sensors.js:149 src/prefs/storage.js:285 src/prefs/network.js:239
 msgid "Horizontal"
 msgstr "Poziomo"
 
@@ -290,12 +292,12 @@ msgid "Sensor 2 Layout"
 msgstr "Układ czujnika 2"
 
 #: src/prefs/sensors.js:163 src/prefs/memory.js:192 src/prefs/storage.js:291
-#: src/prefs/network.js:240 src/prefs/gpu.js:179 src/prefs/processors.js:174
+#: src/prefs/network.js:245 src/prefs/gpu.js:179 src/prefs/processors.js:174
 msgid "Tooltip"
 msgstr "Podpowiedź"
 
 #: src/prefs/sensors.js:164 src/prefs/memory.js:193 src/prefs/storage.js:292
-#: src/prefs/network.js:241 src/prefs/gpu.js:180 src/prefs/processors.js:175
+#: src/prefs/network.js:246 src/prefs/gpu.js:180 src/prefs/processors.js:175
 msgid "Show Tooltip"
 msgstr "Wyświetlaj podpowiedzi"
 
@@ -330,8 +332,8 @@ msgid "Tooltip Sensor 5"
 msgstr "Czujnik 5w podpowiedzi"
 
 #: src/prefs/sensors.js:250 src/prefs/memory.js:202 src/prefs/memory.js:204
-#: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:248
-#: src/prefs/network.js:250 src/prefs/gpu.js:189 src/prefs/processors.js:183
+#: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
+#: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:183
 #: src/prefs/processors.js:185 prefs.js:236 prefs.js:296 prefs.js:330
 #: prefs.js:364
 msgid "Menu"
@@ -462,7 +464,9 @@ msgid "Memory Usage"
 msgstr "Wykorzystanie pamięci"
 
 #: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
-#: src/gpu/gpuMenuComponent.js:282 src/gpu/gpuMenuComponent.js:716
+#: src/network/networkMenu.js:161 src/network/networkMenu.js:296
+#: src/network/networkMenu.js:298 src/gpu/gpuMenuComponent.js:282
+#: src/gpu/gpuMenuComponent.js:716
 msgid "Top Processes"
 msgstr "Największe procesy"
 
@@ -580,7 +584,7 @@ msgstr "Główny kolor paska pamięci wymiany."
 msgid "About"
 msgstr "Informacje"
 
-#: src/prefs/about.js:48 src/network/networkMenu.js:685
+#: src/prefs/about.js:48 src/network/networkMenu.js:909
 msgid "Info"
 msgstr "Informacje"
 
@@ -609,7 +613,7 @@ msgid "GNOME Extensions page"
 msgstr "Strona rozszerzenia GNOME"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:37 prefs.js:305
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:305
 msgid "Storage"
 msgstr "Dyski"
 
@@ -739,15 +743,15 @@ msgstr "Wyświetlaj wartość wolnego miejsca głównego dysku"
 msgid "Set 0 to disable. Value is free MB of storage."
 msgstr "Ustaw 0, aby wyłączyć. Wartość oznacza wolne MB dysku."
 
-#: src/prefs/storage.js:255 src/prefs/network.js:204
+#: src/prefs/storage.js:255 src/prefs/network.js:209
 msgid "IO"
 msgstr "Odczyt/Zapis"
 
-#: src/prefs/storage.js:256 src/prefs/network.js:205
+#: src/prefs/storage.js:256 src/prefs/network.js:210
 msgid "Realtime IO Bar"
 msgstr "Pasek odczytu/zapisu w czasie rzeczywistym"
 
-#: src/prefs/storage.js:257 src/prefs/network.js:206
+#: src/prefs/storage.js:257 src/prefs/network.js:211
 msgid "Show Realtime IO Bar"
 msgstr "Wyświetlaj pasek odczytu/zapisu"
 
@@ -767,11 +771,11 @@ msgstr "Kolor zapisu"
 msgid "<b>Write</b> IO Bar color."
 msgstr "Kolor paska <b>zapisu</b>."
 
-#: src/prefs/storage.js:268 src/prefs/network.js:217
+#: src/prefs/storage.js:268 src/prefs/network.js:222
 msgid "IO History Graph"
 msgstr "Wykres historii odczytu/zapisu"
 
-#: src/prefs/storage.js:269 src/prefs/network.js:218
+#: src/prefs/storage.js:269 src/prefs/network.js:223
 msgid "Show IO History Graph"
 msgstr "Wyświetlaj historię odczytu/zapisu"
 
@@ -783,32 +787,32 @@ msgstr "Kolor <b>odczytu</b> w wykresie historii."
 msgid "<b>Write</b> IO History Graph color."
 msgstr "Kolor <b>zapisu</b> w wykresie historii."
 
-#: src/prefs/storage.js:280 src/prefs/network.js:229
+#: src/prefs/storage.js:280 src/prefs/network.js:234
 msgid "IO History Graph Width"
 msgstr "Szerokość wykresu historii odczytu/zapisu"
 
-#: src/prefs/storage.js:281 src/prefs/storage.js:296 src/prefs/network.js:230
-#: src/prefs/network.js:242
+#: src/prefs/storage.js:281 src/prefs/storage.js:296 src/prefs/network.js:235
+#: src/prefs/network.js:247
 msgid "IO Speed"
 msgstr "Prędkość odczytu/zapisu"
 
-#: src/prefs/storage.js:282 src/prefs/network.js:231
+#: src/prefs/storage.js:282 src/prefs/network.js:236
 msgid "Show IO Speed"
 msgstr "Wyświetlaj prędkość odczytu/zapisu"
 
-#: src/prefs/storage.js:287 src/prefs/network.js:236
+#: src/prefs/storage.js:287 src/prefs/network.js:241
 msgid "IO Speed Layout"
 msgstr "Układ prędkości odczytu/zapisu"
 
-#: src/prefs/storage.js:288 src/prefs/network.js:237
+#: src/prefs/storage.js:288 src/prefs/network.js:242
 msgid "IO Speed Max Number of Figures"
 msgstr "Maksymalna ilość liczb"
 
-#: src/prefs/storage.js:289 src/prefs/network.js:238
+#: src/prefs/storage.js:289 src/prefs/network.js:243
 msgid "IO Speed Threshold"
 msgstr "Próg wyświetlania prędkości"
 
-#: src/prefs/storage.js:289 src/prefs/network.js:238
+#: src/prefs/storage.js:289 src/prefs/network.js:243
 msgid "in kB/s"
 msgstr "w kB/s"
 
@@ -824,7 +828,7 @@ msgstr "Wartość wykorzystania głównego dysku"
 msgid "Main Disk Free Value"
 msgstr "Ilo wolnego miejsca na dysku głównym"
 
-#: src/prefs/storage.js:305 src/prefs/network.js:251
+#: src/prefs/storage.js:305 src/prefs/network.js:256
 msgid "IO Arrows"
 msgstr "Strzałki Odczytu/Zapisu"
 
@@ -836,7 +840,7 @@ msgstr "Kolor strzałki <b>Odczytu<b>."
 msgid "<b>Write</b> IO arrow color."
 msgstr "Kolor strzałki <b>Zapisu<b>."
 
-#: src/prefs/storage.js:316 src/storage/storageMenu.js:294
+#: src/prefs/storage.js:316 src/storage/storageMenu.js:318
 msgid "Devices"
 msgstr "Urządzenia"
 
@@ -973,11 +977,16 @@ msgstr ""
 "scaling_cur_freq: niektóre funkcje zostaną wyłączone!"
 
 #: src/prefs/welcome.js:98
+#, fuzzy
+msgid "'NetHogs' not installed: some optional features will be disabled!"
+msgstr "'lscpu' nie jest zainstalowane: niektóre funkcje zostaną wyłączone!"
+
+#: src/prefs/welcome.js:102
 msgid "'iproute2' not installed: some features will be disabled!"
 msgstr ""
 "'iproute2' nie został zainstalowany: niektóre funkcje zostaną wyłączone!"
 
-#: src/prefs/welcome.js:103
+#: src/prefs/welcome.js:107
 msgid ""
 "'iwconfig' and 'iw' not installed: install one of them to enable wireless "
 "network info!"
@@ -985,7 +994,13 @@ msgstr ""
 "'iwconfig' ani 'iw' nie są zainstalowane: zainstaluj jeden z nich, aby "
 "włączyć informacje o sieci bezprzewodowej!"
 
-#: src/prefs/welcome.js:109
+#: src/prefs/welcome.js:113
+#, fuzzy
+msgid "'iotop' not installed: some optional features will be disabled!"
+msgstr ""
+"'iproute2' nie został zainstalowany: niektóre funkcje zostaną wyłączone!"
+
+#: src/prefs/welcome.js:119
 msgid ""
 "AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
 "be disabled!"
@@ -993,7 +1008,7 @@ msgstr ""
 "Wykryto kartę graficzną AMD, ale nie zainstalowano „amdgpu_top”: niektóre "
 "opcjonalne funkcje zostaną wyłączone!"
 
-#: src/prefs/welcome.js:115
+#: src/prefs/welcome.js:125
 msgid ""
 "NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
 "will be disabled!"
@@ -1001,11 +1016,11 @@ msgstr ""
 "Wykryto kartę graficzną NVidia, ale nie zainstalowano 'nvidia-smi': niektóre "
 "opcjonalne funkcje zostaną wyłączone!"
 
-#: src/prefs/welcome.js:118
+#: src/prefs/welcome.js:128
 msgid "Checking GTop dependency..."
 msgstr "Sprawdzanie zależności GTop..."
 
-#: src/prefs/welcome.js:122 src/prefs/welcome.js:132
+#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
 msgid ""
 "'GTop' not installed, some optional features will be disabled! For a better "
 "experience and performance, install it from your package manager."
@@ -1014,33 +1029,33 @@ msgstr ""
 "wyłączone! Aby uzyskać lepsze wrażenia i wydajność, zainstaluj go z "
 "menedżera pakietów."
 
-#: src/prefs/welcome.js:126
+#: src/prefs/welcome.js:136
 msgid "'GTop' successfully detected and added to Data Sources list."
 msgstr "'GTop' został pomyślnie wykryty i dodany do listy źródeł danych."
 
-#: src/prefs/welcome.js:136
+#: src/prefs/welcome.js:146
 msgid "All other dependencies are met!"
 msgstr "Wszystkie pozostałe wymagania są spełnione!"
 
-#: src/prefs/welcome.js:139
+#: src/prefs/welcome.js:149
 #, fuzzy
 msgid "Support Us"
 msgstr "Wesprzyj nas na Ko-Fi"
 
-#: src/prefs/welcome.js:140
+#: src/prefs/welcome.js:150
 msgid "Support us on Ko-Fi"
 msgstr "Wesprzyj nas na Ko-Fi"
 
-#: src/prefs/welcome.js:141
+#: src/prefs/welcome.js:151
 msgid "Buy us a coffee"
 msgstr "Postaw nam kawę"
 
-#: src/prefs/welcome.js:142
+#: src/prefs/welcome.js:152
 msgid "Become a patron"
 msgstr "Zostań patronem"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:39 prefs.js:339
+#: src/prefs/network.js:84 src/network/networkMenu.js:41 prefs.js:339
 msgid "Network"
 msgstr "Sieć"
 
@@ -1056,55 +1071,60 @@ msgstr "Interfejsy pasujące do tego regexa będą ignorowane."
 msgid "Network IO"
 msgstr "Wysyłanie/Pobieranie sieci"
 
-#: src/prefs/network.js:161
+#: src/prefs/network.js:164
+#, fuzzy
+msgid "Network Top Processes"
+msgstr "Największe procesy"
+
+#: src/prefs/network.js:166
 msgid "Public IPv4 Address"
 msgstr "Publiczny adres IPv4"
 
-#: src/prefs/network.js:162 src/prefs/network.js:167
+#: src/prefs/network.js:167 src/prefs/network.js:172
 msgid "Set to empty to disable. Address will be regex matched."
 msgstr "Ustaw puste, aby wyłączyć. Adres zostanie dopasowany."
 
-#: src/prefs/network.js:166
+#: src/prefs/network.js:171
 msgid "Public IPv6 Address"
 msgstr "Publiczny adres IPv6"
 
-#: src/prefs/network.js:175
+#: src/prefs/network.js:180
 msgid "Wireless Info"
 msgstr "Informacje bezprzewodowe"
 
-#: src/prefs/network.js:191
+#: src/prefs/network.js:196
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr "Ustaw nazwę ikony (np.: 'network-wired-symbolic')"
 
-#: src/prefs/network.js:208 src/prefs/network.js:220 src/prefs/network.js:253
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:258
 msgid "Upload Color"
 msgstr "Kolor wysyłania"
 
-#: src/prefs/network.js:209
+#: src/prefs/network.js:214
 msgid "<b>Upload</b> IO Bar color."
 msgstr "Kolor paska <b>Wysyłania</b>."
 
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:258
+#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:263
 msgid "Download Color"
 msgstr "Kolor pobierania"
 
-#: src/prefs/network.js:214
+#: src/prefs/network.js:219
 msgid "<b>Download</b> IO Bar color."
 msgstr "Kolor paska <b>Pobierania</b>."
 
-#: src/prefs/network.js:221
+#: src/prefs/network.js:226
 msgid "<b>Upload</b> IO History Graph color."
 msgstr "Kolor wykresu <b>Wysyłania<b>."
 
-#: src/prefs/network.js:226
+#: src/prefs/network.js:231
 msgid "<b>Download</b> IO History Graph color."
 msgstr "Kolor <b>Pobierania<b> na wykresie."
 
-#: src/prefs/network.js:254
+#: src/prefs/network.js:259
 msgid "<b>Upload</b> IO arrow color."
 msgstr "Kolor strzałki <b>Wysyłania<b>."
 
-#: src/prefs/network.js:259
+#: src/prefs/network.js:264
 msgid "<b>Download</b> IO arrow color."
 msgstr "Kolor strzałki <b>Pobierania<b>."
 
@@ -1495,587 +1515,600 @@ msgstr[0] "%d czujnik"
 msgstr[1] "%d czujniki"
 msgstr[2] "%d czujników"
 
-#: src/network/networkMenu.js:73
+#: src/network/networkMenu.js:76
 msgid "Global Upload:"
 msgstr "Globalne przesyłanie:"
 
-#: src/network/networkMenu.js:85
+#: src/network/networkMenu.js:88
 msgid "Global Download:"
 msgstr "Globalne pobieranie:"
 
-#: src/network/networkMenu.js:110
+#: src/network/networkMenu.js:113
 msgid "Upload Activity"
 msgstr "Aktywność przesyłania"
 
-#: src/network/networkMenu.js:112 src/network/networkMenu.js:134
-#: src/network/networkMenu.js:875 src/network/networkMenu.js:899
+#: src/network/networkMenu.js:115 src/network/networkMenu.js:137
+#: src/network/networkMenu.js:1099 src/network/networkMenu.js:1123
 #: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
 msgid "Total"
 msgstr "Łącznie"
 
-#: src/network/networkMenu.js:119 src/network/networkMenu.js:141
-#: src/network/networkMenu.js:882 src/network/networkMenu.js:906
+#: src/network/networkMenu.js:122 src/network/networkMenu.js:144
+#: src/network/networkMenu.js:1106 src/network/networkMenu.js:1130
 msgid "Packets"
 msgstr "Pakiety"
 
-#: src/network/networkMenu.js:126 src/network/networkMenu.js:148
-#: src/network/networkMenu.js:889 src/network/networkMenu.js:916
+#: src/network/networkMenu.js:129 src/network/networkMenu.js:151
+#: src/network/networkMenu.js:1113 src/network/networkMenu.js:1140
 msgid "Errors/Dropped"
 msgstr "Błędy/Odrzucone"
 
-#: src/network/networkMenu.js:132
+#: src/network/networkMenu.js:135
 msgid "Download Activity"
 msgstr "Aktywność pobierania"
 
-#: src/network/networkMenu.js:156
+#: src/network/networkMenu.js:167
+#, fuzzy
+msgid "(click to show)"
+msgstr "Kliknij, aby odświeżyć"
+
+#: src/network/networkMenu.js:380
 msgid "Public IP"
 msgstr "Publiczny adres IP"
 
-#: src/network/networkMenu.js:166
+#: src/network/networkMenu.js:390
 msgid "Public IPv4:"
 msgstr "Publiczny adres IPv4:"
 
-#: src/network/networkMenu.js:183
+#: src/network/networkMenu.js:407
 msgid "Public IPv6:"
 msgstr "Publiczny adres IPv6:"
 
-#: src/network/networkMenu.js:230
+#: src/network/networkMenu.js:454
 msgid "Updated a long time ago"
 msgstr "Zaktualizowano dawno temu"
 
-#: src/network/networkMenu.js:232
+#: src/network/networkMenu.js:456
 msgid "Updated a few seconds ago"
 msgstr "Zaktualizowano kilka sekund temu"
 
-#: src/network/networkMenu.js:234
+#: src/network/networkMenu.js:458
 msgid "Updated less than a minute ago"
 msgstr "Zaktualizowano mniej niż minutę temu"
 
-#: src/network/networkMenu.js:236
+#: src/network/networkMenu.js:460
 msgid "Updated about a minute ago"
 msgstr "Zaktualizowano około minutę temu"
 
-#: src/network/networkMenu.js:238
+#: src/network/networkMenu.js:462
 msgid "Updated about 2 minutes ago"
 msgstr "Zaktualizowano około 2 minuty temu"
 
-#: src/network/networkMenu.js:240
+#: src/network/networkMenu.js:464
 msgid "Updated about 5 minutes ago"
 msgstr "Zaktualizowano około 5 minut temu"
 
-#: src/network/networkMenu.js:242
+#: src/network/networkMenu.js:466
 msgid "Updated more than 5 minutes ago"
 msgstr "Zaktualizowano ponad 5 minut temu"
 
-#: src/network/networkMenu.js:243
+#: src/network/networkMenu.js:467
 msgid "Click to refresh"
 msgstr "Kliknij, aby odświeżyć"
 
-#: src/network/networkMenu.js:245
+#: src/network/networkMenu.js:469
 msgid "Refreshing..."
 msgstr "Odświeżanie..."
 
-#: src/network/networkMenu.js:247
+#: src/network/networkMenu.js:471
 msgid "Done"
 msgstr "Gotowe"
 
-#: src/network/networkMenu.js:251
+#: src/network/networkMenu.js:475
 msgid "Default Routes"
 msgstr "Domyślne trasy"
 
-#: src/network/networkMenu.js:290
+#: src/network/networkMenu.js:514
 msgid "Route"
 msgstr "Trasa"
 
-#: src/network/networkMenu.js:296
+#: src/network/networkMenu.js:520
 msgid "Metric"
 msgstr "Metryczny"
 
-#: src/network/networkMenu.js:303
+#: src/network/networkMenu.js:527
 msgid "Device"
 msgstr "Urządzenie"
 
-#: src/network/networkMenu.js:310
+#: src/network/networkMenu.js:534
 msgid "Gateway"
 msgstr "Brama"
 
-#: src/network/networkMenu.js:317 src/storage/storageMenu.js:576
+#: src/network/networkMenu.js:541 src/storage/storageMenu.js:600
 msgid "Type"
 msgstr "Rodzaj"
 
-#: src/network/networkMenu.js:324
+#: src/network/networkMenu.js:548
 msgid "Destination"
 msgstr "Cel"
 
-#: src/network/networkMenu.js:331
+#: src/network/networkMenu.js:555
 msgid "Protocol"
 msgstr "Protokół"
 
-#: src/network/networkMenu.js:338 src/network/networkMenu.js:846
+#: src/network/networkMenu.js:562 src/network/networkMenu.js:1070
 msgid "Scope"
 msgstr "Zakres"
 
-#: src/network/networkMenu.js:345
+#: src/network/networkMenu.js:569
 msgid "Flags"
 msgstr "Flagi"
 
-#: src/network/networkMenu.js:374
+#: src/network/networkMenu.js:598
 msgid "Interfaces"
 msgstr "Interfejsy"
 
-#: src/network/networkMenu.js:377
+#: src/network/networkMenu.js:601
 msgid "No network interface found"
 msgstr "Nie znaleziono interfejsów sieciowego"
 
-#: src/network/networkMenu.js:585
+#: src/network/networkMenu.js:809
 msgctxt "short for upload"
 msgid "U"
 msgstr "W"
 
-#: src/network/networkMenu.js:611
+#: src/network/networkMenu.js:835
 msgctxt "short for download"
 msgid "D"
 msgstr "P"
 
-#: src/network/networkMenu.js:688 src/storage/storageMenu.js:575
+#: src/network/networkMenu.js:912 src/storage/storageMenu.js:599
 #: src/gpu/gpuMenuComponent.js:393 src/gpu/gpuMenuComponent.js:728
 #: src/gpu/gpuMenuComponent.js:759
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/network/networkMenu.js:695
+#: src/network/networkMenu.js:919
 msgid "Alt Names"
 msgstr "Alternatywne nazwy"
 
-#: src/network/networkMenu.js:704
+#: src/network/networkMenu.js:928
 msgid "Interface Index"
 msgstr "Indeks interfejsu"
 
-#: src/network/networkMenu.js:713
+#: src/network/networkMenu.js:937
 msgid "MAC Address"
 msgstr "Adees MAC"
 
-#: src/network/networkMenu.js:722 src/storage/storageMenu.js:665
+#: src/network/networkMenu.js:946 src/storage/storageMenu.js:689
 msgid "Group"
 msgstr "Grupa"
 
-#: src/network/networkMenu.js:731
+#: src/network/networkMenu.js:955
 msgid "Speed"
 msgstr "Szybkość"
 
-#: src/network/networkMenu.js:740
+#: src/network/networkMenu.js:964
 msgid "Duplex"
 msgstr "Dupleks"
 
-#: src/network/networkMenu.js:749
+#: src/network/networkMenu.js:973
 msgid "MTU"
 msgstr "MTU"
 
-#: src/network/networkMenu.js:758
+#: src/network/networkMenu.js:982
 msgid "Tx Queue Length"
 msgstr "Długość kolejki Tx"
 
-#: src/network/networkMenu.js:767
+#: src/network/networkMenu.js:991
 msgid "Link Type"
 msgstr "Typ połączenia"
 
-#: src/network/networkMenu.js:776
+#: src/network/networkMenu.js:1000
 msgid "Operative State"
 msgstr "Stan operacyjny"
 
-#: src/network/networkMenu.js:785
+#: src/network/networkMenu.js:1009
 msgid "Qdisc"
 msgstr "Qdisc"
 
-#: src/network/networkMenu.js:818
+#: src/network/networkMenu.js:1042
 msgid "Family"
 msgstr "Rodzina"
 
-#: src/network/networkMenu.js:825
+#: src/network/networkMenu.js:1049
 msgid "Local"
 msgstr "Lokalny"
 
-#: src/network/networkMenu.js:832
+#: src/network/networkMenu.js:1056
 msgid "Prefix Length"
 msgstr "Długość prefiksu"
 
-#: src/network/networkMenu.js:839
+#: src/network/networkMenu.js:1063
 msgid "Broadcast"
 msgstr "Broadcast"
 
-#: src/network/networkMenu.js:872
+#: src/network/networkMenu.js:1096
 msgid "Upload"
 msgstr "Wysyłanie"
 
-#: src/network/networkMenu.js:896
+#: src/network/networkMenu.js:1120
 msgid "Download"
 msgstr "Pobieranie"
 
-#: src/network/networkMenu.js:930
+#: src/network/networkMenu.js:1154
 msgid "IEEE"
 msgstr "IEEE"
 
-#: src/network/networkMenu.js:942
+#: src/network/networkMenu.js:1166
 msgid "SSID"
 msgstr "SSID"
 
-#: src/network/networkMenu.js:954 src/storage/storageMenu.js:667
+#: src/network/networkMenu.js:1178 src/storage/storageMenu.js:691
 msgid "Mode"
 msgstr "Tryb"
 
-#: src/network/networkMenu.js:966
+#: src/network/networkMenu.js:1190
 msgid "Frequency"
 msgstr "Częstotliwość"
 
-#: src/network/networkMenu.js:978
+#: src/network/networkMenu.js:1202
 msgid "Access Point"
 msgstr "Punkt Dostępu"
 
-#: src/network/networkMenu.js:990
+#: src/network/networkMenu.js:1214
 msgid "Bit Rate"
 msgstr "Szybkość transmisji"
 
-#: src/network/networkMenu.js:1002
+#: src/network/networkMenu.js:1226
 msgid "TX Power"
 msgstr "Moc TX"
 
-#: src/network/networkMenu.js:1014
+#: src/network/networkMenu.js:1238
 msgid "Link Quality"
 msgstr "Jakość łącza"
 
-#: src/network/networkMenu.js:1026
+#: src/network/networkMenu.js:1250
 msgid "Signal Level"
 msgstr "Poziom sygnału"
 
-#: src/storage/storageMenu.js:66
+#: src/storage/storageMenu.js:67
 msgid "Global Read:"
 msgstr "Globalny odczyt:"
 
-#: src/storage/storageMenu.js:78
+#: src/storage/storageMenu.js:79
 msgid "Global Write:"
 msgstr "Globalny zapis:"
 
-#: src/storage/storageMenu.js:103
+#: src/storage/storageMenu.js:104
 msgid "Total Activity"
 msgstr "Łączna aktywność"
 
-#: src/storage/storageMenu.js:105 src/storage/storageMenu.js:712
+#: src/storage/storageMenu.js:106 src/storage/storageMenu.js:736
 msgid "Read"
 msgstr "Odczyt"
 
-#: src/storage/storageMenu.js:112 src/storage/storageMenu.js:719
+#: src/storage/storageMenu.js:113 src/storage/storageMenu.js:743
 msgid "Write"
 msgstr "Zapis"
 
-#: src/storage/storageMenu.js:297
+#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1172
+msgid "(click to show all system processes)"
+msgstr ""
+
+#: src/storage/storageMenu.js:321
 msgid "No storage device found"
 msgstr "Nie znaleziono dysków"
 
-#: src/storage/storageMenu.js:494
+#: src/storage/storageMenu.js:518
 msgctxt "short for read"
 msgid "R"
 msgstr "R"
 
-#: src/storage/storageMenu.js:520
+#: src/storage/storageMenu.js:544
 msgctxt "short for write"
 msgid "W"
 msgstr "W"
 
-#: src/storage/storageMenu.js:570
+#: src/storage/storageMenu.js:594
 msgid "Basic Info"
 msgstr "Podstawowe informacje"
 
-#: src/storage/storageMenu.js:577
+#: src/storage/storageMenu.js:601
 msgid "Model"
 msgstr "Model"
 
-#: src/storage/storageMenu.js:578 src/gpu/gpuMenuComponent.js:456
+#: src/storage/storageMenu.js:602 src/gpu/gpuMenuComponent.js:456
 msgid "Vendor"
 msgstr "Dostawca"
 
-#: src/storage/storageMenu.js:579
+#: src/storage/storageMenu.js:603
 msgid "Serial"
 msgstr "Numer seryjny"
 
-#: src/storage/storageMenu.js:580
+#: src/storage/storageMenu.js:604
 msgid "Size"
 msgstr "Pojemność"
 
-#: src/storage/storageMenu.js:581
+#: src/storage/storageMenu.js:605
 msgid "State"
 msgstr "Stan"
 
-#: src/storage/storageMenu.js:582
+#: src/storage/storageMenu.js:606
 msgid "Subsystems"
 msgstr "Podsystemy"
 
-#: src/storage/storageMenu.js:586
+#: src/storage/storageMenu.js:610
 msgid "File System and Mounting Info"
 msgstr "Informacje o systemie plików i zamontowaniu"
 
-#: src/storage/storageMenu.js:591
+#: src/storage/storageMenu.js:615
 msgid "File System Type"
 msgstr "Typ systemu plików"
 
-#: src/storage/storageMenu.js:592
+#: src/storage/storageMenu.js:616
 msgid "Label"
 msgstr "Etykieta"
 
-#: src/storage/storageMenu.js:593
+#: src/storage/storageMenu.js:617
 msgid "UUID"
 msgstr "UUID"
 
-#: src/storage/storageMenu.js:594
+#: src/storage/storageMenu.js:618
 msgid "Mount Points"
 msgstr "Punkty zamontowania"
 
-#: src/storage/storageMenu.js:595
+#: src/storage/storageMenu.js:619
 msgid "Available Space"
 msgstr "Dostępne miejsce"
 
-#: src/storage/storageMenu.js:596
+#: src/storage/storageMenu.js:620
 msgid "File System Size"
 msgstr "Rozmiar systemu plików"
 
-#: src/storage/storageMenu.js:597
+#: src/storage/storageMenu.js:621
 msgid "Used Space"
 msgstr "Użyte miejsce"
 
-#: src/storage/storageMenu.js:598
+#: src/storage/storageMenu.js:622
 msgid "Used Space (%)"
 msgstr "Użyte miejsce (%)"
 
-#: src/storage/storageMenu.js:599
+#: src/storage/storageMenu.js:623
 msgid "File System Version"
 msgstr "Wersja systemu plików"
 
-#: src/storage/storageMenu.js:600
+#: src/storage/storageMenu.js:624
 msgid "File System Roots"
 msgstr "Główny punkt systemu plików"
 
-#: src/storage/storageMenu.js:604
+#: src/storage/storageMenu.js:628
 msgid "Physical and Disk Details"
 msgstr "Szczegóły fizyczne dysku"
 
-#: src/storage/storageMenu.js:609
+#: src/storage/storageMenu.js:633
 msgid "Physical Sector Size"
 msgstr "Fizyczny rozmiar sektora"
 
-#: src/storage/storageMenu.js:610
+#: src/storage/storageMenu.js:634
 msgid "Logical Sector Size"
 msgstr "Logiczny rozmiar sektora"
 
-#: src/storage/storageMenu.js:611
+#: src/storage/storageMenu.js:635
 msgid "Minimum IO Size"
 msgstr "Minimalny rozmiar wejścia/wyjścia"
 
-#: src/storage/storageMenu.js:612
+#: src/storage/storageMenu.js:636
 msgid "Optimal IO Size"
 msgstr "Optymalny rozmiar wejścia/wyjścia"
 
-#: src/storage/storageMenu.js:613
+#: src/storage/storageMenu.js:637
 msgid "Rotational"
 msgstr "Obrotowy"
 
-#: src/storage/storageMenu.js:614
+#: src/storage/storageMenu.js:638
 msgid "Request Size"
 msgstr "Rozmiar zapytania"
 
-#: src/storage/storageMenu.js:615
+#: src/storage/storageMenu.js:639
 #, fuzzy
 msgid "Alignment Offset"
 msgstr "Alignment Offset"
 
-#: src/storage/storageMenu.js:616
+#: src/storage/storageMenu.js:640
 #, fuzzy
 msgid "Discard Alignment"
 msgstr "Discard Alignment"
 
-#: src/storage/storageMenu.js:617
+#: src/storage/storageMenu.js:641
 #, fuzzy
 msgid "Discard Granularity"
 msgstr "Discard Granularity"
 
-#: src/storage/storageMenu.js:618
+#: src/storage/storageMenu.js:642
 #, fuzzy
 msgid "Discard Max Size"
 msgstr "Discard Max Size"
 
-#: src/storage/storageMenu.js:619
+#: src/storage/storageMenu.js:643
 #, fuzzy
 msgid "Discard Zeroes Data"
 msgstr "Discard Zeroes Data"
 
-#: src/storage/storageMenu.js:623
+#: src/storage/storageMenu.js:647
 msgid "Partition Info"
 msgstr "Informacje o partycji"
 
-#: src/storage/storageMenu.js:628
+#: src/storage/storageMenu.js:652
 msgid "Partition Type"
 msgstr "Typ partycji"
 
-#: src/storage/storageMenu.js:629
+#: src/storage/storageMenu.js:653
 msgid "Partition Label"
 msgstr "Etykieta partycji"
 
-#: src/storage/storageMenu.js:630
+#: src/storage/storageMenu.js:654
 msgid "Partition UUID"
 msgstr "UUID partycji"
 
-#: src/storage/storageMenu.js:631
+#: src/storage/storageMenu.js:655
 msgid "Partition Number"
 msgstr "Numer partycji"
 
-#: src/storage/storageMenu.js:632
+#: src/storage/storageMenu.js:656
 msgid "Partition Table Type"
 msgstr "Rodzaj tablicy partycji"
 
-#: src/storage/storageMenu.js:633
+#: src/storage/storageMenu.js:657
 msgid "Partition Table UUID"
 msgstr "UUID tablicy partycji"
 
-#: src/storage/storageMenu.js:637
+#: src/storage/storageMenu.js:661
 msgid "Performance and Settings"
 msgstr "Wydajność i ustawienia"
 
-#: src/storage/storageMenu.js:642
+#: src/storage/storageMenu.js:666
 #, fuzzy
 msgid "Read Ahead"
 msgstr "Read Ahead"
 
-#: src/storage/storageMenu.js:643
+#: src/storage/storageMenu.js:667
 #, fuzzy
 msgid "Scheduler"
 msgstr "Scheduler"
 
-#: src/storage/storageMenu.js:644
+#: src/storage/storageMenu.js:668
 msgid "Direct Access"
 msgstr "Bezpośredni dostęp"
 
-#: src/storage/storageMenu.js:645
+#: src/storage/storageMenu.js:669
 #, fuzzy
 msgid "Multiqueue"
 msgstr "Multiqueue"
 
-#: src/storage/storageMenu.js:649
+#: src/storage/storageMenu.js:673
 msgid "Advanced Identifiers and States"
 msgstr "Zaawansowane identyfikatory i stany"
 
-#: src/storage/storageMenu.js:654
+#: src/storage/storageMenu.js:678
 #, fuzzy
 msgid "ID Link"
 msgstr "ID Link"
 
-#: src/storage/storageMenu.js:655
+#: src/storage/storageMenu.js:679
 msgid "ID"
 msgstr "ID"
 
-#: src/storage/storageMenu.js:656
+#: src/storage/storageMenu.js:680
 #, fuzzy
 msgid "Major:Minor"
 msgstr "Major:Minor"
 
-#: src/storage/storageMenu.js:657
+#: src/storage/storageMenu.js:681
 msgid "HCTL"
 msgstr "HCTL"
 
-#: src/storage/storageMenu.js:658
+#: src/storage/storageMenu.js:682
 msgid "Kernel Name"
 msgstr "Nazwa w jądrze"
 
-#: src/storage/storageMenu.js:659
+#: src/storage/storageMenu.js:683
 #, fuzzy
 msgid "Path"
 msgstr "Path"
 
-#: src/storage/storageMenu.js:660
+#: src/storage/storageMenu.js:684
 #, fuzzy
 msgid "Revision"
 msgstr "Revision"
 
-#: src/storage/storageMenu.js:661
+#: src/storage/storageMenu.js:685
 msgid "World Wide Name"
 msgstr "Ogólnoświatowa nazwa"
 
-#: src/storage/storageMenu.js:662
+#: src/storage/storageMenu.js:686
 msgid "Transport"
 msgstr "Transport"
 
-#: src/storage/storageMenu.js:663
+#: src/storage/storageMenu.js:687
 msgid "Hotplug"
 msgstr "Hotplug"
 
-#: src/storage/storageMenu.js:664
+#: src/storage/storageMenu.js:688
 msgid "Random"
 msgstr "Losowość"
 
-#: src/storage/storageMenu.js:666
+#: src/storage/storageMenu.js:690
 msgid "Owner"
 msgstr "Właściciel"
 
-#: src/storage/storageMenu.js:668
+#: src/storage/storageMenu.js:692
 msgid "Read Only"
 msgstr "Tylko do odczytu"
 
-#: src/storage/storageMenu.js:669
+#: src/storage/storageMenu.js:693
 msgid "Removable"
 msgstr "Usuwalne"
 
-#: src/storage/storageMenu.js:670
+#: src/storage/storageMenu.js:694
 #, fuzzy
 msgid "Write Same"
 msgstr "Write Same"
 
-#: src/storage/storageMenu.js:671
+#: src/storage/storageMenu.js:695
 #, fuzzy
 msgid "Zoned"
 msgstr "Zoned"
 
-#: src/storage/storageMenu.js:672
+#: src/storage/storageMenu.js:696
 #, fuzzy
 msgid "Zone Size"
 msgstr "Zone Size"
 
-#: src/storage/storageMenu.js:673
+#: src/storage/storageMenu.js:697
 #, fuzzy
 msgid "Zone Write Granularity"
 msgstr "Zone Write Granularity"
 
-#: src/storage/storageMenu.js:674
+#: src/storage/storageMenu.js:698
 #, fuzzy
 msgid "Zone Append"
 msgstr "Zone Append"
 
-#: src/storage/storageMenu.js:675
+#: src/storage/storageMenu.js:699
 #, fuzzy
 msgid "Zone Number"
 msgstr "Zone Number"
 
-#: src/storage/storageMenu.js:676
+#: src/storage/storageMenu.js:700
 #, fuzzy
 msgid "Zone Open Max"
 msgstr "Zone Open Max"
 
-#: src/storage/storageMenu.js:677
+#: src/storage/storageMenu.js:701
 #, fuzzy
 msgid "Zone Active Max"
 msgstr "Zone Active Max"
 
-#: src/storage/storageMenu.js:710
+#: src/storage/storageMenu.js:734
 msgid "Total Device Activity"
 msgstr "Całkowita aktywność urządzenia"
 
-#: src/storage/storageMenu.js:767
+#: src/storage/storageMenu.js:791
 msgid "Disk"
 msgstr "Dysk"
 
-#: src/storage/storageMenu.js:1065
+#: src/storage/storageMenu.js:1108
 msgid "Yes"
 msgstr "Tak"
 
-#: src/storage/storageMenu.js:1065
+#: src/storage/storageMenu.js:1108
 msgid "No"
 msgstr "Nie"
+
+#: src/storage/storageMenu.js:1162
+msgid "(showing all system processes)"
+msgstr ""
 
 #: src/memory/memoryMenu.js:62
 msgid "Allocated:"
