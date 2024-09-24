@@ -35,6 +35,7 @@ type FlushOptions = {
     trigger?: string;
     interval?: number;
     idle?: number;
+    match?: RegExp;
 };
 
 type Options = {
@@ -152,6 +153,14 @@ export default class ContinuousTaskManager {
                         else this.output += line;
 
                         if(this.options?.flush?.always) {
+                            this.listeners.forEach((callback, _subject) => {
+                                callback({ result: this.output, exit: false });
+                            });
+                            this.output = '';
+                        } else if(
+                            this.options?.flush?.match &&
+                            this.options.flush.match.test(line)
+                        ) {
                             this.listeners.forEach((callback, _subject) => {
                                 callback({ result: this.output, exit: false });
                             });

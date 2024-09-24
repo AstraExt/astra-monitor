@@ -329,12 +329,12 @@ export default class StorageMonitor extends Monitor {
         }
 
         const iotopPath = Utils.commandPathLookup('iotop --version');
-        const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 10));
+        const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 15));
         const num = Math.max(1, Math.round(60 / interval));
 
         const command = `${pkexecPath}pkexec ${iotopPath}iotop -bPokq -d ${interval} -n ${num}`;
         this.updateStorageIOTopTask.start(command, {
-            flush: { idle: 250 },
+            flush: { idle: 100 },
         });
     }
 

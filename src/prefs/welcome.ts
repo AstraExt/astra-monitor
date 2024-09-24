@@ -153,6 +153,14 @@ export default class Welcome {
                 group
             );
         }
+        if(!Utils.hasNethogs()) {
+            check = false;
+            PrefsUtils.addStatusLabel(
+                { title: _("'NetHogs' not installed: some optional features will be disabled!") },
+                'am-dialog-warning-symbolic',
+                group
+            );
+        }
         if(!Utils.hasIp()) {
             check = false;
             PrefsUtils.addStatusLabel(
