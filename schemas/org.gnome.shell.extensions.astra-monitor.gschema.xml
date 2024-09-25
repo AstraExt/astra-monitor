@@ -521,7 +521,7 @@
       <range min="0.1" max="10"/>
     </key>
     <key name="memory-unit" enum="org.gnome.shell.extensions.astra-monitor.enum.data-unit2">
-      <default>'kB-kiB'</default>
+      <default>'kB-KB'</default>
       <summary>Memory Unit</summary>
       <description>Unit of measurement for the memory</description>
     </key>
