@@ -226,7 +226,7 @@ export default class Storage {
                     if(!ignored.includes(name)) {
                         ignored.push(name);
                     }
-                    Config.set('storage-ignored', JSON.stringify(ignored), 'string');
+                    Config.set('storage-ignored', ignored, 'json');
                 } else {
                     row.subtitle = _('Active');
                     icon.iconName = 'am-dialog-ok-symbolic';
@@ -234,7 +234,7 @@ export default class Storage {
                     if(ignored.includes(name)) {
                         ignored = ignored.filter((deviceName: string) => deviceName !== name);
                     }
-                    Config.set('storage-ignored', JSON.stringify(ignoredDevices), 'string');
+                    Config.set('storage-ignored', ignored, 'json');
                 }
             });
 

@@ -22,6 +22,7 @@
 ### Bug fixes
 
 -   Addressed `amdgpu_top` v0.8.5 data structure change, now top processes are correctly displayed
+-   Fixed a bug that prevented Storage Devices from being un-ignored
 
 # Astra Monitor 26 - September 16 2024
 
