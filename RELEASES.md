@@ -4,12 +4,16 @@
 
 -   **_I/O Monitoring for Root Processes_**: A new feature has been added to monitor disk I/O activity of root processes. You can now click on the storage top processes header to view root processes with the highest I/O activity for a 60-second window. This feature addresses the security limitations in Linux that restrict access to precise I/O data for root processes. To use this functionality, user permission is required to access the privileged `iotop` utility, which is now a new _(optional)_ dependency for the extension.
 
+![gif](https://github.com/user-attachments/assets/46e7be77-23af-498f-9f30-d9e0eb5c73c0)
+
 -   **_Network Top Processes_**: Introduced the ability to monitor network I/O activity of individual processes. This feature relies on `nethogs`, a new optional dependency for the extension. Due to `nethogs` requiring root access, it can be utilized in two ways:
 
     1. On-demand: Click the network top processes header to grant permission and start `nethogs` with elevated privileges for about 60 seconds.
     2. Always-on: Grant `nethogs` the necessary capabilities (`cap_net_admin` and `cap_net_raw=ep`) to run as a privileged service. The extension will automatically detect and use it in this configuration.
 
     _Check the [documentation](https://github.com/AstraExt/astra-monitor/blob/main/README.md#nethogs) for more details._
+
+![nethogs](https://github.com/user-attachments/assets/388dc409-c60d-4b92-9b0e-6a112c9d13d0)
 
 -   **_Sensors Ignore Regex_**: Now you can use regular expressions to ignore specific sensors based on their name, category, or attribute. This feature allows for more granular control over which sensor data is displayed:
 
@@ -18,6 +22,8 @@
     -   Attribute: Exclude specific attributes (e.g., Min, Max, Crit, Alarm).
 
     This powerful filtering mechanism enables users to customize their sensor display, focusing on the most relevant information while reducing clutter from unwanted sensor data.
+
+![sensors ignore](https://github.com/user-attachments/assets/330e7cef-ef5f-4c25-b04a-b064c69195ad)
 
 ### Bug fixes
 
