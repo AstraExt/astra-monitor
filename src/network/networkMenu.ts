@@ -2755,6 +2755,28 @@ export default class NetworkMenu extends MenuBase {
                 this.networkActivityPopup.errorsDownloadValueLabel.text = '-';
         }
 
+        if(this.topProcesses) {
+            for(let i = 0; i < NetworkMonitor.TOP_PROCESSES_LIMIT; i++) {
+                if(this.topProcesses.labels && i < 3) {
+                    this.topProcesses.labels[i].label.text = '-';
+                    this.topProcesses.labels[i].upload.value.text = '-';
+                    this.topProcesses.labels[i].upload.icon.style = 'color:rgba(255,255,255,0.5);';
+                    this.topProcesses.labels[i].download.value.text = '-';
+                    this.topProcesses.labels[i].download.icon.style =
+                        'color:rgba(255,255,255,0.5);';
+                }
+                if(this.topProcessesPopup && this.topProcessesPopup.processes) {
+                    const popupElement = this.topProcessesPopup.processes.get(i);
+                    if(popupElement) {
+                        popupElement.label.hide();
+                        popupElement.description?.hide();
+                        popupElement.upload.container.hide();
+                        popupElement.download.container.hide();
+                    }
+                }
+            }
+        }
+
         this.publicIPv4.value.text = '-';
         this.publicIpv6.value1.text = '-';
         this.publicIpv6.value2.hide();
