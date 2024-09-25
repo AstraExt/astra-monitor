@@ -12,10 +12,12 @@
     _Check the [documentation](https://github.com/AstraExt/astra-monitor/blob/main/README.md#nethogs) for more details._
 
 -   **_Sensors Ignore Regex_**: Now you can use regular expressions to ignore specific sensors based on their name, category, or attribute. This feature allows for more granular control over which sensor data is displayed:
+
     -   Sensor Name: Exclude an entire sensor (the one you see in the sensors menu).
     -   Category: Exclude entire groups of sensors (e.g., "Package", "Core", "Edge").
     -   Attribute: Exclude specific attributes (e.g., Min, Max, Crit, Alarm).
-        This powerful filtering mechanism enables users to customize their sensor display, focusing on the most relevant information while reducing clutter from unwanted sensor data.
+
+    This powerful filtering mechanism enables users to customize their sensor display, focusing on the most relevant information while reducing clutter from unwanted sensor data.
 
 ### Bug fixes
 
