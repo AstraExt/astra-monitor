@@ -46,8 +46,9 @@ _**NOTE**: The screenshots below are from an outdated version of the extension a
 #### Rich Menu Information
 
 <p align="center">
-    <img src="./screenshots/screenshot9.jpg" height="360px" alt="Screenshot9" />
-    <img src="./screenshots/screenshot10.jpg" height="360px" alt="Screenshot10" />
+    <img src="./screenshots/screenshot9.jpg" height="500px" alt="Screenshot9" />
+    <img src="./screenshots/screenshot10.jpg" height="500px" alt="Screenshot10" />
+    <img src="./screenshots/screenshot11.jpg" height="500px" alt="Screenshot11" />
 </p>
 
 #### Detailed Resource Information
