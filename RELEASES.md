@@ -21,6 +21,7 @@
 
 ### Bug fixes
 
+-   Resolved an issue where `nvidia-smi` was causing an exception, preventing the UI from updating correctly [[#131](https://github.com/AstraExt/astra-monitor/issues/131)]
 -   Addressed `amdgpu_top` v0.8.5 data structure change, now top processes are correctly displayed
 -   Fixed a bug that prevented Storage Devices from being un-ignored
 

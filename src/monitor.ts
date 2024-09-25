@@ -193,7 +193,7 @@ export default class Monitor {
         this.startListeningFor(key);
     }
 
-    notify(key: string, value?: any) {
+    async notify(key: string, value?: any) {
         if(!Utils.ready) return;
 
         const listeners = this.listeners.get(key);

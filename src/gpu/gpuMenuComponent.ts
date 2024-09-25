@@ -1231,69 +1231,73 @@ export default class GpuMenuComponent {
                 section.activity.gfxBarLabel.text = gpuData.activity.GFX.toFixed(0) + '%';
         }
 
-        const numProcesses = this.compact ? 3 : 5;
-        for(let index = 0; index < numProcesses; index++) {
-            const topProcess = this.topProcesses[index];
-            if(!topProcess) continue;
+        if(this.topProcesses) {
+            const numProcesses = this.compact ? 3 : 5;
+            for(let index = 0; index < numProcesses; index++) {
+                const topProcess = this.topProcesses[index];
+                if(!topProcess) continue;
 
-            const topProcessData = gpuData.topProcesses[index];
-            if(!topProcessData) {
-                topProcess.label.text = '-';
-                topProcess.value1.text = '-';
-                topProcess.value2.text = '-';
-                continue;
-            }
+                const topProcessData = gpuData.topProcesses[index];
+                if(!topProcessData) {
+                    topProcess.label.text = '-';
+                    topProcess.value1.text = '-';
+                    topProcess.value2.text = '-';
+                    continue;
+                }
 
-            topProcess.label.text = topProcessData.name;
+                topProcess.label.text = topProcessData.name;
 
-            const pipe0 = topProcessData.pipes[0];
-            if(!pipe0) {
-                topProcess.value1.text = '-';
-            } else {
-                if(pipe0.unit === '%') topProcess.value1.text = pipe0.value.toFixed(0) + '%';
-                else topProcess.value1.text = Utils.formatBytes(pipe0.value, 'kB-KB', 3);
-            }
+                const pipe0 = topProcessData.pipes[0];
+                if(!pipe0) {
+                    topProcess.value1.text = '-';
+                } else {
+                    if(pipe0.unit === '%') topProcess.value1.text = pipe0.value.toFixed(0) + '%';
+                    else topProcess.value1.text = Utils.formatBytes(pipe0.value, 'kB-KB', 3);
+                }
 
-            const pipe1 = topProcessData.pipes[1];
-            if(!pipe1) {
-                topProcess.value2.hide();
-            } else {
-                topProcess.value2.show();
-                if(pipe1.unit === '%') topProcess.value2.text = pipe1.value.toFixed(0) + '%';
-                else topProcess.value2.text = Utils.formatBytes(pipe1.value, 'kB-KB', 3);
+                const pipe1 = topProcessData.pipes[1];
+                if(!pipe1) {
+                    topProcess.value2.hide();
+                } else {
+                    topProcess.value2.show();
+                    if(pipe1.unit === '%') topProcess.value2.text = pipe1.value.toFixed(0) + '%';
+                    else topProcess.value2.text = Utils.formatBytes(pipe1.value, 'kB-KB', 3);
+                }
             }
         }
 
-        const numSensors = this.compact ? 1 : 3;
-        for(let index = 0; index < numSensors; index++) {
-            const sensor = this.mainSensors[index];
-            if(!sensor) continue;
+        if(this.mainSensors) {
+            const numSensors = this.compact ? 1 : 3;
+            for(let index = 0; index < numSensors; index++) {
+                const sensor = this.mainSensors[index];
+                if(!sensor) continue;
 
-            sensor.label.text = '-';
-            sensor.value.text = '-';
+                sensor.label.text = '-';
+                sensor.value.text = '-';
 
-            if(!gpuData.sensors.list) continue;
+                if(!gpuData.sensors.list) continue;
 
-            const sensorData = gpuData.sensors.list[index];
-            if(!sensorData) continue;
+                const sensorData = gpuData.sensors.list[index];
+                if(!sensorData) continue;
 
-            sensor.label.text = sensorData.name;
+                sensor.label.text = sensorData.name;
 
-            let unit = sensorData.unit;
-            if(unit === 'C') unit = '°C';
+                let unit = sensorData.unit;
+                if(unit === 'C') unit = '°C';
 
-            let value = sensorData.value;
-            if(
-                unit === '°C' &&
-                typeof value === 'number' &&
-                Config.get_string('sensors-temperature-unit') === 'fahrenheit'
-            ) {
-                value = Utils.celsiusToFahrenheit(value as number);
-                unit = '°F';
+                let value = sensorData.value;
+                if(
+                    unit === '°C' &&
+                    typeof value === 'number' &&
+                    Config.get_string('sensors-temperature-unit') === 'fahrenheit'
+                ) {
+                    value = Utils.celsiusToFahrenheit(value as number);
+                    unit = '°F';
+                }
+
+                unit = unit === '' ? '' : ' ' + unit;
+                sensor.value.text = value + unit;
             }
-
-            unit = unit === '' ? '' : ' ' + unit;
-            sensor.value.text = value + unit;
         }
 
         if(section.infoPopup) section.infoPopup.updateData(gpuData);
