@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 01:24+0200\n"
+"POT-Creation-Date: 2024-09-25 16:24+0200\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -132,8 +132,8 @@ msgid "now"
 msgstr "teď"
 
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
-#: src/prefs/sensors.js:82 src/prefs/sensors.js:96
-#: src/sensors/sensorsMenu.js:35 src/gpu/gpuMenuComponent.js:338
+#: src/prefs/sensors.js:82 src/prefs/sensors.js:112
+#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:338
 #: src/gpu/gpuMenuComponent.js:802 prefs.js:373
 msgid "Sensors"
 msgstr "Sensory"
@@ -145,7 +145,7 @@ msgstr "Sensory"
 msgid "General"
 msgstr "Obecné"
 
-#: src/prefs/sensors.js:83 src/prefs/sensors.js:134 src/prefs/sensors.js:146
+#: src/prefs/sensors.js:83 src/prefs/sensors.js:150 src/prefs/sensors.js:162
 #: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
 #: src/prefs/gpu.js:84 src/prefs/processors.js:83
 msgid "Show"
@@ -170,12 +170,43 @@ msgstr ""
 msgid "Temperature Unit"
 msgstr "Jednotka teploty"
 
-#: src/prefs/sensors.js:90 src/prefs/memory.js:105 src/prefs/storage.js:184
+#: src/prefs/sensors.js:90
+#, fuzzy
+msgid "Ignored Sensors"
+msgstr "Sensory"
+
+#: src/prefs/sensors.js:92
+#, fuzzy
+msgid "Ignored Sensors Regex"
+msgstr "Ignorovaná zařízení uložiště"
+
+#: src/prefs/sensors.js:93
+msgid "Completely ignore sensors matching this regex"
+msgstr ""
+
+#: src/prefs/sensors.js:97
+#, fuzzy
+msgid "Ignored Sensors Category Regex"
+msgstr "Ignorovaná zařízení uložiště"
+
+#: src/prefs/sensors.js:98
+msgid "Categories are like \"Package\", \"Core\", \"Edge\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:102
+msgid "Ignored Sensors Attribute Regex"
+msgstr ""
+
+#: src/prefs/sensors.js:103
+msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:106 src/prefs/memory.js:105 src/prefs/storage.js:184
 #: src/prefs/network.js:153 src/prefs/processors.js:85
 msgid "Data Sources"
 msgstr "Zdroje dat"
 
-#: src/prefs/sensors.js:92 src/prefs/memory.js:107 src/prefs/memory.js:113
+#: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
 #: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
 #: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
 #: src/prefs/processors.js:87 src/prefs/processors.js:93
@@ -183,7 +214,7 @@ msgstr "Zdroje dat"
 msgid "Auto"
 msgstr "Automaticky"
 
-#: src/prefs/sensors.js:102 src/prefs/sensors.js:104 src/prefs/memory.js:123
+#: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
 #: src/prefs/network.js:186 src/prefs/gpu.js:111 src/prefs/gpu.js:113
 #: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:228
@@ -191,143 +222,143 @@ msgstr "Automaticky"
 msgid "Header"
 msgstr "Záhlaví"
 
-#: src/prefs/sensors.js:105 src/prefs/memory.js:126 src/prefs/storage.js:209
+#: src/prefs/sensors.js:121 src/prefs/memory.js:126 src/prefs/storage.js:209
 #: src/prefs/network.js:189 src/prefs/gpu.js:114 src/prefs/processors.js:117
 msgid "Indicators Order"
 msgstr "Pořadí indikátorů"
 
-#: src/prefs/sensors.js:108 src/prefs/memory.js:129 src/prefs/storage.js:212
+#: src/prefs/sensors.js:124 src/prefs/memory.js:129 src/prefs/storage.js:212
 #: src/prefs/network.js:192 src/prefs/gpu.js:117 src/prefs/processors.js:120
 msgid "Icon"
 msgstr "Ikona"
 
-#: src/prefs/sensors.js:109 src/prefs/memory.js:130 src/prefs/storage.js:213
+#: src/prefs/sensors.js:125 src/prefs/memory.js:130 src/prefs/storage.js:213
 #: src/prefs/network.js:193 src/prefs/gpu.js:118 src/prefs/processors.js:121
 msgid "Show Icon"
 msgstr "Zobrazit ikonu"
 
-#: src/prefs/sensors.js:111 src/prefs/memory.js:132 src/prefs/storage.js:215
+#: src/prefs/sensors.js:127 src/prefs/memory.js:132 src/prefs/storage.js:215
 #: src/prefs/network.js:195 src/prefs/gpu.js:120 src/prefs/processors.js:123
 msgid "Icon Name"
 msgstr "Název ikony"
 
-#: src/prefs/sensors.js:112
+#: src/prefs/sensors.js:128
 msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "Nastavit jméno ikony (např. 'temperature-symbolic')"
 
-#: src/prefs/sensors.js:114 src/prefs/memory.js:135 src/prefs/storage.js:218
+#: src/prefs/sensors.js:130 src/prefs/memory.js:135 src/prefs/storage.js:218
 #: src/prefs/network.js:198 src/prefs/visualization.js:171
 #: src/prefs/visualization.js:178 src/prefs/gpu.js:123
 #: src/prefs/processors.js:126
 msgid "Set to empty to disable icon override"
 msgstr "Pro výchozí název nechte prázdné"
 
-#: src/prefs/sensors.js:117 src/prefs/memory.js:138 src/prefs/storage.js:221
+#: src/prefs/sensors.js:133 src/prefs/memory.js:138 src/prefs/storage.js:221
 #: src/prefs/network.js:201 src/prefs/gpu.js:126 src/prefs/processors.js:129
 msgid "Icon Color"
 msgstr "Barva ikony"
 
-#: src/prefs/sensors.js:118 src/prefs/memory.js:139 src/prefs/storage.js:222
+#: src/prefs/sensors.js:134 src/prefs/memory.js:139 src/prefs/storage.js:222
 #: src/prefs/network.js:202 src/prefs/gpu.js:127 src/prefs/processors.js:130
 msgid "Icon Alert Color"
 msgstr "Barva ikony při výstraze"
 
-#: src/prefs/sensors.js:120 src/prefs/memory.js:141 src/prefs/storage.js:224
+#: src/prefs/sensors.js:136 src/prefs/memory.js:141 src/prefs/storage.js:224
 #: src/prefs/network.js:204 src/prefs/gpu.js:129 src/prefs/processors.js:132
 msgid "Icon Size"
 msgstr "Velikost ikony"
 
-#: src/prefs/sensors.js:121 src/prefs/memory.js:142 src/prefs/storage.js:225
+#: src/prefs/sensors.js:137 src/prefs/memory.js:142 src/prefs/storage.js:225
 #: src/prefs/network.js:205 src/prefs/visualization.js:132
 #: src/prefs/visualization.js:140 src/prefs/visualization.js:148
 #: src/prefs/gpu.js:130 src/prefs/processors.js:133
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
 
-#: src/prefs/sensors.js:128 src/prefs/gpu.js:94
+#: src/prefs/sensors.js:144 src/prefs/gpu.js:94
 msgid "None"
 msgstr "Žádné"
 
-#: src/prefs/sensors.js:133
+#: src/prefs/sensors.js:149
 msgid "Sensor 1"
 msgstr ""
 
-#: src/prefs/sensors.js:136 src/prefs/sensors.js:153 src/prefs/sensors.js:167
-#: src/prefs/sensors.js:183 src/prefs/sensors.js:199 src/prefs/sensors.js:215
-#: src/prefs/sensors.js:231
+#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
+#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
+#: src/prefs/sensors.js:247
 msgid "Source"
 msgstr "Zdroj"
 
-#: src/prefs/sensors.js:141 src/prefs/sensors.js:158 src/prefs/sensors.js:177
-#: src/prefs/sensors.js:193 src/prefs/sensors.js:209 src/prefs/sensors.js:225
-#: src/prefs/sensors.js:241
+#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
+#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
+#: src/prefs/sensors.js:257
 msgid "Value Digits"
 msgstr "Počet číslic za desetinnou čárkou"
 
-#: src/prefs/sensors.js:142 src/prefs/sensors.js:159 src/prefs/sensors.js:178
-#: src/prefs/sensors.js:194 src/prefs/sensors.js:210 src/prefs/sensors.js:226
-#: src/prefs/sensors.js:242
+#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
+#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
+#: src/prefs/sensors.js:258
 msgid "Set -1 to auto. Number of digits after the decimal point."
 msgstr ""
 "Pro automatické nastavení nastavte na -1. Počet číslic za desetinnou čárkou."
 
-#: src/prefs/sensors.js:145
+#: src/prefs/sensors.js:161
 msgid "Sensor 2"
 msgstr ""
 
-#: src/prefs/sensors.js:148 src/prefs/storage.js:284 src/prefs/network.js:238
+#: src/prefs/sensors.js:164 src/prefs/storage.js:284 src/prefs/network.js:238
 msgid "Vertical"
 msgstr "Svislé"
 
-#: src/prefs/sensors.js:149 src/prefs/storage.js:285 src/prefs/network.js:239
+#: src/prefs/sensors.js:165 src/prefs/storage.js:285 src/prefs/network.js:239
 msgid "Horizontal"
 msgstr "Vodorovné"
 
-#: src/prefs/sensors.js:151
+#: src/prefs/sensors.js:167
 msgid "Sensor 2 Layout"
 msgstr "Sensor 2 - rozvržení"
 
-#: src/prefs/sensors.js:163 src/prefs/memory.js:192 src/prefs/storage.js:291
+#: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
 #: src/prefs/network.js:245 src/prefs/gpu.js:179 src/prefs/processors.js:174
 msgid "Tooltip"
 msgstr "Nápověda"
 
-#: src/prefs/sensors.js:164 src/prefs/memory.js:193 src/prefs/storage.js:292
+#: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
 #: src/prefs/network.js:246 src/prefs/gpu.js:180 src/prefs/processors.js:175
 msgid "Show Tooltip"
 msgstr "Zobrazit nápovědu"
 
-#: src/prefs/sensors.js:165
+#: src/prefs/sensors.js:181
 msgid "Tooltip Sensor 1"
 msgstr "Sensor 1 - nápověda"
 
-#: src/prefs/sensors.js:172 src/prefs/sensors.js:188 src/prefs/sensors.js:204
-#: src/prefs/sensors.js:220 src/prefs/sensors.js:236
+#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
+#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
 msgid "Short Name"
 msgstr "Zkrácený název"
 
-#: src/prefs/sensors.js:173 src/prefs/sensors.js:189 src/prefs/sensors.js:205
-#: src/prefs/sensors.js:221 src/prefs/sensors.js:237
+#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
+#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
 msgid "Short name to display in the tooltip."
 msgstr "Zkrácený název pro zobrazení v nápovědě."
 
-#: src/prefs/sensors.js:181
+#: src/prefs/sensors.js:197
 msgid "Tooltip Sensor 2"
 msgstr "Sensor 2 - nápověda"
 
-#: src/prefs/sensors.js:197
+#: src/prefs/sensors.js:213
 msgid "Tooltip Sensor 3"
 msgstr "Sensor 3 - nápověda"
 
-#: src/prefs/sensors.js:213
+#: src/prefs/sensors.js:229
 msgid "Tooltip Sensor 4"
 msgstr "Sensor 4 - nápověda"
 
-#: src/prefs/sensors.js:229
+#: src/prefs/sensors.js:245
 msgid "Tooltip Sensor 5"
 msgstr "Sensor 5 - nápověda"
 
-#: src/prefs/sensors.js:250 src/prefs/memory.js:202 src/prefs/memory.js:204
+#: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
 #: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:183
 #: src/prefs/processors.js:185 prefs.js:236 prefs.js:296 prefs.js:330
@@ -335,7 +366,7 @@ msgstr "Sensor 5 - nápověda"
 msgid "Menu"
 msgstr ""
 
-#: src/prefs/sensors.js:255 src/prefs/gpu.js:194
+#: src/prefs/sensors.js:271 src/prefs/gpu.js:194
 msgid "Empty for now"
 msgstr ""
 
@@ -1494,11 +1525,11 @@ msgstr "Informace o GPU"
 msgid "Only works if GPU header is disabled."
 msgstr ""
 
-#: src/sensors/sensorsMenu.js:38
+#: src/sensors/sensorsMenu.js:50
 msgid "No sensor found"
 msgstr "Nenalezeny žádné sensory"
 
-#: src/sensors/sensorsMenu.js:206
+#: src/sensors/sensorsMenu.js:225
 #, fuzzy, javascript-format
 msgid "%d sensor"
 msgid_plural "%d sensors"
