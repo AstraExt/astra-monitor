@@ -63,6 +63,19 @@ export default class SensorsMenu extends MenuBase {
 
         this.createSensorsList();
         this.addUtilityButtons('sensors');
+
+        Config.connect(this, 'changed::sensors-ignored-regex', () => {
+            this.resetSensorsList();
+            Utils.sensorsMonitor.requestUpdate('sensorsData');
+        });
+        Config.connect(this, 'changed::sensors-ignored-category-regex', () => {
+            this.resetSensorsList();
+            Utils.sensorsMonitor.requestUpdate('sensorsData');
+        });
+        Config.connect(this, 'changed::sensors-ignored-attribute-regex', () => {
+            this.resetSensorsList();
+            Utils.sensorsMonitor.requestUpdate('sensorsData');
+        });
     }
 
     createSensorsList() {
@@ -80,6 +93,14 @@ export default class SensorsMenu extends MenuBase {
             this.sensors = new Map();
             this.addToMenu(this.sensorsSection, 2);
         }
+    }
+
+    resetSensorsList() {
+        for(const [id, sensor] of this.sensors.entries()) {
+            this.sensorsSection.remove_child(sensor.container);
+            this.sensors.delete(id);
+        }
+        this.noSensorsLabel.show();
     }
 
     updateSensorsList(sensors: Map<string, SensorNode>) {

@@ -85,7 +85,7 @@ export default class NetworkMonitor extends Monitor {
     private detectedMaxSpeedsValues: MaxSpeeds;
     private interfaceChecks: Record<string, boolean>;
     private ignored: string[];
-    private ignoredRegex: RegExp | null;
+    private ignoredRegex!: RegExp | null;
 
     private updateNetworkIOTask: CancellableTaskManager<boolean>;
     private updateRoutesTask: CancellableTaskManager<boolean>;
@@ -147,7 +147,7 @@ export default class NetworkMonitor extends Monitor {
         });
 
         // Regex ignored interfaces
-        {
+        const updateIgnoredRegex = () => {
             const regex = Config.get_string('network-ignored-regex');
             try {
                 if(regex === null || regex === '') this.ignoredRegex = null;
@@ -155,19 +155,13 @@ export default class NetworkMonitor extends Monitor {
             } catch(e) {
                 this.ignoredRegex = null;
             }
-        }
+        };
 
         Config.connect(this, 'changed::network-ignored-regex', () => {
             this.reset();
-
-            const regex = Config.get_string('network-ignored-regex');
-            try {
-                if(regex === null || regex === '') this.ignoredRegex = null;
-                else this.ignoredRegex = new RegExp(`^${regex}$`, 'i');
-            } catch(e) {
-                this.ignoredRegex = null;
-            }
+            updateIgnoredRegex();
         });
+        updateIgnoredRegex();
 
         Config.connect(
             this,

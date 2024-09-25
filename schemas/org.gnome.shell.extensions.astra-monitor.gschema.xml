@@ -1103,6 +1103,21 @@
       <summary>Sensors Temperature Unit</summary>
       <description>Temperature Unit of measurement for the sensors</description>
     </key>
+    <key name="sensors-ignored-regex" type="s">
+      <default>''</default>
+      <summary>Ignored Sensors Regex</summary>
+      <description>A regex to match Sensors to ignore</description>
+    </key>
+    <key name="sensors-ignored-category-regex" type="s">
+      <default>''</default>
+      <summary>Ignored Sensors Category Regex</summary>
+      <description>A regex to match Sensors Category to ignore</description>
+    </key>
+    <key name="sensors-ignored-attribute-regex" type="s">
+      <default>''</default>
+      <summary>Ignored Sensors Attribute Regex</summary>
+      <description>A regex to match Sensors Attribute to ignore</description>
+    </key>
     <key name="sensors-source" enum="org.gnome.shell.extensions.astra-monitor.enum.source-list4">
       <default>'auto'</default>
       <summary>Sensors Source</summary>

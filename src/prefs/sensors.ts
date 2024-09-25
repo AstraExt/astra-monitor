@@ -126,6 +126,45 @@ export default class Sensors {
             'string'
         );
 
+        const ignoredSection = PrefsUtils.addExpanderRow(
+            { title: _('Ignored Sensors') },
+            group,
+            'sensors'
+        );
+
+        PrefsUtils.addTextInputRow(
+            {
+                title: _('Ignored Sensors Regex'),
+                subtitle: _('Completely ignore sensors matching this regex'),
+                tabs: 1,
+            },
+            'sensors-ignored-regex',
+            ignoredSection,
+            ''
+        );
+
+        PrefsUtils.addTextInputRow(
+            {
+                title: _('Ignored Sensors Category Regex'),
+                subtitle: _('Categories are like "Package", "Core", "Edge", etc.'),
+                tabs: 1,
+            },
+            'sensors-ignored-category-regex',
+            ignoredSection,
+            ''
+        );
+
+        PrefsUtils.addTextInputRow(
+            {
+                title: _('Ignored Sensors Attribute Regex'),
+                subtitle: _('Attributes are like "Alarm", "Min", "Max", "Crit", etc.'),
+                tabs: 1,
+            },
+            'sensors-ignored-attribute-regex',
+            ignoredSection,
+            ''
+        );
+
         const sourcesSection = PrefsUtils.addExpanderRow(
             { title: _('Data Sources') },
             group,

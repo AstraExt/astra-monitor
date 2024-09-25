@@ -59,6 +59,10 @@ export default class SensorsMonitor extends Monitor {
     private prefTooltipSensor4Source?: SensorSource;
     private prefTooltipSensor5Source?: SensorSource;
 
+    private ignoredSensorsRegex!: RegExp | null;
+    private ignoredSensorsCategoryRegex!: RegExp | null;
+    private ignoredSensorsAttributeRegex!: RegExp | null;
+
     constructor() {
         super('Sensors Monitor');
 
@@ -170,6 +174,57 @@ export default class SensorsMonitor extends Monitor {
             'changed::sensors-header-tooltip-sensor5',
             updateTooltipSensor5SourceBind
         );
+
+        // Regex ignored sensors
+        const updateIgnoredSensorsRegex = () => {
+            const regex = Config.get_string('sensors-ignored-regex');
+            try {
+                if(regex === null || regex === '') this.ignoredSensorsRegex = null;
+                else this.ignoredSensorsRegex = new RegExp(`^${regex}$`, 'i');
+            } catch(e) {
+                this.ignoredSensorsRegex = null;
+            }
+        };
+
+        Config.connect(this, 'changed::sensors-ignored-regex', () => {
+            this.reset();
+            updateIgnoredSensorsRegex();
+        });
+        updateIgnoredSensorsRegex();
+
+        // Regex ignored sensors category
+        const updateIgnoredSensorsCategoryRegex = () => {
+            const regex = Config.get_string('sensors-ignored-category-regex');
+            try {
+                if(regex === null || regex === '') this.ignoredSensorsCategoryRegex = null;
+                else this.ignoredSensorsCategoryRegex = new RegExp(`^${regex}$`, 'i');
+            } catch(e) {
+                this.ignoredSensorsCategoryRegex = null;
+            }
+        };
+
+        Config.connect(this, 'changed::sensors-ignored-category-regex', () => {
+            this.reset();
+            updateIgnoredSensorsCategoryRegex();
+        });
+        updateIgnoredSensorsCategoryRegex();
+
+        // Regex ignored sensors attribute
+        const updateIgnoredSensorsAttributeRegex = () => {
+            const regex = Config.get_string('sensors-ignored-attribute-regex');
+            try {
+                if(regex === null || regex === '') this.ignoredSensorsAttributeRegex = null;
+                else this.ignoredSensorsAttributeRegex = new RegExp(`^${regex}$`, 'i');
+            } catch(e) {
+                this.ignoredSensorsAttributeRegex = null;
+            }
+        };
+
+        Config.connect(this, 'changed::sensors-ignored-attribute-regex', () => {
+            this.reset();
+            updateIgnoredSensorsAttributeRegex();
+        });
+        updateIgnoredSensorsAttributeRegex();
     }
 
     get updateFrequency() {
@@ -182,6 +237,10 @@ export default class SensorsMonitor extends Monitor {
 
     reset() {
         this.updateSensorsDataTask.cancel();
+
+        this.ignoredSensorsRegex = null;
+        this.ignoredSensorsCategoryRegex = null;
+        this.ignoredSensorsAttributeRegex = null;
     }
 
     start() {
@@ -327,11 +386,25 @@ export default class SensorsMonitor extends Monitor {
                             deviceLabel =
                                 Utils.capitalize(split[0]) + ' - ' + split[1].replace(/}$/, '');
 
+                        if(
+                            this.ignoredSensorsRegex !== null &&
+                            this.ignoredSensorsRegex.test(deviceLabel)
+                        ) {
+                            continue;
+                        }
+
                         device = { name: deviceLabel, children: new Map(), attrs: {} };
                         data.hwmon.children.set(deviceName, device);
                     }
 
                     for(const [categoryName, hwmonCategory] of hwmonDevice) {
+                        if(
+                            this.ignoredSensorsCategoryRegex !== null &&
+                            this.ignoredSensorsCategoryRegex.test(categoryName)
+                        ) {
+                            continue;
+                        }
+
                         if(!this.shouldUpdate('hwmon', [deviceName, categoryName])) continue;
 
                         let category = device.children.get(categoryName);
@@ -341,6 +414,13 @@ export default class SensorsMonitor extends Monitor {
                         }
 
                         for(const [attributeName, hwmonAttribute] of hwmonCategory) {
+                            if(
+                                this.ignoredSensorsAttributeRegex !== null &&
+                                this.ignoredSensorsAttributeRegex.test(attributeName)
+                            ) {
+                                continue;
+                            }
+
                             if(
                                 !this.shouldUpdate('hwmon', [
                                     deviceName,
@@ -406,6 +486,13 @@ export default class SensorsMonitor extends Monitor {
                 const parsedData = JSON.parse(lmSensorsDataValue) as any;
                 if(parsedData) {
                     for(const [deviceName, deviceData] of Object.entries(parsedData)) {
+                        if(
+                            this.ignoredSensorsRegex !== null &&
+                            this.ignoredSensorsRegex.test(deviceName)
+                        ) {
+                            continue;
+                        }
+
                         let device = data.lm_sensors.children.get(deviceName);
                         if(!device) {
                             device = { name: deviceName, children: new Map(), attrs: {} };
@@ -426,6 +513,13 @@ export default class SensorsMonitor extends Monitor {
                         for(const [categoryName, categoryData] of Object.entries(
                             deviceData as Record<string, unknown>
                         )) {
+                            if(
+                                this.ignoredSensorsCategoryRegex !== null &&
+                                this.ignoredSensorsCategoryRegex.test(categoryName)
+                            ) {
+                                continue;
+                            }
+
                             if(categoryName === 'Adapter') continue;
 
                             let category = device.children.get(categoryName);
@@ -437,6 +531,13 @@ export default class SensorsMonitor extends Monitor {
                             for(const [attributeName, attributeValue] of Object.entries(
                                 categoryData as Record<string, unknown>
                             )) {
+                                if(
+                                    this.ignoredSensorsAttributeRegex !== null &&
+                                    this.ignoredSensorsAttributeRegex.test(attributeName)
+                                ) {
+                                    continue;
+                                }
+
                                 const value = parseFloat(attributeValue as any);
                                 let unit = '';
                                 if(attributeName !== 'fan')
