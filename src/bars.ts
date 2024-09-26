@@ -251,7 +251,7 @@ export default GObject.registerClass(
                     }
                 }
             } catch(e: any) {
-                Utils.error(e);
+                Utils.error('Error updating bars', e);
             }
         }
 

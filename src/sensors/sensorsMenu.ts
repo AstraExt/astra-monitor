@@ -144,7 +144,7 @@ export default class SensorsMenu extends MenuBase {
             try {
                 this.updateSensor(sensor, sensorData);
             } catch(e: any) {
-                Utils.error(e);
+                Utils.error('Error updating sensor', e);
             }
         }
     }

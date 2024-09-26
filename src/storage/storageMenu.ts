@@ -628,7 +628,7 @@ export default class StorageMenu extends MenuBase {
             try {
                 this.updateBlockDevice(device, deviceData);
             } catch(e: any) {
-                Utils.error(e);
+                Utils.error('Error updating storage device info', e);
             }
         }
     }

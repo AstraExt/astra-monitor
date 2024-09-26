@@ -1067,7 +1067,7 @@ export default class NetworkMenu extends MenuBase {
                     deviceData
                 );
             } catch(e: any) {
-                Utils.error(e);
+                Utils.error('Error updating netowrk interface device', e);
             }
         }
     }

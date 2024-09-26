@@ -1145,7 +1145,7 @@ export default class GpuMonitor extends Monitor {
             this.pushUsageHistory('gpu', gpus);
             this.notify('gpuUpdate', gpus);
         } catch(e: any) {
-            Utils.error(`updateAmdGpu: ${e.message}`);
+            Utils.error('Error updating AMD GPU', e);
         }
     }
 
@@ -2005,7 +2005,7 @@ export default class GpuMonitor extends Monitor {
             this.pushUsageHistory('gpu', gpus);
             this.notify('gpuUpdate', gpus);
         } catch(e: any) {
-            Utils.error(`updateNvidiaGpu: ${e.message}`);
+            Utils.error('Error updating Nvidia GPU', e);
         }
     }
 

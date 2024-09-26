@@ -567,7 +567,7 @@ export default class StorageMonitor extends Monitor {
                 }
             }
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error updating storage usage', e);
         }
         return false;
     }
@@ -822,7 +822,7 @@ export default class StorageMonitor extends Monitor {
             }
         }
         catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error updating storage IO', e);
         }*/
 
         /**!
@@ -1038,7 +1038,7 @@ export default class StorageMonitor extends Monitor {
             this.setUsageValue('topProcessesIOTop', topProcesses);
             this.notify('topProcessesIOTop', topProcesses);
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error updating storage IO top', e);
         }
     }
 
@@ -1097,7 +1097,7 @@ export default class StorageMonitor extends Monitor {
                 return true;
             }
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error updating storage info', e);
         }
         return false;
     }

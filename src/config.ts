@@ -308,7 +308,7 @@ export default class Config {
                 else if(type.equal(new GLib.VariantType('d'))) Config.set(key, value, 'number');
                 else Utils.log('Unsupported type: ' + type);
             } catch(e: any) {
-                Utils.error(e.message);
+                Utils.error('Error importing settings', e);
             }
         }
         Config.apply();
@@ -438,8 +438,8 @@ export default class Config {
                                 Config.set(key, value, 'number');
                             }
                         } else Utils.log('Unsupported type: ' + type);
-                    } catch(e) {
-                        Utils.error('Error syncing profile' + e);
+                    } catch(e: any) {
+                        Utils.error('Error syncing profile', e);
                     }
                 }
             }

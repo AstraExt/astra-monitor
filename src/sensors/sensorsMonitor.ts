@@ -468,7 +468,7 @@ export default class SensorsMonitor extends Monitor {
 
                 await Promise.all(readPromises);
             } catch(e: any) {
-                Utils.error(`Update hwmon data error: ${e.message}`);
+                Utils.error('Error updating hwmon data', e);
             }
         }
 
@@ -553,7 +553,7 @@ export default class SensorsMonitor extends Monitor {
                     }
                 }
             } catch(e: any) {
-                Utils.error(`Update lm-sensors data error: ${e.message}`);
+                Utils.error('Error updating lm-sensors data', e);
             }
         }
 

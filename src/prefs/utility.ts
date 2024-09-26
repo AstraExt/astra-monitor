@@ -142,10 +142,10 @@ export default class Utility {
                                     Config.importSettings(data);
                                 })
                                 .catch(e => {
-                                    Utils.error(e.message);
+                                    Utils.error('Error running import settings', e);
                                 });
                         } catch(e: any) {
-                            Utils.error(e.message);
+                            Utils.error('Error reading import settings file', e);
                         }
                     }
                     subject.destroy();

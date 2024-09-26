@@ -119,7 +119,7 @@ export default class Monitor {
                     //TODO: manage canceled update
                     Utils.log(this.name + ' update canceled: ' + key);
                 } else {
-                    Utils.error(`${this.name} - ${key}: ${e.message}`);
+                    Utils.error(`Error running '${this.name}' task - ${key}`, e);
                 }
             });
     }
@@ -198,7 +198,13 @@ export default class Monitor {
 
         const listeners = this.listeners.get(key);
         if(listeners) {
-            for(const listener of listeners) listener.callback(value);
+            for(const listener of listeners) {
+                try {
+                    listener.callback(value);
+                } catch(e: any) {
+                    Utils.error(`Error notifying listener for ${key}`, e);
+                }
+            }
         }
     }
 

@@ -76,7 +76,7 @@ export default class AstraMonitorExtension extends Extension {
         try {
             this.container?.destroy();
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error destroying container', e);
         }
         this.container = undefined;
 

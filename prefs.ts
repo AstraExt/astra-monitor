@@ -72,7 +72,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             if(!iconsPath) throw new Error('Icons path not found');
             iconTheme.add_search_path(iconsPath);
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error loading custom theme', e);
         }
     }
 
@@ -154,7 +154,7 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 }
                 Config.updatedProfilesConfig(key);
             } catch(e: any) {
-                Utils.error(e);
+                Utils.error('Error updating profile config', e);
             }
         });
 

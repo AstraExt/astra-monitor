@@ -240,7 +240,7 @@ export default class Welcome {
                 }
             })
             .catch((e: any) => {
-                Utils.error(e);
+                Utils.error('Error checking GTop dependency', e);
                 statusLabel.row.title = _(
                     "'GTop' not installed, some optional features will be disabled! For a better experience and performance, install it from your package manager."
                 );

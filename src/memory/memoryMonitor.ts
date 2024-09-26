@@ -428,7 +428,7 @@ export default class MemoryMonitor extends Monitor {
                 topProcesses.push(...resolvedProcesses);
             }
         } catch(e: any) {
-            Utils.error(e.message);
+            Utils.error('Error updating memory top processes', e);
         }
 
         this.topProcessesCache.updateNotSeen(seenPids);
@@ -573,7 +573,7 @@ export default class MemoryMonitor extends Monitor {
                 swapUsage.devices = swapDevices;
             }
         } catch(e: any) {
-            Utils.error(e.message);
+            Utils.error('Error updating swap usage', e);
         }
 
         this.setUsageValue('swapUsage', swapUsage);

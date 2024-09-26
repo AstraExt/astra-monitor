@@ -233,18 +233,18 @@ export default GObject.registerClass(
         }
 
         destroy() {
-            Utils.log('Destroying container');
-
             try {
                 Config.clear(this);
             } catch(e: any) {
-                Utils.error(e);
+                Utils.error('Error clearing container settings', e);
             }
 
             try {
-                for(const widget of this.widgets.values()) widget.destroy();
+                for(const widget of this.widgets.values()) {
+                    widget.destroy();
+                }
             } catch(e: any) {
-                Utils.error(e);
+                Utils.error('Error destroying widgets', e);
             }
             super.destroy();
         }

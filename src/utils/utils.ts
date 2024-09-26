@@ -247,7 +247,7 @@ export default class Utils {
         try {
             Config.clearAll();
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error clearing config', e);
         }
 
         try {
@@ -269,7 +269,7 @@ export default class Utils {
             Utils.sensorsMonitor?.stop();
             Utils.sensorsMonitor?.destroy();
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error stopping or destroying monitor', e);
         }
 
         Utils.lastCachedHwmonDevices = 0;
@@ -314,22 +314,24 @@ export default class Utils {
         }
     }
 
-    static warn(message: string) {
-        const error = new Error();
+    static warn(message: string, error?: Error) {
+        if(error === undefined) error = new Error();
         console.warn(error, Utils.logHeader + ' WARNING: ' + message);
 
         if(Utils.debug) {
             Utils.logToFile('WARNING: ' + message);
+            Utils.logToFile(error.message);
             Utils.logToFile(error.stack ?? '');
         }
     }
 
-    static error(message: string) {
-        const error = new Error();
+    static error(message: string, error?: Error) {
+        if(error === undefined) error = new Error();
         console.error(error, Utils.logHeader + ' ERROR: ' + message);
 
         if(Utils.debug) {
             Utils.logToFile('ERROR: ' + message);
+            Utils.logToFile(error.message);
             Utils.logToFile(error.stack ?? '');
         }
     }
@@ -970,8 +972,8 @@ export default class Utils {
             // order devices by name
             const orderedDevices = new Map([...devices.entries()].sort());
             return orderedDevices;
-        } catch(e) {
-            Utils.error(`Error getting hwmon devices: ${e}`);
+        } catch(e: any) {
+            Utils.error('Error getting hwmon devices', e);
             return new Map();
         }
     }
@@ -1650,7 +1652,7 @@ export default class Utils {
                 Utils.error('No disk data found or lsblk command failed');
             }
         } catch(e: any) {
-            Utils.error('Error getting disk list: ' + e.message);
+            Utils.error('Error getting disk list', e);
         }
         return disks;
     }
@@ -2113,7 +2115,7 @@ export default class Utils {
                 }
             }
         } catch(e: any) {
-            Utils.error(e.message);
+            Utils.error('Error getting network interfaces', e);
         }
 
         return devices;
@@ -2153,7 +2155,7 @@ export default class Utils {
             }
             return routes;
         } catch(e: any) {
-            Utils.error(e.message);
+            Utils.error('Error getting network routes', e);
             return routes;
         }
     }
@@ -2256,7 +2258,7 @@ export default class Utils {
                 for(const device of json.blockdevices) processDevice(device);
             }
         } catch(e: any) {
-            Utils.error(e);
+            Utils.error('Error getting block devices', e);
         }
 
         return devices;
