@@ -1242,6 +1242,10 @@ export default class GpuMenuComponent {
                     topProcess.label.text = '-';
                     topProcess.value1.text = '-';
                     topProcess.value2.text = '-';
+                    
+                    if(gpuData.family === 'NVIDIA') {
+                        topProcess.value2.hide();
+                    }
                     continue;
                 }
 
@@ -1311,7 +1315,12 @@ export default class GpuMenuComponent {
         this.clear();
 
         this.shown = true;
-        this.update(this.lastData);
+        
+        try {
+            this.update(this.lastData);
+        } catch(e: any) {
+            Utils.error('Error updating gpu menu', e);
+        }
     }
 
     public onClose() {
