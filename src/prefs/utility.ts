@@ -91,7 +91,9 @@ export default class Utility {
 
                 dialog.connect('response', (subject, id) => {
                     if(id === Gtk.ResponseType.OK) {
-                        const path = subject.get_file().get_path();
+                        const path = subject.get_file()?.get_path();
+                        if(!path) return;
+
                         const file = Gio.file_new_for_path(path);
                         const stream = file.replace(
                             null,
@@ -136,7 +138,11 @@ export default class Utility {
                 dialog.connect('response', (subject, id) => {
                     if(id === Gtk.ResponseType.OK) {
                         try {
-                            const path = subject.get_file().get_path();
+                            const path = subject.get_file()?.get_path();
+                            if(!path) {
+                                throw new Error('No path');
+                            }
+
                             Utils.readFileAsync(path)
                                 .then(data => {
                                     Config.importSettings(data);

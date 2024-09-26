@@ -76,87 +76,91 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
         }
     }
 
-    fillPreferencesWindow(window: Adw.PreferencesWindow) {
-        Utils.init({
-            service: 'prefs',
-            metadata: this.metadata,
-            settings: this.getSettings(),
-        });
-        PrefsUtils.expanded = new Map();
+    async fillPreferencesWindow(window: Adw.PreferencesWindow) {
+        try {
+            Utils.init({
+                service: 'prefs',
+                metadata: this.metadata,
+                settings: this.getSettings(),
+            });
+            PrefsUtils.expanded = new Map();
 
-        window.connect('close-request', () => {
-            Utils.clear();
+            window.connect('close-request', () => {
+                Utils.clear();
 
-            this.active = null;
-            (this.welcome as any) = null;
-            (this.profiles as any) = null;
-            (this.visualization as any) = null;
-            (this.processors as any) = null;
-            (this.gpu as any) = null;
-            (this.memory as any) = null;
-            (this.storage as any) = null;
-            (this.network as any) = null;
-            (this.sensors as any) = null;
-            (this.utility as any) = null;
-            (this.about as any) = null;
-            (PrefsUtils.expanded as any) = null;
-        });
+                this.active = null;
+                (this.welcome as any) = null;
+                (this.profiles as any) = null;
+                (this.visualization as any) = null;
+                (this.processors as any) = null;
+                (this.gpu as any) = null;
+                (this.memory as any) = null;
+                (this.storage as any) = null;
+                (this.network as any) = null;
+                (this.sensors as any) = null;
+                (this.utility as any) = null;
+                (this.about as any) = null;
+                (PrefsUtils.expanded as any) = null;
+            });
 
-        this.loadCustomTheme();
+            this.loadCustomTheme();
 
-        //! Add dummy page to avoid exception
-        window.add(new Adw.PreferencesPage());
+            //! Add dummy page to avoid exception
+            window.add(new Adw.PreferencesPage());
 
-        const navigation = new Adw.NavigationSplitView({
-            vexpand: true,
-            hexpand: true,
-        });
-        window.set_content(navigation);
+            const navigation = new Adw.NavigationSplitView({
+                vexpand: true,
+                hexpand: true,
+            });
+            window.set_content(navigation);
 
-        this.welcome = new Welcome(this);
-        this.profiles = new Profiles(this);
-        this.visualization = new Visualization(this);
-        this.processors = new Processors(this);
-        this.gpu = new Gpu(this);
-        this.memory = new Memory(this);
-        this.storage = new Storage(this);
-        this.network = new Network(this);
-        this.sensors = new Sensors(this);
-        this.utility = new Utility(this, window);
-        this.about = new About(this);
+            this.welcome = new Welcome(this);
+            this.profiles = new Profiles(this);
+            this.visualization = new Visualization(this);
+            this.processors = new Processors(this);
+            this.gpu = new Gpu(this);
+            this.memory = new Memory(this);
+            this.storage = new Storage(this);
+            this.network = new Network(this);
+            this.sensors = new Sensors(this);
+            this.utility = new Utility(this, window);
+            this.about = new About(this);
 
-        const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
-        const colorScheme = settings.get_string('color-scheme');
+            const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
+            const colorScheme = settings.get_string('color-scheme');
 
-        if(
-            colorScheme === 'prefer-dark' ||
-            (Gtk.Settings.get_default()?.gtkApplicationPreferDarkTheme ?? false) ||
-            Adw.StyleManager.get_default().dark
-        ) {
-            AstraMonitorPrefs.addCss(`
-                .am-active {
-                    background-color: rgba(255, 255, 255, 0.1);
-                }
-            `);
-        } else {
-            AstraMonitorPrefs.addCss(`
-                .am-active {
-                    background-color: rgba(0, 0, 0, 0.1);
-                }
-            `);
-        }
-        this.setupSidebar(navigation);
-
-        Config.connect(this, 'changed', (_settings: Gio.Settings, key: string) => {
-            try {
-                if(Config.globalSettingsKeys.includes(key)) {
-                    return;
-                }
-                Config.updatedProfilesConfig(key);
-            } catch(e: any) {
-                Utils.error('Error updating profile config', e);
+            if(
+                colorScheme === 'prefer-dark' ||
+                (Gtk.Settings.get_default()?.gtkApplicationPreferDarkTheme ?? false) ||
+                Adw.StyleManager.get_default().dark
+            ) {
+                AstraMonitorPrefs.addCss(`
+                    .am-active {
+                        background-color: rgba(255, 255, 255, 0.1);
+                    }
+                `);
+            } else {
+                AstraMonitorPrefs.addCss(`
+                    .am-active {
+                        background-color: rgba(0, 0, 0, 0.1);
+                    }
+                `);
             }
-        });
+            this.setupSidebar(navigation);
+
+            Config.connect(this, 'changed', (_settings: Gio.Settings, key: string) => {
+                try {
+                    if(Config.globalSettingsKeys.includes(key)) {
+                        return;
+                    }
+                    Config.updatedProfilesConfig(key);
+                } catch(e: any) {
+                    Utils.error('Error updating profile config', e);
+                }
+            });
+        } catch(e: any) {
+            Utils.error('Error filling preferences window', e);
+        }
 
         window.set_default_size(this.defaultSize.width, this.defaultSize.height);
         window.set_size_request(this.minimumSize.width, this.minimumSize.height);

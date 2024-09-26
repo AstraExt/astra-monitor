@@ -130,7 +130,7 @@ export default class PrefsUtils {
         else (group as Adw.ExpanderRow).add_row(row);
 
         const entry = new Gtk.Entry({
-            text: Config.get_string(setting),
+            text: Config.get_string(setting) || '',
             halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER,
         });
@@ -211,7 +211,6 @@ export default class PrefsUtils {
             halign: Gtk.Align.END,
             widthRequest: 1,
             opacity: 0,
-            cursor: null,
         });
         row.add_suffix(linkBtn);
         row.activatableWidget = linkBtn;
@@ -710,7 +709,7 @@ export default class PrefsUtils {
             useSize: false,
             level: Gtk.FontChooserLevel.FAMILY,
             previewText: 'Astra Monitor v' + Utils.metadata.version,
-            font: Config.get_string(setting),
+            font: Config.get_string(setting) || '',
         });
 
         fontButton.connect('font-set', widget => {

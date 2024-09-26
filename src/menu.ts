@@ -110,7 +110,6 @@ export default class MenuBase extends PopupMenu.PopupMenu {
 
     static getMonitorSize(actorBox: Clutter.ActorBox): Size {
         const display = global.display;
-        // @ts-expect-error Mtk types are not up to date
         const rect = new Mtk.Rectangle({
             x: actorBox.x1,
             y: actorBox.y1,

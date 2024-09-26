@@ -125,9 +125,15 @@ export default class ContinuousTaskManager {
 
             this.currentTask?.setSubprocess(proc);
 
+            const pipeOut = proc.get_stdout_pipe();
+            if(!pipeOut) {
+                reject('Failed to get stdout pipe');
+                return;
+            }
+
             const stdinStream = proc.get_stdin_pipe();
             const stdoutStream = new Gio.DataInputStream({
-                baseStream: proc.get_stdout_pipe(),
+                baseStream: pipeOut,
                 closeBaseStream: true,
             });
 
@@ -146,6 +152,10 @@ export default class ContinuousTaskManager {
             this.currentTask?.cancellable || null,
             (stream, result) => {
                 try {
+                    if(stream === null) {
+                        throw new Error('Stream invalid');
+                    }
+
                     const [line] = stream.read_line_finish_utf8(result);
 
                     if(line !== null) {

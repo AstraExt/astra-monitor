@@ -427,7 +427,7 @@ export default class Utils {
         ]) {
             try {
                 const [result, stdout, stderr] = GLib.spawn_command_line_sync(path + fullCommand);
-                if(result && stdout && !stderr.length) {
+                if(result && stdout && (!stderr || !stderr.length)) {
                     Utils.commandsPath!.set(command, path);
                     return path;
                 }
@@ -677,7 +677,7 @@ export default class Utils {
     static hasPs(): boolean {
         try {
             const [result, stdout, stderr] = GLib.spawn_command_line_sync('ps -V');
-            return result && stdout && !stderr.length;
+            return result && !!stdout && (!stderr || !stderr.length);
         } catch(e: any) {
             return false;
         }
@@ -1027,7 +1027,7 @@ export default class Utils {
                 const [_result, stdout, _stderr] = GLib.spawn_command_line_sync(
                     `${path}sensors -j`
                 );
-                if(stdout.length > 0) {
+                if(stdout && stdout.length > 0) {
                     const decoder = new TextDecoder('utf8');
                     let stdoutString = decoder.decode(stdout);
 
@@ -1230,6 +1230,7 @@ export default class Utils {
             const path = Utils.commandPathLookup('lspci --version');
             const [result, stdout, stderr] = GLib.spawn_command_line_sync(`${path}lspci -nnk`);
             if(!result || !stdout) {
+                if(!stderr) throw new Error('Stream invalid');
                 const lspciError = decoder.decode(stderr);
                 Utils.error('Error getting GPUs list: ' + lspciError);
                 return Utils.lspciCached;
@@ -1583,7 +1584,7 @@ export default class Utils {
                 `${path}lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH`
             );
 
-            if(stdout.length > 0) {
+            if(stdout && stdout.length > 0) {
                 const decoder = new TextDecoder('utf8');
                 const stdoutString = decoder.decode(stdout);
                 const parsedData = JSON.parse(stdoutString);
@@ -1755,6 +1756,11 @@ export default class Utils {
                 0,
                 null,
                 (sourceObject, result) => {
+                    if(!sourceObject) {
+                        reject(new Error('Source object invalid'));
+                        return;
+                    }
+
                     try {
                         const enumerator = sourceObject.enumerate_children_finish(result);
 
@@ -1799,6 +1805,11 @@ export default class Utils {
                 0,
                 null,
                 (sourceObject, result) => {
+                    if(!sourceObject) {
+                        reject(new Error('Source object invalid'));
+                        return;
+                    }
+
                     try {
                         const enumerator = sourceObject.enumerate_children_finish(result);
 
@@ -1859,6 +1870,11 @@ export default class Utils {
             }
 
             file.load_contents_async(null, (sourceObject, res) => {
+                if(!sourceObject) {
+                    reject(new Error('Source object invalid'));
+                    return;
+                }
+
                 try {
                     const [success, fileContent] = sourceObject.load_contents_finish(res);
 
@@ -1952,6 +1968,11 @@ export default class Utils {
             }
 
             file.load_contents_async(null, (sourceObject, res) => {
+                if(!sourceObject) {
+                    reject(new Error('Source object invalid'));
+                    return;
+                }
+
                 try {
                     const [success, fileContent] = sourceObject.load_contents_finish(res);
 
@@ -1999,7 +2020,7 @@ export default class Utils {
 
             // Create a new subprocess
             const proc = new Gio.Subprocess({
-                argv: argv[1],
+                argv: argv[1] || [],
                 flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
             });
 
@@ -2019,7 +2040,12 @@ export default class Utils {
             cancellableTaskManager?.setSubprocess(proc);
 
             // Communicate with the subprocess asynchronously
-            proc.communicate_utf8_async(null, null, (sub: Gio.Subprocess, res: Gio.AsyncResult) => {
+            proc.communicate_utf8_async(null, null, (sub, res) => {
+                if(!sub) {
+                    reject(new Error('Subprocess invalid'));
+                    return;
+                }
+
                 try {
                     const [, stdout, stderr] = sub.communicate_utf8_finish(res);
                     if(sub.get_exit_status() !== 0) {
@@ -2036,8 +2062,8 @@ export default class Utils {
         });
     }
 
-    static getLocalIcon(iconName: string): Gio.Icon | null {
-        if(!Utils.metadata || !(Utils.metadata as any).path) return null;
+    static getLocalIcon(iconName: string): Gio.Icon | undefined {
+        if(!Utils.metadata || !(Utils.metadata as any).path) return undefined;
         return Gio.icon_new_for_string(
             `${(Utils.metadata as any).path}/icons/hicolor/scalable/actions/${iconName}.svg`
         );
@@ -2557,7 +2583,7 @@ export default class Utils {
             );
 
         let [result, stdout] = GLib.spawn_command_line_sync('which nethogs');
-        if(result === false) {
+        if(result === false || !stdout) {
             Utils.nethogsCaps = [];
             return false;
         }
@@ -2570,7 +2596,7 @@ export default class Utils {
         }
 
         [result, stdout] = GLib.spawn_command_line_sync(`getcap ${nethogs}`);
-        if(result === false) {
+        if(result === false || !stdout) {
             Utils.nethogsCaps = [];
             return false;
         }
