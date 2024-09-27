@@ -1019,8 +1019,15 @@ export default class StorageMonitor extends Monitor {
                 //const readUnit = fields[4];
                 const write = parseFloat(fields[5]) * 1024;
                 //const writeUnit = fields[6];
-                //const device = fields[7];
-                const command = fields.slice(8).join(' ');
+                const swapin = fields[7];
+
+                let io = 1;
+                if(swapin === '?unavailable?') {
+                    // skip io if swapin is unavailable
+                    io--;
+                }
+
+                const command = fields.slice(8 + io).join(' ');
 
                 topProcesses.push({
                     process: {

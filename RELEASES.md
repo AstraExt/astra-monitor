@@ -1,3 +1,9 @@
+# Astra Monitor 29 - TO BE RELEASED
+
+### Bug fixes
+
+-   Resolved an issue where `iotop` was not accurately identifying process names when both SWAPIN and IO% information were present
+
 # Astra Monitor 28 - September 27 2024
 
 ### Bug fixes
