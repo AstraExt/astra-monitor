@@ -1167,7 +1167,7 @@ export default class GpuMonitor extends Monitor {
             for(const gpuInfo of gpuInfoList) {
                 if(!gpuInfo['@id']) continue;
 
-                let id = gpuInfo['@id'];
+                let id = gpuInfo['@id'].toString().toLowerCase();
                 if(id.startsWith('00000000:')) id = id.slice(4);
 
                 const gpu: NvidiaInfo = {
