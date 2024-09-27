@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 16:24+0200\n"
+"POT-Creation-Date: 2024-09-27 21:40+0200\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -134,14 +134,14 @@ msgstr "teď"
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:112
 #: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:338
-#: src/gpu/gpuMenuComponent.js:802 prefs.js:373
+#: src/gpu/gpuMenuComponent.js:802 prefs.js:378
 msgid "Sensors"
 msgstr "Sensory"
 
 #: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
 #: src/prefs/network.js:82 src/prefs/gpu.js:80 src/prefs/processors.js:80
-#: src/prefs/processors.js:82 prefs.js:220 prefs.js:254 prefs.js:280
-#: prefs.js:314 prefs.js:348 prefs.js:382
+#: src/prefs/processors.js:82 prefs.js:225 prefs.js:259 prefs.js:285
+#: prefs.js:319 prefs.js:353 prefs.js:387
 msgid "General"
 msgstr "Obecné"
 
@@ -217,8 +217,8 @@ msgstr "Automaticky"
 #: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
 #: src/prefs/network.js:186 src/prefs/gpu.js:111 src/prefs/gpu.js:113
-#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:228
-#: prefs.js:262 prefs.js:288 prefs.js:322 prefs.js:356 prefs.js:390
+#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:233
+#: prefs.js:267 prefs.js:293 prefs.js:327 prefs.js:361 prefs.js:395
 msgid "Header"
 msgstr "Záhlaví"
 
@@ -361,8 +361,8 @@ msgstr "Sensor 5 - nápověda"
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
 #: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:183
-#: src/prefs/processors.js:185 prefs.js:236 prefs.js:296 prefs.js:330
-#: prefs.js:364
+#: src/prefs/processors.js:185 prefs.js:241 prefs.js:301 prefs.js:335
+#: prefs.js:369
 msgid "Menu"
 msgstr ""
 
@@ -371,7 +371,7 @@ msgid "Empty for now"
 msgstr ""
 
 #: src/prefs/utility.js:36 src/prefs/utility.js:49 src/prefs/utility.js:52
-#: prefs.js:406
+#: prefs.js:411
 msgid "Utility"
 msgstr ""
 
@@ -388,48 +388,48 @@ msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
 msgid "Save"
 msgstr "Uložit"
 
-#: src/prefs/utility.js:70 src/prefs/utility.js:101
+#: src/prefs/utility.js:70 src/prefs/utility.js:103
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/prefs/utility.js:86 src/prefs/utility.js:90
+#: src/prefs/utility.js:88 src/prefs/utility.js:92
 msgid "Import Settings"
 msgstr "Importovat nastavení"
 
-#: src/prefs/utility.js:87
+#: src/prefs/utility.js:89
 #, fuzzy
 msgid "Warning: this will overwrite all profiles."
 msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
 
-#: src/prefs/utility.js:100
+#: src/prefs/utility.js:102
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/prefs/utility.js:123 src/prefs/utility.js:127
+#: src/prefs/utility.js:128 src/prefs/utility.js:132
 msgid "Reset Settings"
 msgstr "Obnovit nastavení"
 
-#: src/prefs/utility.js:124
+#: src/prefs/utility.js:129
 #, fuzzy
 msgid "Warning: this will reset all profiles."
 msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
 
-#: src/prefs/utility.js:128
+#: src/prefs/utility.js:133
 msgid "Are you sure you want to reset all preferences?"
 msgstr "Určitě chcete obnovit všechna nastavení?"
 
-#: src/prefs/utility.js:143
+#: src/prefs/utility.js:148
 msgid "Debug Mode"
 msgstr "Režim ladění (Debug)"
 
-#: src/prefs/utility.js:144
+#: src/prefs/utility.js:149
 msgid ""
 "Warning: may affect performance, use only if you know what you are doing."
 msgstr "Varování: může ovlivnit výkon, použijte na vlastní nebezpečí."
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
-#: prefs.js:271
+#: prefs.js:276
 msgid "Memory"
 msgstr "Paměť"
 
@@ -606,7 +606,7 @@ msgstr "Barva Swap sloupce"
 msgid "Swap bar main color."
 msgstr "Hlavní barva Swap sloupce"
 
-#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:414
+#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:419
 msgid "About"
 msgstr "O rozšíření"
 
@@ -639,7 +639,7 @@ msgid "GNOME Extensions page"
 msgstr "Stránka GNOME rozšíření"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:305
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:310
 msgid "Storage"
 msgstr "Uložiště"
 
@@ -874,16 +874,16 @@ msgstr "Zařízení"
 msgid "Device Usage Bar Color"
 msgstr "Barva sloupce využití zařízení"
 
-#: src/prefs/prefsUtils.js:632
+#: src/prefs/prefsUtils.js:631
 msgid "Move up"
 msgstr ""
 
-#: src/prefs/prefsUtils.js:651
+#: src/prefs/prefsUtils.js:650
 msgid "Move down"
 msgstr ""
 
 #: src/prefs/profiles.js:36 src/prefs/profiles.js:49
-#: src/profiles/profilesMenu.js:32 prefs.js:178
+#: src/profiles/profilesMenu.js:32 prefs.js:183
 msgid "Profiles"
 msgstr ""
 
@@ -935,7 +935,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: src/prefs/welcome.js:33 prefs.js:162
+#: src/prefs/welcome.js:33 prefs.js:167
 msgid "Welcome"
 msgstr ""
 
@@ -1065,7 +1065,7 @@ msgid "Become a patron"
 msgstr "Podpořit na Patreonu"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:41 prefs.js:339
+#: src/prefs/network.js:84 src/network/networkMenu.js:41 prefs.js:344
 msgid "Network"
 msgstr "Síť"
 
@@ -1140,7 +1140,7 @@ msgid "<b>Download</b> IO arrow color."
 msgstr "<b>Download</b> - barva IO šipky."
 
 #: src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56 prefs.js:194
+#: src/prefs/visualization.js:56 prefs.js:199
 msgid "Visualization"
 msgstr "Vizualizace"
 
@@ -1341,7 +1341,7 @@ msgstr "Pořadí"
 
 #: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
 #: src/prefs/gpu.js:82 src/prefs/processors.js:191 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:43 prefs.js:245
+#: src/gpu/gpuMenuComponent.js:43 prefs.js:250
 msgid "GPU"
 msgstr ""
 
@@ -1453,7 +1453,7 @@ msgid "Memory Value"
 msgstr "Využití paměti"
 
 #: src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67 prefs.js:211
+#: src/prefs/processors.js:67 prefs.js:216
 msgid "Processors"
 msgstr "Procesor"
 

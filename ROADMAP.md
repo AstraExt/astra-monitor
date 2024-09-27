@@ -6,27 +6,35 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Beta<br>6/6</th>
+        <th style="text-align:center" colspan="5">Beta<br>8/11</th>
     </tr>
     <tr>
         <th style="text-align:center">Early April 2024</th>
         <th style="text-align:center">Mid April 2024</th>
         <th style="text-align:center">Late April 2024</th>
+        <th style="text-align:center">Q3 2024</th>
+        <th style="text-align:center">Q4 2024</th>
     </tr>
     <tr>
         <td style="text-align:center">✅<br>Advanced Network Monitoring</td>
         <td style="text-align:center">✅<br>Advanced GPU Monitoring</td>
         <td style="text-align:center">✅<br>New Preferences Panel</td>
+        <td style="text-align:center">✅<br>Root Process Monitoring<br><span style="font-size: 13px;">(storage)</span></td>
+        <td style="text-align:center">⌛<br>Help &amp; Doc</td>
     </tr>
     <tr>
         <td style="text-align:center">✅<br>Advanced Disk Monitoring</td>
         <td style="text-align:center"></td>
         <td style="text-align:center">✅<br>Compact Mode</td>
+        <td style="text-align:center">✅<br>Network Process Monitoring</td>
+        <td style="text-align:center">🔲<br>Battery Monitoring</td>
     </tr>
     <tr>
         <td style="text-align:center"></td>
         <td style="text-align:center"></td>
         <td style="text-align:center">✅<br>Settings Profiles</td>
+        <td style="text-align:center"></td>
+        <td style="text-align:center">🔲<br>Continuous Monitoring Mode</td>
     </tr>
 </table>
 
@@ -34,22 +42,15 @@
 
 <table style="text-align:center" align="center">
     <tr>
-        <th style="text-align:center" colspan="3">Release<br>0/5</th>
+        <th style="text-align:center" colspan="2">Release<br>0/2</th>
     </tr>
     <tr>
-        <th style="text-align:center">Q3 2024</th>
-        <th style="text-align:center">Q4 2024</th>
         <th style="text-align:center">Q1 2025</th>
+        <th style="text-align:center">Q2 2025</th>
     </tr>
     <tr>
-        <td style="text-align:center">⌛<br>Help &amp; Doc</td>
-        <td style="text-align:center">🔲<br>Battery Monitoring</td>
-        <td style="text-align:center">🔲<br>User Custom Commands</td>
-    </tr>
-    <tr>
-        <td style="text-align:center"></td>
         <td style="text-align:center">🔲<br>Themes</td>
-        <td style="text-align:center">🔲<br>Continuous Monitoring Mode</td>
+        <td style="text-align:center">🔲<br>User Custom Commands</td>
     </tr>
 </table>
 

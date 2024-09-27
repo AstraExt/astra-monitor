@@ -555,8 +555,8 @@ export default class GpuMonitor extends Monitor {
 
             const gpus = new Map<string, AmdInfo>();
             for(const gpuInfo of json.devices) {
-                const id = gpuInfo.Info?.PCI;
-                if(!id) continue;
+                if(!gpuInfo.Info?.PCI) continue;
+                const id = gpuInfo.Info?.PCI.toString().toLowerCase();
 
                 const gpu: AmdInfo = {
                     id,

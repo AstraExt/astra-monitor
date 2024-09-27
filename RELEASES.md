@@ -1,3 +1,14 @@
+# Astra Monitor 28 - September 27 2024
+
+### Bug fixes
+
+-   Resolved an issue with NVIDIA GPU monitoring where PCI matching failed due to case sensitivity [[#149](https://github.com/AstraExt/astra-monitor/issues/149)]
+
+### Development and Maintenance
+
+-   Enhanced debugging capabilities for improved error identification and issue resolution
+-   Updated TypeScript dependencies to the latest GIR versions
+
 # Astra Monitor 27 - September 25 2024
 
 ### New features
