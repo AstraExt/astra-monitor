@@ -30,6 +30,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Header from '../header.js';
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
+import Grid from '../grid.js';
 import SensorsMenu from './sensorsMenu.js';
 import { SensorsData } from './sensorsMonitor.js';
 import MenuBase from '../menu.js';
@@ -51,11 +52,14 @@ export default GObject.registerClass(
     class SensorsHeader extends Header {
         private icon!: St.Icon;
         private valuesContainer!: St.BoxLayout;
-        private sensors!: St.Label;
+        private sensorGrid!: InstanceType<typeof Grid>;
+        private sensorLabel1!: St.Label;
+        private sensorLabel2!: St.Label;
         private sensorsNum: number = 1;
         private sensorsLayout!: string;
 
-        private maxWidths: number[] = [];
+        private maxWidths1: number[] = [];
+        private maxWidths2: number[] = [];
 
         protected tooltipMenu!: TooltipMenu;
         protected tooltipItem!: TooltipItem;
@@ -95,7 +99,8 @@ export default GObject.registerClass(
             const updateSensorsLayout = () => {
                 this.sensorsLayout =
                     Config.get_string('sensors-header-sensor2-layout') || 'vertical';
-                this.sensors.text = '';
+                this.sensorLabel1.text = '';
+                this.sensorLabel2.text = '';
                 this.resetMaxWidths();
             };
             Config.connect(
@@ -133,9 +138,11 @@ export default GObject.registerClass(
         }
 
         resetMaxWidths() {
-            this.maxWidths = [];
+            this.maxWidths1 = [];
+            this.maxWidths2 = [];
 
-            if(!this.sensors.get_stage()) return;
+            if(!this.sensorLabel1.get_stage()) return;
+            if(!this.sensorLabel2.get_stage()) return;
 
             this.fixContainerStyle();
         }
@@ -196,7 +203,15 @@ export default GObject.registerClass(
                 width: 1,
             });
 
-            this.sensors = new St.Label({
+            this.sensorGrid = new Grid({
+                numCols: 2,
+                styleClass: '',
+                xAlign: Clutter.ActorAlign.END,
+                yAlign: Clutter.ActorAlign.FILL,
+            });
+            this.valuesContainer.add_child(this.sensorGrid);
+
+            this.sensorLabel1 = new St.Label({
                 text: '',
                 styleClass: 'astra-monitor-header-sensors-values-label',
                 style: 'font-size: 0.65em;',
@@ -205,9 +220,22 @@ export default GObject.registerClass(
                 xExpand: true,
                 yExpand: true,
             });
-            this.sensors.clutterText.ellipsize = Pango.EllipsizeMode.NONE;
-            this.sensors.clutterText.lineWrap = false;
-            this.valuesContainer.add_child(this.sensors);
+            this.sensorLabel1.clutterText.ellipsize = Pango.EllipsizeMode.NONE;
+            this.sensorLabel1.clutterText.lineWrap = false;
+            this.sensorGrid.addToGrid(this.sensorLabel1);
+
+            this.sensorLabel2 = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-header-sensors-values-label',
+                style: 'font-size: 0.65em;',
+                yAlign: Clutter.ActorAlign.CENTER,
+                xAlign: Clutter.ActorAlign.END,
+                xExpand: true,
+                yExpand: true,
+            });
+            this.sensorLabel2.clutterText.ellipsize = Pango.EllipsizeMode.NONE;
+            this.sensorLabel2.clutterText.lineWrap = false;
+            this.sensorGrid.addToGrid(this.sensorLabel2);
 
             Config.bind(
                 'sensors-header-sensor1-show',
@@ -252,12 +280,19 @@ export default GObject.registerClass(
             if(sensor2) {
                 this.sensorsNum = 2;
 
-                if(this.sensorsLayout === 'horizontal')
-                    this.sensors.text = `${sensor1} | ${sensor2}`;
-                else this.sensors.text = `${sensor1}\n${sensor2}`;
+                if(this.sensorsLayout === 'horizontal') {
+                    this.sensorLabel1.text = `${sensor1} |`;
+                    this.sensorLabel2.text = sensor2;
+                    this.sensorLabel2.visible = true;
+                } else if(this.sensorsLayout === 'vertical') {
+                    this.sensorLabel1.text = `${sensor1}\n${sensor2}`;
+                    this.sensorLabel2.text = '';
+                    this.sensorLabel2.visible = false;
+                }
             } else {
                 this.sensorsNum = 1;
-                this.sensors.text = sensor1;
+                this.sensorLabel1.text = sensor1;
+                this.sensorLabel2.visible = false;
             }
             this.fixContainerStyle();
         }
@@ -317,14 +352,15 @@ export default GObject.registerClass(
 
         fixContainerStyle() {
             if(!this.valuesContainer.get_parent()) return;
-            if(!this.sensors.get_parent()) return;
+            if(!this.sensorLabel1.get_parent()) return;
+            if(!this.sensorLabel2.get_parent()) return;
 
             const calculateStyle = () => {
                 let defaultStyle = 'font-size:0.65em;';
                 const fontSize = Config.get_int('headers-font-size');
                 if(fontSize) defaultStyle = `font-size:${fontSize}px;`;
                 if(this.sensorsNum === 1 || this.sensorsLayout === 'horizontal')
-                    return fontSize ? defaultStyle : 'font-size:1em';
+                    return fontSize ? defaultStyle : 'font-size:1em;';
 
                 const superHeight =
                     this.valuesContainer.get_parent()?.get_allocation_box()?.get_height() ?? 0;
@@ -337,28 +373,53 @@ export default GObject.registerClass(
             };
             const style = calculateStyle();
 
-            if(this.sensors.style !== style) {
-                this.sensors.style = style;
-                this.sensors.queue_relayout();
+            if(this.sensorLabel1.style !== style || this.sensorLabel2.style !== style) {
+                this.sensorLabel1.style = style;
+                this.sensorLabel2.style = style;
+                this.sensorLabel1.queue_relayout();
+                this.sensorLabel2.queue_relayout();
                 this.valuesContainer.queue_relayout();
             }
 
-            const sensorsWidth = this.sensors.get_preferred_width(-1);
-            const width = sensorsWidth ? sensorsWidth[1] : 0;
+            // SensorLabel 1
+            const sensor1Width = this.sensorLabel1.get_preferred_width(-1);
+            const width1 = sensor1Width ? sensor1Width[1] : 0;
 
-            this.maxWidths.push(width);
+            this.maxWidths1.push(width1);
 
-            if(this.maxWidths.length > Utils.sensorsMonitor.updateFrequency * 10)
-                this.maxWidths.shift();
+            if(this.maxWidths1.length > Utils.sensorsMonitor.updateFrequency * 10)
+                this.maxWidths1.shift();
 
-            const max = Math.max(...this.maxWidths);
+            const max1 = Math.max(...this.maxWidths1);
 
-            if(max === this.valuesContainer.width) return;
-            this.valuesContainer.set_width(max);
+            // SensorLabel 2
+            let max2 = 0;
+
+            if(this.sensorLabel2.visible) {
+                const sensor2Width = this.sensorLabel2.get_preferred_width(-1);
+                const width2 = sensor2Width ? sensor2Width[1] : 0;
+
+                this.maxWidths2.push(width2);
+
+                if(this.maxWidths2.length > Utils.sensorsMonitor.updateFrequency * 10)
+                    this.maxWidths2.shift();
+
+                max2 = Math.max(...this.maxWidths2);
+
+                const margin1 = max1 - width1;
+                this.sensorLabel1.style += `margin-left:${margin1}px;`;
+
+                const margin2 = max2 - width2;
+                this.sensorLabel2.style += `margin-left:${margin2}px;`;
+            }
+
+            if(max1 + max2 === this.valuesContainer.width) return;
+            this.valuesContainer.set_width(max1 + max2);
         }
 
         update() {
-            this.maxWidths = [];
+            this.maxWidths1 = [];
+            this.maxWidths2 = [];
             this.updateValues();
         }
 
