@@ -2,6 +2,7 @@
 
 ### Bug fixes
 
+-   Temporary, but effective, fix for the bars overflowing from their container when there's a fullscreen window [[#127](https://github.com/AstraExt/astra-monitor/issues/127)]
 -   Resolved an issue where `iotop` was not accurately identifying process names when both SWAPIN and IO% information were present
 
 # Astra Monitor 28 - September 27 2024

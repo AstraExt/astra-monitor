@@ -25,6 +25,8 @@ import Clutter from 'gi://Clutter';
 import Utils from './utils/utils.js';
 import Config from './config.js';
 
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
 declare const global: any;
 
 export type BarProps = {
@@ -181,8 +183,12 @@ export default GObject.registerClass(
         updateBars(values: { color: number; value: number }[][]) {
             if(!this.get_stage() || !this.get_parent()) return;
 
+            const componentMonitor = Main.layoutManager.findMonitorForActor(this);
+            if(componentMonitor && componentMonitor.inFullscreen) {
+                return;
+            }
+
             try {
-                // eslint-disable-next-line prefer-const
                 let [width, height] = this.get_size();
                 width /= this.scaleFactor;
                 height /= this.scaleFactor;
