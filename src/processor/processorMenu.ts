@@ -38,7 +38,7 @@ type CpuInfoPopup = MenuBase & {
     hideable?: {
         key: St.Label;
         value: St.Label;
-        reference: { value: St.Label; original: any };
+        reference?: { value: St.Label; original: any };
     }[];
 };
 
@@ -154,13 +154,24 @@ export default class ProcessorMenu extends MenuBase {
 
                 const height = this.cpuInfoPopup.box.get_preferred_height(-1)[1];
 
-                if(height > monitorSize.height * 0.8) {
-                    for(const { key, value, reference } of (this.cpuInfoPopup as any).hideable) {
-                        key.visible = false;
-                        value.visible = false;
+                if(height > monitorSize.height * 0.9) {
+                    const hideable = this.cpuInfoPopup.hideable;
+                    if(hideable) {
+                        let lastHidden: St.Label | null = null;
 
-                        if(reference && reference.value && reference.original)
-                            reference.value.text = reference.original + ' [...]';
+                        for(const { key, value, reference } of hideable) {
+                            key.visible = false;
+                            value.visible = false;
+
+                            if(reference && reference.value && reference.original)
+                                reference.value.text = reference.original + ' [...]';
+                            else lastHidden = key;
+                        }
+
+                        if(lastHidden) {
+                            lastHidden.visible = true;
+                            lastHidden.text = '[...]';
+                        }
                     }
                 }
             }
@@ -189,7 +200,12 @@ export default class ProcessorMenu extends MenuBase {
 
         let reference: { value: St.Label; original: any } | null = null;
 
+        const numKeys = Object.keys(cpuInfo).length;
+
+        let keyIndex = 0;
         for(const key in cpuInfo) {
+            keyIndex++;
+
             if(key === 'Model name') continue;
 
             let value = cpuInfo[key];
@@ -234,16 +250,24 @@ export default class ProcessorMenu extends MenuBase {
                     value = '';
                 }
                 const valueLabel = new St.Label({ text: current });
+
                 if(i > 0 && reference) {
                     this.cpuInfoPopup.hideable.push({
                         key: keyLabel,
                         value: valueLabel,
                         reference,
                     });
-                    reference = null;
                 } else {
                     reference = { value: valueLabel, original: current };
+
+                    if(keyIndex > numKeys - 10) {
+                        this.cpuInfoPopup.hideable.push({
+                            key: keyLabel,
+                            value: valueLabel,
+                        });
+                    }
                 }
+
                 this.cpuInfoPopup.addToMenu(valueLabel);
 
                 i++;
