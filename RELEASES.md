@@ -6,6 +6,7 @@
 -   Addressed a layout issue in horizontal sensors header where sudden changes in one of the sensors values length could disrupt the overall arrangement [[#111](https://github.com/AstraExt/astra-monitor/issues/111)]
 -   Resolved an issue where `iotop` was not accurately identifying process names when both SWAPIN and IO% information were present
 -   Improved CPU info popup layout for smaller screens and fixed an issue where some lines were skipped on larger screens [[#121](https://github.com/AstraExt/astra-monitor/issues/121)]
+-   Fixed layout issues in the main disk preference when disks had long names [[#126](https://github.com/AstraExt/astra-monitor/issues/126)]
 
 # Astra Monitor 28 - September 27 2024
 

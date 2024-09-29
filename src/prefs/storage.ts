@@ -152,7 +152,7 @@ export default class Storage {
             else text = id;
             choicesSource.push({ value: id, text: text });
         }
-        PrefsUtils.addComboRow(
+        PrefsUtils.addDropRow(
             { title: _('Main Disk') },
             choicesSource,
             'storage-main',
