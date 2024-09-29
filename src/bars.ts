@@ -183,9 +183,11 @@ export default GObject.registerClass(
         updateBars(values: { color: number; value: number }[][]) {
             if(!this.get_stage() || !this.get_parent()) return;
 
-            const componentMonitor = Main.layoutManager.findMonitorForActor(this);
-            if(componentMonitor && componentMonitor.inFullscreen) {
-                return;
+            if(this.header) {
+                const componentMonitor = Main.layoutManager.findMonitorForActor(this);
+                if(componentMonitor && componentMonitor.inFullscreen) {
+                    return;
+                }
             }
 
             try {
