@@ -1521,7 +1521,7 @@ export default class GpuMonitor extends Monitor {
                     if(!Array.isArray(gpuInfo.processes.process_info)) {
                         gpuInfo.processes.process_info = [gpuInfo.processes.process_info];
                     }
-                    
+
                     for(const process of gpuInfo.processes.process_info) {
                         const usedMemory = GpuMonitor.nvidiaToGenericField(process.used_memory);
                         if(!usedMemory || usedMemory.value == null || !usedMemory.unit) continue;

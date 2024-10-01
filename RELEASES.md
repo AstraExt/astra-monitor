@@ -1,5 +1,9 @@
 # Astra Monitor 29 - TO BE RELEASED
 
+### New features
+
+-   **_Processor Header Frequency_**: Added the ability to display the CPU frequency in the top bar. You can choose to show either the average or the maximum frequency of your CPU cores. [[#122](https://github.com/AstraExt/astra-monitor/issues/122)]
+
 ### Bug fixes
 
 -   Fixed NVIDIA GPU monitoring to support scenarios with a single top process in the list [[#150](https://github.com/AstraExt/astra-monitor/issues/150)]

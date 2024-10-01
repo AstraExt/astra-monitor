@@ -138,7 +138,7 @@ export default class Utils {
     static debug = false;
     static defaultMonitors = ['processor', 'gpu', 'memory', 'storage', 'network', 'sensors'];
     static defaultIndicators = {
-        processor: ['icon', 'bar', 'graph', 'percentage'],
+        processor: ['icon', 'bar', 'graph', 'percentage', 'frequency'],
         gpu: [
             'icon',
             'activity bar',
@@ -728,6 +728,14 @@ export default class Utils {
         Q: { base: 1000, mult: 1, labels: ['', 'K', 'M', 'B', 'T', 'Q'] },
     };
 
+    static unit4Map = {
+        Hz: { base: 1000, mult: 1, labels: ['Hz', 'kHz', 'MHz', 'GHz', 'THz'] },
+        kHz: { base: 1000, mult: 1, labels: ['kHz', 'MHz', 'GHz', 'THz'] },
+        MHz: { base: 1000, mult: 1, labels: ['MHz', 'GHz', 'THz'] },
+        GHz: { base: 1000, mult: 1, labels: ['GHz', 'THz'] },
+        THz: { base: 1000, mult: 1, labels: ['THz'] },
+    };
+
     static formatBytesPerSec(
         value: number,
         unit: keyof typeof Utils.unitMap,
@@ -828,6 +836,41 @@ export default class Utils {
         const finalUnit = Utils.unit3Map[unit].labels[unitIndex];
         if(finalUnit.length > 0) return `${result} ${finalUnit}`;
         return `${result}`;
+    }
+
+    static formatFrequency(
+        frequency: number,
+        unit: keyof typeof Utils.unit4Map = 'Hz',
+        maxNumbers: number = 4,
+        forceDecimals: boolean = false
+    ): string {
+        if(!Object.prototype.hasOwnProperty.call(Utils.unit4Map, unit)) unit = 'Hz';
+
+        if(!frequency || isNaN(frequency)) return Utils.zeroStr + Utils.unit4Map[unit].labels[0];
+
+        let unitIndex = 0;
+        while(
+            frequency >= Math.pow(10, maxNumbers) &&
+            unitIndex < Utils.unit4Map[unit].labels.length - 1
+        ) {
+            frequency /= Utils.unit4Map[unit].base;
+            unitIndex++;
+        }
+
+        let result = frequency.toFixed(maxNumbers - 1);
+        if(result.indexOf('.') !== -1) {
+            const parts = result.split('.');
+            if(parts[0].length >= maxNumbers && !forceDecimals) {
+                result = parts[0]; // If the integer part is already at max length, ignore decimal part
+            } else {
+                const decimalPart = parts[1].substr(0, maxNumbers - parts[0].length);
+                result = parts[0] + '.' + decimalPart.padEnd(maxNumbers - parts[0].length, '0');
+            }
+        } else if(forceDecimals) {
+            result = result + '.' + '0'.repeat(maxNumbers - result.length);
+        }
+
+        return `${result} ${Utils.unit4Map[unit].labels[unitIndex]}`;
     }
 
     static convertToBytes(value: number | string, unit: string): number {

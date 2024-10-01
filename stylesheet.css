@@ -41,6 +41,13 @@
     margin-right: 0.3em;
 }
 
+.astra-monitor-header-frequency {
+    text-align: right;
+    min-width: 4em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+}
+
 .astra-monitor-header-value {
     font-size: 1em;
     text-align: right;

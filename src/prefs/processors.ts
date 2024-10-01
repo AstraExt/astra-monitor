@@ -264,6 +264,37 @@ export default class Processors {
             0
         );
 
+        const frequencySection = PrefsUtils.addExpanderRow(
+            { title: _('Frequency') },
+            group,
+            'processors'
+        );
+        PrefsUtils.addSwitchRow(
+            { title: _('Show Frequency'), tabs: 1 },
+            'processor-header-frequency',
+            frequencySection
+        );
+        PrefsUtils.addSpinRow(
+            { title: _('Frequency Max Number of Figures'), tabs: 1 },
+            'processor-header-frequency-figures',
+            frequencySection,
+            { min: 2, max: 4, digits: 0, step: 1, page: 1 },
+            true,
+            3
+        );
+        const frequencyMode = [
+            { value: 'average', text: _('Average') },
+            { value: 'max', text: _('Max') },
+        ];
+        PrefsUtils.addComboRow(
+            { title: _('Frequency Mode'), tabs: 1 },
+            frequencyMode,
+            'processor-header-frequency-mode',
+            frequencySection,
+            'string',
+            'average'
+        );
+
         const graphSection = PrefsUtils.addExpanderRow(
             { title: _('History Graph') },
             group,

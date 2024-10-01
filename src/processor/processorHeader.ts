@@ -49,6 +49,9 @@ export default GObject.registerClass(
         protected graph!: InstanceType<typeof ProcessorGraph>;
         protected percentage!: St.Label;
 
+        protected frequencyMode!: 'average' | 'max';
+        protected frequency!: St.Label;
+
         protected tooltipMenu!: TooltipMenu;
         protected tooltipItem!: TooltipItem;
 
@@ -59,6 +62,7 @@ export default GObject.registerClass(
             this.buildGraph();
             this.buildBars();
             this.buildPercentage();
+            this.buildFrequency();
 
             this.addOrReorderIndicators();
 
@@ -99,6 +103,9 @@ export default GObject.registerClass(
                         break;
                     case 'percentage':
                         widget = this.percentage;
+                        break;
+                    case 'frequency':
+                        widget = this.frequency;
                         break;
                 }
 
@@ -348,6 +355,82 @@ export default GObject.registerClass(
             }
         }
 
+        buildFrequency() {
+            this.frequency = new St.Label({
+                text: '- GHz',
+                styleClass: 'astra-monitor-header-frequency',
+                yAlign: Clutter.ActorAlign.CENTER,
+            });
+
+            const updateFrequencyMode = () => {
+                let frequencyMode = Config.get_string('processor-header-frequency-mode');
+                if(frequencyMode && !['average', 'max'].includes(frequencyMode)) {
+                    frequencyMode = 'average';
+                }
+                this.frequencyMode = frequencyMode as 'average' | 'max';
+            };
+
+            Config.connect(
+                this.frequency,
+                'changed::processor-header-frequency-mode',
+                updateFrequencyMode.bind(this)
+            );
+            updateFrequencyMode();
+
+            const setupFrequency = () => {
+                const enabled = Config.get_boolean('processor-header-frequency');
+                this.frequency.visible = enabled;
+                this.frequency.text = '- GHz';
+
+                if(enabled) {
+                    Utils.processorMonitor.listen(
+                        this.frequency,
+                        'cpuCoresFrequency',
+                        this.updateFrequency.bind(this)
+                    );
+                } else {
+                    Utils.processorMonitor.unlisten(this.frequency);
+                }
+            };
+
+            Config.connect(
+                this.frequency,
+                'changed::processor-header-frequency',
+                setupFrequency.bind(this)
+            );
+            setupFrequency();
+        }
+
+        updateFrequency() {
+            if(!this.visible) return;
+            if(!Config.get_boolean('processor-header-frequency')) return;
+
+            const frequency = Utils.processorMonitor.getCurrentValue('cpuCoresFrequency');
+            if(!frequency || !Array.isArray(frequency) || frequency.length === 0) {
+                this.frequency.text = '- GHz';
+                return;
+            }
+
+            const figures = Config.get_int('processor-header-frequency-figures');
+
+            if(this.frequencyMode === 'average') {
+                const sum = frequency.reduce((a, b) => a + b, 0);
+                this.frequency.text = Utils.formatFrequency(
+                    sum / frequency.length / 1000,
+                    'MHz',
+                    figures,
+                    true
+                );
+            } else if(this.frequencyMode === 'max') {
+                this.frequency.text = Utils.formatFrequency(
+                    Math.max(...frequency) / 1000,
+                    'MHz',
+                    figures,
+                    true
+                );
+            }
+        }
+
         update() {
             const perCoreBars = Config.get_boolean('processor-header-bars-core');
             if(perCoreBars) {
@@ -427,6 +510,10 @@ export default GObject.registerClass(
             if(this.percentage) {
                 Config.clear(this.percentage);
                 Utils.processorMonitor.unlisten(this.percentage);
+            }
+            if(this.frequency) {
+                Config.clear(this.frequency);
+                Utils.processorMonitor.unlisten(this.frequency);
             }
             if(this.bars) {
                 Config.clear(this.bars);

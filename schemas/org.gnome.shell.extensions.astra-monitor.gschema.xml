@@ -52,6 +52,10 @@
     <value nick="k " value="5"/>
     <value nick="Ki" value="6"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.astra-monitor.enum.processor-frequency-mode">
+    <value nick="average" value="0"/>
+    <value nick="max" value="1"/>
+  </enum>
   <enum id="org.gnome.shell.extensions.astra-monitor.enum.source-list1">
     <value nick="auto" value="0"/>
     <value nick="proc" value="1"/>
@@ -275,6 +279,22 @@
       <summary>Percentage Icon Alert Threshold</summary>
       <description>Threshold in percentage to show the alert icon</description>
       <range min="0" max="100"/>
+    </key>
+    <key name="processor-header-frequency" type="b">
+      <default>false</default>
+      <summary>CPU Header Frequency</summary>
+      <description>Show the frequency on the header of the CPU monitor</description>
+    </key>
+    <key name="processor-header-frequency-figures" type="i">
+      <default>3</default>
+      <summary>Max Number Figures</summary>
+      <description>Max number of figures to show on the frequency value</description>
+      <range min="2" max="4"/>
+    </key>
+    <key name="processor-header-frequency-mode" enum="org.gnome.shell.extensions.astra-monitor.enum.processor-frequency-mode">
+      <default>'average'</default>
+      <summary>CPU Header Frequency Mode</summary>
+      <description>Frequency mode of the header of the CPU monitor</description>
     </key>
     <key name="processor-header-graph" type="b">
       <default>true</default>
