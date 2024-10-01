@@ -530,8 +530,8 @@ export default class StorageMenu extends MenuBase {
         }
     }
 
-    updateDeviceList() {
-        const devices = Utils.getBlockDevicesSync();
+    async updateDeviceList() {
+        const devices = await Utils.getBlockDevicesAsync();
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
 
@@ -1125,15 +1125,14 @@ export default class StorageMenu extends MenuBase {
     }
 
     async onOpen() {
-        this.clear();
+        this.update('storageIO', true);
+        Utils.storageMonitor.listen(this, 'storageIO', this.update.bind(this, 'storageIO', false));
 
-        Utils.storageMonitor.listen(this, 'storageIO', this.update.bind(this, 'storageIO'));
-        this.update('storageIO');
-
+        this.update('detailedStorageIO', true);
         Utils.storageMonitor.listen(
             this,
             'detailedStorageIO',
-            this.update.bind(this, 'detailedStorageIO')
+            this.update.bind(this, 'detailedStorageIO', false)
         );
         Utils.storageMonitor.requestUpdate('detailedStorageIO');
 
@@ -1145,39 +1144,46 @@ export default class StorageMenu extends MenuBase {
                 this.topProcesses.subSeparator.show();
             }
 
+            this.clear('topProcesses');
+            this.update('topProcesses', true);
             Utils.storageMonitor.listen(
                 this,
                 'topProcesses',
-                this.update.bind(this, 'topProcesses')
+                this.update.bind(this, 'topProcesses', false)
             );
             Utils.storageMonitor.requestUpdate('topProcesses');
 
             Utils.storageMonitor.listen(
                 this,
                 'topProcessesIOTop',
-                this.update.bind(this, 'topProcessesIOTop')
+                this.update.bind(this, 'topProcessesIOTop', false)
             );
             Utils.storageMonitor.listen(
                 this,
                 'topProcessesIOTopStop',
-                this.update.bind(this, 'topProcessesIOTopStop')
+                this.update.bind(this, 'topProcessesIOTopStop', false)
             );
         }
 
-        this.update('deviceList');
+        this.update('deviceList', true);
         if(!this.updateTimer) {
             this.updateTimer = GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
                 Utils.storageMonitor.updateFrequency * 1000 * 2, // Halves the update frequency
                 () => {
-                    this.update('deviceList');
+                    this.update('deviceList', true);
                     Utils.storageMonitor.requestUpdate('storageInfo');
                     return true;
                 }
             );
         }
 
-        Utils.storageMonitor.listen(this, 'storageInfo', this.update.bind(this, 'storageInfo'));
+        this.update('storageInfo', true);
+        Utils.storageMonitor.listen(
+            this,
+            'storageInfo',
+            this.update.bind(this, 'storageInfo', false)
+        );
         Utils.storageMonitor.requestUpdate('storageInfo');
     }
 
@@ -1194,9 +1200,23 @@ export default class StorageMenu extends MenuBase {
         }
     }
 
-    update(code: string) {
+    protected needsUpdate(code: string, forced: boolean = false) {
+        if(forced) {
+            const valueTime = Utils.storageMonitor.getCurrentValueTime(code);
+            return !(valueTime && Date.now() - valueTime > Utils.storageMonitor.updateFrequency);
+        }
+        return super.needsUpdate(code, forced);
+    }
+
+    update(code: string, forced: boolean = false) {
+        if(!this.needsUpdate(code, forced)) {
+            return;
+        }
+
         if(code === 'deviceList') {
-            this.updateDeviceList();
+            Utils.lowPriorityTask(() => {
+                this.updateDeviceList();
+            }, GLib.PRIORITY_DEFAULT);
             return;
         }
         if(code === 'storageIO') {
@@ -1557,15 +1577,29 @@ export default class StorageMenu extends MenuBase {
         this.topProcessesPopup.section!.text = _('Top processes') + ` (${GLib.get_user_name()})`;
     }
 
-    clear() {
-        this.totalReadSpeedValueLabel.text = '-';
-        this.totalWriteSpeedValueLabel.text = '-';
+    clear(code: string = 'all') {
+        if(code === 'all') {
+            this.totalReadSpeedValueLabel.text = '-';
+            this.totalWriteSpeedValueLabel.text = '-';
+        }
 
-        for(const [_id, device] of this.devices.entries()) {
-            device.readValueLabel.text = '-';
-            device.readActivityIcon.style = 'color:rgba(255,255,255,0.5);';
-            device.writeValueLabel.text = '-';
-            device.writeActivityIcon.style = 'color:rgba(255,255,255,0.5);';
+        if(code === 'all' || code === 'devices') {
+            for(const [_id, device] of this.devices.entries()) {
+                device.readValueLabel.text = '-';
+                device.readActivityIcon.style = 'color:rgba(255,255,255,0.5);';
+                device.writeValueLabel.text = '-';
+                device.writeActivityIcon.style = 'color:rgba(255,255,255,0.5);';
+            }
+        }
+
+        if(code === 'all' || code === 'topProcesses') {
+            for(const process of this.topProcesses.labels) {
+                process.label.text = '-';
+                process.read.value.text = '-';
+                process.read.icon.style = 'color:rgba(255,255,255,0.5);';
+                process.write.value.text = '-';
+                process.write.icon.style = 'color:rgba(255,255,255,0.5);';
+            }
         }
     }
 

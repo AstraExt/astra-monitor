@@ -2190,6 +2190,80 @@ export default class Utils {
         return devices;
     }
 
+    static async getNetworkInterfacesAsync(
+        task?: CancellableTaskManager<boolean>
+    ): Promise<Map<string, InterfaceInfo>> {
+        const devices = new Map<string, InterfaceInfo>();
+        if(!Utils.hasIp()) return devices;
+
+        try {
+            const path = Utils.commandPathLookup('ip -V');
+            const result = await Utils.executeCommandAsync(`${path}ip -d -j addr`, task);
+            if(result) {
+                const json = JSON.parse(result);
+
+                for(const data of json) {
+                    const name = data.ifname;
+                    if(name === 'lo') continue;
+
+                    const flags = data.flags || [];
+                    if(flags.includes('LOOPBACK')) continue;
+
+                    const ifindex = data.ifindex;
+                    if(data.ifindex === undefined) continue;
+
+                    const device: InterfaceInfo = {
+                        name,
+                        flags,
+                        ifindex,
+                    };
+
+                    if(data.mtu) device.mtu = data.mtu;
+                    if(data.qdisc) device.qdisc = data.qdisc;
+                    if(data.operstate) device.operstate = data.operstate;
+                    if(data.linkmode) device.linkmode = data.linkmode;
+                    if(data.group) device.group = data.group;
+                    if(data.txqlen) device.txqlen = data.txqlen;
+                    if(data.link_type) device.link_type = data.link_type;
+                    if(data.address) device.address = data.address;
+                    if(data.broadcast) device.broadcast = data.broadcast;
+                    if(data.netmask) device.netmask = data.netmask;
+                    if(data.altnames) device.altnames = data.altnames;
+                    if(data.parentbus) device.parentbus = data.parentbus;
+                    if(data.parentdev) device.parentdev = data.parentdev;
+                    if(data.addr_info) device.addr_info = data.addr_info;
+                    if(data.linkinfo) device.linkinfo = data.linkinfo;
+
+                    devices.set(name, device);
+                }
+
+                const promises = Array.from(devices.entries()).map(async ([name, device]) => {
+                    const [speedStr, duplex] = await Promise.all([
+                        Utils.readFileAsync(`/sys/class/net/${name}/speed`, true),
+                        Utils.readFileAsync(`/sys/class/net/${name}/duplex`, true),
+                    ]);
+
+                    if(speedStr.trim()) {
+                        if(Utils.isIntOrIntString(speedStr.trim())) {
+                            const speed = parseInt(speedStr.trim(), 10);
+                            if(speed > 0) device.speed = speed;
+                        }
+                    }
+
+                    if(duplex.trim()) {
+                        device.duplex = duplex.trim();
+                    }
+                });
+
+                await Promise.all(promises);
+            }
+        } catch(e: any) {
+            Utils.error('Error getting network interfaces', e);
+        }
+
+        return devices;
+    }
+
     static async getNetworkRoutesAsync(
         task?: CancellableTaskManager<boolean>
     ): Promise<RouteInfo[]> {
@@ -2251,86 +2325,116 @@ export default class Utils {
 
                 const json = JSON.parse(output);
 
-                const processDevice = (device: any, parent: BlockDevice | null = null) => {
-                    const id = device.id;
-                    if(!id) return;
-
-                    if(devices.has(id)) {
-                        if(parent) devices.get(id).parents.push(parent);
-                        return;
-                    }
-
-                    const uuid = device.uuid;
-                    const name = device.name;
-                    const kname = device.kname;
-                    const pkname = device.pkname;
-                    const label = device.label;
-                    const type = device.type;
-
-                    if(type === 'loop') return;
-
-                    const subsystems = device.subsystems;
-
-                    let mountpoints: string[] = [];
-                    if(
-                        device.mountpoints &&
-                        device.mountpoints.length > 0 &&
-                        device.mountpoints[0]
-                    )
-                        mountpoints = device.mountpoints;
-
-                    const vendor = device.vendor?.trim();
-                    const model = device.model?.trim();
-                    const path = device.path;
-                    const removable = device.rm;
-                    const readonly = device.ro;
-                    const state = device.state;
-                    const owner = device.owner;
-                    const size = device.size;
-                    const usage = parseInt(device['fsuse%'], 10);
-                    const filesystem = device.fstype;
-
-                    const deviceObj: BlockDevice = {
-                        id,
-                        uuid,
-                        name,
-                        kname,
-                        pkname,
-                        label,
-                        type,
-                        subsystems,
-                        mountpoints,
-                        vendor,
-                        model,
-                        path,
-                        removable,
-                        readonly,
-                        state,
-                        owner,
-                        size,
-                        usage,
-                        filesystem,
-                        parents: [],
-                    };
-
-                    if(parent) {
-                        deviceObj.parents.push(parent);
-                    }
-
-                    if(device.children && device.children.length > 0) {
-                        for(const child of device.children) processDevice(child, deviceObj);
-                    } else {
-                        devices.set(id, deviceObj);
-                    }
-                };
-
-                for(const device of json.blockdevices) processDevice(device);
+                for(const device of json.blockdevices) {
+                    Utils.parseBlockDevice(device, devices);
+                }
             }
         } catch(e: any) {
             Utils.error('Error getting block devices', e);
         }
 
         return devices;
+    }
+
+    static async getBlockDevicesAsync(
+        task?: CancellableTaskManager<boolean>
+    ): Promise<Map<string, BlockDevice>> {
+        const devices = new Map<string, BlockDevice>();
+        if(!Utils.hasLsblk()) return devices;
+
+        try {
+            const commandPath = Utils.commandPathLookup('lsblk -V');
+            const result = await Utils.executeCommandAsync(
+                `${commandPath}lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE`,
+                task
+            );
+            if(result) {
+                const json = JSON.parse(result);
+
+                for(const device of json.blockdevices) {
+                    Utils.parseBlockDevice(device, devices);
+                }
+            }
+        } catch(e: any) {
+            Utils.error('Error getting block devices', e);
+        }
+
+        return devices;
+    }
+
+    static parseBlockDevice(
+        device: any,
+        devices: Map<string, BlockDevice>,
+        parent: BlockDevice | null = null
+    ) {
+        const id = device.id;
+        if(!id) return;
+
+        if(devices.has(id)) {
+            if(parent) devices.get(id)?.parents.push(parent);
+            return;
+        }
+
+        const uuid = device.uuid;
+        const name = device.name;
+        const kname = device.kname;
+        const pkname = device.pkname;
+        const label = device.label;
+        const type = device.type;
+
+        if(type === 'loop') return;
+
+        const subsystems = device.subsystems;
+
+        let mountpoints: string[] = [];
+        if(device.mountpoints && device.mountpoints.length > 0 && device.mountpoints[0])
+            mountpoints = device.mountpoints;
+
+        const vendor = device.vendor?.trim();
+        const model = device.model?.trim();
+        const path = device.path;
+        const removable = device.rm;
+        const readonly = device.ro;
+        const state = device.state;
+        const owner = device.owner;
+        const size = device.size;
+        const usage = parseInt(device['fsuse%'], 10);
+        const filesystem = device.fstype;
+
+        const deviceObj: BlockDevice = {
+            id,
+            uuid,
+            name,
+            kname,
+            pkname,
+            label,
+            type,
+            subsystems,
+            mountpoints,
+            vendor,
+            model,
+            path,
+            removable,
+            readonly,
+            state,
+            owner,
+            size,
+            usage,
+            filesystem,
+            parents: [],
+        };
+
+        if(parent) {
+            deviceObj.parents.push(parent);
+        }
+
+        if(device.children && device.children.length > 0) {
+            for(const child of device.children) {
+                Utils.parseBlockDevice(child, devices, deviceObj);
+            }
+        } else {
+            devices.set(id, deviceObj);
+        }
     }
 
     static parseRGBA(colorString: string | null, fallbackValue?: string): Color {

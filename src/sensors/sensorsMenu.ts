@@ -348,7 +348,11 @@ export default class SensorsMenu extends MenuBase {
     async onOpen() {
         Utils.sensorsMonitor.listen(this, 'sensorsDataAll', () => {});
 
-        Utils.sensorsMonitor.listen(this, 'sensorsData', this.update.bind(this, 'sensorsData'));
+        Utils.sensorsMonitor.listen(
+            this,
+            'sensorsData',
+            this.update.bind(this, 'sensorsData', false)
+        );
         Utils.sensorsMonitor.requestUpdate('sensorsData');
     }
 
@@ -357,7 +361,9 @@ export default class SensorsMenu extends MenuBase {
         Utils.sensorsMonitor.unlisten(this, 'sensorsData');
     }
 
-    update(code: string) {
+    update(code: string, forced: boolean = false) {
+        if(!this.needsUpdate(code, forced)) return;
+
         if(code === 'sensorsData') {
             const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
             if(sensorsData) {

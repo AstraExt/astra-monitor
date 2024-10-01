@@ -389,6 +389,16 @@ export default class StorageMonitor extends Monitor {
     stopListeningFor(key: string) {
         super.stopListeningFor(key);
 
+        if(key === 'topProcesses') {
+            this.previousPidsIO = new Map();
+        }
+        if(key === 'storageIO') {
+            this.previousStorageIO = {
+                bytesRead: -1,
+                bytesWritten: -1,
+                time: -1,
+            };
+        }
         if(key === 'detailedStorageIO') {
             this.previousDetailedStorageIO.devices = null;
             this.previousDetailedStorageIO.time = -1;

@@ -50,6 +50,8 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     private grid: InstanceType<typeof Grid>;
     private utilityBox?: St.BoxLayout;
 
+    private lastForcedUpdate: Map<string, number> = new Map();
+
     constructor(sourceActor: St.Widget, arrowAlignment: number, params: MenuProps = {}) {
         super(sourceActor, arrowAlignment, params.arrowSide ?? MenuBase.openingSide);
 
@@ -222,7 +224,19 @@ export default class MenuBase extends PopupMenu.PopupMenu {
 
     async onClose() {}
 
-    update(_code: string) {
+    protected needsUpdate(code: string, forced: boolean = false) {
+        if(forced) {
+            const lastUpdate = this.lastForcedUpdate.get(code);
+
+            if(lastUpdate && Date.now() - lastUpdate < 1000) {
+                return false;
+            }
+            this.lastForcedUpdate.set(code, Date.now());
+        }
+        return true;
+    }
+
+    update(_code: string, _forced: boolean = false) {
         Utils.error('update() needs to be overridden');
     }
 

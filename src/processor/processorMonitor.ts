@@ -212,6 +212,12 @@ export default class ProcessorMonitor extends Monitor {
         });
     }
 
+    stopListeningFor(code: string) {
+        if(code === 'topProcesses') {
+            this.previousPidsCpuTime = new Map();
+        }
+    }
+
     update(): boolean {
         Utils.verbose('Updating Processor Monitor');
 

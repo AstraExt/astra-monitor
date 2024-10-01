@@ -36,6 +36,8 @@ export default class Monitor {
     private timerID: number | null = null;
     private listeners: Map<string, { callback: (value: any) => void; subject: any }[]> = new Map();
     private usageHistory: Map<string, any[]> = new Map();
+    private usageHistoryTime: Map<string, number[]> = new Map();
+
     private enqueuedUpdates: string[] = [];
     private nextCallTime = -1;
 
@@ -94,6 +96,7 @@ export default class Monitor {
 
     resetData() {
         this.usageHistory = new Map();
+        this.usageHistoryTime = new Map();
         this.enqueuedUpdates = [];
     }
 
@@ -131,17 +134,29 @@ export default class Monitor {
             this.usageHistory.set(key, values);
         }
 
+        let times = this.usageHistoryTime.get(key);
+        if(times === undefined) {
+            times = [];
+            this.usageHistoryTime.set(key, times);
+        }
+
         if(this.enqueuedUpdates.includes(key) && values.length > 0) {
             values[0] = value;
+            times[0] = Date.now();
             this.enqueuedUpdates = this.enqueuedUpdates.filter(k => k !== key);
         } else {
             values.unshift(value);
-            if(values.length > this.usageHistoryLength) values.pop();
+            times.unshift(Date.now());
+            if(values.length > this.usageHistoryLength) {
+                values.pop();
+                times.pop();
+            }
         }
     }
 
     setUsageValue(key: string, value: any) {
         this.usageHistory.set(key, [value]);
+        this.usageHistoryTime.set(key, [Date.now()]);
     }
 
     getUsageHistory(key: string): any[] {
@@ -150,14 +165,27 @@ export default class Monitor {
         return values;
     }
 
+    getUsageHistoryTimes(key: string): number[] {
+        const times = this.usageHistoryTime.get(key);
+        if(times === undefined) return [];
+        return times;
+    }
+
     getCurrentValue(key: string): any | null {
         const values = this.usageHistory.get(key);
         if(values === undefined) return null;
         return values[0];
     }
 
+    getCurrentValueTime(key: string): number {
+        const times = this.usageHistoryTime.get(key);
+        if(times === undefined) return 0;
+        return times[0];
+    }
+
     resetUsageHistory(key: string) {
         this.usageHistory.set(key, []);
+        this.usageHistoryTime.set(key, []);
     }
 
     /**
@@ -165,7 +193,9 @@ export default class Monitor {
      * WARNING: When overriden, super.requestUpdate(key) must be called at the end of the function
      */
     requestUpdate(key: string) {
-        if(!this.enqueuedUpdates.includes(key)) this.enqueuedUpdates.push(key);
+        if(!this.enqueuedUpdates.includes(key)) {
+            this.enqueuedUpdates.push(key);
+        }
     }
 
     isListeningFor(key: string): boolean {
@@ -216,7 +246,9 @@ export default class Monitor {
                     const newListeners = listeners.filter(listener => listener.subject !== subject);
                     this.listeners.set(listenerKey, newListeners);
 
-                    if(newListeners.length === 0) this.stopListeningFor(listenerKey);
+                    if(newListeners.length === 0) {
+                        this.stopListeningFor(listenerKey);
+                    }
                 }
             }
             return;
@@ -227,7 +259,9 @@ export default class Monitor {
             const newListeners = listeners.filter(listener => listener.subject !== subject);
             this.listeners.set(key, newListeners);
 
-            if(newListeners.length === 0) this.stopListeningFor(key);
+            if(newListeners.length === 0) {
+                this.stopListeningFor(key);
+            }
         }
     }
 

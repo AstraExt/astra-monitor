@@ -45,7 +45,7 @@ export default class GpuMenu extends MenuBase {
 
         this.addUtilityButtons('gpu');
 
-        Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
+        Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate', false));
     }
 
     async onOpen() {
@@ -56,7 +56,9 @@ export default class GpuMenu extends MenuBase {
         this.gpuSection.onClose();
     }
 
-    update(code: string, ...args: any[]) {
+    update(code: string, forced: boolean = false, ...args: any[]) {
+        if(!this.needsUpdate(code, forced)) return;
+
         if(code === 'gpuUpdate') {
             const show = Config.get_boolean('gpu-header-show');
             if(!show) return;

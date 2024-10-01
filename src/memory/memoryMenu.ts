@@ -696,20 +696,34 @@ export default class MemoryMenu extends MenuBase {
     }
 
     async onOpen() {
-        this.clear();
-
         //Update cpu usage percentage label
-        this.update('memoryUsage');
-        Utils.memoryMonitor.listen(this, 'memoryUsage', this.update.bind(this, 'memoryUsage'));
+        this.update('memoryUsage', true);
+        Utils.memoryMonitor.listen(
+            this,
+            'memoryUsage',
+            this.update.bind(this, 'memoryUsage', false)
+        );
 
         //Update graph history
-        this.update('graph');
-        Utils.memoryMonitor.listen(this.graph, 'memoryUsage', this.update.bind(this, 'graph'));
+        this.update('graph', true);
+        Utils.memoryMonitor.listen(
+            this.graph,
+            'memoryUsage',
+            this.update.bind(this, 'graph', false)
+        );
 
-        Utils.memoryMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
+        this.clear('topProcesses');
+        this.update('topProcesses', true);
+        Utils.memoryMonitor.listen(
+            this,
+            'topProcesses',
+            this.update.bind(this, 'topProcesses', false)
+        );
         Utils.memoryMonitor.requestUpdate('topProcesses');
 
-        Utils.memoryMonitor.listen(this, 'swapUsage', this.update.bind(this, 'swapUsage'));
+        this.clear('swapUsage');
+        this.update('swapUsage');
+        Utils.memoryMonitor.listen(this, 'swapUsage', this.update.bind(this, 'swapUsage', false));
         Utils.memoryMonitor.requestUpdate('swapUsage');
     }
 
@@ -720,29 +734,44 @@ export default class MemoryMenu extends MenuBase {
         Utils.memoryMonitor.unlisten(this, 'swapUsage');
     }
 
-    clear() {
+    clear(code: string = 'all') {
         //Clear elements before updating them (in case of a lagging update)
 
-        this.memoryTotalQty.text = '';
-        this.memoryUsedQty.text = '';
-        this.memoryAllocatedQty.text = '';
-        this.memoryFreeQty.text = '';
-
-        for(let i = 0; i < this.topProcesses.length; i++) {
-            this.topProcesses[i].label.text = '';
-            this.topProcesses[i].percentage.text = '';
+        if(code === 'all' || code === 'memoryUsage') {
+            this.memoryTotalQty.text = '';
+            this.memoryUsedQty.text = '';
+            this.memoryAllocatedQty.text = '';
+            this.memoryFreeQty.text = '';
         }
 
-        for(let i = 0; i < MemoryMonitor.TOP_PROCESSES_LIMIT; i++) {
-            const popup = this.topProcessesPopup?.processes?.get(i);
-            if(!popup) continue;
-            popup.label.text = '';
-            popup.percentage.text = '';
-            popup.description.text = '';
+        if(code === 'all' || code === 'topProcesses') {
+            for(let i = 0; i < this.topProcesses.length; i++) {
+                this.topProcesses[i].label.text = '';
+                this.topProcesses[i].percentage.text = '';
+            }
+
+            for(let i = 0; i < MemoryMonitor.TOP_PROCESSES_LIMIT; i++) {
+                const popup = this.topProcessesPopup?.processes?.get(i);
+                if(!popup) continue;
+                popup.label.text = '';
+                popup.percentage.text = '';
+                popup.description.text = '';
+            }
+        }
+
+        if(code === 'all' || code === 'swapUsage') {
+            this.memorySwapPopup.usedQtyLabel!.text = '';
+            this.memorySwapPopup.usedPercLabel!.text = '';
+            this.memorySwapPopup.freeQtyLabel!.text = '';
+            this.memorySwapPopup.freePercLabel!.text = '';
+            this.memorySwapPopup.cachedQtyLabel!.text = '';
+            this.memorySwapPopup.cachedPercLabel!.text = '';
         }
     }
 
-    update(code: string) {
+    update(code: string, forced: boolean = false) {
+        if(!this.needsUpdate(code, forced)) return;
+
         if(code === 'memoryUsage') {
             const unit = Config.get_string('memory-unit');
             const memoryUsage = Utils.memoryMonitor.getCurrentValue('memoryUsage');

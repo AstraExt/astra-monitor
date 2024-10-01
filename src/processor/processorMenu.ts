@@ -461,12 +461,12 @@ export default class ProcessorMenu extends MenuBase {
                 Utils.processorMonitor.listen(
                     hoverButton,
                     'cpuCoresUsage',
-                    this.update.bind(this, 'cpuCoresUsage')
+                    this.update.bind(this, 'cpuCoresUsage', false)
                 );
 
                 if(this.lazyCoresPopupTimer == null) {
                     this.lazyCoresPopupTimer = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE + 1, () => {
-                        this.update('cpuCoresUsage');
+                        this.update('cpuCoresUsage', false);
                         this.lazyCoresPopupTimer = null;
                         return GLib.SOURCE_REMOVE;
                     });
@@ -475,7 +475,7 @@ export default class ProcessorMenu extends MenuBase {
                 Utils.processorMonitor.listen(
                     hoverButton,
                     'cpuCoresFrequency',
-                    this.update.bind(this, 'cpuCoresFrequency')
+                    this.update.bind(this, 'cpuCoresFrequency', false)
                 );
                 Utils.processorMonitor.requestUpdate('cpuCoresFrequency');
             }
@@ -821,36 +821,51 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     async onOpen() {
-        this.clear();
-
         if(this.gpuSection.container.visible) {
             this.gpuSection.onOpen();
         }
 
         //Update cpu usage percentage label
-        this.update('cpuUsage');
-        Utils.processorMonitor.listen(this, 'cpuUsage', this.update.bind(this, 'cpuUsage'));
+        this.clear('cpuUsage');
+        this.update('cpuUsage', true);
+        Utils.processorMonitor.listen(this, 'cpuUsage', this.update.bind(this, 'cpuUsage', false));
 
         //Update graph history
-        this.update('graph');
-        Utils.processorMonitor.listen(this.graph, 'cpuUsage', this.update.bind(this, 'graph'));
+        this.update('graph', true);
+        Utils.processorMonitor.listen(
+            this.graph,
+            'cpuUsage',
+            this.update.bind(this, 'graph', false)
+        );
 
-        Utils.processorMonitor.listen(this, 'topProcesses', this.update.bind(this, 'topProcesses'));
+        this.update('topProcesses', true);
+        Utils.processorMonitor.listen(
+            this,
+            'topProcesses',
+            this.update.bind(this, 'topProcesses', false)
+        );
         Utils.processorMonitor.requestUpdate('topProcesses');
         this.queueTopProcessesUpdate = true;
 
-        Utils.processorMonitor.listen(this, 'loadAverage', this.update.bind(this, 'loadAverage'));
+        this.update('loadAverage', true);
+        Utils.processorMonitor.listen(
+            this,
+            'loadAverage',
+            this.update.bind(this, 'loadAverage', false)
+        );
         Utils.processorMonitor.requestUpdate('loadAverage');
 
         this.menuUptimeTimer = Utils.getUptime(bootTime => {
             this.menuUptime.text = Utils.formatUptime(bootTime);
         });
 
+        this.clear('gpuUpdate');
+        this.update('gpuUpdate', true);
         const processorGpuShow = Config.get_boolean('processor-gpu');
         const gpuHeaderShow = Config.get_boolean('gpu-header-show');
         if(processorGpuShow && !gpuHeaderShow) {
             Utils.gpuMonitor.listen(this, 'gpuUpdateProcessor', () => {});
-            Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate'));
+            Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate', false));
         }
     }
 
@@ -878,34 +893,56 @@ export default class ProcessorMenu extends MenuBase {
         }
     }
 
-    clear() {
+    clear(code: string = 'all') {
         //Clear elements before updating them (in case of a lagging update)
 
-        this.cpuTotalPerc.text = '-';
-        this.cpuUserPerc.text = '-';
-        this.cpuSystemPerc.text = '-';
-
-        for(let i = 0; i < this.topProcesses.length; i++) {
-            this.topProcesses[i].label.text = '';
-            this.topProcesses[i].percentage.text = '';
+        if(code === 'all' || code === 'cpuUsage') {
+            this.cpuTotalPerc.text = '-';
+            this.cpuUserPerc.text = '-';
+            this.cpuSystemPerc.text = '-';
         }
 
-        for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
-            const popup = this.topProcessesPopup?.processes?.get(i);
-            if(!popup) continue;
-            popup.percentage.text = '';
-            popup.description.text = '';
+        if(code === 'all' || code === 'topProcesses') {
+            for(let i = 0; i < this.topProcesses.length; i++) {
+                this.topProcesses[i].label.text = '';
+                this.topProcesses[i].percentage.text = '';
+            }
+
+            for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
+                const popup = this.topProcessesPopup?.processes?.get(i);
+                if(!popup) continue;
+                popup.percentage.text = '';
+                popup.description.text = '';
+            }
         }
 
-        for(let i = 0; i < this.loadAverageValues.length; i++)
-            this.loadAverageValues[i].text = '-';
+        if(code === 'all' || code === 'loadAverage') {
+            for(let i = 0; i < this.loadAverageValues.length; i++)
+                this.loadAverageValues[i].text = '-';
+        }
 
-        this.menuUptime.text = '';
+        if(code === 'all' || code === 'systemUptime') {
+            this.menuUptime.text = '';
+        }
 
-        this.gpuSection.clear();
+        if(code === 'all' || code === 'gpuUpdate') {
+            this.gpuSection.clear();
+        }
     }
 
-    update(code: string, ...args: any[]) {
+    protected needsUpdate(code: string, forced: boolean = false) {
+        if(forced) {
+            const valueTime = Utils.processorMonitor.getCurrentValueTime(code);
+            return !(valueTime && Date.now() - valueTime > Utils.processorMonitor.updateFrequency);
+        }
+        return super.needsUpdate(code, forced);
+    }
+
+    update(code: string, forced: boolean = false, ...args: any[]) {
+        if(!this.needsUpdate(code, forced)) {
+            return;
+        }
+
         if(code === 'cpuUsage') {
             const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
 
@@ -985,6 +1022,13 @@ export default class ProcessorMenu extends MenuBase {
             return;
         }
         if(code === 'topProcesses') {
+            if(this.queueTopProcessesUpdate) {
+                if(Utils.processorMonitor.dueIn >= 300)
+                    Utils.processorMonitor.requestUpdate('topProcesses');
+                this.queueTopProcessesUpdate = false;
+                return;
+            }
+
             const topProcesses = Utils.processorMonitor.getCurrentValue('topProcesses');
             if(!topProcesses || !Array.isArray(topProcesses)) {
                 for(let i = 0; i < this.topProcesses.length; i++) {
@@ -1032,17 +1076,12 @@ export default class ProcessorMenu extends MenuBase {
                     }
                 }
             }
-
-            if(this.queueTopProcessesUpdate) {
-                if(Utils.processorMonitor.dueIn >= 300)
-                    Utils.processorMonitor.requestUpdate('topProcesses');
-                this.queueTopProcessesUpdate = false;
-                return;
-            }
             return;
         }
         if(code === 'loadAverage') {
-            if(this.loadAverageValues.length === 0) return;
+            if(this.loadAverageValues.length === 0) {
+                return;
+            }
 
             const loadAverage = Utils.processorMonitor.getCurrentValue('loadAverage');
             if(!loadAverage) {

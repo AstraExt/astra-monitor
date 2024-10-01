@@ -270,6 +270,13 @@ export default class NetworkMonitor extends Monitor {
     stopListeningFor(key: string) {
         super.stopListeningFor(key);
 
+        if(key === 'networkIO') {
+            this.previousNetworkIO = {
+                bytesUploaded: -1,
+                bytesDownloaded: -1,
+                time: -1,
+            };
+        }
         if(key === 'detailedNetworkIO') {
             this.previousDetailedNetworkIO.devices = null;
             this.previousDetailedNetworkIO.time = -1;
@@ -315,7 +322,7 @@ export default class NetworkMonitor extends Monitor {
 
             this.runUpdate('networkIO', detailed, procNetDev);
 
-            if(detailed) super.requestUpdate('networkIO'); // override also the storageIO update
+            if(detailed) super.requestUpdate('networkIO'); // override also the networkIO update
         }
         if(key === 'routes') {
             this.runUpdate('routes');
