@@ -587,7 +587,7 @@ export default class NetworkMenu extends MenuBase {
                 layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;',
+                style: 'margin-left:0;margin-right:0;width:6em;',
             });
             uploadContainer.hide();
 
@@ -613,7 +613,7 @@ export default class NetworkMenu extends MenuBase {
                 layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;',
+                style: 'margin-left:0;margin-right:0;width:6em;',
             });
             downloadContainer.hide();
 

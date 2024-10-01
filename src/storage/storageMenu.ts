@@ -429,7 +429,7 @@ export default class StorageMenu extends MenuBase {
                 layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;',
+                style: 'margin-left:0;margin-right:0;width:6em;',
             });
 
             const readActivityIcon = new St.Icon({
@@ -454,7 +454,7 @@ export default class StorageMenu extends MenuBase {
                 layoutManager: new Clutter.GridLayout({
                     orientation: Clutter.Orientation.HORIZONTAL,
                 }),
-                style: 'margin-left:0;margin-right:0;width:5em;',
+                style: 'margin-left:0;margin-right:0;width:6em;',
             });
 
             const writeActivityIcon = new St.Icon({
