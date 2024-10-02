@@ -1,4 +1,4 @@
-# Astra Monitor 29 - TO BE RELEASED
+# Astra Monitor 29 - October 2 2024
 
 ### New features
 

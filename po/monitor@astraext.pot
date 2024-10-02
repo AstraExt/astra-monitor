@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Astra Monitor 45\n"
+"Project-Id-Version: Astra Monitor 46\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-27 21:40+0200\n"
+"POT-Creation-Date: 2024-10-02 12:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,100 +18,100 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: src/processor/processorMenu.js:37 src/prefs/processors.js:186
+#: src/processor/processorMenu.js:37 src/prefs/processors.js:194
 msgid "CPU"
 msgstr ""
 
-#: src/processor/processorMenu.js:90
+#: src/processor/processorMenu.js:100
 msgid "CPU info"
 msgstr ""
 
-#: src/processor/processorMenu.js:162 src/memory/memoryMenu.js:50
+#: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
 #: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:244
 #: src/gpu/gpuMenuComponent.js:677
 msgid "Total:"
 msgstr ""
 
-#: src/processor/processorMenu.js:170
+#: src/processor/processorMenu.js:188
 msgid "User:"
 msgstr ""
 
-#: src/processor/processorMenu.js:178
+#: src/processor/processorMenu.js:196
 msgid "System:"
 msgstr ""
 
-#: src/processor/processorMenu.js:207
+#: src/processor/processorMenu.js:225
 msgid "CPU Category Usage Raw Info"
 msgstr ""
 
-#: src/processor/processorMenu.js:209
+#: src/processor/processorMenu.js:227
 msgid "User"
 msgstr ""
 
-#: src/processor/processorMenu.js:216
+#: src/processor/processorMenu.js:234
 msgid "Nice"
 msgstr ""
 
-#: src/processor/processorMenu.js:223
+#: src/processor/processorMenu.js:241
 msgid "System"
 msgstr ""
 
-#: src/processor/processorMenu.js:230
+#: src/processor/processorMenu.js:248
 msgid "Idle"
 msgstr ""
 
-#: src/processor/processorMenu.js:237
+#: src/processor/processorMenu.js:255
 msgid "I/O wait"
 msgstr ""
 
-#: src/processor/processorMenu.js:244
+#: src/processor/processorMenu.js:262
 msgid "IRQ"
 msgstr ""
 
-#: src/processor/processorMenu.js:251
+#: src/processor/processorMenu.js:269
 msgid "Soft IRQ"
 msgstr ""
 
-#: src/processor/processorMenu.js:258
+#: src/processor/processorMenu.js:276
 msgid "Steal"
 msgstr ""
 
-#: src/processor/processorMenu.js:320
+#: src/processor/processorMenu.js:338
 msgid "CPU Cores Usage Info"
 msgstr ""
 
-#: src/processor/processorMenu.js:362
+#: src/processor/processorMenu.js:380
 msgid "GHz"
 msgstr ""
 
-#: src/processor/processorMenu.js:377 src/processor/processorMenu.js:419
+#: src/processor/processorMenu.js:395 src/processor/processorMenu.js:437
 #: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
-#: src/storage/storageMenu.js:1163 src/storage/storageMenu.js:1164
-#: src/storage/storageMenu.js:1173 src/storage/storageMenu.js:1174
+#: src/storage/storageMenu.js:1178 src/storage/storageMenu.js:1179
+#: src/storage/storageMenu.js:1188 src/storage/storageMenu.js:1189
 #: src/memory/memoryMenu.js:247 src/memory/memoryMenu.js:294
 msgid "Top processes"
 msgstr ""
 
-#: src/processor/processorMenu.js:452
+#: src/processor/processorMenu.js:470
 msgid "Load average"
 msgstr ""
 
-#: src/processor/processorMenu.js:472
+#: src/processor/processorMenu.js:490
 msgctxt "short for 1 minute"
 msgid "1m"
 msgstr ""
 
-#: src/processor/processorMenu.js:492
+#: src/processor/processorMenu.js:510
 msgctxt "short for 5 minutes"
 msgid "5m"
 msgstr ""
 
-#: src/processor/processorMenu.js:512
+#: src/processor/processorMenu.js:530
 msgctxt "short for 15 minutes"
 msgid "15m"
 msgstr ""
 
-#: src/processor/processorMenu.js:561
+#: src/processor/processorMenu.js:579
 msgid "System uptime"
 msgstr ""
 
@@ -314,12 +314,12 @@ msgid "Sensor 2 Layout"
 msgstr ""
 
 #: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
-#: src/prefs/network.js:245 src/prefs/gpu.js:179 src/prefs/processors.js:174
+#: src/prefs/network.js:245 src/prefs/gpu.js:179 src/prefs/processors.js:182
 msgid "Tooltip"
 msgstr ""
 
 #: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
-#: src/prefs/network.js:246 src/prefs/gpu.js:180 src/prefs/processors.js:175
+#: src/prefs/network.js:246 src/prefs/gpu.js:180 src/prefs/processors.js:183
 msgid "Show Tooltip"
 msgstr ""
 
@@ -355,8 +355,8 @@ msgstr ""
 
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:183
-#: src/prefs/processors.js:185 prefs.js:241 prefs.js:301 prefs.js:335
+#: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:191
+#: src/prefs/processors.js:193 prefs.js:241 prefs.js:301 prefs.js:335
 #: prefs.js:369
 msgid "Menu"
 msgstr ""
@@ -538,17 +538,17 @@ msgstr ""
 msgid "Set 0 to disable. Value is free MB of ram."
 msgstr ""
 
-#: src/prefs/memory.js:164 src/prefs/processors.js:145
+#: src/prefs/memory.js:164 src/prefs/processors.js:153
 msgid "History Graph"
 msgstr ""
 
-#: src/prefs/memory.js:165 src/prefs/processors.js:146
+#: src/prefs/memory.js:165 src/prefs/processors.js:154
 msgid "Show History Graph"
 msgstr ""
 
 #: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
 #: src/prefs/visualization.js:81 src/prefs/gpu.js:145 src/prefs/gpu.js:167
-#: src/prefs/processors.js:148 src/prefs/processors.js:163
+#: src/prefs/processors.js:156 src/prefs/processors.js:171
 msgid "Main Color"
 msgstr ""
 
@@ -556,8 +556,8 @@ msgstr ""
 msgid "<b>Used</b> memory color."
 msgstr ""
 
-#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:152
-#: src/prefs/processors.js:188
+#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:160
+#: src/prefs/processors.js:196
 msgid "History Graph Breakdown"
 msgstr ""
 
@@ -570,19 +570,19 @@ msgid "<b>Allocated <u>unused</u></b> memory color."
 msgstr ""
 
 #: src/prefs/memory.js:177 src/prefs/gpu.js:149 src/prefs/gpu.js:171
-#: src/prefs/processors.js:158
+#: src/prefs/processors.js:166
 msgid "History Graph Width"
 msgstr ""
 
-#: src/prefs/memory.js:178 src/prefs/processors.js:159
+#: src/prefs/memory.js:178 src/prefs/processors.js:167
 msgid "Realtime Bar"
 msgstr ""
 
-#: src/prefs/memory.js:179 src/prefs/processors.js:160
+#: src/prefs/memory.js:179 src/prefs/processors.js:168
 msgid "Show Realtime Bar"
 msgstr ""
 
-#: src/prefs/memory.js:185 src/prefs/processors.js:167
+#: src/prefs/memory.js:185 src/prefs/processors.js:175
 msgid "Realtime Bar Breakdown"
 msgstr ""
 
@@ -1182,8 +1182,8 @@ msgstr ""
 msgid "Changing this will just replace all main colors."
 msgstr ""
 
-#: src/prefs/visualization.js:92 src/prefs/processors.js:154
-#: src/prefs/processors.js:169
+#: src/prefs/visualization.js:92 src/prefs/processors.js:162
+#: src/prefs/processors.js:177
 msgid "Secondary Color"
 msgstr ""
 
@@ -1312,7 +1312,7 @@ msgid "Monitor Ordering"
 msgstr ""
 
 #: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
-#: src/prefs/gpu.js:82 src/prefs/processors.js:191 src/gpu/gpuMenu.js:28
+#: src/prefs/gpu.js:82 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
 #: src/gpu/gpuMenuComponent.js:43 prefs.js:250
 msgid "GPU"
 msgstr ""
@@ -1426,7 +1426,7 @@ msgstr ""
 msgid "Set icon name (ie: 'cpu-symbolic')"
 msgstr ""
 
-#: src/prefs/processors.js:137 src/prefs/processors.js:176
+#: src/prefs/processors.js:137 src/prefs/processors.js:184
 msgid "Percentage"
 msgstr ""
 
@@ -1434,7 +1434,7 @@ msgstr ""
 msgid "Show Percentage"
 msgstr ""
 
-#: src/prefs/processors.js:139 src/prefs/processors.js:177
+#: src/prefs/processors.js:139 src/prefs/processors.js:185
 msgid "Single Core Percentage"
 msgstr ""
 
@@ -1442,35 +1442,59 @@ msgstr ""
 msgid "Set 0 to disable. Value is percentage of total cpu usage."
 msgstr ""
 
-#: src/prefs/processors.js:149 src/prefs/processors.js:164
+#: src/prefs/processors.js:145 src/network/networkMenu.js:1190
+msgid "Frequency"
+msgstr ""
+
+#: src/prefs/processors.js:146
+msgid "Show Frequency"
+msgstr ""
+
+#: src/prefs/processors.js:147
+msgid "Frequency Max Number of Figures"
+msgstr ""
+
+#: src/prefs/processors.js:149
+msgid "Average"
+msgstr ""
+
+#: src/prefs/processors.js:150
+msgid "Max"
+msgstr ""
+
+#: src/prefs/processors.js:152
+msgid "Frequency Mode"
+msgstr ""
+
+#: src/prefs/processors.js:157 src/prefs/processors.js:172
 msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
 msgstr ""
 
-#: src/prefs/processors.js:155 src/prefs/processors.js:170
+#: src/prefs/processors.js:163 src/prefs/processors.js:178
 msgid "<b>System usage</b> color."
 msgstr ""
 
-#: src/prefs/processors.js:161
+#: src/prefs/processors.js:169
 msgid "Realtime per-core Bars"
 msgstr ""
 
-#: src/prefs/processors.js:187
+#: src/prefs/processors.js:195
 msgid "Realtime Bars Breakdown"
 msgstr ""
 
-#: src/prefs/processors.js:189
+#: src/prefs/processors.js:197
 msgid "Core Bars Breakdown"
 msgstr ""
 
-#: src/prefs/processors.js:190
+#: src/prefs/processors.js:198
 msgid "Top Processes Single Core"
 msgstr ""
 
-#: src/prefs/processors.js:193
+#: src/prefs/processors.js:201
 msgid "Show GPU info"
 msgstr ""
 
-#: src/prefs/processors.js:194
+#: src/prefs/processors.js:202
 msgid "Only works if GPU header is disabled."
 msgstr ""
 
@@ -1717,10 +1741,6 @@ msgstr ""
 msgid "Mode"
 msgstr ""
 
-#: src/network/networkMenu.js:1190
-msgid "Frequency"
-msgstr ""
-
 #: src/network/networkMenu.js:1202
 msgid "Access Point"
 msgstr ""
@@ -1761,7 +1781,7 @@ msgstr ""
 msgid "Write"
 msgstr ""
 
-#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1172
+#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1187
 msgid "(click to show all system processes)"
 msgstr ""
 
@@ -2047,15 +2067,15 @@ msgstr ""
 msgid "Disk"
 msgstr ""
 
-#: src/storage/storageMenu.js:1108
+#: src/storage/storageMenu.js:1123
 msgid "Yes"
 msgstr ""
 
-#: src/storage/storageMenu.js:1108
+#: src/storage/storageMenu.js:1123
 msgid "No"
 msgstr ""
 
-#: src/storage/storageMenu.js:1162
+#: src/storage/storageMenu.js:1177
 msgid "(showing all system processes)"
 msgstr ""
 

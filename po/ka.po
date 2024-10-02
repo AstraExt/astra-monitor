@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-27 21:40+0200\n"
+"POT-Creation-Date: 2024-10-02 12:00+0200\n"
 "PO-Revision-Date: 2024-04-27 11:41+0200\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -22,100 +22,100 @@ msgstr ""
 "X-Poedit-Basepath: ../src\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: src/processor/processorMenu.js:37 src/prefs/processors.js:186
+#: src/processor/processorMenu.js:37 src/prefs/processors.js:194
 msgid "CPU"
 msgstr "CPU"
 
-#: src/processor/processorMenu.js:90
+#: src/processor/processorMenu.js:100
 msgid "CPU info"
 msgstr "ინფორმაცია CPU-ს შესახებ"
 
-#: src/processor/processorMenu.js:162 src/memory/memoryMenu.js:50
+#: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
 #: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:244
 #: src/gpu/gpuMenuComponent.js:677
 msgid "Total:"
 msgstr "სულ:"
 
-#: src/processor/processorMenu.js:170
+#: src/processor/processorMenu.js:188
 msgid "User:"
 msgstr "მომხმარებელი:"
 
-#: src/processor/processorMenu.js:178
+#: src/processor/processorMenu.js:196
 msgid "System:"
 msgstr "სისტემა:"
 
-#: src/processor/processorMenu.js:207
+#: src/processor/processorMenu.js:225
 msgid "CPU Category Usage Raw Info"
 msgstr "დაუმუშავებელი ინფორმაცია CPU-ს გამოყენების კატეგორიის შესახებ"
 
-#: src/processor/processorMenu.js:209
+#: src/processor/processorMenu.js:227
 msgid "User"
 msgstr "მომხმარებელი"
 
-#: src/processor/processorMenu.js:216
+#: src/processor/processorMenu.js:234
 msgid "Nice"
 msgstr "თანხმობადობა"
 
-#: src/processor/processorMenu.js:223
+#: src/processor/processorMenu.js:241
 msgid "System"
 msgstr "სისტემა"
 
-#: src/processor/processorMenu.js:230
+#: src/processor/processorMenu.js:248
 msgid "Idle"
 msgstr "უმოქმედო"
 
-#: src/processor/processorMenu.js:237
+#: src/processor/processorMenu.js:255
 msgid "I/O wait"
 msgstr "შეყვანა/გამოყვანის ლოდინი"
 
-#: src/processor/processorMenu.js:244
+#: src/processor/processorMenu.js:262
 msgid "IRQ"
 msgstr "შეწყვეტა"
 
-#: src/processor/processorMenu.js:251
+#: src/processor/processorMenu.js:269
 msgid "Soft IRQ"
 msgstr "პროგრამული შეწყვეტა"
 
-#: src/processor/processorMenu.js:258
+#: src/processor/processorMenu.js:276
 msgid "Steal"
 msgstr "მოპარვა"
 
-#: src/processor/processorMenu.js:320
+#: src/processor/processorMenu.js:338
 msgid "CPU Cores Usage Info"
 msgstr "ინფორმაცია CPU-ს ბირთვების გამოყენების შესახებ"
 
-#: src/processor/processorMenu.js:362
+#: src/processor/processorMenu.js:380
 msgid "GHz"
 msgstr "გჰც"
 
-#: src/processor/processorMenu.js:377 src/processor/processorMenu.js:419
+#: src/processor/processorMenu.js:395 src/processor/processorMenu.js:437
 #: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
-#: src/storage/storageMenu.js:1163 src/storage/storageMenu.js:1164
-#: src/storage/storageMenu.js:1173 src/storage/storageMenu.js:1174
+#: src/storage/storageMenu.js:1178 src/storage/storageMenu.js:1179
+#: src/storage/storageMenu.js:1188 src/storage/storageMenu.js:1189
 #: src/memory/memoryMenu.js:247 src/memory/memoryMenu.js:294
 msgid "Top processes"
 msgstr "ტოპ პროცესები"
 
-#: src/processor/processorMenu.js:452
+#: src/processor/processorMenu.js:470
 msgid "Load average"
 msgstr "დატვირთვის საშუალო"
 
-#: src/processor/processorMenu.js:472
+#: src/processor/processorMenu.js:490
 msgctxt "short for 1 minute"
 msgid "1m"
 msgstr "1წთ"
 
-#: src/processor/processorMenu.js:492
+#: src/processor/processorMenu.js:510
 msgctxt "short for 5 minutes"
 msgid "5m"
 msgstr "5წთ"
 
-#: src/processor/processorMenu.js:512
+#: src/processor/processorMenu.js:530
 msgctxt "short for 15 minutes"
 msgid "15m"
 msgstr "15წთ"
 
-#: src/processor/processorMenu.js:561
+#: src/processor/processorMenu.js:579
 msgid "System uptime"
 msgstr "სისტემის მუშაობის დრო"
 
@@ -324,12 +324,12 @@ msgid "Sensor 2 Layout"
 msgstr "სენსორი 2-ის განლაგება"
 
 #: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
-#: src/prefs/network.js:245 src/prefs/gpu.js:179 src/prefs/processors.js:174
+#: src/prefs/network.js:245 src/prefs/gpu.js:179 src/prefs/processors.js:182
 msgid "Tooltip"
 msgstr "მინიშნება"
 
 #: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
-#: src/prefs/network.js:246 src/prefs/gpu.js:180 src/prefs/processors.js:175
+#: src/prefs/network.js:246 src/prefs/gpu.js:180 src/prefs/processors.js:183
 msgid "Show Tooltip"
 msgstr "მინიშნების ჩვენება"
 
@@ -371,8 +371,8 @@ msgstr "სენსორი 5-ის მინიშნება"
 
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:183
-#: src/prefs/processors.js:185 prefs.js:241 prefs.js:301 prefs.js:335
+#: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:191
+#: src/prefs/processors.js:193 prefs.js:241 prefs.js:301 prefs.js:335
 #: prefs.js:369
 msgid "Menu"
 msgstr "მენიუ"
@@ -573,17 +573,17 @@ msgstr ""
 "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების თავისუფალი "
 "მბ."
 
-#: src/prefs/memory.js:164 src/prefs/processors.js:145
+#: src/prefs/memory.js:164 src/prefs/processors.js:153
 msgid "History Graph"
 msgstr "ისტორიის გრაფიკი"
 
-#: src/prefs/memory.js:165 src/prefs/processors.js:146
+#: src/prefs/memory.js:165 src/prefs/processors.js:154
 msgid "Show History Graph"
 msgstr "ისტორიის გრაფიკის ჩვენება"
 
 #: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
 #: src/prefs/visualization.js:81 src/prefs/gpu.js:145 src/prefs/gpu.js:167
-#: src/prefs/processors.js:148 src/prefs/processors.js:163
+#: src/prefs/processors.js:156 src/prefs/processors.js:171
 #, fuzzy
 msgid "Main Color"
 msgstr "ძირითადი ფერი"
@@ -592,8 +592,8 @@ msgstr "ძირითადი ფერი"
 msgid "<b>Used</b> memory color."
 msgstr "<b>გამოყენებული</b> მეხსიერების ფერი."
 
-#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:152
-#: src/prefs/processors.js:188
+#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:160
+#: src/prefs/processors.js:196
 msgid "History Graph Breakdown"
 msgstr "ისტორიის გრაფიკის დაყოფა"
 
@@ -607,19 +607,19 @@ msgid "<b>Allocated <u>unused</u></b> memory color."
 msgstr "<b>მინიჭებული <u>გამოუყენებული</u></b> მეხსიერების ფერი."
 
 #: src/prefs/memory.js:177 src/prefs/gpu.js:149 src/prefs/gpu.js:171
-#: src/prefs/processors.js:158
+#: src/prefs/processors.js:166
 msgid "History Graph Width"
 msgstr "ისტორიის გრაფიკის სიგანე"
 
-#: src/prefs/memory.js:178 src/prefs/processors.js:159
+#: src/prefs/memory.js:178 src/prefs/processors.js:167
 msgid "Realtime Bar"
 msgstr "რეალური დროის სვეტი"
 
-#: src/prefs/memory.js:179 src/prefs/processors.js:160
+#: src/prefs/memory.js:179 src/prefs/processors.js:168
 msgid "Show Realtime Bar"
 msgstr "რეალური დროის სვეტის ჩვენება"
 
-#: src/prefs/memory.js:185 src/prefs/processors.js:167
+#: src/prefs/memory.js:185 src/prefs/processors.js:175
 msgid "Realtime Bar Breakdown"
 msgstr "რეალური დროის სვეტის დაყოფა"
 
@@ -1270,8 +1270,8 @@ msgstr "ეს უფრო ხელსაწყო არის, ვიდრ�
 msgid "Changing this will just replace all main colors."
 msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
 
-#: src/prefs/visualization.js:92 src/prefs/processors.js:154
-#: src/prefs/processors.js:169
+#: src/prefs/visualization.js:92 src/prefs/processors.js:162
+#: src/prefs/processors.js:177
 #, fuzzy
 msgid "Secondary Color"
 msgstr "მეორადი ფერი"
@@ -1407,7 +1407,7 @@ msgid "Monitor Ordering"
 msgstr "მონიტორის დალაგება"
 
 #: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
-#: src/prefs/gpu.js:82 src/prefs/processors.js:191 src/gpu/gpuMenu.js:28
+#: src/prefs/gpu.js:82 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
 #: src/gpu/gpuMenuComponent.js:43 prefs.js:250
 msgid "GPU"
 msgstr "GPU"
@@ -1544,7 +1544,7 @@ msgstr "დატვირთვის საშუალო"
 msgid "Set icon name (ie: 'cpu-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'cpu-symbolic')"
 
-#: src/prefs/processors.js:137 src/prefs/processors.js:176
+#: src/prefs/processors.js:137 src/prefs/processors.js:184
 msgid "Percentage"
 msgstr "პროცენტი"
 
@@ -1552,7 +1552,7 @@ msgstr "პროცენტი"
 msgid "Show Percentage"
 msgstr "პროცენტის ჩვენება"
 
-#: src/prefs/processors.js:139 src/prefs/processors.js:177
+#: src/prefs/processors.js:139 src/prefs/processors.js:185
 msgid "Single Core Percentage"
 msgstr "ერთი ბირთვის პროცენტი"
 
@@ -1562,38 +1562,66 @@ msgid "Set 0 to disable. Value is percentage of total cpu usage."
 msgstr ""
 "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს გამოყენების პროცენტია."
 
-#: src/prefs/processors.js:149 src/prefs/processors.js:164
+#: src/prefs/processors.js:145 src/network/networkMenu.js:1190
+msgid "Frequency"
+msgstr "სიხშირე"
+
+#: src/prefs/processors.js:146
+#, fuzzy
+msgid "Show Frequency"
+msgstr "სიხშირე"
+
+#: src/prefs/processors.js:147
+#, fuzzy
+msgid "Frequency Max Number of Figures"
+msgstr "თავისუფალის მნიშვნელობის სიმბოლოთა მაქსიმალური რაოდენობა"
+
+#: src/prefs/processors.js:149
+#, fuzzy
+msgid "Average"
+msgstr "დატვირთვის საშუალო"
+
+#: src/prefs/processors.js:150
+msgid "Max"
+msgstr ""
+
+#: src/prefs/processors.js:152
+#, fuzzy
+msgid "Frequency Mode"
+msgstr "სიხშირე"
+
+#: src/prefs/processors.js:157 src/prefs/processors.js:172
 msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
 msgstr ""
 "<b>ჯამური გამოყენების</b> ფერი (<b>მომხმარებლის გამოყენება</b>, როდესაც "
 "დაყოფა ჩართულია)."
 
-#: src/prefs/processors.js:155 src/prefs/processors.js:170
+#: src/prefs/processors.js:163 src/prefs/processors.js:178
 msgid "<b>System usage</b> color."
 msgstr "<b>სისტემური გამოყენების</b> ფერი."
 
-#: src/prefs/processors.js:161
+#: src/prefs/processors.js:169
 msgid "Realtime per-core Bars"
 msgstr "რეალური დროის ბირთვის სვეტები"
 
-#: src/prefs/processors.js:187
+#: src/prefs/processors.js:195
 msgid "Realtime Bars Breakdown"
 msgstr "რეალური დროის სვეტების დაყოფა"
 
-#: src/prefs/processors.js:189
+#: src/prefs/processors.js:197
 msgid "Core Bars Breakdown"
 msgstr "ბირთვის სვეტების დაყოფა"
 
-#: src/prefs/processors.js:190
+#: src/prefs/processors.js:198
 msgid "Top Processes Single Core"
 msgstr "ტოპ პროცესები ერთ ბირთვზე"
 
-#: src/prefs/processors.js:193
+#: src/prefs/processors.js:201
 #, fuzzy
 msgid "Show GPU info"
 msgstr "ინფორმაცია GPU-ს შესახებ"
 
-#: src/prefs/processors.js:194
+#: src/prefs/processors.js:202
 msgid "Only works if GPU header is disabled."
 msgstr "მუშაობს მხოლოდ როდესაც GPU სათაური გათიშულია."
 
@@ -1852,10 +1880,6 @@ msgstr "SSID"
 msgid "Mode"
 msgstr "რეჟიმი"
 
-#: src/network/networkMenu.js:1190
-msgid "Frequency"
-msgstr "სიხშირე"
-
 #: src/network/networkMenu.js:1202
 msgid "Access Point"
 msgstr "წვდომის წერტილი"
@@ -1897,7 +1921,7 @@ msgstr "წაკითხვა"
 msgid "Write"
 msgstr "ჩაწერა"
 
-#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1172
+#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1187
 msgid "(click to show all system processes)"
 msgstr ""
 
@@ -2197,16 +2221,16 @@ msgstr "ჯამური მოწყობილობის აქტივ�
 msgid "Disk"
 msgstr "დისკი"
 
-#: src/storage/storageMenu.js:1108
+#: src/storage/storageMenu.js:1123
 msgid "Yes"
 msgstr "დიახ"
 
-#: src/storage/storageMenu.js:1108
+#: src/storage/storageMenu.js:1123
 #, fuzzy
 msgid "No"
 msgstr "არა"
 
-#: src/storage/storageMenu.js:1162
+#: src/storage/storageMenu.js:1177
 msgid "(showing all system processes)"
 msgstr ""
 
