@@ -1712,7 +1712,7 @@ export default class Utils {
                 return id;
             }
         }
-        if(disks.size > 0) return disks.keys().next().value;
+        if(disks.size > 0) return disks.keys().next().value || null;
         return null;
     }
 
