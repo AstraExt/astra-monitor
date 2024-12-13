@@ -777,6 +777,14 @@ export default class ProcessorMonitor extends Monitor {
         };
     }
 
+    /**
+     * Reading frequency from /sys/devices/system/cpu/cpu<N>/cpufreq/scaling_cur_freq
+     * This read frequency in KHz. This function read the frequency and converts it in MHz
+     * by dividing it with 1000.
+     * 
+     * source: https://www.kernel.org/doc/Documentation/cpu-freq/user-guide.txt#:~:text=scaling_cur_freq%20%3A%20Current%20frequency%20of%20the,and%20cpufreq%20core%2C%20in%20KHz. 
+     *
+    */
     async updateCpuCoresFrequencyProc(): Promise<boolean> {
         if(this.isListeningFor('cpuCoresFrequency')) {
             try {
