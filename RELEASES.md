@@ -1,3 +1,9 @@
+# Astra Monitor 30 - TO BE RELEASED
+
+### Bug fixes
+
+-   Fixed GPU detection on some GPUs [[#162](https://github.com/AstraExt/astra-monitor/issues/162)]
+
 # Astra Monitor 29 - October 2 2024
 
 ### New features

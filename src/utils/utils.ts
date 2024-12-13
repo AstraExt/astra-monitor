@@ -1283,7 +1283,7 @@ export default class Utils {
 
             const filteredOutputs = Utils.filterLspciOutput(
                 lspciOutput,
-                ['vga', 'display controller'],
+                ['vga', 'display controller', '3d controller'],
                 'or',
                 5
             );
