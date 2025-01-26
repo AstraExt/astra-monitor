@@ -407,6 +407,11 @@
       <summary>Main GPU</summary>
       <description>Main GPU</description>
     </key>
+    <key name="gpu-data" type="s">
+      <default>'""'</default>
+      <summary>GPU Data</summary>
+      <description>GPU Data</description>
+    </key>
     <key name="gpu-indicators-order" type="s">
       <default>'""'</default>
       <summary>Order of the indicators</summary>
@@ -1299,7 +1304,7 @@
     </key>
     
     <!-- DEPRECATED KEYS
-    VALUES ARE MOVED TO PROPER NEW KEYS AS SOON AS FIRST RUN (V20)
+    VALUES ARE MOVED TO PROPER NEW KEYS AS SOON AS FIRST RUN
     KEEP THEM FOR BACKWARD COMPATIBILITY
     -->
     <key name="processor-menu-gpu" type="s">

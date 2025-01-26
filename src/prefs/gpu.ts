@@ -24,6 +24,7 @@ import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensio
 
 import PrefsUtils from './prefsUtils.js';
 import Utils, { GpuInfo } from '../utils/utils.js';
+import Config from '../config.js';
 
 type AstraMonitorPrefs = import('../../prefs.js').default;
 
@@ -100,7 +101,7 @@ export default class Gpu {
             title: _('General'),
         });
 
-        const group = new Adw.PreferencesGroup({ title: _('GPU') });
+        let group = new Adw.PreferencesGroup({ title: _('General') });
         PrefsUtils.addSwitchRow(
             {
                 title: _('Show'),
@@ -137,6 +138,84 @@ export default class Gpu {
             choicesSource.push({ value: data, text: Utils.getGPUModelName(gpu) });
         }
         PrefsUtils.addDropRow({ title: _('Main GPU') }, choicesSource, 'gpu-main', group, 'json');
+
+        generalPage.add(group);
+
+        group = new Adw.PreferencesGroup({ title: _('GPU') });
+
+        for(const gpu of gpus) {
+            const gpuSection = PrefsUtils.addExpanderRow(
+                { title: Utils.getGPUModelName(gpu) },
+                group,
+                'gpu'
+            );
+
+            if(!Utils.canMonitorGpu(gpu)) {
+                PrefsUtils.addLabelRow(
+                    {
+                        title: _(
+                            'Monitoring of this GPU is not supported or a dependency is missing.'
+                        ),
+                    },
+                    '',
+                    gpuSection
+                );
+                continue;
+            }
+
+            const gpuMonitorValue = {
+                watch: 'gpu-data',
+                get: () => {
+                    const gpusData = Config.get_json('gpu-data');
+                    for(const gpuData of gpusData) {
+                        if(Utils.isSameGpu(gpu, gpuData)) {
+                            return gpuData.monitor;
+                        }
+                    }
+                    return false;
+                },
+                set: (value: boolean) => {
+                    let changed = false;
+
+                    const gpusData = Config.get_json('gpu-data');
+                    if(value) {
+                        let found = false;
+                        for(const gpuData of gpusData) {
+                            if(Utils.isSameGpu(gpu, gpuData)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if(!found) {
+                            gpusData.push({
+                                domain: gpu.domain,
+                                bus: gpu.bus,
+                                slot: gpu.slot,
+                                vendorId: gpu.vendorId,
+                                productId: gpu.productId,
+                                monitor: true,
+                            });
+                            changed = true;
+                        }
+                    } else {
+                        for(const gpuData of gpusData) {
+                            if(
+                                gpuData.domain === gpu.domain &&
+                                gpuData.bus === gpu.bus &&
+                                gpuData.slot === gpu.slot
+                            ) {
+                                gpusData.splice(gpusData.indexOf(gpuData), 1);
+                                changed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(changed) Config.set('gpu-data', gpusData, 'json');
+                },
+            };
+
+            PrefsUtils.addSwitchRow({ title: _('Monitor'), tabs: 1 }, gpuMonitorValue, gpuSection);
+        }
 
         generalPage.add(group);
         return generalPage;

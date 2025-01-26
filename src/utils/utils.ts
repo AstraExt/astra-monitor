@@ -572,6 +572,13 @@ export default class Utils {
         return gpu.vendorId === '8086';
     }
 
+    static canMonitorGpu(gpu: GpuInfo): boolean {
+        if(Utils.isAmdGpu(gpu)) return Utils.hasAmdGpuTop();
+        if(Utils.isNvidiaGpu(gpu)) return Utils.hasNvidiaSmi();
+        //if(Utils.isIntelGpu(gpu)) return Utils.hasIntelGpuTop();
+        return false;
+    }
+
     static async hasGTop(): Promise<boolean> {
         while(Utils.GTop === undefined) {
             // eslint-disable-next-line no-await-in-loop
@@ -1395,24 +1402,34 @@ export default class Utils {
 
     static getGPUModelName(gpu: GpuInfo): string {
         let shortName = Utils.GPUModelShortify(gpu.model);
+        const shortVendorName = Utils.GPUModelShortify(gpu.vendor);
         const vendorNames = Utils.getVendorName('0x' + gpu.vendorId);
 
         if(vendorNames[0] === 'Unknown') return shortName;
 
-        const normalizedShortName = shortName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-        if(
-            !vendorNames.some(vendorName => normalizedShortName.includes(vendorName.toLowerCase()))
-        ) {
-            const shortVendorName = Utils.GPUModelShortify(gpu.vendor);
-            const normalizedVendorName = shortVendorName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        if(shortVendorName.startsWith(shortName) && shortVendorName.length > shortName.length) {
+            shortName = shortVendorName;
+        } else if(shortName.length < 32) {
+            const normalizedShortName = shortName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             if(
-                shortVendorName &&
-                vendorNames.some(vendorName =>
-                    normalizedVendorName.includes(vendorName.toLowerCase())
+                !vendorNames.some(vendorName =>
+                    normalizedShortName.includes(vendorName.toLowerCase())
                 )
-            )
-                shortName = shortVendorName + ` [${shortName}]`;
-            else shortName = vendorNames.join(' / ') + ` ${shortName}`;
+            ) {
+                const normalizedVendorName = shortVendorName
+                    .replace(/[^a-zA-Z0-9]/g, '')
+                    .toLowerCase();
+                if(
+                    shortVendorName &&
+                    vendorNames.some(vendorName =>
+                        normalizedVendorName.includes(vendorName.toLowerCase())
+                    )
+                ) {
+                    shortName = shortVendorName + ` [${shortName}]`;
+                } else {
+                    shortName = vendorNames.join(' / ') + ` ${shortName}`;
+                }
+            }
         }
         return shortName;
     }
@@ -1514,28 +1531,42 @@ export default class Utils {
         return model;
     }
 
-    static getSelectedGPU(): GpuInfo | undefined {
-        const selected = Config.get_json('gpu-main');
-        if(!selected) return undefined;
+    static isSameGpu(gpu1: GpuInfo, gpu2: GpuInfo): boolean {
+        if(!gpu1 || !gpu2) return false;
 
-        //Fix GPU domain missing (v9 => v10)
-        //TODO: remove in v12-v13
-        if(selected && selected.domain) {
-            if(!selected.domain.includes(':')) selected.domain = '0000:' + selected.domain;
-        }
+        return (
+            gpu1.domain === gpu2.domain &&
+            gpu1.bus === gpu2.bus &&
+            gpu1.slot === gpu2.slot &&
+            gpu1.vendorId === gpu2.vendorId &&
+            gpu1.productId === gpu2.productId
+        );
+    }
+
+    static getMonitoredGPUs(): GpuInfo[] {
+        const gpusData = Config.get_json('gpu-data');
+        if(!gpusData) return [];
+
+        const gpus = Utils.getGPUsList();
+        return gpusData.filter((gpuData: any) =>
+            gpus.some((gpu: any) => Utils.isSameGpu(gpu, gpuData))
+        );
+    }
+
+    static getMainGPU(): GpuInfo | undefined {
+        const mainGpu = Config.get_json('gpu-main');
+        if(!mainGpu) return undefined;
 
         const gpus = Utils.getGPUsList();
         for(const gpu of gpus) {
-            if(
-                gpu.domain === selected.domain &&
-                gpu.bus === selected.bus &&
-                gpu.slot === selected.slot &&
-                gpu.vendorId === selected.vendorId &&
-                gpu.productId === selected.productId
-            )
-                return gpu;
+            if(Utils.isSameGpu(gpu, mainGpu)) return gpu;
         }
         return undefined;
+    }
+
+    static getPCI(gpu: GpuInfo | undefined): string {
+        if(!gpu) return '';
+        return `${gpu.domain}:${gpu.bus}.${gpu.slot}`;
     }
 
     static cachedUptimeSeconds: number = 0;
@@ -2606,7 +2637,7 @@ export default class Utils {
 
         //Fix GPU moved from processor (v19 => v20)
         const processorMenuGpu = Config.get_json('processor-menu-gpu');
-        const gpuMain = Config.get_json('gpu-main');
+        let gpuMain = Config.get_json('gpu-main');
         if(processorMenuGpu && !gpuMain) {
             Config.set('gpu-main', processorMenuGpu, 'json');
             Config.set('processor-menu-gpu', '""', 'string');
@@ -2635,6 +2666,20 @@ export default class Utils {
             const currentProfile = Config.get_string('current-profile') || 'default';
             profiles[currentProfile] = Config.getCurrentSettingsData(Config.globalSettingsKeys);
             Config.set('profiles', profiles, 'json');
+        }
+
+        //Fix GPU moved from processor (v29 => v30)
+        gpuMain = Config.get_json('gpu-main');
+        if(gpuMain && gpuMain.domain) {
+            const gpuData = Config.get_json('gpu-data');
+            if(!gpuData) {
+                if(!gpuMain.domain.includes(':')) gpuMain.domain = '0000:' + gpuMain.domain;
+
+                gpuMain.monitor = true;
+                gpuData.push(gpuMain);
+                Config.set('gpu-data', gpuData, 'json');
+                //Config.set('gpu-main', '""', 'string');
+            }
         }
     }
 

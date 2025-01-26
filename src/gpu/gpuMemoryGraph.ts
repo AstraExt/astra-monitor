@@ -143,10 +143,8 @@ export default GObject.registerClass(
                 const pointSpacing = width / (this.historyLimit - 1);
                 const baseX = (this.historyLimit - historyLength) * pointSpacing;
 
-                const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-                const selectedPci = selectedGpu
-                    ? `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`
-                    : '';
+                const mainGpu = Utils.gpuMonitor.getMainGpu();
+                const mainPci = Utils.getPCI(mainGpu);
 
                 // Draw single graph for total usage
                 ctx.setSourceRGBA(
@@ -156,8 +154,8 @@ export default GObject.registerClass(
                     this.colors[0].alpha
                 );
                 const totalFunc = (node: HistoryData) => {
-                    if(!node || !selectedGpu) return 0;
-                    const gpuData = node.get(selectedPci);
+                    if(!node || !mainGpu) return 0;
+                    const gpuData = node.get(mainPci);
                     if(!gpuData || !gpuData.vram || Number.isNaN(gpuData.vram.percent)) return 0;
                     return (gpuData.vram.percent ?? 0) / 100.0;
                 };

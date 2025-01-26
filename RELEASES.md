@@ -1,8 +1,16 @@
 # Astra Monitor 30 - TO BE RELEASED
 
+### New features
+
+-   **_Preliminary Multi-GPU Monitoring Support_**: Introduced initial support for monitoring multiple GPUs simultaneously. This feature allows viewing and managing the performance metrics of multiple GPUs within the Astra Monitor interface. While still in its early stages, this functionality aims to provide comprehensive insights into multi-GPU setups, enhancing the monitoring capabilities for those with complex hardware configurations. Feedback is welcome to help refine and improve this feature.
+
+    _Note: This development paves the way for integrated GPU support and will eventually allow the system to automatically check and select the active GPU. Currently, it is necessary to manually set the main GPU, but this process will possibly be automated in future updates._
+
 ### Bug fixes
 
+-   Fixed CPU frequency not being correctly displayed [[#155](https://github.com/AstraExt/astra-monitor/issues/155)] [[#168](https://github.com/AstraExt/astra-monitor/issues/168)]
 -   Fixed GPU detection on some GPUs [[#162](https://github.com/AstraExt/astra-monitor/issues/162)]
+-   Fixed GPU model name not being correctly displayed [[#152](https://github.com/AstraExt/astra-monitor/issues/152)]
 
 # Astra Monitor 29 - October 2 2024
 

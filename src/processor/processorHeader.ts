@@ -416,14 +416,14 @@ export default GObject.registerClass(
             if(this.frequencyMode === 'average') {
                 const sum = frequency.reduce((a, b) => a + b, 0);
                 this.frequency.text = Utils.formatFrequency(
-                    sum / frequency.length / 1000, /** Convert to GHz  */
+                    sum / frequency.length / 1000 /** Convert to GHz  */,
                     'GHz',
                     figures,
                     true
                 );
             } else if(this.frequencyMode === 'max') {
                 this.frequency.text = Utils.formatFrequency(
-                    Math.max(...frequency) / 1000, /** Convert to GHz  */
+                    Math.max(...frequency) / 1000 /** Convert to GHz  */,
                     'GHz',
                     figures,
                     true

@@ -200,13 +200,12 @@ export default GObject.registerClass(
                     return;
                 }
 
-                const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-                if(!selectedGpu) return;
+                const mainGpu = Utils.gpuMonitor.getMainGpu();
+                if(!mainGpu) return;
 
                 if(!data) return;
 
-                const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-                const gpuData = data.get(selectedPci);
+                const gpuData = data.get(Utils.getPCI(mainGpu));
                 if(!gpuData || !gpuData.activity || gpuData.activity.GFX === undefined) return;
 
                 if(activityThreshold > 0) {
@@ -274,13 +273,13 @@ export default GObject.registerClass(
             if(!this.visible) return;
             if(!Config.get_boolean('gpu-header-activity-bar')) return;
 
-            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-            if(!selectedGpu) return;
+            const mainGpu = Utils.gpuMonitor.getMainGpu();
+            if(!mainGpu) return;
 
             if(!data) return;
 
-            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-            const gpuData = data.get(selectedPci);
+            const mainPci = `${mainGpu.domain}:${mainGpu.bus}.${mainGpu.slot}`;
+            const gpuData = data.get(mainPci);
             if(!gpuData) return;
 
             if(!gpuData.activity || gpuData.activity.GFX === undefined)
@@ -324,7 +323,15 @@ export default GObject.registerClass(
         updateActivityGraph() {
             if(!this.visible) return;
             if(!Config.get_boolean('gpu-header-activity-graph')) return;
-            const usage: Map<string, GenericGpuInfo>[] = Utils.gpuMonitor.getUsageHistory('gpu');
+            let usage: Map<string, GenericGpuInfo>[] = Utils.gpuMonitor.getUsageHistory('gpu');
+
+            const mainGpu = Utils.gpuMonitor.getMainGpu();
+            const monitoredGPUs = Utils.gpuMonitor.getMonitoredGPUs();
+            if(mainGpu && monitoredGPUs && monitoredGPUs.length > 0) {
+                const mainPci = Utils.getPCI(mainGpu);
+                usage = usage.filter(node => node.has(mainPci));
+            }
+
             this.activityGraph.setUsageHistory(usage);
         }
 
@@ -352,8 +359,8 @@ export default GObject.registerClass(
             if(!this.visible) return;
             if(!Config.get_boolean('gpu-header-activity-percentage')) return;
 
-            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-            if(!selectedGpu) {
+            const mainGpu = Utils.gpuMonitor.getMainGpu();
+            if(!mainGpu) {
                 this.activityPercentage.text = '-%';
                 return;
             }
@@ -363,8 +370,7 @@ export default GObject.registerClass(
                 return;
             }
 
-            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-            const gpuData = data.get(selectedPci);
+            const gpuData = data.get(Utils.getPCI(mainGpu));
             if(!gpuData) {
                 this.activityPercentage.text = '-%';
                 return;
@@ -403,13 +409,12 @@ export default GObject.registerClass(
             if(!this.visible) return;
             if(!Config.get_boolean('gpu-header-memory-bar')) return;
 
-            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-            if(!selectedGpu) return;
+            const mainGpu = Utils.gpuMonitor.getMainGpu();
+            if(!mainGpu) return;
 
             if(!data) return;
 
-            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-            const gpuData = data.get(selectedPci);
+            const gpuData = data.get(Utils.getPCI(mainGpu));
             if(!gpuData) return;
 
             if(!gpuData.vram || gpuData.vram.percent === undefined) this.memoryBar.setUsage([]);
@@ -452,7 +457,15 @@ export default GObject.registerClass(
         updateMemoryGraph() {
             if(!this.visible) return;
             if(!Config.get_boolean('gpu-header-memory-graph')) return;
-            const usage: Map<string, GenericGpuInfo>[] = Utils.gpuMonitor.getUsageHistory('gpu');
+            let usage: Map<string, GenericGpuInfo>[] = Utils.gpuMonitor.getUsageHistory('gpu');
+
+            const mainGpu = Utils.gpuMonitor.getMainGpu();
+            const monitoredGPUs = Utils.gpuMonitor.getMonitoredGPUs();
+            if(mainGpu && monitoredGPUs && monitoredGPUs.length > 0) {
+                const mainPci = Utils.getPCI(mainGpu);
+                usage = usage.filter(node => node.has(mainPci));
+            }
+
             this.memoryGraph.setUsageHistory(usage);
         }
 
@@ -480,8 +493,8 @@ export default GObject.registerClass(
             if(!this.visible) return;
             if(!Config.get_boolean('gpu-header-memory-percentage')) return;
 
-            const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-            if(!selectedGpu) {
+            const mainGpu = Utils.gpuMonitor.getMainGpu();
+            if(!mainGpu) {
                 this.memoryPercentage.text = '-%';
                 return;
             }
@@ -491,8 +504,7 @@ export default GObject.registerClass(
                 return;
             }
 
-            const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-            const gpuData = data.get(selectedPci);
+            const gpuData = data.get(Utils.getPCI(mainGpu));
             if(!gpuData) {
                 this.memoryPercentage.text = '-%';
                 return;
@@ -548,13 +560,12 @@ export default GObject.registerClass(
 
                     const values: string[] = [];
 
-                    const selectedGpu = Utils.gpuMonitor.getSelectedGpu();
-                    if(!selectedGpu) return;
+                    const mainGpu = Utils.gpuMonitor.getMainGpu();
+                    if(!mainGpu) return;
 
                     if(!data) return;
 
-                    const selectedPci = `${selectedGpu.domain}:${selectedGpu.bus}.${selectedGpu.slot}`;
-                    const gpuData = data.get(selectedPci);
+                    const gpuData = data.get(Utils.getPCI(mainGpu));
                     if(!gpuData) return;
 
                     if(

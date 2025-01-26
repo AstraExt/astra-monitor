@@ -36,6 +36,7 @@ type RowProps = {
     iconName?: string;
     tabs?: number;
     useMarkup?: boolean;
+    readOnly?: boolean;
 };
 
 type AdjustamentProps = {
@@ -46,6 +47,11 @@ type AdjustamentProps = {
     page?: number;
 };
 
+type SwitchCallback = {
+    watch: string;
+    get: () => boolean;
+    set: (value: boolean) => void;
+};
 type ColorCallback = (color: string) => void;
 
 export type Choice = { value: any; text: string; disabled?: boolean };
@@ -242,11 +248,13 @@ export default class PrefsUtils {
 
     public static addSwitchRow(
         props: RowProps,
-        setting: string,
+        setting: string | SwitchCallback,
         group: Adw.PreferencesGroup | Adw.ExpanderRow
     ) {
         const tabs = props.tabs;
+        const readOnly = props.readOnly;
         delete props.tabs;
+        delete props.readOnly;
 
         if(props.iconName) {
             if(props.title) props.title = '  ' + props.title;
@@ -259,12 +267,26 @@ export default class PrefsUtils {
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
 
+        const isCallback = typeof setting !== 'string';
         const toggle = new Gtk.Switch({
-            active: Config.get_boolean(setting),
+            active: isCallback ? setting.get() : Config.get_boolean(setting),
             halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER,
         });
-        Config.bind(setting, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
+        if(!isCallback) {
+            Config.bind(setting, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
+        } else {
+            toggle.connect('activate', widget => {
+                setting.set(!widget.active);
+            });
+            Config.connect(this, 'changed::' + setting.watch, () => {
+                toggle.active = setting.get();
+            });
+        }
+
+        if(readOnly) {
+            toggle.set_sensitive(false);
+        }
 
         row.add_suffix(toggle);
         row.activatableWidget = toggle;

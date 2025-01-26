@@ -352,7 +352,8 @@ export default class GpuMonitor extends Monitor {
     }[];
     private infoPipesCacheTime = 0;
 
-    private selectedGpu?: GpuInfo | undefined;
+    private mainGpu?: GpuInfo | undefined;
+    private monitoredGPUs: GpuInfo[] | undefined = undefined;
 
     constructor() {
         super('Gpu Monitor');
@@ -368,11 +369,18 @@ export default class GpuMonitor extends Monitor {
         Config.connect(this, 'changed::gpu-header-show', this.updateMonitorStatus.bind(this));
         Config.connect(this, 'changed::gpu-update', this.restart.bind(this));
 
-        const updateGpu = () => {
-            this.selectedGpu = Utils.getSelectedGPU();
+        const updateMainGpu = () => {
+            this.mainGpu = Utils.getMainGPU();
         };
-        Config.connect(this, 'changed::gpu-main', updateGpu.bind(this));
-        updateGpu();
+        Config.connect(this, 'changed::gpu-main', updateMainGpu.bind(this));
+        updateMainGpu();
+
+        const updateMonitoredGPUs = () => {
+            this.monitoredGPUs = Utils.getMonitoredGPUs();
+            this.updateMonitorStatus();
+        };
+        Config.connect(this, 'changed::gpu-data', updateMonitoredGPUs.bind(this));
+        updateMonitoredGPUs();
 
         this.updateMonitorStatus();
     }
@@ -381,8 +389,12 @@ export default class GpuMonitor extends Monitor {
         return Config.get_double('gpu-update');
     }
 
-    getSelectedGpu() {
-        return this.selectedGpu;
+    getMainGpu() {
+        return this.mainGpu;
+    }
+
+    getMonitoredGPUs() {
+        return this.monitoredGPUs;
     }
 
     updateMonitorStatus() {
@@ -405,11 +417,11 @@ export default class GpuMonitor extends Monitor {
     }
 
     start() {
+        this.startGpuTask();
+
         if(this.status) return;
         this.status = true;
-
         super.start();
-        this.startGpuTask();
     }
 
     stop() {
@@ -436,10 +448,18 @@ export default class GpuMonitor extends Monitor {
     }
 
     private startGpuTask() {
-        const selectedGpu = Utils.getSelectedGPU();
-        if(!selectedGpu) return;
+        const monitoredGPUs = Utils.getMonitoredGPUs();
+        if(!monitoredGPUs) return;
 
-        if(Utils.hasAMDGpu() && Utils.hasAmdGpuTop() && Utils.isAmdGpu(selectedGpu)) {
+        let hasAMD = false;
+        for(const gpu of monitoredGPUs) {
+            if(Utils.isAmdGpu(gpu)) {
+                hasAMD = true;
+                break;
+            }
+        }
+
+        if(hasAMD && Utils.hasAmdGpuTop() && !this.updateAmdGpuTask.isRunning) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
             const path = Utils.commandPathLookup('amdgpu_top --version');
@@ -454,7 +474,15 @@ export default class GpuMonitor extends Monitor {
             });
         }
 
-        if(Utils.hasNVidiaGpu() && Utils.hasNvidiaSmi() && Utils.isNvidiaGpu(selectedGpu)) {
+        let hasNvidia = false;
+        for(const gpu of monitoredGPUs) {
+            if(Utils.isNvidiaGpu(gpu)) {
+                hasNvidia = true;
+                break;
+            }
+        }
+
+        if(hasNvidia && Utils.hasNvidiaSmi() && !this.updateNvidiaGpuTask.isRunning) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
             /**

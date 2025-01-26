@@ -43,6 +43,7 @@ export default class Config {
         'processor-menu-gpu',
         'processor-menu-gpu-color',
         'headers-height',
+        'gpu-main',
     ];
 
     static set(key: string, value: any, type: TypeEnumStr = 'any') {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 12:00+0200\n"
+"POT-Creation-Date: 2025-01-26 19:37+0100\n"
 "PO-Revision-Date: 2024-01-21 12:11+0100\n"
 "Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
 "Language-Team: \n"
@@ -28,8 +28,8 @@ msgid "CPU info"
 msgstr "CPU-Info"
 
 #: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
-#: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:244
-#: src/gpu/gpuMenuComponent.js:677
+#: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:241
+#: src/gpu/gpuMenuComponent.js:693
 msgid "Total:"
 msgstr "Gesamt:"
 
@@ -133,26 +133,26 @@ msgstr "jetzt"
 
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:112
-#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:338
-#: src/gpu/gpuMenuComponent.js:802 prefs.js:378
+#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:336
+#: src/gpu/gpuMenuComponent.js:818 prefs.js:378
 msgid "Sensors"
 msgstr "Sensoren"
 
 #: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
-#: src/prefs/network.js:82 src/prefs/gpu.js:80 src/prefs/processors.js:80
-#: src/prefs/processors.js:82 prefs.js:225 prefs.js:259 prefs.js:285
-#: prefs.js:319 prefs.js:353 prefs.js:387
+#: src/prefs/network.js:82 src/prefs/gpu.js:81 src/prefs/gpu.js:83
+#: src/prefs/processors.js:80 src/prefs/processors.js:82 prefs.js:225
+#: prefs.js:259 prefs.js:285 prefs.js:319 prefs.js:353 prefs.js:387
 msgid "General"
 msgstr "Allgemein"
 
 #: src/prefs/sensors.js:83 src/prefs/sensors.js:150 src/prefs/sensors.js:162
 #: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
-#: src/prefs/gpu.js:84 src/prefs/processors.js:83
+#: src/prefs/gpu.js:85 src/prefs/processors.js:83
 msgid "Show"
 msgstr "Anzeigen"
 
 #: src/prefs/sensors.js:84 src/prefs/memory.js:84 src/prefs/storage.js:86
-#: src/prefs/network.js:86 src/prefs/gpu.js:92 src/prefs/processors.js:84
+#: src/prefs/network.js:86 src/prefs/gpu.js:93 src/prefs/processors.js:84
 msgid "Update frequency (seconds)"
 msgstr "Aktualisierungsrate (Sekunden)"
 
@@ -217,29 +217,29 @@ msgstr ""
 
 #: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
-#: src/prefs/network.js:186 src/prefs/gpu.js:111 src/prefs/gpu.js:113
+#: src/prefs/network.js:186 src/prefs/gpu.js:173 src/prefs/gpu.js:175
 #: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:233
 #: prefs.js:267 prefs.js:293 prefs.js:327 prefs.js:361 prefs.js:395
 msgid "Header"
 msgstr ""
 
 #: src/prefs/sensors.js:121 src/prefs/memory.js:126 src/prefs/storage.js:209
-#: src/prefs/network.js:189 src/prefs/gpu.js:114 src/prefs/processors.js:117
+#: src/prefs/network.js:189 src/prefs/gpu.js:176 src/prefs/processors.js:117
 msgid "Indicators Order"
 msgstr ""
 
 #: src/prefs/sensors.js:124 src/prefs/memory.js:129 src/prefs/storage.js:212
-#: src/prefs/network.js:192 src/prefs/gpu.js:117 src/prefs/processors.js:120
+#: src/prefs/network.js:192 src/prefs/gpu.js:179 src/prefs/processors.js:120
 msgid "Icon"
 msgstr "Symbol"
 
 #: src/prefs/sensors.js:125 src/prefs/memory.js:130 src/prefs/storage.js:213
-#: src/prefs/network.js:193 src/prefs/gpu.js:118 src/prefs/processors.js:121
+#: src/prefs/network.js:193 src/prefs/gpu.js:180 src/prefs/processors.js:121
 msgid "Show Icon"
 msgstr "Symbol anzeigen"
 
 #: src/prefs/sensors.js:127 src/prefs/memory.js:132 src/prefs/storage.js:215
-#: src/prefs/network.js:195 src/prefs/gpu.js:120 src/prefs/processors.js:123
+#: src/prefs/network.js:195 src/prefs/gpu.js:182 src/prefs/processors.js:123
 #, fuzzy
 msgid "Icon Name"
 msgstr "Symbolgröße"
@@ -250,36 +250,36 @@ msgstr ""
 
 #: src/prefs/sensors.js:130 src/prefs/memory.js:135 src/prefs/storage.js:218
 #: src/prefs/network.js:198 src/prefs/visualization.js:171
-#: src/prefs/visualization.js:178 src/prefs/gpu.js:123
+#: src/prefs/visualization.js:178 src/prefs/gpu.js:185
 #: src/prefs/processors.js:126
 msgid "Set to empty to disable icon override"
 msgstr ""
 
 #: src/prefs/sensors.js:133 src/prefs/memory.js:138 src/prefs/storage.js:221
-#: src/prefs/network.js:201 src/prefs/gpu.js:126 src/prefs/processors.js:129
+#: src/prefs/network.js:201 src/prefs/gpu.js:188 src/prefs/processors.js:129
 msgid "Icon Color"
 msgstr ""
 
 #: src/prefs/sensors.js:134 src/prefs/memory.js:139 src/prefs/storage.js:222
-#: src/prefs/network.js:202 src/prefs/gpu.js:127 src/prefs/processors.js:130
+#: src/prefs/network.js:202 src/prefs/gpu.js:189 src/prefs/processors.js:130
 msgid "Icon Alert Color"
 msgstr ""
 
 #: src/prefs/sensors.js:136 src/prefs/memory.js:141 src/prefs/storage.js:224
-#: src/prefs/network.js:204 src/prefs/gpu.js:129 src/prefs/processors.js:132
+#: src/prefs/network.js:204 src/prefs/gpu.js:191 src/prefs/processors.js:132
 msgid "Icon Size"
 msgstr "Symbolgröße"
 
 #: src/prefs/sensors.js:137 src/prefs/memory.js:142 src/prefs/storage.js:225
 #: src/prefs/network.js:205 src/prefs/visualization.js:132
 #: src/prefs/visualization.js:140 src/prefs/visualization.js:148
-#: src/prefs/gpu.js:130 src/prefs/processors.js:133
+#: src/prefs/gpu.js:192 src/prefs/processors.js:133
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr ""
 "Experimentelle Funktion: Es könnte erforderlich sein, die Erweiterung neu zu "
 "aktivieren."
 
-#: src/prefs/sensors.js:144 src/prefs/gpu.js:94
+#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
 msgid "None"
 msgstr "Kein"
 
@@ -323,12 +323,12 @@ msgid "Sensor 2 Layout"
 msgstr "Sensor 2"
 
 #: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
-#: src/prefs/network.js:245 src/prefs/gpu.js:179 src/prefs/processors.js:182
+#: src/prefs/network.js:245 src/prefs/gpu.js:241 src/prefs/processors.js:182
 msgid "Tooltip"
 msgstr "Minihilfe"
 
 #: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
-#: src/prefs/network.js:246 src/prefs/gpu.js:180 src/prefs/processors.js:183
+#: src/prefs/network.js:246 src/prefs/gpu.js:242 src/prefs/processors.js:183
 msgid "Show Tooltip"
 msgstr "Minihilfe anzeigen"
 
@@ -370,13 +370,13 @@ msgstr "Minihilfe"
 
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:255 src/prefs/gpu.js:189 src/prefs/processors.js:191
+#: src/prefs/network.js:255 src/prefs/gpu.js:251 src/prefs/processors.js:191
 #: src/prefs/processors.js:193 prefs.js:241 prefs.js:301 prefs.js:335
 #: prefs.js:369
 msgid "Menu"
 msgstr "Menü"
 
-#: src/prefs/sensors.js:271 src/prefs/gpu.js:194
+#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
 msgid "Empty for now"
 msgstr ""
 
@@ -505,8 +505,8 @@ msgstr "Arbeitsspeicher"
 
 #: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
 #: src/network/networkMenu.js:161 src/network/networkMenu.js:296
-#: src/network/networkMenu.js:298 src/gpu/gpuMenuComponent.js:282
-#: src/gpu/gpuMenuComponent.js:716
+#: src/network/networkMenu.js:298 src/gpu/gpuMenuComponent.js:279
+#: src/gpu/gpuMenuComponent.js:732
 #, fuzzy
 msgid "Top Processes"
 msgstr "Prozessoren"
@@ -526,7 +526,7 @@ msgid "Show Usage Percentage"
 msgstr "Prozentwert anzeigen"
 
 #: src/prefs/memory.js:149 src/prefs/memory.js:160 src/prefs/storage.js:240
-#: src/prefs/storage.js:251 src/prefs/gpu.js:138 src/prefs/gpu.js:160
+#: src/prefs/storage.js:251 src/prefs/gpu.js:200 src/prefs/gpu.js:222
 #: src/prefs/processors.js:141
 #, fuzzy
 msgid "Icon Alert"
@@ -574,7 +574,7 @@ msgid "Show History Graph"
 msgstr "Verlaufsdiagramm anzeigen"
 
 #: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
-#: src/prefs/visualization.js:81 src/prefs/gpu.js:145 src/prefs/gpu.js:167
+#: src/prefs/visualization.js:81 src/prefs/gpu.js:207 src/prefs/gpu.js:229
 #: src/prefs/processors.js:156 src/prefs/processors.js:171
 msgid "Main Color"
 msgstr ""
@@ -596,7 +596,7 @@ msgstr ""
 msgid "<b>Allocated <u>unused</u></b> memory color."
 msgstr ""
 
-#: src/prefs/memory.js:177 src/prefs/gpu.js:149 src/prefs/gpu.js:171
+#: src/prefs/memory.js:177 src/prefs/gpu.js:211 src/prefs/gpu.js:233
 #: src/prefs/processors.js:166
 msgid "History Graph Width"
 msgstr "Breite des Verlaufsdiagramms"
@@ -904,11 +904,11 @@ msgstr "Geräte"
 msgid "Device Usage Bar Color"
 msgstr ""
 
-#: src/prefs/prefsUtils.js:631
+#: src/prefs/prefsUtils.js:647
 msgid "Move up"
 msgstr ""
 
-#: src/prefs/prefsUtils.js:650
+#: src/prefs/prefsUtils.js:666
 msgid "Move down"
 msgstr ""
 
@@ -1378,109 +1378,117 @@ msgstr ""
 msgid "Monitor Ordering"
 msgstr ""
 
-#: src/prefs/gpu.js:41 src/prefs/gpu.js:54 src/prefs/gpu.js:67
-#: src/prefs/gpu.js:82 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:43 prefs.js:250
+#: src/prefs/gpu.js:42 src/prefs/gpu.js:55 src/prefs/gpu.js:68
+#: src/prefs/gpu.js:108 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
+#: src/gpu/gpuMenuComponent.js:45 prefs.js:250
 msgid "GPU"
 msgstr "GPU"
 
-#: src/prefs/gpu.js:85
+#: src/prefs/gpu.js:86
 msgid "Showing GPU info in the panel requires continuous GPU monitoring."
 msgstr ""
 
-#: src/prefs/gpu.js:89
+#: src/prefs/gpu.js:90
 msgid "Hint: You can instead choose to show GPU stats in Processors' menu."
 msgstr ""
 
-#: src/prefs/gpu.js:105
+#: src/prefs/gpu.js:106
 msgid "Main GPU"
 msgstr "Haupt-GPU"
 
-#: src/prefs/gpu.js:121
+#: src/prefs/gpu.js:113
+msgid "Monitoring of this GPU is not supported or a dependency is missing."
+msgstr ""
+
+#: src/prefs/gpu.js:166
+msgid "Monitor"
+msgstr ""
+
+#: src/prefs/gpu.js:183
 msgid "Set icon name (ie: 'gpu-symbolic')"
 msgstr ""
 
-#: src/prefs/gpu.js:135 src/prefs/gpu.js:181
+#: src/prefs/gpu.js:197 src/prefs/gpu.js:243
 #, fuzzy
 msgid "Activity Percentage"
 msgstr "Prozentwert"
 
-#: src/prefs/gpu.js:136
+#: src/prefs/gpu.js:198
 #, fuzzy
 msgid "Show Activity Percentage"
 msgstr "Prozentwert anzeigen"
 
-#: src/prefs/gpu.js:139
+#: src/prefs/gpu.js:201
 msgid "Set 0 to disable. Value is percentage of total GPU Activity usage."
 msgstr ""
 
-#: src/prefs/gpu.js:142
+#: src/prefs/gpu.js:204
 #, fuzzy
 msgid "Activity History Graph"
 msgstr "Verlaufsdiagramm"
 
-#: src/prefs/gpu.js:143
+#: src/prefs/gpu.js:205
 #, fuzzy
 msgid "Show Activity History Graph"
 msgstr "Verlaufsdiagramm anzeigen"
 
-#: src/prefs/gpu.js:146 src/prefs/gpu.js:168
+#: src/prefs/gpu.js:208 src/prefs/gpu.js:230
 msgid "<b>Total usage</b> color."
 msgstr ""
 
-#: src/prefs/gpu.js:150
+#: src/prefs/gpu.js:212
 #, fuzzy
 msgid "Realtime Activity Bar"
 msgstr "Echtzeitbalken"
 
-#: src/prefs/gpu.js:151
+#: src/prefs/gpu.js:213
 #, fuzzy
 msgid "Show Activity Bar"
 msgstr "Aktiv"
 
-#: src/prefs/gpu.js:153 src/prefs/gpu.js:175
+#: src/prefs/gpu.js:215 src/prefs/gpu.js:237
 msgid "Bar Color"
 msgstr ""
 
-#: src/prefs/gpu.js:154 src/prefs/gpu.js:176
+#: src/prefs/gpu.js:216 src/prefs/gpu.js:238
 msgid "GPU bar main color."
 msgstr ""
 
-#: src/prefs/gpu.js:157 src/prefs/gpu.js:182
+#: src/prefs/gpu.js:219 src/prefs/gpu.js:244
 #, fuzzy
 msgid "Memory Percentage"
 msgstr "Prozentwert anzeigen"
 
-#: src/prefs/gpu.js:158
+#: src/prefs/gpu.js:220
 #, fuzzy
 msgid "Show Memory Percentage"
 msgstr "Prozentwert anzeigen"
 
-#: src/prefs/gpu.js:161
+#: src/prefs/gpu.js:223
 msgid "Set 0 to disable. Value is percentage of total GPU Memory usage."
 msgstr ""
 
-#: src/prefs/gpu.js:164
+#: src/prefs/gpu.js:226
 #, fuzzy
 msgid "Memory History Graph"
 msgstr "Verlaufsdiagramm anzeigen"
 
-#: src/prefs/gpu.js:165
+#: src/prefs/gpu.js:227
 #, fuzzy
 msgid "Show Memory History Graph"
 msgstr "Verlaufsdiagramm anzeigen"
 
-#: src/prefs/gpu.js:172
+#: src/prefs/gpu.js:234
 #, fuzzy
 msgid "Realtime Memory Bar"
 msgstr "Echtzeitbalken"
 
-#: src/prefs/gpu.js:173
+#: src/prefs/gpu.js:235
 #, fuzzy
 msgid "Show Memory Bar"
 msgstr "Echtzeitbalken anzeigen"
 
-#: src/prefs/gpu.js:183
+#: src/prefs/gpu.js:245
 #, fuzzy
 msgid "Memory Value"
 msgstr "Arbeitsspeicher"
@@ -1746,8 +1754,8 @@ msgid "D"
 msgstr "D"
 
 #: src/network/networkMenu.js:912 src/storage/storageMenu.js:599
-#: src/gpu/gpuMenuComponent.js:393 src/gpu/gpuMenuComponent.js:728
-#: src/gpu/gpuMenuComponent.js:759
+#: src/gpu/gpuMenuComponent.js:409 src/gpu/gpuMenuComponent.js:744
+#: src/gpu/gpuMenuComponent.js:775
 msgid "Name"
 msgstr "Name"
 
@@ -1903,7 +1911,7 @@ msgstr "Swap-Info"
 msgid "Model"
 msgstr ""
 
-#: src/storage/storageMenu.js:602 src/gpu/gpuMenuComponent.js:456
+#: src/storage/storageMenu.js:602 src/gpu/gpuMenuComponent.js:472
 msgid "Vendor"
 msgstr "Hersteller"
 
@@ -2192,7 +2200,7 @@ msgid "Allocated:"
 msgstr "Zugewiesen:"
 
 #: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
-#: src/gpu/gpuMenuComponent.js:223 src/gpu/gpuMenuComponent.js:656
+#: src/gpu/gpuMenuComponent.js:220 src/gpu/gpuMenuComponent.js:672
 msgid "Used:"
 msgstr "Verwendet:"
 
@@ -2248,48 +2256,48 @@ msgstr ""
 msgid "Swap Devices"
 msgstr "Swap-Geräte"
 
-#: src/gpu/gpuMenuComponent.js:54
+#: src/gpu/gpuMenuComponent.js:56
 msgid "No GPU found"
 msgstr "Keine GPU gefunden"
 
-#: src/gpu/gpuMenuComponent.js:67
+#: src/gpu/gpuMenuComponent.js:69
 msgid "GPUs"
 msgstr "GPUs"
 
-#: src/gpu/gpuMenuComponent.js:131 src/gpu/gpuMenuComponent.js:566
+#: src/gpu/gpuMenuComponent.js:128 src/gpu/gpuMenuComponent.js:582
 #, fuzzy
 msgid "Activity"
 msgstr "Aktiv"
 
-#: src/gpu/gpuMenuComponent.js:180 src/gpu/gpuMenuComponent.js:615
+#: src/gpu/gpuMenuComponent.js:177 src/gpu/gpuMenuComponent.js:631
 msgid "VRAM"
 msgstr ""
 
-#: src/gpu/gpuMenuComponent.js:386
+#: src/gpu/gpuMenuComponent.js:402
 msgid "GPU info"
 msgstr "GPU-Info"
 
-#: src/gpu/gpuMenuComponent.js:423
+#: src/gpu/gpuMenuComponent.js:439
 msgid "Subsystem"
 msgstr "Subsystem"
 
-#: src/gpu/gpuMenuComponent.js:464
+#: src/gpu/gpuMenuComponent.js:480
 msgid "Vendor ID"
 msgstr "Hersteller-ID"
 
-#: src/gpu/gpuMenuComponent.js:473
+#: src/gpu/gpuMenuComponent.js:489
 msgid "Product ID"
 msgstr "Produkt-ID"
 
-#: src/gpu/gpuMenuComponent.js:481
+#: src/gpu/gpuMenuComponent.js:497
 msgid "PCI"
 msgstr ""
 
-#: src/gpu/gpuMenuComponent.js:493
+#: src/gpu/gpuMenuComponent.js:509
 msgid "Drivers"
 msgstr "Treiber"
 
-#: src/gpu/gpuMenuComponent.js:502
+#: src/gpu/gpuMenuComponent.js:518
 msgid "Modules"
 msgstr "Module"
 
