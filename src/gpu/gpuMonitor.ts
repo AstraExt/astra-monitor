@@ -293,14 +293,17 @@ type NvidiaInfoRaw = {
     };
     pci?: {
         pci_gpu_link_info?: {
-            max_link_gen?: NvidiaField;
-            current_link_gen?: NvidiaField;
-            device_current_link_gen?: NvidiaField;
-            max_device_link_gen?: NvidiaField;
-        };
-        link_widths?: {
-            max_link_width?: NvidiaField;
-            current_link_width?: NvidiaField;
+            pcie_gen?: {
+                max_link_gen?: NvidiaField;
+                current_link_gen?: NvidiaField;
+                device_current_link_gen?: NvidiaField;
+                max_device_link_gen?: NvidiaField;
+                max_host_link_gen?: NvidiaField;
+            };
+            link_widths?: {
+                max_link_width?: NvidiaField;
+                current_link_width?: NvidiaField;
+            };
         };
         tx_util?: NvidiaField;
         rx_util?: NvidiaField;
@@ -1632,12 +1635,16 @@ export default class GpuMonitor extends Monitor {
                 };
 
                 if(gpuInfo.pci) {
-                    if(gpuInfo.pci.pci_gpu_link_info && gpuInfo.pci.link_widths) {
+                    if(
+                        gpuInfo.pci.pci_gpu_link_info &&
+                        gpuInfo.pci.pci_gpu_link_info.pcie_gen &&
+                        gpuInfo.pci.pci_gpu_link_info.link_widths
+                    ) {
                         const maxLinkGen = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.pci.pci_gpu_link_info.max_link_gen
+                            gpuInfo.pci.pci_gpu_link_info.pcie_gen.max_link_gen
                         );
                         const maxLinkWidth = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.pci.link_widths.max_link_width
+                            gpuInfo.pci.pci_gpu_link_info.link_widths.max_link_width
                         );
                         if(maxLinkGen && maxLinkWidth && maxLinkGen.value && maxLinkWidth.value) {
                             addSensor({
@@ -1650,10 +1657,10 @@ export default class GpuMonitor extends Monitor {
                         }
 
                         const currentLinkGen = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.pci.pci_gpu_link_info.current_link_gen
+                            gpuInfo.pci.pci_gpu_link_info.pcie_gen.current_link_gen
                         );
                         const currentLinkWidth = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.pci.link_widths.current_link_width
+                            gpuInfo.pci.pci_gpu_link_info.link_widths.current_link_width
                         );
 
                         if(
@@ -1672,26 +1679,21 @@ export default class GpuMonitor extends Monitor {
                         }
 
                         const deviceCurrentLinkGen = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.pci.pci_gpu_link_info.device_current_link_gen
+                            gpuInfo.pci.pci_gpu_link_info.pcie_gen.device_current_link_gen
                         );
-                        if(deviceCurrentLinkGen && deviceCurrentLinkGen.value) {
-                            addSensor({
-                                category: 'PCIe Link',
-                                name: 'Device Current Link Gen',
-                                value: `Gen${deviceCurrentLinkGen.value}`,
-                                unit: '',
-                                priority: GpuSensorPriority.NONE,
-                            });
-                        }
-
                         const deviceCurrentLinkWidth = GpuMonitor.nvidiaToGenericField(
-                            gpuInfo.pci.link_widths.current_link_width
+                            gpuInfo.pci.pci_gpu_link_info.link_widths.current_link_width
                         );
-                        if(deviceCurrentLinkWidth && deviceCurrentLinkWidth.value) {
+                        if(
+                            deviceCurrentLinkGen &&
+                            deviceCurrentLinkGen.value &&
+                            deviceCurrentLinkWidth &&
+                            deviceCurrentLinkWidth.value
+                        ) {
                             addSensor({
                                 category: 'PCIe Link',
-                                name: 'Device Current Link Width',
-                                value: `x${deviceCurrentLinkWidth.value}`,
+                                name: 'Device Current Link',
+                                value: `Gen${deviceCurrentLinkGen.value}x${deviceCurrentLinkWidth.value}`,
                                 unit: '',
                                 priority: GpuSensorPriority.NONE,
                             });
@@ -1700,22 +1702,36 @@ export default class GpuMonitor extends Monitor {
 
                     const txUtil = GpuMonitor.nvidiaToGenericField(gpuInfo.pci.tx_util);
                     if(txUtil && txUtil.value && txUtil.unit) {
+                        const bytes = Utils.convertToBytes(
+                            txUtil.value,
+                            txUtil.unit.replace('/s', '')
+                        );
+                        const formatted = Utils.formatBytesPerSec(bytes, 'kB/s', 3);
+                        const [value, unit] = formatted.split(' ');
+
                         addSensor({
                             category: 'PCIe Link',
                             name: 'TX Util',
-                            value: txUtil.value,
-                            unit: txUtil.unit,
+                            value: value,
+                            unit: unit,
                             priority: GpuSensorPriority.NONE,
                         });
                     }
 
                     const rxUtil = GpuMonitor.nvidiaToGenericField(gpuInfo.pci.rx_util);
                     if(rxUtil && rxUtil.value && rxUtil.unit) {
+                        const bytes = Utils.convertToBytes(
+                            rxUtil.value,
+                            rxUtil.unit.replace('/s', '')
+                        );
+                        const formatted = Utils.formatBytesPerSec(bytes, 'kB/s', 3);
+                        const [value, unit] = formatted.split(' ');
+
                         addSensor({
                             category: 'PCIe Link',
                             name: 'RX Util',
-                            value: rxUtil.value,
-                            unit: rxUtil.unit,
+                            value: value,
+                            unit: unit,
                             priority: GpuSensorPriority.NONE,
                         });
                     }

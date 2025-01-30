@@ -2799,4 +2799,8 @@ export default class Utils {
             Utils.nethogsCaps.includes('cap_net_raw=ep')
         );
     }
+
+    static getGpuUUID(gpuInfo: GpuInfo): string {
+        return `${gpuInfo.domain}:${gpuInfo.bus}.${gpuInfo.slot}`;
+    }
 }

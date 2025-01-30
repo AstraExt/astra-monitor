@@ -96,7 +96,7 @@ type SensorsPopup = MenuBase & {
 
 type Section = {
     info: GpuInfo;
-    pci: string;
+    uuid: string;
     infoPopup?: InfoPopup;
     activityPopup?: ActivityPopup;
     vramPopup?: VramPopup;
@@ -182,7 +182,7 @@ export default class GpuMenuComponent {
     private createSection(gpuInfo: GpuInfo): Section {
         const section: Section = {
             info: gpuInfo,
-            pci: `${gpuInfo.domain}:${gpuInfo.bus}.${gpuInfo.slot}`,
+            uuid: Utils.getGpuUUID(gpuInfo),
             vram: {},
             activity: {},
         };
@@ -462,7 +462,7 @@ export default class GpuMenuComponent {
 
                 processes.push({ label, value1, value2 });
             }
-            this.topProcesses.set(section.pci, processes);
+            this.topProcesses.set(section.uuid, processes);
             topProcessesGrid.addToGrid(listGrid);
         }
         grid.addToGrid(topProcessesButton);
@@ -523,7 +523,7 @@ export default class GpuMenuComponent {
 
                 sensors.push({ label, value });
             }
-            this.mainSensors.set(section.pci, sensors);
+            this.mainSensors.set(section.uuid, sensors);
             sensorsGrid.addToGrid(listGrid);
         }
         grid.addToGrid(sensorsButton);
@@ -1198,149 +1198,129 @@ export default class GpuMenuComponent {
             return;
         }
 
-        for(const pci of data.keys()) {
-            for(const section of this.sections) {
-                if(section.pci === pci) {
-                    const gpuData: GenericGpuInfo | undefined = data.get(pci);
-                    if(!gpuData) return;
+        for(const section of this.sections) {
+            const gpuData: GenericGpuInfo | undefined = data.get(section.uuid);
+            if(!gpuData) {
+                // This update has no data for this GPU
+                continue;
+            }
 
-                    if(
-                        section.vram.bar &&
-                        gpuData.vram.percent !== undefined &&
-                        !Number.isNaN(gpuData.vram.percent)
-                    ) {
-                        section.vram.bar.setUsage([{ percent: gpuData.vram.percent }]);
-                        if(section.vram.barLabel)
-                            section.vram.barLabel.text = gpuData.vram.percent.toFixed(0) + '%';
-                    }
+            if(
+                section.vram.bar &&
+                gpuData.vram.percent !== undefined &&
+                !Number.isNaN(gpuData.vram.percent)
+            ) {
+                section.vram.bar.setUsage([{ percent: gpuData.vram.percent }]);
+                if(section.vram.barLabel)
+                    section.vram.barLabel.text = gpuData.vram.percent.toFixed(0) + '%';
+            }
 
-                    if(
-                        section.vram.usedLabel &&
-                        gpuData.vram.used !== undefined &&
-                        !Number.isNaN(gpuData.vram.used)
-                    ) {
-                        section.vram.usedLabel.text = Utils.formatBytes(
-                            gpuData.vram.used,
-                            'kB-KB',
-                            3
-                        );
-                    }
+            if(
+                section.vram.usedLabel &&
+                gpuData.vram.used !== undefined &&
+                !Number.isNaN(gpuData.vram.used)
+            ) {
+                section.vram.usedLabel.text = Utils.formatBytes(gpuData.vram.used, 'kB-KB', 3);
+            }
 
-                    if(
-                        section.vram.totalLabel &&
-                        gpuData.vram.total !== undefined &&
-                        !Number.isNaN(gpuData.vram.total)
-                    ) {
-                        section.vram.totalLabel.text = Utils.formatBytes(
-                            gpuData.vram.total,
-                            'kB-KB',
-                            3
-                        );
-                    }
+            if(
+                section.vram.totalLabel &&
+                gpuData.vram.total !== undefined &&
+                !Number.isNaN(gpuData.vram.total)
+            ) {
+                section.vram.totalLabel.text = Utils.formatBytes(gpuData.vram.total, 'kB-KB', 3);
+            }
 
-                    if(
-                        section.activity.gfxBar &&
-                        gpuData.activity.GFX !== undefined &&
-                        !Number.isNaN(gpuData.activity.GFX)
-                    ) {
-                        section.activity.gfxBar.setUsage([{ percent: gpuData.activity.GFX }]);
-                        if(section.activity.gfxBarLabel)
-                            section.activity.gfxBarLabel.text =
-                                gpuData.activity.GFX.toFixed(0) + '%';
-                    }
+            if(
+                section.activity.gfxBar &&
+                gpuData.activity.GFX !== undefined &&
+                !Number.isNaN(gpuData.activity.GFX)
+            ) {
+                section.activity.gfxBar.setUsage([{ percent: gpuData.activity.GFX }]);
+                if(section.activity.gfxBarLabel)
+                    section.activity.gfxBarLabel.text = gpuData.activity.GFX.toFixed(0) + '%';
+            }
 
-                    if(this.topProcesses) {
-                        const numProcesses = this.compact ? 3 : 5;
-                        for(let index = 0; index < numProcesses; index++) {
-                            const topProcess = this.topProcesses.get(section.pci)?.[index];
-                            if(!topProcess) continue;
+            if(this.topProcesses) {
+                const numProcesses = this.compact ? 3 : 5;
+                for(let index = 0; index < numProcesses; index++) {
+                    const topProcess = this.topProcesses.get(section.uuid)?.[index];
+                    if(!topProcess) continue;
 
-                            const topProcessData = gpuData.topProcesses[index];
-                            if(!topProcessData) {
-                                topProcess.label.text = '-';
-                                topProcess.value1.text = '-';
-                                topProcess.value2.text = '-';
+                    const topProcessData = gpuData.topProcesses[index];
+                    if(!topProcessData) {
+                        topProcess.label.text = '-';
+                        topProcess.value1.text = '-';
+                        topProcess.value2.text = '-';
 
-                                if(gpuData.family === 'NVIDIA') {
-                                    topProcess.value2.hide();
-                                }
-                                continue;
-                            }
-
-                            topProcess.label.text = topProcessData.name;
-
-                            const pipe0 = topProcessData.pipes[0];
-                            if(!pipe0) {
-                                topProcess.value1.text = '-';
-                            } else {
-                                if(pipe0.unit === '%')
-                                    topProcess.value1.text = pipe0.value.toFixed(0) + '%';
-                                else
-                                    topProcess.value1.text = Utils.formatBytes(
-                                        pipe0.value,
-                                        'kB-KB',
-                                        3
-                                    );
-                            }
-
-                            const pipe1 = topProcessData.pipes[1];
-                            if(!pipe1) {
-                                topProcess.value2.hide();
-                            } else {
-                                topProcess.value2.show();
-                                if(pipe1.unit === '%')
-                                    topProcess.value2.text = pipe1.value.toFixed(0) + '%';
-                                else
-                                    topProcess.value2.text = Utils.formatBytes(
-                                        pipe1.value,
-                                        'kB-KB',
-                                        3
-                                    );
-                            }
+                        if(gpuData.family === 'NVIDIA') {
+                            topProcess.value2.hide();
                         }
+                        continue;
                     }
 
-                    if(this.mainSensors) {
-                        const numSensors = this.compact ? 1 : 3;
-                        for(let index = 0; index < numSensors; index++) {
-                            const sensor = this.mainSensors.get(section.pci)?.[index];
-                            if(!sensor) continue;
+                    topProcess.label.text = topProcessData.name;
 
-                            sensor.label.text = '-';
-                            sensor.value.text = '-';
-
-                            if(!gpuData.sensors.list) continue;
-
-                            const sensorData = gpuData.sensors.list[index];
-                            if(!sensorData) continue;
-
-                            sensor.label.text = sensorData.name;
-
-                            let unit = sensorData.unit;
-                            if(unit === 'C') unit = '°C';
-
-                            let value = sensorData.value;
-                            if(
-                                unit === '°C' &&
-                                typeof value === 'number' &&
-                                Config.get_string('sensors-temperature-unit') === 'fahrenheit'
-                            ) {
-                                value = Utils.celsiusToFahrenheit(value as number);
-                                unit = '°F';
-                            }
-
-                            unit = unit === '' ? '' : ' ' + unit;
-                            sensor.value.text = value + unit;
-                        }
+                    const pipe0 = topProcessData.pipes[0];
+                    if(!pipe0) {
+                        topProcess.value1.text = '-';
+                    } else {
+                        if(pipe0.unit === '%')
+                            topProcess.value1.text = pipe0.value.toFixed(0) + '%';
+                        else topProcess.value1.text = Utils.formatBytes(pipe0.value, 'kB-KB', 3);
                     }
 
-                    if(section.infoPopup) section.infoPopup.updateData(gpuData);
-                    if(section.activityPopup) section.activityPopup.updateData(gpuData);
-                    if(section.vramPopup) section.vramPopup.updateData(gpuData);
-                    if(section.topProcessesPopup) section.topProcessesPopup.updateData(gpuData);
-                    if(section.sensorsPopup) section.sensorsPopup.updateData(gpuData);
+                    const pipe1 = topProcessData.pipes[1];
+                    if(!pipe1) {
+                        topProcess.value2.hide();
+                    } else {
+                        topProcess.value2.show();
+                        if(pipe1.unit === '%')
+                            topProcess.value2.text = pipe1.value.toFixed(0) + '%';
+                        else topProcess.value2.text = Utils.formatBytes(pipe1.value, 'kB-KB', 3);
+                    }
                 }
             }
+
+            if(this.mainSensors) {
+                const numSensors = this.compact ? 1 : 3;
+                for(let index = 0; index < numSensors; index++) {
+                    const sensor = this.mainSensors.get(section.uuid)?.[index];
+                    if(!sensor) continue;
+
+                    sensor.label.text = '-';
+                    sensor.value.text = '-';
+
+                    if(!gpuData.sensors.list) continue;
+
+                    const sensorData = gpuData.sensors.list[index];
+                    if(!sensorData) continue;
+
+                    sensor.label.text = sensorData.name;
+
+                    let unit = sensorData.unit;
+                    if(unit === 'C') unit = '°C';
+
+                    let value = sensorData.value;
+                    if(
+                        unit === '°C' &&
+                        typeof value === 'number' &&
+                        Config.get_string('sensors-temperature-unit') === 'fahrenheit'
+                    ) {
+                        value = Utils.celsiusToFahrenheit(value as number);
+                        unit = '°F';
+                    }
+
+                    unit = unit === '' ? '' : ' ' + unit;
+                    sensor.value.text = value + unit;
+                }
+            }
+
+            if(section.infoPopup) section.infoPopup.updateData(gpuData);
+            if(section.activityPopup) section.activityPopup.updateData(gpuData);
+            if(section.vramPopup) section.vramPopup.updateData(gpuData);
+            if(section.topProcessesPopup) section.topProcessesPopup.updateData(gpuData);
+            if(section.sensorsPopup) section.sensorsPopup.updateData(gpuData);
         }
     }
 

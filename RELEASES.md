@@ -11,6 +11,7 @@
 -   Fixed CPU frequency not being correctly displayed [[#155](https://github.com/AstraExt/astra-monitor/issues/155)] [[#168](https://github.com/AstraExt/astra-monitor/issues/168)]
 -   Fixed GPU detection on some GPUs [[#162](https://github.com/AstraExt/astra-monitor/issues/162)]
 -   Fixed GPU model name not being correctly displayed [[#152](https://github.com/AstraExt/astra-monitor/issues/152)]
+-   Improved NVIDIA `nvidia-smi` parsing for better sensors monitoring
 
 # Astra Monitor 29 - October 2 2024
 
