@@ -26,7 +26,7 @@
         "eslint": "^8.57.0",
         "@girs/gnome-shell": "^47.0.0-next.4",
         "@girs/gjs": "^4.0.0-beta.16",
-        "@girs/gtop-2.0": "2.0.0-4.0.0-beta.16",
+        "@girs/gtop-2.0": "^2.0.0-4.0.0-beta.19",
         "@typescript-eslint/eslint-plugin": "^7.7.1",
         "@typescript-eslint/parser": "^7.7.1",
         "prettier": "^3.2.5"
