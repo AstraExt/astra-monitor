@@ -2474,30 +2474,39 @@ export default class Utils {
         return (length *= 20);
     }
 
-    static xmlParse(xml: string): any {
+    static xmlParse(xml: string, skips: string[] = []): any {
         if(!Utils.xmlParser) return undefined;
-        return Utils.xmlParser.parse(xml);
+        return Utils.xmlParser.parse(xml, skips);
     }
 
     static performanceStart(name: string) {
         if(!Utils.debug) return;
-        Utils.performanceMap?.set(name, { start: GLib.get_monotonic_time(), mean: 0, count: 0 });
+        let performance = Utils.performanceMap?.get(name);
+        if(!performance) {
+            performance = { start: GLib.get_monotonic_time(), mean: 0, count: 0 };
+        } else {
+            performance.start = GLib.get_monotonic_time();
+        }
+        Utils.performanceMap?.set(name, performance);
     }
 
     static performanceEnd(name: string) {
         if(!Utils.debug) return;
 
-        const start = Utils.performanceMap?.get(name);
-        if(start) {
+        const performance = Utils.performanceMap?.get(name);
+        if(performance) {
             const end = GLib.get_monotonic_time();
-            const time = (end - start.start) / 1000;
-            start.mean = (start.mean * start.count + time) / (start.count + 1);
-            start.count++;
-            Utils.log(`${name} took ${start.mean.toFixed(2)}ms (mean: ${start.mean.toFixed(2)}ms)`);
+            const time = (end - performance.start) / 1000;
+            performance.mean =
+                (performance.mean * performance.count + time) / (performance.count + 1);
+            performance.count++;
+            Utils.log(
+                `${name} took ${performance.mean.toFixed(2)}ms (mean: ${performance.mean.toFixed(2)}ms)`
+            );
             Utils.performanceMap?.set(name, {
                 start: GLib.get_monotonic_time(),
-                mean: start.mean,
-                count: start.count,
+                mean: performance.mean,
+                count: performance.count,
             });
         }
     }

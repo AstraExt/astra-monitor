@@ -57,6 +57,7 @@ export type GenericGpuInfo = {
         percent?: number;
         total?: number;
         used?: number;
+        reserved?: number;
         pipes: {
             name: string;
             percent: number;
@@ -267,7 +268,7 @@ type NvidiaInfoRaw = {
     compute_mode?: NvidiaField;
     fb_memory_usage?: {
         total?: NvidiaField;
-        reserverd?: NvidiaField;
+        reserved?: NvidiaField;
         used?: NvidiaField;
         free?: NvidiaField;
     };
@@ -1184,8 +1185,7 @@ export default class GpuMonitor extends Monitor {
         if(data.exit || !data.result) return;
 
         try {
-            const xml = Utils.xmlParse(data.result);
-
+            const xml = Utils.xmlParse(data.result, ['supported_clocks']);
             if(!xml.nvidia_smi_log) return;
 
             let gpuInfoList: NvidiaInfoRaw[] = xml.nvidia_smi_log.gpu;
@@ -1471,6 +1471,15 @@ export default class GpuMonitor extends Monitor {
                     const usedData = GpuMonitor.nvidiaToGenericField(gpuInfo.fb_memory_usage.used);
                     if(usedData && usedData.value != null && usedData.unit)
                         gpu.vram.used = Utils.convertToBytes(usedData.value, usedData.unit);
+
+                    const reservedData = GpuMonitor.nvidiaToGenericField(
+                        gpuInfo.fb_memory_usage.reserved
+                    );
+                    if(reservedData && reservedData.value != null && reservedData.unit)
+                        gpu.vram.reserved = Utils.convertToBytes(
+                            reservedData.value,
+                            reservedData.unit
+                        );
 
                     if(gpu.vram.total !== undefined && gpu.vram.used !== undefined) {
                         gpu.vram.percent = (gpu.vram.used / gpu.vram.total) * 100;
