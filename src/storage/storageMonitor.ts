@@ -29,7 +29,7 @@ import TopProcessesCache from '../utils/topProcessesCache.js';
 import ContinuousTaskManager, {
     ContinuousTaskManagerData,
 } from '../utils/continuousTaskManager.js';
-
+import CommandHelper from '../utils/commandHelper.js';
 export type StorageUsage = {
     size: number;
     usePercentage: number;
@@ -555,8 +555,9 @@ export default class StorageMonitor extends Monitor {
             if(!disk || !disk.path) return false;
 
             const path = disk.path.replace(/[^a-zA-Z0-9/-]/g, '');
-            const result = await Utils.executeCommandAsync(
-                `lsblk -Jb -o ID,SIZE,FSUSE% ${path}`,
+            const lsblkPath = Utils.commandPathLookup('lsblk -V');
+            const result = await CommandHelper.runCommand(
+                `${lsblkPath}lsblk -Jb -o ID,SIZE,FSUSE% ${path}`,
                 this.updateStorageUsageTask
             );
 
@@ -1073,8 +1074,9 @@ export default class StorageMonitor extends Monitor {
 
     async updateStorageInfo(): Promise<boolean> {
         try {
-            const result = await Utils.executeCommandAsync(
-                'lsblk -JbO',
+            const path = Utils.commandPathLookup('lsblk -V');
+            const result = await CommandHelper.runCommand(
+                `${path}lsblk -JbO`,
                 this.updateStorageInfoTask
             );
 

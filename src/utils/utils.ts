@@ -29,6 +29,7 @@ import StorageMonitor, { BlockDevice } from '../storage/storageMonitor.js';
 import NetworkMonitor from '../network/networkMonitor.js';
 import SensorsMonitor from '../sensors/sensorsMonitor.js';
 import CancellableTaskManager from './cancellableTaskManager.js';
+import CommandHelper from './commandHelper.js';
 import XMLParser from './xmlParser.js';
 
 type GTop = typeof import('gi://GTop').default;
@@ -171,7 +172,8 @@ export default class Utils {
 
     static ready = false;
 
-    static performanceMap: Map<string, number> | null = null;
+    static performanceMap: Map<string, { start: number; mean: number; count: number }> | null =
+        null;
 
     static lastCachedHwmonDevices: number = 0;
     static cachedHwmonDevices: HwMonDevices = new Map();
@@ -1699,7 +1701,7 @@ export default class Utils {
 
         try {
             const path = Utils.commandPathLookup('lsblk -V');
-            const result = await Utils.executeCommandAsync(
+            const result = await CommandHelper.runCommand(
                 `${path}lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH`,
                 task
             );
@@ -2074,68 +2076,6 @@ export default class Utils {
         });
     }
 
-    static executeCommandAsync(
-        command: string,
-        cancellableTaskManager?: CancellableTaskManager<boolean>
-    ): Promise<string> {
-        return new Promise((resolve, reject) => {
-            let argv;
-            try {
-                // Parse the command line to properly create an argument vector
-                argv = GLib.shell_parse_argv(command);
-                if(!argv[0]) {
-                    throw new Error('Invalid command');
-                }
-            } catch(e: any) {
-                // Handle errors in command parsing
-                reject(new Error(`Failed to parse command: ${e.message}`));
-                return;
-            }
-
-            // Create a new subprocess
-            const proc = new Gio.Subprocess({
-                argv: argv[1] || [],
-                flags: Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
-            });
-
-            // Initialize the subprocess
-            try {
-                const init = proc.init(cancellableTaskManager?.cancellable || null);
-                if(!init) {
-                    reject(new Error('Failed to initialize subprocess'));
-                    return;
-                }
-            } catch(e: any) {
-                // Handle errors in subprocess initialization
-                reject(new Error(`Failed to initialize subprocess: ${e.message}`));
-                return;
-            }
-
-            cancellableTaskManager?.setSubprocess(proc);
-
-            // Communicate with the subprocess asynchronously
-            proc.communicate_utf8_async(null, null, (sub, res) => {
-                if(!sub) {
-                    reject(new Error('Subprocess invalid'));
-                    return;
-                }
-
-                try {
-                    const [, stdout, stderr] = sub.communicate_utf8_finish(res);
-                    if(sub.get_exit_status() !== 0) {
-                        if(!stderr) throw new Error('No error output');
-                        reject(new Error(`Command failed with error: ${stderr.trim()}`));
-                        return;
-                    }
-                    if(!stdout) throw new Error('No output');
-                    resolve(stdout.trim());
-                } catch(e: any) {
-                    reject(new Error(`Failed to communicate with subprocess: ${e.message}`));
-                }
-            });
-        });
-    }
-
     static getLocalIcon(iconName: string): Gio.Icon | undefined {
         if(!Utils.metadata || !(Utils.metadata as any).path) return undefined;
         return Gio.icon_new_for_string(
@@ -2229,7 +2169,7 @@ export default class Utils {
 
         try {
             const path = Utils.commandPathLookup('ip -V');
-            const result = await Utils.executeCommandAsync(`${path}ip -d -j addr`, task);
+            const result = await CommandHelper.runCommand(`${path}ip -d -j addr`, task);
             if(result) {
                 const json = JSON.parse(result);
 
@@ -2304,7 +2244,7 @@ export default class Utils {
 
         try {
             const path = Utils.commandPathLookup('ip -V');
-            const result = await Utils.executeCommandAsync(
+            const result = await CommandHelper.runCommand(
                 `${path}ip -d -j route show default`,
                 task
             );
@@ -2375,7 +2315,7 @@ export default class Utils {
 
         try {
             const commandPath = Utils.commandPathLookup('lsblk -V');
-            const result = await Utils.executeCommandAsync(
+            const result = await CommandHelper.runCommand(
                 `${commandPath}lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE`,
                 task
             );
@@ -2541,8 +2481,7 @@ export default class Utils {
 
     static performanceStart(name: string) {
         if(!Utils.debug) return;
-
-        Utils.performanceMap?.set(name, GLib.get_monotonic_time());
+        Utils.performanceMap?.set(name, { start: GLib.get_monotonic_time(), mean: 0, count: 0 });
     }
 
     static performanceEnd(name: string) {
@@ -2551,8 +2490,15 @@ export default class Utils {
         const start = Utils.performanceMap?.get(name);
         if(start) {
             const end = GLib.get_monotonic_time();
-            Utils.log(`${name} took ${((end - start) / 1000).toFixed(2)}ms`);
-            Utils.performanceMap?.set(name, 0);
+            const time = (end - start.start) / 1000;
+            start.mean = (start.mean * start.count + time) / (start.count + 1);
+            start.count++;
+            Utils.log(`${name} took ${start.mean.toFixed(2)}ms (mean: ${start.mean.toFixed(2)}ms)`);
+            Utils.performanceMap?.set(name, {
+                start: GLib.get_monotonic_time(),
+                mean: start.mean,
+                count: start.count,
+            });
         }
     }
 
