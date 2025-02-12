@@ -2626,8 +2626,9 @@ export default class Utils {
         //Fix GPU moved from processor (v29 => v30)
         gpuMain = Config.get_json('gpu-main');
         if(gpuMain && gpuMain.domain) {
-            const gpuData = Config.get_json('gpu-data');
+            let gpuData = Config.get_json('gpu-data');
             if(!gpuData) {
+                gpuData = [];
                 if(!gpuMain.domain.includes(':')) gpuMain.domain = '0000:' + gpuMain.domain;
 
                 gpuMain.monitor = true;
