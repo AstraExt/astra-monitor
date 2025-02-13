@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-26 19:37+0100\n"
+"POT-Creation-Date: 2025-02-13 19:24+0100\n"
 "PO-Revision-Date: 2024-04-24 18:28+0200\n"
 "Last-Translator: awumii <awumii@protonmail.com>\n"
 "Language-Team: awumii <awumii@protonmail.com>\n"
@@ -29,8 +29,8 @@ msgid "CPU info"
 msgstr "Informacje o CPU"
 
 #: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
-#: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:241
-#: src/gpu/gpuMenuComponent.js:693
+#: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:270
+#: src/gpu/gpuMenuComponent.js:1195
 msgid "Total:"
 msgstr "Łącznie:"
 
@@ -137,8 +137,8 @@ msgstr "teraz"
 
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:112
-#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:336
-#: src/gpu/gpuMenuComponent.js:818 prefs.js:378
+#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:365
+#: src/gpu/gpuMenuComponent.js:1320 prefs.js:378
 msgid "Sensors"
 msgstr "Czujniki"
 
@@ -496,8 +496,8 @@ msgstr "Wykorzystanie pamięci"
 
 #: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
 #: src/network/networkMenu.js:161 src/network/networkMenu.js:296
-#: src/network/networkMenu.js:298 src/gpu/gpuMenuComponent.js:279
-#: src/gpu/gpuMenuComponent.js:732
+#: src/network/networkMenu.js:298 src/gpu/gpuMenuComponent.js:308
+#: src/gpu/gpuMenuComponent.js:1234
 msgid "Top Processes"
 msgstr "Największe procesy"
 
@@ -1363,7 +1363,7 @@ msgstr "Kolejność monitorów"
 
 #: src/prefs/gpu.js:42 src/prefs/gpu.js:55 src/prefs/gpu.js:68
 #: src/prefs/gpu.js:108 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:45 prefs.js:250
+#: src/gpu/gpuMenuComponent.js:46 prefs.js:250
 msgid "GPU"
 msgstr "GPU"
 
@@ -1731,8 +1731,8 @@ msgid "D"
 msgstr "P"
 
 #: src/network/networkMenu.js:912 src/storage/storageMenu.js:599
-#: src/gpu/gpuMenuComponent.js:409 src/gpu/gpuMenuComponent.js:744
-#: src/gpu/gpuMenuComponent.js:775
+#: src/gpu/gpuMenuComponent.js:438 src/gpu/gpuMenuComponent.js:1246
+#: src/gpu/gpuMenuComponent.js:1277
 msgid "Name"
 msgstr "Nazwa"
 
@@ -1882,7 +1882,7 @@ msgstr "Podstawowe informacje"
 msgid "Model"
 msgstr "Model"
 
-#: src/storage/storageMenu.js:602 src/gpu/gpuMenuComponent.js:472
+#: src/storage/storageMenu.js:602 src/gpu/gpuMenuComponent.js:501
 msgid "Vendor"
 msgstr "Dostawca"
 
@@ -2179,7 +2179,7 @@ msgid "Allocated:"
 msgstr "Przydzielone:"
 
 #: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
-#: src/gpu/gpuMenuComponent.js:220 src/gpu/gpuMenuComponent.js:672
+#: src/gpu/gpuMenuComponent.js:249 src/gpu/gpuMenuComponent.js:1174
 msgid "Used:"
 msgstr "Używane:"
 
@@ -2235,49 +2235,219 @@ msgstr "Zswapped"
 msgid "Swap Devices"
 msgstr "Urządzenia pamięci wymiany"
 
-#: src/gpu/gpuMenuComponent.js:56
+#: src/gpu/gpuMenuComponent.js:57
 msgid "No GPU found"
 msgstr "Nie znaleziono GPU"
 
-#: src/gpu/gpuMenuComponent.js:69
+#: src/gpu/gpuMenuComponent.js:70
 msgid "GPUs"
 msgstr "GPU"
 
-#: src/gpu/gpuMenuComponent.js:128 src/gpu/gpuMenuComponent.js:582
+#: src/gpu/gpuMenuComponent.js:129
+msgid "No Connected Display"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1084
 msgid "Activity"
 msgstr "Aktywność"
 
-#: src/gpu/gpuMenuComponent.js:177 src/gpu/gpuMenuComponent.js:631
+#: src/gpu/gpuMenuComponent.js:206 src/gpu/gpuMenuComponent.js:1133
 msgid "VRAM"
 msgstr "VRAM"
 
-#: src/gpu/gpuMenuComponent.js:402
+#: src/gpu/gpuMenuComponent.js:431
 msgid "GPU info"
 msgstr "Informacje o GPU"
 
-#: src/gpu/gpuMenuComponent.js:439
+#: src/gpu/gpuMenuComponent.js:468
 msgid "Subsystem"
 msgstr "Podsystem"
 
-#: src/gpu/gpuMenuComponent.js:480
+#: src/gpu/gpuMenuComponent.js:509
 msgid "Vendor ID"
 msgstr "ID dostawcy"
 
-#: src/gpu/gpuMenuComponent.js:489
+#: src/gpu/gpuMenuComponent.js:518
 msgid "Product ID"
 msgstr "ID produktu"
 
-#: src/gpu/gpuMenuComponent.js:497
+#: src/gpu/gpuMenuComponent.js:526
 msgid "PCI"
 msgstr "PCI"
 
-#: src/gpu/gpuMenuComponent.js:509
+#: src/gpu/gpuMenuComponent.js:538
 msgid "Drivers"
 msgstr "Sterowniki"
 
-#: src/gpu/gpuMenuComponent.js:518
+#: src/gpu/gpuMenuComponent.js:547
 msgid "Modules"
 msgstr "Moduły"
+
+#: src/gpu/gpuMenuComponent.js:611
+msgid "Displays"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:613
+#, fuzzy
+msgid "No displays found"
+msgstr "Nie znaleziono czujników"
+
+#: src/gpu/gpuMenuComponent.js:644
+#, fuzzy
+msgid "Status"
+msgstr "Stan"
+
+#: src/gpu/gpuMenuComponent.js:656
+#, fuzzy
+msgid "Product Code"
+msgstr "ID produktu"
+
+#: src/gpu/gpuMenuComponent.js:668
+#, fuzzy
+msgid "Serial Number"
+msgstr "Zone Number"
+
+#: src/gpu/gpuMenuComponent.js:680
+msgid "Manufacturer Date"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:692
+#, fuzzy
+msgid "EDID Version"
+msgstr "Wersja"
+
+#: src/gpu/gpuMenuComponent.js:704
+#, fuzzy
+msgid "Display Size"
+msgstr "Discard Max Size"
+
+#: src/gpu/gpuMenuComponent.js:716 src/gpu/gpuMenuComponent.js:942
+msgid "Native Resolution"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:728 src/gpu/gpuMenuComponent.js:961
+msgid "Refresh Rate"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:740
+msgid "Display Gamma"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:752
+msgid "Display Type"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:764
+msgid "Capabilities"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:843
+msgid "Enabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:846
+msgid "Disabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:939
+msgid "Native Resolutions"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:958
+msgid "Refresh Rates"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:986
+msgid "RGB 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:990
+msgid "RGB 4:4:4 + YCrCb 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:994
+msgid "RGB 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:997
+msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1005
+msgid "Monochrome or Grayscale"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1008
+#, fuzzy
+msgid "RGB color"
+msgstr "Kolor paska"
+
+#: src/gpu/gpuMenuComponent.js:1011
+#, fuzzy
+msgid "Non-RGB color"
+msgstr "Kolor ikony"
+
+#: src/gpu/gpuMenuComponent.js:1026
+msgid "Digital Input"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1028
+msgid "VESA DFP"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1033
+msgid "White Sync Levels: "
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1036
+msgid "Blank to Black"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1039
+msgid "Separate Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1042
+msgid "Composite Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1045
+msgid "Sync on Green"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1048
+msgid "VSync Serrated"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1052
+msgid "DPMS Standby"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1055
+msgid "DPMS Suspend"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1058
+msgid "DPMS Active Off"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1061
+msgid "Standard sRGB"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1064
+msgid "Preferred Timing"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1067
+#, fuzzy
+msgid "GTF Supported"
+msgstr "Wesprzyj nas na Ko-Fi"
+
+#: src/gpu/gpuMenuComponent.js:1545
+#, javascript-format
+msgid "%d/%d Displays Connected"
+msgstr ""
 
 #, fuzzy
 #~ msgid "What's Shell TOPBAR/DASH/PANEL Position?"

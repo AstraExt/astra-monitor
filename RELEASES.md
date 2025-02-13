@@ -1,4 +1,4 @@
-# Astra Monitor 30 - TO BE RELEASED
+# Astra Monitor 30 - February 13 2025
 
 ### New features
 
@@ -7,6 +7,8 @@
     _Note: This development paves the way for integrated GPU support and will eventually allow the system to automatically check and select the active GPU. Currently, it is necessary to manually set the main GPU, but this process will possibly be automated in future updates._
 
 -   **_Display Output and Display Info_**: Added support for display output and detailed display information. This enhancement allows detailed display parameters to be viewed directly from the Astra Monitor interface, streamlining the management and troubleshooting of connected monitors. While only a subset of the parsed EDID data is utilized at present, this lays the groundwork for incorporating even more in-depth display information in future updates. Your feedback is welcome as we continue to refine this functionality.
+
+![screenshot](https://github.com/user-attachments/assets/fbf2da8e-b967-401a-8c3c-d09e95031806)
 
 ### Bug fixes
 
