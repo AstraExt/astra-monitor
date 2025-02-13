@@ -6,6 +6,8 @@
 
     _Note: This development paves the way for integrated GPU support and will eventually allow the system to automatically check and select the active GPU. Currently, it is necessary to manually set the main GPU, but this process will possibly be automated in future updates._
 
+-   **_Display Output and Display Info_**: Added support for display output and detailed display information. This enhancement allows detailed display parameters to be viewed directly from the Astra Monitor interface, streamlining the management and troubleshooting of connected monitors. While only a subset of the parsed EDID data is utilized at present, this lays the groundwork for incorporating even more in-depth display information in future updates. Your feedback is welcome as we continue to refine this functionality.
+
 ### Bug fixes
 
 -   Fixed lag issue while navigating through the menu [[#138](https://github.com/AstraExt/astra-monitor/issues/138)] (related to [GNOME GLib issue #3229](https://gitlab.gnome.org/GNOME/glib/-/issues/3229))

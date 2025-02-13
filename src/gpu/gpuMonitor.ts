@@ -27,7 +27,9 @@ import Monitor from '../monitor.js';
 import ContinuousTaskManager, {
     ContinuousTaskManagerData,
 } from '../utils/continuousTaskManager.js';
-
+import CancellableTaskManager from '../utils/cancellableTaskManager.js';
+import CommandHelper from '../utils/commandHelper.js';
+import { EDID, EdidParser } from '../utils/edidParser.js';
 // eslint-disable-next-line no-shadow
 enum GpuSensorPriority {
     NONE,
@@ -345,10 +347,25 @@ export type NvidiaInfo = GenericGpuInfo & {
     raw: NvidiaInfoRaw;
 };
 
+export type DisplayData = {
+    cardName: string;
+    uuid: string;
+    pciBus: string;
+    pciAddress: string;
+    pciPort: string;
+    pciFunction: string;
+    connector: string;
+    status: string;
+    enabled: boolean;
+    edid: EDID;
+};
+
 export default class GpuMonitor extends Monitor {
     private status = false;
     private updateAmdGpuTask: ContinuousTaskManager;
     private updateNvidiaGpuTask: ContinuousTaskManager;
+
+    private updateDisplaysTask: CancellableTaskManager<boolean>;
 
     private infoPipesCache?: {
         name: string;
@@ -361,6 +378,8 @@ export default class GpuMonitor extends Monitor {
 
     constructor() {
         super('Gpu Monitor');
+
+        this.updateDisplaysTask = new CancellableTaskManager();
 
         this.updateAmdGpuTask = new ContinuousTaskManager();
         this.updateAmdGpuTask.listen(this, this.updateAmdGpu.bind(this));
@@ -416,6 +435,8 @@ export default class GpuMonitor extends Monitor {
     }
 
     reset() {
+        this.updateDisplaysTask.cancel();
+
         this.infoPipesCache = undefined;
         this.infoPipesCacheTime = 0;
     }
@@ -510,16 +531,33 @@ export default class GpuMonitor extends Monitor {
     update(): boolean {
         Utils.verbose('Updating Gpu Monitor');
 
+        if(this.isListeningFor('displays')) {
+            this.runUpdate('displays');
+        }
+
         return true;
     }
 
     requestUpdate(key: string) {
+        if(key === 'displays') {
+            if(!this.updateDisplaysTask.isRunning) {
+                this.runUpdate('displays');
+            }
+        }
         super.requestUpdate(key);
     }
 
-    /*runUpdate(key: string, ...params: any[]) {
-        
-    }*/
+    runUpdate(key: string, ...params: any[]) {
+        if(key === 'displays') {
+            this.runTask({
+                key,
+                task: this.updateDisplaysTask,
+                run: this.updateDisplays.bind(this, ...params),
+                callback: this.notify.bind(this, 'displays'),
+            });
+            return;
+        }
+    }
 
     static nvidiaToGenericField(
         nvidia: NvidiaField | undefined,
@@ -2065,6 +2103,98 @@ export default class GpuMonitor extends Monitor {
         } catch(e: any) {
             Utils.error('Error updating Nvidia GPU', e);
         }
+    }
+
+    async updateDisplays(): Promise<boolean> {
+        const data: DisplayData[] = [];
+
+        const cardsList = await Utils.listDirAsync('/sys/class/drm');
+
+        const cards: { name: string; pathPromise: Promise<string> }[] = [];
+
+        for(const card of cardsList) {
+            if(card.isFolder && /^card[0-9]+$/.test(card.name)) {
+                const promise = CommandHelper.runCommand(
+                    `readlink -f /sys/class/drm/${card.name}/device`
+                );
+                cards.push({ name: card.name, pathPromise: promise });
+            }
+        }
+
+        const results = await Promise.all(cards.map(card => card.pathPromise));
+        const pciRegex = /([0-9a-fA-F]{4}):([0-9a-fA-F]{2}):([0-9a-fA-F]{2})\.([0-9])/gm;
+
+        async function readDisplayFiles(
+            displayName: string,
+            files: string[]
+        ): Promise<Record<string, string>> {
+            const filePromises = files.map(file =>
+                Utils.readFileAsync(
+                    `/sys/class/drm/${displayName}/${file}`,
+                    false,
+                    file === 'edid' ? 'hex' : 'utf8'
+                )
+                    .then((content: string) => ({ [file]: content.trim() }))
+                    .catch(_e => {
+                        //Utils.log(`Error reading /sys/class/drm/${displayName}/${file}`, e);
+                        return { [file]: 'unknown' };
+                    })
+            );
+            const fileResults = await Promise.all(filePromises);
+            return Object.assign({}, ...fileResults);
+        }
+
+        const displayDataPromises: Array<Promise<DisplayData>> = [];
+
+        for(let i = 0; i < cards.length; i++) {
+            const cardName = cards[i].name;
+            const result = results[i];
+
+            const matches = Array.from(result.matchAll(pciRegex));
+            if(matches.length > 0) {
+                const lastMatch = matches[matches.length - 1];
+                const pciBus = lastMatch[1];
+                const pciAddress = lastMatch[2];
+                const pciPort = lastMatch[3];
+                const pciFunction = lastMatch[4];
+
+                for(const display of cardsList) {
+                    if(
+                        display.isFolder &&
+                        display.name.startsWith(cardName) &&
+                        display.name !== cardName
+                    ) {
+                        const connectorName = display.name.replace(`${cardName}-`, '');
+
+                        const filesToRead = ['status', 'enabled', 'edid'];
+                        const displayFilesPromise = readDisplayFiles(display.name, filesToRead);
+
+                        const promise = displayFilesPromise.then(files => {
+                            return {
+                                cardName: cardName,
+                                uuid: `${pciBus}:${pciAddress}:${pciPort}.${pciFunction}`,
+                                pciBus: pciBus,
+                                pciAddress: pciAddress,
+                                pciPort: pciPort,
+                                pciFunction: pciFunction,
+                                connector: connectorName,
+                                status: files.status,
+                                enabled: files.enabled === 'enabled',
+                                edid: EdidParser.parseEdid(files.edid) ?? null,
+                            } as DisplayData;
+                        });
+
+                        displayDataPromises.push(promise);
+                    }
+                }
+            }
+        }
+
+        const displayDataResults = await Promise.all(displayDataPromises);
+        data.push(...displayDataResults);
+
+        this.pushUsageHistory('displays', data);
+        return true;
     }
 
     destroy() {

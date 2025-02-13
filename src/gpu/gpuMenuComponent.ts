@@ -20,6 +20,7 @@
 
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
+import Pango from 'gi://Pango';
 import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import MenuBase from '../menu.js';
@@ -27,7 +28,7 @@ import Utils, { GpuInfo } from '../utils/utils.js';
 import Grid from '../grid.js';
 import Config from '../config.js';
 
-import { GenericGpuInfo } from '../gpu/gpuMonitor.js';
+import { DisplayData, GenericGpuInfo } from '../gpu/gpuMonitor.js';
 import GpuActivityBars from '../gpu/gpuActivityBars.js';
 import GpuMemoryBars from '../gpu/gpuMemoryBars.js';
 
@@ -39,6 +40,37 @@ export type GpuComponentProps = {
 
 type InfoPopup = MenuBase & {
     updateData: (data: GenericGpuInfo) => void;
+};
+
+type DisplaysPopup = MenuBase & {
+    gpuInfo: GpuInfo;
+    displayContainers: {
+        container: InstanceType<typeof Grid>;
+        label: St.Label;
+
+        status: St.Label;
+        productCodeLabel: St.Label;
+        productCodeValue: St.Label;
+        serialNumberLabel: St.Label;
+        serialNumberValue: St.Label;
+        manufacturerDateLabel: St.Label;
+        manufacturerDateValue: St.Label;
+        edidVersionLabel: St.Label;
+        edidVersionValue: St.Label;
+        displaySizeLabel: St.Label;
+        displaySizeValue: St.Label;
+        nativeResolutionLabel: St.Label;
+        nativeResolutionValue: St.Label;
+        refreshRateLabel: St.Label;
+        refreshRateValue: St.Label;
+        displayGammaLabel: St.Label;
+        displayGammaValue: St.Label;
+        displayTypeLabel: St.Label;
+        displayTypeValue: St.Label;
+        capabilitiesLabel: St.Label;
+        capabilitiesValue: St.Label;
+    }[];
+    updateData: (data: DisplayData[]) => void;
 };
 
 type ActivityPopup = MenuBase & {
@@ -98,6 +130,8 @@ type Section = {
     info: GpuInfo;
     uuid: string;
     infoPopup?: InfoPopup;
+    displaysTitle?: St.Label;
+    displaysPopup?: DisplaysPopup;
     activityPopup?: ActivityPopup;
     vramPopup?: VramPopup;
     topProcessesPopup?: TopProcessesPopup;
@@ -213,6 +247,39 @@ export default class GpuMenuComponent {
             if(infoPopup) infoPopup.close(true);
         });
         grid.addToGrid(infoButton);
+
+        //DISPLAYS
+        const displaysButton = new St.Button({
+            reactive: true,
+            trackHover: true,
+            style: defaultStyle,
+            xExpand: true,
+        });
+
+        const displaysGrid = new Grid({ numCols: 1 });
+        displaysButton.set_child(displaysGrid);
+
+        const displaysPopup = this.createDisplaysPopup(displaysButton, gpuInfo);
+        section.displaysPopup = displaysPopup;
+
+        displaysButton.connect('enter-event', () => {
+            displaysButton.style = defaultStyle + this.parent.selectionStyle;
+            if(displaysPopup) displaysPopup.open(true);
+        });
+
+        displaysButton.connect('leave-event', () => {
+            displaysButton.style = defaultStyle;
+            if(displaysPopup) displaysPopup.close(true);
+        });
+        grid.addToGrid(displaysButton);
+
+        const displaysTitle = new St.Label({
+            text: _('No Connected Display'),
+            styleClass: 'astra-monitor-menu-header-small-centered',
+            xExpand: true,
+        });
+        section.displaysTitle = displaysTitle;
+        displaysGrid.addToGrid(displaysTitle);
 
         //ACTIVITY
         const activityButton = new St.Button({
@@ -805,6 +872,551 @@ export default class GpuMenuComponent {
         return popup;
     }
 
+    private createDisplaysPopup(sourceActor: St.Widget, gpuInfo: GpuInfo): DisplaysPopup {
+        const popup = new MenuBase(sourceActor, 0.05) as DisplaysPopup;
+        popup.addMenuSection(_('Displays'));
+
+        const noDisplaysLabel = new St.Label({
+            text: _('No displays found'),
+            styleClass: 'astra-monitor-menu-label',
+        });
+        popup.addToMenu(noDisplaysLabel, 2);
+
+        const grid = new Grid({
+            numCols: 1,
+            xExpand: true,
+            xAlign: Clutter.ActorAlign.START,
+        });
+        popup.addToMenu(grid, 2);
+
+        popup.displayContainers = [];
+
+        for(let i = 0; i < 8; i++) {
+            const displayContainer = new Grid({
+                numCols: 2,
+                xExpand: true,
+                xAlign: Clutter.ActorAlign.FILL,
+            });
+            const displayLabel = new St.Label({
+                text: '',
+                xAlign: Clutter.ActorAlign.CENTER,
+                style: 'font-size:0.9em;max-width:250px;',
+            });
+            displayLabel.clutterText.useMarkup = true;
+            displayContainer.addToGrid(displayLabel, 2);
+
+            const horizontalLine = new St.Widget({
+                reactive: false,
+                style: 'height:1px;width:100%;margin:0 8px;background-color:#888;opacity:0.5;',
+            });
+            displayContainer.addToGrid(horizontalLine, 2);
+
+            grid.addToGrid(displayContainer, 2);
+
+            const statusLabel = new St.Label({
+                text: _('Status'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(statusLabel);
+
+            const statusValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                style: 'width:250px;',
+            });
+            displayContainer.addToGrid(statusValue);
+
+            const productCodeLabel = new St.Label({
+                text: _('Product Code'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(productCodeLabel);
+
+            const productCodeValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(productCodeValue);
+
+            const serialNumberLabel = new St.Label({
+                text: _('Serial Number'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(serialNumberLabel);
+
+            const serialNumberValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(serialNumberValue);
+
+            const manufacturerDateLabel = new St.Label({
+                text: _('Manufacturer Date'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(manufacturerDateLabel);
+
+            const manufacturerDateValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(manufacturerDateValue);
+
+            const edidVersionLabel = new St.Label({
+                text: _('EDID Version'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(edidVersionLabel);
+
+            const edidVersionValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(edidVersionValue);
+
+            const displaySizeLabel = new St.Label({
+                text: _('Display Size'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(displaySizeLabel);
+
+            const displaySizeValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(displaySizeValue);
+
+            const nativeResolutionLabel = new St.Label({
+                text: _('Native Resolution'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(nativeResolutionLabel);
+
+            const nativeResolutionValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(nativeResolutionValue);
+
+            const refreshRateLabel = new St.Label({
+                text: _('Refresh Rate'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(refreshRateLabel);
+
+            const refreshRateValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(refreshRateValue);
+
+            const displayGammaLabel = new St.Label({
+                text: _('Display Gamma'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(displayGammaLabel);
+
+            const displayGammaValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(displayGammaValue);
+
+            const displayTypeLabel = new St.Label({
+                text: _('Display Type'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(displayTypeLabel);
+
+            const displayTypeValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(displayTypeValue);
+
+            const capabilitiesLabel = new St.Label({
+                text: _('Capabilities'),
+                styleClass: 'astra-monitor-menu-sub-key',
+                xExpand: true,
+            });
+            displayContainer.addToGrid(capabilitiesLabel);
+
+            const capabilitiesValue = new St.Label({
+                text: '',
+                styleClass: 'astra-monitor-menu-sub-value',
+                xExpand: true,
+                style: 'max-width:250px;',
+            });
+            capabilitiesValue.clutterText.set_line_wrap(true);
+            capabilitiesValue.clutterText.set_line_wrap_mode(Pango.WrapMode.WORD);
+            displayContainer.addToGrid(capabilitiesValue);
+
+            popup.displayContainers.push({
+                container: displayContainer,
+                label: displayLabel,
+                status: statusValue,
+                productCodeLabel: productCodeLabel,
+                productCodeValue: productCodeValue,
+                serialNumberLabel: serialNumberLabel,
+                serialNumberValue: serialNumberValue,
+                manufacturerDateLabel: manufacturerDateLabel,
+                manufacturerDateValue: manufacturerDateValue,
+                edidVersionLabel: edidVersionLabel,
+                edidVersionValue: edidVersionValue,
+                displaySizeLabel: displaySizeLabel,
+                displaySizeValue: displaySizeValue,
+                nativeResolutionLabel: nativeResolutionLabel,
+                nativeResolutionValue: nativeResolutionValue,
+                refreshRateLabel: refreshRateLabel,
+                refreshRateValue: refreshRateValue,
+                displayGammaLabel: displayGammaLabel,
+                displayGammaValue: displayGammaValue,
+                displayTypeLabel: displayTypeLabel,
+                displayTypeValue: displayTypeValue,
+                capabilitiesLabel: capabilitiesLabel,
+                capabilitiesValue: capabilitiesValue,
+            });
+        }
+
+        const uuid = Utils.getGpuUUID(gpuInfo);
+
+        popup.updateData = (data: DisplayData[]) => {
+            if(data.length > 0) noDisplaysLabel.hide();
+            else noDisplaysLabel.show();
+
+            const displaysData = data.filter(
+                d =>
+                    d.uuid === uuid &&
+                    d.connector &&
+                    !d.connector.toLowerCase().includes('writeback')
+            );
+            for(let i = 0; i < popup.displayContainers.length; i++) {
+                const displayContainer = popup.displayContainers[i];
+                const displayData = displaysData[i];
+
+                displayContainer.container.show();
+
+                if(!displayData) {
+                    displayContainer.container.hide();
+                    continue;
+                }
+
+                // LABEL
+                let labelText = '';
+                if(displayData.edid.modelName) {
+                    labelText = displayData.edid.modelName;
+                } else if(displayData.edid.eisaInfo && displayData.edid.eisaInfo.name) {
+                    labelText = displayData.edid.eisaInfo.name;
+                }
+
+                if(displayData.connector) {
+                    if(labelText) {
+                        labelText += ` [<b><span color='grey'>${displayData.connector}</span></b>]`;
+                    } else {
+                        labelText = `[<b><span color='grey'>${displayData.connector}</span></b>]`;
+                    }
+                }
+
+                if(!labelText) {
+                    displayContainer.container.hide();
+                    continue;
+                }
+
+                displayContainer.label.clutterText.set_markup(labelText);
+                displayContainer.status.text = Utils.capitalize(displayData.status);
+
+                if(displayData.enabled) {
+                    displayContainer.status.text += ' - ' + _('Enabled');
+                } else {
+                    displayContainer.status.text += ' - ' + _('Disabled');
+                }
+
+                if(displayData.status === 'disconnected') {
+                    displayContainer.productCodeLabel.hide();
+                    displayContainer.productCodeValue.hide();
+                    displayContainer.serialNumberLabel.hide();
+                    displayContainer.serialNumberValue.hide();
+                    displayContainer.manufacturerDateLabel.hide();
+                    displayContainer.manufacturerDateValue.hide();
+                    displayContainer.edidVersionLabel.hide();
+                    displayContainer.edidVersionValue.hide();
+                    displayContainer.displaySizeLabel.hide();
+                    displayContainer.displaySizeValue.hide();
+                    displayContainer.nativeResolutionLabel.hide();
+                    displayContainer.nativeResolutionValue.hide();
+                    displayContainer.refreshRateLabel.hide();
+                    displayContainer.refreshRateValue.hide();
+                    displayContainer.displayGammaLabel.hide();
+                    displayContainer.displayGammaValue.hide();
+                    displayContainer.displayTypeLabel.hide();
+                    displayContainer.displayTypeValue.hide();
+                    displayContainer.capabilitiesLabel.hide();
+                    displayContainer.capabilitiesValue.hide();
+                    continue;
+                }
+
+                // PRODUCT CODE
+                if(displayData.edid.productCode) {
+                    displayContainer.productCodeValue.text =
+                        '0x' + displayData.edid.productCode?.toString(16).toUpperCase() || '';
+                    displayContainer.productCodeLabel.show();
+                    displayContainer.productCodeValue.show();
+                } else {
+                    displayContainer.productCodeLabel.hide();
+                    displayContainer.productCodeValue.hide();
+                }
+
+                // SERIAL NUMBER
+                if(displayData.edid.serialNumber) {
+                    if(typeof displayData.edid.serialNumber === 'number') {
+                        displayContainer.serialNumberValue.text =
+                            '0x' + displayData.edid.serialNumber.toString(16).toUpperCase();
+                    } else {
+                        displayContainer.serialNumberValue.text =
+                            displayData.edid.serialNumber?.toString() || '';
+                    }
+                    displayContainer.serialNumberLabel.show();
+                    displayContainer.serialNumberValue.show();
+                } else {
+                    displayContainer.serialNumberLabel.hide();
+                    displayContainer.serialNumberValue.hide();
+                }
+
+                // MANUFACTURER DATE
+                if(displayData.edid.manufactureDate) {
+                    displayContainer.manufacturerDateValue.text = displayData.edid.manufactureDate;
+                    displayContainer.manufacturerDateLabel.show();
+                    displayContainer.manufacturerDateValue.show();
+                } else {
+                    displayContainer.manufacturerDateLabel.hide();
+                    displayContainer.manufacturerDateValue.hide();
+                }
+
+                // EDID VERSION
+                if(displayData.edid.edidVersion) {
+                    displayContainer.edidVersionValue.text = displayData.edid.edidVersion;
+                    displayContainer.edidVersionLabel.show();
+                    displayContainer.edidVersionValue.show();
+                } else {
+                    displayContainer.edidVersionLabel.hide();
+                    displayContainer.edidVersionValue.hide();
+                }
+
+                // DISPLAY SIZE
+                if(displayData.edid.bdp.maxHorImgSize && displayData.edid.bdp.maxVertImgSize) {
+                    const width = displayData.edid.bdp.maxHorImgSize;
+                    const height = displayData.edid.bdp.maxVertImgSize;
+                    const inches = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / 2.54;
+
+                    displayContainer.displaySizeValue.text = `${inches.toFixed(1)}" - ${width}cm x ${height}cm`;
+                    displayContainer.displaySizeLabel.show();
+                    displayContainer.displaySizeValue.show();
+                } else {
+                    displayContainer.displaySizeLabel.hide();
+                    displayContainer.displaySizeValue.hide();
+                }
+
+                if(
+                    displayData.edid.dtds &&
+                    displayData.edid.dtds.length > 0 &&
+                    displayData.edid.dtds[0].horActivePixels &&
+                    displayData.edid.dtds[0].vertActivePixels
+                ) {
+                    const resolutions = new Set<string>();
+
+                    for(const dtd of displayData.edid.dtds) {
+                        resolutions.add(dtd.horActivePixels + ' x ' + dtd.vertActivePixels);
+                    }
+
+                    displayContainer.nativeResolutionValue.text =
+                        Array.from(resolutions).join(', ');
+                    displayContainer.nativeResolutionValue.show();
+
+                    if(resolutions.size > 1) {
+                        displayContainer.nativeResolutionLabel.text = _('Native Resolutions');
+                    } else {
+                        displayContainer.nativeResolutionLabel.text = _('Native Resolution');
+                    }
+                    displayContainer.nativeResolutionLabel.show();
+                } else {
+                    displayContainer.nativeResolutionLabel.hide();
+                    displayContainer.nativeResolutionValue.hide();
+                }
+
+                // REFRESH RATE
+                if(
+                    displayData.edid.standardDisplayModes &&
+                    displayData.edid.standardDisplayModes.length > 0
+                ) {
+                    const refreshRates = new Set<number>();
+                    for(const mode of displayData.edid.standardDisplayModes) {
+                        refreshRates.add(mode.vertFreq);
+                    }
+                    displayContainer.refreshRateValue.text = Array.from(refreshRates).join(', ');
+
+                    if(refreshRates.size > 1) {
+                        displayContainer.refreshRateLabel.text = _('Refresh Rates');
+                    } else {
+                        displayContainer.refreshRateLabel.text = _('Refresh Rate');
+                    }
+                    displayContainer.refreshRateLabel.show();
+                    displayContainer.refreshRateValue.show();
+                } else {
+                    displayContainer.refreshRateLabel.hide();
+                    displayContainer.refreshRateValue.hide();
+                }
+
+                // DISPLAY GAMMA
+                if(displayData.edid.bdp.displayGamma) {
+                    displayContainer.displayGammaValue.text =
+                        displayData.edid.bdp.displayGamma.toFixed(1);
+                    displayContainer.displayGammaLabel.show();
+                    displayContainer.displayGammaValue.show();
+                } else {
+                    displayContainer.displayGammaLabel.hide();
+                    displayContainer.displayGammaValue.hide();
+                }
+
+                // DISPLAY TYPE
+                if(displayData.edid.bdp.displayType) {
+                    displayContainer.displayTypeLabel.show();
+                    displayContainer.displayTypeValue.show();
+
+                    if(displayData.edid.bdp.digitalInput) {
+                        switch(displayData.edid.bdp.displayType) {
+                            case 0:
+                                displayContainer.displayTypeValue.text = _('RGB 4:4:4');
+                                break;
+                            case 1:
+                                displayContainer.displayTypeValue.text =
+                                    _('RGB 4:4:4 + YCrCb 4:4:4');
+                                break;
+                            case 2:
+                                displayContainer.displayTypeValue.text =
+                                    _('RGB 4:4:4 + YCrCb 4:2:2');
+                                break;
+                            case 3:
+                                displayContainer.displayTypeValue.text = _(
+                                    'RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2'
+                                );
+                                break;
+                        }
+                    } else {
+                        switch(displayData.edid.bdp.displayType) {
+                            case 0:
+                                displayContainer.displayTypeValue.text =
+                                    _('Monochrome or Grayscale');
+                                break;
+                            case 1:
+                                displayContainer.displayTypeValue.text = _('RGB color');
+                                break;
+                            case 2:
+                                displayContainer.displayTypeValue.text = _('Non-RGB color');
+                                break;
+                            case 3:
+                                displayContainer.displayTypeLabel.hide();
+                                displayContainer.displayTypeValue.hide();
+                                break;
+                        }
+                    }
+                } else {
+                    displayContainer.displayTypeLabel.hide();
+                    displayContainer.displayTypeValue.hide();
+                }
+
+                // CAPABILITIES
+                const capabilities = [];
+
+                if(displayData.edid.bdp.digitalInput) {
+                    capabilities.push(_('Digital Input'));
+                    if(displayData.edid.bdp.vesaDfpCompatible) {
+                        capabilities.push(_('VESA DFP'));
+                    }
+                } else {
+                    if(displayData.edid.bdp.whiteSyncLevels) {
+                        capabilities.push(
+                            _('White Sync Levels: ' + displayData.edid.bdp.whiteSyncLevels)
+                        );
+                    }
+
+                    if(displayData.edid.bdp.blankToBlack) {
+                        capabilities.push(_('Blank to Black'));
+                    }
+
+                    if(displayData.edid.bdp.separateSyncSupported) {
+                        capabilities.push(_('Separate Sync'));
+                    }
+
+                    if(displayData.edid.bdp.compositeSyncSupported) {
+                        capabilities.push(_('Composite Sync'));
+                    }
+
+                    if(displayData.edid.bdp.synOnGreen) {
+                        capabilities.push(_('Sync on Green'));
+                    }
+
+                    if(displayData.edid.bdp.vsyncSerrated) {
+                        capabilities.push(_('VSync Serrated'));
+                    }
+                }
+
+                if(displayData.edid.bdp.dpmsStandby) {
+                    capabilities.push(_('DPMS Standby'));
+                }
+
+                if(displayData.edid.bdp.dpmsSuspend) {
+                    capabilities.push(_('DPMS Suspend'));
+                }
+
+                if(displayData.edid.bdp.dpmsActiveOff) {
+                    capabilities.push(_('DPMS Active Off'));
+                }
+
+                if(displayData.edid.bdp.standardSRgb) {
+                    capabilities.push(_('Standard sRGB'));
+                }
+
+                if(displayData.edid.bdp.preferredTiming) {
+                    capabilities.push(_('Preferred Timing'));
+                }
+
+                if(displayData.edid.bdp.gtfSupported) {
+                    capabilities.push(_('GTF Supported'));
+                }
+
+                if(capabilities.length > 0) {
+                    displayContainer.capabilitiesLabel.show();
+                    displayContainer.capabilitiesValue.show();
+                    displayContainer.capabilitiesValue.text = capabilities.join(', ');
+                } else {
+                    displayContainer.capabilitiesLabel.hide();
+                    displayContainer.capabilitiesValue.hide();
+                }
+            }
+        };
+
+        return popup;
+    }
+
     private createActivityPopup(sourceActor: St.Widget, _gpuInfo: GpuInfo): ActivityPopup {
         const popup = new MenuBase(sourceActor, 0.05) as ActivityPopup;
         popup.addMenuSection(_('Activity'));
@@ -1324,10 +1936,43 @@ export default class GpuMenuComponent {
         }
     }
 
+    public updateDisplays() {
+        const data = Utils.gpuMonitor.getCurrentValue('displays') as DisplayData[];
+        if(!data || data.length === 0) {
+            return;
+        }
+
+        for(const section of this.sections) {
+            let connected = 0;
+            let total = 0;
+
+            const displays = [];
+
+            for(const display of data) {
+                if(section.uuid === display.uuid) {
+                    if(display.status === 'connected') {
+                        connected++;
+                    }
+                    total++;
+                }
+                displays.push(display);
+            }
+            if(section.displaysTitle) {
+                section.displaysTitle.text = _('%d/%d Displays Connected').format(connected, total);
+            }
+
+            if(section.displaysPopup) {
+                section.displaysPopup.updateData(displays);
+            }
+        }
+    }
+
     public onOpen() {
         this.clear();
-
         this.shown = true;
+
+        Utils.gpuMonitor.requestUpdate('displays');
+        Utils.gpuMonitor.listen(this, 'displays', this.updateDisplays.bind(this));
 
         try {
             this.update(this.lastData);
@@ -1338,6 +1983,7 @@ export default class GpuMenuComponent {
 
     public onClose() {
         this.shown = false;
+        Utils.gpuMonitor.unlisten(this, 'displays');
     }
 
     public clear() {}

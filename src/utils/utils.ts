@@ -1920,7 +1920,11 @@ export default class Utils {
         }
     }
 
-    static readFileAsync(path: string, emptyOnFail: boolean = false): Promise<string> {
+    static readFileAsync(
+        path: string,
+        emptyOnFail: boolean = false,
+        encoding: 'utf8' | 'str' | 'hex' = 'utf8'
+    ): Promise<string> {
         return new Promise((resolve, reject) => {
             // Check if the path is valid and not empty
             if(!path || typeof path !== 'string') {
@@ -1968,8 +1972,19 @@ export default class Utils {
                     }
 
                     // Decode the file content
-                    const decoder = new TextDecoder('utf8');
-                    resolve(decoder.decode(fileContent));
+                    if(encoding === 'utf8') {
+                        const decoder = new TextDecoder('utf8');
+                        resolve(decoder.decode(fileContent));
+                    } else if(encoding === 'str') {
+                        resolve(fileContent.toString());
+                    } else if(encoding === 'hex') {
+                        const hexString = Array.from(fileContent)
+                            .map(byte => byte.toString(16).padStart(2, '0'))
+                            .join('');
+                        resolve(hexString);
+                    } else {
+                        reject(new Error('Invalid encoding'));
+                    }
                 } catch(e: any) {
                     if(emptyOnFail) resolve('');
                     else reject(new Error(`Error reading file: ${e.message}`));
