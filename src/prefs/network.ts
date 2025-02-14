@@ -463,7 +463,26 @@ export default class Network {
             title: _('Menu'),
         });
 
-        const group = new Adw.PreferencesGroup({ title: _('Menu') });
+        let group = new Adw.PreferencesGroup({ title: _('Dependencies') });
+
+        PrefsUtils.addStatusLabel(
+            {
+                title: _(
+                    "'NetHogs' not installed or not configured appopriately: you won't be able to monitor process network activity! Check the documentation for more information."
+                ),
+            },
+            'am-dialog-warning-symbolic',
+            group
+        );
+
+        if(!Utils.hasNethogs()) {
+            group.visible = true;
+        } else {
+            group.visible = false;
+        }
+        menuPage.add(group);
+
+        group = new Adw.PreferencesGroup({ title: _('Menu') });
 
         const ioArrows = PrefsUtils.addExpanderRow({ title: _('IO Arrows') }, group, 'network');
         PrefsUtils.addColorRow(
