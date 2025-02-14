@@ -1,3 +1,9 @@
+# Astra Monitor 31 - TO BE RELEASED
+
+### Bug fixes
+
+-   Fixed display counter: now excluding writeback connectors.
+
 # Astra Monitor 30 - February 13 2025
 
 ### New features

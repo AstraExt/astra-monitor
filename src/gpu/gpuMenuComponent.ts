@@ -1122,9 +1122,9 @@ export default class GpuMenuComponent {
 
                 // LABEL
                 let labelText = '';
-                if(displayData.edid.modelName) {
+                if(displayData.edid?.modelName) {
                     labelText = displayData.edid.modelName;
-                } else if(displayData.edid.eisaInfo && displayData.edid.eisaInfo.name) {
+                } else if(displayData.edid?.eisaInfo && displayData.edid.eisaInfo.name) {
                     labelText = displayData.edid.eisaInfo.name;
                 }
 
@@ -1175,7 +1175,7 @@ export default class GpuMenuComponent {
                 }
 
                 // PRODUCT CODE
-                if(displayData.edid.productCode) {
+                if(displayData.edid?.productCode) {
                     displayContainer.productCodeValue.text =
                         '0x' + displayData.edid.productCode?.toString(16).toUpperCase() || '';
                     displayContainer.productCodeLabel.show();
@@ -1186,7 +1186,7 @@ export default class GpuMenuComponent {
                 }
 
                 // SERIAL NUMBER
-                if(displayData.edid.serialNumber) {
+                if(displayData.edid?.serialNumber) {
                     if(typeof displayData.edid.serialNumber === 'number') {
                         displayContainer.serialNumberValue.text =
                             '0x' + displayData.edid.serialNumber.toString(16).toUpperCase();
@@ -1202,7 +1202,7 @@ export default class GpuMenuComponent {
                 }
 
                 // MANUFACTURER DATE
-                if(displayData.edid.manufactureDate) {
+                if(displayData.edid?.manufactureDate) {
                     displayContainer.manufacturerDateValue.text = displayData.edid.manufactureDate;
                     displayContainer.manufacturerDateLabel.show();
                     displayContainer.manufacturerDateValue.show();
@@ -1212,7 +1212,7 @@ export default class GpuMenuComponent {
                 }
 
                 // EDID VERSION
-                if(displayData.edid.edidVersion) {
+                if(displayData.edid?.edidVersion) {
                     displayContainer.edidVersionValue.text = displayData.edid.edidVersion;
                     displayContainer.edidVersionLabel.show();
                     displayContainer.edidVersionValue.show();
@@ -1222,7 +1222,7 @@ export default class GpuMenuComponent {
                 }
 
                 // DISPLAY SIZE
-                if(displayData.edid.bdp.maxHorImgSize && displayData.edid.bdp.maxVertImgSize) {
+                if(displayData.edid?.bdp?.maxHorImgSize && displayData.edid?.bdp?.maxVertImgSize) {
                     const width = displayData.edid.bdp.maxHorImgSize;
                     const height = displayData.edid.bdp.maxVertImgSize;
                     const inches = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / 2.54;
@@ -1236,10 +1236,10 @@ export default class GpuMenuComponent {
                 }
 
                 if(
-                    displayData.edid.dtds &&
-                    displayData.edid.dtds.length > 0 &&
-                    displayData.edid.dtds[0].horActivePixels &&
-                    displayData.edid.dtds[0].vertActivePixels
+                    displayData.edid?.dtds &&
+                    displayData.edid?.dtds.length > 0 &&
+                    displayData.edid?.dtds[0].horActivePixels &&
+                    displayData.edid?.dtds[0].vertActivePixels
                 ) {
                     const resolutions = new Set<string>();
 
@@ -1264,8 +1264,8 @@ export default class GpuMenuComponent {
 
                 // REFRESH RATE
                 if(
-                    displayData.edid.standardDisplayModes &&
-                    displayData.edid.standardDisplayModes.length > 0
+                    displayData.edid?.standardDisplayModes &&
+                    displayData.edid?.standardDisplayModes.length > 0
                 ) {
                     const refreshRates = new Set<number>();
                     for(const mode of displayData.edid.standardDisplayModes) {
@@ -1286,7 +1286,7 @@ export default class GpuMenuComponent {
                 }
 
                 // DISPLAY GAMMA
-                if(displayData.edid.bdp.displayGamma) {
+                if(displayData.edid?.bdp?.displayGamma) {
                     displayContainer.displayGammaValue.text =
                         displayData.edid.bdp.displayGamma.toFixed(1);
                     displayContainer.displayGammaLabel.show();
@@ -1297,12 +1297,12 @@ export default class GpuMenuComponent {
                 }
 
                 // DISPLAY TYPE
-                if(displayData.edid.bdp.displayType) {
+                if(displayData.edid?.bdp?.displayType) {
                     displayContainer.displayTypeLabel.show();
                     displayContainer.displayTypeValue.show();
 
-                    if(displayData.edid.bdp.digitalInput) {
-                        switch(displayData.edid.bdp.displayType) {
+                    if(displayData.edid?.bdp?.digitalInput) {
+                        switch(displayData.edid?.bdp?.displayType) {
                             case 0:
                                 displayContainer.displayTypeValue.text = _('RGB 4:4:4');
                                 break;
@@ -1346,60 +1346,60 @@ export default class GpuMenuComponent {
                 // CAPABILITIES
                 const capabilities = [];
 
-                if(displayData.edid.bdp.digitalInput) {
+                if(displayData.edid?.bdp?.digitalInput) {
                     capabilities.push(_('Digital Input'));
-                    if(displayData.edid.bdp.vesaDfpCompatible) {
+                    if(displayData.edid?.bdp?.vesaDfpCompatible) {
                         capabilities.push(_('VESA DFP'));
                     }
                 } else {
-                    if(displayData.edid.bdp.whiteSyncLevels) {
+                    if(displayData.edid?.bdp?.whiteSyncLevels) {
                         capabilities.push(
-                            _('White Sync Levels: ' + displayData.edid.bdp.whiteSyncLevels)
+                            _('White Sync Levels: ' + displayData.edid?.bdp?.whiteSyncLevels)
                         );
                     }
 
-                    if(displayData.edid.bdp.blankToBlack) {
+                    if(displayData.edid?.bdp?.blankToBlack) {
                         capabilities.push(_('Blank to Black'));
                     }
 
-                    if(displayData.edid.bdp.separateSyncSupported) {
+                    if(displayData.edid?.bdp?.separateSyncSupported) {
                         capabilities.push(_('Separate Sync'));
                     }
 
-                    if(displayData.edid.bdp.compositeSyncSupported) {
+                    if(displayData.edid?.bdp?.compositeSyncSupported) {
                         capabilities.push(_('Composite Sync'));
                     }
 
-                    if(displayData.edid.bdp.synOnGreen) {
+                    if(displayData.edid?.bdp?.synOnGreen) {
                         capabilities.push(_('Sync on Green'));
                     }
 
-                    if(displayData.edid.bdp.vsyncSerrated) {
+                    if(displayData.edid?.bdp?.vsyncSerrated) {
                         capabilities.push(_('VSync Serrated'));
                     }
                 }
 
-                if(displayData.edid.bdp.dpmsStandby) {
+                if(displayData.edid?.bdp?.dpmsStandby) {
                     capabilities.push(_('DPMS Standby'));
                 }
 
-                if(displayData.edid.bdp.dpmsSuspend) {
+                if(displayData.edid?.bdp?.dpmsSuspend) {
                     capabilities.push(_('DPMS Suspend'));
                 }
 
-                if(displayData.edid.bdp.dpmsActiveOff) {
+                if(displayData.edid?.bdp?.dpmsActiveOff) {
                     capabilities.push(_('DPMS Active Off'));
                 }
 
-                if(displayData.edid.bdp.standardSRgb) {
+                if(displayData.edid?.bdp?.standardSRgb) {
                     capabilities.push(_('Standard sRGB'));
                 }
 
-                if(displayData.edid.bdp.preferredTiming) {
+                if(displayData.edid?.bdp?.preferredTiming) {
                     capabilities.push(_('Preferred Timing'));
                 }
 
-                if(displayData.edid.bdp.gtfSupported) {
+                if(displayData.edid?.bdp?.gtfSupported) {
                     capabilities.push(_('GTF Supported'));
                 }
 
@@ -1937,8 +1937,9 @@ export default class GpuMenuComponent {
     }
 
     public updateDisplays() {
-        const data = Utils.gpuMonitor.getCurrentValue('displays') as DisplayData[];
-        if(!data || data.length === 0) {
+        let displaysData = Utils.gpuMonitor.getCurrentValue('displays') as DisplayData[];
+        displaysData = displaysData.filter(d => !d.connector.toLowerCase().includes('writeback'));
+        if(!displaysData || displaysData.length === 0) {
             return;
         }
 
@@ -1948,14 +1949,14 @@ export default class GpuMenuComponent {
 
             const displays = [];
 
-            for(const display of data) {
-                if(section.uuid === display.uuid) {
-                    if(display.status === 'connected') {
+            for(const displayData of displaysData) {
+                if(section.uuid === displayData.uuid) {
+                    if(displayData.status === 'connected') {
                         connected++;
                     }
                     total++;
                 }
-                displays.push(display);
+                displays.push(displayData);
             }
             if(section.displaysTitle) {
                 section.displaysTitle.text = _('%d/%d Displays Connected').format(connected, total);

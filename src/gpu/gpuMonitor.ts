@@ -357,7 +357,7 @@ export type DisplayData = {
     connector: string;
     status: string;
     enabled: boolean;
-    edid: EDID;
+    edid: EDID | null;
 };
 
 export default class GpuMonitor extends Monitor {
