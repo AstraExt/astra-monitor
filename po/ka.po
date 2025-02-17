@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-13 19:24+0100\n"
+"POT-Creation-Date: 2025-02-17 13:09+0100\n"
 "PO-Revision-Date: 2024-04-27 11:41+0200\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -371,7 +371,7 @@ msgstr "სენსორი 5-ის მინიშნება"
 
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:255 src/prefs/gpu.js:251 src/prefs/processors.js:191
+#: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
 #: src/prefs/processors.js:193 prefs.js:241 prefs.js:301 prefs.js:335
 #: prefs.js:369
 msgid "Menu"
@@ -902,7 +902,7 @@ msgstr "მთავარი დისკის გამოყენები�
 msgid "Main Disk Free Value"
 msgstr "მთავარი დისკის თავისუფალის მნიშვნელობა"
 
-#: src/prefs/storage.js:305 src/prefs/network.js:256
+#: src/prefs/storage.js:305 src/prefs/network.js:267
 msgid "IO Arrows"
 msgstr "შეყვანა/გამოყვანის ისრები"
 
@@ -987,7 +987,7 @@ msgstr ""
 msgid "Welcome"
 msgstr "კეთილი იყოს თქვენი მობრძანება"
 
-#: src/prefs/welcome.js:46
+#: src/prefs/welcome.js:46 src/prefs/network.js:255
 msgid "Dependencies"
 msgstr "დამოკიდებულებები"
 
@@ -1163,7 +1163,7 @@ msgstr "უკაბელოს ინფორმაცია"
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'network-wired-symbolic')"
 
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:258
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
 #, fuzzy
 msgid "Upload Color"
 msgstr "ატვირთვის ფერი"
@@ -1172,7 +1172,7 @@ msgstr "ატვირთვის ფერი"
 msgid "<b>Upload</b> IO Bar color."
 msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის სვეტის ფერი."
 
-#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:263
+#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
 #, fuzzy
 msgid "Download Color"
 msgstr "ხატულას ფერი"
@@ -1191,11 +1191,18 @@ msgstr "<b>ატვირთვის</b> შეყვანა/გამოყ
 msgid "<b>Download</b> IO History Graph color."
 msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
 
-#: src/prefs/network.js:259
+#: src/prefs/network.js:257
+msgid ""
+"'NetHogs' not installed or not configured appopriately: you won't be able to "
+"monitor process network activity! Check the documentation for more "
+"information."
+msgstr ""
+
+#: src/prefs/network.js:270
 msgid "<b>Upload</b> IO arrow color."
 msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
 
-#: src/prefs/network.js:264
+#: src/prefs/network.js:275
 msgid "<b>Download</b> IO arrow color."
 msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
 
@@ -2513,7 +2520,7 @@ msgstr ""
 msgid "GTF Supported"
 msgstr "დაგვიჭირეთ მხარი"
 
-#: src/gpu/gpuMenuComponent.js:1545
+#: src/gpu/gpuMenuComponent.js:1546
 #, javascript-format
 msgid "%d/%d Displays Connected"
 msgstr ""

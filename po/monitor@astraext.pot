@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Astra Monitor 47\n"
+"Project-Id-Version: Astra Monitor 48\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-13 19:28+0100\n"
+"POT-Creation-Date: 2025-02-17 13:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -355,7 +355,7 @@ msgstr ""
 
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:255 src/prefs/gpu.js:251 src/prefs/processors.js:191
+#: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
 #: src/prefs/processors.js:193 prefs.js:241 prefs.js:301 prefs.js:335
 #: prefs.js:369
 msgid "Menu"
@@ -846,7 +846,7 @@ msgstr ""
 msgid "Main Disk Free Value"
 msgstr ""
 
-#: src/prefs/storage.js:305 src/prefs/network.js:256
+#: src/prefs/storage.js:305 src/prefs/network.js:267
 msgid "IO Arrows"
 msgstr ""
 
@@ -931,7 +931,7 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: src/prefs/welcome.js:46
+#: src/prefs/welcome.js:46 src/prefs/network.js:255
 msgid "Dependencies"
 msgstr ""
 
@@ -1086,7 +1086,7 @@ msgstr ""
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr ""
 
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:258
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
 msgid "Upload Color"
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "<b>Upload</b> IO Bar color."
 msgstr ""
 
-#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:263
+#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
 msgid "Download Color"
 msgstr ""
 
@@ -1110,11 +1110,18 @@ msgstr ""
 msgid "<b>Download</b> IO History Graph color."
 msgstr ""
 
-#: src/prefs/network.js:259
+#: src/prefs/network.js:257
+msgid ""
+"'NetHogs' not installed or not configured appopriately: you won't be able to "
+"monitor process network activity! Check the documentation for more "
+"information."
+msgstr ""
+
+#: src/prefs/network.js:270
 msgid "<b>Upload</b> IO arrow color."
 msgstr ""
 
-#: src/prefs/network.js:264
+#: src/prefs/network.js:275
 msgid "<b>Download</b> IO arrow color."
 msgstr ""
 
@@ -2348,7 +2355,7 @@ msgstr ""
 msgid "GTF Supported"
 msgstr ""
 
-#: src/gpu/gpuMenuComponent.js:1545
+#: src/gpu/gpuMenuComponent.js:1546
 #, javascript-format
 msgid "%d/%d Displays Connected"
 msgstr ""

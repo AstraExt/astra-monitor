@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-13 19:24+0100\n"
+"POT-Creation-Date: 2025-02-17 13:09+0100\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -360,7 +360,7 @@ msgstr "Sensor 5 - nápověda"
 
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:255 src/prefs/gpu.js:251 src/prefs/processors.js:191
+#: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
 #: src/prefs/processors.js:193 prefs.js:241 prefs.js:301 prefs.js:335
 #: prefs.js:369
 msgid "Menu"
@@ -854,7 +854,7 @@ msgstr "Hodnota využití hlavního disku"
 msgid "Main Disk Free Value"
 msgstr "Volná paměť hlavního disku"
 
-#: src/prefs/storage.js:305 src/prefs/network.js:256
+#: src/prefs/storage.js:305 src/prefs/network.js:267
 msgid "IO Arrows"
 msgstr "IO šipky"
 
@@ -939,7 +939,7 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: src/prefs/welcome.js:46
+#: src/prefs/welcome.js:46 src/prefs/network.js:255
 msgid "Dependencies"
 msgstr "Závislosti"
 
@@ -1107,7 +1107,7 @@ msgstr "Bezdrátová síť"
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr "Nastavit název ikony (např. 'network-wired-symbolic')"
 
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:258
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
 msgid "Upload Color"
 msgstr "Barva pro upload"
 
@@ -1115,7 +1115,7 @@ msgstr "Barva pro upload"
 msgid "<b>Upload</b> IO Bar color."
 msgstr "<b>Upload</b> - barva IO sloupce."
 
-#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:263
+#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
 msgid "Download Color"
 msgstr "Barva pro download"
 
@@ -1131,11 +1131,18 @@ msgstr "<b>Upload</b> - barva IO historického grafu."
 msgid "<b>Download</b> IO History Graph color."
 msgstr "<b>Download</b> - barva IO historického grafu."
 
-#: src/prefs/network.js:259
+#: src/prefs/network.js:257
+msgid ""
+"'NetHogs' not installed or not configured appopriately: you won't be able to "
+"monitor process network activity! Check the documentation for more "
+"information."
+msgstr ""
+
+#: src/prefs/network.js:270
 msgid "<b>Upload</b> IO arrow color."
 msgstr "<b>Upload</b> - barva IO šipky."
 
-#: src/prefs/network.js:264
+#: src/prefs/network.js:275
 msgid "<b>Download</b> IO arrow color."
 msgstr "<b>Download</b> - barva IO šipky."
 
@@ -2414,7 +2421,7 @@ msgstr ""
 msgid "GTF Supported"
 msgstr "Podpořit na Ko-Fi"
 
-#: src/gpu/gpuMenuComponent.js:1545
+#: src/gpu/gpuMenuComponent.js:1546
 #, javascript-format
 msgid "%d/%d Displays Connected"
 msgstr ""

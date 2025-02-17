@@ -16,10 +16,7 @@ export default class CommandHelper {
                     return;
                 }
 
-                const flags =
-                    Gio.SubprocessFlags.STDOUT_PIPE |
-                    Gio.SubprocessFlags.STDERR_PIPE |
-                    Gio.SubprocessFlags.INHERIT_FDS;
+                const flags = Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE;
 
                 const proc = new Gio.Subprocess({ argv, flags });
                 try {

@@ -1,7 +1,8 @@
-# Astra Monitor 31 - TO BE RELEASED
+# Astra Monitor 31 - February 17 2025
 
 ### Bug fixes
 
+-   Reverted command spawner due to its potential to cause crashes; this change reintroduces lag in the menus because of a GLib limitation. A new solution is being explored, as preventing crashes remains the top priority.
 -   Fixed display counter: now excluding writeback connectors.
 
 # Astra Monitor 30 - February 13 2025
