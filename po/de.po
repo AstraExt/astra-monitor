@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 13:09+0100\n"
+"POT-Creation-Date: 2025-02-21 15:31+0100\n"
 "PO-Revision-Date: 2024-01-21 12:11+0100\n"
 "Last-Translator: Philipp Kiemle <philipp.kiemle@gmail.com>\n"
 "Language-Team: \n"
@@ -433,6 +433,22 @@ msgstr "Debug-Modus"
 msgid ""
 "Warning: may affect performance, use only if you know what you are doing."
 msgstr ""
+
+#: src/prefs/utility.js:152
+msgid "Experimental Features"
+msgstr ""
+
+#: src/prefs/utility.js:154
+#, fuzzy
+msgid "PosixSpawn Subprocess"
+msgstr "Prozessoren"
+
+#: src/prefs/utility.js:155
+#, fuzzy
+msgid "Experimental posix_spawn() subprocess monitoring."
+msgstr ""
+"Experimentelle Funktion: Es könnte erforderlich sein, die Erweiterung neu zu "
+"aktivieren."
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34

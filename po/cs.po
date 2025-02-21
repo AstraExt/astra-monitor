@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 13:09+0100\n"
+"POT-Creation-Date: 2025-02-21 15:31+0100\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -426,6 +426,20 @@ msgstr "Režim ladění (Debug)"
 msgid ""
 "Warning: may affect performance, use only if you know what you are doing."
 msgstr "Varování: může ovlivnit výkon, použijte na vlastní nebezpečí."
+
+#: src/prefs/utility.js:152
+msgid "Experimental Features"
+msgstr ""
+
+#: src/prefs/utility.js:154
+#, fuzzy
+msgid "PosixSpawn Subprocess"
+msgstr "Procesy"
+
+#: src/prefs/utility.js:155
+#, fuzzy
+msgid "Experimental posix_spawn() subprocess monitoring."
+msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34

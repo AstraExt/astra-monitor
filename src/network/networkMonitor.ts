@@ -28,7 +28,7 @@ import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseVal
 import ContinuousTaskManager, {
     ContinuousTaskManagerData,
 } from '../utils/continuousTaskManager.js';
-import CommandHelper from '../utils/commandHelper.js';
+
 export type NetworkIO = {
     bytesUploadedPerSec: number;
     bytesDownloadedPerSec: number;
@@ -776,7 +776,7 @@ export default class NetworkMonitor extends Monitor {
 
         let result = '';
         try {
-            result = await CommandHelper.runCommand(`${path}iwconfig`);
+            result = await Utils.runAsyncCommand(`${path}iwconfig`);
         } catch(e) {
             /* NO NETWORK FOUND */
         }
@@ -846,7 +846,7 @@ export default class NetworkMonitor extends Monitor {
                 (async () => {
                     try {
                         const path = Utils.commandPathLookup('iw --version');
-                        const str = await CommandHelper.runCommand(`${path}iw dev ${dev} link`);
+                        const str = await Utils.runAsyncCommand(`${path}iw dev ${dev} link`);
                         if(!str) return;
 
                         // Parse info

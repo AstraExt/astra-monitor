@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 13:09+0100\n"
+"POT-Creation-Date: 2025-02-21 15:31+0100\n"
 "PO-Revision-Date: 2024-04-27 11:41+0200\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -439,6 +439,21 @@ msgid ""
 msgstr ""
 "ყურადღება: შეიძლება შეეხოს წარმადობას, გამოიყენეთ მხოლოდ თუ იცით, რას "
 "აკეთებთ."
+
+#: src/prefs/utility.js:152
+msgid "Experimental Features"
+msgstr ""
+
+#: src/prefs/utility.js:154
+#, fuzzy
+msgid "PosixSpawn Subprocess"
+msgstr "ტოპ პროცესები"
+
+#: src/prefs/utility.js:155
+#, fuzzy
+msgid "Experimental posix_spawn() subprocess monitoring."
+msgstr ""
+"ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34

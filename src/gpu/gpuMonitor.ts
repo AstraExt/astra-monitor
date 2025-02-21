@@ -28,7 +28,6 @@ import ContinuousTaskManager, {
     ContinuousTaskManagerData,
 } from '../utils/continuousTaskManager.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
-import CommandHelper from '../utils/commandHelper.js';
 import { EDID, EdidParser } from '../utils/edidParser.js';
 // eslint-disable-next-line no-shadow
 enum GpuSensorPriority {
@@ -2114,7 +2113,7 @@ export default class GpuMonitor extends Monitor {
 
         for(const card of cardsList) {
             if(card.isFolder && /^card[0-9]+$/.test(card.name)) {
-                const promise = CommandHelper.runCommand(
+                const promise = Utils.runAsyncCommand(
                     `readlink -f /sys/class/drm/${card.name}/device`
                 );
                 cards.push({ name: card.name, pathPromise: promise });

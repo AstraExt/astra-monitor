@@ -24,7 +24,6 @@ import Monitor from '../monitor.js';
 import TopProcessesCache from '../utils/topProcessesCache.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import PromiseValueHolder, { PromiseValueHolderStore } from '../utils/promiseValueHolder.js';
-import CommandHelper from '../utils/commandHelper.js';
 
 export type MemoryUsage = {
     active: number;
@@ -369,7 +368,7 @@ export default class MemoryMonitor extends Monitor {
         const processPromises = [];
 
         try {
-            const result = await CommandHelper.runCommand(
+            const result = await Utils.runAsyncCommand(
                 'ps -eo pid,rss,%mem --sort=-%mem',
                 this.updateTopProcessesTask
             );

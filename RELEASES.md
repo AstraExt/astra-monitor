@@ -1,8 +1,17 @@
+# Astra Monitor 32 - February 21 2025
+
+### Experimental Features
+
+-   **New Feature Introduction Process**: From now on, substantial changes will be introduced as experimental features that need to be manually activated. This approach ensures that these new features are not immediately available to everyone, helping to avoid regressions or bugs in environments where stability is crucial.
+-   **POSIX Subprocess**: Introduced experimental support for posix_spawn() subprocess management to enhance command execution efficiency and flexibility. This new feature is disabled by default.
+-   **Enable via Preferences**: To activate posix_spawn Subprocess functionality, please navigate to the **Preferences > Utility** page and enable it.
+-   **Community Testing & Feedback**: We invite the community to help test this experimental feature in the current release and in future updates. Please report any bugs, regressions, or share your suggestions and feedback to help improve the feature.
+
 # Astra Monitor 31 - February 17 2025
 
 ### Bug fixes
 
--   Reverted command spawner due to its potential to cause crashes; this change reintroduces lag in the menus because of a GLib limitation. A new solution is being explored, as preventing crashes remains the top priority.
+-   Reverted command spawner due to its potential to cause crashes; this change reintroduces lag in the menus because of a [GLib limitation](https://gitlab.gnome.org/GNOME/glib/-/issues/3229). A new solution is being explored, as preventing crashes remains the top priority.
 -   Fixed display counter: now excluding writeback connectors.
 
 # Astra Monitor 30 - February 13 2025

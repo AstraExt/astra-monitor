@@ -62,7 +62,7 @@ export default class Utility {
             iconName: 'am-settings-symbolic',
         });
 
-        const group = new Adw.PreferencesGroup({ title: _('Utility') });
+        let group = new Adw.PreferencesGroup({ title: _('Utility') });
 
         PrefsUtils.addButtonRow(
             {
@@ -195,6 +195,37 @@ export default class Utility {
             group
         );
         utilityPage.add(group);
+
+        group = new Adw.PreferencesGroup({ title: _('Experimental Features') });
+        PrefsUtils.addSwitchRow(
+            {
+                title: _('PosixSpawn Subprocess'),
+                subtitle: _('Experimental posix_spawn() subprocess monitoring.'),
+            },
+            {
+                watch: 'experimental-features',
+                get: () => {
+                    const features = Config.get_json('experimental-features');
+                    return features?.includes('ps_subprocess') ?? false;
+                },
+                set: (value: boolean) => {
+                    const features = Config.get_json('experimental-features');
+                    if(value) {
+                        if(!features?.includes('ps_subprocess')) {
+                            features.push('ps_subprocess');
+                        }
+                    } else {
+                        if(features?.includes('ps_subprocess')) {
+                            features.splice(features.indexOf('ps_subprocess'), 1);
+                        }
+                    }
+                    Config.set('experimental-features', features, 'json');
+                },
+            },
+            group
+        );
+        utilityPage.add(group);
+
         return utilityPage;
     }
 }

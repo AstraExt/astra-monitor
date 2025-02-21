@@ -29,6 +29,7 @@ import StorageMonitor, { BlockDevice } from '../storage/storageMonitor.js';
 import NetworkMonitor from '../network/networkMonitor.js';
 import SensorsMonitor from '../sensors/sensorsMonitor.js';
 import CancellableTaskManager from './cancellableTaskManager.js';
+import CommandSubprocess from './commandSubprocess.js';
 import CommandHelper from './commandHelper.js';
 import XMLParser from './xmlParser.js';
 
@@ -1701,7 +1702,7 @@ export default class Utils {
 
         try {
             const path = Utils.commandPathLookup('lsblk -V');
-            const result = await CommandHelper.runCommand(
+            const result = await Utils.runAsyncCommand(
                 `${path}lsblk -J -o ID,NAME,LABEL,MOUNTPOINTS,PATH`,
                 task
             );
@@ -2091,6 +2092,26 @@ export default class Utils {
         });
     }
 
+    static experimentalPsSubprocess: boolean | undefined = undefined;
+    static runAsyncCommand(
+        command: string,
+        task?: CancellableTaskManager<boolean>
+    ): Promise<string> {
+        if(Utils.experimentalPsSubprocess === undefined) {
+            let features = Config.get_json('experimental-features');
+            Utils.experimentalPsSubprocess = features?.includes('ps_subprocess') ?? false;
+            Config.connect(this, 'changed::experimental-features', () => {
+                features = Config.get_json('experimental-features');
+                Utils.experimentalPsSubprocess = features?.includes('ps_subprocess') ?? false;
+            });
+        }
+
+        if(Utils.experimentalPsSubprocess) {
+            return CommandSubprocess.run(command, task);
+        }
+        return CommandHelper.runCommand(command, task);
+    }
+
     static getLocalIcon(iconName: string): Gio.Icon | undefined {
         if(!Utils.metadata || !(Utils.metadata as any).path) return undefined;
         return Gio.icon_new_for_string(
@@ -2184,7 +2205,7 @@ export default class Utils {
 
         try {
             const path = Utils.commandPathLookup('ip -V');
-            const result = await CommandHelper.runCommand(`${path}ip -d -j addr`, task);
+            const result = await Utils.runAsyncCommand(`${path}ip -d -j addr`, task);
             if(result) {
                 const json = JSON.parse(result);
 
@@ -2259,10 +2280,7 @@ export default class Utils {
 
         try {
             const path = Utils.commandPathLookup('ip -V');
-            const result = await CommandHelper.runCommand(
-                `${path}ip -d -j route show default`,
-                task
-            );
+            const result = await Utils.runAsyncCommand(`${path}ip -d -j route show default`, task);
             if(result) {
                 const json = JSON.parse(result);
                 for(const data of json) {
@@ -2330,7 +2348,7 @@ export default class Utils {
 
         try {
             const commandPath = Utils.commandPathLookup('lsblk -V');
-            const result = await CommandHelper.runCommand(
+            const result = await Utils.runAsyncCommand(
                 `${commandPath}lsblk -Jb -o ID,UUID,NAME,KNAME,PKNAME,LABEL,TYPE,SUBSYSTEMS,MOUNTPOINTS,VENDOR,MODEL,PATH,RM,RO,STATE,OWNER,SIZE,FSUSE%,FSTYPE`,
                 task
             );
@@ -2652,6 +2670,19 @@ export default class Utils {
                 //Config.set('gpu-main', '""', 'string');
             }
         }
+
+        //Fix experimental-features (v31 => v32)
+        let experimentalFeatures = Config.get_json('experimental-features');
+        if(!experimentalFeatures) {
+            Config.set('experimental-features', [], 'json');
+            experimentalFeatures = [];
+        }
+
+        //Clean Removed Experimental Features
+        experimentalFeatures = experimentalFeatures.filter((feature: string) =>
+            Config.experimentalFeatures.includes(feature)
+        );
+        Config.set('experimental-features', experimentalFeatures, 'json');
     }
 
     static unitToIcon(unit: string): IconData {

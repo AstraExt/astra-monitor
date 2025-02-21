@@ -1303,6 +1303,14 @@
       <range min="-1" max="3"/>
     </key>
     
+    <!-- EXPERIMENTAL FEATURES -->
+    <key name="experimental-features" type="s">
+      <default>''</default>
+      <summary>Experimental Features</summary>
+      <description>Experimental features to enable</description>
+    </key>
+    
+    
     <!-- DEPRECATED KEYS
     VALUES ARE MOVED TO PROPER NEW KEYS AS SOON AS FIRST RUN
     KEEP THEM FOR BACKWARD COMPATIBILITY

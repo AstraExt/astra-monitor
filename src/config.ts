@@ -44,7 +44,12 @@ export default class Config {
         'processor-menu-gpu-color',
         'headers-height',
         'gpu-main',
+
+        //Experimental features
+        'experimental-features',
     ];
+
+    static readonly experimentalFeatures = ['ps_subprocess'];
 
     static set(key: string, value: any, type: TypeEnumStr = 'any') {
         if(!Config.settings) throw new Error('Critical: Config.settings is not valid');
