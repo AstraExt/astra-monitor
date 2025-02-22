@@ -1,3 +1,9 @@
+# Astra Monitor 33 - February 22 2025
+
+### Bug fixes
+
+-   Fixed a memory leak on running async commands [[#179](https://github.com/AstraExt/astra-monitor/issues/179)]
+
 # Astra Monitor 32 - February 21 2025
 
 ### Experimental Features
