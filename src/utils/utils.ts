@@ -1312,7 +1312,7 @@ export default class Utils {
                     /^((?:[0-9a-fA-F]{4}:)?[0-9a-fA-F]{2}):([0-9a-fA-F]{2})\.([0-9a-fA-F]) /;
                 const addressMatch = addressRegex.exec(firstLine);
                 if(!addressMatch) {
-                    Utils.warn('Error getting GPUs list: ' + firstLine + ' does not match address');
+                    Utils.log('Error getting GPUs list: ' + firstLine + ' does not match address');
                     continue;
                 }
                 let domain = addressMatch[1];
