@@ -27,6 +27,7 @@ import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.j
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
+import Signal from './signal.js';
 import Utils from './utils/utils.js';
 import Grid from './grid.js';
 import Config from './config.js';
@@ -46,16 +47,21 @@ type Size = {
 export default class MenuBase extends PopupMenu.PopupMenu {
     public static openingSide: St.Side = St.Side.RIGHT;
 
+    public name: string;
     private statusMenu: PopupMenu.PopupMenuSection;
     private grid: InstanceType<typeof Grid>;
     private utilityBox?: St.BoxLayout;
+
+    private systemMonitorButton?: St.Button;
+    private preferencesButton?: St.Button;
 
     private lastForcedUpdate: Map<string, number> = new Map();
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, params: MenuProps = {}) {
         super(sourceActor, arrowAlignment, params.arrowSide ?? MenuBase.openingSide);
 
-        if(params.name) Utils.verbose(`Creating ${params.name}`);
+        this.name = params.name ?? 'Unnamed Menu';
+        Utils.verbose(`Creating ${this.name}`);
 
         if(params.scrollable) {
             // SCROLLABLE
@@ -170,42 +176,42 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         const appSys = Shell.AppSystem.get_default();
         let app = appSys.lookup_app('org.gnome.SystemMonitor.desktop');
         if(app) {
-            const button = new St.Button({ styleClass: 'button' });
-            button.child = new St.Icon({
+            this.systemMonitorButton = new St.Button({ styleClass: 'button' });
+            this.systemMonitorButton.child = new St.Icon({
                 gicon: Utils.getLocalIcon('am-system-monitor-symbolic'),
                 fallbackIconName: 'org.gnome.SystemMonitor-symbolic',
             });
 
-            button.connect('clicked', () => {
+            Signal.connect(this.systemMonitorButton, 'clicked', () => {
                 this.close(true);
                 app.activate();
             });
-            this.utilityBox.add_child(button);
+            this.utilityBox.add_child(this.systemMonitorButton);
         } else {
             // GNOME <=45
             app = appSys.lookup_app('gnome-system-monitor.desktop');
             if(app) {
-                const button = new St.Button({ styleClass: 'button' });
-                button.child = new St.Icon({
+                this.systemMonitorButton = new St.Button({ styleClass: 'button' });
+                this.systemMonitorButton.child = new St.Icon({
                     gicon: Utils.getLocalIcon('am-system-monitor-symbolic'),
                     fallbackIconName: 'org.gnome.SystemMonitor-symbolic',
                 });
 
-                button.connect('clicked', () => {
+                Signal.connect(this.systemMonitorButton, 'clicked', () => {
                     this.close(true);
                     app.activate();
                 });
-                this.utilityBox.add_child(button);
+                this.utilityBox.add_child(this.systemMonitorButton);
             }
         }
 
         // Astra Monitor preferences
-        const button = new St.Button({ styleClass: 'button' });
-        button.child = new St.Icon({
+        this.preferencesButton = new St.Button({ styleClass: 'button' });
+        this.preferencesButton.child = new St.Icon({
             gicon: Utils.getLocalIcon('am-settings-symbolic'),
             fallbackIconName: 'preferences-system-symbolic',
         });
-        button.connect('clicked', () => {
+        Signal.connect(this.preferencesButton, 'clicked', () => {
             this.close(true);
             try {
                 if(category) Config.set('queued-pref-category', category, 'string');
@@ -215,14 +221,14 @@ export default class MenuBase extends PopupMenu.PopupMenu {
                 Utils.log(`Error opening settings: ${err}`);
             }
         });
-        this.utilityBox.add_child(button);
+        this.utilityBox.add_child(this.preferencesButton);
 
         this.addToMenu(this.utilityBox, this.grid.getNumCols());
     }
 
     async onOpen() {}
 
-    async onClose() {}
+    onClose() {}
 
     protected needsUpdate(code: string, forced: boolean = false) {
         if(forced) {
@@ -240,8 +246,29 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         Utils.error('update() needs to be overridden');
     }
 
-    destroy(): void {
+    override destroy(): void {
+        this.close(false);
         Config.clear(this);
+        Signal.clear(this);
+        Signal.clear(this.systemMonitorButton);
+        Signal.clear(this.preferencesButton);
+
+        this.onClose();
+
+        this.systemMonitorButton?.destroy();
+        this.systemMonitorButton = undefined as any;
+
+        this.preferencesButton?.destroy();
+        this.preferencesButton = undefined as any;
+
+        this.grid?.destroy();
+        this.grid = undefined as any;
+
+        this.statusMenu?.destroy();
+        this.statusMenu = undefined as any;
+
+        this.removeAll();
+        Main.uiGroup.remove_child(this.actor);
         super.destroy();
     }
 }

@@ -493,20 +493,35 @@ export default GObject.registerClass(
             this.tooltipMenu.close(false);
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
             Utils.sensorsMonitor.unlisten(this);
 
-            Config.clear(this.icon);
-
+            if(this.icon) {
+                Config.clear(this.icon);
+                Utils.sensorsMonitor.unlisten(this.icon);
+                this.icon.destroy();
+                this.icon = undefined as any;
+            }
             if(this.valuesContainer) {
                 Config.clear(this.valuesContainer);
                 Utils.sensorsMonitor.unlisten(this.valuesContainer);
+                this.valuesContainer.destroy();
+                this.valuesContainer = undefined as any;
+            }
+            if(this.tooltipItem) {
+                Config.clear(this.tooltipItem);
+                Utils.sensorsMonitor.unlisten(this.tooltipItem);
+                this.tooltipItem.destroy();
+                this.tooltipItem = undefined as any;
             }
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.sensorsMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
+                Main.uiGroup.remove_child(this.tooltipMenu.actor);
+                this.tooltipMenu.destroy();
+                this.tooltipMenu = undefined as any;
             }
 
             super.destroy();

@@ -40,7 +40,7 @@ export default GObject.registerClass(
             Config.connect(this, 'changed::memory-header-bars-color2', this.setStyle.bind(this));
         }
 
-        setStyle() {
+        override setStyle() {
             super.setStyle();
 
             this.colors = [

@@ -190,11 +190,12 @@ export default class StorageMonitor extends Monitor {
     private dataSources!: StorageDataSources;
 
     //private disksCacheFilled: boolean = false;
-    private disksCache: Map<string, DiskInfo> = new Map();
+    private disksCache: Map<string, DiskInfo>;
 
     constructor() {
         super('Storage Monitor');
 
+        this.disksCache = new Map();
         this.topProcessesCache = new TopProcessesCache(this.updateFrequency);
 
         this.diskChecks = {};
@@ -280,18 +281,18 @@ export default class StorageMonitor extends Monitor {
             time: -1,
         };
 
-        this.topProcessesCache.reset();
+        this.topProcessesCache?.reset();
         this.previousPidsIO = new Map();
 
-        this.updateMountpointCache.cancel();
+        this.updateMountpointCache?.cancel();
 
-        this.updateStorageUsageTask.cancel();
-        this.updateTopProcessesTask.cancel();
-        this.updateStorageIOTask.cancel();
-        this.updateStorageInfoTask.cancel();
+        this.updateStorageUsageTask?.cancel();
+        this.updateTopProcessesTask?.cancel();
+        this.updateStorageIOTask?.cancel();
+        this.updateStorageInfoTask?.cancel();
 
         //this.disksCacheFilled = false;
-        this.disksCache.clear();
+        this.disksCache?.clear();
     }
 
     checkMainDisk(): string | null {
@@ -307,18 +308,18 @@ export default class StorageMonitor extends Monitor {
         return storageMain;
     }
 
-    start() {
+    override start() {
         super.start();
     }
 
-    stop() {
+    override stop() {
         super.stop();
         this.stopIOTop();
         this.reset();
     }
 
     startIOTop() {
-        if(this.updateStorageIOTopTask.isRunning) {
+        if(this.updateStorageIOTopTask?.isRunning ?? false) {
             return;
         }
 
@@ -339,7 +340,7 @@ export default class StorageMonitor extends Monitor {
     }
 
     stopIOTop() {
-        if(this.updateStorageIOTopTask.isRunning) {
+        if(this.updateStorageIOTopTask?.isRunning) {
             this.updateStorageIOTopTask.stop();
         }
     }
@@ -386,7 +387,7 @@ export default class StorageMonitor extends Monitor {
         });
     }
 
-    stopListeningFor(key: string) {
+    override stopListeningFor(key: string) {
         super.stopListeningFor(key);
 
         if(key === 'topProcesses') {
@@ -427,7 +428,7 @@ export default class StorageMonitor extends Monitor {
         return true;
     }
 
-    requestUpdate(key: string) {
+    override requestUpdate(key: string) {
         if(key === 'storageUsage') {
             this.runUpdate('storageUsage');
         } else if(key === 'storageIO' || key === 'detailedStorageIO') {
@@ -1121,8 +1122,39 @@ export default class StorageMonitor extends Monitor {
         return false;
     }
 
-    destroy() {
+    override destroy() {
+        this.stop();
         Config.clear(this);
+
+        this.updateMountpointCache?.cancel();
+        this.updateMountpointCache = undefined as any;
+
+        this.updateStorageUsageTask?.cancel();
+        this.updateStorageUsageTask = undefined as any;
+
+        this.updateTopProcessesTask?.cancel();
+        this.updateTopProcessesTask = undefined as any;
+
+        this.updateStorageIOTask?.cancel();
+        this.updateStorageIOTask = undefined as any;
+
+        this.updateStorageInfoTask?.cancel();
+        this.updateStorageInfoTask = undefined as any;
+
+        this.updateStorageIOTopTask?.destroy();
+        this.updateStorageIOTopTask = undefined as any;
+
+        this.previousStorageIO = undefined as any;
+        this.previousDetailedStorageIO = undefined as any;
+        this.previousPidsIO = undefined as any;
+
+        this.topProcessesCache?.reset();
+        this.topProcessesCache = undefined as any;
+
+        this.disksCache = undefined as any;
+        this.diskChecks = undefined as any;
+        this.sectorSizes = undefined as any;
+
         super.destroy();
     }
 }

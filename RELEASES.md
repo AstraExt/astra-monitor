@@ -1,3 +1,14 @@
+# Astra Monitor 34 - April 1 2025
+
+### New features
+
+-   **Time Traveling**: Introduced revolutionary time manipulation capabilities allowing users to monitor system performance in the past, present, and future simultaneously. Access metrics from yesterday's gaming session or tomorrow's compile job with our quantum-entangled monitoring algorithm. (April Fools!)
+
+### Bug fixes
+
+-   Fixed a memory leak while disabling and re-enabling the extension [[#181](https://github.com/AstraExt/astra-monitor/issues/181)]
+-   Implemented significant memory usage optimizations and enhanced resource cleanup when the extension is disabled.
+
 # Astra Monitor 33 - February 22 2025
 
 ### Bug fixes

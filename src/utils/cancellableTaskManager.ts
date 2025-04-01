@@ -21,78 +21,85 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
+class CancellableTask<T> {
+    private timeoutId?: number;
+    private rejectFn?: (reason?: any) => void;
+    private taskPromise: Promise<T>;
+
+    constructor(private boundTask: () => Promise<T>) {
+        this.taskPromise = new Promise<T>((resolve, reject) => {
+            this.rejectFn = reject;
+
+            this.timeoutId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this.boundTask().then(resolve).catch(reject);
+                this.timeoutId = undefined;
+                return GLib.SOURCE_REMOVE;
+            });
+        });
+    }
+
+    public get promise(): Promise<T> {
+        return this.taskPromise;
+    }
+
+    public cancel(): void {
+        if(this.timeoutId) {
+            GLib.source_remove(this.timeoutId);
+            this.timeoutId = undefined;
+        }
+
+        if(this.rejectFn) {
+            this.rejectFn({ isCancelled: true, message: 'Task cancelled' });
+        }
+        this.rejectFn = undefined;
+    }
+}
+
 export default class CancellableTaskManager<T> {
     private cancelId?: number;
-    private taskCancellable: Gio.Cancellable;
-    private currentTask?: { promise: Promise<T>; cancel: () => void };
+    private currentTask?: CancellableTask<T>;
 
-    constructor() {
-        this.taskCancellable = new Gio.Cancellable();
+    private taskCancellable?: Gio.Cancellable;
+    public get cancellable() {
+        if(!this.taskCancellable) {
+            this.taskCancellable = new Gio.Cancellable();
+        }
+        return this.taskCancellable;
     }
 
     public run(boundTask: () => Promise<T>): Promise<T> {
-        if(this.currentTask) this.currentTask.cancel();
-
-        this.currentTask = this.makeCancellable(boundTask);
-
-        return this.currentTask.promise.finally(() => {
-            if(this.currentTask) this.currentTask = undefined;
-
-            if(this.cancelId) this.taskCancellable.disconnect(this.cancelId);
-            this.cancelId = undefined;
+        this.cancel();
+        this.currentTask = new CancellableTask<T>(boundTask);
+        return new Promise<T>((resolve, reject) => {
+            this.currentTask!.promise.then(resolve)
+                .catch(reject)
+                .finally(() => {
+                    this.cancel();
+                });
         });
     }
 
     public setSubprocess(subprocess: Gio.Subprocess) {
-        this.cancelId = this.taskCancellable.connect(() => {
+        this.cancelId = this.cancellable.connect(() => {
             subprocess.force_exit();
         });
-    }
-
-    private makeCancellable(boundTask: () => Promise<T>): {
-        promise: Promise<T>;
-        cancel: () => void;
-    } {
-        let rejectFn: (reason?: any) => void;
-        let timeoutId: number | undefined;
-
-        const promise = new Promise<T>((resolve, reject) => {
-            rejectFn = reject;
-
-            timeoutId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-                timeoutId = undefined;
-                boundTask().then(resolve).catch(reject);
-                return GLib.SOURCE_REMOVE;
-            });
-        });
-
-        const cancel = () => {
-            if(this.cancelId) {
-                this.taskCancellable.cancel();
-                this.taskCancellable.disconnect(this.cancelId);
-                this.taskCancellable = new Gio.Cancellable();
-                this.cancelId = undefined;
-            }
-            if(timeoutId) {
-                GLib.source_remove(timeoutId);
-                timeoutId = undefined;
-            }
-            rejectFn({ isCancelled: true, message: 'Task cancelled' });
-        };
-        return { promise, cancel };
     }
 
     public cancel() {
         if(this.currentTask) {
             this.currentTask.cancel();
+            this.currentTask = undefined;
         }
+
+        if(this.cancelId) {
+            this.taskCancellable?.cancel();
+            this.taskCancellable?.disconnect(this.cancelId);
+            this.cancelId = undefined;
+        }
+        this.taskCancellable = undefined;
     }
 
     public get isRunning() {
         return !!this.currentTask;
-    }
-
-    public get cancellable() {
-        return this.taskCancellable;
     }
 }

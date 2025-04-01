@@ -191,7 +191,7 @@ export default class Config {
     }
 
     static disconnect(object: any, signal: string | null = null) {
-        if(!Config.settings) throw new Error('Critical: Config.settings is not valid');
+        if(!Config.settings) return;
         if(!Config.connectMap.has(object)) return;
         const connections = Config.connectMap.get(object);
         for(const connection of connections) {
@@ -204,7 +204,8 @@ export default class Config {
     }
 
     static disconnectAfter(object: any, signal: string | null = null) {
-        if(!Config.settings) throw new Error('Critical: Config.settings is not valid');
+        if(!Config.settings) return;
+
         if(!Config.connectAfterMap.has(object)) return;
         const connections = Config.connectAfterMap.get(object);
         for(const connection of connections) {
@@ -218,10 +219,11 @@ export default class Config {
 
     static disconnectAll(object: any) {
         this.disconnect(object);
+        this.disconnectAfter(object);
     }
 
     static clear(widget: any) {
-        if(!Config.settings) throw new Error('Critical: Config.settings is not valid');
+        if(!Config.settings) return;
 
         if(Config.bindMap.has(widget)) {
             const widgetBindings = Config.bindMap.get(widget);

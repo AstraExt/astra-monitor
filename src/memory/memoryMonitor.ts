@@ -108,18 +108,18 @@ export default class MemoryMonitor extends Monitor {
     }
 
     reset() {
-        this.topProcessesCache.reset();
+        this.topProcessesCache?.reset();
 
-        this.updateMemoryUsageTask.cancel();
-        this.updateTopProcessesTask.cancel();
-        this.updateSwapUsageTask.cancel();
+        this.updateMemoryUsageTask?.cancel();
+        this.updateTopProcessesTask?.cancel();
+        this.updateSwapUsageTask?.cancel();
     }
 
-    start() {
+    override start() {
         super.start();
     }
 
-    stop() {
+    override stop() {
         super.stop();
         this.reset();
     }
@@ -164,7 +164,7 @@ export default class MemoryMonitor extends Monitor {
         return true;
     }
 
-    requestUpdate(key: string) {
+    override requestUpdate(key: string) {
         if(key === 'memoryUsage') {
             if(!this.updateMemoryUsageTask.isRunning) {
                 const procMeminfo = new PromiseValueHolderStore<string[]>(
@@ -580,8 +580,22 @@ export default class MemoryMonitor extends Monitor {
         return true;
     }
 
-    destroy() {
+    override destroy() {
+        this.stop();
         Config.clear(this);
+
+        this.topProcessesCache.reset();
+        this.topProcessesCache = undefined as any;
+
+        this.updateMemoryUsageTask?.cancel();
+        this.updateMemoryUsageTask = undefined as any;
+
+        this.updateTopProcessesTask?.cancel();
+        this.updateTopProcessesTask = undefined as any;
+
+        this.updateSwapUsageTask?.cancel();
+        this.updateSwapUsageTask = undefined as any;
+
         super.destroy();
     }
 }

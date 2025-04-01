@@ -24,6 +24,7 @@ import St from 'gi://St';
 import Atk from 'gi://Atk';
 import Clutter from 'gi://Clutter';
 
+import Signal from './signal.js';
 import Utils from './utils/utils.js';
 import Config from './config.js';
 import MenuBase from './menu.js';
@@ -69,7 +70,7 @@ export default GObject.registerClass(
 
             this.createTooltip();
 
-            this.connect('button-press-event', (_widget, event) => {
+            Signal.connect(this, 'button-press-event', (_widget, event) => {
                 if(event.get_button() === 1) {
                     this.click();
                 } else {
@@ -78,32 +79,32 @@ export default GObject.registerClass(
                 return Clutter.EVENT_PROPAGATE;
             });
 
-            this.connect('touch-event', (_widget, _event) => {
+            Signal.connect(this, 'touch-event', (_widget, _event) => {
                 this.click();
                 return Clutter.EVENT_PROPAGATE;
             });
 
-            this.connect('hide', () => {
+            Signal.connect(this, 'hide', () => {
                 if(this.menu) this.menu.close(true);
             });
 
-            this.connect('enter-event', () => {
+            Signal.connect(this, 'enter-event', () => {
                 this.showTooltip();
             });
 
-            this.connect('leave-event', () => {
+            Signal.connect(this, 'leave-event', () => {
                 this.hideTooltip();
             });
 
             Config.connect(this, 'changed::headers-height-override', this.setStyle.bind(this));
-            this.box.connect('notify::allocation', () => {
+            Signal.connect(this.box, 'notify::allocation', () => {
                 Utils.lowPriorityTask(this.setStyle.bind(this));
             });
 
             if(this.showConfig)
                 Config.bind(this.showConfig, this, 'visible', Gio.SettingsBindFlags.GET);
 
-            this.connect_after('notify::allocation', () => {
+            Signal.connectAfter(this, 'notify::allocation', () => {
                 if(this.waitForAllocation) {
                     this.waitForAllocation = false;
                     if(this.firstAllocation) this.firstAllocation = false;
@@ -198,8 +199,7 @@ export default GObject.registerClass(
 
         setMenu(menu: MenuBase) {
             this.menu = menu;
-            // @ts-expect-error connect not updated in types
-            this.menu.connect('open-state-changed', this.onOpenMenu.bind(this));
+            Signal.connect(this.menu, 'open-state-changed', this.onOpenMenu.bind(this));
         }
 
         onOpenMenu(_menu: any, open: boolean) {
@@ -254,14 +254,18 @@ export default GObject.registerClass(
             return 1;
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
+            Signal.clear(this);
+            Signal.clear(this.menu);
+            Signal.clear(this.box);
 
-            if(this.menu) {
-                this.menu.onClose();
-                this.menu.destroy();
-            }
+            this.menu?.destroy();
+            this.menu = undefined as any;
 
+            this.box.remove_all_children();
+            this.box.destroy();
+            this.remove_all_children();
             super.destroy();
         }
     }

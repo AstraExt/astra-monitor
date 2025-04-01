@@ -104,7 +104,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
         }
     }
 
-    public close(animate: boolean): void {
+    public override close(animate: boolean): void {
         super.close(animate);
 
         if(this.capturedEventId) {
@@ -117,5 +117,6 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
 
         this.removeAll();
         Main.uiGroup.remove_child(this.actor);
+        this.destroy();
     }
 }

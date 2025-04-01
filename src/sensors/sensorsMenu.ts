@@ -356,7 +356,7 @@ export default class SensorsMenu extends MenuBase {
         Utils.sensorsMonitor.requestUpdate('sensorsData');
     }
 
-    async onClose() {
+    onClose() {
         Utils.sensorsMonitor.unlisten(this, 'sensorsDataAll');
         Utils.sensorsMonitor.unlisten(this, 'sensorsData');
     }
@@ -396,12 +396,5 @@ export default class SensorsMenu extends MenuBase {
             }
             return;
         }
-    }
-
-    destroy() {
-        this.close(true);
-        this.removeAll();
-
-        super.destroy();
     }
 }

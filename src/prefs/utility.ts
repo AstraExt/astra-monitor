@@ -200,7 +200,10 @@ export default class Utility {
         PrefsUtils.addSwitchRow(
             {
                 title: _('PosixSpawn Subprocess'),
-                subtitle: _('Experimental posix_spawn() subprocess monitoring.'),
+                subtitle: _(
+                    'Experimental posix_spawn() subprocess monitoring.\n' +
+                        'This might help with UI performance issues.'
+                ),
             },
             {
                 watch: 'experimental-features',

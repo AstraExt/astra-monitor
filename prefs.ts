@@ -44,6 +44,8 @@ import Sensors from './src/prefs/sensors.js';
 import Utility from './src/prefs/utility.js';
 import About from './src/prefs/about.js';
 
+import Signal from './src/signal.js';
+
 export default class AstraMonitorPrefs extends ExtensionPreferences {
     private minimumSize = { width: 600, height: 300 };
     private defaultSize = { width: 850, height: 700 };
@@ -85,22 +87,22 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             });
             PrefsUtils.expanded = new Map();
 
-            window.connect('close-request', () => {
+            Signal.connect(window, 'close-request', () => {
                 Utils.clear();
 
                 this.active = null;
-                (this.welcome as any) = null;
-                (this.profiles as any) = null;
-                (this.visualization as any) = null;
-                (this.processors as any) = null;
-                (this.gpu as any) = null;
-                (this.memory as any) = null;
-                (this.storage as any) = null;
-                (this.network as any) = null;
-                (this.sensors as any) = null;
-                (this.utility as any) = null;
-                (this.about as any) = null;
-                (PrefsUtils.expanded as any) = null;
+                this.welcome = undefined as any;
+                this.profiles = undefined as any;
+                this.visualization = undefined as any;
+                this.processors = undefined as any;
+                this.gpu = undefined as any;
+                this.memory = undefined as any;
+                this.storage = undefined as any;
+                this.network = undefined as any;
+                this.sensors = undefined as any;
+                this.utility = undefined as any;
+                this.about = undefined as any;
+                PrefsUtils.expanded = undefined as any;
             });
 
             this.loadCustomTheme();

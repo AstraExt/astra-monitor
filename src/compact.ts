@@ -23,6 +23,7 @@ import GLib from 'gi://GLib';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 
+import Signal from './signal.js';
 import Header from './header.js';
 import Config from './config.js';
 import Utils from './utils/utils.js';
@@ -49,8 +50,8 @@ export default GObject.registerClass(
 
             Config.connect(this, 'changed::compact-mode', this.refresh.bind(this));
 
-            this.connect('enter-event', this.start_hover.bind(this));
-            this.connect('leave-event', this.end_hover.bind(this));
+            Signal.connect(this, 'enter-event', this.start_hover.bind(this));
+            Signal.connect(this, 'leave-event', this.end_hover.bind(this));
 
             Config.connect(this, 'changed::compact-mode-activation', () => {
                 this.compacted = Config.get_boolean('compact-mode');
@@ -176,9 +177,9 @@ export default GObject.registerClass(
             }, GLib.PRIORITY_DEFAULT_IDLE);
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
-
+            Signal.clear(this);
             super.destroy();
         }
     }

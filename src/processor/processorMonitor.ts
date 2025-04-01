@@ -137,23 +137,23 @@ export default class ProcessorMonitor extends Monitor {
             };
         }
 
-        this.topProcessesCache.reset();
+        this.topProcessesCache?.reset();
         this.topProcessesTime = -1;
 
         this.previousPidsCpuTime = new Map();
 
-        this.updateCpuUsageTask.cancel();
-        this.updateCoresUsageTask.cancel();
-        this.updateCoresFrequencyTask.cancel();
-        this.updateTopProcessesTask.cancel();
-        this.updateLoadAvgTask.cancel();
+        this.updateCpuUsageTask?.cancel();
+        this.updateCoresUsageTask?.cancel();
+        this.updateCoresFrequencyTask?.cancel();
+        this.updateTopProcessesTask?.cancel();
+        this.updateLoadAvgTask?.cancel();
     }
 
-    start() {
+    override start() {
         super.start();
     }
 
-    stop() {
+    override stop() {
         super.stop();
         this.reset();
     }
@@ -245,7 +245,7 @@ export default class ProcessorMonitor extends Monitor {
         return true;
     }
 
-    requestUpdate(key: string) {
+    override requestUpdate(key: string) {
         if(key === 'cpuUsage') {
             if(!this.updateCpuUsageTask.isRunning) {
                 const procStatStore = new PromiseValueHolderStore<string[]>(
@@ -1035,8 +1035,30 @@ export default class ProcessorMonitor extends Monitor {
         return true;
     }
 
-    destroy() {
+    override destroy() {
+        this.stop();
         Config.clear(this);
+
+        this.topProcessesCache?.reset();
+        this.topProcessesCache = undefined as any;
+
+        this.updateCpuUsageTask?.cancel();
+        this.updateCpuUsageTask = undefined as any;
+
+        this.updateCoresUsageTask?.cancel();
+        this.updateCoresUsageTask = undefined as any;
+
+        this.updateCoresFrequencyTask?.cancel();
+        this.updateCoresFrequencyTask = undefined as any;
+
+        this.updateTopProcessesTask?.cancel();
+        this.updateTopProcessesTask = undefined as any;
+
+        this.updateLoadAvgTask?.cancel();
+        this.updateLoadAvgTask = undefined as any;
+
+        this.previousPidsCpuTime.clear();
+
         super.destroy();
     }
 }

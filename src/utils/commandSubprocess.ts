@@ -7,7 +7,7 @@ export class CommandSubprocess {
     private subprocess: Gio.Subprocess | null = null;
     private stdoutStream: Gio.InputStream | null = null;
     private stderrStream: Gio.InputStream | null = null;
-    private isCleaningUp: boolean = false;
+    private destroyed: boolean = false;
 
     static async run(
         command: string,
@@ -26,7 +26,7 @@ export class CommandSubprocess {
                 const [ok, argv] = GLib.shell_parse_argv(command);
                 if(!ok || !argv || argv.length === 0) {
                     reject(new Error(`Failed to parse command: "${command}"`));
-                    this.cleanup();
+                    this.destroy();
                     return;
                 }
 
@@ -41,13 +41,17 @@ export class CommandSubprocess {
                 try {
                     const init = this.subprocess.init(cancellableTaskManager?.cancellable || null);
                     if(!init) {
-                        reject(new Error('Failed to initialize subprocess'));
-                        this.cleanup();
+                        reject(new Error(`Failed to initialize CommandSubprocess: '${command}'`));
+                        this.destroy();
                         return;
                     }
                 } catch(e: any) {
-                    reject(new Error(`Failed to initialize subprocess: ${e.message}`));
-                    this.cleanup();
+                    reject(
+                        new Error(
+                            `Failed to initialize CommandSubprocess: '${command}' - ${e.message}`
+                        )
+                    );
+                    this.destroy();
                     return;
                 }
 
@@ -57,7 +61,7 @@ export class CommandSubprocess {
                 this.subprocess.wait_async(
                     cancellableTaskManager?.cancellable || null,
                     async (_source, res) => {
-                        if(this.isCleaningUp) {
+                        if(this.destroyed) {
                             return;
                         }
 
@@ -77,7 +81,7 @@ export class CommandSubprocess {
                                 );
                                 reject(
                                     new Error(
-                                        `Command failed with exit status ${exitStatus}: ${stderrContent}`
+                                        `CommandSubprocess failed with exit status ${exitStatus}: ${stderrContent}`
                                     )
                                 );
                             } else {
@@ -92,45 +96,19 @@ export class CommandSubprocess {
                                 }
                             }
                         } catch(e: any) {
-                            reject(new Error(`Failed to read subprocess output: ${e.message}`));
+                            reject(
+                                new Error(`Failed to read CommandSubprocess output: ${e.message}`)
+                            );
                         } finally {
-                            this.cleanup();
+                            this.destroy();
                         }
                     }
                 );
             } catch(e: any) {
-                reject(new Error(`Failed to run command: ${e.message}`));
-                this.cleanup();
+                reject(new Error(`Failed to run CommandSubprocess: ${e.message}`));
+                this.destroy();
             }
         });
-    }
-
-    private cleanup() {
-        if(this.isCleaningUp) {
-            return;
-        }
-        this.isCleaningUp = true;
-
-        if(this.subprocess) {
-            this.subprocess.force_exit();
-            this.subprocess = null;
-        }
-        if(this.stdoutStream) {
-            try {
-                this.stdoutStream.close(null);
-            } catch(e: any) {
-                /* empty */
-            }
-            this.stdoutStream = null;
-        }
-        if(this.stderrStream) {
-            try {
-                this.stderrStream.close(null);
-            } catch(e: any) {
-                /* empty */
-            }
-            this.stderrStream = null;
-        }
     }
 
     private static async readAll(
@@ -174,6 +152,34 @@ export class CommandSubprocess {
 
             readChunk();
         });
+    }
+
+    private destroy() {
+        if(this.destroyed) {
+            return;
+        }
+        this.destroyed = true;
+
+        try {
+            this.subprocess?.force_exit();
+        } catch(e: any) {
+            /* empty */
+        }
+        this.subprocess = null;
+
+        try {
+            this.stdoutStream?.close(null);
+        } catch(e: any) {
+            /* empty */
+        }
+        this.stdoutStream = null;
+
+        try {
+            this.stderrStream?.close(null);
+        } catch(e: any) {
+            /* empty */
+        }
+        this.stderrStream = null;
     }
 }
 

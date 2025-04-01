@@ -195,18 +195,18 @@ export default class NetworkMonitor extends Monitor {
             time: -1,
         };
 
-        this.updateNetworkIOTask.cancel();
-        this.updateRoutesTask.cancel();
-        this.updateWirelessTask.cancel();
+        this.updateNetworkIOTask?.cancel();
+        this.updateRoutesTask?.cancel();
+        this.updateWirelessTask?.cancel();
     }
 
-    start() {
+    override start() {
         super.start();
 
         this.startPublicIpsUpdater();
     }
 
-    stop() {
+    override stop() {
         super.stop();
 
         this.stopPublicIpsUpdater();
@@ -252,7 +252,7 @@ export default class NetworkMonitor extends Monitor {
         });
     }
 
-    startListeningFor(key: string) {
+    override startListeningFor(key: string) {
         super.startListeningFor(key);
 
         if(key === 'topProcesses') {
@@ -267,7 +267,7 @@ export default class NetworkMonitor extends Monitor {
         }
     }
 
-    stopListeningFor(key: string) {
+    override stopListeningFor(key: string) {
         super.stopListeningFor(key);
 
         if(key === 'networkIO') {
@@ -312,7 +312,7 @@ export default class NetworkMonitor extends Monitor {
         return true;
     }
 
-    requestUpdate(key: string) {
+    override requestUpdate(key: string) {
         if(key === 'networkIO' || key === 'detailedNetworkIO') {
             const procNetDev = new PromiseValueHolderStore<string[]>(
                 this.getProNetDevAsync.bind(this)
@@ -1005,8 +1005,22 @@ export default class NetworkMonitor extends Monitor {
         this.notify('topProcesses');
     }
 
-    destroy() {
+    override destroy() {
+        this.stop();
         Config.clear(this);
+
+        this.updateNetworkIOTask?.cancel();
+        this.updateNetworkIOTask = undefined as any;
+
+        this.updateRoutesTask?.cancel();
+        this.updateRoutesTask = undefined as any;
+
+        this.updateWirelessTask?.cancel();
+        this.updateWirelessTask = undefined as any;
+
+        this.updateNethogsTask?.destroy();
+        this.updateNethogsTask = undefined as any;
+
         super.destroy();
     }
 }

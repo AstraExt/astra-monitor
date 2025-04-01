@@ -116,7 +116,9 @@ export default class ProcessorMenu extends MenuBase {
         this.addHistoryGraph();
         this.addTopProcesses();
         this.addLoadAverage();
-        this.addGPUs();
+
+        //TODO TODO TODO TODO TODO TODO TODO
+        //this.addGPUs();
         this.addSystemUptime();
         this.addUtilityButtons('processors');
     }
@@ -821,7 +823,7 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     async onOpen() {
-        if(this.gpuSection.container.visible) {
+        if(this.gpuSection?.container.visible) {
             this.gpuSection.onOpen();
         }
 
@@ -864,13 +866,13 @@ export default class ProcessorMenu extends MenuBase {
         const processorGpuShow = Config.get_boolean('processor-gpu');
         const gpuHeaderShow = Config.get_boolean('gpu-header-show');
         if(processorGpuShow && !gpuHeaderShow) {
-            Utils.gpuMonitor.listen(this, 'gpuUpdateProcessor', () => {});
-            Utils.gpuMonitor.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate', false));
+            Utils.gpuMonitor?.listen(this, 'gpuUpdateProcessor', () => {});
+            Utils.gpuMonitor?.listen(this, 'gpuUpdate', this.update.bind(this, 'gpuUpdate', false));
         }
     }
 
-    async onClose() {
-        this.gpuSection.onClose();
+    onClose() {
+        this.gpuSection?.onClose();
 
         if(this.lazyCoresPopupTimer != null) {
             GLib.source_remove(this.lazyCoresPopupTimer);
@@ -882,15 +884,13 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.unlisten(this, 'topProcesses');
         Utils.processorMonitor.unlisten(this, 'loadAverage');
 
-        Utils.gpuMonitor.unlisten(this, 'gpuUpdate');
-        Utils.gpuMonitor.unlisten(this, 'gpuUpdateProcessor');
+        Utils.gpuMonitor?.unlisten(this, 'gpuUpdate');
+        Utils.gpuMonitor?.unlisten(this, 'gpuUpdateProcessor');
 
         this.queueTopProcessesUpdate = false;
 
-        if(this.menuUptimeTimer) {
-            this.menuUptimeTimer.stop();
-            this.menuUptimeTimer = null;
-        }
+        this.menuUptimeTimer?.stop();
+        this.menuUptimeTimer = null;
     }
 
     clear(code: string = 'all') {
@@ -926,11 +926,11 @@ export default class ProcessorMenu extends MenuBase {
         }
 
         if(code === 'all' || code === 'gpuUpdate') {
-            this.gpuSection.clear();
+            this.gpuSection?.clear();
         }
     }
 
-    protected needsUpdate(code: string, forced: boolean = false) {
+    protected override needsUpdate(code: string, forced: boolean = false) {
         if(forced) {
             const valueTime = Utils.processorMonitor.getCurrentValueTime(code);
             return !(valueTime && Date.now() - valueTime > Utils.processorMonitor.updateFrequency);
@@ -1103,33 +1103,47 @@ export default class ProcessorMenu extends MenuBase {
             return;
         }
         if(code === 'gpuUpdate') {
-            this.gpuSection.update(args[0]);
+            this.gpuSection?.update(args[0]);
             return;
         }
     }
 
-    destroy() {
-        this.close(true);
-        Config.clear(this);
-        Config.clear(this.gpuSection);
-        this.removeAll();
+    override destroy() {
+        this.close(false);
+        this.onClose();
 
-        if(this.cpuInfoPopup) {
-            this.cpuInfoPopup.destroy();
-            (this.cpuInfoPopup as any) = null;
+        Config.clear(this);
+
+        if(this.gpuSection) {
+            Config.clear(this.gpuSection);
+            this.gpuSection.destroy();
+            this.gpuSection = undefined as any;
         }
-        if(this.cpuCategoryUsagePopup) {
-            this.cpuCategoryUsagePopup.destroy();
-            (this.cpuCategoryUsagePopup as any) = null;
+
+        this.processorBar?.destroy();
+        this.processorBar = undefined as any;
+
+        this.graph?.destroy();
+        this.graph = undefined as any;
+
+        this.cpuInfoPopup?.destroy();
+        this.cpuInfoPopup = undefined as any;
+
+        if(this.cpuCoresUsagePopup?.cores) {
+            for(const core of this.cpuCoresUsagePopup.cores.values()) {
+                core.bar?.destroy();
+                core.bar = undefined as any;
+            }
         }
-        if(this.cpuCoresUsagePopup) {
-            this.cpuCoresUsagePopup.destroy();
-            (this.cpuCoresUsagePopup as any) = null;
-        }
-        if(this.topProcessesPopup) {
-            this.topProcessesPopup.destroy();
-            (this.topProcessesPopup as any) = null;
-        }
+
+        this.cpuCategoryUsagePopup?.destroy();
+        this.cpuCategoryUsagePopup = undefined as any;
+
+        this.cpuCoresUsagePopup?.destroy();
+        this.cpuCoresUsagePopup = undefined as any;
+
+        this.topProcessesPopup?.destroy();
+        this.topProcessesPopup = undefined as any;
 
         super.destroy();
     }

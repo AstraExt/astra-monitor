@@ -55,6 +55,7 @@ export default GObject.registerClass(
         protected barSize: number;
         protected bars: St.Widget[][];
         protected hideEmpty: boolean;
+        protected themeContextConnectId?: number;
 
         constructor(params: BarProps) {
             //default params
@@ -154,7 +155,7 @@ export default GObject.registerClass(
             const themeContext = St.ThemeContext.get_for_stage(global.get_stage());
             if(themeContext.get_scale_factor) {
                 this.scaleFactor = themeContext.get_scale_factor();
-                themeContext.connect('notify::scale-factor', obj => {
+                this.themeContextConnectId = themeContext.connect('notify::scale-factor', obj => {
                     this.scaleFactor = obj.get_scale_factor();
                 });
             } else {
@@ -307,8 +308,23 @@ export default GObject.registerClass(
             return size;
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
+
+            if(this.themeContextConnectId) {
+                const themeContext = St.ThemeContext.get_for_stage(global.get_stage());
+                themeContext.disconnect(this.themeContextConnectId);
+                this.themeContextConnectId = undefined as any;
+            }
+
+            for(let i = 0; i < this.bars.length; i++) {
+                for(let j = 0; j < this.bars[i].length; j++) {
+                    this.bars[i][j].destroy();
+                }
+            }
+            this.bars.length = 0;
+
+            this.remove_all_children();
             super.destroy();
         }
     }

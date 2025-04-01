@@ -565,6 +565,7 @@ export default class StorageMenu extends MenuBase {
             if(!devices.has(id)) {
                 this.deviceSection.remove_child(device.container);
                 this.devices.delete(id);
+                device.bar?.destroy();
 
                 this.devicesInfoPopup.get(id)?.close(true);
                 this.devicesInfoPopup.get(id)?.destroy();
@@ -1084,7 +1085,7 @@ export default class StorageMenu extends MenuBase {
         else device.sizeLabel.text = '-';
     }
 
-    addUtilityButtons() {
+    override addUtilityButtons() {
         super.addUtilityButtons('storage', box => {
             const appSys = Shell.AppSystem.get_default();
 
@@ -1187,7 +1188,7 @@ export default class StorageMenu extends MenuBase {
         Utils.storageMonitor.requestUpdate('storageInfo');
     }
 
-    async onClose() {
+    onClose() {
         Utils.storageMonitor.unlisten(this, 'storageIO');
         Utils.storageMonitor.unlisten(this, 'detailedStorageIO');
         Utils.storageMonitor.unlisten(this, 'topProcesses');
@@ -1603,9 +1604,34 @@ export default class StorageMenu extends MenuBase {
         }
     }
 
-    destroy() {
-        this.close(true);
-        this.removeAll();
+    override destroy() {
+        Config.clear(this);
+
+        this.storageActivityPopup?.destroy();
+        this.storageActivityPopup = undefined as any;
+
+        this.graph?.destroy();
+        this.graph = undefined as any;
+
+        this.topProcessesPopup?.destroy();
+        this.topProcessesPopup = undefined as any;
+
+        for(const [id, device] of this.devices.entries()) {
+            device.bar?.destroy();
+            device.bar = undefined as any;
+
+            this.devicesInfoPopup.get(id)?.close(true);
+            this.devicesInfoPopup.get(id)?.destroy();
+            this.devicesInfoPopup.delete(id);
+
+            this.devicesTotalsPopup.get(id)?.close(true);
+            this.devicesTotalsPopup.get(id)?.destroy();
+            this.devicesTotalsPopup.delete(id);
+        }
+
+        this.deviceSection.remove_all_children();
+        this.deviceSection?.destroy();
+        this.deviceSection = undefined as any;
 
         super.destroy();
     }

@@ -41,7 +41,7 @@ export default GObject.registerClass(
             return 'storage-menu-device-color';
         }
 
-        setStyle() {
+        override setStyle() {
             super.setStyle();
 
             this.colors = [Config.get_string(this.colorConfig) ?? 'rgba(29,172,214,1.0)'];

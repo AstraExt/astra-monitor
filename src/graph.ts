@@ -24,6 +24,7 @@ import Clutter from 'gi://Clutter';
 
 import Utils from './utils/utils.js';
 import Config from './config.js';
+import Signal from './signal.js';
 
 //cairo.Context has no types and is currently empty
 export type CairoContext = any;
@@ -98,7 +99,7 @@ export default GObject.registerClass(
 
             this.setStyle();
 
-            this.historyChart.connect('repaint', this.repaint.bind(this));
+            Signal.connect(this.historyChart, 'repaint', this.repaint.bind(this));
             Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
         }
 
@@ -201,8 +202,17 @@ export default GObject.registerClass(
             this.historyChart.queue_repaint();
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
+            Signal.clear(this.historyChart);
+
+            this.historyChart?.destroy();
+            this.historyChart = undefined as any;
+
+            this.grid?.destroy();
+            this.grid = undefined as any;
+            this.historyGrid = undefined as any;
+
             super.destroy();
         }
     }

@@ -439,28 +439,51 @@ export default GObject.registerClass(
             this.tooltipMenu.close(false);
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
             Utils.networkMonitor.unlisten(this);
 
-            Config.clear(this.icon);
-
+            if(this.icon) {
+                Config.clear(this.icon);
+                Utils.networkMonitor.unlisten(this.icon);
+                this.icon.destroy();
+                this.icon = undefined as any;
+            }
             if(this.bars) {
                 Config.clear(this.bars);
                 Utils.networkMonitor.unlisten(this.bars);
+                this.bars.destroy();
+                this.bars = undefined as any;
             }
             if(this.graph) {
                 Config.clear(this.graph);
                 Utils.networkMonitor.unlisten(this.graph);
+                this.graph.destroy();
+                this.graph = undefined as any;
             }
             if(this.speedContainer) {
                 Config.clear(this.speedContainer);
                 Utils.networkMonitor.unlisten(this.speedContainer);
+                this.speedContainer = undefined as any;
+            }
+            if(this.speed) {
+                Config.clear(this.speed);
+                Utils.networkMonitor.unlisten(this.speed);
+                this.speed = undefined as any;
+            }
+            if(this.tooltipItem) {
+                Config.clear(this.tooltipItem);
+                Utils.networkMonitor.unlisten(this.tooltipItem);
+                this.tooltipItem.destroy();
+                this.tooltipItem = undefined as any;
             }
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.networkMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
+                Main.uiGroup.remove_child(this.tooltipMenu.actor);
+                this.tooltipMenu.destroy();
+                this.tooltipMenu = undefined as any;
             }
 
             super.destroy();

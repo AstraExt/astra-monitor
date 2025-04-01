@@ -45,7 +45,7 @@ export default GObject.registerClass(
             );
         }
 
-        setStyle() {
+        override setStyle() {
             super.setStyle();
 
             this.colors = [

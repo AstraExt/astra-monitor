@@ -40,7 +40,7 @@ export default GObject.registerClass(
             Config.connect(this, 'changed::memory-menu-swap-color', this.setStyle.bind(this));
         }
 
-        setStyle() {
+        override setStyle() {
             super.setStyle();
 
             this.colors = [Config.get_string('memory-menu-swap-color') ?? 'rgba(29,172,214,1.0)'];

@@ -236,18 +236,18 @@ export default class SensorsMonitor extends Monitor {
     }
 
     reset() {
-        this.updateSensorsDataTask.cancel();
+        this.updateSensorsDataTask?.cancel();
 
         this.ignoredSensorsRegex = null;
         this.ignoredSensorsCategoryRegex = null;
         this.ignoredSensorsAttributeRegex = null;
     }
 
-    start() {
+    override start() {
         super.start();
     }
 
-    stop() {
+    override stop() {
         super.stop();
         this.reset();
     }
@@ -265,7 +265,7 @@ export default class SensorsMonitor extends Monitor {
         return true;
     }
 
-    requestUpdate(key: string) {
+    override requestUpdate(key: string) {
         if(key === 'sensorsData') {
             const lmSensorsData = new PromiseValueHolderStore<string | null>(
                 this.getLmSensorsDataAsync.bind(this)
@@ -561,8 +561,13 @@ export default class SensorsMonitor extends Monitor {
         return true;
     }
 
-    destroy() {
+    override destroy() {
+        this.stop();
         Config.clear(this);
+
+        this.updateSensorsDataTask?.cancel();
+        this.updateSensorsDataTask = undefined as any;
+
         super.destroy();
     }
 }

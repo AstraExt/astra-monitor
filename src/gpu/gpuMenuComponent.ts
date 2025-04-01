@@ -27,7 +27,6 @@ import MenuBase from '../menu.js';
 import Utils, { GpuInfo } from '../utils/utils.js';
 import Grid from '../grid.js';
 import Config from '../config.js';
-
 import { DisplayData, GenericGpuInfo } from '../gpu/gpuMonitor.js';
 import GpuActivityBars from '../gpu/gpuActivityBars.js';
 import GpuMemoryBars from '../gpu/gpuMemoryBars.js';
@@ -162,13 +161,14 @@ export default class GpuMenuComponent {
     private topProcesses!: Map<string, TopProcess[]>;
     private mainSensors!: Map<string, Sensor[]>;
 
-    private sections: Section[] = [];
+    private sections: Section[];
 
     constructor(params: GpuComponentProps) {
         this.parent = params.parent;
         if(params.compact) this.compact = params.compact;
         if(params.title) this.title = params.title;
 
+        this.sections = [];
         this.topProcesses = new Map();
         this.mainSensors = new Map();
 
@@ -1990,9 +1990,58 @@ export default class GpuMenuComponent {
     public clear() {}
 
     public destroy() {
+        this.onClose();
         Config.clear(this);
 
         if(this.title) Config.clear(this.title);
         if(this.noGPULabel) Config.clear(this.noGPULabel);
+
+        if(this.sections) {
+            for(const section of this.sections) {
+                section.vram.bar?.destroy();
+                section.vram.bar = undefined as any;
+
+                section.activity.gfxBar?.destroy();
+                section.activity.gfxBar = undefined as any;
+
+                if(section.activityPopup) {
+                    for(const pipe of section.activityPopup.pipes) {
+                        pipe.bar?.destroy();
+                        pipe.bar = undefined as any;
+                    }
+                    section.activityPopup.destroy();
+                    section.activityPopup = undefined as any;
+                }
+
+                if(section.vramPopup) {
+                    for(const pipe of section.vramPopup.pipes) {
+                        pipe.bar?.destroy();
+                        pipe.bar = undefined as any;
+                    }
+                    section.vramPopup.destroy();
+                    section.vramPopup = undefined as any;
+                }
+
+                section.infoPopup?.destroy();
+                section.infoPopup = undefined as any;
+
+                section.displaysPopup?.destroy();
+                section.displaysPopup = undefined as any;
+
+                section.topProcessesPopup?.destroy();
+                section.topProcessesPopup = undefined as any;
+
+                section.sensorsPopup?.destroy();
+                section.sensorsPopup = undefined as any;
+            }
+            this.sections = undefined as any;
+        }
+
+        this.topProcesses = undefined as any;
+        this.mainSensors = undefined as any;
+
+        this.container?.remove_all_children();
+        this.container?.destroy();
+        this.container = undefined as any;
     }
 }

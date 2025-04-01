@@ -29,6 +29,7 @@ import ContinuousTaskManager, {
 } from '../utils/continuousTaskManager.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import { EDID, EdidParser } from '../utils/edidParser.js';
+
 // eslint-disable-next-line no-shadow
 enum GpuSensorPriority {
     NONE,
@@ -427,20 +428,20 @@ export default class GpuMonitor extends Monitor {
         }
     }
 
-    restart() {
+    override restart() {
         if(!Config.get_boolean('gpu-header-show') && !this.isListeningFor('gpuUpdateProcessor'))
             return;
         super.restart();
     }
 
     reset() {
-        this.updateDisplaysTask.cancel();
+        this.updateDisplaysTask?.cancel();
 
         this.infoPipesCache = undefined;
         this.infoPipesCacheTime = 0;
     }
 
-    start() {
+    override start() {
         this.startGpuTask();
 
         if(this.status) return;
@@ -448,7 +449,7 @@ export default class GpuMonitor extends Monitor {
         super.start();
     }
 
-    stop() {
+    override stop() {
         if(!this.status) return;
         this.status = false;
 
@@ -523,8 +524,8 @@ export default class GpuMonitor extends Monitor {
     }
 
     private stopGpuTask() {
-        if(this.updateAmdGpuTask.isRunning) this.updateAmdGpuTask.stop();
-        if(this.updateNvidiaGpuTask.isRunning) this.updateNvidiaGpuTask.stop();
+        if(this.updateAmdGpuTask?.isRunning) this.updateAmdGpuTask.stop();
+        if(this.updateNvidiaGpuTask?.isRunning) this.updateNvidiaGpuTask.stop();
     }
 
     update(): boolean {
@@ -537,7 +538,7 @@ export default class GpuMonitor extends Monitor {
         return true;
     }
 
-    requestUpdate(key: string) {
+    override requestUpdate(key: string) {
         if(key === 'displays') {
             if(!this.updateDisplaysTask.isRunning) {
                 this.runUpdate('displays');
@@ -2196,8 +2197,15 @@ export default class GpuMonitor extends Monitor {
         return true;
     }
 
-    destroy() {
+    override destroy() {
+        this.stop();
         Config.clear(this);
+
+        this.updateAmdGpuTask?.destroy();
+        this.updateAmdGpuTask = undefined as any;
+        this.updateNvidiaGpuTask?.destroy();
+        this.updateNvidiaGpuTask = undefined as any;
+
         super.destroy();
     }
 }

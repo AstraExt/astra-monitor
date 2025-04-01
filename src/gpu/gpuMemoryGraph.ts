@@ -165,7 +165,7 @@ export default GObject.registerClass(
             ctx.$dispose();
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
             super.destroy();
         }

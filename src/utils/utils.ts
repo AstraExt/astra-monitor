@@ -22,6 +22,7 @@ import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
 import Config from '../config.js';
+import Signal from '../signal.js';
 import ProcessorMonitor from '../processor/processorMonitor.js';
 import GpuMonitor from '../gpu/gpuMonitor.js';
 import MemoryMonitor from '../memory/memoryMonitor.js';
@@ -38,7 +39,6 @@ type GTop = typeof import('gi://GTop').default;
 type Extension = import('resource:///org/gnome/shell/extensions/extension.js').Extension;
 type ExtensionMetadata =
     import('resource:///org/gnome/shell/extensions/extension.js').ExtensionMetadata;
-type Button = import('resource:///org/gnome/shell/ui/panelMenu.js').Button;
 
 type UtilsInitProps = {
     service: string;
@@ -161,8 +161,6 @@ export default class Utils {
     static extension?: Extension;
     static metadata?: ExtensionMetadata;
 
-    static container: Button;
-
     static processorMonitor: ProcessorMonitor;
     static gpuMonitor: GpuMonitor;
     static memoryMonitor: MemoryMonitor;
@@ -237,20 +235,34 @@ export default class Utils {
     }
 
     static clear() {
-        Utils.xmlParser = null;
-        Utils.performanceMap = null;
-        Utils.commandsPath = null;
-
-        for(const task of Utils.lowPriorityTasks) GLib.source_remove(task);
+        for(const task of Utils.lowPriorityTasks) {
+            try {
+                GLib.source_remove(task);
+            } catch(e) {
+                Utils.warn('Error removing lowPriorityTask', e instanceof Error ? e : undefined);
+            }
+        }
         Utils.lowPriorityTasks = [];
 
-        for(const task of Utils.timeoutTasks) GLib.source_remove(task);
+        for(const task of Utils.timeoutTasks) {
+            try {
+                GLib.source_remove(task);
+            } catch(e) {
+                Utils.warn('Error removing timeoutTask', e instanceof Error ? e : undefined);
+            }
+        }
         Utils.timeoutTasks = [];
 
         try {
             Config.clearAll();
         } catch(e: any) {
             Utils.error('Error clearing config', e);
+        }
+
+        try {
+            Signal.clearAll();
+        } catch(e: any) {
+            Utils.error('Error clearing signal', e);
         }
 
         try {
@@ -275,18 +287,31 @@ export default class Utils {
             Utils.error('Error stopping or destroying monitor', e);
         }
 
+        Utils.xmlParser = null;
+        Utils.performanceMap = null;
+        Utils.commandsPath = null;
+        Utils.lspciCached = undefined;
         Utils.lastCachedHwmonDevices = 0;
-        Utils.cachedHwmonDevices = new Map();
-        (Utils.processorMonitor as any) = undefined;
-        (Utils.gpuMonitor as any) = undefined;
-        (Utils.memoryMonitor as any) = undefined;
-        (Utils.storageMonitor as any) = undefined;
-        (Utils.networkMonitor as any) = undefined;
-        (Utils.sensorsMonitor as any) = undefined;
+        Utils.cachedHwmonDevices = undefined as any;
+        Utils.processorMonitor = undefined as any;
+        Utils.gpuMonitor = undefined as any;
+        Utils.memoryMonitor = undefined as any;
+        Utils.storageMonitor = undefined as any;
+        Utils.networkMonitor = undefined as any;
+        Utils.sensorsMonitor = undefined as any;
 
         Utils.extension = undefined;
         Utils.metadata = undefined;
         Config.settings = undefined;
+
+        if(Utils.uptimeTimer) {
+            try {
+                GLib.source_remove(Utils.uptimeTimer);
+                Utils.uptimeTimer = 0;
+            } catch(e) {
+                Utils.warn('Error removing uptime timer', e instanceof Error ? e : undefined);
+            }
+        }
     }
 
     static async initializeGTop() {
@@ -412,6 +437,7 @@ export default class Utils {
 
     static commandPathLookup(fullCommand: string): string | false {
         const [command, ..._args] = fullCommand.split(' ');
+
         if(Utils.commandsPath!.has(command)) {
             return Utils.commandsPath!.get(command) ?? false;
         }
@@ -643,16 +669,6 @@ export default class Utils {
             collecting--;
         }
         return results;
-    }
-
-    static GPUIsInUse(lspciOutputs: string[], gpu: string): boolean {
-        //TODO: make this more robust:
-        for(const lspciOutput of lspciOutputs) {
-            const isPassthrough = lspciOutput.includes('vfio-pci');
-            if(isPassthrough) continue;
-            if(lspciOutput.toLowerCase().includes(gpu)) return true;
-        }
-        return false;
     }
 
     static hasAmdGpuTop(): boolean {
@@ -1290,7 +1306,6 @@ export default class Utils {
             }
 
             const lspciOutput = decoder.decode(stdout);
-
             const filteredOutputs = Utils.filterLspciOutput(
                 lspciOutput,
                 ['vga', 'display controller', '3d controller'],
@@ -1576,7 +1591,9 @@ export default class Utils {
     static uptimeTimer: number = 0;
     static getUptime(callback: (uptime: number) => void): UptimeTimer {
         const syncTime = () => {
-            if(Utils.uptimeTimer) GLib.source_remove(Utils.uptimeTimer);
+            if(Utils.uptimeTimer) {
+                GLib.source_remove(Utils.uptimeTimer);
+            }
             Utils.cachedUptimeSeconds = 0;
 
             try {
@@ -1603,7 +1620,7 @@ export default class Utils {
 
         return {
             stop: () => {
-                if(Utils.uptimeTimer !== 0) {
+                if(Utils.uptimeTimer) {
                     GLib.source_remove(Utils.uptimeTimer);
                     Utils.uptimeTimer = 0;
                 }
@@ -1730,7 +1747,7 @@ export default class Utils {
                 Utils.error('No disk data found or lsblk command failed');
             }
         } catch(e: any) {
-            Utils.error('Error getting disk list', e);
+            Utils.error('Error getting disk list async: ' + e, e);
         }
         return disks;
     }

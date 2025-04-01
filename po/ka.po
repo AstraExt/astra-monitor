@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 15:31+0100\n"
+"POT-Creation-Date: 2025-03-31 23:47+0200\n"
 "PO-Revision-Date: 2024-04-27 11:41+0200\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -26,96 +26,96 @@ msgstr ""
 msgid "CPU"
 msgstr "CPU"
 
-#: src/processor/processorMenu.js:100
+#: src/processor/processorMenu.js:99
 msgid "CPU info"
 msgstr "ინფორმაცია CPU-ს შესახებ"
 
-#: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
+#: src/processor/processorMenu.js:179 src/memory/memoryMenu.js:50
 #: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:270
 #: src/gpu/gpuMenuComponent.js:1195
 msgid "Total:"
 msgstr "სულ:"
 
-#: src/processor/processorMenu.js:188
+#: src/processor/processorMenu.js:187
 msgid "User:"
 msgstr "მომხმარებელი:"
 
-#: src/processor/processorMenu.js:196
+#: src/processor/processorMenu.js:195
 msgid "System:"
 msgstr "სისტემა:"
 
-#: src/processor/processorMenu.js:225
+#: src/processor/processorMenu.js:224
 msgid "CPU Category Usage Raw Info"
 msgstr "დაუმუშავებელი ინფორმაცია CPU-ს გამოყენების კატეგორიის შესახებ"
 
-#: src/processor/processorMenu.js:227
+#: src/processor/processorMenu.js:226
 msgid "User"
 msgstr "მომხმარებელი"
 
-#: src/processor/processorMenu.js:234
+#: src/processor/processorMenu.js:233
 msgid "Nice"
 msgstr "თანხმობადობა"
 
-#: src/processor/processorMenu.js:241
+#: src/processor/processorMenu.js:240
 msgid "System"
 msgstr "სისტემა"
 
-#: src/processor/processorMenu.js:248
+#: src/processor/processorMenu.js:247
 msgid "Idle"
 msgstr "უმოქმედო"
 
-#: src/processor/processorMenu.js:255
+#: src/processor/processorMenu.js:254
 msgid "I/O wait"
 msgstr "შეყვანა/გამოყვანის ლოდინი"
 
-#: src/processor/processorMenu.js:262
+#: src/processor/processorMenu.js:261
 msgid "IRQ"
 msgstr "შეწყვეტა"
 
-#: src/processor/processorMenu.js:269
+#: src/processor/processorMenu.js:268
 msgid "Soft IRQ"
 msgstr "პროგრამული შეწყვეტა"
 
-#: src/processor/processorMenu.js:276
+#: src/processor/processorMenu.js:275
 msgid "Steal"
 msgstr "მოპარვა"
 
-#: src/processor/processorMenu.js:338
+#: src/processor/processorMenu.js:337
 msgid "CPU Cores Usage Info"
 msgstr "ინფორმაცია CPU-ს ბირთვების გამოყენების შესახებ"
 
-#: src/processor/processorMenu.js:380
+#: src/processor/processorMenu.js:379
 msgid "GHz"
 msgstr "გჰც"
 
-#: src/processor/processorMenu.js:395 src/processor/processorMenu.js:437
+#: src/processor/processorMenu.js:394 src/processor/processorMenu.js:436
 #: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
-#: src/storage/storageMenu.js:1178 src/storage/storageMenu.js:1179
-#: src/storage/storageMenu.js:1188 src/storage/storageMenu.js:1189
+#: src/storage/storageMenu.js:1179 src/storage/storageMenu.js:1180
+#: src/storage/storageMenu.js:1189 src/storage/storageMenu.js:1190
 #: src/memory/memoryMenu.js:247 src/memory/memoryMenu.js:294
 msgid "Top processes"
 msgstr "ტოპ პროცესები"
 
-#: src/processor/processorMenu.js:470
+#: src/processor/processorMenu.js:469
 msgid "Load average"
 msgstr "დატვირთვის საშუალო"
 
-#: src/processor/processorMenu.js:490
+#: src/processor/processorMenu.js:489
 msgctxt "short for 1 minute"
 msgid "1m"
 msgstr "1წთ"
 
-#: src/processor/processorMenu.js:510
+#: src/processor/processorMenu.js:509
 msgctxt "short for 5 minutes"
 msgid "5m"
 msgstr "5წთ"
 
-#: src/processor/processorMenu.js:530
+#: src/processor/processorMenu.js:529
 msgctxt "short for 15 minutes"
 msgid "15m"
 msgstr "15წთ"
 
-#: src/processor/processorMenu.js:579
+#: src/processor/processorMenu.js:578
 msgid "System uptime"
 msgstr "სისტემის მუშაობის დრო"
 
@@ -137,14 +137,14 @@ msgstr "ახლა"
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:112
 #: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:365
-#: src/gpu/gpuMenuComponent.js:1320 prefs.js:378
+#: src/gpu/gpuMenuComponent.js:1320 prefs.js:379
 msgid "Sensors"
 msgstr "სენსორები"
 
 #: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
 #: src/prefs/network.js:82 src/prefs/gpu.js:81 src/prefs/gpu.js:83
-#: src/prefs/processors.js:80 src/prefs/processors.js:82 prefs.js:225
-#: prefs.js:259 prefs.js:285 prefs.js:319 prefs.js:353 prefs.js:387
+#: src/prefs/processors.js:80 src/prefs/processors.js:82 prefs.js:226
+#: prefs.js:260 prefs.js:286 prefs.js:320 prefs.js:354 prefs.js:388
 msgid "General"
 msgstr "საერთო"
 
@@ -220,8 +220,8 @@ msgstr "ავტო"
 #: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
 #: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
 #: src/prefs/network.js:186 src/prefs/gpu.js:173 src/prefs/gpu.js:175
-#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:233
-#: prefs.js:267 prefs.js:293 prefs.js:327 prefs.js:361 prefs.js:395
+#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:234
+#: prefs.js:268 prefs.js:294 prefs.js:328 prefs.js:362 prefs.js:396
 msgid "Header"
 msgstr "სათაური"
 
@@ -372,8 +372,8 @@ msgstr "სენსორი 5-ის მინიშნება"
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
 #: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
-#: src/prefs/processors.js:193 prefs.js:241 prefs.js:301 prefs.js:335
-#: prefs.js:369
+#: src/prefs/processors.js:193 prefs.js:242 prefs.js:302 prefs.js:336
+#: prefs.js:370
 msgid "Menu"
 msgstr "მენიუ"
 
@@ -382,7 +382,7 @@ msgid "Empty for now"
 msgstr "ამჟამად ცარიელი"
 
 #: src/prefs/utility.js:36 src/prefs/utility.js:49 src/prefs/utility.js:52
-#: prefs.js:411
+#: prefs.js:412
 msgid "Utility"
 msgstr "ხელსაწყოები"
 
@@ -451,13 +451,15 @@ msgstr "ტოპ პროცესები"
 
 #: src/prefs/utility.js:155
 #, fuzzy
-msgid "Experimental posix_spawn() subprocess monitoring."
+msgid ""
+"Experimental posix_spawn() subprocess monitoring.\n"
+"This might help with UI performance issues."
 msgstr ""
 "ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
 
 #: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
 #: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
-#: prefs.js:276
+#: prefs.js:277
 msgid "Memory"
 msgstr "მეხსიერება"
 
@@ -524,8 +526,8 @@ msgid "Memory Usage"
 msgstr "მეხსიერების გამოყენება"
 
 #: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
-#: src/network/networkMenu.js:161 src/network/networkMenu.js:296
-#: src/network/networkMenu.js:298 src/gpu/gpuMenuComponent.js:308
+#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
+#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:308
 #: src/gpu/gpuMenuComponent.js:1234
 msgid "Top Processes"
 msgstr "ტოპ პროცესები"
@@ -650,11 +652,11 @@ msgstr "Swap-ის სვეტის ფერი"
 msgid "Swap bar main color."
 msgstr "Swap-ის სვეტის ძირითადი ფერი."
 
-#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:419
+#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:420
 msgid "About"
 msgstr "შესახებ"
 
-#: src/prefs/about.js:48 src/network/networkMenu.js:909
+#: src/prefs/about.js:48 src/network/networkMenu.js:910
 msgid "Info"
 msgstr "ინფო"
 
@@ -683,7 +685,7 @@ msgid "GNOME Extensions page"
 msgstr "GNOME-ს გაფართოებების გვერდი"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:310
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:311
 msgid "Storage"
 msgstr "მეხსიერება"
 
@@ -946,7 +948,7 @@ msgid "Move down"
 msgstr "ქვემოთ გადატანა"
 
 #: src/prefs/profiles.js:36 src/prefs/profiles.js:49
-#: src/profiles/profilesMenu.js:32 prefs.js:183
+#: src/profiles/profilesMenu.js:32 prefs.js:184
 msgid "Profiles"
 msgstr ""
 
@@ -998,7 +1000,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: src/prefs/welcome.js:33 prefs.js:167
+#: src/prefs/welcome.js:33 prefs.js:168
 msgid "Welcome"
 msgstr "კეთილი იყოს თქვენი მობრძანება"
 
@@ -1132,7 +1134,7 @@ msgid "Become a patron"
 msgstr "გახდით მეცენატი"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:41 prefs.js:344
+#: src/prefs/network.js:84 src/network/networkMenu.js:42 prefs.js:345
 msgid "Network"
 msgstr "ქსელი"
 
@@ -1222,7 +1224,7 @@ msgid "<b>Download</b> IO arrow color."
 msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
 
 #: src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56 prefs.js:199
+#: src/prefs/visualization.js:56 prefs.js:200
 msgid "Visualization"
 msgstr "ვიზუალიზაცია"
 
@@ -1430,7 +1432,7 @@ msgstr "მონიტორის დალაგება"
 
 #: src/prefs/gpu.js:42 src/prefs/gpu.js:55 src/prefs/gpu.js:68
 #: src/prefs/gpu.js:108 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:46 prefs.js:250
+#: src/gpu/gpuMenuComponent.js:46 prefs.js:251
 msgid "GPU"
 msgstr "GPU"
 
@@ -1555,7 +1557,7 @@ msgid "Memory Value"
 msgstr "მეხსიერების მნიშვნელობა"
 
 #: src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67 prefs.js:216
+#: src/prefs/processors.js:67 prefs.js:217
 msgid "Processors"
 msgstr "პროცესორები"
 
@@ -1593,7 +1595,7 @@ msgid "Set 0 to disable. Value is percentage of total cpu usage."
 msgstr ""
 "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს გამოყენების პროცენტია."
 
-#: src/prefs/processors.js:145 src/network/networkMenu.js:1190
+#: src/prefs/processors.js:145 src/network/networkMenu.js:1191
 msgid "Frequency"
 msgstr "სიხშირე"
 
@@ -1667,267 +1669,267 @@ msgid_plural "%d sensors"
 msgstr[0] "%d სენსორი"
 msgstr[1] "%d სენსორი"
 
-#: src/network/networkMenu.js:76
+#: src/network/networkMenu.js:77
 msgid "Global Upload:"
 msgstr "გლობალური ატვირთვა:"
 
-#: src/network/networkMenu.js:88
+#: src/network/networkMenu.js:89
 msgid "Global Download:"
 msgstr "გლობალური გადმოტვირთვა:"
 
-#: src/network/networkMenu.js:113
+#: src/network/networkMenu.js:114
 #, fuzzy
 msgid "Upload Activity"
 msgstr "ატვირთვის აქტივობა"
 
-#: src/network/networkMenu.js:115 src/network/networkMenu.js:137
-#: src/network/networkMenu.js:1099 src/network/networkMenu.js:1123
+#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
+#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
 #: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
 msgid "Total"
 msgstr "სულ"
 
-#: src/network/networkMenu.js:122 src/network/networkMenu.js:144
-#: src/network/networkMenu.js:1106 src/network/networkMenu.js:1130
+#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
+#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
 msgid "Packets"
 msgstr "პაკეტები"
 
-#: src/network/networkMenu.js:129 src/network/networkMenu.js:151
-#: src/network/networkMenu.js:1113 src/network/networkMenu.js:1140
+#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
+#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
 msgid "Errors/Dropped"
 msgstr "შეცდომები/დაკარგული"
 
-#: src/network/networkMenu.js:135
+#: src/network/networkMenu.js:136
 #, fuzzy
 msgid "Download Activity"
 msgstr "გადმოტვირთვის აქტივობა"
 
-#: src/network/networkMenu.js:167
+#: src/network/networkMenu.js:168
 #, fuzzy
 msgid "(click to show)"
 msgstr "დააჭირეთ გასაახლებლად"
 
-#: src/network/networkMenu.js:380
+#: src/network/networkMenu.js:381
 msgid "Public IP"
 msgstr "საჯარო IP"
 
-#: src/network/networkMenu.js:390
+#: src/network/networkMenu.js:391
 msgid "Public IPv4:"
 msgstr "საჯარო IPv4:"
 
-#: src/network/networkMenu.js:407
+#: src/network/networkMenu.js:408
 msgid "Public IPv6:"
 msgstr "საჯარო IPv6:"
 
-#: src/network/networkMenu.js:454
+#: src/network/networkMenu.js:455
 msgid "Updated a long time ago"
 msgstr "განახლებულია დიდი ხნის წინ"
 
-#: src/network/networkMenu.js:456
+#: src/network/networkMenu.js:457
 #, fuzzy
 msgid "Updated a few seconds ago"
 msgstr "განახლებულია რამდენიმე წამის წინ"
 
-#: src/network/networkMenu.js:458
+#: src/network/networkMenu.js:459
 msgid "Updated less than a minute ago"
 msgstr "განახლებულია ერთ წუთზე ნაკლები დროის წინ"
 
-#: src/network/networkMenu.js:460
+#: src/network/networkMenu.js:461
 msgid "Updated about a minute ago"
 msgstr "განახლებულია დაახლოებით ერთი წუთის წინ"
 
-#: src/network/networkMenu.js:462
+#: src/network/networkMenu.js:463
 msgid "Updated about 2 minutes ago"
 msgstr "განახლებულია დაახლოებით 2 წუთის წინ"
 
-#: src/network/networkMenu.js:464
+#: src/network/networkMenu.js:465
 msgid "Updated about 5 minutes ago"
 msgstr "განახლებულია დაახლოებით 5 წუთის წინ"
 
-#: src/network/networkMenu.js:466
+#: src/network/networkMenu.js:467
 msgid "Updated more than 5 minutes ago"
 msgstr "განახლებულია 5 წუთზე მეტი დროის წინ"
 
-#: src/network/networkMenu.js:467
+#: src/network/networkMenu.js:468
 msgid "Click to refresh"
 msgstr "დააჭირეთ გასაახლებლად"
 
-#: src/network/networkMenu.js:469
+#: src/network/networkMenu.js:470
 msgid "Refreshing..."
 msgstr "განახლება..."
 
-#: src/network/networkMenu.js:471
+#: src/network/networkMenu.js:472
 msgid "Done"
 msgstr "მზადაა"
 
-#: src/network/networkMenu.js:475
+#: src/network/networkMenu.js:476
 #, fuzzy
 msgid "Default Routes"
 msgstr "ნაგულისხმები მარშრუტები"
 
-#: src/network/networkMenu.js:514
+#: src/network/networkMenu.js:515
 msgid "Route"
 msgstr "მარშრუტი"
 
-#: src/network/networkMenu.js:520
+#: src/network/networkMenu.js:521
 msgid "Metric"
 msgstr "მეტრული"
 
-#: src/network/networkMenu.js:527
+#: src/network/networkMenu.js:528
 #, fuzzy
 msgid "Device"
 msgstr "მოწყობილობა"
 
-#: src/network/networkMenu.js:534
+#: src/network/networkMenu.js:535
 msgid "Gateway"
 msgstr "გეითვეი"
 
-#: src/network/networkMenu.js:541 src/storage/storageMenu.js:600
+#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
 msgid "Type"
 msgstr "ტიპი"
 
-#: src/network/networkMenu.js:548
+#: src/network/networkMenu.js:549
 #, fuzzy
 msgid "Destination"
 msgstr "დანიშნულება"
 
-#: src/network/networkMenu.js:555
+#: src/network/networkMenu.js:556
 msgid "Protocol"
 msgstr "პროტოკოლი"
 
-#: src/network/networkMenu.js:562 src/network/networkMenu.js:1070
+#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
 msgid "Scope"
 msgstr "Scope"
 
-#: src/network/networkMenu.js:569
+#: src/network/networkMenu.js:570
 msgid "Flags"
 msgstr "დროშები"
 
-#: src/network/networkMenu.js:598
+#: src/network/networkMenu.js:599
 msgid "Interfaces"
 msgstr "ინტერფეისები"
 
-#: src/network/networkMenu.js:601
+#: src/network/networkMenu.js:602
 msgid "No network interface found"
 msgstr "ქსელური ინტერფეისი ვერ მოიძებნა"
 
-#: src/network/networkMenu.js:809
+#: src/network/networkMenu.js:810
 msgctxt "short for upload"
 msgid "U"
 msgstr "ატვ"
 
-#: src/network/networkMenu.js:835
+#: src/network/networkMenu.js:836
 msgctxt "short for download"
 msgid "D"
 msgstr "გადმ"
 
-#: src/network/networkMenu.js:912 src/storage/storageMenu.js:599
+#: src/network/networkMenu.js:913 src/storage/storageMenu.js:600
 #: src/gpu/gpuMenuComponent.js:438 src/gpu/gpuMenuComponent.js:1246
 #: src/gpu/gpuMenuComponent.js:1277
 msgid "Name"
 msgstr "სახელი"
 
-#: src/network/networkMenu.js:919
+#: src/network/networkMenu.js:920
 #, fuzzy
 msgid "Alt Names"
 msgstr "ალტერნატიული სახელები"
 
-#: src/network/networkMenu.js:928
+#: src/network/networkMenu.js:929
 #, fuzzy
 msgid "Interface Index"
 msgstr "ინტერფეისების ინდექსი"
 
-#: src/network/networkMenu.js:937
+#: src/network/networkMenu.js:938
 msgid "MAC Address"
 msgstr "MAC მისამართი"
 
-#: src/network/networkMenu.js:946 src/storage/storageMenu.js:689
+#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
 msgid "Group"
 msgstr "ჯგუფი"
 
-#: src/network/networkMenu.js:955
+#: src/network/networkMenu.js:956
 #, fuzzy
 msgid "Speed"
 msgstr "სიჩქარე"
 
-#: src/network/networkMenu.js:964
+#: src/network/networkMenu.js:965
 msgid "Duplex"
 msgstr "დუპლექსი"
 
-#: src/network/networkMenu.js:973
+#: src/network/networkMenu.js:974
 msgid "MTU"
 msgstr "MTU"
 
-#: src/network/networkMenu.js:982
+#: src/network/networkMenu.js:983
 msgid "Tx Queue Length"
 msgstr "Tx რიგის სიგრძე"
 
-#: src/network/networkMenu.js:991
+#: src/network/networkMenu.js:992
 msgid "Link Type"
 msgstr "კავშირის ტიპი"
 
-#: src/network/networkMenu.js:1000
+#: src/network/networkMenu.js:1001
 msgid "Operative State"
 msgstr "ოპერატიული მდგომარეობა"
 
-#: src/network/networkMenu.js:1009
+#: src/network/networkMenu.js:1010
 msgid "Qdisc"
 msgstr "Qdisc"
 
-#: src/network/networkMenu.js:1042
+#: src/network/networkMenu.js:1043
 msgid "Family"
 msgstr "ოჯახი"
 
-#: src/network/networkMenu.js:1049
+#: src/network/networkMenu.js:1050
 msgid "Local"
 msgstr "ადგილობრივი"
 
-#: src/network/networkMenu.js:1056
+#: src/network/networkMenu.js:1057
 msgid "Prefix Length"
 msgstr "პრეფიქსის სიგრძე"
 
-#: src/network/networkMenu.js:1063
+#: src/network/networkMenu.js:1064
 msgid "Broadcast"
 msgstr "მაუწყებლობა"
 
-#: src/network/networkMenu.js:1096
+#: src/network/networkMenu.js:1097
 #, fuzzy
 msgid "Upload"
 msgstr "ატვირთვა"
 
-#: src/network/networkMenu.js:1120
+#: src/network/networkMenu.js:1121
 #, fuzzy
 msgid "Download"
 msgstr "გადმოტვირთვა"
 
-#: src/network/networkMenu.js:1154
+#: src/network/networkMenu.js:1155
 msgid "IEEE"
 msgstr "IEEE"
 
-#: src/network/networkMenu.js:1166
+#: src/network/networkMenu.js:1167
 msgid "SSID"
 msgstr "SSID"
 
-#: src/network/networkMenu.js:1178 src/storage/storageMenu.js:691
+#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
 msgid "Mode"
 msgstr "რეჟიმი"
 
-#: src/network/networkMenu.js:1202
+#: src/network/networkMenu.js:1203
 msgid "Access Point"
 msgstr "წვდომის წერტილი"
 
-#: src/network/networkMenu.js:1214
+#: src/network/networkMenu.js:1215
 msgid "Bit Rate"
 msgstr "ბიტრეიტი"
 
-#: src/network/networkMenu.js:1226
+#: src/network/networkMenu.js:1227
 msgid "TX Power"
 msgstr "TX სიმძლავრე"
 
-#: src/network/networkMenu.js:1238
+#: src/network/networkMenu.js:1239
 msgid "Link Quality"
 msgstr "კავშირის ხარისხი"
 
-#: src/network/networkMenu.js:1250
+#: src/network/networkMenu.js:1251
 msgid "Signal Level"
 msgstr "სიგნალის დონე"
 
@@ -1944,15 +1946,15 @@ msgstr "გლობალური ჩაწერა:"
 msgid "Total Activity"
 msgstr "ჯამური აქტივობა"
 
-#: src/storage/storageMenu.js:106 src/storage/storageMenu.js:736
+#: src/storage/storageMenu.js:106 src/storage/storageMenu.js:737
 msgid "Read"
 msgstr "წაკითხვა"
 
-#: src/storage/storageMenu.js:113 src/storage/storageMenu.js:743
+#: src/storage/storageMenu.js:113 src/storage/storageMenu.js:744
 msgid "Write"
 msgstr "ჩაწერა"
 
-#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1187
+#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1188
 msgid "(click to show all system processes)"
 msgstr ""
 
@@ -1960,308 +1962,308 @@ msgstr ""
 msgid "No storage device found"
 msgstr "მეხსიერების მოწყობილობა ვერ მოიძებნა"
 
-#: src/storage/storageMenu.js:518
+#: src/storage/storageMenu.js:519
 msgctxt "short for read"
 msgid "R"
 msgstr "წაკ"
 
-#: src/storage/storageMenu.js:544
+#: src/storage/storageMenu.js:545
 msgctxt "short for write"
 msgid "W"
 msgstr "ჩაწ"
 
-#: src/storage/storageMenu.js:594
+#: src/storage/storageMenu.js:595
 #, fuzzy
 msgid "Basic Info"
 msgstr "საბაზისო ინფორმაცია"
 
-#: src/storage/storageMenu.js:601
+#: src/storage/storageMenu.js:602
 msgid "Model"
 msgstr "მოდელი"
 
-#: src/storage/storageMenu.js:602 src/gpu/gpuMenuComponent.js:501
+#: src/storage/storageMenu.js:603 src/gpu/gpuMenuComponent.js:501
 msgid "Vendor"
 msgstr "მწარმოებელი"
 
-#: src/storage/storageMenu.js:603
+#: src/storage/storageMenu.js:604
 msgid "Serial"
 msgstr "სერიული ნომერი"
 
-#: src/storage/storageMenu.js:604
+#: src/storage/storageMenu.js:605
 #, fuzzy
 msgid "Size"
 msgstr "ზომა"
 
-#: src/storage/storageMenu.js:605
+#: src/storage/storageMenu.js:606
 msgid "State"
 msgstr "მდგომარეობა"
 
-#: src/storage/storageMenu.js:606
+#: src/storage/storageMenu.js:607
 #, fuzzy
 msgid "Subsystems"
 msgstr "ქვე-სისტემები"
 
-#: src/storage/storageMenu.js:610
+#: src/storage/storageMenu.js:611
 msgid "File System and Mounting Info"
 msgstr "ფაილური სისტემა და მიბმის ინფო"
 
-#: src/storage/storageMenu.js:615
+#: src/storage/storageMenu.js:616
 #, fuzzy
 msgid "File System Type"
 msgstr "ფაილური სისტემის ტიპი"
 
-#: src/storage/storageMenu.js:616
+#: src/storage/storageMenu.js:617
 msgid "Label"
 msgstr "იარლიყი"
 
-#: src/storage/storageMenu.js:617
+#: src/storage/storageMenu.js:618
 msgid "UUID"
 msgstr "UUID"
 
-#: src/storage/storageMenu.js:618
+#: src/storage/storageMenu.js:619
 msgid "Mount Points"
 msgstr "მიბმის წერტილები"
 
-#: src/storage/storageMenu.js:619
+#: src/storage/storageMenu.js:620
 #, fuzzy
 msgid "Available Space"
 msgstr "ხელმისაწვდომი ადგილი"
 
-#: src/storage/storageMenu.js:620
+#: src/storage/storageMenu.js:621
 #, fuzzy
 msgid "File System Size"
 msgstr "ფაილური სისტემის ზომა"
 
-#: src/storage/storageMenu.js:621
+#: src/storage/storageMenu.js:622
 #, fuzzy
 msgid "Used Space"
 msgstr "გამოყენებული ადგილი"
 
-#: src/storage/storageMenu.js:622
+#: src/storage/storageMenu.js:623
 msgid "Used Space (%)"
 msgstr "გამოყენებული ადგილი (%)"
 
-#: src/storage/storageMenu.js:623
+#: src/storage/storageMenu.js:624
 msgid "File System Version"
 msgstr "ფაილური სისტემის ვერსია"
 
-#: src/storage/storageMenu.js:624
+#: src/storage/storageMenu.js:625
 msgid "File System Roots"
 msgstr "ფაილური სისტემის ფესვები"
 
-#: src/storage/storageMenu.js:628
+#: src/storage/storageMenu.js:629
 msgid "Physical and Disk Details"
 msgstr "ფიზიკური და დისკის დეტალები"
 
-#: src/storage/storageMenu.js:633
+#: src/storage/storageMenu.js:634
 msgid "Physical Sector Size"
 msgstr "ფიზიკური სექტორის ზომა"
 
-#: src/storage/storageMenu.js:634
+#: src/storage/storageMenu.js:635
 msgid "Logical Sector Size"
 msgstr "ლოგიკური სექტორის ზომა"
 
-#: src/storage/storageMenu.js:635
+#: src/storage/storageMenu.js:636
 msgid "Minimum IO Size"
 msgstr "მინიმალური შეყვანა/გამოყვანის ზომა"
 
-#: src/storage/storageMenu.js:636
+#: src/storage/storageMenu.js:637
 msgid "Optimal IO Size"
 msgstr "ოპტიმალური შეყვანა/გამოყვანის ზომა"
 
-#: src/storage/storageMenu.js:637
+#: src/storage/storageMenu.js:638
 msgid "Rotational"
 msgstr "მბრუნავი"
 
-#: src/storage/storageMenu.js:638
+#: src/storage/storageMenu.js:639
 #, fuzzy
 msgid "Request Size"
 msgstr "მოთხოვნის ზომა"
 
-#: src/storage/storageMenu.js:639
+#: src/storage/storageMenu.js:640
 msgid "Alignment Offset"
 msgstr "განლაგების განსტოება"
 
-#: src/storage/storageMenu.js:640
+#: src/storage/storageMenu.js:641
 msgid "Discard Alignment"
 msgstr "განლაგების გაუქმება"
 
-#: src/storage/storageMenu.js:641
+#: src/storage/storageMenu.js:642
 msgid "Discard Granularity"
 msgstr "გრანულარობადობის გაუქმება"
 
-#: src/storage/storageMenu.js:642
+#: src/storage/storageMenu.js:643
 msgid "Discard Max Size"
 msgstr "მაქსიმალურის ზომის გაუქმება"
 
-#: src/storage/storageMenu.js:643
+#: src/storage/storageMenu.js:644
 msgid "Discard Zeroes Data"
 msgstr "ნოლების მონაცემების გაუქმება"
 
-#: src/storage/storageMenu.js:647
+#: src/storage/storageMenu.js:648
 msgid "Partition Info"
 msgstr "დანაყოფის ინფო"
 
-#: src/storage/storageMenu.js:652
+#: src/storage/storageMenu.js:653
 msgid "Partition Type"
 msgstr "დანაყოფის ტიპი"
 
-#: src/storage/storageMenu.js:653
+#: src/storage/storageMenu.js:654
 msgid "Partition Label"
 msgstr "დანაყოფის იარლიყი"
 
-#: src/storage/storageMenu.js:654
+#: src/storage/storageMenu.js:655
 msgid "Partition UUID"
 msgstr "დანაყოფის UUID"
 
-#: src/storage/storageMenu.js:655
+#: src/storage/storageMenu.js:656
 msgid "Partition Number"
 msgstr "დანაყოფის ნომერი"
 
-#: src/storage/storageMenu.js:656
+#: src/storage/storageMenu.js:657
 msgid "Partition Table Type"
 msgstr "დანაყოფის ცხრილის ტიპი"
 
-#: src/storage/storageMenu.js:657
+#: src/storage/storageMenu.js:658
 msgid "Partition Table UUID"
 msgstr "დანაყოფის ცხრილის UUID"
 
-#: src/storage/storageMenu.js:661
+#: src/storage/storageMenu.js:662
 msgid "Performance and Settings"
 msgstr "წარმადობა და პარამეტრები"
 
-#: src/storage/storageMenu.js:666
+#: src/storage/storageMenu.js:667
 msgid "Read Ahead"
 msgstr "წინსწრებით წაკითხვა"
 
-#: src/storage/storageMenu.js:667
+#: src/storage/storageMenu.js:668
 msgid "Scheduler"
 msgstr "დამგეგმავი"
 
-#: src/storage/storageMenu.js:668
+#: src/storage/storageMenu.js:669
 msgid "Direct Access"
 msgstr "პირდაპირი წვდომა"
 
-#: src/storage/storageMenu.js:669
+#: src/storage/storageMenu.js:670
 msgid "Multiqueue"
 msgstr "მულტი-რიგი"
 
-#: src/storage/storageMenu.js:673
+#: src/storage/storageMenu.js:674
 msgid "Advanced Identifiers and States"
 msgstr "გაფართოებული იდენტიფიკატორები და მდგომარეობები"
 
-#: src/storage/storageMenu.js:678
+#: src/storage/storageMenu.js:679
 msgid "ID Link"
 msgstr "ID ბმული"
 
-#: src/storage/storageMenu.js:679
+#: src/storage/storageMenu.js:680
 #, fuzzy
 msgid "ID"
 msgstr "ID"
 
-#: src/storage/storageMenu.js:680
+#: src/storage/storageMenu.js:681
 msgid "Major:Minor"
 msgstr "მაჟორული:მინორული"
 
-#: src/storage/storageMenu.js:681
+#: src/storage/storageMenu.js:682
 msgid "HCTL"
 msgstr "HCTL"
 
-#: src/storage/storageMenu.js:682
+#: src/storage/storageMenu.js:683
 #, fuzzy
 msgid "Kernel Name"
 msgstr "ბირთვის სახელი"
 
-#: src/storage/storageMenu.js:683
+#: src/storage/storageMenu.js:684
 msgid "Path"
 msgstr "გზა"
 
-#: src/storage/storageMenu.js:684
+#: src/storage/storageMenu.js:685
 #, fuzzy
 msgid "Revision"
 msgstr "რევიზია"
 
-#: src/storage/storageMenu.js:685
+#: src/storage/storageMenu.js:686
 msgid "World Wide Name"
 msgstr "World Wide სახელი"
 
-#: src/storage/storageMenu.js:686
+#: src/storage/storageMenu.js:687
 msgid "Transport"
 msgstr "ტრანსპორტი"
 
-#: src/storage/storageMenu.js:687
+#: src/storage/storageMenu.js:688
 msgid "Hotplug"
 msgstr "Hotplug"
 
-#: src/storage/storageMenu.js:688
+#: src/storage/storageMenu.js:689
 msgid "Random"
 msgstr "შემთხვევითი"
 
-#: src/storage/storageMenu.js:690
+#: src/storage/storageMenu.js:691
 msgid "Owner"
 msgstr "მფლობელი"
 
-#: src/storage/storageMenu.js:692
+#: src/storage/storageMenu.js:693
 #, fuzzy
 msgid "Read Only"
 msgstr "მხოლოდ წაკითხვადი"
 
-#: src/storage/storageMenu.js:693
+#: src/storage/storageMenu.js:694
 msgid "Removable"
 msgstr "ამოღებადი"
 
-#: src/storage/storageMenu.js:694
+#: src/storage/storageMenu.js:695
 msgid "Write Same"
 msgstr "იგივეს ჩაწერა"
 
-#: src/storage/storageMenu.js:695
+#: src/storage/storageMenu.js:696
 msgid "Zoned"
 msgstr "ზონირებული"
 
-#: src/storage/storageMenu.js:696
+#: src/storage/storageMenu.js:697
 #, fuzzy
 msgid "Zone Size"
 msgstr "ზონის ზომა"
 
-#: src/storage/storageMenu.js:697
+#: src/storage/storageMenu.js:698
 msgid "Zone Write Granularity"
 msgstr "ზონის ჩაწერის გრანულარობადობა"
 
-#: src/storage/storageMenu.js:698
+#: src/storage/storageMenu.js:699
 msgid "Zone Append"
 msgstr "ზონის მიწებება"
 
-#: src/storage/storageMenu.js:699
+#: src/storage/storageMenu.js:700
 msgid "Zone Number"
 msgstr "ზონის ნომერი"
 
-#: src/storage/storageMenu.js:700
+#: src/storage/storageMenu.js:701
 msgid "Zone Open Max"
 msgstr "ზონის ღია მაწსიმუმი"
 
-#: src/storage/storageMenu.js:701
+#: src/storage/storageMenu.js:702
 msgid "Zone Active Max"
 msgstr "ზონის აქტიური მაქსიმუმი"
 
-#: src/storage/storageMenu.js:734
+#: src/storage/storageMenu.js:735
 #, fuzzy
 msgid "Total Device Activity"
 msgstr "ჯამური მოწყობილობის აქტივობა"
 
-#: src/storage/storageMenu.js:791
+#: src/storage/storageMenu.js:792
 msgid "Disk"
 msgstr "დისკი"
 
-#: src/storage/storageMenu.js:1123
+#: src/storage/storageMenu.js:1124
 msgid "Yes"
 msgstr "დიახ"
 
-#: src/storage/storageMenu.js:1123
+#: src/storage/storageMenu.js:1124
 #, fuzzy
 msgid "No"
 msgstr "არა"
 
-#: src/storage/storageMenu.js:1177
+#: src/storage/storageMenu.js:1178
 msgid "(showing all system processes)"
 msgstr ""
 

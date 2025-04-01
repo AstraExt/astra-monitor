@@ -501,32 +501,51 @@ export default GObject.registerClass(
             this.tooltipMenu.close(false);
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
             Utils.processorMonitor.unlisten(this);
 
-            Config.clear(this.icon);
-
-            if(this.percentage) {
-                Config.clear(this.percentage);
-                Utils.processorMonitor.unlisten(this.percentage);
-            }
-            if(this.frequency) {
-                Config.clear(this.frequency);
-                Utils.processorMonitor.unlisten(this.frequency);
+            if(this.icon) {
+                Config.clear(this.icon);
+                Utils.processorMonitor.unlisten(this.icon);
+                this.icon.destroy();
+                this.icon = undefined as any;
             }
             if(this.bars) {
                 Config.clear(this.bars);
                 Utils.processorMonitor.unlisten(this.bars);
+                this.bars.destroy();
+                this.bars = undefined as any;
             }
             if(this.graph) {
                 Config.clear(this.graph);
                 Utils.processorMonitor.unlisten(this.graph);
+                this.graph.destroy();
+                this.graph = undefined as any;
+            }
+            if(this.percentage) {
+                Config.clear(this.percentage);
+                Utils.processorMonitor.unlisten(this.percentage);
+                this.percentage = undefined as any;
+            }
+            if(this.frequency) {
+                Config.clear(this.frequency);
+                Utils.processorMonitor.unlisten(this.frequency);
+                this.frequency = undefined as any;
+            }
+            if(this.tooltipItem) {
+                Config.clear(this.tooltipItem);
+                Utils.processorMonitor.unlisten(this.tooltipItem);
+                this.tooltipItem.destroy();
+                this.tooltipItem = undefined as any;
             }
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.processorMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
+                Main.uiGroup.remove_child(this.tooltipMenu.actor);
+                this.tooltipMenu.destroy();
+                this.tooltipMenu = undefined as any;
             }
 
             super.destroy();

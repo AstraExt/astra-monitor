@@ -14,7 +14,7 @@ export default class CommandHelper {
             try {
                 const [ok, argv] = GLib.shell_parse_argv(command);
                 if(!ok || !argv || argv.length === 0) {
-                    reject(new Error(`Failed to parse command: "${command}"`));
+                    reject(new Error(`Failed to parse CommandHelper: "${command}"`));
                     return;
                 }
 
@@ -24,11 +24,11 @@ export default class CommandHelper {
                 try {
                     const init = proc.init(cancellableTaskManager?.cancellable || null);
                     if(!init) {
-                        reject(new Error('Failed to initialize subprocess'));
+                        reject(new Error('Failed to initialize CommandHelper'));
                         return;
                     }
                 } catch(e: any) {
-                    reject(new Error(`Failed to initialize subprocess: ${e.message}`));
+                    reject(new Error(`Failed to initialize CommandHelper: ${e.message}`));
                     return;
                 }
 
@@ -53,7 +53,7 @@ export default class CommandHelper {
 
                                 reject(
                                     new Error(
-                                        `Command failed with exit status ${exitStatus}: ${stderrContent}`
+                                        `CommandHelper failed with exit status ${exitStatus}: ${stderrContent}`
                                     )
                                 );
                                 return;
@@ -67,7 +67,7 @@ export default class CommandHelper {
                             if(!stdoutContent) throw new Error('No output');
                             resolve(stdoutContent.trim());
                         } catch(e: any) {
-                            reject(new Error(`Failed to read command output: ${e.message}`));
+                            reject(new Error(`Failed to read CommandHelper output: ${e.message}`));
                         } finally {
                             stdoutPipe?.close(cancellableTaskManager?.cancellable || null);
                             stderrPipe?.close(cancellableTaskManager?.cancellable || null);
@@ -75,7 +75,7 @@ export default class CommandHelper {
                     }
                 );
             } catch(e: any) {
-                reject(new Error(`Failed to run command: ${e.message}`));
+                reject(new Error(`Failed to run CommandHelper: ${e.message}`));
                 proc?.force_exit();
             }
         });

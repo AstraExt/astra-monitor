@@ -617,7 +617,7 @@ export default GObject.registerClass(
             this.tooltipMenu.close(false);
         }
 
-        destroy() {
+        override destroy() {
             Config.clear(this);
             Utils.gpuMonitor.unlisten(this);
             Utils.gpuMonitor.unlisten(this.activityBar);
@@ -633,35 +633,62 @@ export default GObject.registerClass(
             if(this.icon) {
                 Config.clear(this.icon);
                 Utils.gpuMonitor.unlisten(this.icon);
+                this.icon.destroy();
+                this.icon = undefined as any;
             }
             if(this.activityBar) {
                 Config.clear(this.activityBar);
                 Utils.gpuMonitor.unlisten(this.activityBar);
+                this.activityBar.destroy();
+                this.activityBar = undefined as any;
             }
             if(this.activityGraph) {
                 Config.clear(this.activityGraph);
                 Utils.gpuMonitor.unlisten(this.activityGraph);
+                this.activityGraph.destroy();
+                this.activityGraph = undefined as any;
             }
             if(this.activityPercentage) {
                 Config.clear(this.activityPercentage);
                 Utils.gpuMonitor.unlisten(this.activityPercentage);
+                this.activityPercentage = undefined as any;
             }
             if(this.memoryBar) {
                 Config.clear(this.memoryBar);
                 Utils.gpuMonitor.unlisten(this.memoryBar);
+                this.memoryBar.destroy();
+                this.memoryBar = undefined as any;
             }
             if(this.memoryGraph) {
                 Config.clear(this.memoryGraph);
                 Utils.gpuMonitor.unlisten(this.memoryGraph);
+                this.memoryGraph.destroy();
+                this.memoryGraph = undefined as any;
             }
             if(this.memoryPercentage) {
                 Config.clear(this.memoryPercentage);
                 Utils.gpuMonitor.unlisten(this.memoryPercentage);
+                this.memoryPercentage = undefined as any;
+            }
+            if(this.memoryValue) {
+                Config.clear(this.memoryValue);
+                Utils.gpuMonitor.unlisten(this.memoryValue);
+                this.memoryValue = undefined as any;
+            }
+
+            if(this.tooltipItem) {
+                Config.clear(this.tooltipItem);
+                Utils.gpuMonitor.unlisten(this.tooltipMenu);
+                this.tooltipItem.destroy();
+                this.tooltipItem = undefined as any;
             }
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.gpuMonitor.unlisten(this.tooltipMenu);
                 this.tooltipMenu.close(false);
+                Main.uiGroup.remove_child(this.tooltipMenu.actor);
+                this.tooltipMenu.destroy();
+                this.tooltipMenu = undefined as any;
             }
 
             super.destroy();

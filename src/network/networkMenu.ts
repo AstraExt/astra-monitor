@@ -28,6 +28,7 @@ import NetworkGraph from './networkGraph.js';
 import Grid from '../grid.js';
 import Utils, { InterfaceInfo, RouteInfo } from '../utils/utils.js';
 import Config from '../config.js';
+import Signal from '../signal.js';
 import NetworkMonitor, { NetworkWirelessInfo } from './networkMonitor.js';
 
 type InterfaceDeviceInfo = {
@@ -739,15 +740,15 @@ export default class NetworkMenu extends MenuBase {
             refreshStatus: RefreshStatus.IDLE,
         };
 
-        this.publicIPContainer.connect('enter-event', () => {
+        Signal.connect(this.publicIPContainer, 'enter-event', () => {
             this.publicIPContainer.style = defaultStyle + this.selectionStyle;
         });
 
-        this.publicIPContainer.connect('leave-event', () => {
+        Signal.connect(this.publicIPContainer, 'leave-event', () => {
             this.publicIPContainer.style = defaultStyle;
         });
 
-        this.publicIPContainer.connect('clicked', () => {
+        Signal.connect(this.publicIPContainer, 'clicked', () => {
             if(this.publicIpv6.refreshStatus !== RefreshStatus.IDLE) return;
             this.publicIpv6.refreshStatus = RefreshStatus.REFRESHING;
             this.updateIpsFooterLablel();
@@ -2003,7 +2004,7 @@ export default class NetworkMenu extends MenuBase {
         }
     }
 
-    addUtilityButtons() {
+    override addUtilityButtons() {
         super.addUtilityButtons('network', box => {
             const button = new St.Button({ styleClass: 'button' });
             button.child = new St.Icon({
@@ -2086,7 +2087,7 @@ export default class NetworkMenu extends MenuBase {
         }
     }
 
-    async onClose() {
+    onClose() {
         Utils.networkMonitor.unlisten(this, 'networkIO');
         Utils.networkMonitor.unlisten(this, 'detailedNetworkIO');
         Utils.networkMonitor.unlisten(this, 'publicIps');
@@ -2829,13 +2830,53 @@ export default class NetworkMenu extends MenuBase {
         }
     }
 
-    destroy() {
-        this.close(true);
-        this.removeAll();
+    override destroy() {
+        this.close(false);
+        this.onClose();
+
+        Config.clear(this);
+        Signal.clear(this.publicIPContainer);
+
+        this.graph?.destroy();
+        this.graph = undefined as any;
 
         if(this.publicIpv6.refreshTimer) {
             GLib.source_remove(this.publicIpv6.refreshTimer);
             this.publicIpv6.refreshTimer = 0;
+        }
+
+        this.networkActivityPopup?.destroy();
+        this.networkActivityPopup = undefined as any;
+
+        this.topProcessesPopup?.destroy();
+        this.topProcessesPopup = undefined as any;
+
+        this.routesPopup?.destroy();
+        this.routesPopup = undefined as any;
+
+        if(this.devicesInfoPopup) {
+            for(const popup of this.devicesInfoPopup.values()) {
+                popup.destroy();
+            }
+            this.devicesInfoPopup = undefined as any;
+        }
+        if(this.devicesWirelessPopup) {
+            for(const popup of this.devicesWirelessPopup.values()) {
+                popup.destroy();
+            }
+            this.devicesWirelessPopup = undefined as any;
+        }
+        if(this.devicesTotalsPopup) {
+            for(const popup of this.devicesTotalsPopup.values()) {
+                popup.destroy();
+            }
+            this.devicesTotalsPopup = undefined as any;
+        }
+        if(this.devicesWirelessPopup) {
+            for(const popup of this.devicesWirelessPopup.values()) {
+                popup.destroy();
+            }
+            this.devicesWirelessPopup = undefined as any;
         }
 
         super.destroy();
