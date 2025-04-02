@@ -360,7 +360,7 @@ msgstr "Czujnik 4 w podpowiedzi"
 
 #: src/prefs/sensors.js:245
 msgid "Tooltip Sensor 5"
-msgstr "Czujnik 5w podpowiedzi"
+msgstr "Czujnik 5 w podpowiedzi"
 
 #: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
 #: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
