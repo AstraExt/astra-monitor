@@ -1,3 +1,9 @@
+# Astra Monitor 35 - August 17 2025
+
+### Bug fixes
+
+-   Fixed empty preferences page when no gpu is selected [[#194](https://github.com/AstraExt/astra-monitor/issues/190)] (Thanks to [@ViscoidOrc](https://github.com/ViscoidOrc) for PR)
+
 # Astra Monitor 34 - April 1 2025
 
 ### New features
