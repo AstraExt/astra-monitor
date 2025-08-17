@@ -447,7 +447,9 @@ export default class PrefsUtils {
             });
 
             select.set_model(stringList);
-            select.selected = selected;
+            if(selected >= 0) {
+                select.selected = selected;
+            }
 
             resetSignal = resetButton?.connect('clicked', () => {
                 choices.forEach((choice, index) => {
