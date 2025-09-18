@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-17 12:05+0200\n"
+"POT-Creation-Date: 2025-09-18 15:35+0200\n"
 "Last-Translator: Mikulas Stastny <mikusaq@seznam.cz>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -17,602 +17,6 @@ msgstr ""
 "X-Generator: POEditor.com\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: prefs.js:168 src/prefs/welcome.js:33
-msgid "Welcome"
-msgstr ""
-
-#: prefs.js:184 src/profiles/profilesMenu.js:32 src/prefs/profiles.js:36
-#: src/prefs/profiles.js:49
-msgid "Profiles"
-msgstr ""
-
-#: prefs.js:200 src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56
-msgid "Visualization"
-msgstr "Vizualizace"
-
-#: prefs.js:217 src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67
-msgid "Processors"
-msgstr "Procesor"
-
-#: prefs.js:226 prefs.js:260 prefs.js:286 prefs.js:320 prefs.js:354
-#: prefs.js:388 src/prefs/storage.js:82 src/prefs/network.js:82
-#: src/prefs/processors.js:80 src/prefs/processors.js:82
-#: src/prefs/sensors.js:80 src/prefs/gpu.js:81 src/prefs/gpu.js:83
-#: src/prefs/memory.js:80
-msgid "General"
-msgstr "Obecné"
-
-#: prefs.js:234 prefs.js:268 prefs.js:294 prefs.js:328 prefs.js:362
-#: prefs.js:396 src/prefs/storage.js:206 src/prefs/storage.js:208
-#: src/prefs/network.js:186 src/prefs/processors.js:114
-#: src/prefs/processors.js:116 src/prefs/sensors.js:118
-#: src/prefs/sensors.js:120 src/prefs/gpu.js:173 src/prefs/gpu.js:175
-#: src/prefs/memory.js:123 src/prefs/memory.js:125
-msgid "Header"
-msgstr "Záhlaví"
-
-#: prefs.js:242 prefs.js:302 prefs.js:336 prefs.js:370 src/prefs/storage.js:302
-#: src/prefs/storage.js:304 src/prefs/network.js:253 src/prefs/network.js:266
-#: src/prefs/processors.js:191 src/prefs/processors.js:193
-#: src/prefs/sensors.js:266 src/prefs/gpu.js:251 src/prefs/memory.js:202
-#: src/prefs/memory.js:204
-msgid "Menu"
-msgstr ""
-
-#: prefs.js:251 src/gpu/gpuMenu.js:28 src/gpu/gpuMenuComponent.js:46
-#: src/prefs/processors.js:199 src/prefs/gpu.js:42 src/prefs/gpu.js:55
-#: src/prefs/gpu.js:68 src/prefs/gpu.js:108
-msgid "GPU"
-msgstr ""
-
-#: prefs.js:277 src/prefs/memory.js:41 src/prefs/memory.js:54
-#: src/prefs/memory.js:67 src/prefs/memory.js:82 src/prefs/memory.js:205
-#: src/memory/memoryMenu.js:34
-msgid "Memory"
-msgstr "Paměť"
-
-#: prefs.js:311 src/prefs/storage.js:43 src/prefs/storage.js:56
-#: src/prefs/storage.js:69 src/prefs/storage.js:84
-#: src/storage/storageMenu.js:38
-msgid "Storage"
-msgstr "Uložiště"
-
-#: prefs.js:345 src/network/networkMenu.js:42 src/prefs/network.js:43
-#: src/prefs/network.js:56 src/prefs/network.js:69 src/prefs/network.js:84
-msgid "Network"
-msgstr "Síť"
-
-#: prefs.js:379 src/gpu/gpuMenuComponent.js:365
-#: src/gpu/gpuMenuComponent.js:1320 src/sensors/sensorsMenu.js:47
-#: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
-#: src/prefs/sensors.js:82 src/prefs/sensors.js:112
-msgid "Sensors"
-msgstr "Sensory"
-
-#: prefs.js:412 src/prefs/utility.js:36 src/prefs/utility.js:49
-#: src/prefs/utility.js:52
-msgid "Utility"
-msgstr ""
-
-#: prefs.js:420 src/prefs/about.js:32 src/prefs/about.js:45
-msgid "About"
-msgstr "O rozšíření"
-
-#: src/network/networkMenu.js:77
-msgid "Global Upload:"
-msgstr "Globální upload:"
-
-#: src/network/networkMenu.js:89
-msgid "Global Download:"
-msgstr "Globální download:"
-
-#: src/network/networkMenu.js:114
-msgid "Upload Activity"
-msgstr "Upload"
-
-#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
-#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
-#: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
-msgid "Total"
-msgstr "Celkem"
-
-#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
-#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
-msgid "Packets"
-msgstr "Pakety"
-
-#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
-#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
-msgid "Errors/Dropped"
-msgstr "Chyby/Zahozeno"
-
-#: src/network/networkMenu.js:136
-msgid "Download Activity"
-msgstr "Download"
-
-#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
-#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:308
-#: src/gpu/gpuMenuComponent.js:1234 src/prefs/storage.js:195
-#: src/prefs/processors.js:103 src/prefs/memory.js:117
-msgid "Top Processes"
-msgstr "Procesy"
-
-#: src/network/networkMenu.js:168
-msgid "(click to show)"
-msgstr ""
-
-#: src/network/networkMenu.js:381
-msgid "Public IP"
-msgstr "Veřejná IP"
-
-#: src/network/networkMenu.js:391
-msgid "Public IPv4:"
-msgstr "Veřejná IPv4"
-
-#: src/network/networkMenu.js:408
-msgid "Public IPv6:"
-msgstr "Veřejná IPv6"
-
-#: src/network/networkMenu.js:455
-msgid "Updated a long time ago"
-msgstr ""
-
-#: src/network/networkMenu.js:457
-#, fuzzy
-msgid "Updated a few seconds ago"
-msgstr "Frekvence aktualizace (sekundy)"
-
-#: src/network/networkMenu.js:459
-msgid "Updated less than a minute ago"
-msgstr ""
-
-#: src/network/networkMenu.js:461
-msgid "Updated about a minute ago"
-msgstr ""
-
-#: src/network/networkMenu.js:463
-msgid "Updated about 2 minutes ago"
-msgstr ""
-
-#: src/network/networkMenu.js:465
-msgid "Updated about 5 minutes ago"
-msgstr ""
-
-#: src/network/networkMenu.js:467
-msgid "Updated more than 5 minutes ago"
-msgstr ""
-
-#: src/network/networkMenu.js:468
-msgid "Click to refresh"
-msgstr ""
-
-#: src/network/networkMenu.js:470
-msgid "Refreshing..."
-msgstr ""
-
-#: src/network/networkMenu.js:472
-msgid "Done"
-msgstr ""
-
-#: src/network/networkMenu.js:476
-msgid "Default Routes"
-msgstr "Výchozí cesty"
-
-#: src/network/networkMenu.js:515
-msgid "Route"
-msgstr "Cesta"
-
-#: src/network/networkMenu.js:521
-msgid "Metric"
-msgstr "Metrika"
-
-#: src/network/networkMenu.js:528
-msgid "Device"
-msgstr "Zařízení"
-
-#: src/network/networkMenu.js:535
-msgid "Gateway"
-msgstr "Brána"
-
-#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
-msgid "Type"
-msgstr "Typ"
-
-#: src/network/networkMenu.js:549
-msgid "Destination"
-msgstr "Cíl"
-
-#: src/network/networkMenu.js:556
-msgid "Protocol"
-msgstr "Protokol"
-
-#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
-msgid "Scope"
-msgstr ""
-
-#: src/network/networkMenu.js:570
-msgid "Flags"
-msgstr "Příznaky"
-
-#: src/network/networkMenu.js:599
-msgid "Interfaces"
-msgstr "Rozhraní"
-
-#: src/network/networkMenu.js:602
-msgid "No network interface found"
-msgstr "Nenalezena žádná síťová rozhraní"
-
-#: src/network/networkMenu.js:810
-msgctxt "short for upload"
-msgid "U"
-msgstr ""
-
-#: src/network/networkMenu.js:836
-msgctxt "short for download"
-msgid "D"
-msgstr ""
-
-#: src/network/networkMenu.js:910 src/prefs/about.js:48
-msgid "Info"
-msgstr ""
-
-#: src/network/networkMenu.js:913 src/gpu/gpuMenuComponent.js:438
-#: src/gpu/gpuMenuComponent.js:1246 src/gpu/gpuMenuComponent.js:1277
-#: src/storage/storageMenu.js:600
-msgid "Name"
-msgstr "Jméno"
-
-#: src/network/networkMenu.js:920
-msgid "Alt Names"
-msgstr "Alternativní jména"
-
-#: src/network/networkMenu.js:929
-msgid "Interface Index"
-msgstr "Index rozhraní"
-
-#: src/network/networkMenu.js:938
-msgid "MAC Address"
-msgstr "MAC adresa"
-
-#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
-msgid "Group"
-msgstr "Skupina"
-
-#: src/network/networkMenu.js:956
-msgid "Speed"
-msgstr "Rychlost"
-
-#: src/network/networkMenu.js:965
-msgid "Duplex"
-msgstr ""
-
-#: src/network/networkMenu.js:974
-msgid "MTU"
-msgstr ""
-
-#: src/network/networkMenu.js:983
-msgid "Tx Queue Length"
-msgstr "Délka TX fronty"
-
-#: src/network/networkMenu.js:992
-msgid "Link Type"
-msgstr "Typ linky"
-
-#: src/network/networkMenu.js:1001
-msgid "Operative State"
-msgstr "Operativní stav"
-
-#: src/network/networkMenu.js:1010
-msgid "Qdisc"
-msgstr ""
-
-#: src/network/networkMenu.js:1043
-msgid "Family"
-msgstr "Rodina"
-
-#: src/network/networkMenu.js:1050
-msgid "Local"
-msgstr "Lokální adresa"
-
-#: src/network/networkMenu.js:1057
-msgid "Prefix Length"
-msgstr "Délka prefixu"
-
-#: src/network/networkMenu.js:1064
-msgid "Broadcast"
-msgstr ""
-
-#: src/network/networkMenu.js:1097
-msgid "Upload"
-msgstr ""
-
-#: src/network/networkMenu.js:1121
-msgid "Download"
-msgstr ""
-
-#: src/network/networkMenu.js:1155
-msgid "IEEE"
-msgstr ""
-
-#: src/network/networkMenu.js:1167
-msgid "SSID"
-msgstr ""
-
-#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
-msgid "Mode"
-msgstr "Režim"
-
-#: src/network/networkMenu.js:1191 src/prefs/processors.js:145
-msgid "Frequency"
-msgstr "Frekvence"
-
-#: src/network/networkMenu.js:1203
-msgid "Access Point"
-msgstr "Přístupový bod"
-
-#: src/network/networkMenu.js:1215
-msgid "Bit Rate"
-msgstr "Přenosová rychlost"
-
-#: src/network/networkMenu.js:1227
-msgid "TX Power"
-msgstr "TX výkon"
-
-#: src/network/networkMenu.js:1239
-msgid "Link Quality"
-msgstr "Kvalita linky"
-
-#: src/network/networkMenu.js:1251
-msgid "Signal Level"
-msgstr "Síla signálu"
-
-#: src/network/networkGraph.js:95 src/gpu/gpuActivityGraph.js:83
-#: src/gpu/gpuMemoryGraph.js:83 src/processor/processorGraph.js:86
-#: src/storage/storageGraph.js:95 src/memory/memoryGraph.js:86
-#, javascript-format
-msgid "%d min ago"
-msgid_plural "%d mins ago"
-msgstr[0] "před %d minutou"
-msgstr[1] "před %d minutami"
-msgstr[2] "před %d minutami"
-msgstr[3] "před %d minutami"
-
-#: src/network/networkGraph.js:98 src/gpu/gpuActivityGraph.js:86
-#: src/gpu/gpuMemoryGraph.js:86 src/processor/processorGraph.js:89
-#: src/storage/storageGraph.js:98 src/memory/memoryGraph.js:89
-msgid "now"
-msgstr "teď"
-
-#: src/gpu/gpuMenuComponent.js:57
-msgid "No GPU found"
-msgstr "Nenalezeno žádné GPU"
-
-#: src/gpu/gpuMenuComponent.js:70
-msgid "GPUs"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:129
-msgid "No Connected Display"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1084
-msgid "Activity"
-msgstr "Aktivita"
-
-#: src/gpu/gpuMenuComponent.js:206 src/gpu/gpuMenuComponent.js:1133
-msgid "VRAM"
-msgstr "VRAM"
-
-#: src/gpu/gpuMenuComponent.js:249 src/gpu/gpuMenuComponent.js:1174
-#: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
-msgid "Used:"
-msgstr "Využito:"
-
-#: src/gpu/gpuMenuComponent.js:270 src/gpu/gpuMenuComponent.js:1195
-#: src/processor/processorMenu.js:179 src/memory/memoryMenu.js:50
-#: src/memory/memoryMenu.js:369
-msgid "Total:"
-msgstr "Celkem:"
-
-#: src/gpu/gpuMenuComponent.js:431
-msgid "GPU info"
-msgstr "Informace o GPU"
-
-#: src/gpu/gpuMenuComponent.js:468
-msgid "Subsystem"
-msgstr "Subsystém"
-
-#: src/gpu/gpuMenuComponent.js:501 src/storage/storageMenu.js:603
-msgid "Vendor"
-msgstr "Výrobce"
-
-#: src/gpu/gpuMenuComponent.js:509
-msgid "Vendor ID"
-msgstr "ID výrobce"
-
-#: src/gpu/gpuMenuComponent.js:518
-msgid "Product ID"
-msgstr "ID produktu"
-
-#: src/gpu/gpuMenuComponent.js:526
-msgid "PCI"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:538
-msgid "Drivers"
-msgstr "Ovladače"
-
-#: src/gpu/gpuMenuComponent.js:547
-msgid "Modules"
-msgstr "Moduly"
-
-#: src/gpu/gpuMenuComponent.js:611
-msgid "Displays"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:613
-#, fuzzy
-msgid "No displays found"
-msgstr "Nenalezeny žádné sensory"
-
-#: src/gpu/gpuMenuComponent.js:644
-#, fuzzy
-msgid "Status"
-msgstr "Stav"
-
-#: src/gpu/gpuMenuComponent.js:656
-#, fuzzy
-msgid "Product Code"
-msgstr "ID produktu"
-
-#: src/gpu/gpuMenuComponent.js:668
-#, fuzzy
-msgid "Serial Number"
-msgstr "Číslo zóny"
-
-#: src/gpu/gpuMenuComponent.js:680
-msgid "Manufacturer Date"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:692
-#, fuzzy
-msgid "EDID Version"
-msgstr "Verze"
-
-#: src/gpu/gpuMenuComponent.js:704
-msgid "Display Size"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:716 src/gpu/gpuMenuComponent.js:942
-msgid "Native Resolution"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:728 src/gpu/gpuMenuComponent.js:961
-msgid "Refresh Rate"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:740
-msgid "Display Gamma"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:752
-msgid "Display Type"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:764
-msgid "Capabilities"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:843
-msgid "Enabled"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:846
-msgid "Disabled"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:939
-msgid "Native Resolutions"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:958
-msgid "Refresh Rates"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:986
-msgid "RGB 4:4:4"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:990
-msgid "RGB 4:4:4 + YCrCb 4:4:4"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:994
-msgid "RGB 4:4:4 + YCrCb 4:2:2"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:997
-msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1005
-msgid "Monochrome or Grayscale"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1008
-#, fuzzy
-msgid "RGB color"
-msgstr "Barva sloupců"
-
-#: src/gpu/gpuMenuComponent.js:1011
-#, fuzzy
-msgid "Non-RGB color"
-msgstr "Barva ikony"
-
-#: src/gpu/gpuMenuComponent.js:1026
-msgid "Digital Input"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1028
-msgid "VESA DFP"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1033
-msgid "White Sync Levels: "
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1036
-msgid "Blank to Black"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1039
-msgid "Separate Sync"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1042
-msgid "Composite Sync"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1045
-msgid "Sync on Green"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1048
-msgid "VSync Serrated"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1052
-msgid "DPMS Standby"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1055
-msgid "DPMS Suspend"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1058
-msgid "DPMS Active Off"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1061
-msgid "Standard sRGB"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1064
-msgid "Preferred Timing"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1067
-#, fuzzy
-msgid "GTF Supported"
-msgstr "Podpořit na Ko-Fi"
-
-#: src/gpu/gpuMenuComponent.js:1546
-#, javascript-format
-msgid "%d/%d Displays Connected"
-msgstr ""
-
 #: src/processor/processorMenu.js:37 src/prefs/processors.js:194
 msgid "CPU"
 msgstr "CPU"
@@ -620,6 +24,12 @@ msgstr "CPU"
 #: src/processor/processorMenu.js:99
 msgid "CPU info"
 msgstr "Informace o CPU"
+
+#: src/processor/processorMenu.js:179 src/memory/memoryMenu.js:50
+#: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:270
+#: src/gpu/gpuMenuComponent.js:1195
+msgid "Total:"
+msgstr "Celkem:"
 
 #: src/processor/processorMenu.js:187
 msgid "User:"
@@ -704,36 +114,550 @@ msgstr ""
 msgid "System uptime"
 msgstr "Doba běhu systému"
 
-#: src/sensors/sensorsMenu.js:50
-msgid "No sensor found"
-msgstr "Nenalezeny žádné sensory"
+#: src/processor/processorGraph.js:86 src/network/networkGraph.js:95
+#: src/storage/storageGraph.js:95 src/memory/memoryGraph.js:86
+#: src/gpu/gpuActivityGraph.js:83 src/gpu/gpuMemoryGraph.js:83
+#, javascript-format
+msgid "%d min ago"
+msgid_plural "%d mins ago"
+msgstr[0] "před %d minutou"
+msgstr[1] "před %d minutami"
+msgstr[2] "před %d minutami"
+msgstr[3] "před %d minutami"
 
-#: src/sensors/sensorsMenu.js:225
-#, fuzzy, javascript-format
-msgid "%d sensor"
-msgid_plural "%d sensors"
-msgstr[0] "sensory"
-msgstr[1] "sensory"
-msgstr[2] "sensory"
+#: src/processor/processorGraph.js:89 src/network/networkGraph.js:98
+#: src/storage/storageGraph.js:98 src/memory/memoryGraph.js:89
+#: src/gpu/gpuActivityGraph.js:86 src/gpu/gpuMemoryGraph.js:86
+msgid "now"
+msgstr "teď"
 
-#: src/prefs/prefsUtils.js:649
-msgid "Move up"
-msgstr ""
+#: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
+#: src/prefs/sensors.js:82 src/prefs/sensors.js:112
+#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:365
+#: src/gpu/gpuMenuComponent.js:1320 prefs.js:379
+msgid "Sensors"
+msgstr "Sensory"
 
-#: src/prefs/prefsUtils.js:668
-msgid "Move down"
-msgstr ""
+#: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
+#: src/prefs/network.js:82 src/prefs/gpu.js:81 src/prefs/gpu.js:83
+#: src/prefs/processors.js:80 src/prefs/processors.js:82 prefs.js:226
+#: prefs.js:260 prefs.js:286 prefs.js:320 prefs.js:354 prefs.js:388
+msgid "General"
+msgstr "Obecné"
 
-#: src/prefs/storage.js:85 src/prefs/network.js:85 src/prefs/processors.js:83
 #: src/prefs/sensors.js:83 src/prefs/sensors.js:150 src/prefs/sensors.js:162
-#: src/prefs/gpu.js:85 src/prefs/memory.js:83
+#: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
+#: src/prefs/gpu.js:85 src/prefs/processors.js:83
 msgid "Show"
 msgstr "Zobrazit"
 
-#: src/prefs/storage.js:86 src/prefs/network.js:86 src/prefs/processors.js:84
-#: src/prefs/sensors.js:84 src/prefs/gpu.js:93 src/prefs/memory.js:84
+#: src/prefs/sensors.js:84 src/prefs/memory.js:84 src/prefs/storage.js:86
+#: src/prefs/network.js:86 src/prefs/gpu.js:93 src/prefs/processors.js:84
 msgid "Update frequency (seconds)"
 msgstr "Frekvence aktualizace (sekundy)"
+
+#: src/prefs/sensors.js:86
+msgctxt "Celsius unit measure choice"
+msgid "Celsius"
+msgstr ""
+
+#: src/prefs/sensors.js:87
+msgctxt "Fahrenheit unit measure choice"
+msgid "Fahrenheit"
+msgstr ""
+
+#: src/prefs/sensors.js:89
+msgid "Temperature Unit"
+msgstr "Jednotka teploty"
+
+#: src/prefs/sensors.js:90
+#, fuzzy
+msgid "Ignored Sensors"
+msgstr "Sensory"
+
+#: src/prefs/sensors.js:92
+#, fuzzy
+msgid "Ignored Sensors Regex"
+msgstr "Ignorovaná zařízení uložiště"
+
+#: src/prefs/sensors.js:93
+msgid "Completely ignore sensors matching this regex"
+msgstr ""
+
+#: src/prefs/sensors.js:97
+#, fuzzy
+msgid "Ignored Sensors Category Regex"
+msgstr "Ignorovaná zařízení uložiště"
+
+#: src/prefs/sensors.js:98
+msgid "Categories are like \"Package\", \"Core\", \"Edge\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:102
+msgid "Ignored Sensors Attribute Regex"
+msgstr ""
+
+#: src/prefs/sensors.js:103
+msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:106 src/prefs/memory.js:105 src/prefs/storage.js:184
+#: src/prefs/network.js:153 src/prefs/processors.js:85
+msgid "Data Sources"
+msgstr "Zdroje dat"
+
+#: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
+#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
+#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
+#: src/prefs/processors.js:87 src/prefs/processors.js:93
+#: src/prefs/processors.js:99 src/prefs/processors.js:105
+msgid "Auto"
+msgstr "Automaticky"
+
+#: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
+#: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
+#: src/prefs/network.js:186 src/prefs/gpu.js:173 src/prefs/gpu.js:175
+#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:234
+#: prefs.js:268 prefs.js:294 prefs.js:328 prefs.js:362 prefs.js:396
+msgid "Header"
+msgstr "Záhlaví"
+
+#: src/prefs/sensors.js:121 src/prefs/memory.js:126 src/prefs/storage.js:209
+#: src/prefs/network.js:189 src/prefs/gpu.js:176 src/prefs/processors.js:117
+msgid "Indicators Order"
+msgstr "Pořadí indikátorů"
+
+#: src/prefs/sensors.js:124 src/prefs/memory.js:129 src/prefs/storage.js:212
+#: src/prefs/network.js:192 src/prefs/gpu.js:179 src/prefs/processors.js:120
+msgid "Icon"
+msgstr "Ikona"
+
+#: src/prefs/sensors.js:125 src/prefs/memory.js:130 src/prefs/storage.js:213
+#: src/prefs/network.js:193 src/prefs/gpu.js:180 src/prefs/processors.js:121
+msgid "Show Icon"
+msgstr "Zobrazit ikonu"
+
+#: src/prefs/sensors.js:127 src/prefs/memory.js:132 src/prefs/storage.js:215
+#: src/prefs/network.js:195 src/prefs/gpu.js:182 src/prefs/processors.js:123
+msgid "Icon Name"
+msgstr "Název ikony"
+
+#: src/prefs/sensors.js:128
+msgid "Set icon name (ie: 'temperature-symbolic')"
+msgstr "Nastavit jméno ikony (např. 'temperature-symbolic')"
+
+#: src/prefs/sensors.js:130 src/prefs/memory.js:135 src/prefs/storage.js:218
+#: src/prefs/network.js:198 src/prefs/visualization.js:171
+#: src/prefs/visualization.js:178 src/prefs/gpu.js:185
+#: src/prefs/processors.js:126
+msgid "Set to empty to disable icon override"
+msgstr "Pro výchozí název nechte prázdné"
+
+#: src/prefs/sensors.js:133 src/prefs/memory.js:138 src/prefs/storage.js:221
+#: src/prefs/network.js:201 src/prefs/gpu.js:188 src/prefs/processors.js:129
+msgid "Icon Color"
+msgstr "Barva ikony"
+
+#: src/prefs/sensors.js:134 src/prefs/memory.js:139 src/prefs/storage.js:222
+#: src/prefs/network.js:202 src/prefs/gpu.js:189 src/prefs/processors.js:130
+msgid "Icon Alert Color"
+msgstr "Barva ikony při výstraze"
+
+#: src/prefs/sensors.js:136 src/prefs/memory.js:141 src/prefs/storage.js:224
+#: src/prefs/network.js:204 src/prefs/gpu.js:191 src/prefs/processors.js:132
+msgid "Icon Size"
+msgstr "Velikost ikony"
+
+#: src/prefs/sensors.js:137 src/prefs/memory.js:142 src/prefs/storage.js:225
+#: src/prefs/network.js:205 src/prefs/visualization.js:132
+#: src/prefs/visualization.js:140 src/prefs/visualization.js:148
+#: src/prefs/gpu.js:192 src/prefs/processors.js:133
+msgid "Experimental feature: may require to disable/enable the extension."
+msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
+
+#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
+msgid "None"
+msgstr "Žádné"
+
+#: src/prefs/sensors.js:149
+msgid "Sensor 1"
+msgstr ""
+
+#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
+#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
+#: src/prefs/sensors.js:247
+msgid "Source"
+msgstr "Zdroj"
+
+#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
+#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
+#: src/prefs/sensors.js:257
+msgid "Value Digits"
+msgstr "Počet číslic za desetinnou čárkou"
+
+#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
+#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
+#: src/prefs/sensors.js:258
+msgid "Set -1 to auto. Number of digits after the decimal point."
+msgstr ""
+"Pro automatické nastavení nastavte na -1. Počet číslic za desetinnou čárkou."
+
+#: src/prefs/sensors.js:161
+msgid "Sensor 2"
+msgstr ""
+
+#: src/prefs/sensors.js:164 src/prefs/storage.js:284 src/prefs/network.js:238
+msgid "Vertical"
+msgstr "Svislé"
+
+#: src/prefs/sensors.js:165 src/prefs/storage.js:285 src/prefs/network.js:239
+msgid "Horizontal"
+msgstr "Vodorovné"
+
+#: src/prefs/sensors.js:167
+msgid "Sensor 2 Layout"
+msgstr "Sensor 2 - rozvržení"
+
+#: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
+#: src/prefs/network.js:245 src/prefs/gpu.js:241 src/prefs/processors.js:182
+msgid "Tooltip"
+msgstr "Nápověda"
+
+#: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
+#: src/prefs/network.js:246 src/prefs/gpu.js:242 src/prefs/processors.js:183
+msgid "Show Tooltip"
+msgstr "Zobrazit nápovědu"
+
+#: src/prefs/sensors.js:181
+msgid "Tooltip Sensor 1"
+msgstr "Sensor 1 - nápověda"
+
+#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
+#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
+msgid "Short Name"
+msgstr "Zkrácený název"
+
+#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
+#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
+msgid "Short name to display in the tooltip."
+msgstr "Zkrácený název pro zobrazení v nápovědě."
+
+#: src/prefs/sensors.js:197
+msgid "Tooltip Sensor 2"
+msgstr "Sensor 2 - nápověda"
+
+#: src/prefs/sensors.js:213
+msgid "Tooltip Sensor 3"
+msgstr "Sensor 3 - nápověda"
+
+#: src/prefs/sensors.js:229
+msgid "Tooltip Sensor 4"
+msgstr "Sensor 4 - nápověda"
+
+#: src/prefs/sensors.js:245
+msgid "Tooltip Sensor 5"
+msgstr "Sensor 5 - nápověda"
+
+#: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
+#: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
+#: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
+#: src/prefs/processors.js:193 prefs.js:242 prefs.js:302 prefs.js:336
+#: prefs.js:370
+msgid "Menu"
+msgstr ""
+
+#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
+msgid "Empty for now"
+msgstr ""
+
+#: src/prefs/utility.js:36 src/prefs/utility.js:49 src/prefs/utility.js:52
+#: prefs.js:412
+msgid "Utility"
+msgstr ""
+
+#: src/prefs/utility.js:54 src/prefs/utility.js:58
+msgid "Export Settings"
+msgstr "Exportovat nastavení"
+
+#: src/prefs/utility.js:55
+#, fuzzy
+msgid "Warning: this will export all profiles."
+msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
+
+#: src/prefs/utility.js:69
+msgid "Save"
+msgstr "Uložit"
+
+#: src/prefs/utility.js:70 src/prefs/utility.js:103
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: src/prefs/utility.js:88 src/prefs/utility.js:92
+msgid "Import Settings"
+msgstr "Importovat nastavení"
+
+#: src/prefs/utility.js:89
+#, fuzzy
+msgid "Warning: this will overwrite all profiles."
+msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
+
+#: src/prefs/utility.js:102
+msgid "Open"
+msgstr "Otevřít"
+
+#: src/prefs/utility.js:128 src/prefs/utility.js:132
+msgid "Reset Settings"
+msgstr "Obnovit nastavení"
+
+#: src/prefs/utility.js:129
+#, fuzzy
+msgid "Warning: this will reset all profiles."
+msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
+
+#: src/prefs/utility.js:133
+msgid "Are you sure you want to reset all preferences?"
+msgstr "Určitě chcete obnovit všechna nastavení?"
+
+#: src/prefs/utility.js:148
+msgid "Debug Mode"
+msgstr "Režim ladění (Debug)"
+
+#: src/prefs/utility.js:149
+msgid ""
+"Warning: may affect performance, use only if you know what you are doing."
+msgstr "Varování: může ovlivnit výkon, použijte na vlastní nebezpečí."
+
+#: src/prefs/utility.js:152
+msgid "Experimental Features"
+msgstr ""
+
+#: src/prefs/utility.js:154
+#, fuzzy
+msgid "PosixSpawn Subprocess"
+msgstr "Procesy"
+
+#: src/prefs/utility.js:155
+#, fuzzy
+msgid ""
+"Experimental posix_spawn() subprocess monitoring.\n"
+"This might help with UI performance issues."
+msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
+
+#: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
+#: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
+#: prefs.js:277
+msgid "Memory"
+msgstr "Paměť"
+
+#: src/prefs/memory.js:86
+msgid "kB (as kiB)"
+msgstr "kB (jako kiB)"
+
+#: src/prefs/memory.js:87
+msgid "kB (as KB)"
+msgstr "kB (jako KB)"
+
+#: src/prefs/memory.js:88
+msgid "kiB"
+msgstr ""
+
+#: src/prefs/memory.js:89
+msgid "KiB"
+msgstr ""
+
+#: src/prefs/memory.js:90
+msgid "KB"
+msgstr ""
+
+#: src/prefs/memory.js:91
+msgid "k (as kB)"
+msgstr "k (jako kB)"
+
+#: src/prefs/memory.js:92
+msgid "Ki (as Ki)"
+msgstr "Ki (jako Ki)"
+
+#: src/prefs/memory.js:94 src/prefs/storage.js:100 src/prefs/network.js:100
+msgid "Data Unit"
+msgstr "Datová jednotka"
+
+#: src/prefs/memory.js:98
+msgid "Used = Total - Free - Buffers - Cached"
+msgstr "Využito = Celkem - Volná - Vyrovnávací - V mezipaměti"
+
+#: src/prefs/memory.js:100
+msgid "Used = Total - Free"
+msgstr "Využito = Celkem - Volno"
+
+#: src/prefs/memory.js:101
+msgid "Used = Total - Available"
+msgstr "Využito = Celkem - Dostupná"
+
+#: src/prefs/memory.js:102
+msgid "Used = Active"
+msgstr "Využito = Aktivní"
+
+#: src/prefs/memory.js:104
+msgid "Used Memory"
+msgstr "Využitá paměť"
+
+#: src/prefs/memory.js:111
+msgid "Memory Usage"
+msgstr "Využití paměti"
+
+#: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
+#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
+#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:308
+#: src/gpu/gpuMenuComponent.js:1234
+msgid "Top Processes"
+msgstr "Procesy"
+
+#: src/prefs/memory.js:133
+msgid "Set icon name (ie: 'memory-symbolic')"
+msgstr "Nastavit jméno ikony (např. 'memory-symbolic')"
+
+#: src/prefs/memory.js:146 src/prefs/memory.js:194 src/prefs/storage.js:237
+msgid "Usage Percentage"
+msgstr "Využití v procentech"
+
+#: src/prefs/memory.js:147
+msgid "Show Usage Percentage"
+msgstr "Zobrazit využití v procentech"
+
+#: src/prefs/memory.js:149 src/prefs/memory.js:160 src/prefs/storage.js:240
+#: src/prefs/storage.js:251 src/prefs/gpu.js:200 src/prefs/gpu.js:222
+#: src/prefs/processors.js:141
+msgid "Icon Alert"
+msgstr "Ikona výstrahy"
+
+#: src/prefs/memory.js:150
+msgid "Set 0 to disable. Value is percentage of ram usage."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je využití RAM v %."
+
+#: src/prefs/memory.js:153 src/prefs/memory.js:195 src/prefs/storage.js:244
+msgid "Usage Value"
+msgstr "Hodnota využití"
+
+#: src/prefs/memory.js:154
+msgid "Show Usage Value"
+msgstr "Zobrazit hodnotu využití"
+
+#: src/prefs/memory.js:155 src/prefs/storage.js:246
+msgid "Usage Value Max Number of Figures"
+msgstr "Maximální počet číslic hodnoty využití"
+
+#: src/prefs/memory.js:156 src/prefs/memory.js:196 src/prefs/storage.js:247
+msgid "Free Value"
+msgstr "Volná paměť"
+
+#: src/prefs/memory.js:157
+msgid "Show Free Value"
+msgstr "Zobrazit volnou paměť"
+
+#: src/prefs/memory.js:158 src/prefs/storage.js:249
+msgid "Free Value Max Number of Figures"
+msgstr "Maximální počet číslic hodnoty volné paměti"
+
+#: src/prefs/memory.js:161
+msgid "Set 0 to disable. Value is free MB of ram."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je volná paměť RAM v MB."
+
+#: src/prefs/memory.js:164 src/prefs/processors.js:153
+msgid "History Graph"
+msgstr "Historický graf"
+
+#: src/prefs/memory.js:165 src/prefs/processors.js:154
+msgid "Show History Graph"
+msgstr "Zobrazit historický graf"
+
+#: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
+#: src/prefs/visualization.js:81 src/prefs/gpu.js:207 src/prefs/gpu.js:229
+#: src/prefs/processors.js:156 src/prefs/processors.js:171
+msgid "Main Color"
+msgstr "Hlavní barva"
+
+#: src/prefs/memory.js:168 src/prefs/memory.js:182
+msgid "<b>Used</b> memory color."
+msgstr "<b>Využito</b> - barva paměti."
+
+#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:160
+#: src/prefs/processors.js:196
+msgid "History Graph Breakdown"
+msgstr "Členění historického grafu"
+
+#: src/prefs/memory.js:173 src/prefs/memory.js:187
+msgid "Alt Color"
+msgstr "Alternativní barva"
+
+#: src/prefs/memory.js:174 src/prefs/memory.js:188
+msgid "<b>Allocated <u>unused</u></b> memory color."
+msgstr "<b>Alokováno <u>nevyužito</u></b> - barva paměti"
+
+#: src/prefs/memory.js:177 src/prefs/gpu.js:211 src/prefs/gpu.js:233
+#: src/prefs/processors.js:166
+msgid "History Graph Width"
+msgstr "Šířka historického grafu"
+
+#: src/prefs/memory.js:178 src/prefs/processors.js:167
+msgid "Realtime Bar"
+msgstr "Aktuální stav"
+
+#: src/prefs/memory.js:179 src/prefs/processors.js:168
+msgid "Show Realtime Bar"
+msgstr "Zobrazit aktuální stav"
+
+#: src/prefs/memory.js:185 src/prefs/processors.js:175
+msgid "Realtime Bar Breakdown"
+msgstr "Rozdělení sloupců aktuálního stavu"
+
+#: src/prefs/memory.js:207 src/memory/memoryMenu.js:329
+msgid "Swap"
+msgstr "SWAP paměť"
+
+#: src/prefs/memory.js:209
+msgid "Swap Bar Color"
+msgstr "Barva Swap sloupce"
+
+#: src/prefs/memory.js:210
+msgid "Swap bar main color."
+msgstr "Hlavní barva Swap sloupce"
+
+#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:420
+msgid "About"
+msgstr "O rozšíření"
+
+#: src/prefs/about.js:48 src/network/networkMenu.js:910
+msgid "Info"
+msgstr ""
+
+#: src/prefs/about.js:57
+msgid "Version"
+msgstr "Verze"
+
+#: src/prefs/about.js:58
+msgid "GitHub"
+msgstr ""
+
+#: src/prefs/about.js:59
+msgid "Changelog"
+msgstr ""
+
+#: src/prefs/about.js:60
+msgid "Roadmap"
+msgstr "Roadmapa"
+
+#: src/prefs/about.js:61
+msgid "Report a bug or suggest new feature"
+msgstr "Náhlasit chybu nebo navrhnout novou funkci"
+
+#: src/prefs/about.js:62
+msgid "GNOME Extensions page"
+msgstr "Stránka GNOME rozšíření"
+
+#: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:311
+msgid "Storage"
+msgstr "Uložiště"
 
 #: src/prefs/storage.js:88 src/prefs/network.js:88
 msgid "kB/s"
@@ -779,10 +703,6 @@ msgstr "k (jako kB/s)"
 msgid "Ki (as KiB/s)"
 msgstr "Ki (jako KiB/s)"
 
-#: src/prefs/storage.js:100 src/prefs/network.js:100 src/prefs/memory.js:94
-msgid "Data Unit"
-msgstr "Datová jednotka"
-
 #: src/prefs/storage.js:121 src/prefs/storage.js:229
 msgid "Main Disk"
 msgstr "Hlavní disk"
@@ -821,19 +741,6 @@ msgstr "Hlavní"
 msgid "Main disk cannot be ignored"
 msgstr "Hlavní disk nelze ignorovat"
 
-#: src/prefs/storage.js:184 src/prefs/network.js:153 src/prefs/processors.js:85
-#: src/prefs/sensors.js:106 src/prefs/memory.js:105
-msgid "Data Sources"
-msgstr "Zdroje dat"
-
-#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
-#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
-#: src/prefs/processors.js:87 src/prefs/processors.js:93
-#: src/prefs/processors.js:99 src/prefs/processors.js:105
-#: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
-msgid "Auto"
-msgstr "Automaticky"
-
 #: src/prefs/storage.js:190
 msgid "Storage Usage"
 msgstr "Využití uložiště"
@@ -842,65 +749,9 @@ msgstr "Využití uložiště"
 msgid "Storage IO"
 msgstr "IO uložiště"
 
-#: src/prefs/storage.js:209 src/prefs/network.js:189
-#: src/prefs/processors.js:117 src/prefs/sensors.js:121 src/prefs/gpu.js:176
-#: src/prefs/memory.js:126
-msgid "Indicators Order"
-msgstr "Pořadí indikátorů"
-
-#: src/prefs/storage.js:212 src/prefs/network.js:192
-#: src/prefs/processors.js:120 src/prefs/sensors.js:124 src/prefs/gpu.js:179
-#: src/prefs/memory.js:129
-msgid "Icon"
-msgstr "Ikona"
-
-#: src/prefs/storage.js:213 src/prefs/network.js:193
-#: src/prefs/processors.js:121 src/prefs/sensors.js:125 src/prefs/gpu.js:180
-#: src/prefs/memory.js:130
-msgid "Show Icon"
-msgstr "Zobrazit ikonu"
-
-#: src/prefs/storage.js:215 src/prefs/network.js:195
-#: src/prefs/processors.js:123 src/prefs/sensors.js:127 src/prefs/gpu.js:182
-#: src/prefs/memory.js:132
-msgid "Icon Name"
-msgstr "Název ikony"
-
 #: src/prefs/storage.js:216
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr "Nastavit název ikony (např. 'drive-harddisk-symbolic')"
-
-#: src/prefs/storage.js:218 src/prefs/visualization.js:171
-#: src/prefs/visualization.js:178 src/prefs/network.js:198
-#: src/prefs/processors.js:126 src/prefs/sensors.js:130 src/prefs/gpu.js:185
-#: src/prefs/memory.js:135
-msgid "Set to empty to disable icon override"
-msgstr "Pro výchozí název nechte prázdné"
-
-#: src/prefs/storage.js:221 src/prefs/network.js:201
-#: src/prefs/processors.js:129 src/prefs/sensors.js:133 src/prefs/gpu.js:188
-#: src/prefs/memory.js:138
-msgid "Icon Color"
-msgstr "Barva ikony"
-
-#: src/prefs/storage.js:222 src/prefs/network.js:202
-#: src/prefs/processors.js:130 src/prefs/sensors.js:134 src/prefs/gpu.js:189
-#: src/prefs/memory.js:139
-msgid "Icon Alert Color"
-msgstr "Barva ikony při výstraze"
-
-#: src/prefs/storage.js:224 src/prefs/network.js:204
-#: src/prefs/processors.js:132 src/prefs/sensors.js:136 src/prefs/gpu.js:191
-#: src/prefs/memory.js:141
-msgid "Icon Size"
-msgstr "Velikost ikony"
-
-#: src/prefs/storage.js:225 src/prefs/visualization.js:132
-#: src/prefs/visualization.js:140 src/prefs/visualization.js:148
-#: src/prefs/network.js:205 src/prefs/processors.js:133
-#: src/prefs/sensors.js:137 src/prefs/gpu.js:192 src/prefs/memory.js:142
-msgid "Experimental feature: may require to disable/enable the extension."
-msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
 
 #: src/prefs/storage.js:230
 msgid "Usage Bar"
@@ -910,57 +761,25 @@ msgstr "Sloupec využití"
 msgid "Show Main Disk Usage Bar"
 msgstr "Zobrazit sloupec využití hlavního disku"
 
-#: src/prefs/storage.js:233 src/prefs/visualization.js:81
-#: src/prefs/processors.js:156 src/prefs/processors.js:171 src/prefs/gpu.js:207
-#: src/prefs/gpu.js:229 src/prefs/memory.js:167 src/prefs/memory.js:181
-msgid "Main Color"
-msgstr "Hlavní barva"
-
 #: src/prefs/storage.js:234
 msgid "<b>Used</b> storage color."
 msgstr "<b>Využito</b> - barva uložiště."
-
-#: src/prefs/storage.js:237 src/prefs/memory.js:146 src/prefs/memory.js:194
-msgid "Usage Percentage"
-msgstr "Využití v procentech"
 
 #: src/prefs/storage.js:238
 msgid "Show Main Disk Usage Percentage"
 msgstr "Zobrazit využití hlavního disku v %"
 
-#: src/prefs/storage.js:240 src/prefs/storage.js:251
-#: src/prefs/processors.js:141 src/prefs/gpu.js:200 src/prefs/gpu.js:222
-#: src/prefs/memory.js:149 src/prefs/memory.js:160
-msgid "Icon Alert"
-msgstr "Ikona výstrahy"
-
 #: src/prefs/storage.js:241
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr "Nastavte na 0 pro vypnutí. Hodnota je využití disku v %."
-
-#: src/prefs/storage.js:244 src/prefs/memory.js:153 src/prefs/memory.js:195
-msgid "Usage Value"
-msgstr "Hodnota využití"
 
 #: src/prefs/storage.js:245
 msgid "Show Main Disk Usage Value"
 msgstr "Zobrazit hodnotu využití hlavního disku"
 
-#: src/prefs/storage.js:246 src/prefs/memory.js:155
-msgid "Usage Value Max Number of Figures"
-msgstr "Maximální počet číslic hodnoty využití"
-
-#: src/prefs/storage.js:247 src/prefs/memory.js:156 src/prefs/memory.js:196
-msgid "Free Value"
-msgstr "Volná paměť"
-
 #: src/prefs/storage.js:248
 msgid "Show Main Disk Free Value"
 msgstr "Zobrazit hodnotu volné paměti hlavního disku"
-
-#: src/prefs/storage.js:249 src/prefs/memory.js:158
-msgid "Free Value Max Number of Figures"
-msgstr "Maximální počet číslic hodnoty volné paměti"
 
 #: src/prefs/storage.js:252
 msgid "Set 0 to disable. Value is free MB of storage."
@@ -1023,14 +842,6 @@ msgstr "Rychlost IO"
 msgid "Show IO Speed"
 msgstr "Zobrazit rychlost IO"
 
-#: src/prefs/storage.js:284 src/prefs/network.js:238 src/prefs/sensors.js:164
-msgid "Vertical"
-msgstr "Svislé"
-
-#: src/prefs/storage.js:285 src/prefs/network.js:239 src/prefs/sensors.js:165
-msgid "Horizontal"
-msgstr "Vodorovné"
-
 #: src/prefs/storage.js:287 src/prefs/network.js:241
 msgid "IO Speed Layout"
 msgstr "IO rychlost - rozvržení"
@@ -1046,18 +857,6 @@ msgstr "Hranice IO rychlosti"
 #: src/prefs/storage.js:289 src/prefs/network.js:243
 msgid "in kB/s"
 msgstr "v kB/s"
-
-#: src/prefs/storage.js:291 src/prefs/network.js:245
-#: src/prefs/processors.js:182 src/prefs/sensors.js:179 src/prefs/gpu.js:241
-#: src/prefs/memory.js:192
-msgid "Tooltip"
-msgstr "Nápověda"
-
-#: src/prefs/storage.js:292 src/prefs/network.js:246
-#: src/prefs/processors.js:183 src/prefs/sensors.js:180 src/prefs/gpu.js:242
-#: src/prefs/memory.js:193
-msgid "Show Tooltip"
-msgstr "Zobrazit nápovědu"
 
 #: src/prefs/storage.js:293
 msgid "Main Disk Usage Percentage"
@@ -1090,6 +889,283 @@ msgstr "Zařízení"
 #: src/prefs/storage.js:318
 msgid "Device Usage Bar Color"
 msgstr "Barva sloupce využití zařízení"
+
+#: src/prefs/prefsUtils.js:649
+msgid "Move up"
+msgstr ""
+
+#: src/prefs/prefsUtils.js:668
+msgid "Move down"
+msgstr ""
+
+#: src/prefs/profiles.js:36 src/prefs/profiles.js:49
+#: src/profiles/profilesMenu.js:32 prefs.js:184
+msgid "Profiles"
+msgstr ""
+
+#: src/prefs/profiles.js:62
+msgid "Current profile"
+msgstr ""
+
+#: src/prefs/profiles.js:98
+msgid "Rename profile"
+msgstr ""
+
+#: src/prefs/profiles.js:110
+msgid "Apply"
+msgstr ""
+
+#: src/prefs/profiles.js:133
+msgid "Reset profile"
+msgstr ""
+
+#: src/prefs/profiles.js:134
+msgid "Warning: this will reset the current profile to default settings."
+msgstr ""
+
+#: src/prefs/profiles.js:137
+msgid "Reset"
+msgstr ""
+
+#: src/prefs/profiles.js:147
+msgid "Clone profile"
+msgstr ""
+
+#: src/prefs/profiles.js:148
+msgid "Create a copy of the current profile."
+msgstr ""
+
+#: src/prefs/profiles.js:151
+msgid "Clone"
+msgstr ""
+
+#: src/prefs/profiles.js:176
+msgid "Delete profile"
+msgstr ""
+
+#: src/prefs/profiles.js:177
+msgid "Warning: this operation is irreversible."
+msgstr ""
+
+#: src/prefs/profiles.js:180
+msgid "Delete"
+msgstr ""
+
+#: src/prefs/welcome.js:33 prefs.js:168
+msgid "Welcome"
+msgstr ""
+
+#: src/prefs/welcome.js:46 src/prefs/network.js:255
+msgid "Dependencies"
+msgstr "Závislosti"
+
+#: src/prefs/welcome.js:50
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/stat: rozšíření nebude fungovat!"
+
+#: src/prefs/welcome.js:54
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/cpuinfo: rozšíření nebude fungovat!"
+
+#: src/prefs/welcome.js:58
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/meminfo: rozšíření nebude fungovat!"
+
+#: src/prefs/welcome.js:62
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/diskstats: rozšíření nebude fungovat!"
+
+#: src/prefs/welcome.js:66
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr "Nelze přistoupit k /proc/net/dev: rozšíření nebude fungovat!"
+
+#: src/prefs/welcome.js:70
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr "Nelze přistoupit k 'ps': rozšíření nebude fungovat!"
+
+#: src/prefs/welcome.js:75
+msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
+msgstr "Nelze přistoupit k /sys/class/hwmon: údaje ze sensorů nelze získat!"
+
+#: src/prefs/welcome.js:80
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "'lscpu' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:84
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "'lspci' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:88
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "'lsblk' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:93
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
+msgstr ""
+"Nelze přistoupit k /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: "
+"některé funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:98
+#, fuzzy
+msgid "'NetHogs' not installed: some optional features will be disabled!"
+msgstr "'lscpu' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:102
+msgid "'iproute2' not installed: some features will be disabled!"
+msgstr "'iproute2' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:107
+msgid ""
+"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
+"network info!"
+msgstr ""
+
+#: src/prefs/welcome.js:113
+#, fuzzy
+msgid "'iotop' not installed: some optional features will be disabled!"
+msgstr "'iproute2' nenainstalováno: některé funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:119
+msgid ""
+"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
+"be disabled!"
+msgstr ""
+"AMD GPU detekováno, ale 'amdgpu_top' nenainstalováno: některé volitelné "
+"funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:125
+msgid ""
+"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
+"will be disabled!"
+msgstr ""
+"NVidia GPU detekováno, ale 'nvidia-smi' nenainstalováno: některé volitelné "
+"funkce jsou vypnuté!"
+
+#: src/prefs/welcome.js:128
+msgid "Checking GTop dependency..."
+msgstr "Kontrola GTop závislosti..."
+
+#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
+msgid ""
+"'GTop' not installed, some optional features will be disabled! For a better "
+"experience and performance, install it from your package manager."
+msgstr ""
+"'GTop' nenainstalováno, některé volitelné funkce jsou vypnuté! Pro "
+"lepšízážitek jej nainstalujte pomocí Vašeho package manageru."
+
+#: src/prefs/welcome.js:136
+msgid "'GTop' successfully detected and added to Data Sources list."
+msgstr "'Gtop' úspěšně nalezen a přidán ke zdrojům dat."
+
+#: src/prefs/welcome.js:146
+msgid "All other dependencies are met!"
+msgstr "Všechny ostatní závislosti jsou splněny!"
+
+#: src/prefs/welcome.js:149
+#, fuzzy
+msgid "Support Us"
+msgstr "Podpořit na Ko-Fi"
+
+#: src/prefs/welcome.js:150
+msgid "Support us on Ko-Fi"
+msgstr "Podpořit na Ko-Fi"
+
+#: src/prefs/welcome.js:151
+msgid "Buy us a coffee"
+msgstr "Podpořit na Buy me a coffee"
+
+#: src/prefs/welcome.js:152
+msgid "Become a patron"
+msgstr "Podpořit na Patreonu"
+
+#: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
+#: src/prefs/network.js:84 src/network/networkMenu.js:42 prefs.js:345
+msgid "Network"
+msgstr "Síť"
+
+#: src/prefs/network.js:101
+msgid "Ignored Network Interfaces"
+msgstr "Ignorovaná síťová rozhraní"
+
+#: src/prefs/network.js:104
+msgid "Interfaces matching this regex will be ignored."
+msgstr "Rozhraní odpovídající tomuto regulárnímu výrazu budou ignorována."
+
+#: src/prefs/network.js:159
+msgid "Network IO"
+msgstr "IO síťe"
+
+#: src/prefs/network.js:164
+#, fuzzy
+msgid "Network Top Processes"
+msgstr "Procesy"
+
+#: src/prefs/network.js:166
+msgid "Public IPv4 Address"
+msgstr "Veřejná IPv4 adresa"
+
+#: src/prefs/network.js:167 src/prefs/network.js:172
+msgid "Set to empty to disable. Address will be regex matched."
+msgstr ""
+"Pro vypnutí nechejte prázdné. Adresa bude porovnávána regulárním výrazem."
+
+#: src/prefs/network.js:171
+msgid "Public IPv6 Address"
+msgstr "Veřejná IPv6 adresa"
+
+#: src/prefs/network.js:180
+msgid "Wireless Info"
+msgstr "Bezdrátová síť"
+
+#: src/prefs/network.js:196
+msgid "Set icon name (ie: 'network-wired-symbolic')"
+msgstr "Nastavit název ikony (např. 'network-wired-symbolic')"
+
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
+msgid "Upload Color"
+msgstr "Barva pro upload"
+
+#: src/prefs/network.js:214
+msgid "<b>Upload</b> IO Bar color."
+msgstr "<b>Upload</b> - barva IO sloupce."
+
+#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
+msgid "Download Color"
+msgstr "Barva pro download"
+
+#: src/prefs/network.js:219
+msgid "<b>Download</b> IO Bar color."
+msgstr "<b>Download</b> - barva IO sloupce."
+
+#: src/prefs/network.js:226
+msgid "<b>Upload</b> IO History Graph color."
+msgstr "<b>Upload</b> - barva IO historického grafu."
+
+#: src/prefs/network.js:231
+msgid "<b>Download</b> IO History Graph color."
+msgstr "<b>Download</b> - barva IO historického grafu."
+
+#: src/prefs/network.js:257
+msgid ""
+"'NetHogs' not installed or not configured appopriately: you won't be able to "
+"monitor process network activity! Check the documentation for more "
+"information."
+msgstr ""
+
+#: src/prefs/network.js:270
+msgid "<b>Upload</b> IO arrow color."
+msgstr "<b>Upload</b> - barva IO šipky."
+
+#: src/prefs/network.js:275
+msgid "<b>Download</b> IO arrow color."
+msgstr "<b>Download</b> - barva IO šipky."
+
+#: src/prefs/visualization.js:40 src/prefs/visualization.js:53
+#: src/prefs/visualization.js:56 prefs.js:200
+msgid "Visualization"
+msgstr "Vizualizace"
 
 #: src/prefs/visualization.js:57
 msgid "Theme"
@@ -1286,418 +1362,11 @@ msgstr "Nastavit název ikony (např. 'cpu-symbolic')"
 msgid "Monitor Ordering"
 msgstr "Pořadí"
 
-#: src/prefs/about.js:57
-msgid "Version"
-msgstr "Verze"
-
-#: src/prefs/about.js:58
-msgid "GitHub"
+#: src/prefs/gpu.js:42 src/prefs/gpu.js:55 src/prefs/gpu.js:68
+#: src/prefs/gpu.js:108 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
+#: src/gpu/gpuMenuComponent.js:46 prefs.js:251
+msgid "GPU"
 msgstr ""
-
-#: src/prefs/about.js:59
-msgid "Changelog"
-msgstr ""
-
-#: src/prefs/about.js:60
-msgid "Roadmap"
-msgstr "Roadmapa"
-
-#: src/prefs/about.js:61
-msgid "Report a bug or suggest new feature"
-msgstr "Náhlasit chybu nebo navrhnout novou funkci"
-
-#: src/prefs/about.js:62
-msgid "GNOME Extensions page"
-msgstr "Stránka GNOME rozšíření"
-
-#: src/prefs/network.js:101
-msgid "Ignored Network Interfaces"
-msgstr "Ignorovaná síťová rozhraní"
-
-#: src/prefs/network.js:104
-msgid "Interfaces matching this regex will be ignored."
-msgstr "Rozhraní odpovídající tomuto regulárnímu výrazu budou ignorována."
-
-#: src/prefs/network.js:159
-msgid "Network IO"
-msgstr "IO síťe"
-
-#: src/prefs/network.js:164
-#, fuzzy
-msgid "Network Top Processes"
-msgstr "Procesy"
-
-#: src/prefs/network.js:166
-msgid "Public IPv4 Address"
-msgstr "Veřejná IPv4 adresa"
-
-#: src/prefs/network.js:167 src/prefs/network.js:172
-msgid "Set to empty to disable. Address will be regex matched."
-msgstr ""
-"Pro vypnutí nechejte prázdné. Adresa bude porovnávána regulárním výrazem."
-
-#: src/prefs/network.js:171
-msgid "Public IPv6 Address"
-msgstr "Veřejná IPv6 adresa"
-
-#: src/prefs/network.js:180
-msgid "Wireless Info"
-msgstr "Bezdrátová síť"
-
-#: src/prefs/network.js:196
-msgid "Set icon name (ie: 'network-wired-symbolic')"
-msgstr "Nastavit název ikony (např. 'network-wired-symbolic')"
-
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
-msgid "Upload Color"
-msgstr "Barva pro upload"
-
-#: src/prefs/network.js:214
-msgid "<b>Upload</b> IO Bar color."
-msgstr "<b>Upload</b> - barva IO sloupce."
-
-#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
-msgid "Download Color"
-msgstr "Barva pro download"
-
-#: src/prefs/network.js:219
-msgid "<b>Download</b> IO Bar color."
-msgstr "<b>Download</b> - barva IO sloupce."
-
-#: src/prefs/network.js:226
-msgid "<b>Upload</b> IO History Graph color."
-msgstr "<b>Upload</b> - barva IO historického grafu."
-
-#: src/prefs/network.js:231
-msgid "<b>Download</b> IO History Graph color."
-msgstr "<b>Download</b> - barva IO historického grafu."
-
-#: src/prefs/network.js:255 src/prefs/welcome.js:46
-msgid "Dependencies"
-msgstr "Závislosti"
-
-#: src/prefs/network.js:257
-msgid ""
-"'NetHogs' not installed or not configured appopriately: you won't be able to "
-"monitor process network activity! Check the documentation for more "
-"information."
-msgstr ""
-
-#: src/prefs/network.js:270
-msgid "<b>Upload</b> IO arrow color."
-msgstr "<b>Upload</b> - barva IO šipky."
-
-#: src/prefs/network.js:275
-msgid "<b>Download</b> IO arrow color."
-msgstr "<b>Download</b> - barva IO šipky."
-
-#: src/prefs/processors.js:91
-msgid "Cpu Usage"
-msgstr "Využití CPU"
-
-#: src/prefs/processors.js:97
-msgid "Cpu Cores Usage"
-msgstr "Využití jader CPU"
-
-#: src/prefs/processors.js:108
-msgid "Load Average"
-msgstr "Průměrné vytížení"
-
-#: src/prefs/processors.js:124
-msgid "Set icon name (ie: 'cpu-symbolic')"
-msgstr "Nastavit název ikony (např. 'cpu-symbolic')"
-
-#: src/prefs/processors.js:137 src/prefs/processors.js:184
-msgid "Percentage"
-msgstr "Procenta"
-
-#: src/prefs/processors.js:138
-msgid "Show Percentage"
-msgstr "Zobrazit v procentech"
-
-#: src/prefs/processors.js:139 src/prefs/processors.js:185
-msgid "Single Core Percentage"
-msgstr "Procenta jednoho jádra"
-
-#: src/prefs/processors.js:142
-#, fuzzy
-msgid "Set 0 to disable. Value is percentage of total cpu usage."
-msgstr "Nastavte na 0 pro vypnutí. Hodnota je využití CPU v %."
-
-#: src/prefs/processors.js:146
-#, fuzzy
-msgid "Show Frequency"
-msgstr "Frekvence"
-
-#: src/prefs/processors.js:147
-#, fuzzy
-msgid "Frequency Max Number of Figures"
-msgstr "Maximální počet číslic hodnoty volné paměti"
-
-#: src/prefs/processors.js:149
-#, fuzzy
-msgid "Average"
-msgstr "Průměrné vytížení"
-
-#: src/prefs/processors.js:150
-msgid "Max"
-msgstr ""
-
-#: src/prefs/processors.js:152
-#, fuzzy
-msgid "Frequency Mode"
-msgstr "Frekvence"
-
-#: src/prefs/processors.js:153 src/prefs/memory.js:164
-msgid "History Graph"
-msgstr "Historický graf"
-
-#: src/prefs/processors.js:154 src/prefs/memory.js:165
-msgid "Show History Graph"
-msgstr "Zobrazit historický graf"
-
-#: src/prefs/processors.js:157 src/prefs/processors.js:172
-msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
-msgstr ""
-"<b>Celkové využití</b> - barva (<b>Využití uživatele</b> pokud je zapnuto "
-"členění)."
-
-#: src/prefs/processors.js:160 src/prefs/processors.js:196
-#: src/prefs/memory.js:171 src/prefs/memory.js:206
-msgid "History Graph Breakdown"
-msgstr "Členění historického grafu"
-
-#: src/prefs/processors.js:163 src/prefs/processors.js:178
-msgid "<b>System usage</b> color."
-msgstr "<b>Využití systému</b> - barva"
-
-#: src/prefs/processors.js:166 src/prefs/gpu.js:211 src/prefs/gpu.js:233
-#: src/prefs/memory.js:177
-msgid "History Graph Width"
-msgstr "Šířka historického grafu"
-
-#: src/prefs/processors.js:167 src/prefs/memory.js:178
-msgid "Realtime Bar"
-msgstr "Aktuální stav"
-
-#: src/prefs/processors.js:168 src/prefs/memory.js:179
-msgid "Show Realtime Bar"
-msgstr "Zobrazit aktuální stav"
-
-#: src/prefs/processors.js:169
-msgid "Realtime per-core Bars"
-msgstr "Aktuální stav jednotlivých jader"
-
-#: src/prefs/processors.js:175 src/prefs/memory.js:185
-msgid "Realtime Bar Breakdown"
-msgstr "Rozdělení sloupců aktuálního stavu"
-
-#: src/prefs/processors.js:195
-msgid "Realtime Bars Breakdown"
-msgstr "Rozdělení sloupců aktuálního stavu"
-
-#: src/prefs/processors.js:197
-msgid "Core Bars Breakdown"
-msgstr "Rozdělení sloupců jednotlivých jader"
-
-#: src/prefs/processors.js:198
-msgid "Top Processes Single Core"
-msgstr "Jednojádrové procesy"
-
-#: src/prefs/processors.js:201
-#, fuzzy
-msgid "Show GPU info"
-msgstr "Informace o GPU"
-
-#: src/prefs/processors.js:202
-msgid "Only works if GPU header is disabled."
-msgstr ""
-
-#: src/prefs/sensors.js:86
-msgctxt "Celsius unit measure choice"
-msgid "Celsius"
-msgstr ""
-
-#: src/prefs/sensors.js:87
-msgctxt "Fahrenheit unit measure choice"
-msgid "Fahrenheit"
-msgstr ""
-
-#: src/prefs/sensors.js:89
-msgid "Temperature Unit"
-msgstr "Jednotka teploty"
-
-#: src/prefs/sensors.js:90
-#, fuzzy
-msgid "Ignored Sensors"
-msgstr "Sensory"
-
-#: src/prefs/sensors.js:92
-#, fuzzy
-msgid "Ignored Sensors Regex"
-msgstr "Ignorovaná zařízení uložiště"
-
-#: src/prefs/sensors.js:93
-msgid "Completely ignore sensors matching this regex"
-msgstr ""
-
-#: src/prefs/sensors.js:97
-#, fuzzy
-msgid "Ignored Sensors Category Regex"
-msgstr "Ignorovaná zařízení uložiště"
-
-#: src/prefs/sensors.js:98
-msgid "Categories are like \"Package\", \"Core\", \"Edge\", etc."
-msgstr ""
-
-#: src/prefs/sensors.js:102
-msgid "Ignored Sensors Attribute Regex"
-msgstr ""
-
-#: src/prefs/sensors.js:103
-msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
-msgstr ""
-
-#: src/prefs/sensors.js:128
-msgid "Set icon name (ie: 'temperature-symbolic')"
-msgstr "Nastavit jméno ikony (např. 'temperature-symbolic')"
-
-#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
-msgid "None"
-msgstr "Žádné"
-
-#: src/prefs/sensors.js:149
-msgid "Sensor 1"
-msgstr ""
-
-#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
-#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
-#: src/prefs/sensors.js:247
-msgid "Source"
-msgstr "Zdroj"
-
-#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
-#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
-#: src/prefs/sensors.js:257
-msgid "Value Digits"
-msgstr "Počet číslic za desetinnou čárkou"
-
-#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
-#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
-#: src/prefs/sensors.js:258
-msgid "Set -1 to auto. Number of digits after the decimal point."
-msgstr ""
-"Pro automatické nastavení nastavte na -1. Počet číslic za desetinnou čárkou."
-
-#: src/prefs/sensors.js:161
-msgid "Sensor 2"
-msgstr ""
-
-#: src/prefs/sensors.js:167
-msgid "Sensor 2 Layout"
-msgstr "Sensor 2 - rozvržení"
-
-#: src/prefs/sensors.js:181
-msgid "Tooltip Sensor 1"
-msgstr "Sensor 1 - nápověda"
-
-#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
-#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
-msgid "Short Name"
-msgstr "Zkrácený název"
-
-#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
-#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
-msgid "Short name to display in the tooltip."
-msgstr "Zkrácený název pro zobrazení v nápovědě."
-
-#: src/prefs/sensors.js:197
-msgid "Tooltip Sensor 2"
-msgstr "Sensor 2 - nápověda"
-
-#: src/prefs/sensors.js:213
-msgid "Tooltip Sensor 3"
-msgstr "Sensor 3 - nápověda"
-
-#: src/prefs/sensors.js:229
-msgid "Tooltip Sensor 4"
-msgstr "Sensor 4 - nápověda"
-
-#: src/prefs/sensors.js:245
-msgid "Tooltip Sensor 5"
-msgstr "Sensor 5 - nápověda"
-
-#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
-msgid "Empty for now"
-msgstr ""
-
-#: src/prefs/utility.js:54 src/prefs/utility.js:58
-msgid "Export Settings"
-msgstr "Exportovat nastavení"
-
-#: src/prefs/utility.js:55
-#, fuzzy
-msgid "Warning: this will export all profiles."
-msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
-
-#: src/prefs/utility.js:69
-msgid "Save"
-msgstr "Uložit"
-
-#: src/prefs/utility.js:70 src/prefs/utility.js:103
-msgid "Cancel"
-msgstr "Zrušit"
-
-#: src/prefs/utility.js:88 src/prefs/utility.js:92
-msgid "Import Settings"
-msgstr "Importovat nastavení"
-
-#: src/prefs/utility.js:89
-#, fuzzy
-msgid "Warning: this will overwrite all profiles."
-msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
-
-#: src/prefs/utility.js:102
-msgid "Open"
-msgstr "Otevřít"
-
-#: src/prefs/utility.js:128 src/prefs/utility.js:132
-msgid "Reset Settings"
-msgstr "Obnovit nastavení"
-
-#: src/prefs/utility.js:129
-#, fuzzy
-msgid "Warning: this will reset all profiles."
-msgstr "Změna tohoto nastavení pouze změní všechny hlavní barvy."
-
-#: src/prefs/utility.js:133
-msgid "Are you sure you want to reset all preferences?"
-msgstr "Určitě chcete obnovit všechna nastavení?"
-
-#: src/prefs/utility.js:148
-msgid "Debug Mode"
-msgstr "Režim ladění (Debug)"
-
-#: src/prefs/utility.js:149
-msgid ""
-"Warning: may affect performance, use only if you know what you are doing."
-msgstr "Varování: může ovlivnit výkon, použijte na vlastní nebezpečí."
-
-#: src/prefs/utility.js:152
-msgid "Experimental Features"
-msgstr ""
-
-#: src/prefs/utility.js:154
-#, fuzzy
-msgid "PosixSpawn Subprocess"
-msgstr "Procesy"
-
-#: src/prefs/utility.js:155
-#, fuzzy
-msgid ""
-"Experimental posix_spawn() subprocess monitoring.\n"
-"This might help with UI performance issues."
-msgstr "Experimentální funkce: možná bude nutné vypnout/zapnout rozšíření."
 
 #: src/prefs/gpu.js:86
 msgid "Showing GPU info in the panel requires continuous GPU monitoring."
@@ -1815,274 +1484,371 @@ msgstr "Zobrazit aktuální stav"
 msgid "Memory Value"
 msgstr "Využití paměti"
 
-#: src/prefs/welcome.js:50
-msgid "Cannot access /proc/stat: this extension will not work!"
-msgstr "Nelze přistoupit k /proc/stat: rozšíření nebude fungovat!"
+#: src/prefs/processors.js:41 src/prefs/processors.js:54
+#: src/prefs/processors.js:67 prefs.js:217
+msgid "Processors"
+msgstr "Procesor"
 
-#: src/prefs/welcome.js:54
-msgid "Cannot access /proc/cpuinfo: this extension will not work!"
-msgstr "Nelze přistoupit k /proc/cpuinfo: rozšíření nebude fungovat!"
+#: src/prefs/processors.js:91
+msgid "Cpu Usage"
+msgstr "Využití CPU"
 
-#: src/prefs/welcome.js:58
-msgid "Cannot access /proc/meminfo: this extension will not work!"
-msgstr "Nelze přistoupit k /proc/meminfo: rozšíření nebude fungovat!"
+#: src/prefs/processors.js:97
+msgid "Cpu Cores Usage"
+msgstr "Využití jader CPU"
 
-#: src/prefs/welcome.js:62
-msgid "Cannot access /proc/diskstats: this extension will not work!"
-msgstr "Nelze přistoupit k /proc/diskstats: rozšíření nebude fungovat!"
+#: src/prefs/processors.js:108
+msgid "Load Average"
+msgstr "Průměrné vytížení"
 
-#: src/prefs/welcome.js:66
-msgid "Cannot access /proc/net/dev: this extension will not work!"
-msgstr "Nelze přistoupit k /proc/net/dev: rozšíření nebude fungovat!"
+#: src/prefs/processors.js:124
+msgid "Set icon name (ie: 'cpu-symbolic')"
+msgstr "Nastavit název ikony (např. 'cpu-symbolic')"
 
-#: src/prefs/welcome.js:70
-msgid "Cannot access 'ps': this extension will not work!"
-msgstr "Nelze přistoupit k 'ps': rozšíření nebude fungovat!"
+#: src/prefs/processors.js:137 src/prefs/processors.js:184
+msgid "Percentage"
+msgstr "Procenta"
 
-#: src/prefs/welcome.js:75
-msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
-msgstr "Nelze přistoupit k /sys/class/hwmon: údaje ze sensorů nelze získat!"
+#: src/prefs/processors.js:138
+msgid "Show Percentage"
+msgstr "Zobrazit v procentech"
 
-#: src/prefs/welcome.js:80
-msgid "'lscpu' not installed: some features will be disabled!"
-msgstr "'lscpu' nenainstalováno: některé funkce jsou vypnuté!"
+#: src/prefs/processors.js:139 src/prefs/processors.js:185
+msgid "Single Core Percentage"
+msgstr "Procenta jednoho jádra"
 
-#: src/prefs/welcome.js:84
-msgid "'lspci' not installed: some features will be disabled!"
-msgstr "'lspci' nenainstalováno: některé funkce jsou vypnuté!"
-
-#: src/prefs/welcome.js:88
-msgid "'lsblk' not installed: some features will be disabled!"
-msgstr "'lsblk' nenainstalováno: některé funkce jsou vypnuté!"
-
-#: src/prefs/welcome.js:93
-msgid ""
-"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
-"features will be disabled!"
-msgstr ""
-"Nelze přistoupit k /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: "
-"některé funkce jsou vypnuté!"
-
-#: src/prefs/welcome.js:98
+#: src/prefs/processors.js:142
 #, fuzzy
-msgid "'NetHogs' not installed: some optional features will be disabled!"
-msgstr "'lscpu' nenainstalováno: některé funkce jsou vypnuté!"
+msgid "Set 0 to disable. Value is percentage of total cpu usage."
+msgstr "Nastavte na 0 pro vypnutí. Hodnota je využití CPU v %."
 
-#: src/prefs/welcome.js:102
-msgid "'iproute2' not installed: some features will be disabled!"
-msgstr "'iproute2' nenainstalováno: některé funkce jsou vypnuté!"
+#: src/prefs/processors.js:145 src/network/networkMenu.js:1191
+msgid "Frequency"
+msgstr "Frekvence"
 
-#: src/prefs/welcome.js:107
-msgid ""
-"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
-"network info!"
-msgstr ""
-
-#: src/prefs/welcome.js:113
+#: src/prefs/processors.js:146
 #, fuzzy
-msgid "'iotop' not installed: some optional features will be disabled!"
-msgstr "'iproute2' nenainstalováno: některé funkce jsou vypnuté!"
+msgid "Show Frequency"
+msgstr "Frekvence"
 
-#: src/prefs/welcome.js:119
-msgid ""
-"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
-"be disabled!"
-msgstr ""
-"AMD GPU detekováno, ale 'amdgpu_top' nenainstalováno: některé volitelné "
-"funkce jsou vypnuté!"
-
-#: src/prefs/welcome.js:125
-msgid ""
-"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
-"will be disabled!"
-msgstr ""
-"NVidia GPU detekováno, ale 'nvidia-smi' nenainstalováno: některé volitelné "
-"funkce jsou vypnuté!"
-
-#: src/prefs/welcome.js:128
-msgid "Checking GTop dependency..."
-msgstr "Kontrola GTop závislosti..."
-
-#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
-msgid ""
-"'GTop' not installed, some optional features will be disabled! For a better "
-"experience and performance, install it from your package manager."
-msgstr ""
-"'GTop' nenainstalováno, některé volitelné funkce jsou vypnuté! Pro "
-"lepšízážitek jej nainstalujte pomocí Vašeho package manageru."
-
-#: src/prefs/welcome.js:136
-msgid "'GTop' successfully detected and added to Data Sources list."
-msgstr "'Gtop' úspěšně nalezen a přidán ke zdrojům dat."
-
-#: src/prefs/welcome.js:146
-msgid "All other dependencies are met!"
-msgstr "Všechny ostatní závislosti jsou splněny!"
-
-#: src/prefs/welcome.js:149
+#: src/prefs/processors.js:147
 #, fuzzy
-msgid "Support Us"
-msgstr "Podpořit na Ko-Fi"
+msgid "Frequency Max Number of Figures"
+msgstr "Maximální počet číslic hodnoty volné paměti"
 
-#: src/prefs/welcome.js:150
-msgid "Support us on Ko-Fi"
-msgstr "Podpořit na Ko-Fi"
+#: src/prefs/processors.js:149
+#, fuzzy
+msgid "Average"
+msgstr "Průměrné vytížení"
 
-#: src/prefs/welcome.js:151
-msgid "Buy us a coffee"
-msgstr "Podpořit na Buy me a coffee"
-
-#: src/prefs/welcome.js:152
-msgid "Become a patron"
-msgstr "Podpořit na Patreonu"
-
-#: src/prefs/memory.js:86
-msgid "kB (as kiB)"
-msgstr "kB (jako kiB)"
-
-#: src/prefs/memory.js:87
-msgid "kB (as KB)"
-msgstr "kB (jako KB)"
-
-#: src/prefs/memory.js:88
-msgid "kiB"
+#: src/prefs/processors.js:150
+msgid "Max"
 msgstr ""
 
-#: src/prefs/memory.js:89
-msgid "KiB"
+#: src/prefs/processors.js:152
+#, fuzzy
+msgid "Frequency Mode"
+msgstr "Frekvence"
+
+#: src/prefs/processors.js:157 src/prefs/processors.js:172
+msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
+msgstr ""
+"<b>Celkové využití</b> - barva (<b>Využití uživatele</b> pokud je zapnuto "
+"členění)."
+
+#: src/prefs/processors.js:163 src/prefs/processors.js:178
+msgid "<b>System usage</b> color."
+msgstr "<b>Využití systému</b> - barva"
+
+#: src/prefs/processors.js:169
+msgid "Realtime per-core Bars"
+msgstr "Aktuální stav jednotlivých jader"
+
+#: src/prefs/processors.js:195
+msgid "Realtime Bars Breakdown"
+msgstr "Rozdělení sloupců aktuálního stavu"
+
+#: src/prefs/processors.js:197
+msgid "Core Bars Breakdown"
+msgstr "Rozdělení sloupců jednotlivých jader"
+
+#: src/prefs/processors.js:198
+msgid "Top Processes Single Core"
+msgstr "Jednojádrové procesy"
+
+#: src/prefs/processors.js:201
+#, fuzzy
+msgid "Show GPU info"
+msgstr "Informace o GPU"
+
+#: src/prefs/processors.js:202
+msgid "Only works if GPU header is disabled."
 msgstr ""
 
-#: src/prefs/memory.js:90
-msgid "KB"
+#: src/sensors/sensorsMenu.js:50
+msgid "No sensor found"
+msgstr "Nenalezeny žádné sensory"
+
+#: src/sensors/sensorsMenu.js:225
+#, fuzzy, javascript-format
+msgid "%d sensor"
+msgid_plural "%d sensors"
+msgstr[0] "sensory"
+msgstr[1] "sensory"
+msgstr[2] "sensory"
+
+#: src/network/networkMenu.js:77
+msgid "Global Upload:"
+msgstr "Globální upload:"
+
+#: src/network/networkMenu.js:89
+msgid "Global Download:"
+msgstr "Globální download:"
+
+#: src/network/networkMenu.js:114
+msgid "Upload Activity"
+msgstr "Upload"
+
+#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
+#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
+#: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
+msgid "Total"
+msgstr "Celkem"
+
+#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
+#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
+msgid "Packets"
+msgstr "Pakety"
+
+#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
+#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
+msgid "Errors/Dropped"
+msgstr "Chyby/Zahozeno"
+
+#: src/network/networkMenu.js:136
+msgid "Download Activity"
+msgstr "Download"
+
+#: src/network/networkMenu.js:168
+msgid "(click to show)"
 msgstr ""
 
-#: src/prefs/memory.js:91
-msgid "k (as kB)"
-msgstr "k (jako kB)"
+#: src/network/networkMenu.js:381
+msgid "Public IP"
+msgstr "Veřejná IP"
 
-#: src/prefs/memory.js:92
-msgid "Ki (as Ki)"
-msgstr "Ki (jako Ki)"
+#: src/network/networkMenu.js:391
+msgid "Public IPv4:"
+msgstr "Veřejná IPv4"
 
-#: src/prefs/memory.js:98
-msgid "Used = Total - Free - Buffers - Cached"
-msgstr "Využito = Celkem - Volná - Vyrovnávací - V mezipaměti"
+#: src/network/networkMenu.js:408
+msgid "Public IPv6:"
+msgstr "Veřejná IPv6"
 
-#: src/prefs/memory.js:100
-msgid "Used = Total - Free"
-msgstr "Využito = Celkem - Volno"
-
-#: src/prefs/memory.js:101
-msgid "Used = Total - Available"
-msgstr "Využito = Celkem - Dostupná"
-
-#: src/prefs/memory.js:102
-msgid "Used = Active"
-msgstr "Využito = Aktivní"
-
-#: src/prefs/memory.js:104
-msgid "Used Memory"
-msgstr "Využitá paměť"
-
-#: src/prefs/memory.js:111
-msgid "Memory Usage"
-msgstr "Využití paměti"
-
-#: src/prefs/memory.js:133
-msgid "Set icon name (ie: 'memory-symbolic')"
-msgstr "Nastavit jméno ikony (např. 'memory-symbolic')"
-
-#: src/prefs/memory.js:147
-msgid "Show Usage Percentage"
-msgstr "Zobrazit využití v procentech"
-
-#: src/prefs/memory.js:150
-msgid "Set 0 to disable. Value is percentage of ram usage."
-msgstr "Nastavte na 0 pro vypnutí. Hodnota je využití RAM v %."
-
-#: src/prefs/memory.js:154
-msgid "Show Usage Value"
-msgstr "Zobrazit hodnotu využití"
-
-#: src/prefs/memory.js:157
-msgid "Show Free Value"
-msgstr "Zobrazit volnou paměť"
-
-#: src/prefs/memory.js:161
-msgid "Set 0 to disable. Value is free MB of ram."
-msgstr "Nastavte na 0 pro vypnutí. Hodnota je volná paměť RAM v MB."
-
-#: src/prefs/memory.js:168 src/prefs/memory.js:182
-msgid "<b>Used</b> memory color."
-msgstr "<b>Využito</b> - barva paměti."
-
-#: src/prefs/memory.js:173 src/prefs/memory.js:187
-msgid "Alt Color"
-msgstr "Alternativní barva"
-
-#: src/prefs/memory.js:174 src/prefs/memory.js:188
-msgid "<b>Allocated <u>unused</u></b> memory color."
-msgstr "<b>Alokováno <u>nevyužito</u></b> - barva paměti"
-
-#: src/prefs/memory.js:207 src/memory/memoryMenu.js:329
-msgid "Swap"
-msgstr "SWAP paměť"
-
-#: src/prefs/memory.js:209
-msgid "Swap Bar Color"
-msgstr "Barva Swap sloupce"
-
-#: src/prefs/memory.js:210
-msgid "Swap bar main color."
-msgstr "Hlavní barva Swap sloupce"
-
-#: src/prefs/profiles.js:62
-msgid "Current profile"
+#: src/network/networkMenu.js:455
+msgid "Updated a long time ago"
 msgstr ""
 
-#: src/prefs/profiles.js:98
-msgid "Rename profile"
+#: src/network/networkMenu.js:457
+#, fuzzy
+msgid "Updated a few seconds ago"
+msgstr "Frekvence aktualizace (sekundy)"
+
+#: src/network/networkMenu.js:459
+msgid "Updated less than a minute ago"
 msgstr ""
 
-#: src/prefs/profiles.js:110
-msgid "Apply"
+#: src/network/networkMenu.js:461
+msgid "Updated about a minute ago"
 msgstr ""
 
-#: src/prefs/profiles.js:133
-msgid "Reset profile"
+#: src/network/networkMenu.js:463
+msgid "Updated about 2 minutes ago"
 msgstr ""
 
-#: src/prefs/profiles.js:134
-msgid "Warning: this will reset the current profile to default settings."
+#: src/network/networkMenu.js:465
+msgid "Updated about 5 minutes ago"
 msgstr ""
 
-#: src/prefs/profiles.js:137
-msgid "Reset"
+#: src/network/networkMenu.js:467
+msgid "Updated more than 5 minutes ago"
 msgstr ""
 
-#: src/prefs/profiles.js:147
-msgid "Clone profile"
+#: src/network/networkMenu.js:468
+msgid "Click to refresh"
 msgstr ""
 
-#: src/prefs/profiles.js:148
-msgid "Create a copy of the current profile."
+#: src/network/networkMenu.js:470
+msgid "Refreshing..."
 msgstr ""
 
-#: src/prefs/profiles.js:151
-msgid "Clone"
+#: src/network/networkMenu.js:472
+msgid "Done"
 msgstr ""
 
-#: src/prefs/profiles.js:176
-msgid "Delete profile"
+#: src/network/networkMenu.js:476
+msgid "Default Routes"
+msgstr "Výchozí cesty"
+
+#: src/network/networkMenu.js:515
+msgid "Route"
+msgstr "Cesta"
+
+#: src/network/networkMenu.js:521
+msgid "Metric"
+msgstr "Metrika"
+
+#: src/network/networkMenu.js:528
+msgid "Device"
+msgstr "Zařízení"
+
+#: src/network/networkMenu.js:535
+msgid "Gateway"
+msgstr "Brána"
+
+#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
+msgid "Type"
+msgstr "Typ"
+
+#: src/network/networkMenu.js:549
+msgid "Destination"
+msgstr "Cíl"
+
+#: src/network/networkMenu.js:556
+msgid "Protocol"
+msgstr "Protokol"
+
+#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
+msgid "Scope"
 msgstr ""
 
-#: src/prefs/profiles.js:177
-msgid "Warning: this operation is irreversible."
+#: src/network/networkMenu.js:570
+msgid "Flags"
+msgstr "Příznaky"
+
+#: src/network/networkMenu.js:599
+msgid "Interfaces"
+msgstr "Rozhraní"
+
+#: src/network/networkMenu.js:602
+msgid "No network interface found"
+msgstr "Nenalezena žádná síťová rozhraní"
+
+#: src/network/networkMenu.js:810
+msgctxt "short for upload"
+msgid "U"
 msgstr ""
 
-#: src/prefs/profiles.js:180
-msgid "Delete"
+#: src/network/networkMenu.js:836
+msgctxt "short for download"
+msgid "D"
 msgstr ""
+
+#: src/network/networkMenu.js:913 src/storage/storageMenu.js:600
+#: src/gpu/gpuMenuComponent.js:438 src/gpu/gpuMenuComponent.js:1246
+#: src/gpu/gpuMenuComponent.js:1277
+msgid "Name"
+msgstr "Jméno"
+
+#: src/network/networkMenu.js:920
+msgid "Alt Names"
+msgstr "Alternativní jména"
+
+#: src/network/networkMenu.js:929
+msgid "Interface Index"
+msgstr "Index rozhraní"
+
+#: src/network/networkMenu.js:938
+msgid "MAC Address"
+msgstr "MAC adresa"
+
+#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
+msgid "Group"
+msgstr "Skupina"
+
+#: src/network/networkMenu.js:956
+msgid "Speed"
+msgstr "Rychlost"
+
+#: src/network/networkMenu.js:965
+msgid "Duplex"
+msgstr ""
+
+#: src/network/networkMenu.js:974
+msgid "MTU"
+msgstr ""
+
+#: src/network/networkMenu.js:983
+msgid "Tx Queue Length"
+msgstr "Délka TX fronty"
+
+#: src/network/networkMenu.js:992
+msgid "Link Type"
+msgstr "Typ linky"
+
+#: src/network/networkMenu.js:1001
+msgid "Operative State"
+msgstr "Operativní stav"
+
+#: src/network/networkMenu.js:1010
+msgid "Qdisc"
+msgstr ""
+
+#: src/network/networkMenu.js:1043
+msgid "Family"
+msgstr "Rodina"
+
+#: src/network/networkMenu.js:1050
+msgid "Local"
+msgstr "Lokální adresa"
+
+#: src/network/networkMenu.js:1057
+msgid "Prefix Length"
+msgstr "Délka prefixu"
+
+#: src/network/networkMenu.js:1064
+msgid "Broadcast"
+msgstr ""
+
+#: src/network/networkMenu.js:1097
+msgid "Upload"
+msgstr ""
+
+#: src/network/networkMenu.js:1121
+msgid "Download"
+msgstr ""
+
+#: src/network/networkMenu.js:1155
+msgid "IEEE"
+msgstr ""
+
+#: src/network/networkMenu.js:1167
+msgid "SSID"
+msgstr ""
+
+#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
+msgid "Mode"
+msgstr "Režim"
+
+#: src/network/networkMenu.js:1203
+msgid "Access Point"
+msgstr "Přístupový bod"
+
+#: src/network/networkMenu.js:1215
+msgid "Bit Rate"
+msgstr "Přenosová rychlost"
+
+#: src/network/networkMenu.js:1227
+msgid "TX Power"
+msgstr "TX výkon"
+
+#: src/network/networkMenu.js:1239
+msgid "Link Quality"
+msgstr "Kvalita linky"
+
+#: src/network/networkMenu.js:1251
+msgid "Signal Level"
+msgstr "Síla signálu"
 
 #: src/storage/storageMenu.js:67
 msgid "Global Read:"
@@ -2129,6 +1895,10 @@ msgstr "Základní informace"
 #: src/storage/storageMenu.js:602
 msgid "Model"
 msgstr ""
+
+#: src/storage/storageMenu.js:603 src/gpu/gpuMenuComponent.js:501
+msgid "Vendor"
+msgstr "Výrobce"
 
 #: src/storage/storageMenu.js:604
 msgid "Serial"
@@ -2402,6 +2172,11 @@ msgstr ""
 msgid "Allocated:"
 msgstr "Alokováno:"
 
+#: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
+#: src/gpu/gpuMenuComponent.js:249 src/gpu/gpuMenuComponent.js:1174
+msgid "Used:"
+msgstr "Využito:"
+
 #: src/memory/memoryMenu.js:86
 msgid "Free:"
 msgstr "Volná:"
@@ -2453,6 +2228,219 @@ msgstr ""
 #: src/memory/memoryMenu.js:457
 msgid "Swap Devices"
 msgstr "SWAP zařízení"
+
+#: src/gpu/gpuMenuComponent.js:57
+msgid "No GPU found"
+msgstr "Nenalezeno žádné GPU"
+
+#: src/gpu/gpuMenuComponent.js:70
+msgid "GPUs"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:129
+msgid "No Connected Display"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1084
+msgid "Activity"
+msgstr "Aktivita"
+
+#: src/gpu/gpuMenuComponent.js:206 src/gpu/gpuMenuComponent.js:1133
+msgid "VRAM"
+msgstr "VRAM"
+
+#: src/gpu/gpuMenuComponent.js:431
+msgid "GPU info"
+msgstr "Informace o GPU"
+
+#: src/gpu/gpuMenuComponent.js:468
+msgid "Subsystem"
+msgstr "Subsystém"
+
+#: src/gpu/gpuMenuComponent.js:509
+msgid "Vendor ID"
+msgstr "ID výrobce"
+
+#: src/gpu/gpuMenuComponent.js:518
+msgid "Product ID"
+msgstr "ID produktu"
+
+#: src/gpu/gpuMenuComponent.js:526
+msgid "PCI"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:538
+msgid "Drivers"
+msgstr "Ovladače"
+
+#: src/gpu/gpuMenuComponent.js:547
+msgid "Modules"
+msgstr "Moduly"
+
+#: src/gpu/gpuMenuComponent.js:611
+msgid "Displays"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:613
+#, fuzzy
+msgid "No displays found"
+msgstr "Nenalezeny žádné sensory"
+
+#: src/gpu/gpuMenuComponent.js:644
+#, fuzzy
+msgid "Status"
+msgstr "Stav"
+
+#: src/gpu/gpuMenuComponent.js:656
+#, fuzzy
+msgid "Product Code"
+msgstr "ID produktu"
+
+#: src/gpu/gpuMenuComponent.js:668
+#, fuzzy
+msgid "Serial Number"
+msgstr "Číslo zóny"
+
+#: src/gpu/gpuMenuComponent.js:680
+msgid "Manufacturer Date"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:692
+#, fuzzy
+msgid "EDID Version"
+msgstr "Verze"
+
+#: src/gpu/gpuMenuComponent.js:704
+msgid "Display Size"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:716 src/gpu/gpuMenuComponent.js:942
+msgid "Native Resolution"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:728 src/gpu/gpuMenuComponent.js:961
+msgid "Refresh Rate"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:740
+msgid "Display Gamma"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:752
+msgid "Display Type"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:764
+msgid "Capabilities"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:843
+msgid "Enabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:846
+msgid "Disabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:939
+msgid "Native Resolutions"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:958
+msgid "Refresh Rates"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:986
+msgid "RGB 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:990
+msgid "RGB 4:4:4 + YCrCb 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:994
+msgid "RGB 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:997
+msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1005
+msgid "Monochrome or Grayscale"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1008
+#, fuzzy
+msgid "RGB color"
+msgstr "Barva sloupců"
+
+#: src/gpu/gpuMenuComponent.js:1011
+#, fuzzy
+msgid "Non-RGB color"
+msgstr "Barva ikony"
+
+#: src/gpu/gpuMenuComponent.js:1026
+msgid "Digital Input"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1028
+msgid "VESA DFP"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1033
+msgid "White Sync Levels: "
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1036
+msgid "Blank to Black"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1039
+msgid "Separate Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1042
+msgid "Composite Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1045
+msgid "Sync on Green"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1048
+msgid "VSync Serrated"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1052
+msgid "DPMS Standby"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1055
+msgid "DPMS Suspend"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1058
+msgid "DPMS Active Off"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1061
+msgid "Standard sRGB"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1064
+msgid "Preferred Timing"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1067
+#, fuzzy
+msgid "GTF Supported"
+msgstr "Podpořit na Ko-Fi"
+
+#: src/gpu/gpuMenuComponent.js:1546
+#, javascript-format
+msgid "%d/%d Displays Connected"
+msgstr ""
 
 #, fuzzy
 #~ msgid "What's Shell TOPBAR/DASH/PANEL Position?"

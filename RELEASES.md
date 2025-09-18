@@ -1,3 +1,9 @@
+# Astra Monitor 36 - September 18 2025
+
+### New features
+
+-   **GNOME 49 Support**: Added support for GNOME 49.
+
 # Astra Monitor 35 - August 17 2025
 
 ### Bug fixes
