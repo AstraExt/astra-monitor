@@ -240,6 +240,12 @@ security.wrappers = {
 
 _Note: This is an example configuration and may vary depending on your specific NixOS setup. Adjust the configuration as needed for your system._
 
+## Optional Dependency
+
+For users with AMD CPUs that include integrated GPUs, installing [amdgpu_top](https://github.com/Umio-Yasuno/amdgpu_top) is required to enable GPU monitoring. In contrast, Intel integrated GPUs are not currently supported.
+  
+
+
 # Usage
 
 Once installed, Astra Monitor can be accessed and configured directly from the GNOME extensions tool. You can customize what system resources to monitor and how the information is displayed, tailoring the experience to your need.
