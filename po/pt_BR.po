@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Astra Monitor 51\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-18 15:35+0200\n"
-"PO-Revision-Date: 2025-05-25 23:42-0300\n"
+"PO-Revision-Date: 2025-11-08 20:56-0300\n"
 "Last-Translator: cogumi <yunurix@pm.me>\n"
 "Language-Team: cogumi <yunurix@pm.me>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: src/processor/processorMenu.js:37 src/prefs/processors.js:194
 msgid "CPU"
@@ -373,7 +373,7 @@ msgstr "Utilitário"
 
 #: src/prefs/utility.js:54 src/prefs/utility.js:58
 msgid "Export Settings"
-msgstr "Exportar definições"
+msgstr "Exportar configurações"
 
 #: src/prefs/utility.js:55
 msgid "Warning: this will export all profiles."
@@ -389,7 +389,7 @@ msgstr "Cancelar"
 
 #: src/prefs/utility.js:88 src/prefs/utility.js:92
 msgid "Import Settings"
-msgstr "Importar definições"
+msgstr "Importar configurações"
 
 #: src/prefs/utility.js:89
 msgid "Warning: this will overwrite all profiles."
@@ -401,15 +401,15 @@ msgstr "Abrir"
 
 #: src/prefs/utility.js:128 src/prefs/utility.js:132
 msgid "Reset Settings"
-msgstr "Restaurar"
+msgstr "Restaurar configurações"
 
 #: src/prefs/utility.js:129
 msgid "Warning: this will reset all profiles."
-msgstr "Cuidado: Isso vai redefinir todos os perfis."
+msgstr "Cuidado: Isso vai restaurar todos os perfis."
 
 #: src/prefs/utility.js:133
 msgid "Are you sure you want to reset all preferences?"
-msgstr "Tem certeza que quer redefinir todas as preferências?"
+msgstr "Tem certeza que quer restaurar todas as configurações?"
 
 #: src/prefs/utility.js:148
 msgid "Debug Mode"
@@ -1018,8 +1018,8 @@ msgid ""
 "'iwconfig' and 'iw' not installed: install one of them to enable wireless "
 "network info!"
 msgstr ""
-"'iwconfig' e 'iw' não instalados: instale um deles para habilitar "
-"informações de rede sem fio!"
+"'iwconfig' e 'iw' não instalados: instale um deles para ativar informações "
+"de rede sem fio!"
 
 #: src/prefs/welcome.js:113
 msgid "'iotop' not installed: some optional features will be disabled!"
@@ -1060,7 +1060,7 @@ msgstr "'GTop' detectado com sucesso e adicionado à lista de Fontes de Dados."
 
 #: src/prefs/welcome.js:146
 msgid "All other dependencies are met!"
-msgstr "Todas as outras dependências foram atendidas!"
+msgstr "Todas as outras dependências foram satisfeitas!"
 
 #: src/prefs/welcome.js:149
 msgid "Support Us"
@@ -1217,7 +1217,7 @@ msgstr "Ajuste isto se você reposicionou a barra para melhorar o layout."
 
 #: src/prefs/visualization.js:77
 msgid "Disable/Enable the extension to apply changes."
-msgstr "Desative/Reative a extensão para aplicar mudanças."
+msgstr "Desative/Ative a extensão para aplicar mudanças."
 
 #: src/prefs/visualization.js:82 src/prefs/visualization.js:93
 msgid "This is an utility rather than a setting."
