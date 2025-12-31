@@ -232,6 +232,13 @@ export default class Utils {
         const updateExplicitZero = () => (Utils.explicitZero = Config.get_boolean('explicit-zero'));
         Config.connect(this, 'changed::explicit-zero', updateExplicitZero);
         updateExplicitZero();
+
+        const updateExperimentalPsSubprocess = () => {
+            const features = Config.get_json('experimental-features');
+            Utils.experimentalPsSubprocess = features?.includes('ps_subprocess') ?? false;
+        };
+        Config.connect(this, 'changed::experimental-features', updateExperimentalPsSubprocess);
+        updateExperimentalPsSubprocess();
     }
 
     static clear() {
@@ -2124,15 +2131,6 @@ export default class Utils {
         command: string,
         task?: CancellableTaskManager<boolean>
     ): Promise<string> {
-        if(Utils.experimentalPsSubprocess === undefined) {
-            let features = Config.get_json('experimental-features');
-            Utils.experimentalPsSubprocess = features?.includes('ps_subprocess') ?? false;
-            Config.connect(this, 'changed::experimental-features', () => {
-                features = Config.get_json('experimental-features');
-                Utils.experimentalPsSubprocess = features?.includes('ps_subprocess') ?? false;
-            });
-        }
-
         if(Utils.experimentalPsSubprocess) {
             return CommandSubprocess.run(command, task);
         }
