@@ -6,6 +6,7 @@
 -   Fixed a bug where continuous processeses were not triggering updates correctly. This was causing some features to not work correctly when using continuous processeses like `nethogs` and `iotop` for monitoring network and I/O activity of processes. [[#207](https://github.com/AstraExt/astra-monitor/issues/207)]
 -   Updated the testing script to support GNOME 49 environments without X11. Also added a `shell.nix` file to facilitate testing on NixOS.
 -   Optimized command path lookup to improve performance trying to avoid spawning subprocesses when possible.
+-   Fixed a bug where switches in preferences were not updating correctly when the value was changed. [[#201](https://github.com/AstraExt/astra-monitor/issues/201)]
 
 # Astra Monitor 36 - September 18 2025
 

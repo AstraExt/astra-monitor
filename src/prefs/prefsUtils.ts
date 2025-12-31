@@ -276,8 +276,9 @@ export default class PrefsUtils {
         if(!isCallback) {
             Config.bind(setting, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
         } else {
-            toggle.connect('state-set', (_, state) => {
+            toggle.connect('state-set', (_widget, state) => {
                 setting.set(state);
+                return false;
             });
             Config.connect(this, 'changed::' + setting.watch, () => {
                 toggle.active = setting.get();
