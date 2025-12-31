@@ -2,6 +2,7 @@
 
 ### Bug fixes
 
+-   Improved async command execution fixing a potential memory leak. [[#191](https://github.com/AstraExt/astra-monitor/issues/191)][[#181](https://github.com/AstraExt/astra-monitor/issues/181)]
 -   Fixed a bug where continuous processeses were not triggering updates correctly. This was causing some features to not work correctly when using continuous processeses like `nethogs` and `iotop` for monitoring network and I/O activity of processes. [[#207](https://github.com/AstraExt/astra-monitor/issues/207)]
 -   Updated the testing script to support GNOME 49 environments without X11. Also added a `shell.nix` file to facilitate testing on NixOS.
 -   Optimized command path lookup to improve performance trying to avoid spawning subprocesses when possible.
