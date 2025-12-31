@@ -455,6 +455,16 @@ export default class Utils {
             '/opt/sbin/',
         ]) {
             try {
+                const fullPath = path + command;
+                const program = GLib.find_program_in_path(fullPath);
+                if(program) {
+                    Utils.commandsPath!.set(command, path);
+                    return path;
+                }
+                if(GLib.file_test(fullPath, GLib.FileTest.IS_EXECUTABLE)) {
+                    Utils.commandsPath!.set(command, path);
+                    return path;
+                }
                 const [result, stdout, stderr] = GLib.spawn_command_line_sync(path + fullCommand);
                 if(result && stdout && (!stderr || !stderr.length)) {
                     Utils.commandsPath!.set(command, path);
