@@ -13,6 +13,24 @@ RESOLUTION=1867x1050 # this fits my 4th monitor perfectly, change it to your nee
 EXTENSION_DIR=$(dirname "$0") # Assumes pack.sh is in the main directory
 DIST_DIR="${EXTENSION_DIR}/dist"
 
+# Check GNOME Shell version to determine if --nested flag is supported
+# --nested was removed in GNOME 49 and replaced by --devkit
+GNOME_VERSION=$(gnome-shell --version | grep -oP '\d+' | head -1)
+if [ "$GNOME_VERSION" -ge 49 ]; then
+    # --devkit requires mutter-devkit (or mutter-dev-bin on Debian/Ubuntu)
+    if ! command -v mutter-devkit >/dev/null 2>&1; then
+         log_message "Error: gnome-shell --devkit requires 'mutter-devkit' which is not installed."
+         log_message "Please install it (e.g. 'sudo apt install mutter-dev-bin', 'sudo dnf install mutter' or 'nix-shell')"
+         exit 1
+    fi
+    GNOME_SHELL_CMD="gnome-shell --wayland --mode=minimal --devkit"
+    USE_XEPHYR=0
+else
+    GNOME_SHELL_CMD="gnome-shell --nested --wayland --mode=minimal"
+    USE_XEPHYR=1
+fi
+log_message "Detected GNOME Shell version: $GNOME_VERSION (using: $GNOME_SHELL_CMD)"
+
 # Check if schemas are compiled
 if [ ! -f ./schemas/gschemas.compiled ]; then
     command -v glib-compile-schemas >/dev/null 2>&1 || { echo >&2 "glib-compile-schemas is required but it's not installed. Aborting."; exit 1; }
@@ -95,12 +113,14 @@ rm -rf "${DIST_DIR}"
 rm "./$EXTENSION_NAME.shell-extension.zip"
 
 # Check if Xephyr on display :2 is already running
-if ! ps ax | grep -v grep | grep "Xephyr.*$XEPHYR_DISPLAY" > /dev/null; then
-    log_message "Starting Xephyr on display $XEPHYR_DISPLAY"
-    screen -dmS xephyr_session Xephyr -ac -br -noreset -screen $RESOLUTION $XEPHYR_DISPLAY
-    sleep 1  # Give Xephyr time to start
-else
-    log_message "Xephyr on display $XEPHYR_DISPLAY is already running"
+if [ "$USE_XEPHYR" -eq 1 ]; then
+    if ! ps ax | grep -v grep | grep "Xephyr.*$XEPHYR_DISPLAY" > /dev/null; then
+        log_message "Starting Xephyr on display $XEPHYR_DISPLAY"
+        screen -dmS xephyr_session Xephyr -ac -br -noreset -screen $RESOLUTION $XEPHYR_DISPLAY
+        sleep 1  # Give Xephyr time to start
+    else
+        log_message "Xephyr on display $XEPHYR_DISPLAY is already running"
+    fi
 fi
 
 # Enable the extension
@@ -120,22 +140,24 @@ export XDG_CURRENT_DESKTOP=GNOME-Shell
 export XDG_SESSION_DESKTOP=GNOME-Shell
 export XDG_SESSION_CLASS=user
 
-export DISPLAY=$XEPHYR_DISPLAY
-export WAYLAND_DISPLAY=wayland-1
+if [ "$USE_XEPHYR" -eq 1 ]; then
+    export DISPLAY=$XEPHYR_DISPLAY
+    export WAYLAND_DISPLAY=wayland-1
+fi
 
 # Start DBus session and capture its PID
 export DBUS_SESSION_BUS_ADDRESS=$(dbus-daemon --session --fork --print-address)
 export DBUS_SESSION_BUS_PID=$!
 export ASTRA_MONITOR_NESTED_SESSION=1
 
-dbus-run-session -- gnome-shell --nested --wayland --mode=minimal &
+dbus-run-session -- $GNOME_SHELL_CMD &
 sleep 1
 
 cleanup() {
     log_message "Terminating gnome-shell..."
-    pkill -f "gnome-shell --nested --wayland --mode=minimal"
+    pkill -f "$GNOME_SHELL_CMD"
     sleep 0.5
-    wait $(pgrep -f "gnome-shell --nested --wayland --mode=minimal")
+    wait $(pgrep -f "$GNOME_SHELL_CMD")
     sleep 0.5
 
     # Kill the DBus session
@@ -146,7 +168,7 @@ cleanup() {
 
 trap cleanup EXIT INT TERM
 
-wait $(pgrep -f "gnome-shell --nested --wayland --mode=minimal")
+wait $(pgrep -f "$GNOME_SHELL_CMD")
 
 sleep 0.5
 exit 0
