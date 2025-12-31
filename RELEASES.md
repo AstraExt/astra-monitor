@@ -1,3 +1,10 @@
+# Astra Monitor 37 - TO BE RELEASED
+
+### Bug fixes
+
+-   Fixed a bug where continuous processeses were not triggering updates correctly. This was causing some features to not work correctly when using continuous processeses like `nethogs` and `iotop` for monitoring network and I/O activity of processes. [[#207](https://github.com/AstraExt/astra-monitor/issues/207)]
+-   Updated the testing script to support GNOME 49 environments without X11. Also added a `shell.nix` file to facilitate testing on NixOS.
+
 # Astra Monitor 36 - September 18 2025
 
 ### New features
