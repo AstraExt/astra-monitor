@@ -938,11 +938,24 @@ export default class Utils {
         return value;
     }
 
+    static hwmonPromise: Promise<HwMonDevices> | null = null;
     static async getCachedHwmonDevicesAsync(): Promise<HwMonDevices> {
-        const devices = await Utils.getHwmonDevices();
-        Utils.lastCachedHwmonDevices = Date.now();
-        Utils.cachedHwmonDevices = devices;
-        return Utils.cachedHwmonDevices;
+        if(Utils.hwmonPromise) {
+            return Utils.hwmonPromise;
+        }
+
+        Utils.hwmonPromise = (async () => {
+            try {
+                const devices = await Utils.getHwmonDevices();
+                Utils.lastCachedHwmonDevices = Date.now();
+                Utils.cachedHwmonDevices = devices;
+                return devices;
+            } finally {
+                Utils.hwmonPromise = null;
+            }
+        })();
+
+        return Utils.hwmonPromise;
     }
 
     static getCachedHwmonDevices(): HwMonDevices {

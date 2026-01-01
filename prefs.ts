@@ -22,6 +22,7 @@ import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
 import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
 import {
     ExtensionPreferences,
@@ -114,7 +115,12 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
                 vexpand: true,
                 hexpand: true,
             });
-            window.set_content(navigation);
+            
+            //! Set content in idle loop to bypass the check and avoid immediate crashes
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                window.set_content(navigation);
+                return GLib.SOURCE_REMOVE;
+            });
 
             this.welcome = new Welcome(this);
             this.profiles = new Profiles(this);
@@ -275,7 +281,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             expanded => {
                 if(expanded && processorsDefaultBtn) {
                     processorsDefaultBtn.activate();
-                    processorsDefaultBtn.grab_focus();
+                    if(processorsDefaultBtn.get_mapped())
+                        processorsDefaultBtn.grab_focus();
                 }
             }
         );
@@ -329,7 +336,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             expanded => {
                 if(expanded && gpuDefaultBtn) {
                     gpuDefaultBtn.activate();
-                    gpuDefaultBtn.grab_focus();
+                    if(gpuDefaultBtn.get_mapped())
+                        gpuDefaultBtn.grab_focus();
                 }
             }
         );
@@ -383,7 +391,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             expanded => {
                 if(expanded && memoryDefaultBtn) {
                     memoryDefaultBtn.activate();
-                    memoryDefaultBtn.grab_focus();
+                    if(memoryDefaultBtn.get_mapped())
+                        memoryDefaultBtn.grab_focus();
                 }
             }
         );
@@ -437,7 +446,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             expanded => {
                 if(expanded && storageDefaultBtn) {
                     storageDefaultBtn.activate();
-                    storageDefaultBtn.grab_focus();
+                    if(storageDefaultBtn.get_mapped())
+                        storageDefaultBtn.grab_focus();
                 }
             }
         );
@@ -491,7 +501,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             expanded => {
                 if(expanded && networkDefaultBtn) {
                     networkDefaultBtn.activate();
-                    networkDefaultBtn.grab_focus();
+                    if(networkDefaultBtn.get_mapped())
+                        networkDefaultBtn.grab_focus();
                 }
             }
         );
@@ -545,7 +556,8 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
             expanded => {
                 if(expanded && sensorsDefaultBtn) {
                     sensorsDefaultBtn.activate();
-                    sensorsDefaultBtn.grab_focus();
+                    if(sensorsDefaultBtn.get_mapped())
+                        sensorsDefaultBtn.grab_focus();
                 }
             }
         );
