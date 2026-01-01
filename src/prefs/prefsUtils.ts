@@ -69,10 +69,8 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.iconName) {
-            if(props.title) props.title = '  ' + props.title;
-            if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
-        }
+        const iconName = props.iconName;
+        delete props.iconName;
 
         const data: any = {
             ...props,
@@ -81,6 +79,7 @@ export default class PrefsUtils {
 
         const section = new Adw.ExpanderRow(data);
         if(tabs) section.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(section, iconName);
 
         section.connect('notify::expanded', widget => {
             if(callback) callback(widget.expanded);
@@ -111,8 +110,12 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
+        const iconName = props.iconName;
+        delete props.iconName;
+
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -130,8 +133,12 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
+        const iconName = props.iconName;
+        delete props.iconName;
+
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -179,13 +186,12 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.iconName) {
-            if(props.title) props.title = '  ' + props.title;
-            if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
-        }
+        const iconName = props.iconName;
+        delete props.iconName;
 
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -233,7 +239,7 @@ export default class PrefsUtils {
 
         const row = new Adw.ActionRow(props);
         const box = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
-        const icon = new Gtk.Image({ iconName: iconName });
+        const icon = new Gtk.Image({ iconName: iconName, pixelSize: 16 });
         icon.set_margin_end(10);
         box.append(icon);
         row.add_prefix(box);
@@ -257,13 +263,12 @@ export default class PrefsUtils {
         delete props.tabs;
         delete props.readOnly;
 
-        if(props.iconName) {
-            if(props.title) props.title = '  ' + props.title;
-            if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
-        }
+        const iconName = props.iconName;
+        delete props.iconName;
 
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -303,15 +308,14 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.iconName) {
-            if(props.title) props.title = '  ' + props.title;
-            if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
-        }
+        const iconName = props.iconName;
+        delete props.iconName;
 
         const isCallback = typeof setting === 'function';
 
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -374,9 +378,13 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
+        const iconName = props.iconName;
+        delete props.iconName;
+
         const row = new Adw.ActionRow(props);
         row.add_suffix(new Gtk.Box({ widthRequest: 10 }));
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -556,8 +564,12 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
+        const iconName = props.iconName;
+        delete props.iconName;
+
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
@@ -702,10 +714,8 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.iconName) {
-            if(props.title) props.title = '  ' + props.title;
-            if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
-        }
+        const iconName = props.iconName;
+        delete props.iconName;
 
         const adjustment = new Gtk.Adjustment({
             lower: adj.min,
@@ -717,6 +727,7 @@ export default class PrefsUtils {
 
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         const spinButton = new Gtk.SpinButton({
             halign: Gtk.Align.END,
@@ -767,13 +778,12 @@ export default class PrefsUtils {
         const tabs = props.tabs;
         delete props.tabs;
 
-        if(props.iconName) {
-            if(props.title) props.title = '  ' + props.title;
-            if(props.subtitle) props.subtitle = '  ' + props.subtitle.replace('\n', '\n  ');
-        }
+        const iconName = props.iconName;
+        delete props.iconName;
 
         const row = new Adw.ActionRow(props);
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
+        if(iconName) PrefsUtils.addIcon(row, iconName);
 
         const fontButton = new Gtk.FontButton({
             modal: true,
@@ -853,7 +863,7 @@ export default class PrefsUtils {
             buttonUp.set_opacity(0.0);
         }
 
-        const upImg = new Gtk.Image({ iconName: 'go-up-symbolic', pixelSize: 12 });
+        const upImg = new Gtk.Image({ iconName: 'go-up-symbolic', pixelSize: 16 });
         buttonUp.set_child(upImg);
         buttonUp.set_margin_top(10);
         buttonUp.set_margin_bottom(10);
@@ -873,7 +883,7 @@ export default class PrefsUtils {
             buttonDown.set_opacity(0.0);
         }
 
-        const downImg = new Gtk.Image({ iconName: 'go-down-symbolic', pixelSize: 12 });
+        const downImg = new Gtk.Image({ iconName: 'go-down-symbolic', pixelSize: 16 });
         buttonDown.set_child(downImg);
         buttonDown.set_margin_start(10);
         buttonDown.set_margin_top(10);
@@ -890,5 +900,14 @@ export default class PrefsUtils {
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
+    }
+    
+    private static addIcon(row: Adw.ActionRow | Adw.ExpanderRow, iconName: string) {
+        const icon = new Gtk.Image({
+            iconName,
+            pixelSize: 16,
+            marginEnd: 4,
+        });
+        row.add_prefix(icon);
     }
 }

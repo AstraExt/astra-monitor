@@ -9,6 +9,7 @@
 -   Fixed a bug where switches in preferences were not updating correctly when the value was changed. [[#201](https://github.com/AstraExt/astra-monitor/issues/201)]
 -   Resolved a crash that occurred in the preferences window when selecting a GPU. Also enhanced the display of GPU model names for improved clarity in the preferences interface. [[#159](https://github.com/AstraExt/astra-monitor/issues/159)]
 -   Improved preferences panel initialization and other minor enhancements. [[#183](https://github.com/AstraExt/astra-monitor/issues/183)]
+-   Fixed icons displayed incorrectly in preferences panel.
 
 # Astra Monitor 36 - September 18 2025
 
