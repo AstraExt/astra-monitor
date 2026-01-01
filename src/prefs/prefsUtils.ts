@@ -441,13 +441,6 @@ export default class PrefsUtils {
         let selectSignal: number | undefined;
 
         const addChoices = (choices: Choice[]) => {
-            if(resetSignal !== undefined) {
-                resetButton?.disconnect(resetSignal);
-            }
-            if(selectSignal !== undefined) {
-                select.disconnect(selectSignal);
-            }
-
             let savedValue: any;
             switch(type) {
                 case 'boolean':
@@ -470,10 +463,6 @@ export default class PrefsUtils {
                     break;
             }
 
-            const stringList = new Gtk.StringList();
-
-            for(const choice of choices) stringList.append(choice.text);
-
             let selected = -1;
             choices.forEach((choice, index) => {
                 let value = choice.value;
@@ -481,12 +470,34 @@ export default class PrefsUtils {
                 if(value === savedValue) selected = index;
             });
 
-            select.set_model(stringList);
-            if(selected >= 0) {
+            if(selected >= 0 && select.selected !== selected) {
                 select.selected = selected;
             }
 
+            if(choices[selected] && choices[selected].text) {
+                const text = choices[selected].text;
+                select.set_tooltip_text(text);
+                row.set_tooltip_text(text);
+            } else {
+                select.set_tooltip_text('');
+                row.set_tooltip_text('');
+            }
+        };
+
+        const setupModel = (choices: Choice[]) => {
+            if(resetSignal !== undefined) {
+                resetButton?.disconnect(resetSignal);
+            }
+            if(selectSignal !== undefined) {
+                select.disconnect(selectSignal);
+            }
+
+            const stringList = new Gtk.StringList();
+            for(const choice of choices) stringList.append(choice.text);
+            select.set_model(stringList);
+
             resetSignal = resetButton?.connect('clicked', () => {
+                let selected = -1;
                 choices.forEach((choice, index) => {
                     let value = choice.value;
                     if(type === 'json') value = JSON.stringify(value);
@@ -501,30 +512,35 @@ export default class PrefsUtils {
                 }
             });
 
-            if(choices[selected] && choices[selected].text)
-                select.set_tooltip_text(choices[selected].text);
             selectSignal = select.connect('notify::selected', widget => {
                 const selectedIndex = widget.selected;
                 const selectedChoice = choices[selectedIndex];
                 if(selectedChoice !== undefined) {
                     row.set_tooltip_text(selectedChoice.text);
+                    select.set_tooltip_text(selectedChoice.text);
 
                     if(type === 'json')
                         Config.set(setting, JSON.stringify(selectedChoice.value), 'string');
                     else Config.set(setting, selectedChoice.value, type);
                 }
             });
+
+            addChoices(choices);
         };
 
-        const update = () => {
-            if(typeof values === 'function') {
-                values().then(addChoices);
-            } else {
-                addChoices(values);
-            }
-        };
-        update();
-        Config.connect(row, 'changed::' + setting, update);
+        let update;
+        if(Array.isArray(values)) {
+            setupModel(values);
+            update = () => addChoices(values);
+            Config.connect(row, 'changed::' + setting, update);
+        }
+        else {
+            update = () => {
+                values().then(setupModel);
+            };
+            update();
+            Config.connect(row, 'changed::' + setting, update);
+        }
 
         return { update };
     }
