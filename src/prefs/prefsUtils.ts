@@ -24,6 +24,7 @@ import Adw from 'gi://Adw';
 import Gtk from 'gi://Gtk';
 import Gdk from 'gi://Gdk';
 import Gio from 'gi://Gio';
+import Pango from 'gi://Pango';
 
 import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
@@ -374,6 +375,7 @@ export default class PrefsUtils {
         delete props.tabs;
 
         const row = new Adw.ActionRow(props);
+        row.add_suffix(new Gtk.Box({ widthRequest: 10 }));
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));
 
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
@@ -392,12 +394,44 @@ export default class PrefsUtils {
             row.add_suffix(resetButton);
         }
 
+        const factory = new Gtk.SignalListItemFactory();
+        factory.connect('setup', (_factory, item) => {
+            const label = new Gtk.Label({
+                ellipsize: Pango.EllipsizeMode.END,
+                maxWidthChars: 80,
+                halign: Gtk.Align.START,
+            });
+            (item as any).set_child(label);
+        });
+
+        factory.connect('bind', (_factory, item) => {
+            const label = (item as any).get_child();
+            const value = (item as any).get_item().get_string();
+            label.set_label(value);
+        });
+
+        const listFactory = new Gtk.SignalListItemFactory();
+        listFactory.connect('setup', (_factory, item) => {
+            const label = new Gtk.Label({
+                halign: Gtk.Align.START,
+            });
+            (item as any).set_child(label);
+        });
+
+        listFactory.connect('bind', (_factory, item) => {
+            const label = (item as any).get_child();
+            const value = (item as any).get_item().get_string();
+            label.set_label(value);
+        });
+
         const select = new Gtk.DropDown({
             selected: -1,
             halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER,
             hexpand: false,
             vexpand: false,
+            factory,
+            listFactory,
         });
 
         row.add_suffix(select);
