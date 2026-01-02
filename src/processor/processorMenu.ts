@@ -117,8 +117,7 @@ export default class ProcessorMenu extends MenuBase {
         this.addTopProcesses();
         this.addLoadAverage();
 
-        //TODO TODO TODO TODO TODO TODO TODO
-        //this.addGPUs();
+        this.addGPUs();
         this.addSystemUptime();
         this.addUtilityButtons('processors');
     }

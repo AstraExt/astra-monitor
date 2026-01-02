@@ -4,12 +4,13 @@
 
 -   Improved async command execution fixing a potential memory leak. [[#191](https://github.com/AstraExt/astra-monitor/issues/191)][[#181](https://github.com/AstraExt/astra-monitor/issues/181)]
 -   Fixed a bug where continuous processeses were not triggering updates correctly. This was causing some features to not work correctly when using continuous processeses like `nethogs` and `iotop` for monitoring network and I/O activity of processes. [[#207](https://github.com/AstraExt/astra-monitor/issues/207)]
--   Updated the testing script to support GNOME 49 environments without X11. Also added a `shell.nix` file to facilitate testing on NixOS.
 -   Optimized command path lookup to improve performance trying to avoid spawning subprocesses when possible.
+-   Fixed GPU monitoring not showing in the processor menu when the GPU header is disabled. [[#189](https://github.com/AstraExt/astra-monitor/issues/189)]
 -   Fixed a bug where switches in preferences were not updating correctly when the value was changed. [[#201](https://github.com/AstraExt/astra-monitor/issues/201)]
 -   Resolved a crash that occurred in the preferences window when selecting a GPU. Also enhanced the display of GPU model names for improved clarity in the preferences interface. [[#159](https://github.com/AstraExt/astra-monitor/issues/159)]
 -   Improved preferences panel initialization and other minor enhancements. [[#183](https://github.com/AstraExt/astra-monitor/issues/183)]
 -   Fixed icons displayed incorrectly in preferences panel.
+-   Updated the testing script to support GNOME 49 environments without X11. Also added a `shell.nix` file to facilitate testing on NixOS.
 
 # Astra Monitor 36 - September 18 2025
 
