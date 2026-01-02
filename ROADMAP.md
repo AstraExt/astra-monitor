@@ -13,7 +13,7 @@
         <th style="text-align:center">Mid April 2024</th>
         <th style="text-align:center">Late April 2024</th>
         <th style="text-align:center">Q3 2024</th>
-        <th style="text-align:center">Q4 2024</th>
+        <th style="text-align:center">~ 2026</th>
     </tr>
     <tr>
         <td style="text-align:center">✅<br>Advanced Network Monitoring</td>
@@ -45,8 +45,8 @@
         <th style="text-align:center" colspan="2">Release<br>0/2</th>
     </tr>
     <tr>
-        <th style="text-align:center">Q1 2025</th>
-        <th style="text-align:center">Q2 2025</th>
+        <th style="text-align:center">?</th>
+        <th style="text-align:center">?</th>
     </tr>
     <tr>
         <td style="text-align:center">🔲<br>Themes</td>

@@ -73,25 +73,21 @@ As Astra Monitor is in beta stage of development, we have an ambitious roadmap p
         <th style="text-align:center" colspan="2">Release<br>0/5</th>
     </tr>
     <tr>
-        <th style="text-align:center">Q3 2024</th>
-        <th style="text-align:center">Q4 2024</th>
-        <th style="text-align:center">Q1 2025</th>
-        <th style="text-align:center">Q2 2025</th>
+        <th style="text-align:center">~2026</th>
+        <th style="text-align:center">?</th>
+        <th style="text-align:center">?</th>
     </tr>
     <tr>
-        <td style="text-align:center">✅<br>Root Process Monitoring<br><span style="font-size: 13px;">(storage)</span></td>
         <td style="text-align:center">⌛<br>Help &amp; Doc</td>
         <td style="text-align:center">🔲<br>Themes</td>
         <td style="text-align:center">🔲<br>User Custom Commands</td>
     </tr>
     <tr>
-        <td style="text-align:center">✅<br>Network Process Monitoring</td>
         <td style="text-align:center">🔲<br>Battery Monitoring</td>
         <td style="text-align:center"></td>
         <td style="text-align:center"></td>
     </tr>
     <tr>
-        <td style="text-align:center"></td>
         <td style="text-align:center">🔲<br>Continuous Monitoring Mode</td>
         <td style="text-align:center"></td>
         <td style="text-align:center"></td>
