@@ -57,6 +57,11 @@ export default GObject.registerClass(
 
             const values = [];
             for(let i = 0; i < usage.length; i++) {
+                if(usage[i].offline) {
+                    values.push([]);
+                    continue;
+                }
+                
                 if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                     values.push([
                         { color: 0, value: usage[i].user / 100.0 },

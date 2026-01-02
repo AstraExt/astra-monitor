@@ -228,7 +228,7 @@ export default GObject.registerClass(
 
             let numBars = 1;
             const perCoreBars = Config.get_boolean('processor-header-bars-core');
-            if(perCoreBars) numBars = Utils.processorMonitor.getNumberOfCores();
+            if(perCoreBars) numBars = Utils.processorMonitor.getCpuTopology().length;
 
             this.bars = new ProcessorBars({
                 numBars: numBars,
@@ -255,7 +255,7 @@ export default GObject.registerClass(
             if(!Config.get_boolean('processor-header-bars')) return;
 
             const usage = Utils.processorMonitor.getCurrentValue('cpuCoresUsage');
-            const cores = Utils.processorMonitor.getNumberOfCores();
+            const cores = Utils.processorMonitor.getCpuTopology().length;
             if(!usage || !Array.isArray(usage) || usage.length < cores) this.bars.setUsage([]);
             else this.bars.setUsage(usage);
         }
@@ -348,7 +348,7 @@ export default GObject.registerClass(
             }
 
             if(Config.get_boolean('processor-header-percentage-core')) {
-                const numberOfCores = Utils.processorMonitor.getNumberOfCores();
+                const numberOfCores = Utils.processorMonitor.getCpuTopology().length;
                 this.percentage.text = (cpuUsage.total * numberOfCores).toFixed(0) + '%';
             } else {
                 this.percentage.text = cpuUsage.total.toFixed(0) + '%';
@@ -413,17 +413,24 @@ export default GObject.registerClass(
 
             const figures = Config.get_int('processor-header-frequency-figures');
 
+            // Filter out NaN values (offline cores)
+            const activeFrequencies = frequency.filter(f => !isNaN(f));
+            if(activeFrequencies.length === 0) {
+                this.frequency.text = '- GHz';
+                return;
+            }
+
             if(this.frequencyMode === 'average') {
-                const sum = frequency.reduce((a, b) => a + b, 0);
+                const sum = activeFrequencies.reduce((a, b) => a + b, 0);
                 this.frequency.text = Utils.formatFrequency(
-                    sum / frequency.length / 1000 /** Convert to GHz  */,
+                    sum / activeFrequencies.length / 1000 /** Convert to GHz  */,
                     'GHz',
                     figures,
                     true
                 );
             } else if(this.frequencyMode === 'max') {
                 this.frequency.text = Utils.formatFrequency(
-                    Math.max(...frequency) / 1000 /** Convert to GHz  */,
+                    Math.max(...activeFrequencies) / 1000 /** Convert to GHz  */,
                     'GHz',
                     figures,
                     true
@@ -476,7 +483,7 @@ export default GObject.registerClass(
                     if(cpuUsage && cpuUsage.total && !isNaN(cpuUsage.total))
                         total = cpuUsage.total;
                     if(Config.get_boolean('processor-header-tooltip-percentage-core'))
-                        total *= Utils.processorMonitor.getNumberOfCores();
+                        total *= Utils.processorMonitor.getCpuTopology().length;
                     values.push(Math.round(total) + '%');
                 }
 

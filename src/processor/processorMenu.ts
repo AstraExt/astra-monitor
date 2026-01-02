@@ -502,15 +502,15 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCoresUsagePopup.addMenuSection(_('CPU Cores Usage Info'));
         this.cpuCoresUsagePopup.cores = new Map();
 
-        const numCores = Utils.processorMonitor.getNumberOfCores();
+        const numCores = Utils.processorMonitor.getCpuTopology().length;
         let numRows = 1;
         if(numCores > 16) numRows = Math.ceil(numCores / 32) * 2;
         const numCols = Math.ceil(numCores / numRows);
         const grid = new Grid({ numCols, styleClass: 'astra-monitor-menu-subgrid' });
 
-        let defaultStyle = 'width: 2.8em;';
-        if(numCores >= 10) defaultStyle = 'width: 3.2em;';
-        if(numCores >= 100) defaultStyle = 'width: 3.6em;';
+        let defaultStyle = 'width: 3.2em;';
+        if(numCores >= 10) defaultStyle = 'width: 3.6em;';
+        if(numCores >= 100) defaultStyle = 'width: 4.0em;';
 
         for(let i = 0; i < numCores; i++) {
             const col = i % numCols;
@@ -977,15 +977,22 @@ export default class ProcessorMenu extends MenuBase {
         if(code === 'cpuCoresUsage') {
             if(this.cpuCoresUsagePopup.isOpen) {
                 const usage = Utils.processorMonitor.getCurrentValue('cpuCoresUsage');
-                const numCores = Utils.processorMonitor.getNumberOfCores();
+                const numCores = Utils.processorMonitor.getCpuTopology().length;
 
                 for(let i = 0; i < numCores; i++) {
                     const core = this.cpuCoresUsagePopup.cores?.get(i);
                     if(!core) continue;
-
+                    
                     if(!usage || !Array.isArray(usage) || usage.length < numCores) {
                         core.bar.setUsage([]);
                         core.percentage.text = '-';
+                        core.percentage.styleClass = 'astra-monitor-menu-sub-percentage';
+                        core.unit.show();
+                    } else if(usage[i].offline) {
+                        core.bar.setUsage([]);
+                        core.percentage.text = _('Offline');
+                        core.percentage.styleClass = 'astra-monitor-menu-sub-offline';
+                        core.unit.hide();
                     } else {
                         core.bar.setUsage([usage[i]]);
 
@@ -993,6 +1000,8 @@ export default class ProcessorMenu extends MenuBase {
                             core.percentage.text = '-';
                         else if(usage[i].total === 100) core.percentage.text = '100%';
                         else core.percentage.text = usage[i].total.toFixed(1) + '%';
+                        core.percentage.styleClass = 'astra-monitor-menu-sub-percentage';
+                        core.unit.show();
                     }
                 }
             }
@@ -1000,17 +1009,30 @@ export default class ProcessorMenu extends MenuBase {
         }
         if(code === 'cpuCoresFrequency') {
             const frequencies = Utils.processorMonitor.getCurrentValue('cpuCoresFrequency');
+            const numCores = Utils.processorMonitor.getCpuTopology().length;
+            
+            const usage = Utils.processorMonitor.getCurrentValue('cpuCoresUsage');
+            
             if(!frequencies || !Array.isArray(frequencies) || frequencies.length === 0) {
-                for(let i = 0; i < Utils.processorMonitor.getNumberOfCores(); i++) {
+                for(let i = 0; i < numCores; i++) {
                     const core = this.cpuCoresUsagePopup.cores?.get(i);
                     core!.value.text = '-';
+                    core!.value.show();
                 }
             } else {
-                for(let i = 0; i < Utils.processorMonitor.getNumberOfCores(); i++) {
+                for(let i = 0; i < numCores; i++) {
                     const core = this.cpuCoresUsagePopup.cores?.get(i);
                     if(!core) continue;
+
+                    // If core is offline (checked via usage array), don't update frequency
+                    if(usage && Array.isArray(usage) && usage[i] && usage[i].offline) {
+                        core!.value.hide();
+                        continue;
+                    }
+
                     if(!frequencies[i] || isNaN(frequencies[i])) core.value.text = '-';
                     else core.value.text = (frequencies[i] / 1000).toFixed(2);
+                    core!.value.show();
                 }
             }
             return;
@@ -1053,13 +1075,13 @@ export default class ProcessorMenu extends MenuBase {
                     const topProcess = topProcesses[i];
                     const process = topProcess.process;
                     const cpu = topProcess.cpu;
+                    const numCores = Utils.processorMonitor.getCpuTopology().length;
 
                     if(this.topProcesses[i]) {
                         this.topProcesses[i].label.text = process.exec;
 
                         if(perCore)
-                            this.topProcesses[i].percentage.text =
-                                (cpu * Utils.processorMonitor.getNumberOfCores()).toFixed(1) + '%';
+                            this.topProcesses[i].percentage.text = (cpu * numCores).toFixed(1) + '%';
                         else this.topProcesses[i].percentage.text = cpu.toFixed(1) + '%';
                     }
                     if(this.topProcessesPopup) {
@@ -1069,8 +1091,7 @@ export default class ProcessorMenu extends MenuBase {
                         popup.description.text = process.cmd;
 
                         if(perCore)
-                            popup.percentage.text =
-                                (cpu * Utils.processorMonitor.getNumberOfCores()).toFixed(1) + '%';
+                            popup.percentage.text = (cpu * numCores).toFixed(1) + '%';
                         else popup.percentage.text = cpu.toFixed(1) + '%';
                     }
                 }

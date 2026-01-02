@@ -1,5 +1,11 @@
 # Astra Monitor 37 - TO BE RELEASED
 
+### New features
+
+-   **Offline CPU Cores**: Now, whenever a CPU core is offline, it will be handled correctly and shown as offline in the processor menu.<br>
+  *Note: Due to a [bug in libgtop](https://gitlab.gnome.org/GNOME/libgtop/-/issues/41#note_2641436), this feature requires `/proc/stat` as the source for "CPU cores usage". Unfortunately, libgtop currently truncates CPU usage data starting from the first offline core it encounters.*
+
+
 ### Bug fixes
 
 -   Improved async command execution fixing a potential memory leak. [[#191](https://github.com/AstraExt/astra-monitor/issues/191)][[#181](https://github.com/AstraExt/astra-monitor/issues/181)]

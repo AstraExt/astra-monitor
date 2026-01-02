@@ -33,6 +33,7 @@ export type ProcessorUsage = {
     user: number;
     system: number;
     total: number;
+    offline?: boolean;
 
     raw?: {
         user: number;
@@ -81,7 +82,7 @@ export default class ProcessorMonitor extends Monitor {
     private previousCpuCoresUsage!: PreviousCpuCoresUsage;
     private previousPidsCpuTime!: Map<number, CpuTime>;
 
-    private coresNum: number;
+    private cpuPresent: number[]|null;
     private dataSources!: ProcessorDataSources;
     private cpuInfo?: CpuInfo;
 
@@ -97,8 +98,8 @@ export default class ProcessorMonitor extends Monitor {
         this.updateTopProcessesTask = new CancellableTaskManager();
         this.updateLoadAvgTask = new CancellableTaskManager();
 
-        this.coresNum = -1;
-        this.getNumberOfCores();
+        this.cpuPresent = null;
+        this.getCpuTopology();
 
         this.getCpuInfoSync();
 
@@ -127,8 +128,9 @@ export default class ProcessorMonitor extends Monitor {
             system: -1,
             total: -1,
         };
-        this.previousCpuCoresUsage = new Array(this.coresNum);
-        for(let i = 0; i < this.coresNum; i++) {
+        const numCores = this.getCpuTopology().length;
+        this.previousCpuCoresUsage = new Array(numCores);
+        for(let i = 0; i < numCores || 0; i++) {
             this.previousCpuCoresUsage[i] = {
                 idle: -1,
                 user: -1,
@@ -183,8 +185,9 @@ export default class ProcessorMonitor extends Monitor {
             this.dataSources.cpuCoresUsage =
                 Config.get_string('processor-source-cpu-cores-usage') ?? undefined;
             this.updateCoresUsageTask.cancel();
-            this.previousCpuCoresUsage = new Array(this.coresNum);
-            for(let i = 0; i < this.coresNum; i++) {
+            const numCores = this.getCpuTopology().length;
+            this.previousCpuCoresUsage = new Array(numCores);
+            for(let i = 0; i < numCores; i++) {
                 this.previousCpuCoresUsage[i] = {
                     idle: -1,
                     user: -1,
@@ -383,13 +386,13 @@ export default class ProcessorMonitor extends Monitor {
         );
     }
 
-    getProcStatSync(): string[] {
+    getCpuPresentSync(): number[] {
         // this is used very rarely, only on first setup
-        // takes ~0.2ms but could be more on slower systems
-        const fileContents = GLib.file_get_contents('/proc/stat');
+        // takes ~0.02ms but could be more on slower systems
+        const fileContents = GLib.file_get_contents('/sys/devices/system/cpu/present');
         if(fileContents && fileContents[0]) {
             const decoder = new TextDecoder('utf8');
-            return decoder.decode(fileContents[1]).split('\n');
+            return Utils.parseCpuPresentFile(decoder.decode(fileContents[1]));
         }
         return [];
     }
@@ -397,18 +400,11 @@ export default class ProcessorMonitor extends Monitor {
     /**
      * This is a sync function but caches the result
      */
-    getNumberOfCores(): number {
-        if(this.coresNum !== -1) return this.coresNum;
-
-        const procstat = this.getProcStatSync();
-        if(procstat.length < 1) return 0;
-
-        let cores = 0;
-        for(let i = 0; i < procstat.length; i++) {
-            if(procstat[i].startsWith('cpu')) cores++;
-        }
-        this.coresNum = cores - 1;
-        return this.coresNum;
+    getCpuTopology(): number[] {
+        if(this.cpuPresent !== null)
+            return this.cpuPresent;
+        this.cpuPresent = this.getCpuPresentSync();
+        return this.cpuPresent;
     }
 
     /**
@@ -652,31 +648,63 @@ export default class ProcessorMonitor extends Monitor {
     }
 
     async updateCpuCoresUsageProc(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
-        let procStatValue = await procStat.getValue();
+        const procStatValue = await procStat.getValue();
         if(procStatValue.length < 1) return false;
 
-        // Remove the first line (total CPU usage)
-        procStatValue = procStatValue.slice(1);
+        // Map cpu id to line parts
+        const cpuLines = new Map<number, string[]>();
+        // Skip first line (total CPU usage)
+        for(let i = 1; i < procStatValue.length; i++) {
+            const line = procStatValue[i];
+            if(!line.startsWith('cpu')) break;
+            
+            const parts = line.split(' ').filter(n => n.trim() !== '');
+            if(parts.length < 9) continue;
 
-        const cpuCoresUsage: PreviousCpuCoresUsage = [];
-        for(let i = 0; i < procStatValue.length; i++) {
-            if(!procStatValue[i].startsWith('cpu')) break;
+            const cpuIdStr = parts[0].substring(3);
+            const cpuId = parseInt(cpuIdStr, 10);
+            if(!isNaN(cpuId)) {
+                cpuLines.set(cpuId, parts);
+            }
+        }
 
-            const cpuLine = procStatValue[i].split(' ').filter(n => n.trim() !== '');
-            if(cpuLine.length < 9) continue;
+        const topology = this.getCpuTopology();
+        const cpuCoresUsage: any[] = [];
 
-            const cpuCoreUsage = this.updateCpuCoresUsageCommon(i, {
-                user: parseInt(cpuLine[1], 10),
-                nice: parseInt(cpuLine[2], 10),
-                system: parseInt(cpuLine[3], 10),
-                idle: parseInt(cpuLine[4], 10),
-                iowait: parseInt(cpuLine[5], 10),
-                irq: parseInt(cpuLine[6], 10),
-                softirq: parseInt(cpuLine[7], 10),
-                steal: parseInt(cpuLine[8], 10),
-            });
+        for(let i = 0; i < topology.length; i++) {
+            const coreId = topology[i];
+            const cpuLine = cpuLines.get(coreId);
 
-            if(cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
+            if(cpuLine) {
+                const usage = this.updateCpuCoresUsageCommon(i, {
+                    user: parseInt(cpuLine[1], 10),
+                    nice: parseInt(cpuLine[2], 10),
+                    system: parseInt(cpuLine[3], 10),
+                    idle: parseInt(cpuLine[4], 10),
+                    iowait: parseInt(cpuLine[5], 10),
+                    irq: parseInt(cpuLine[6], 10),
+                    softirq: parseInt(cpuLine[7], 10),
+                    steal: parseInt(cpuLine[8], 10),
+                });
+
+                if(usage) cpuCoresUsage.push(usage);
+                else cpuCoresUsage.push({ total: 0, user: 0, system: 0, idle: 0 });
+            } else {
+                // Offline
+                this.previousCpuCoresUsage[i] = {
+                    idle: -1,
+                    user: -1,
+                    system: -1,
+                    total: -1,
+                };
+                cpuCoresUsage.push({
+                    total: 0,
+                    user: 0,
+                    system: 0,
+                    idle: 0,
+                    offline: true,
+                });
+            }
         }
 
         this.pushUsageHistory('cpuCoresUsage', cpuCoresUsage);
@@ -687,29 +715,46 @@ export default class ProcessorMonitor extends Monitor {
         const GTop = Utils.GTop;
         if(!GTop) return false;
 
-        const buf = new GTop.glibtop_cpu();
-        GTop.glibtop_get_cpu(buf);
-
         const cpu = new GTop.glibtop_cpu();
+        GTop.glibtop_get_cpu(cpu);
 
         const cpuCoresUsage = [];
-        for(let i = 0; i < this.coresNum; i++) {
-            GTop.glibtop_get_cpu(cpu);
+        const topology = this.getCpuTopology();
 
-            if(cpu.xcpu_total.length <= i) break;
+        for(let i = 0; i < topology.length; i++) {
+            const coreId = topology[i];
 
-            const cpuCoreUsage = this.updateCpuCoresUsageCommon(i, {
-                user: cpu.xcpu_user[i],
-                nice: cpu.xcpu_nice[i],
-                system: cpu.xcpu_sys[i],
-                idle: cpu.xcpu_idle[i],
-                iowait: cpu.xcpu_iowait[i],
-                irq: cpu.xcpu_irq[i],
-                softirq: cpu.xcpu_softirq[i],
-                steal: 0,
-            });
+            // Check if we have data for this core (GTop returns 0 for offline cores)
+            if(coreId < cpu.xcpu_total.length && cpu.xcpu_total[coreId] > 0) {
+                const cpuCoreUsage = this.updateCpuCoresUsageCommon(i, {
+                    user: cpu.xcpu_user[coreId],
+                    nice: cpu.xcpu_nice[coreId],
+                    system: cpu.xcpu_sys[coreId],
+                    idle: cpu.xcpu_idle[coreId],
+                    iowait: cpu.xcpu_iowait[coreId],
+                    irq: cpu.xcpu_irq[coreId],
+                    softirq: cpu.xcpu_softirq[coreId],
+                    steal: 0,
+                });
 
-            if(cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
+                if(cpuCoreUsage !== null) cpuCoresUsage.push(cpuCoreUsage);
+                else cpuCoresUsage.push({ total: 0, user: 0, system: 0, idle: 0 });
+            } else {
+                // Offline
+                this.previousCpuCoresUsage[i] = {
+                    idle: -1,
+                    user: -1,
+                    system: -1,
+                    total: -1,
+                };
+                cpuCoresUsage.push({
+                    total: 0,
+                    user: 0,
+                    system: 0,
+                    idle: 0,
+                    offline: true,
+                });
+            }
         }
 
         this.pushUsageHistory('cpuCoresUsage', cpuCoresUsage);
@@ -786,28 +831,29 @@ export default class ProcessorMonitor extends Monitor {
      *
      */
     async updateCpuCoresFrequencyProc(): Promise<boolean> {
+        const topology = this.getCpuTopology();
+
         if(this.isListeningFor('cpuCoresFrequency')) {
             try {
-                const paths = Utils.generateCpuFreqPaths(this.coresNum);
+                const paths = topology.map(coreId => `/sys/devices/system/cpu/cpu${coreId}/cpufreq/scaling_cur_freq`);
 
-                const frequencies: number[] = [];
                 const readFiles = paths.map(path => {
                     return Utils.readFileAsync(path)
                         .then(fileContent => {
                             if(fileContent) {
                                 if(Utils.isIntOrIntString(fileContent))
-                                    frequencies.push(Number.NaN);
-                                else frequencies.push(parseInt(fileContent, 10) / 1000);
+                                    return Number.NaN;
+                                else return parseInt(fileContent, 10) / 1000;
                             } else {
-                                frequencies.push(Number.NaN);
+                                return Number.NaN;
                             }
                         })
                         .catch(() => {
-                            frequencies.push(Number.NaN);
+                            return Number.NaN;
                         });
                 });
 
-                await Promise.all(readFiles);
+                const frequencies = await Promise.all(readFiles);
                 this.pushUsageHistory('cpuCoresFrequency', frequencies);
                 return true;
             } catch(e) {
@@ -816,7 +862,7 @@ export default class ProcessorMonitor extends Monitor {
         }
 
         const frequencies: number[] = [];
-        for(let i = 0; i < this.coresNum; i++) frequencies.push(Number.NaN);
+        for(let i = 0; i < topology.length; i++) frequencies.push(Number.NaN);
         this.pushUsageHistory('cpuCoresFrequency', frequencies);
         return true;
     }
