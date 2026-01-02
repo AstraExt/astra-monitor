@@ -211,6 +211,7 @@ export default class PrefsUtils {
 
         const row = new Adw.ActionRow({
             ...props,
+            title: `🔗 ${props.title}`,
             useMarkup: true,
         });
         if(tabs) row.add_prefix(new Gtk.Box({ marginStart: tabs * 20 }));

@@ -947,8 +947,8 @@ msgid "Delete"
 msgstr "Apagar"
 
 #: src/prefs/welcome.js:33 prefs.js:168
-msgid "Welcome"
-msgstr "Bem-vindo(a)"
+msgid "Overview"
+msgstr "Visão Geral"
 
 #: src/prefs/welcome.js:46 src/prefs/network.js:255
 msgid "Dependencies"

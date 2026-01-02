@@ -204,8 +204,9 @@ export default class AstraMonitorPrefs extends ExtensionPreferences {
 
         const welcomeBtn = PrefsUtils.addButtonRow(
             {
-                title: _('Welcome'),
+                title: '<b>' + _('Overview') + '</b>',
                 iconName: 'am-home-symbolic',
+                useMarkup: true,
             },
             welcomeGroup,
             btn => {

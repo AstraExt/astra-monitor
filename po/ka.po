@@ -1001,8 +1001,8 @@ msgid "Delete"
 msgstr ""
 
 #: src/prefs/welcome.js:33 prefs.js:168
-msgid "Welcome"
-msgstr "კეთილი იყოს თქვენი მობრძანება"
+msgid "Overview"
+msgstr "მოხდება"
 
 #: src/prefs/welcome.js:46 src/prefs/network.js:255
 msgid "Dependencies"

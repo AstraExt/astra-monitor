@@ -958,8 +958,8 @@ msgid "Delete"
 msgstr ""
 
 #: src/prefs/welcome.js:33 prefs.js:168
-msgid "Welcome"
-msgstr "Witaj"
+msgid "Overview"
+msgstr "Przegląd"
 
 #: src/prefs/welcome.js:46 src/prefs/network.js:255
 msgid "Dependencies"
