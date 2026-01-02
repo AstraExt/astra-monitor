@@ -857,7 +857,9 @@ export default class ProcessorMenu extends MenuBase {
         Utils.processorMonitor.requestUpdate('loadAverage');
 
         this.menuUptimeTimer = Utils.getUptime(bootTime => {
-            this.menuUptime.text = Utils.formatUptime(bootTime);
+            try {
+                this.menuUptime.text = Utils.formatUptime(bootTime);
+            } catch(e) { /* empty */ }
         });
 
         this.clear('gpuUpdate');
@@ -871,6 +873,9 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     onClose() {
+        this.menuUptimeTimer?.stop();
+        this.menuUptimeTimer = null;
+
         this.gpuSection?.onClose();
 
         if(this.lazyCoresPopupTimer != null) {
@@ -887,9 +892,6 @@ export default class ProcessorMenu extends MenuBase {
         Utils.gpuMonitor?.unlisten(this, 'gpuUpdateProcessor');
 
         this.queueTopProcessesUpdate = false;
-
-        this.menuUptimeTimer?.stop();
-        this.menuUptimeTimer = null;
     }
 
     clear(code: string = 'all') {
