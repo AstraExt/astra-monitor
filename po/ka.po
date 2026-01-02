@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-18 15:35+0200\n"
+"POT-Creation-Date: 2026-01-02 15:32+0100\n"
 "PO-Revision-Date: 2024-04-27 11:41+0200\n"
 "Last-Translator: George Salukvadze <giosal90@gmail.com>\n"
 "Language-Team: ka\n"
@@ -22,73 +22,673 @@ msgstr ""
 "X-Poedit-Basepath: ../src\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: prefs.js:172
+msgid "Overview"
+msgstr "მოხდება"
+
+#: prefs.js:189 src/profiles/profilesMenu.js:32 src/prefs/profiles.js:36
+#: src/prefs/profiles.js:49
+msgid "Profiles"
+msgstr ""
+
+#: prefs.js:205 src/prefs/visualization.js:40 src/prefs/visualization.js:53
+#: src/prefs/visualization.js:56
+msgid "Visualization"
+msgstr "ვიზუალიზაცია"
+
+#: prefs.js:222 src/prefs/processors.js:41 src/prefs/processors.js:54
+#: src/prefs/processors.js:67
+msgid "Processors"
+msgstr "პროცესორები"
+
+#: prefs.js:232 prefs.js:267 prefs.js:294 prefs.js:329 prefs.js:364
+#: prefs.js:399 src/prefs/storage.js:82 src/prefs/network.js:82
+#: src/prefs/processors.js:80 src/prefs/processors.js:82
+#: src/prefs/sensors.js:80 src/prefs/gpu.js:81 src/prefs/gpu.js:83
+#: src/prefs/memory.js:80
+msgid "General"
+msgstr "საერთო"
+
+#: prefs.js:240 prefs.js:275 prefs.js:302 prefs.js:337 prefs.js:372
+#: prefs.js:407 src/prefs/storage.js:206 src/prefs/storage.js:208
+#: src/prefs/network.js:186 src/prefs/processors.js:114
+#: src/prefs/processors.js:116 src/prefs/sensors.js:118
+#: src/prefs/sensors.js:120 src/prefs/gpu.js:173 src/prefs/gpu.js:175
+#: src/prefs/memory.js:123 src/prefs/memory.js:125
+msgid "Header"
+msgstr "სათაური"
+
+#: prefs.js:248 prefs.js:310 prefs.js:345 prefs.js:380 src/prefs/storage.js:302
+#: src/prefs/storage.js:304 src/prefs/network.js:253 src/prefs/network.js:266
+#: src/prefs/processors.js:191 src/prefs/processors.js:193
+#: src/prefs/sensors.js:266 src/prefs/gpu.js:251 src/prefs/memory.js:202
+#: src/prefs/memory.js:204
+msgid "Menu"
+msgstr "მენიუ"
+
+#: prefs.js:257 src/gpu/gpuMenu.js:28 src/gpu/gpuMenuComponent.js:46
+#: src/prefs/processors.js:199 src/prefs/gpu.js:42 src/prefs/gpu.js:55
+#: src/prefs/gpu.js:68 src/prefs/gpu.js:108
+msgid "GPU"
+msgstr "GPU"
+
+#: prefs.js:284 src/prefs/memory.js:41 src/prefs/memory.js:54
+#: src/prefs/memory.js:67 src/prefs/memory.js:82 src/prefs/memory.js:205
+#: src/memory/memoryMenu.js:34
+msgid "Memory"
+msgstr "მეხსიერება"
+
+#: prefs.js:319 src/prefs/storage.js:43 src/prefs/storage.js:56
+#: src/prefs/storage.js:69 src/prefs/storage.js:84
+#: src/storage/storageMenu.js:38
+msgid "Storage"
+msgstr "მეხსიერება"
+
+#: prefs.js:354 src/network/networkMenu.js:42 src/prefs/network.js:43
+#: src/prefs/network.js:56 src/prefs/network.js:69 src/prefs/network.js:84
+msgid "Network"
+msgstr "ქსელი"
+
+#: prefs.js:389 src/gpu/gpuMenuComponent.js:365
+#: src/gpu/gpuMenuComponent.js:1320 src/sensors/sensorsMenu.js:47
+#: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
+#: src/prefs/sensors.js:82 src/prefs/sensors.js:112
+msgid "Sensors"
+msgstr "სენსორები"
+
+#: prefs.js:423 src/prefs/utility.js:36 src/prefs/utility.js:49
+#: src/prefs/utility.js:52
+msgid "Utility"
+msgstr "ხელსაწყოები"
+
+#: prefs.js:431 src/prefs/about.js:32 src/prefs/about.js:45
+msgid "About"
+msgstr "შესახებ"
+
+#: src/network/networkMenu.js:77
+msgid "Global Upload:"
+msgstr "გლობალური ატვირთვა:"
+
+#: src/network/networkMenu.js:89
+msgid "Global Download:"
+msgstr "გლობალური გადმოტვირთვა:"
+
+#: src/network/networkMenu.js:114
+#, fuzzy
+msgid "Upload Activity"
+msgstr "ატვირთვის აქტივობა"
+
+#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
+#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
+#: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
+msgid "Total"
+msgstr "სულ"
+
+#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
+#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
+msgid "Packets"
+msgstr "პაკეტები"
+
+#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
+#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
+msgid "Errors/Dropped"
+msgstr "შეცდომები/დაკარგული"
+
+#: src/network/networkMenu.js:136
+#, fuzzy
+msgid "Download Activity"
+msgstr "გადმოტვირთვის აქტივობა"
+
+#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
+#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:308
+#: src/gpu/gpuMenuComponent.js:1234 src/prefs/storage.js:195
+#: src/prefs/processors.js:103 src/prefs/memory.js:117
+msgid "Top Processes"
+msgstr "ტოპ პროცესები"
+
+#: src/network/networkMenu.js:168
+#, fuzzy
+msgid "(click to show)"
+msgstr "დააჭირეთ გასაახლებლად"
+
+#: src/network/networkMenu.js:381
+msgid "Public IP"
+msgstr "საჯარო IP"
+
+#: src/network/networkMenu.js:391
+msgid "Public IPv4:"
+msgstr "საჯარო IPv4:"
+
+#: src/network/networkMenu.js:408
+msgid "Public IPv6:"
+msgstr "საჯარო IPv6:"
+
+#: src/network/networkMenu.js:455
+msgid "Updated a long time ago"
+msgstr "განახლებულია დიდი ხნის წინ"
+
+#: src/network/networkMenu.js:457
+#, fuzzy
+msgid "Updated a few seconds ago"
+msgstr "განახლებულია რამდენიმე წამის წინ"
+
+#: src/network/networkMenu.js:459
+msgid "Updated less than a minute ago"
+msgstr "განახლებულია ერთ წუთზე ნაკლები დროის წინ"
+
+#: src/network/networkMenu.js:461
+msgid "Updated about a minute ago"
+msgstr "განახლებულია დაახლოებით ერთი წუთის წინ"
+
+#: src/network/networkMenu.js:463
+msgid "Updated about 2 minutes ago"
+msgstr "განახლებულია დაახლოებით 2 წუთის წინ"
+
+#: src/network/networkMenu.js:465
+msgid "Updated about 5 minutes ago"
+msgstr "განახლებულია დაახლოებით 5 წუთის წინ"
+
+#: src/network/networkMenu.js:467
+msgid "Updated more than 5 minutes ago"
+msgstr "განახლებულია 5 წუთზე მეტი დროის წინ"
+
+#: src/network/networkMenu.js:468
+msgid "Click to refresh"
+msgstr "დააჭირეთ გასაახლებლად"
+
+#: src/network/networkMenu.js:470
+msgid "Refreshing..."
+msgstr "განახლება..."
+
+#: src/network/networkMenu.js:472
+msgid "Done"
+msgstr "მზადაა"
+
+#: src/network/networkMenu.js:476
+#, fuzzy
+msgid "Default Routes"
+msgstr "ნაგულისხმები მარშრუტები"
+
+#: src/network/networkMenu.js:515
+msgid "Route"
+msgstr "მარშრუტი"
+
+#: src/network/networkMenu.js:521
+msgid "Metric"
+msgstr "მეტრული"
+
+#: src/network/networkMenu.js:528
+#, fuzzy
+msgid "Device"
+msgstr "მოწყობილობა"
+
+#: src/network/networkMenu.js:535
+msgid "Gateway"
+msgstr "გეითვეი"
+
+#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
+msgid "Type"
+msgstr "ტიპი"
+
+#: src/network/networkMenu.js:549
+#, fuzzy
+msgid "Destination"
+msgstr "დანიშნულება"
+
+#: src/network/networkMenu.js:556
+msgid "Protocol"
+msgstr "პროტოკოლი"
+
+#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
+msgid "Scope"
+msgstr "Scope"
+
+#: src/network/networkMenu.js:570
+msgid "Flags"
+msgstr "დროშები"
+
+#: src/network/networkMenu.js:599
+msgid "Interfaces"
+msgstr "ინტერფეისები"
+
+#: src/network/networkMenu.js:602
+msgid "No network interface found"
+msgstr "ქსელური ინტერფეისი ვერ მოიძებნა"
+
+#: src/network/networkMenu.js:810
+msgctxt "short for upload"
+msgid "U"
+msgstr "ატვ"
+
+#: src/network/networkMenu.js:836
+msgctxt "short for download"
+msgid "D"
+msgstr "გადმ"
+
+#: src/network/networkMenu.js:910 src/prefs/about.js:48
+msgid "Info"
+msgstr "ინფო"
+
+#: src/network/networkMenu.js:913 src/gpu/gpuMenuComponent.js:438
+#: src/gpu/gpuMenuComponent.js:1246 src/gpu/gpuMenuComponent.js:1277
+#: src/storage/storageMenu.js:600
+msgid "Name"
+msgstr "სახელი"
+
+#: src/network/networkMenu.js:920
+#, fuzzy
+msgid "Alt Names"
+msgstr "ალტერნატიული სახელები"
+
+#: src/network/networkMenu.js:929
+#, fuzzy
+msgid "Interface Index"
+msgstr "ინტერფეისების ინდექსი"
+
+#: src/network/networkMenu.js:938
+msgid "MAC Address"
+msgstr "MAC მისამართი"
+
+#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
+msgid "Group"
+msgstr "ჯგუფი"
+
+#: src/network/networkMenu.js:956
+#, fuzzy
+msgid "Speed"
+msgstr "სიჩქარე"
+
+#: src/network/networkMenu.js:965
+msgid "Duplex"
+msgstr "დუპლექსი"
+
+#: src/network/networkMenu.js:974
+msgid "MTU"
+msgstr "MTU"
+
+#: src/network/networkMenu.js:983
+msgid "Tx Queue Length"
+msgstr "Tx რიგის სიგრძე"
+
+#: src/network/networkMenu.js:992
+msgid "Link Type"
+msgstr "კავშირის ტიპი"
+
+#: src/network/networkMenu.js:1001
+msgid "Operative State"
+msgstr "ოპერატიული მდგომარეობა"
+
+#: src/network/networkMenu.js:1010
+msgid "Qdisc"
+msgstr "Qdisc"
+
+#: src/network/networkMenu.js:1043
+msgid "Family"
+msgstr "ოჯახი"
+
+#: src/network/networkMenu.js:1050
+msgid "Local"
+msgstr "ადგილობრივი"
+
+#: src/network/networkMenu.js:1057
+msgid "Prefix Length"
+msgstr "პრეფიქსის სიგრძე"
+
+#: src/network/networkMenu.js:1064
+msgid "Broadcast"
+msgstr "მაუწყებლობა"
+
+#: src/network/networkMenu.js:1097
+#, fuzzy
+msgid "Upload"
+msgstr "ატვირთვა"
+
+#: src/network/networkMenu.js:1121
+#, fuzzy
+msgid "Download"
+msgstr "გადმოტვირთვა"
+
+#: src/network/networkMenu.js:1155
+msgid "IEEE"
+msgstr "IEEE"
+
+#: src/network/networkMenu.js:1167
+msgid "SSID"
+msgstr "SSID"
+
+#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
+msgid "Mode"
+msgstr "რეჟიმი"
+
+#: src/network/networkMenu.js:1191 src/prefs/processors.js:145
+msgid "Frequency"
+msgstr "სიხშირე"
+
+#: src/network/networkMenu.js:1203
+msgid "Access Point"
+msgstr "წვდომის წერტილი"
+
+#: src/network/networkMenu.js:1215
+msgid "Bit Rate"
+msgstr "ბიტრეიტი"
+
+#: src/network/networkMenu.js:1227
+msgid "TX Power"
+msgstr "TX სიმძლავრე"
+
+#: src/network/networkMenu.js:1239
+msgid "Link Quality"
+msgstr "კავშირის ხარისხი"
+
+#: src/network/networkMenu.js:1251
+msgid "Signal Level"
+msgstr "სიგნალის დონე"
+
+#: src/network/networkGraph.js:95 src/gpu/gpuActivityGraph.js:83
+#: src/gpu/gpuMemoryGraph.js:83 src/processor/processorGraph.js:86
+#: src/storage/storageGraph.js:95 src/memory/memoryGraph.js:86
+#, fuzzy, javascript-format
+msgid "%d min ago"
+msgid_plural "%d mins ago"
+msgstr[0] "%d წუთის წინ"
+msgstr[1] "%d წუთის წინ"
+
+#: src/network/networkGraph.js:98 src/gpu/gpuActivityGraph.js:86
+#: src/gpu/gpuMemoryGraph.js:86 src/processor/processorGraph.js:89
+#: src/storage/storageGraph.js:98 src/memory/memoryGraph.js:89
+msgid "now"
+msgstr "ახლა"
+
+#: src/gpu/gpuMenuComponent.js:57
+msgid "No GPU found"
+msgstr "GPU ვერ მოიძებნა"
+
+#: src/gpu/gpuMenuComponent.js:70
+msgid "GPUs"
+msgstr "GPU-ები"
+
+#: src/gpu/gpuMenuComponent.js:129
+msgid "No Connected Display"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1084
+msgid "Activity"
+msgstr "აქტივობა"
+
+#: src/gpu/gpuMenuComponent.js:206 src/gpu/gpuMenuComponent.js:1133
+msgid "VRAM"
+msgstr "ვიდეო ოპერატიული მეხსიერება"
+
+#: src/gpu/gpuMenuComponent.js:249 src/gpu/gpuMenuComponent.js:1174
+#: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
+msgid "Used:"
+msgstr "გამოყენებული:"
+
+#: src/gpu/gpuMenuComponent.js:270 src/gpu/gpuMenuComponent.js:1195
+#: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
+#: src/memory/memoryMenu.js:369
+msgid "Total:"
+msgstr "სულ:"
+
+#: src/gpu/gpuMenuComponent.js:431
+msgid "GPU info"
+msgstr "ინფორმაცია GPU-ს შესახებ"
+
+#: src/gpu/gpuMenuComponent.js:468
+msgid "Subsystem"
+msgstr "ქვე-სისტემა"
+
+#: src/gpu/gpuMenuComponent.js:501 src/storage/storageMenu.js:603
+msgid "Vendor"
+msgstr "მწარმოებელი"
+
+#: src/gpu/gpuMenuComponent.js:509
+msgid "Vendor ID"
+msgstr "მწარმოებლის ID"
+
+#: src/gpu/gpuMenuComponent.js:518
+msgid "Product ID"
+msgstr "პროდუქტის ID"
+
+#: src/gpu/gpuMenuComponent.js:526
+msgid "PCI"
+msgstr "PCI"
+
+#: src/gpu/gpuMenuComponent.js:538
+msgid "Drivers"
+msgstr "დრაივერები"
+
+#: src/gpu/gpuMenuComponent.js:547
+msgid "Modules"
+msgstr "მოდულები"
+
+#: src/gpu/gpuMenuComponent.js:611
+msgid "Displays"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:613
+#, fuzzy
+msgid "No displays found"
+msgstr "სენსორი ვერ მოიძებნა"
+
+#: src/gpu/gpuMenuComponent.js:644
+#, fuzzy
+msgid "Status"
+msgstr "მდგომარეობა"
+
+#: src/gpu/gpuMenuComponent.js:656
+#, fuzzy
+msgid "Product Code"
+msgstr "პროდუქტის ID"
+
+#: src/gpu/gpuMenuComponent.js:668
+#, fuzzy
+msgid "Serial Number"
+msgstr "ზონის ნომერი"
+
+#: src/gpu/gpuMenuComponent.js:680
+msgid "Manufacturer Date"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:692
+#, fuzzy
+msgid "EDID Version"
+msgstr "ვერსია"
+
+#: src/gpu/gpuMenuComponent.js:704
+#, fuzzy
+msgid "Display Size"
+msgstr "მაქსიმალურის ზომის გაუქმება"
+
+#: src/gpu/gpuMenuComponent.js:716 src/gpu/gpuMenuComponent.js:942
+msgid "Native Resolution"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:728 src/gpu/gpuMenuComponent.js:961
+msgid "Refresh Rate"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:740
+msgid "Display Gamma"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:752
+msgid "Display Type"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:764
+msgid "Capabilities"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:843
+msgid "Enabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:846
+msgid "Disabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:939
+msgid "Native Resolutions"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:958
+msgid "Refresh Rates"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:986
+msgid "RGB 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:990
+msgid "RGB 4:4:4 + YCrCb 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:994
+msgid "RGB 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:997
+msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1005
+msgid "Monochrome or Grayscale"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1008
+#, fuzzy
+msgid "RGB color"
+msgstr "სვეტის ფერი"
+
+#: src/gpu/gpuMenuComponent.js:1011
+#, fuzzy
+msgid "Non-RGB color"
+msgstr "ხატულას ფერი"
+
+#: src/gpu/gpuMenuComponent.js:1026
+msgid "Digital Input"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1028
+msgid "VESA DFP"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1033
+msgid "White Sync Levels: "
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1036
+msgid "Blank to Black"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1039
+msgid "Separate Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1042
+msgid "Composite Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1045
+msgid "Sync on Green"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1048
+msgid "VSync Serrated"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1052
+msgid "DPMS Standby"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1055
+msgid "DPMS Suspend"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1058
+msgid "DPMS Active Off"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1061
+msgid "Standard sRGB"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1064
+msgid "Preferred Timing"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1067
+#, fuzzy
+msgid "GTF Supported"
+msgstr "დაგვიჭირეთ მხარი"
+
+#: src/gpu/gpuMenuComponent.js:1546
+#, javascript-format
+msgid "%d/%d Displays Connected"
+msgstr ""
+
 #: src/processor/processorMenu.js:37 src/prefs/processors.js:194
 msgid "CPU"
 msgstr "CPU"
 
-#: src/processor/processorMenu.js:99
+#: src/processor/processorMenu.js:100
 msgid "CPU info"
 msgstr "ინფორმაცია CPU-ს შესახებ"
 
-#: src/processor/processorMenu.js:179 src/memory/memoryMenu.js:50
-#: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:270
-#: src/gpu/gpuMenuComponent.js:1195
-msgid "Total:"
-msgstr "სულ:"
-
-#: src/processor/processorMenu.js:187
+#: src/processor/processorMenu.js:188
 msgid "User:"
 msgstr "მომხმარებელი:"
 
-#: src/processor/processorMenu.js:195
+#: src/processor/processorMenu.js:196
 msgid "System:"
 msgstr "სისტემა:"
 
-#: src/processor/processorMenu.js:224
+#: src/processor/processorMenu.js:225
 msgid "CPU Category Usage Raw Info"
 msgstr "დაუმუშავებელი ინფორმაცია CPU-ს გამოყენების კატეგორიის შესახებ"
 
-#: src/processor/processorMenu.js:226
+#: src/processor/processorMenu.js:227
 msgid "User"
 msgstr "მომხმარებელი"
 
-#: src/processor/processorMenu.js:233
+#: src/processor/processorMenu.js:234
 msgid "Nice"
 msgstr "თანხმობადობა"
 
-#: src/processor/processorMenu.js:240
+#: src/processor/processorMenu.js:241
 msgid "System"
 msgstr "სისტემა"
 
-#: src/processor/processorMenu.js:247
+#: src/processor/processorMenu.js:248
 msgid "Idle"
 msgstr "უმოქმედო"
 
-#: src/processor/processorMenu.js:254
+#: src/processor/processorMenu.js:255
 msgid "I/O wait"
 msgstr "შეყვანა/გამოყვანის ლოდინი"
 
-#: src/processor/processorMenu.js:261
+#: src/processor/processorMenu.js:262
 msgid "IRQ"
 msgstr "შეწყვეტა"
 
-#: src/processor/processorMenu.js:268
+#: src/processor/processorMenu.js:269
 msgid "Soft IRQ"
 msgstr "პროგრამული შეწყვეტა"
 
-#: src/processor/processorMenu.js:275
+#: src/processor/processorMenu.js:276
 msgid "Steal"
 msgstr "მოპარვა"
 
-#: src/processor/processorMenu.js:337
+#: src/processor/processorMenu.js:338
 msgid "CPU Cores Usage Info"
 msgstr "ინფორმაცია CPU-ს ბირთვების გამოყენების შესახებ"
 
-#: src/processor/processorMenu.js:379
+#: src/processor/processorMenu.js:380
 msgid "GHz"
 msgstr "გჰც"
 
-#: src/processor/processorMenu.js:394 src/processor/processorMenu.js:436
+#: src/processor/processorMenu.js:395 src/processor/processorMenu.js:437
 #: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
 #: src/storage/storageMenu.js:1179 src/storage/storageMenu.js:1180
 #: src/storage/storageMenu.js:1189 src/storage/storageMenu.js:1190
@@ -96,598 +696,62 @@ msgstr "გჰც"
 msgid "Top processes"
 msgstr "ტოპ პროცესები"
 
-#: src/processor/processorMenu.js:469
+#: src/processor/processorMenu.js:470
 msgid "Load average"
 msgstr "დატვირთვის საშუალო"
 
-#: src/processor/processorMenu.js:489
+#: src/processor/processorMenu.js:490
 msgctxt "short for 1 minute"
 msgid "1m"
 msgstr "1წთ"
 
-#: src/processor/processorMenu.js:509
+#: src/processor/processorMenu.js:510
 msgctxt "short for 5 minutes"
 msgid "5m"
 msgstr "5წთ"
 
-#: src/processor/processorMenu.js:529
+#: src/processor/processorMenu.js:530
 msgctxt "short for 15 minutes"
 msgid "15m"
 msgstr "15წთ"
 
-#: src/processor/processorMenu.js:578
+#: src/processor/processorMenu.js:579
 msgid "System uptime"
 msgstr "სისტემის მუშაობის დრო"
 
-#: src/processor/processorGraph.js:86 src/network/networkGraph.js:95
-#: src/storage/storageGraph.js:95 src/memory/memoryGraph.js:86
-#: src/gpu/gpuActivityGraph.js:83 src/gpu/gpuMemoryGraph.js:83
+#: src/processor/processorMenu.js:723
+msgid "Offline"
+msgstr ""
+
+#: src/sensors/sensorsMenu.js:50
+msgid "No sensor found"
+msgstr "სენსორი ვერ მოიძებნა"
+
+#: src/sensors/sensorsMenu.js:225
 #, fuzzy, javascript-format
-msgid "%d min ago"
-msgid_plural "%d mins ago"
-msgstr[0] "%d წუთის წინ"
-msgstr[1] "%d წუთის წინ"
+msgid "%d sensor"
+msgid_plural "%d sensors"
+msgstr[0] "%d სენსორი"
+msgstr[1] "%d სენსორი"
 
-#: src/processor/processorGraph.js:89 src/network/networkGraph.js:98
-#: src/storage/storageGraph.js:98 src/memory/memoryGraph.js:89
-#: src/gpu/gpuActivityGraph.js:86 src/gpu/gpuMemoryGraph.js:86
-msgid "now"
-msgstr "ახლა"
+#: src/prefs/prefsUtils.js:700
+msgid "Move up"
+msgstr "ზემოთ გადატანა"
 
-#: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
-#: src/prefs/sensors.js:82 src/prefs/sensors.js:112
-#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:365
-#: src/gpu/gpuMenuComponent.js:1320 prefs.js:379
-msgid "Sensors"
-msgstr "სენსორები"
+#: src/prefs/prefsUtils.js:719
+msgid "Move down"
+msgstr "ქვემოთ გადატანა"
 
-#: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
-#: src/prefs/network.js:82 src/prefs/gpu.js:81 src/prefs/gpu.js:83
-#: src/prefs/processors.js:80 src/prefs/processors.js:82 prefs.js:226
-#: prefs.js:260 prefs.js:286 prefs.js:320 prefs.js:354 prefs.js:388
-msgid "General"
-msgstr "საერთო"
-
+#: src/prefs/storage.js:85 src/prefs/network.js:85 src/prefs/processors.js:83
 #: src/prefs/sensors.js:83 src/prefs/sensors.js:150 src/prefs/sensors.js:162
-#: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
-#: src/prefs/gpu.js:85 src/prefs/processors.js:83
+#: src/prefs/gpu.js:85 src/prefs/memory.js:83
 msgid "Show"
 msgstr "ჩვენება"
 
-#: src/prefs/sensors.js:84 src/prefs/memory.js:84 src/prefs/storage.js:86
-#: src/prefs/network.js:86 src/prefs/gpu.js:93 src/prefs/processors.js:84
+#: src/prefs/storage.js:86 src/prefs/network.js:86 src/prefs/processors.js:84
+#: src/prefs/sensors.js:84 src/prefs/gpu.js:93 src/prefs/memory.js:84
 msgid "Update frequency (seconds)"
 msgstr "განახლების სიხშირე (წამები)"
-
-#: src/prefs/sensors.js:86
-msgctxt "Celsius unit measure choice"
-msgid "Celsius"
-msgstr "ცელსიუსი"
-
-#: src/prefs/sensors.js:87
-msgctxt "Fahrenheit unit measure choice"
-msgid "Fahrenheit"
-msgstr "ფარენჰაიტი"
-
-#: src/prefs/sensors.js:89
-msgid "Temperature Unit"
-msgstr "ტემპერატურის ერთეული"
-
-#: src/prefs/sensors.js:90
-#, fuzzy
-msgid "Ignored Sensors"
-msgstr "სენსორები"
-
-#: src/prefs/sensors.js:92
-#, fuzzy
-msgid "Ignored Sensors Regex"
-msgstr "იგნორირებული მეხსიერების მოწყობილობები"
-
-#: src/prefs/sensors.js:93
-msgid "Completely ignore sensors matching this regex"
-msgstr ""
-
-#: src/prefs/sensors.js:97
-#, fuzzy
-msgid "Ignored Sensors Category Regex"
-msgstr "იგნორირებული მეხსიერების მოწყობილობები"
-
-#: src/prefs/sensors.js:98
-msgid "Categories are like \"Package\", \"Core\", \"Edge\", etc."
-msgstr ""
-
-#: src/prefs/sensors.js:102
-msgid "Ignored Sensors Attribute Regex"
-msgstr ""
-
-#: src/prefs/sensors.js:103
-msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
-msgstr ""
-
-#: src/prefs/sensors.js:106 src/prefs/memory.js:105 src/prefs/storage.js:184
-#: src/prefs/network.js:153 src/prefs/processors.js:85
-msgid "Data Sources"
-msgstr "მონაცემთა წყაროები"
-
-#: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
-#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
-#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
-#: src/prefs/processors.js:87 src/prefs/processors.js:93
-#: src/prefs/processors.js:99 src/prefs/processors.js:105
-msgid "Auto"
-msgstr "ავტო"
-
-#: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
-#: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
-#: src/prefs/network.js:186 src/prefs/gpu.js:173 src/prefs/gpu.js:175
-#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:234
-#: prefs.js:268 prefs.js:294 prefs.js:328 prefs.js:362 prefs.js:396
-msgid "Header"
-msgstr "სათაური"
-
-#: src/prefs/sensors.js:121 src/prefs/memory.js:126 src/prefs/storage.js:209
-#: src/prefs/network.js:189 src/prefs/gpu.js:176 src/prefs/processors.js:117
-msgid "Indicators Order"
-msgstr "ინდიკატორების განლაგება"
-
-#: src/prefs/sensors.js:124 src/prefs/memory.js:129 src/prefs/storage.js:212
-#: src/prefs/network.js:192 src/prefs/gpu.js:179 src/prefs/processors.js:120
-msgid "Icon"
-msgstr "ხატულა"
-
-#: src/prefs/sensors.js:125 src/prefs/memory.js:130 src/prefs/storage.js:213
-#: src/prefs/network.js:193 src/prefs/gpu.js:180 src/prefs/processors.js:121
-msgid "Show Icon"
-msgstr "ხატულას ჩვენება"
-
-#: src/prefs/sensors.js:127 src/prefs/memory.js:132 src/prefs/storage.js:215
-#: src/prefs/network.js:195 src/prefs/gpu.js:182 src/prefs/processors.js:123
-msgid "Icon Name"
-msgstr "ხატულას სახელი"
-
-#: src/prefs/sensors.js:128
-msgid "Set icon name (ie: 'temperature-symbolic')"
-msgstr "დააყენეთ ხატულას სახელი (მაგ., 'temperature-symbolic')"
-
-#: src/prefs/sensors.js:130 src/prefs/memory.js:135 src/prefs/storage.js:218
-#: src/prefs/network.js:198 src/prefs/visualization.js:171
-#: src/prefs/visualization.js:178 src/prefs/gpu.js:185
-#: src/prefs/processors.js:126
-msgid "Set to empty to disable icon override"
-msgstr "დააყენეთ ცარიელზე ხატულების გადაყენების გასათიშად"
-
-#: src/prefs/sensors.js:133 src/prefs/memory.js:138 src/prefs/storage.js:221
-#: src/prefs/network.js:201 src/prefs/gpu.js:188 src/prefs/processors.js:129
-msgid "Icon Color"
-msgstr "ხატულას ფერი"
-
-#: src/prefs/sensors.js:134 src/prefs/memory.js:139 src/prefs/storage.js:222
-#: src/prefs/network.js:202 src/prefs/gpu.js:189 src/prefs/processors.js:130
-msgid "Icon Alert Color"
-msgstr "ხატულას გაფრთხილების ფერი"
-
-#: src/prefs/sensors.js:136 src/prefs/memory.js:141 src/prefs/storage.js:224
-#: src/prefs/network.js:204 src/prefs/gpu.js:191 src/prefs/processors.js:132
-msgid "Icon Size"
-msgstr "ხატულას ზომა"
-
-#: src/prefs/sensors.js:137 src/prefs/memory.js:142 src/prefs/storage.js:225
-#: src/prefs/network.js:205 src/prefs/visualization.js:132
-#: src/prefs/visualization.js:140 src/prefs/visualization.js:148
-#: src/prefs/gpu.js:192 src/prefs/processors.js:133
-msgid "Experimental feature: may require to disable/enable the extension."
-msgstr ""
-"ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
-
-#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
-msgid "None"
-msgstr "არცერთი"
-
-#: src/prefs/sensors.js:149
-msgid "Sensor 1"
-msgstr "სენსორი 1"
-
-#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
-#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
-#: src/prefs/sensors.js:247
-msgid "Source"
-msgstr "წყარო"
-
-#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
-#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
-#: src/prefs/sensors.js:257
-msgid "Value Digits"
-msgstr "მნიშვნელობის ციფრები"
-
-#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
-#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
-#: src/prefs/sensors.js:258
-msgid "Set -1 to auto. Number of digits after the decimal point."
-msgstr ""
-"დააყენეთ -1 ავტომატურისთვის. ციფრთა რაოდენობა ათწილადი გამყოფის შემდეგ."
-
-#: src/prefs/sensors.js:161
-msgid "Sensor 2"
-msgstr "სენსორი 2"
-
-#: src/prefs/sensors.js:164 src/prefs/storage.js:284 src/prefs/network.js:238
-msgid "Vertical"
-msgstr "ვერტუკალური"
-
-#: src/prefs/sensors.js:165 src/prefs/storage.js:285 src/prefs/network.js:239
-msgid "Horizontal"
-msgstr "ჰორიზონტალური"
-
-#: src/prefs/sensors.js:167
-#, fuzzy
-msgid "Sensor 2 Layout"
-msgstr "სენსორი 2-ის განლაგება"
-
-#: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
-#: src/prefs/network.js:245 src/prefs/gpu.js:241 src/prefs/processors.js:182
-msgid "Tooltip"
-msgstr "მინიშნება"
-
-#: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
-#: src/prefs/network.js:246 src/prefs/gpu.js:242 src/prefs/processors.js:183
-msgid "Show Tooltip"
-msgstr "მინიშნების ჩვენება"
-
-#: src/prefs/sensors.js:181
-#, fuzzy
-msgid "Tooltip Sensor 1"
-msgstr "სენსორი 1-ის მინიშნება"
-
-#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
-#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
-#, fuzzy
-msgid "Short Name"
-msgstr "მოკლე სახელი"
-
-#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
-#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
-msgid "Short name to display in the tooltip."
-msgstr "მოკლე სახელი მინიშნებაში საჩვენებლად"
-
-#: src/prefs/sensors.js:197
-#, fuzzy
-msgid "Tooltip Sensor 2"
-msgstr "სენსორი 2-ის მინიშნება"
-
-#: src/prefs/sensors.js:213
-#, fuzzy
-msgid "Tooltip Sensor 3"
-msgstr "სენსორი 3-ის მინიშნება"
-
-#: src/prefs/sensors.js:229
-#, fuzzy
-msgid "Tooltip Sensor 4"
-msgstr "სენსორი 4-ის მინიშნება"
-
-#: src/prefs/sensors.js:245
-#, fuzzy
-msgid "Tooltip Sensor 5"
-msgstr "სენსორი 5-ის მინიშნება"
-
-#: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
-#: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
-#: src/prefs/processors.js:193 prefs.js:242 prefs.js:302 prefs.js:336
-#: prefs.js:370
-msgid "Menu"
-msgstr "მენიუ"
-
-#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
-msgid "Empty for now"
-msgstr "ამჟამად ცარიელი"
-
-#: src/prefs/utility.js:36 src/prefs/utility.js:49 src/prefs/utility.js:52
-#: prefs.js:412
-msgid "Utility"
-msgstr "ხელსაწყოები"
-
-#: src/prefs/utility.js:54 src/prefs/utility.js:58
-msgid "Export Settings"
-msgstr "პარამეტრების ექსპორტი"
-
-#: src/prefs/utility.js:55
-#, fuzzy
-msgid "Warning: this will export all profiles."
-msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
-
-#: src/prefs/utility.js:69
-msgid "Save"
-msgstr "შენახვა"
-
-#: src/prefs/utility.js:70 src/prefs/utility.js:103
-msgid "Cancel"
-msgstr "გაუქმება"
-
-#: src/prefs/utility.js:88 src/prefs/utility.js:92
-msgid "Import Settings"
-msgstr "პარამეტრების იმპორტი"
-
-#: src/prefs/utility.js:89
-#, fuzzy
-msgid "Warning: this will overwrite all profiles."
-msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
-
-#: src/prefs/utility.js:102
-msgid "Open"
-msgstr "გახსნა"
-
-#: src/prefs/utility.js:128 src/prefs/utility.js:132
-msgid "Reset Settings"
-msgstr "პარამეტრების ჩამოყრა"
-
-#: src/prefs/utility.js:129
-#, fuzzy
-msgid "Warning: this will reset all profiles."
-msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
-
-#: src/prefs/utility.js:133
-msgid "Are you sure you want to reset all preferences?"
-msgstr "დარწმუნებული ხართ, რომ გსურთ ყველა პარამეტრების ჩამოყრა?"
-
-#: src/prefs/utility.js:148
-msgid "Debug Mode"
-msgstr "დებაგის რეჟიმი"
-
-#: src/prefs/utility.js:149
-msgid ""
-"Warning: may affect performance, use only if you know what you are doing."
-msgstr ""
-"ყურადღება: შეიძლება შეეხოს წარმადობას, გამოიყენეთ მხოლოდ თუ იცით, რას "
-"აკეთებთ."
-
-#: src/prefs/utility.js:152
-msgid "Experimental Features"
-msgstr ""
-
-#: src/prefs/utility.js:154
-#, fuzzy
-msgid "PosixSpawn Subprocess"
-msgstr "ტოპ პროცესები"
-
-#: src/prefs/utility.js:155
-#, fuzzy
-msgid ""
-"Experimental posix_spawn() subprocess monitoring.\n"
-"This might help with UI performance issues."
-msgstr ""
-"ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
-
-#: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
-#: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
-#: prefs.js:277
-msgid "Memory"
-msgstr "მეხსიერება"
-
-#: src/prefs/memory.js:86
-#, fuzzy
-msgid "kB (as kiB)"
-msgstr "კბ (როგორც კიბ/წმ)"
-
-#: src/prefs/memory.js:87
-#, fuzzy
-msgid "kB (as KB)"
-msgstr "კბ (როგორც კბ/წმ)"
-
-#: src/prefs/memory.js:88
-msgid "kiB"
-msgstr "კიბ"
-
-#: src/prefs/memory.js:89
-#, fuzzy
-msgid "KiB"
-msgstr "კიბ/წმ"
-
-#: src/prefs/memory.js:90
-msgid "KB"
-msgstr "კბ"
-
-#: src/prefs/memory.js:91
-#, fuzzy
-msgid "k (as kB)"
-msgstr "კ (როგორც კბ/წმ)"
-
-#: src/prefs/memory.js:92
-#, fuzzy
-msgid "Ki (as Ki)"
-msgstr "კი (როგორც კიბ/წმ)"
-
-#: src/prefs/memory.js:94 src/prefs/storage.js:100 src/prefs/network.js:100
-msgid "Data Unit"
-msgstr "მონაცემთა ერთეული"
-
-#: src/prefs/memory.js:98
-msgid "Used = Total - Free - Buffers - Cached"
-msgstr "გამოყენებული = ჯამური - თავისუფალი - ბუფერები - ქეშირებული"
-
-#: src/prefs/memory.js:100
-msgid "Used = Total - Free"
-msgstr "გამოყენებული = ჯამური - თავისუფალი"
-
-#: src/prefs/memory.js:101
-msgid "Used = Total - Available"
-msgstr "გამოყენებული = ჯამური - ხელმისაწვდომი"
-
-#: src/prefs/memory.js:102
-msgid "Used = Active"
-msgstr "გამოყენებული = აქტიური"
-
-#: src/prefs/memory.js:104
-msgid "Used Memory"
-msgstr "გამოყენებული მეხსიერება"
-
-#: src/prefs/memory.js:111
-#, fuzzy
-msgid "Memory Usage"
-msgstr "მეხსიერების გამოყენება"
-
-#: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
-#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
-#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:308
-#: src/gpu/gpuMenuComponent.js:1234
-msgid "Top Processes"
-msgstr "ტოპ პროცესები"
-
-#: src/prefs/memory.js:133
-msgid "Set icon name (ie: 'memory-symbolic')"
-msgstr "დააყენეთ ხატულას სახელი (მაგ., 'memory-symbolic')"
-
-#: src/prefs/memory.js:146 src/prefs/memory.js:194 src/prefs/storage.js:237
-msgid "Usage Percentage"
-msgstr "გამოყენების პროცენტი"
-
-#: src/prefs/memory.js:147
-msgid "Show Usage Percentage"
-msgstr "გამოყენების პროცენტის ჩვენება"
-
-#: src/prefs/memory.js:149 src/prefs/memory.js:160 src/prefs/storage.js:240
-#: src/prefs/storage.js:251 src/prefs/gpu.js:200 src/prefs/gpu.js:222
-#: src/prefs/processors.js:141
-msgid "Icon Alert"
-msgstr "ხატულას გაფღტხილება"
-
-#: src/prefs/memory.js:150
-msgid "Set 0 to disable. Value is percentage of ram usage."
-msgstr ""
-"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების გამოყენების "
-"პროცენტი"
-
-#: src/prefs/memory.js:153 src/prefs/memory.js:195 src/prefs/storage.js:244
-msgid "Usage Value"
-msgstr "გამოყენების მნიშვნელობა"
-
-#: src/prefs/memory.js:154
-msgid "Show Usage Value"
-msgstr "გამოყენების მნიშვნელობის ჩვენება"
-
-#: src/prefs/memory.js:155 src/prefs/storage.js:246
-msgid "Usage Value Max Number of Figures"
-msgstr "გამოყენების მნიშვნელობის სიმბოლოთა მაქსიმალური რაოდენობა"
-
-#: src/prefs/memory.js:156 src/prefs/memory.js:196 src/prefs/storage.js:247
-#, fuzzy
-msgid "Free Value"
-msgstr "თავისუფალის მნიშვნელობა"
-
-#: src/prefs/memory.js:157
-#, fuzzy
-msgid "Show Free Value"
-msgstr "თავისუფალის მნიშვნელობის ჩვენება"
-
-#: src/prefs/memory.js:158 src/prefs/storage.js:249
-#, fuzzy
-msgid "Free Value Max Number of Figures"
-msgstr "თავისუფალის მნიშვნელობის სიმბოლოთა მაქსიმალური რაოდენობა"
-
-#: src/prefs/memory.js:161
-#, fuzzy
-msgid "Set 0 to disable. Value is free MB of ram."
-msgstr ""
-"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების თავისუფალი "
-"მბ."
-
-#: src/prefs/memory.js:164 src/prefs/processors.js:153
-msgid "History Graph"
-msgstr "ისტორიის გრაფიკი"
-
-#: src/prefs/memory.js:165 src/prefs/processors.js:154
-msgid "Show History Graph"
-msgstr "ისტორიის გრაფიკის ჩვენება"
-
-#: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
-#: src/prefs/visualization.js:81 src/prefs/gpu.js:207 src/prefs/gpu.js:229
-#: src/prefs/processors.js:156 src/prefs/processors.js:171
-#, fuzzy
-msgid "Main Color"
-msgstr "ძირითადი ფერი"
-
-#: src/prefs/memory.js:168 src/prefs/memory.js:182
-msgid "<b>Used</b> memory color."
-msgstr "<b>გამოყენებული</b> მეხსიერების ფერი."
-
-#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:160
-#: src/prefs/processors.js:196
-msgid "History Graph Breakdown"
-msgstr "ისტორიის გრაფიკის დაყოფა"
-
-#: src/prefs/memory.js:173 src/prefs/memory.js:187
-#, fuzzy
-msgid "Alt Color"
-msgstr "ალტერნატიული ფერი"
-
-#: src/prefs/memory.js:174 src/prefs/memory.js:188
-msgid "<b>Allocated <u>unused</u></b> memory color."
-msgstr "<b>მინიჭებული <u>გამოუყენებული</u></b> მეხსიერების ფერი."
-
-#: src/prefs/memory.js:177 src/prefs/gpu.js:211 src/prefs/gpu.js:233
-#: src/prefs/processors.js:166
-msgid "History Graph Width"
-msgstr "ისტორიის გრაფიკის სიგანე"
-
-#: src/prefs/memory.js:178 src/prefs/processors.js:167
-msgid "Realtime Bar"
-msgstr "რეალური დროის სვეტი"
-
-#: src/prefs/memory.js:179 src/prefs/processors.js:168
-msgid "Show Realtime Bar"
-msgstr "რეალური დროის სვეტის ჩვენება"
-
-#: src/prefs/memory.js:185 src/prefs/processors.js:175
-msgid "Realtime Bar Breakdown"
-msgstr "რეალური დროის სვეტის დაყოფა"
-
-#: src/prefs/memory.js:207 src/memory/memoryMenu.js:329
-msgid "Swap"
-msgstr "Swap"
-
-#: src/prefs/memory.js:209
-msgid "Swap Bar Color"
-msgstr "Swap-ის სვეტის ფერი"
-
-#: src/prefs/memory.js:210
-msgid "Swap bar main color."
-msgstr "Swap-ის სვეტის ძირითადი ფერი."
-
-#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:420
-msgid "About"
-msgstr "შესახებ"
-
-#: src/prefs/about.js:48 src/network/networkMenu.js:910
-msgid "Info"
-msgstr "ინფო"
-
-#: src/prefs/about.js:57
-msgid "Version"
-msgstr "ვერსია"
-
-#: src/prefs/about.js:58
-msgid "GitHub"
-msgstr "GitHub"
-
-#: src/prefs/about.js:59
-msgid "Changelog"
-msgstr "ცვლილებათა ჟურნალი"
-
-#: src/prefs/about.js:60
-msgid "Roadmap"
-msgstr "გეგმები"
-
-#: src/prefs/about.js:61
-msgid "Report a bug or suggest new feature"
-msgstr "პრობლემის დასმენა ან ახალი ფუნქციის შეთავაზება"
-
-#: src/prefs/about.js:62
-msgid "GNOME Extensions page"
-msgstr "GNOME-ს გაფართოებების გვერდი"
-
-#: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:311
-msgid "Storage"
-msgstr "მეხსიერება"
 
 #: src/prefs/storage.js:88 src/prefs/network.js:88
 msgid "kB/s"
@@ -733,6 +797,10 @@ msgstr "კ (როგორც კბ/წმ)"
 msgid "Ki (as KiB/s)"
 msgstr "კი (როგორც კიბ/წმ)"
 
+#: src/prefs/storage.js:100 src/prefs/network.js:100 src/prefs/memory.js:94
+msgid "Data Unit"
+msgstr "მონაცემთა ერთეული"
+
 #: src/prefs/storage.js:121 src/prefs/storage.js:229
 msgid "Main Disk"
 msgstr "მთავარი დისკი"
@@ -773,6 +841,19 @@ msgstr "მთავარი"
 msgid "Main disk cannot be ignored"
 msgstr "მთავარი დისკი ვერ იქნება იგნორირებული"
 
+#: src/prefs/storage.js:184 src/prefs/network.js:153 src/prefs/processors.js:85
+#: src/prefs/sensors.js:106 src/prefs/memory.js:105
+msgid "Data Sources"
+msgstr "მონაცემთა წყაროები"
+
+#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
+#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
+#: src/prefs/processors.js:87 src/prefs/processors.js:93
+#: src/prefs/processors.js:99 src/prefs/processors.js:105
+#: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
+msgid "Auto"
+msgstr "ავტო"
+
 #: src/prefs/storage.js:190
 #, fuzzy
 msgid "Storage Usage"
@@ -783,9 +864,66 @@ msgstr "მეხსიერების გამოყენება"
 msgid "Storage IO"
 msgstr "მეხსიერება ჩაწერა/წაკითხვა"
 
+#: src/prefs/storage.js:209 src/prefs/network.js:189
+#: src/prefs/processors.js:117 src/prefs/sensors.js:121 src/prefs/gpu.js:176
+#: src/prefs/memory.js:126
+msgid "Indicators Order"
+msgstr "ინდიკატორების განლაგება"
+
+#: src/prefs/storage.js:212 src/prefs/network.js:192
+#: src/prefs/processors.js:120 src/prefs/sensors.js:124 src/prefs/gpu.js:179
+#: src/prefs/memory.js:129
+msgid "Icon"
+msgstr "ხატულა"
+
+#: src/prefs/storage.js:213 src/prefs/network.js:193
+#: src/prefs/processors.js:121 src/prefs/sensors.js:125 src/prefs/gpu.js:180
+#: src/prefs/memory.js:130
+msgid "Show Icon"
+msgstr "ხატულას ჩვენება"
+
+#: src/prefs/storage.js:215 src/prefs/network.js:195
+#: src/prefs/processors.js:123 src/prefs/sensors.js:127 src/prefs/gpu.js:182
+#: src/prefs/memory.js:132
+msgid "Icon Name"
+msgstr "ხატულას სახელი"
+
 #: src/prefs/storage.js:216
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr "დააყენეთ ხატულას სახელი (მაგ., 'drive-harddisk-symbolic')"
+
+#: src/prefs/storage.js:218 src/prefs/visualization.js:171
+#: src/prefs/visualization.js:178 src/prefs/network.js:198
+#: src/prefs/processors.js:126 src/prefs/sensors.js:130 src/prefs/gpu.js:185
+#: src/prefs/memory.js:135
+msgid "Set to empty to disable icon override"
+msgstr "დააყენეთ ცარიელზე ხატულების გადაყენების გასათიშად"
+
+#: src/prefs/storage.js:221 src/prefs/network.js:201
+#: src/prefs/processors.js:129 src/prefs/sensors.js:133 src/prefs/gpu.js:188
+#: src/prefs/memory.js:138
+msgid "Icon Color"
+msgstr "ხატულას ფერი"
+
+#: src/prefs/storage.js:222 src/prefs/network.js:202
+#: src/prefs/processors.js:130 src/prefs/sensors.js:134 src/prefs/gpu.js:189
+#: src/prefs/memory.js:139
+msgid "Icon Alert Color"
+msgstr "ხატულას გაფრთხილების ფერი"
+
+#: src/prefs/storage.js:224 src/prefs/network.js:204
+#: src/prefs/processors.js:132 src/prefs/sensors.js:136 src/prefs/gpu.js:191
+#: src/prefs/memory.js:141
+msgid "Icon Size"
+msgstr "ხატულას ზომა"
+
+#: src/prefs/storage.js:225 src/prefs/visualization.js:132
+#: src/prefs/visualization.js:140 src/prefs/visualization.js:148
+#: src/prefs/network.js:205 src/prefs/processors.js:133
+#: src/prefs/sensors.js:137 src/prefs/gpu.js:192 src/prefs/memory.js:142
+msgid "Experimental feature: may require to disable/enable the extension."
+msgstr ""
+"ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
 
 #: src/prefs/storage.js:230
 #, fuzzy
@@ -797,28 +935,63 @@ msgstr "გამოყენების სვეტი"
 msgid "Show Main Disk Usage Bar"
 msgstr "მთავარი დისკის გამოყენების სვეტის ჩვენება"
 
+#: src/prefs/storage.js:233 src/prefs/visualization.js:81
+#: src/prefs/processors.js:156 src/prefs/processors.js:171 src/prefs/gpu.js:207
+#: src/prefs/gpu.js:229 src/prefs/memory.js:167 src/prefs/memory.js:181
+#, fuzzy
+msgid "Main Color"
+msgstr "ძირითადი ფერი"
+
 #: src/prefs/storage.js:234
 msgid "<b>Used</b> storage color."
 msgstr "<b>გამოყენებული</b> მეხსიერების ფერი."
+
+#: src/prefs/storage.js:237 src/prefs/memory.js:146 src/prefs/memory.js:194
+msgid "Usage Percentage"
+msgstr "გამოყენების პროცენტი"
 
 #: src/prefs/storage.js:238
 #, fuzzy
 msgid "Show Main Disk Usage Percentage"
 msgstr "მთავარი დისკის გამოყენების პროცენტის ჩვენება"
 
+#: src/prefs/storage.js:240 src/prefs/storage.js:251
+#: src/prefs/processors.js:141 src/prefs/gpu.js:200 src/prefs/gpu.js:222
+#: src/prefs/memory.js:149 src/prefs/memory.js:160
+msgid "Icon Alert"
+msgstr "ხატულას გაფღტხილება"
+
 #: src/prefs/storage.js:241
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr "დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის დისკის გამოყენების პროცენტი."
+
+#: src/prefs/storage.js:244 src/prefs/memory.js:153 src/prefs/memory.js:195
+msgid "Usage Value"
+msgstr "გამოყენების მნიშვნელობა"
 
 #: src/prefs/storage.js:245
 #, fuzzy
 msgid "Show Main Disk Usage Value"
 msgstr "მთავარი დისკის გამოყენების მნიშვნელობის ჩვენება"
 
+#: src/prefs/storage.js:246 src/prefs/memory.js:155
+msgid "Usage Value Max Number of Figures"
+msgstr "გამოყენების მნიშვნელობის სიმბოლოთა მაქსიმალური რაოდენობა"
+
+#: src/prefs/storage.js:247 src/prefs/memory.js:156 src/prefs/memory.js:196
+#, fuzzy
+msgid "Free Value"
+msgstr "თავისუფალის მნიშვნელობა"
+
 #: src/prefs/storage.js:248
 #, fuzzy
 msgid "Show Main Disk Free Value"
 msgstr "მთავარი დისკის თავისუფალის მნიშვნელობის ჩვენება"
+
+#: src/prefs/storage.js:249 src/prefs/memory.js:158
+#, fuzzy
+msgid "Free Value Max Number of Figures"
+msgstr "თავისუფალის მნიშვნელობის სიმბოლოთა მაქსიმალური რაოდენობა"
 
 #: src/prefs/storage.js:252
 #, fuzzy
@@ -887,6 +1060,14 @@ msgstr "შეყვანა/გამოყვანის სიჩქარ�
 msgid "Show IO Speed"
 msgstr "შეყვანა/გამოყვანის სიჩქარის ჩვენება"
 
+#: src/prefs/storage.js:284 src/prefs/network.js:238 src/prefs/sensors.js:164
+msgid "Vertical"
+msgstr "ვერტუკალური"
+
+#: src/prefs/storage.js:285 src/prefs/network.js:239 src/prefs/sensors.js:165
+msgid "Horizontal"
+msgstr "ჰორიზონტალური"
+
 #: src/prefs/storage.js:287 src/prefs/network.js:241
 #, fuzzy
 msgid "IO Speed Layout"
@@ -903,6 +1084,18 @@ msgstr "შეყვანა/გამოყვანის სიჩქარ�
 #: src/prefs/storage.js:289 src/prefs/network.js:243
 msgid "in kB/s"
 msgstr "კბ/წმ-ში"
+
+#: src/prefs/storage.js:291 src/prefs/network.js:245
+#: src/prefs/processors.js:182 src/prefs/sensors.js:179 src/prefs/gpu.js:241
+#: src/prefs/memory.js:192
+msgid "Tooltip"
+msgstr "მინიშნება"
+
+#: src/prefs/storage.js:292 src/prefs/network.js:246
+#: src/prefs/processors.js:183 src/prefs/sensors.js:180 src/prefs/gpu.js:242
+#: src/prefs/memory.js:193
+msgid "Show Tooltip"
+msgstr "მინიშნების ჩვენება"
 
 #: src/prefs/storage.js:293
 #, fuzzy
@@ -938,295 +1131,6 @@ msgstr "მოწყობილობები"
 #: src/prefs/storage.js:318
 msgid "Device Usage Bar Color"
 msgstr "მოწყობილობის გამოყენების სვეტის ფერი"
-
-#: src/prefs/prefsUtils.js:649
-msgid "Move up"
-msgstr "ზემოთ გადატანა"
-
-#: src/prefs/prefsUtils.js:668
-msgid "Move down"
-msgstr "ქვემოთ გადატანა"
-
-#: src/prefs/profiles.js:36 src/prefs/profiles.js:49
-#: src/profiles/profilesMenu.js:32 prefs.js:184
-msgid "Profiles"
-msgstr ""
-
-#: src/prefs/profiles.js:62
-msgid "Current profile"
-msgstr ""
-
-#: src/prefs/profiles.js:98
-msgid "Rename profile"
-msgstr ""
-
-#: src/prefs/profiles.js:110
-msgid "Apply"
-msgstr ""
-
-#: src/prefs/profiles.js:133
-msgid "Reset profile"
-msgstr ""
-
-#: src/prefs/profiles.js:134
-msgid "Warning: this will reset the current profile to default settings."
-msgstr ""
-
-#: src/prefs/profiles.js:137
-msgid "Reset"
-msgstr ""
-
-#: src/prefs/profiles.js:147
-msgid "Clone profile"
-msgstr ""
-
-#: src/prefs/profiles.js:148
-msgid "Create a copy of the current profile."
-msgstr ""
-
-#: src/prefs/profiles.js:151
-msgid "Clone"
-msgstr ""
-
-#: src/prefs/profiles.js:176
-msgid "Delete profile"
-msgstr ""
-
-#: src/prefs/profiles.js:177
-msgid "Warning: this operation is irreversible."
-msgstr ""
-
-#: src/prefs/profiles.js:180
-msgid "Delete"
-msgstr ""
-
-#: src/prefs/welcome.js:33 prefs.js:168
-msgid "Overview"
-msgstr "მოხდება"
-
-#: src/prefs/welcome.js:46 src/prefs/network.js:255
-msgid "Dependencies"
-msgstr "დამოკიდებულებები"
-
-#: src/prefs/welcome.js:50
-msgid "Cannot access /proc/stat: this extension will not work!"
-msgstr "/proc/stat-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
-
-#: src/prefs/welcome.js:54
-msgid "Cannot access /proc/cpuinfo: this extension will not work!"
-msgstr "/proc/cpuinfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
-
-#: src/prefs/welcome.js:58
-msgid "Cannot access /proc/meminfo: this extension will not work!"
-msgstr "/proc/meminfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
-
-#: src/prefs/welcome.js:62
-msgid "Cannot access /proc/diskstats: this extension will not work!"
-msgstr "/proc/diskstats-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
-
-#: src/prefs/welcome.js:66
-msgid "Cannot access /proc/net/dev: this extension will not work!"
-msgstr "/proc/net/dev-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
-
-#: src/prefs/welcome.js:70
-msgid "Cannot access 'ps': this extension will not work!"
-msgstr "'ps'-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
-
-#: src/prefs/welcome.js:75
-#, fuzzy
-msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
-msgstr "/proc/meminfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
-
-#: src/prefs/welcome.js:80
-msgid "'lscpu' not installed: some features will be disabled!"
-msgstr "'lscpu' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:84
-msgid "'lspci' not installed: some features will be disabled!"
-msgstr "'lspci' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:88
-msgid "'lsblk' not installed: some features will be disabled!"
-msgstr "'lsblk' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:93
-msgid ""
-"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
-"features will be disabled!"
-msgstr ""
-"/sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq-ზე წვდომა ვერ "
-"ხერხდებაზოგი ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:98
-#, fuzzy
-msgid "'NetHogs' not installed: some optional features will be disabled!"
-msgstr "'lscpu' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:102
-msgid "'iproute2' not installed: some features will be disabled!"
-msgstr "'iproute2' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:107
-msgid ""
-"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
-"network info!"
-msgstr ""
-"'iwconfig' და 'iw' არ არის დაყენებული: დააყენეთ ერთ ერთი უკაბელო ქსელის "
-"ინფორმაციის ჩასართავად!"
-
-#: src/prefs/welcome.js:113
-#, fuzzy
-msgid "'iotop' not installed: some optional features will be disabled!"
-msgstr "'iproute2' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:119
-msgid ""
-"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
-"be disabled!"
-msgstr ""
-"'AMD GPU იყო აღმოჩენილი, მაგრამ 'amdgpu_top' არ არის დაყენებული: ზოგი "
-"არასავალდებულო ფუქნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:125
-msgid ""
-"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
-"will be disabled!"
-msgstr ""
-"NVidia GPU იყო აღმოჩენილი, მაგრამ 'nvidia-smi' არ არის დაყენებული: ზოგი "
-"არასავალდებულო ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:128
-msgid "Checking GTop dependency..."
-msgstr "GTop-ის დამოკიდებულების შემოწმება..."
-
-#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
-#, fuzzy
-msgid ""
-"'GTop' not installed, some optional features will be disabled! For a better "
-"experience and performance, install it from your package manager."
-msgstr ""
-"'GTop' არ არის დაყენებული, ზოგი არასავალდებულო ფუნქცია იქნება გათიშული!"
-
-#: src/prefs/welcome.js:136
-msgid "'GTop' successfully detected and added to Data Sources list."
-msgstr ""
-"'GTop' წარმატებით იქნა აღმოჩენილი და დამატებული მონაცემთა წყაროთა სიაში."
-
-#: src/prefs/welcome.js:146
-msgid "All other dependencies are met!"
-msgstr "ყველა სხვა დამოკიდებულება დაკმაყოფილებულია!"
-
-#: src/prefs/welcome.js:149
-#, fuzzy
-msgid "Support Us"
-msgstr "დაგვიჭირეთ მხარი"
-
-#: src/prefs/welcome.js:150
-msgid "Support us on Ko-Fi"
-msgstr "დაგვიჭირეთ მხარი Ko-Fi-ზე"
-
-#: src/prefs/welcome.js:151
-msgid "Buy us a coffee"
-msgstr "გვიყიდეთ ყავა"
-
-#: src/prefs/welcome.js:152
-msgid "Become a patron"
-msgstr "გახდით მეცენატი"
-
-#: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:42 prefs.js:345
-msgid "Network"
-msgstr "ქსელი"
-
-#: src/prefs/network.js:101
-msgid "Ignored Network Interfaces"
-msgstr "იგნორირებული ქსლური ინტერფეისები"
-
-#: src/prefs/network.js:104
-msgid "Interfaces matching this regex will be ignored."
-msgstr ""
-"ინტერფეისები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება "
-"იგნრირებული."
-
-#: src/prefs/network.js:159
-#, fuzzy
-msgid "Network IO"
-msgstr "ქსელური შეყვანა/გამოყვანა"
-
-#: src/prefs/network.js:164
-#, fuzzy
-msgid "Network Top Processes"
-msgstr "ტოპ პროცესები"
-
-#: src/prefs/network.js:166
-msgid "Public IPv4 Address"
-msgstr "საჯარო IPv4 მისამართი"
-
-#: src/prefs/network.js:167 src/prefs/network.js:172
-#, fuzzy
-msgid "Set to empty to disable. Address will be regex matched."
-msgstr ""
-"დააყენეთ ცარიელზე გასათიშად. მისამართი დაემთხვევა რეგულარულ გამონათქვამს."
-
-#: src/prefs/network.js:171
-msgid "Public IPv6 Address"
-msgstr "საჯარო IPv6 მისამართი"
-
-#: src/prefs/network.js:180
-msgid "Wireless Info"
-msgstr "უკაბელოს ინფორმაცია"
-
-#: src/prefs/network.js:196
-msgid "Set icon name (ie: 'network-wired-symbolic')"
-msgstr "დააყენეთ ხატულას სახელი (მაგ., 'network-wired-symbolic')"
-
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
-#, fuzzy
-msgid "Upload Color"
-msgstr "ატვირთვის ფერი"
-
-#: src/prefs/network.js:214
-msgid "<b>Upload</b> IO Bar color."
-msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის სვეტის ფერი."
-
-#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
-#, fuzzy
-msgid "Download Color"
-msgstr "ხატულას ფერი"
-
-#: src/prefs/network.js:219
-msgid "<b>Download</b> IO Bar color."
-msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის სვეტის ფერი."
-
-#: src/prefs/network.js:226
-#, fuzzy
-msgid "<b>Upload</b> IO History Graph color."
-msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
-
-#: src/prefs/network.js:231
-#, fuzzy
-msgid "<b>Download</b> IO History Graph color."
-msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
-
-#: src/prefs/network.js:257
-msgid ""
-"'NetHogs' not installed or not configured appopriately: you won't be able to "
-"monitor process network activity! Check the documentation for more "
-"information."
-msgstr ""
-
-#: src/prefs/network.js:270
-msgid "<b>Upload</b> IO arrow color."
-msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
-
-#: src/prefs/network.js:275
-msgid "<b>Download</b> IO arrow color."
-msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
-
-#: src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56 prefs.js:200
-msgid "Visualization"
-msgstr "ვიზუალიზაცია"
 
 #: src/prefs/visualization.js:57
 msgid "Theme"
@@ -1430,11 +1334,437 @@ msgstr "დააყენეთ ხატულას სახელი (მ�
 msgid "Monitor Ordering"
 msgstr "მონიტორის დალაგება"
 
-#: src/prefs/gpu.js:42 src/prefs/gpu.js:55 src/prefs/gpu.js:68
-#: src/prefs/gpu.js:108 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:46 prefs.js:251
-msgid "GPU"
-msgstr "GPU"
+#: src/prefs/about.js:57
+msgid "Version"
+msgstr "ვერსია"
+
+#: src/prefs/about.js:58
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/about.js:59
+msgid "Changelog"
+msgstr "ცვლილებათა ჟურნალი"
+
+#: src/prefs/about.js:60
+msgid "Roadmap"
+msgstr "გეგმები"
+
+#: src/prefs/about.js:61
+msgid "Report a bug or suggest new feature"
+msgstr "პრობლემის დასმენა ან ახალი ფუნქციის შეთავაზება"
+
+#: src/prefs/about.js:62
+msgid "GNOME Extensions page"
+msgstr "GNOME-ს გაფართოებების გვერდი"
+
+#: src/prefs/network.js:101
+msgid "Ignored Network Interfaces"
+msgstr "იგნორირებული ქსლური ინტერფეისები"
+
+#: src/prefs/network.js:104
+msgid "Interfaces matching this regex will be ignored."
+msgstr ""
+"ინტერფეისები, რომლებიც ემთხვევა ამ რეგულარულ გამონათქვამს, იქნება "
+"იგნრირებული."
+
+#: src/prefs/network.js:159
+#, fuzzy
+msgid "Network IO"
+msgstr "ქსელური შეყვანა/გამოყვანა"
+
+#: src/prefs/network.js:164
+#, fuzzy
+msgid "Network Top Processes"
+msgstr "ტოპ პროცესები"
+
+#: src/prefs/network.js:166
+msgid "Public IPv4 Address"
+msgstr "საჯარო IPv4 მისამართი"
+
+#: src/prefs/network.js:167 src/prefs/network.js:172
+#, fuzzy
+msgid "Set to empty to disable. Address will be regex matched."
+msgstr ""
+"დააყენეთ ცარიელზე გასათიშად. მისამართი დაემთხვევა რეგულარულ გამონათქვამს."
+
+#: src/prefs/network.js:171
+msgid "Public IPv6 Address"
+msgstr "საჯარო IPv6 მისამართი"
+
+#: src/prefs/network.js:180
+msgid "Wireless Info"
+msgstr "უკაბელოს ინფორმაცია"
+
+#: src/prefs/network.js:196
+msgid "Set icon name (ie: 'network-wired-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'network-wired-symbolic')"
+
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
+#, fuzzy
+msgid "Upload Color"
+msgstr "ატვირთვის ფერი"
+
+#: src/prefs/network.js:214
+msgid "<b>Upload</b> IO Bar color."
+msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის სვეტის ფერი."
+
+#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
+#, fuzzy
+msgid "Download Color"
+msgstr "ხატულას ფერი"
+
+#: src/prefs/network.js:219
+msgid "<b>Download</b> IO Bar color."
+msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის სვეტის ფერი."
+
+#: src/prefs/network.js:226
+#, fuzzy
+msgid "<b>Upload</b> IO History Graph color."
+msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
+
+#: src/prefs/network.js:231
+#, fuzzy
+msgid "<b>Download</b> IO History Graph color."
+msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისტორიის გრაფიკის ჩვენება"
+
+#: src/prefs/network.js:255 src/prefs/welcome.js:46
+msgid "Dependencies"
+msgstr "დამოკიდებულებები"
+
+#: src/prefs/network.js:257
+msgid ""
+"'NetHogs' not installed or not configured appopriately: you won't be able to "
+"monitor process network activity! Check the documentation for more "
+"information."
+msgstr ""
+
+#: src/prefs/network.js:270
+msgid "<b>Upload</b> IO arrow color."
+msgstr "<b>ატვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
+
+#: src/prefs/network.js:275
+msgid "<b>Download</b> IO arrow color."
+msgstr "<b>გადმოტვირთვის</b> შეყვანა/გამოყვანის ისრის ფერი."
+
+#: src/prefs/processors.js:91
+msgid "Cpu Usage"
+msgstr "CPU-ს გამოყენება"
+
+#: src/prefs/processors.js:97
+msgid "Cpu Cores Usage"
+msgstr "CPU-ს ბირთვების გამოყენება"
+
+#: src/prefs/processors.js:108
+msgid "Load Average"
+msgstr "დატვირთვის საშუალო"
+
+#: src/prefs/processors.js:124
+msgid "Set icon name (ie: 'cpu-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'cpu-symbolic')"
+
+#: src/prefs/processors.js:137 src/prefs/processors.js:184
+msgid "Percentage"
+msgstr "პროცენტი"
+
+#: src/prefs/processors.js:138
+msgid "Show Percentage"
+msgstr "პროცენტის ჩვენება"
+
+#: src/prefs/processors.js:139 src/prefs/processors.js:185
+msgid "Single Core Percentage"
+msgstr "ერთი ბირთვის პროცენტი"
+
+#: src/prefs/processors.js:142
+#, fuzzy
+msgid "Set 0 to disable. Value is percentage of total cpu usage."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს გამოყენების პროცენტია."
+
+#: src/prefs/processors.js:146
+#, fuzzy
+msgid "Show Frequency"
+msgstr "სიხშირე"
+
+#: src/prefs/processors.js:147
+#, fuzzy
+msgid "Frequency Max Number of Figures"
+msgstr "თავისუფალის მნიშვნელობის სიმბოლოთა მაქსიმალური რაოდენობა"
+
+#: src/prefs/processors.js:149
+#, fuzzy
+msgid "Average"
+msgstr "დატვირთვის საშუალო"
+
+#: src/prefs/processors.js:150
+msgid "Max"
+msgstr ""
+
+#: src/prefs/processors.js:152
+#, fuzzy
+msgid "Frequency Mode"
+msgstr "სიხშირე"
+
+#: src/prefs/processors.js:153 src/prefs/memory.js:164
+msgid "History Graph"
+msgstr "ისტორიის გრაფიკი"
+
+#: src/prefs/processors.js:154 src/prefs/memory.js:165
+msgid "Show History Graph"
+msgstr "ისტორიის გრაფიკის ჩვენება"
+
+#: src/prefs/processors.js:157 src/prefs/processors.js:172
+msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
+msgstr ""
+"<b>ჯამური გამოყენების</b> ფერი (<b>მომხმარებლის გამოყენება</b>, როდესაც "
+"დაყოფა ჩართულია)."
+
+#: src/prefs/processors.js:160 src/prefs/processors.js:196
+#: src/prefs/memory.js:171 src/prefs/memory.js:206
+msgid "History Graph Breakdown"
+msgstr "ისტორიის გრაფიკის დაყოფა"
+
+#: src/prefs/processors.js:163 src/prefs/processors.js:178
+msgid "<b>System usage</b> color."
+msgstr "<b>სისტემური გამოყენების</b> ფერი."
+
+#: src/prefs/processors.js:166 src/prefs/gpu.js:211 src/prefs/gpu.js:233
+#: src/prefs/memory.js:177
+msgid "History Graph Width"
+msgstr "ისტორიის გრაფიკის სიგანე"
+
+#: src/prefs/processors.js:167 src/prefs/memory.js:178
+msgid "Realtime Bar"
+msgstr "რეალური დროის სვეტი"
+
+#: src/prefs/processors.js:168 src/prefs/memory.js:179
+msgid "Show Realtime Bar"
+msgstr "რეალური დროის სვეტის ჩვენება"
+
+#: src/prefs/processors.js:169
+msgid "Realtime per-core Bars"
+msgstr "რეალური დროის ბირთვის სვეტები"
+
+#: src/prefs/processors.js:175 src/prefs/memory.js:185
+msgid "Realtime Bar Breakdown"
+msgstr "რეალური დროის სვეტის დაყოფა"
+
+#: src/prefs/processors.js:195
+msgid "Realtime Bars Breakdown"
+msgstr "რეალური დროის სვეტების დაყოფა"
+
+#: src/prefs/processors.js:197
+msgid "Core Bars Breakdown"
+msgstr "ბირთვის სვეტების დაყოფა"
+
+#: src/prefs/processors.js:198
+msgid "Top Processes Single Core"
+msgstr "ტოპ პროცესები ერთ ბირთვზე"
+
+#: src/prefs/processors.js:201
+#, fuzzy
+msgid "Show GPU info"
+msgstr "ინფორმაცია GPU-ს შესახებ"
+
+#: src/prefs/processors.js:202
+msgid "Only works if GPU header is disabled."
+msgstr "მუშაობს მხოლოდ როდესაც GPU სათაური გათიშულია."
+
+#: src/prefs/sensors.js:86
+msgctxt "Celsius unit measure choice"
+msgid "Celsius"
+msgstr "ცელსიუსი"
+
+#: src/prefs/sensors.js:87
+msgctxt "Fahrenheit unit measure choice"
+msgid "Fahrenheit"
+msgstr "ფარენჰაიტი"
+
+#: src/prefs/sensors.js:89
+msgid "Temperature Unit"
+msgstr "ტემპერატურის ერთეული"
+
+#: src/prefs/sensors.js:90
+#, fuzzy
+msgid "Ignored Sensors"
+msgstr "სენსორები"
+
+#: src/prefs/sensors.js:92
+#, fuzzy
+msgid "Ignored Sensors Regex"
+msgstr "იგნორირებული მეხსიერების მოწყობილობები"
+
+#: src/prefs/sensors.js:93
+msgid "Completely ignore sensors matching this regex"
+msgstr ""
+
+#: src/prefs/sensors.js:97
+#, fuzzy
+msgid "Ignored Sensors Category Regex"
+msgstr "იგნორირებული მეხსიერების მოწყობილობები"
+
+#: src/prefs/sensors.js:98
+msgid "Categories are like \"Package\", \"Core\", \"Edge\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:102
+msgid "Ignored Sensors Attribute Regex"
+msgstr ""
+
+#: src/prefs/sensors.js:103
+msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:128
+msgid "Set icon name (ie: 'temperature-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'temperature-symbolic')"
+
+#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
+msgid "None"
+msgstr "არცერთი"
+
+#: src/prefs/sensors.js:149
+msgid "Sensor 1"
+msgstr "სენსორი 1"
+
+#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
+#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
+#: src/prefs/sensors.js:247
+msgid "Source"
+msgstr "წყარო"
+
+#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
+#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
+#: src/prefs/sensors.js:257
+msgid "Value Digits"
+msgstr "მნიშვნელობის ციფრები"
+
+#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
+#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
+#: src/prefs/sensors.js:258
+msgid "Set -1 to auto. Number of digits after the decimal point."
+msgstr ""
+"დააყენეთ -1 ავტომატურისთვის. ციფრთა რაოდენობა ათწილადი გამყოფის შემდეგ."
+
+#: src/prefs/sensors.js:161
+msgid "Sensor 2"
+msgstr "სენსორი 2"
+
+#: src/prefs/sensors.js:167
+#, fuzzy
+msgid "Sensor 2 Layout"
+msgstr "სენსორი 2-ის განლაგება"
+
+#: src/prefs/sensors.js:181
+#, fuzzy
+msgid "Tooltip Sensor 1"
+msgstr "სენსორი 1-ის მინიშნება"
+
+#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
+#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
+#, fuzzy
+msgid "Short Name"
+msgstr "მოკლე სახელი"
+
+#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
+#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
+msgid "Short name to display in the tooltip."
+msgstr "მოკლე სახელი მინიშნებაში საჩვენებლად"
+
+#: src/prefs/sensors.js:197
+#, fuzzy
+msgid "Tooltip Sensor 2"
+msgstr "სენსორი 2-ის მინიშნება"
+
+#: src/prefs/sensors.js:213
+#, fuzzy
+msgid "Tooltip Sensor 3"
+msgstr "სენსორი 3-ის მინიშნება"
+
+#: src/prefs/sensors.js:229
+#, fuzzy
+msgid "Tooltip Sensor 4"
+msgstr "სენსორი 4-ის მინიშნება"
+
+#: src/prefs/sensors.js:245
+#, fuzzy
+msgid "Tooltip Sensor 5"
+msgstr "სენსორი 5-ის მინიშნება"
+
+#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
+msgid "Empty for now"
+msgstr "ამჟამად ცარიელი"
+
+#: src/prefs/utility.js:54 src/prefs/utility.js:58
+msgid "Export Settings"
+msgstr "პარამეტრების ექსპორტი"
+
+#: src/prefs/utility.js:55
+#, fuzzy
+msgid "Warning: this will export all profiles."
+msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
+
+#: src/prefs/utility.js:69
+msgid "Save"
+msgstr "შენახვა"
+
+#: src/prefs/utility.js:70 src/prefs/utility.js:103
+msgid "Cancel"
+msgstr "გაუქმება"
+
+#: src/prefs/utility.js:88 src/prefs/utility.js:92
+msgid "Import Settings"
+msgstr "პარამეტრების იმპორტი"
+
+#: src/prefs/utility.js:89
+#, fuzzy
+msgid "Warning: this will overwrite all profiles."
+msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
+
+#: src/prefs/utility.js:102
+msgid "Open"
+msgstr "გახსნა"
+
+#: src/prefs/utility.js:128 src/prefs/utility.js:132
+msgid "Reset Settings"
+msgstr "პარამეტრების ჩამოყრა"
+
+#: src/prefs/utility.js:129
+#, fuzzy
+msgid "Warning: this will reset all profiles."
+msgstr "ამის შეცვლა მხოლოდ ყველა ძირითად ფერს ჩაანაცვლებს."
+
+#: src/prefs/utility.js:133
+msgid "Are you sure you want to reset all preferences?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ყველა პარამეტრების ჩამოყრა?"
+
+#: src/prefs/utility.js:148
+msgid "Debug Mode"
+msgstr "დებაგის რეჟიმი"
+
+#: src/prefs/utility.js:149
+msgid ""
+"Warning: may affect performance, use only if you know what you are doing."
+msgstr ""
+"ყურადღება: შეიძლება შეეხოს წარმადობას, გამოიყენეთ მხოლოდ თუ იცით, რას "
+"აკეთებთ."
+
+#: src/prefs/utility.js:152
+msgid "Experimental Features"
+msgstr ""
+
+#: src/prefs/utility.js:154
+#, fuzzy
+msgid "PosixSpawn Subprocess"
+msgstr "ტოპ პროცესები"
+
+#: src/prefs/utility.js:155
+#, fuzzy
+msgid ""
+"Experimental posix_spawn() subprocess monitoring.\n"
+"This might help with UI performance issues."
+msgstr ""
+"ექსპერიმენტალური ფუნქცია: შეიძლება დასჭირდეს გაფართოების გამორთვა/ჩართვა."
 
 #: src/prefs/gpu.js:86
 msgid "Showing GPU info in the panel requires continuous GPU monitoring."
@@ -1449,6 +1779,10 @@ msgstr ""
 #: src/prefs/gpu.js:106
 msgid "Main GPU"
 msgstr "მთავარი GPU"
+
+#: src/prefs/gpu.js:106
+msgid "May require a restart."
+msgstr ""
 
 #: src/prefs/gpu.js:113
 msgid "Monitoring of this GPU is not supported or a dependency is missing."
@@ -1556,382 +1890,295 @@ msgstr "მეხსიერების სვეტის ჩვენებ�
 msgid "Memory Value"
 msgstr "მეხსიერების მნიშვნელობა"
 
-#: src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67 prefs.js:217
-msgid "Processors"
-msgstr "პროცესორები"
-
-#: src/prefs/processors.js:91
-msgid "Cpu Usage"
-msgstr "CPU-ს გამოყენება"
-
-#: src/prefs/processors.js:97
-msgid "Cpu Cores Usage"
-msgstr "CPU-ს ბირთვების გამოყენება"
-
-#: src/prefs/processors.js:108
-msgid "Load Average"
-msgstr "დატვირთვის საშუალო"
-
-#: src/prefs/processors.js:124
-msgid "Set icon name (ie: 'cpu-symbolic')"
-msgstr "დააყენეთ ხატულას სახელი (მაგ., 'cpu-symbolic')"
-
-#: src/prefs/processors.js:137 src/prefs/processors.js:184
-msgid "Percentage"
-msgstr "პროცენტი"
-
-#: src/prefs/processors.js:138
-msgid "Show Percentage"
-msgstr "პროცენტის ჩვენება"
-
-#: src/prefs/processors.js:139 src/prefs/processors.js:185
-msgid "Single Core Percentage"
-msgstr "ერთი ბირთვის პროცენტი"
-
-#: src/prefs/processors.js:142
-#, fuzzy
-msgid "Set 0 to disable. Value is percentage of total cpu usage."
-msgstr ""
-"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა ჯამური CPU-ს გამოყენების პროცენტია."
-
-#: src/prefs/processors.js:145 src/network/networkMenu.js:1191
-msgid "Frequency"
-msgstr "სიხშირე"
-
-#: src/prefs/processors.js:146
-#, fuzzy
-msgid "Show Frequency"
-msgstr "სიხშირე"
-
-#: src/prefs/processors.js:147
-#, fuzzy
-msgid "Frequency Max Number of Figures"
-msgstr "თავისუფალის მნიშვნელობის სიმბოლოთა მაქსიმალური რაოდენობა"
-
-#: src/prefs/processors.js:149
-#, fuzzy
-msgid "Average"
-msgstr "დატვირთვის საშუალო"
-
-#: src/prefs/processors.js:150
-msgid "Max"
+#: src/prefs/welcome.js:33
+msgid "Welcome"
 msgstr ""
 
-#: src/prefs/processors.js:152
-#, fuzzy
-msgid "Frequency Mode"
-msgstr "სიხშირე"
+#: src/prefs/welcome.js:50
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr "/proc/stat-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
 
-#: src/prefs/processors.js:157 src/prefs/processors.js:172
-msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
+#: src/prefs/welcome.js:54
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
+msgstr "/proc/cpuinfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: src/prefs/welcome.js:58
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr "/proc/meminfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: src/prefs/welcome.js:62
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr "/proc/diskstats-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: src/prefs/welcome.js:66
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr "/proc/net/dev-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: src/prefs/welcome.js:70
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr "'ps'-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: src/prefs/welcome.js:75
+#, fuzzy
+msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
+msgstr "/proc/meminfo-ზე წვდომა ვერ ხერხდება: ეს გაფართოება არ იმუშავებს!"
+
+#: src/prefs/welcome.js:80
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "'lscpu' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: src/prefs/welcome.js:84
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "'lspci' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: src/prefs/welcome.js:88
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "'lsblk' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
+
+#: src/prefs/welcome.js:93
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
 msgstr ""
-"<b>ჯამური გამოყენების</b> ფერი (<b>მომხმარებლის გამოყენება</b>, როდესაც "
-"დაყოფა ჩართულია)."
+"/sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq-ზე წვდომა ვერ "
+"ხერხდებაზოგი ფუნქცია იქნება გათიშული!"
 
-#: src/prefs/processors.js:163 src/prefs/processors.js:178
-msgid "<b>System usage</b> color."
-msgstr "<b>სისტემური გამოყენების</b> ფერი."
-
-#: src/prefs/processors.js:169
-msgid "Realtime per-core Bars"
-msgstr "რეალური დროის ბირთვის სვეტები"
-
-#: src/prefs/processors.js:195
-msgid "Realtime Bars Breakdown"
-msgstr "რეალური დროის სვეტების დაყოფა"
-
-#: src/prefs/processors.js:197
-msgid "Core Bars Breakdown"
-msgstr "ბირთვის სვეტების დაყოფა"
-
-#: src/prefs/processors.js:198
-msgid "Top Processes Single Core"
-msgstr "ტოპ პროცესები ერთ ბირთვზე"
-
-#: src/prefs/processors.js:201
+#: src/prefs/welcome.js:98
 #, fuzzy
-msgid "Show GPU info"
-msgstr "ინფორმაცია GPU-ს შესახებ"
+msgid "'NetHogs' not installed: some optional features will be disabled!"
+msgstr "'lscpu' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
 
-#: src/prefs/processors.js:202
-msgid "Only works if GPU header is disabled."
-msgstr "მუშაობს მხოლოდ როდესაც GPU სათაური გათიშულია."
+#: src/prefs/welcome.js:102
+msgid "'iproute2' not installed: some features will be disabled!"
+msgstr "'iproute2' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
 
-#: src/sensors/sensorsMenu.js:50
-msgid "No sensor found"
-msgstr "სენსორი ვერ მოიძებნა"
+#: src/prefs/welcome.js:107
+msgid ""
+"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
+"network info!"
+msgstr ""
+"'iwconfig' და 'iw' არ არის დაყენებული: დააყენეთ ერთ ერთი უკაბელო ქსელის "
+"ინფორმაციის ჩასართავად!"
 
-#: src/sensors/sensorsMenu.js:225
-#, fuzzy, javascript-format
-msgid "%d sensor"
-msgid_plural "%d sensors"
-msgstr[0] "%d სენსორი"
-msgstr[1] "%d სენსორი"
-
-#: src/network/networkMenu.js:77
-msgid "Global Upload:"
-msgstr "გლობალური ატვირთვა:"
-
-#: src/network/networkMenu.js:89
-msgid "Global Download:"
-msgstr "გლობალური გადმოტვირთვა:"
-
-#: src/network/networkMenu.js:114
+#: src/prefs/welcome.js:113
 #, fuzzy
-msgid "Upload Activity"
-msgstr "ატვირთვის აქტივობა"
+msgid "'iotop' not installed: some optional features will be disabled!"
+msgstr "'iproute2' არ არის დაყენებული: ზოგი ფუნქცია იქნება გათიშული!"
 
-#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
-#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
-#: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
-msgid "Total"
-msgstr "სულ"
+#: src/prefs/welcome.js:119
+msgid ""
+"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
+"be disabled!"
+msgstr ""
+"'AMD GPU იყო აღმოჩენილი, მაგრამ 'amdgpu_top' არ არის დაყენებული: ზოგი "
+"არასავალდებულო ფუქნქცია იქნება გათიშული!"
 
-#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
-#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
-msgid "Packets"
-msgstr "პაკეტები"
+#: src/prefs/welcome.js:125
+msgid ""
+"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
+"will be disabled!"
+msgstr ""
+"NVidia GPU იყო აღმოჩენილი, მაგრამ 'nvidia-smi' არ არის დაყენებული: ზოგი "
+"არასავალდებულო ფუნქცია იქნება გათიშული!"
 
-#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
-#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
-msgid "Errors/Dropped"
-msgstr "შეცდომები/დაკარგული"
+#: src/prefs/welcome.js:128
+msgid "Checking GTop dependency..."
+msgstr "GTop-ის დამოკიდებულების შემოწმება..."
 
-#: src/network/networkMenu.js:136
+#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
 #, fuzzy
-msgid "Download Activity"
-msgstr "გადმოტვირთვის აქტივობა"
+msgid ""
+"'GTop' not installed, some optional features will be disabled! For a better "
+"experience and performance, install it from your package manager."
+msgstr ""
+"'GTop' არ არის დაყენებული, ზოგი არასავალდებულო ფუნქცია იქნება გათიშული!"
 
-#: src/network/networkMenu.js:168
+#: src/prefs/welcome.js:136
+msgid "'GTop' successfully detected and added to Data Sources list."
+msgstr ""
+"'GTop' წარმატებით იქნა აღმოჩენილი და დამატებული მონაცემთა წყაროთა სიაში."
+
+#: src/prefs/welcome.js:146
+msgid "All other dependencies are met!"
+msgstr "ყველა სხვა დამოკიდებულება დაკმაყოფილებულია!"
+
+#: src/prefs/welcome.js:149
 #, fuzzy
-msgid "(click to show)"
-msgstr "დააჭირეთ გასაახლებლად"
+msgid "Support Us"
+msgstr "დაგვიჭირეთ მხარი"
 
-#: src/network/networkMenu.js:381
-msgid "Public IP"
-msgstr "საჯარო IP"
+#: src/prefs/welcome.js:150
+msgid "Support us on Ko-Fi"
+msgstr "დაგვიჭირეთ მხარი Ko-Fi-ზე"
 
-#: src/network/networkMenu.js:391
-msgid "Public IPv4:"
-msgstr "საჯარო IPv4:"
+#: src/prefs/welcome.js:151
+msgid "Buy us a coffee"
+msgstr "გვიყიდეთ ყავა"
 
-#: src/network/networkMenu.js:408
-msgid "Public IPv6:"
-msgstr "საჯარო IPv6:"
+#: src/prefs/welcome.js:152
+msgid "Become a patron"
+msgstr "გახდით მეცენატი"
 
-#: src/network/networkMenu.js:455
-msgid "Updated a long time ago"
-msgstr "განახლებულია დიდი ხნის წინ"
-
-#: src/network/networkMenu.js:457
+#: src/prefs/memory.js:86
 #, fuzzy
-msgid "Updated a few seconds ago"
-msgstr "განახლებულია რამდენიმე წამის წინ"
+msgid "kB (as kiB)"
+msgstr "კბ (როგორც კიბ/წმ)"
 
-#: src/network/networkMenu.js:459
-msgid "Updated less than a minute ago"
-msgstr "განახლებულია ერთ წუთზე ნაკლები დროის წინ"
-
-#: src/network/networkMenu.js:461
-msgid "Updated about a minute ago"
-msgstr "განახლებულია დაახლოებით ერთი წუთის წინ"
-
-#: src/network/networkMenu.js:463
-msgid "Updated about 2 minutes ago"
-msgstr "განახლებულია დაახლოებით 2 წუთის წინ"
-
-#: src/network/networkMenu.js:465
-msgid "Updated about 5 minutes ago"
-msgstr "განახლებულია დაახლოებით 5 წუთის წინ"
-
-#: src/network/networkMenu.js:467
-msgid "Updated more than 5 minutes ago"
-msgstr "განახლებულია 5 წუთზე მეტი დროის წინ"
-
-#: src/network/networkMenu.js:468
-msgid "Click to refresh"
-msgstr "დააჭირეთ გასაახლებლად"
-
-#: src/network/networkMenu.js:470
-msgid "Refreshing..."
-msgstr "განახლება..."
-
-#: src/network/networkMenu.js:472
-msgid "Done"
-msgstr "მზადაა"
-
-#: src/network/networkMenu.js:476
+#: src/prefs/memory.js:87
 #, fuzzy
-msgid "Default Routes"
-msgstr "ნაგულისხმები მარშრუტები"
+msgid "kB (as KB)"
+msgstr "კბ (როგორც კბ/წმ)"
 
-#: src/network/networkMenu.js:515
-msgid "Route"
-msgstr "მარშრუტი"
+#: src/prefs/memory.js:88
+msgid "kiB"
+msgstr "კიბ"
 
-#: src/network/networkMenu.js:521
-msgid "Metric"
-msgstr "მეტრული"
-
-#: src/network/networkMenu.js:528
+#: src/prefs/memory.js:89
 #, fuzzy
-msgid "Device"
-msgstr "მოწყობილობა"
+msgid "KiB"
+msgstr "კიბ/წმ"
 
-#: src/network/networkMenu.js:535
-msgid "Gateway"
-msgstr "გეითვეი"
+#: src/prefs/memory.js:90
+msgid "KB"
+msgstr "კბ"
 
-#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
-msgid "Type"
-msgstr "ტიპი"
-
-#: src/network/networkMenu.js:549
+#: src/prefs/memory.js:91
 #, fuzzy
-msgid "Destination"
-msgstr "დანიშნულება"
+msgid "k (as kB)"
+msgstr "კ (როგორც კბ/წმ)"
 
-#: src/network/networkMenu.js:556
-msgid "Protocol"
-msgstr "პროტოკოლი"
-
-#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
-msgid "Scope"
-msgstr "Scope"
-
-#: src/network/networkMenu.js:570
-msgid "Flags"
-msgstr "დროშები"
-
-#: src/network/networkMenu.js:599
-msgid "Interfaces"
-msgstr "ინტერფეისები"
-
-#: src/network/networkMenu.js:602
-msgid "No network interface found"
-msgstr "ქსელური ინტერფეისი ვერ მოიძებნა"
-
-#: src/network/networkMenu.js:810
-msgctxt "short for upload"
-msgid "U"
-msgstr "ატვ"
-
-#: src/network/networkMenu.js:836
-msgctxt "short for download"
-msgid "D"
-msgstr "გადმ"
-
-#: src/network/networkMenu.js:913 src/storage/storageMenu.js:600
-#: src/gpu/gpuMenuComponent.js:438 src/gpu/gpuMenuComponent.js:1246
-#: src/gpu/gpuMenuComponent.js:1277
-msgid "Name"
-msgstr "სახელი"
-
-#: src/network/networkMenu.js:920
+#: src/prefs/memory.js:92
 #, fuzzy
-msgid "Alt Names"
-msgstr "ალტერნატიული სახელები"
+msgid "Ki (as Ki)"
+msgstr "კი (როგორც კიბ/წმ)"
 
-#: src/network/networkMenu.js:929
+#: src/prefs/memory.js:98
+msgid "Used = Total - Free - Buffers - Cached"
+msgstr "გამოყენებული = ჯამური - თავისუფალი - ბუფერები - ქეშირებული"
+
+#: src/prefs/memory.js:100
+msgid "Used = Total - Free"
+msgstr "გამოყენებული = ჯამური - თავისუფალი"
+
+#: src/prefs/memory.js:101
+msgid "Used = Total - Available"
+msgstr "გამოყენებული = ჯამური - ხელმისაწვდომი"
+
+#: src/prefs/memory.js:102
+msgid "Used = Active"
+msgstr "გამოყენებული = აქტიური"
+
+#: src/prefs/memory.js:104
+msgid "Used Memory"
+msgstr "გამოყენებული მეხსიერება"
+
+#: src/prefs/memory.js:111
 #, fuzzy
-msgid "Interface Index"
-msgstr "ინტერფეისების ინდექსი"
+msgid "Memory Usage"
+msgstr "მეხსიერების გამოყენება"
 
-#: src/network/networkMenu.js:938
-msgid "MAC Address"
-msgstr "MAC მისამართი"
+#: src/prefs/memory.js:133
+msgid "Set icon name (ie: 'memory-symbolic')"
+msgstr "დააყენეთ ხატულას სახელი (მაგ., 'memory-symbolic')"
 
-#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
-msgid "Group"
-msgstr "ჯგუფი"
+#: src/prefs/memory.js:147
+msgid "Show Usage Percentage"
+msgstr "გამოყენების პროცენტის ჩვენება"
 
-#: src/network/networkMenu.js:956
+#: src/prefs/memory.js:150
+msgid "Set 0 to disable. Value is percentage of ram usage."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების გამოყენების "
+"პროცენტი"
+
+#: src/prefs/memory.js:154
+msgid "Show Usage Value"
+msgstr "გამოყენების მნიშვნელობის ჩვენება"
+
+#: src/prefs/memory.js:157
 #, fuzzy
-msgid "Speed"
-msgstr "სიჩქარე"
+msgid "Show Free Value"
+msgstr "თავისუფალის მნიშვნელობის ჩვენება"
 
-#: src/network/networkMenu.js:965
-msgid "Duplex"
-msgstr "დუპლექსი"
-
-#: src/network/networkMenu.js:974
-msgid "MTU"
-msgstr "MTU"
-
-#: src/network/networkMenu.js:983
-msgid "Tx Queue Length"
-msgstr "Tx რიგის სიგრძე"
-
-#: src/network/networkMenu.js:992
-msgid "Link Type"
-msgstr "კავშირის ტიპი"
-
-#: src/network/networkMenu.js:1001
-msgid "Operative State"
-msgstr "ოპერატიული მდგომარეობა"
-
-#: src/network/networkMenu.js:1010
-msgid "Qdisc"
-msgstr "Qdisc"
-
-#: src/network/networkMenu.js:1043
-msgid "Family"
-msgstr "ოჯახი"
-
-#: src/network/networkMenu.js:1050
-msgid "Local"
-msgstr "ადგილობრივი"
-
-#: src/network/networkMenu.js:1057
-msgid "Prefix Length"
-msgstr "პრეფიქსის სიგრძე"
-
-#: src/network/networkMenu.js:1064
-msgid "Broadcast"
-msgstr "მაუწყებლობა"
-
-#: src/network/networkMenu.js:1097
+#: src/prefs/memory.js:161
 #, fuzzy
-msgid "Upload"
-msgstr "ატვირთვა"
+msgid "Set 0 to disable. Value is free MB of ram."
+msgstr ""
+"დააყენეთ 0-ზე გასათიშად. მნიშვნელობა არის ოპერატიული მეხსიერების თავისუფალი "
+"მბ."
 
-#: src/network/networkMenu.js:1121
+#: src/prefs/memory.js:168 src/prefs/memory.js:182
+msgid "<b>Used</b> memory color."
+msgstr "<b>გამოყენებული</b> მეხსიერების ფერი."
+
+#: src/prefs/memory.js:173 src/prefs/memory.js:187
 #, fuzzy
-msgid "Download"
-msgstr "გადმოტვირთვა"
+msgid "Alt Color"
+msgstr "ალტერნატიული ფერი"
 
-#: src/network/networkMenu.js:1155
-msgid "IEEE"
-msgstr "IEEE"
+#: src/prefs/memory.js:174 src/prefs/memory.js:188
+msgid "<b>Allocated <u>unused</u></b> memory color."
+msgstr "<b>მინიჭებული <u>გამოუყენებული</u></b> მეხსიერების ფერი."
 
-#: src/network/networkMenu.js:1167
-msgid "SSID"
-msgstr "SSID"
+#: src/prefs/memory.js:207 src/memory/memoryMenu.js:329
+msgid "Swap"
+msgstr "Swap"
 
-#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
-msgid "Mode"
-msgstr "რეჟიმი"
+#: src/prefs/memory.js:209
+msgid "Swap Bar Color"
+msgstr "Swap-ის სვეტის ფერი"
 
-#: src/network/networkMenu.js:1203
-msgid "Access Point"
-msgstr "წვდომის წერტილი"
+#: src/prefs/memory.js:210
+msgid "Swap bar main color."
+msgstr "Swap-ის სვეტის ძირითადი ფერი."
 
-#: src/network/networkMenu.js:1215
-msgid "Bit Rate"
-msgstr "ბიტრეიტი"
+#: src/prefs/profiles.js:62
+msgid "Current profile"
+msgstr ""
 
-#: src/network/networkMenu.js:1227
-msgid "TX Power"
-msgstr "TX სიმძლავრე"
+#: src/prefs/profiles.js:98
+msgid "Rename profile"
+msgstr ""
 
-#: src/network/networkMenu.js:1239
-msgid "Link Quality"
-msgstr "კავშირის ხარისხი"
+#: src/prefs/profiles.js:110
+msgid "Apply"
+msgstr ""
 
-#: src/network/networkMenu.js:1251
-msgid "Signal Level"
-msgstr "სიგნალის დონე"
+#: src/prefs/profiles.js:133
+msgid "Reset profile"
+msgstr ""
+
+#: src/prefs/profiles.js:134
+msgid "Warning: this will reset the current profile to default settings."
+msgstr ""
+
+#: src/prefs/profiles.js:137
+msgid "Reset"
+msgstr ""
+
+#: src/prefs/profiles.js:147
+msgid "Clone profile"
+msgstr ""
+
+#: src/prefs/profiles.js:148
+msgid "Create a copy of the current profile."
+msgstr ""
+
+#: src/prefs/profiles.js:151
+msgid "Clone"
+msgstr ""
+
+#: src/prefs/profiles.js:176
+msgid "Delete profile"
+msgstr ""
+
+#: src/prefs/profiles.js:177
+msgid "Warning: this operation is irreversible."
+msgstr ""
+
+#: src/prefs/profiles.js:180
+msgid "Delete"
+msgstr ""
 
 #: src/storage/storageMenu.js:67
 msgid "Global Read:"
@@ -1980,10 +2227,6 @@ msgstr "საბაზისო ინფორმაცია"
 #: src/storage/storageMenu.js:602
 msgid "Model"
 msgstr "მოდელი"
-
-#: src/storage/storageMenu.js:603 src/gpu/gpuMenuComponent.js:501
-msgid "Vendor"
-msgstr "მწარმოებელი"
 
 #: src/storage/storageMenu.js:604
 msgid "Serial"
@@ -2271,11 +2514,6 @@ msgstr ""
 msgid "Allocated:"
 msgstr "გამოყოფილი:"
 
-#: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
-#: src/gpu/gpuMenuComponent.js:249 src/gpu/gpuMenuComponent.js:1174
-msgid "Used:"
-msgstr "გამოყენებული:"
-
 #: src/memory/memoryMenu.js:86
 msgid "Free:"
 msgstr "თავისუფალი:"
@@ -2327,220 +2565,6 @@ msgstr "Zswapp-ირებული"
 #: src/memory/memoryMenu.js:457
 msgid "Swap Devices"
 msgstr "Swap-ის მოწყობილობები"
-
-#: src/gpu/gpuMenuComponent.js:57
-msgid "No GPU found"
-msgstr "GPU ვერ მოიძებნა"
-
-#: src/gpu/gpuMenuComponent.js:70
-msgid "GPUs"
-msgstr "GPU-ები"
-
-#: src/gpu/gpuMenuComponent.js:129
-msgid "No Connected Display"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1084
-msgid "Activity"
-msgstr "აქტივობა"
-
-#: src/gpu/gpuMenuComponent.js:206 src/gpu/gpuMenuComponent.js:1133
-msgid "VRAM"
-msgstr "ვიდეო ოპერატიული მეხსიერება"
-
-#: src/gpu/gpuMenuComponent.js:431
-msgid "GPU info"
-msgstr "ინფორმაცია GPU-ს შესახებ"
-
-#: src/gpu/gpuMenuComponent.js:468
-msgid "Subsystem"
-msgstr "ქვე-სისტემა"
-
-#: src/gpu/gpuMenuComponent.js:509
-msgid "Vendor ID"
-msgstr "მწარმოებლის ID"
-
-#: src/gpu/gpuMenuComponent.js:518
-msgid "Product ID"
-msgstr "პროდუქტის ID"
-
-#: src/gpu/gpuMenuComponent.js:526
-msgid "PCI"
-msgstr "PCI"
-
-#: src/gpu/gpuMenuComponent.js:538
-msgid "Drivers"
-msgstr "დრაივერები"
-
-#: src/gpu/gpuMenuComponent.js:547
-msgid "Modules"
-msgstr "მოდულები"
-
-#: src/gpu/gpuMenuComponent.js:611
-msgid "Displays"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:613
-#, fuzzy
-msgid "No displays found"
-msgstr "სენსორი ვერ მოიძებნა"
-
-#: src/gpu/gpuMenuComponent.js:644
-#, fuzzy
-msgid "Status"
-msgstr "მდგომარეობა"
-
-#: src/gpu/gpuMenuComponent.js:656
-#, fuzzy
-msgid "Product Code"
-msgstr "პროდუქტის ID"
-
-#: src/gpu/gpuMenuComponent.js:668
-#, fuzzy
-msgid "Serial Number"
-msgstr "ზონის ნომერი"
-
-#: src/gpu/gpuMenuComponent.js:680
-msgid "Manufacturer Date"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:692
-#, fuzzy
-msgid "EDID Version"
-msgstr "ვერსია"
-
-#: src/gpu/gpuMenuComponent.js:704
-#, fuzzy
-msgid "Display Size"
-msgstr "მაქსიმალურის ზომის გაუქმება"
-
-#: src/gpu/gpuMenuComponent.js:716 src/gpu/gpuMenuComponent.js:942
-msgid "Native Resolution"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:728 src/gpu/gpuMenuComponent.js:961
-msgid "Refresh Rate"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:740
-msgid "Display Gamma"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:752
-msgid "Display Type"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:764
-msgid "Capabilities"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:843
-msgid "Enabled"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:846
-msgid "Disabled"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:939
-msgid "Native Resolutions"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:958
-msgid "Refresh Rates"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:986
-msgid "RGB 4:4:4"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:990
-msgid "RGB 4:4:4 + YCrCb 4:4:4"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:994
-msgid "RGB 4:4:4 + YCrCb 4:2:2"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:997
-msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1005
-msgid "Monochrome or Grayscale"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1008
-#, fuzzy
-msgid "RGB color"
-msgstr "სვეტის ფერი"
-
-#: src/gpu/gpuMenuComponent.js:1011
-#, fuzzy
-msgid "Non-RGB color"
-msgstr "ხატულას ფერი"
-
-#: src/gpu/gpuMenuComponent.js:1026
-msgid "Digital Input"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1028
-msgid "VESA DFP"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1033
-msgid "White Sync Levels: "
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1036
-msgid "Blank to Black"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1039
-msgid "Separate Sync"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1042
-msgid "Composite Sync"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1045
-msgid "Sync on Green"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1048
-msgid "VSync Serrated"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1052
-msgid "DPMS Standby"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1055
-msgid "DPMS Suspend"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1058
-msgid "DPMS Active Off"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1061
-msgid "Standard sRGB"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1064
-msgid "Preferred Timing"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1067
-#, fuzzy
-msgid "GTF Supported"
-msgstr "დაგვიჭირეთ მხარი"
-
-#: src/gpu/gpuMenuComponent.js:1546
-#, javascript-format
-msgid "%d/%d Displays Connected"
-msgstr ""
 
 #, fuzzy
 #~ msgid "What's Shell TOPBAR/DASH/PANEL Position?"

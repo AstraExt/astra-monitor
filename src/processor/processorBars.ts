@@ -61,7 +61,7 @@ export default GObject.registerClass(
                     values.push([]);
                     continue;
                 }
-                
+
                 if(!this.breakdownConfig || Config.get_boolean(this.breakdownConfig)) {
                     values.push([
                         { color: 0, value: usage[i].user / 100.0 },

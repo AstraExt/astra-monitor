@@ -82,7 +82,7 @@ export default class ProcessorMonitor extends Monitor {
     private previousCpuCoresUsage!: PreviousCpuCoresUsage;
     private previousPidsCpuTime!: Map<number, CpuTime>;
 
-    private cpuPresent: number[]|null;
+    private cpuPresent: number[] | null;
     private dataSources!: ProcessorDataSources;
     private cpuInfo?: CpuInfo;
 
@@ -401,8 +401,7 @@ export default class ProcessorMonitor extends Monitor {
      * This is a sync function but caches the result
      */
     getCpuTopology(): number[] {
-        if(this.cpuPresent !== null)
-            return this.cpuPresent;
+        if(this.cpuPresent !== null) return this.cpuPresent;
         this.cpuPresent = this.getCpuPresentSync();
         return this.cpuPresent;
     }
@@ -657,7 +656,7 @@ export default class ProcessorMonitor extends Monitor {
         for(let i = 1; i < procStatValue.length; i++) {
             const line = procStatValue[i];
             if(!line.startsWith('cpu')) break;
-            
+
             const parts = line.split(' ').filter(n => n.trim() !== '');
             if(parts.length < 9) continue;
 
@@ -835,14 +834,15 @@ export default class ProcessorMonitor extends Monitor {
 
         if(this.isListeningFor('cpuCoresFrequency')) {
             try {
-                const paths = topology.map(coreId => `/sys/devices/system/cpu/cpu${coreId}/cpufreq/scaling_cur_freq`);
+                const paths = topology.map(
+                    coreId => `/sys/devices/system/cpu/cpu${coreId}/cpufreq/scaling_cur_freq`
+                );
 
                 const readFiles = paths.map(path => {
                     return Utils.readFileAsync(path)
                         .then(fileContent => {
                             if(fileContent) {
-                                if(Utils.isIntOrIntString(fileContent))
-                                    return Number.NaN;
+                                if(Utils.isIntOrIntString(fileContent)) return Number.NaN;
                                 else return parseInt(fileContent, 10) / 1000;
                             } else {
                                 return Number.NaN;

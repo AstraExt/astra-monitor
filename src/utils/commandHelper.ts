@@ -21,7 +21,7 @@ export default class CommandHelper {
             const flags = Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE;
 
             proc = new Gio.Subprocess({ argv, flags });
-            
+
             try {
                 const init = proc.init(cancellableTaskManager?.cancellable || null);
                 if(!init) {
@@ -32,7 +32,7 @@ export default class CommandHelper {
             }
 
             cancellableTaskManager?.setSubprocess(proc);
-            
+
             stdoutStream = proc.get_stdout_pipe();
             stderrStream = proc.get_stderr_pipe();
 
@@ -40,20 +40,17 @@ export default class CommandHelper {
             const stderrPromise = CommandHelper.readAll(stderrStream, cancellableTaskManager);
 
             const waitPromise = new Promise<number>((resolve, reject) => {
-                proc!.wait_async(
-                    cancellableTaskManager?.cancellable || null,
-                    (_source, res) => {
-                        try {
-                            if(!proc!.wait_finish(res)) {
-                                reject(new Error('Wait failed'));
-                            } else {
-                                resolve(proc!.get_exit_status());
-                            }
-                        } catch(e) {
-                            reject(e);
+                proc!.wait_async(cancellableTaskManager?.cancellable || null, (_source, res) => {
+                    try {
+                        if(!proc!.wait_finish(res)) {
+                            reject(new Error('Wait failed'));
+                        } else {
+                            resolve(proc!.get_exit_status());
                         }
+                    } catch(e) {
+                        reject(e);
                     }
-                );
+                });
             });
 
             const [exitStatus, stdoutContent, stderrContent] = await Promise.all([
@@ -69,15 +66,22 @@ export default class CommandHelper {
             }
 
             if(!stdoutContent) throw new Error('No output');
-            
-            return stdoutContent.trim();
 
+            return stdoutContent.trim();
         } catch(e: any) {
             proc?.force_exit();
             throw new Error(`Failed to run CommandHelper: ${e.message}`);
         } finally {
-            try { stdoutStream?.close(null); } catch(_) { /* empty */ }
-            try { stderrStream?.close(null); } catch(_) { /* empty */ }
+            try {
+                stdoutStream?.close(null);
+            } catch(_) {
+                /* empty */
+            }
+            try {
+                stderrStream?.close(null);
+            } catch(_) {
+                /* empty */
+            }
         }
     }
 
@@ -86,7 +90,7 @@ export default class CommandHelper {
         cancellableTaskManager?: CancellableTaskManager<boolean>
     ): Promise<string> {
         if(!stream) return '';
-        
+
         const chunks: Uint8Array[] = [];
         let totalLength = 0;
         const bufferSize = 8192;

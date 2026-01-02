@@ -542,8 +542,7 @@ export default class PrefsUtils {
             setupModel(values);
             update = () => addChoices(values);
             Config.connect(row, 'changed::' + setting, update);
-        }
-        else {
+        } else {
             update = () => {
                 values().then(setupModel);
             };
@@ -902,7 +901,7 @@ export default class PrefsUtils {
         if((group as any).add) (group as Adw.PreferencesGroup).add(row);
         else (group as Adw.ExpanderRow).add_row(row);
     }
-    
+
     private static addIcon(row: Adw.ActionRow | Adw.ExpanderRow, iconName: string) {
         const icon = new Gtk.Image({
             iconName,

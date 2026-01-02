@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: AstraMonitor 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-18 15:35+0200\n"
+"POT-Creation-Date: 2026-01-02 15:32+0100\n"
 "PO-Revision-Date: 2024-02-13 12:28+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: ru\n"
@@ -20,106 +20,370 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: src/processor/processorMenu.js:37 src/prefs/processors.js:194
-msgid "CPU"
-msgstr "ЦП"
+#: prefs.js:172
+msgid "Overview"
+msgstr ""
 
-#: src/processor/processorMenu.js:99
-msgid "CPU info"
-msgstr "Информация о ЦП"
+#: prefs.js:189 src/profiles/profilesMenu.js:32 src/prefs/profiles.js:36
+#: src/prefs/profiles.js:49
+msgid "Profiles"
+msgstr ""
 
-#: src/processor/processorMenu.js:179 src/memory/memoryMenu.js:50
-#: src/memory/memoryMenu.js:369 src/gpu/gpuMenuComponent.js:270
-#: src/gpu/gpuMenuComponent.js:1195
-msgid "Total:"
-msgstr "Всего:"
+#: prefs.js:205 src/prefs/visualization.js:40 src/prefs/visualization.js:53
+#: src/prefs/visualization.js:56
+msgid "Visualization"
+msgstr "Визуализация"
 
-#: src/processor/processorMenu.js:187
-msgid "User:"
-msgstr "Пользователь:"
+#: prefs.js:222 src/prefs/processors.js:41 src/prefs/processors.js:54
+#: src/prefs/processors.js:67
+msgid "Processors"
+msgstr "Процессоры"
 
-#: src/processor/processorMenu.js:195
-msgid "System:"
-msgstr "Система:"
+#: prefs.js:232 prefs.js:267 prefs.js:294 prefs.js:329 prefs.js:364
+#: prefs.js:399 src/prefs/storage.js:82 src/prefs/network.js:82
+#: src/prefs/processors.js:80 src/prefs/processors.js:82
+#: src/prefs/sensors.js:80 src/prefs/gpu.js:81 src/prefs/gpu.js:83
+#: src/prefs/memory.js:80
+msgid "General"
+msgstr "Общие"
 
-#: src/processor/processorMenu.js:224
-msgid "CPU Category Usage Raw Info"
-msgstr "Информация о категории использования ЦП"
+#: prefs.js:240 prefs.js:275 prefs.js:302 prefs.js:337 prefs.js:372
+#: prefs.js:407 src/prefs/storage.js:206 src/prefs/storage.js:208
+#: src/prefs/network.js:186 src/prefs/processors.js:114
+#: src/prefs/processors.js:116 src/prefs/sensors.js:118
+#: src/prefs/sensors.js:120 src/prefs/gpu.js:173 src/prefs/gpu.js:175
+#: src/prefs/memory.js:123 src/prefs/memory.js:125
+msgid "Header"
+msgstr "Заголовок"
 
-#: src/processor/processorMenu.js:226
-msgid "User"
-msgstr "Пользователь"
+#: prefs.js:248 prefs.js:310 prefs.js:345 prefs.js:380 src/prefs/storage.js:302
+#: src/prefs/storage.js:304 src/prefs/network.js:253 src/prefs/network.js:266
+#: src/prefs/processors.js:191 src/prefs/processors.js:193
+#: src/prefs/sensors.js:266 src/prefs/gpu.js:251 src/prefs/memory.js:202
+#: src/prefs/memory.js:204
+msgid "Menu"
+msgstr "Меню"
 
-#: src/processor/processorMenu.js:233
-msgid "Nice"
-msgstr "Уступчивость"
+#: prefs.js:257 src/gpu/gpuMenu.js:28 src/gpu/gpuMenuComponent.js:46
+#: src/prefs/processors.js:199 src/prefs/gpu.js:42 src/prefs/gpu.js:55
+#: src/prefs/gpu.js:68 src/prefs/gpu.js:108
+msgid "GPU"
+msgstr "ГП"
 
-#: src/processor/processorMenu.js:240
-msgid "System"
-msgstr "Система"
+#: prefs.js:284 src/prefs/memory.js:41 src/prefs/memory.js:54
+#: src/prefs/memory.js:67 src/prefs/memory.js:82 src/prefs/memory.js:205
+#: src/memory/memoryMenu.js:34
+msgid "Memory"
+msgstr "Память"
 
-#: src/processor/processorMenu.js:247
-msgid "Idle"
-msgstr "Бездействие"
+#: prefs.js:319 src/prefs/storage.js:43 src/prefs/storage.js:56
+#: src/prefs/storage.js:69 src/prefs/storage.js:84
+#: src/storage/storageMenu.js:38
+msgid "Storage"
+msgstr "Хранилище"
 
-#: src/processor/processorMenu.js:254
-msgid "I/O wait"
-msgstr "Ожидание ввода/вывода"
+#: prefs.js:354 src/network/networkMenu.js:42 src/prefs/network.js:43
+#: src/prefs/network.js:56 src/prefs/network.js:69 src/prefs/network.js:84
+msgid "Network"
+msgstr "Сеть"
 
-#: src/processor/processorMenu.js:261
-msgid "IRQ"
-msgstr "Прерывание"
+#: prefs.js:389 src/gpu/gpuMenuComponent.js:365
+#: src/gpu/gpuMenuComponent.js:1320 src/sensors/sensorsMenu.js:47
+#: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
+#: src/prefs/sensors.js:82 src/prefs/sensors.js:112
+msgid "Sensors"
+msgstr "Датчики"
 
-#: src/processor/processorMenu.js:268
-msgid "Soft IRQ"
-msgstr "Программное прерывание"
+#: prefs.js:423 src/prefs/utility.js:36 src/prefs/utility.js:49
+#: src/prefs/utility.js:52
+msgid "Utility"
+msgstr ""
 
-#: src/processor/processorMenu.js:275
-msgid "Steal"
-msgstr "Steal"
+#: prefs.js:431 src/prefs/about.js:32 src/prefs/about.js:45
+msgid "About"
+msgstr ""
 
-#: src/processor/processorMenu.js:337
-msgid "CPU Cores Usage Info"
-msgstr "Информация об использовании ядер ЦП"
+#: src/network/networkMenu.js:77
+msgid "Global Upload:"
+msgstr "Глобальная выгрузка:"
 
-#: src/processor/processorMenu.js:379
-msgid "GHz"
-msgstr "ГГц"
+#: src/network/networkMenu.js:89
+msgid "Global Download:"
+msgstr "Глобальная загрузка:"
 
-#: src/processor/processorMenu.js:394 src/processor/processorMenu.js:436
-#: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
-#: src/storage/storageMenu.js:1179 src/storage/storageMenu.js:1180
-#: src/storage/storageMenu.js:1189 src/storage/storageMenu.js:1190
-#: src/memory/memoryMenu.js:247 src/memory/memoryMenu.js:294
-msgid "Top processes"
+#: src/network/networkMenu.js:114
+#, fuzzy
+msgid "Upload Activity"
+msgstr "Активность"
+
+#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
+#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
+#: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
+msgid "Total"
+msgstr "Всего"
+
+#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
+#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
+msgid "Packets"
+msgstr ""
+
+#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
+#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
+msgid "Errors/Dropped"
+msgstr ""
+
+#: src/network/networkMenu.js:136
+#, fuzzy
+msgid "Download Activity"
+msgstr "Активность"
+
+#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
+#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:308
+#: src/gpu/gpuMenuComponent.js:1234 src/prefs/storage.js:195
+#: src/prefs/processors.js:103 src/prefs/memory.js:117
+msgid "Top Processes"
 msgstr "Наибольшие процессы"
 
-#: src/processor/processorMenu.js:469
-msgid "Load average"
+#: src/network/networkMenu.js:168
+msgid "(click to show)"
 msgstr ""
 
-#: src/processor/processorMenu.js:489
-msgctxt "short for 1 minute"
-msgid "1m"
+#: src/network/networkMenu.js:381
+msgid "Public IP"
 msgstr ""
 
-#: src/processor/processorMenu.js:509
-msgctxt "short for 5 minutes"
-msgid "5m"
+#: src/network/networkMenu.js:391
+msgid "Public IPv4:"
 msgstr ""
 
-#: src/processor/processorMenu.js:529
-msgctxt "short for 15 minutes"
-msgid "15m"
+#: src/network/networkMenu.js:408
+msgid "Public IPv6:"
 msgstr ""
 
-#: src/processor/processorMenu.js:578
-msgid "System uptime"
-msgstr "Время работы системы"
+#: src/network/networkMenu.js:455
+msgid "Updated a long time ago"
+msgstr ""
 
-#: src/processor/processorGraph.js:86 src/network/networkGraph.js:95
+#: src/network/networkMenu.js:457
+#, fuzzy
+msgid "Updated a few seconds ago"
+msgstr "Частота обновления (в секундах)"
+
+#: src/network/networkMenu.js:459
+msgid "Updated less than a minute ago"
+msgstr ""
+
+#: src/network/networkMenu.js:461
+msgid "Updated about a minute ago"
+msgstr ""
+
+#: src/network/networkMenu.js:463
+msgid "Updated about 2 minutes ago"
+msgstr ""
+
+#: src/network/networkMenu.js:465
+msgid "Updated about 5 minutes ago"
+msgstr ""
+
+#: src/network/networkMenu.js:467
+msgid "Updated more than 5 minutes ago"
+msgstr ""
+
+#: src/network/networkMenu.js:468
+msgid "Click to refresh"
+msgstr ""
+
+#: src/network/networkMenu.js:470
+msgid "Refreshing..."
+msgstr ""
+
+#: src/network/networkMenu.js:472
+msgid "Done"
+msgstr ""
+
+#: src/network/networkMenu.js:476
+#, fuzzy
+msgid "Default Routes"
+msgstr "По умолчанию (Авто)"
+
+#: src/network/networkMenu.js:515
+msgid "Route"
+msgstr ""
+
+#: src/network/networkMenu.js:521
+msgid "Metric"
+msgstr ""
+
+#: src/network/networkMenu.js:528
+#, fuzzy
+msgid "Device"
+msgstr "Устройства"
+
+#: src/network/networkMenu.js:535
+msgid "Gateway"
+msgstr ""
+
+#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
+msgid "Type"
+msgstr ""
+
+#: src/network/networkMenu.js:549
+#, fuzzy
+msgid "Destination"
+msgstr "Положение"
+
+#: src/network/networkMenu.js:556
+msgid "Protocol"
+msgstr ""
+
+#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
+msgid "Scope"
+msgstr ""
+
+#: src/network/networkMenu.js:570
+msgid "Flags"
+msgstr ""
+
+#: src/network/networkMenu.js:599
+msgid "Interfaces"
+msgstr "Интерфейсы"
+
+#: src/network/networkMenu.js:602
+msgid "No network interface found"
+msgstr "Сетевой интерфейс не найден"
+
+#: src/network/networkMenu.js:810
+msgctxt "short for upload"
+msgid "U"
+msgstr "В"
+
+#: src/network/networkMenu.js:836
+msgctxt "short for download"
+msgid "D"
+msgstr "З"
+
+#: src/network/networkMenu.js:910 src/prefs/about.js:48
+msgid "Info"
+msgstr "Информация"
+
+#: src/network/networkMenu.js:913 src/gpu/gpuMenuComponent.js:438
+#: src/gpu/gpuMenuComponent.js:1246 src/gpu/gpuMenuComponent.js:1277
+#: src/storage/storageMenu.js:600
+msgid "Name"
+msgstr "Название"
+
+#: src/network/networkMenu.js:920
+#, fuzzy
+msgid "Alt Names"
+msgstr "Имя значка"
+
+#: src/network/networkMenu.js:929
+#, fuzzy
+msgid "Interface Index"
+msgstr "Интерфейсы"
+
+#: src/network/networkMenu.js:938
+msgid "MAC Address"
+msgstr ""
+
+#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
+msgid "Group"
+msgstr ""
+
+#: src/network/networkMenu.js:956
+#, fuzzy
+msgid "Speed"
+msgstr "Показать скорость ввода/вывода"
+
+#: src/network/networkMenu.js:965
+msgid "Duplex"
+msgstr ""
+
+#: src/network/networkMenu.js:974
+msgid "MTU"
+msgstr ""
+
+#: src/network/networkMenu.js:983
+msgid "Tx Queue Length"
+msgstr ""
+
+#: src/network/networkMenu.js:992
+msgid "Link Type"
+msgstr ""
+
+#: src/network/networkMenu.js:1001
+msgid "Operative State"
+msgstr ""
+
+#: src/network/networkMenu.js:1010
+msgid "Qdisc"
+msgstr ""
+
+#: src/network/networkMenu.js:1043
+msgid "Family"
+msgstr ""
+
+#: src/network/networkMenu.js:1050
+msgid "Local"
+msgstr ""
+
+#: src/network/networkMenu.js:1057
+msgid "Prefix Length"
+msgstr ""
+
+#: src/network/networkMenu.js:1064
+msgid "Broadcast"
+msgstr ""
+
+#: src/network/networkMenu.js:1097
+#, fuzzy
+msgid "Upload"
+msgstr "Цвет значка"
+
+#: src/network/networkMenu.js:1121
+#, fuzzy
+msgid "Download"
+msgstr "Цвет значка"
+
+#: src/network/networkMenu.js:1155
+msgid "IEEE"
+msgstr ""
+
+#: src/network/networkMenu.js:1167
+msgid "SSID"
+msgstr ""
+
+#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
+msgid "Mode"
+msgstr ""
+
+#: src/network/networkMenu.js:1191 src/prefs/processors.js:145
+msgid "Frequency"
+msgstr ""
+
+#: src/network/networkMenu.js:1203
+msgid "Access Point"
+msgstr ""
+
+#: src/network/networkMenu.js:1215
+msgid "Bit Rate"
+msgstr ""
+
+#: src/network/networkMenu.js:1227
+msgid "TX Power"
+msgstr ""
+
+#: src/network/networkMenu.js:1239
+msgid "Link Quality"
+msgstr ""
+
+#: src/network/networkMenu.js:1251
+msgid "Signal Level"
+msgstr ""
+
+#: src/network/networkGraph.js:95 src/gpu/gpuActivityGraph.js:83
+#: src/gpu/gpuMemoryGraph.js:83 src/processor/processorGraph.js:86
 #: src/storage/storageGraph.js:95 src/memory/memoryGraph.js:86
-#: src/gpu/gpuActivityGraph.js:83 src/gpu/gpuMemoryGraph.js:83
 #, javascript-format
 msgid "%d min ago"
 msgid_plural "%d mins ago"
@@ -127,560 +391,363 @@ msgstr[0] "%d минута назад"
 msgstr[1] "%d минуты назад"
 msgstr[2] "%d минут назад"
 
-#: src/processor/processorGraph.js:89 src/network/networkGraph.js:98
+#: src/network/networkGraph.js:98 src/gpu/gpuActivityGraph.js:86
+#: src/gpu/gpuMemoryGraph.js:86 src/processor/processorGraph.js:89
 #: src/storage/storageGraph.js:98 src/memory/memoryGraph.js:89
-#: src/gpu/gpuActivityGraph.js:86 src/gpu/gpuMemoryGraph.js:86
 msgid "now"
 msgstr "сейчас"
 
-#: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
-#: src/prefs/sensors.js:82 src/prefs/sensors.js:112
-#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:365
-#: src/gpu/gpuMenuComponent.js:1320 prefs.js:379
-msgid "Sensors"
-msgstr "Датчики"
+#: src/gpu/gpuMenuComponent.js:57
+msgid "No GPU found"
+msgstr "ГП не найден"
 
-#: src/prefs/sensors.js:80 src/prefs/memory.js:80 src/prefs/storage.js:82
-#: src/prefs/network.js:82 src/prefs/gpu.js:81 src/prefs/gpu.js:83
-#: src/prefs/processors.js:80 src/prefs/processors.js:82 prefs.js:226
-#: prefs.js:260 prefs.js:286 prefs.js:320 prefs.js:354 prefs.js:388
-msgid "General"
-msgstr "Общие"
+#: src/gpu/gpuMenuComponent.js:70
+msgid "GPUs"
+msgstr "ГП"
 
+#: src/gpu/gpuMenuComponent.js:129
+msgid "No Connected Display"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1084
+msgid "Activity"
+msgstr "Активность"
+
+#: src/gpu/gpuMenuComponent.js:206 src/gpu/gpuMenuComponent.js:1133
+msgid "VRAM"
+msgstr "VRAM"
+
+#: src/gpu/gpuMenuComponent.js:249 src/gpu/gpuMenuComponent.js:1174
+#: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
+msgid "Used:"
+msgstr "Используется:"
+
+#: src/gpu/gpuMenuComponent.js:270 src/gpu/gpuMenuComponent.js:1195
+#: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
+#: src/memory/memoryMenu.js:369
+msgid "Total:"
+msgstr "Всего:"
+
+#: src/gpu/gpuMenuComponent.js:431
+msgid "GPU info"
+msgstr "Информация о ГП"
+
+#: src/gpu/gpuMenuComponent.js:468
+msgid "Subsystem"
+msgstr "Подсистема"
+
+#: src/gpu/gpuMenuComponent.js:501 src/storage/storageMenu.js:603
+msgid "Vendor"
+msgstr "Производитель"
+
+#: src/gpu/gpuMenuComponent.js:509
+msgid "Vendor ID"
+msgstr "ID производителя"
+
+#: src/gpu/gpuMenuComponent.js:518
+msgid "Product ID"
+msgstr "ID товара"
+
+#: src/gpu/gpuMenuComponent.js:526
+msgid "PCI"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:538
+msgid "Drivers"
+msgstr "Драйвера"
+
+#: src/gpu/gpuMenuComponent.js:547
+msgid "Modules"
+msgstr "Модули"
+
+#: src/gpu/gpuMenuComponent.js:611
+msgid "Displays"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:613
+#, fuzzy
+msgid "No displays found"
+msgstr "Датчик не найден"
+
+#: src/gpu/gpuMenuComponent.js:644
+msgid "Status"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:656
+#, fuzzy
+msgid "Product Code"
+msgstr "ID товара"
+
+#: src/gpu/gpuMenuComponent.js:668
+msgid "Serial Number"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:680
+msgid "Manufacturer Date"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:692
+#, fuzzy
+msgid "EDID Version"
+msgstr "Версия"
+
+#: src/gpu/gpuMenuComponent.js:704
+msgid "Display Size"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:716 src/gpu/gpuMenuComponent.js:942
+msgid "Native Resolution"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:728 src/gpu/gpuMenuComponent.js:961
+msgid "Refresh Rate"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:740
+msgid "Display Gamma"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:752
+msgid "Display Type"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:764
+msgid "Capabilities"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:843
+msgid "Enabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:846
+msgid "Disabled"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:939
+msgid "Native Resolutions"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:958
+msgid "Refresh Rates"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:986
+msgid "RGB 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:990
+msgid "RGB 4:4:4 + YCrCb 4:4:4"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:994
+msgid "RGB 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:997
+msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1005
+msgid "Monochrome or Grayscale"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1008
+#, fuzzy
+msgid "RGB color"
+msgstr "Цвет значка"
+
+#: src/gpu/gpuMenuComponent.js:1011
+#, fuzzy
+msgid "Non-RGB color"
+msgstr "Цвет значка"
+
+#: src/gpu/gpuMenuComponent.js:1026
+msgid "Digital Input"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1028
+msgid "VESA DFP"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1033
+msgid "White Sync Levels: "
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1036
+msgid "Blank to Black"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1039
+msgid "Separate Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1042
+msgid "Composite Sync"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1045
+msgid "Sync on Green"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1048
+msgid "VSync Serrated"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1052
+msgid "DPMS Standby"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1055
+msgid "DPMS Suspend"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1058
+msgid "DPMS Active Off"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1061
+msgid "Standard sRGB"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1064
+msgid "Preferred Timing"
+msgstr ""
+
+#: src/gpu/gpuMenuComponent.js:1067
+#, fuzzy
+msgid "GTF Supported"
+msgstr "Поддержать нас на Ko-Fi"
+
+#: src/gpu/gpuMenuComponent.js:1546
+#, javascript-format
+msgid "%d/%d Displays Connected"
+msgstr ""
+
+#: src/processor/processorMenu.js:37 src/prefs/processors.js:194
+msgid "CPU"
+msgstr "ЦП"
+
+#: src/processor/processorMenu.js:100
+msgid "CPU info"
+msgstr "Информация о ЦП"
+
+#: src/processor/processorMenu.js:188
+msgid "User:"
+msgstr "Пользователь:"
+
+#: src/processor/processorMenu.js:196
+msgid "System:"
+msgstr "Система:"
+
+#: src/processor/processorMenu.js:225
+msgid "CPU Category Usage Raw Info"
+msgstr "Информация о категории использования ЦП"
+
+#: src/processor/processorMenu.js:227
+msgid "User"
+msgstr "Пользователь"
+
+#: src/processor/processorMenu.js:234
+msgid "Nice"
+msgstr "Уступчивость"
+
+#: src/processor/processorMenu.js:241
+msgid "System"
+msgstr "Система"
+
+#: src/processor/processorMenu.js:248
+msgid "Idle"
+msgstr "Бездействие"
+
+#: src/processor/processorMenu.js:255
+msgid "I/O wait"
+msgstr "Ожидание ввода/вывода"
+
+#: src/processor/processorMenu.js:262
+msgid "IRQ"
+msgstr "Прерывание"
+
+#: src/processor/processorMenu.js:269
+msgid "Soft IRQ"
+msgstr "Программное прерывание"
+
+#: src/processor/processorMenu.js:276
+msgid "Steal"
+msgstr "Steal"
+
+#: src/processor/processorMenu.js:338
+msgid "CPU Cores Usage Info"
+msgstr "Информация об использовании ядер ЦП"
+
+#: src/processor/processorMenu.js:380
+msgid "GHz"
+msgstr "ГГц"
+
+#: src/processor/processorMenu.js:395 src/processor/processorMenu.js:437
+#: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
+#: src/storage/storageMenu.js:1179 src/storage/storageMenu.js:1180
+#: src/storage/storageMenu.js:1189 src/storage/storageMenu.js:1190
+#: src/memory/memoryMenu.js:247 src/memory/memoryMenu.js:294
+msgid "Top processes"
+msgstr "Наибольшие процессы"
+
+#: src/processor/processorMenu.js:470
+msgid "Load average"
+msgstr ""
+
+#: src/processor/processorMenu.js:490
+msgctxt "short for 1 minute"
+msgid "1m"
+msgstr ""
+
+#: src/processor/processorMenu.js:510
+msgctxt "short for 5 minutes"
+msgid "5m"
+msgstr ""
+
+#: src/processor/processorMenu.js:530
+msgctxt "short for 15 minutes"
+msgid "15m"
+msgstr ""
+
+#: src/processor/processorMenu.js:579
+msgid "System uptime"
+msgstr "Время работы системы"
+
+#: src/processor/processorMenu.js:723
+msgid "Offline"
+msgstr ""
+
+#: src/sensors/sensorsMenu.js:50
+msgid "No sensor found"
+msgstr "Датчик не найден"
+
+#: src/sensors/sensorsMenu.js:225
+#, fuzzy, javascript-format
+msgid "%d sensor"
+msgid_plural "%d sensors"
+msgstr[0] "Датчики"
+msgstr[1] "Датчики"
+msgstr[2] "Датчики"
+
+#: src/prefs/prefsUtils.js:700
+msgid "Move up"
+msgstr ""
+
+#: src/prefs/prefsUtils.js:719
+msgid "Move down"
+msgstr ""
+
+#: src/prefs/storage.js:85 src/prefs/network.js:85 src/prefs/processors.js:83
 #: src/prefs/sensors.js:83 src/prefs/sensors.js:150 src/prefs/sensors.js:162
-#: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
-#: src/prefs/gpu.js:85 src/prefs/processors.js:83
+#: src/prefs/gpu.js:85 src/prefs/memory.js:83
 msgid "Show"
 msgstr "Показать"
 
-#: src/prefs/sensors.js:84 src/prefs/memory.js:84 src/prefs/storage.js:86
-#: src/prefs/network.js:86 src/prefs/gpu.js:93 src/prefs/processors.js:84
+#: src/prefs/storage.js:86 src/prefs/network.js:86 src/prefs/processors.js:84
+#: src/prefs/sensors.js:84 src/prefs/gpu.js:93 src/prefs/memory.js:84
 msgid "Update frequency (seconds)"
 msgstr "Частота обновления (в секундах)"
-
-#: src/prefs/sensors.js:86
-msgctxt "Celsius unit measure choice"
-msgid "Celsius"
-msgstr "Цельсий"
-
-#: src/prefs/sensors.js:87
-msgctxt "Fahrenheit unit measure choice"
-msgid "Fahrenheit"
-msgstr "Фаренгейт"
-
-#: src/prefs/sensors.js:89
-msgid "Temperature Unit"
-msgstr "Единица измерения температуры"
-
-#: src/prefs/sensors.js:90
-#, fuzzy
-msgid "Ignored Sensors"
-msgstr "Датчики"
-
-#: src/prefs/sensors.js:92
-#, fuzzy
-msgid "Ignored Sensors Regex"
-msgstr "Игнорируемые устройства хранения"
-
-#: src/prefs/sensors.js:93
-msgid "Completely ignore sensors matching this regex"
-msgstr ""
-
-#: src/prefs/sensors.js:97
-#, fuzzy
-msgid "Ignored Sensors Category Regex"
-msgstr "Игнорируемые устройства хранения"
-
-#: src/prefs/sensors.js:98
-msgid "Categories are like \"Package\", \"Core\", \"Edge\", etc."
-msgstr ""
-
-#: src/prefs/sensors.js:102
-msgid "Ignored Sensors Attribute Regex"
-msgstr ""
-
-#: src/prefs/sensors.js:103
-msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
-msgstr ""
-
-#: src/prefs/sensors.js:106 src/prefs/memory.js:105 src/prefs/storage.js:184
-#: src/prefs/network.js:153 src/prefs/processors.js:85
-msgid "Data Sources"
-msgstr "Источники данных"
-
-#: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
-#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
-#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
-#: src/prefs/processors.js:87 src/prefs/processors.js:93
-#: src/prefs/processors.js:99 src/prefs/processors.js:105
-msgid "Auto"
-msgstr "Авто"
-
-#: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
-#: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
-#: src/prefs/network.js:186 src/prefs/gpu.js:173 src/prefs/gpu.js:175
-#: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:234
-#: prefs.js:268 prefs.js:294 prefs.js:328 prefs.js:362 prefs.js:396
-msgid "Header"
-msgstr "Заголовок"
-
-#: src/prefs/sensors.js:121 src/prefs/memory.js:126 src/prefs/storage.js:209
-#: src/prefs/network.js:189 src/prefs/gpu.js:176 src/prefs/processors.js:117
-msgid "Indicators Order"
-msgstr "Порядок индикаторов"
-
-#: src/prefs/sensors.js:124 src/prefs/memory.js:129 src/prefs/storage.js:212
-#: src/prefs/network.js:192 src/prefs/gpu.js:179 src/prefs/processors.js:120
-msgid "Icon"
-msgstr "Значок"
-
-#: src/prefs/sensors.js:125 src/prefs/memory.js:130 src/prefs/storage.js:213
-#: src/prefs/network.js:193 src/prefs/gpu.js:180 src/prefs/processors.js:121
-msgid "Show Icon"
-msgstr "Показать значок"
-
-#: src/prefs/sensors.js:127 src/prefs/memory.js:132 src/prefs/storage.js:215
-#: src/prefs/network.js:195 src/prefs/gpu.js:182 src/prefs/processors.js:123
-msgid "Icon Name"
-msgstr "Имя значка"
-
-#: src/prefs/sensors.js:128
-msgid "Set icon name (ie: 'temperature-symbolic')"
-msgstr "Установите имя значка (например, 'temperature-symbolic')"
-
-#: src/prefs/sensors.js:130 src/prefs/memory.js:135 src/prefs/storage.js:218
-#: src/prefs/network.js:198 src/prefs/visualization.js:171
-#: src/prefs/visualization.js:178 src/prefs/gpu.js:185
-#: src/prefs/processors.js:126
-msgid "Set to empty to disable icon override"
-msgstr "Установите пустое значение, чтобы отключить переопределение значков"
-
-#: src/prefs/sensors.js:133 src/prefs/memory.js:138 src/prefs/storage.js:221
-#: src/prefs/network.js:201 src/prefs/gpu.js:188 src/prefs/processors.js:129
-msgid "Icon Color"
-msgstr "Цвет значка"
-
-#: src/prefs/sensors.js:134 src/prefs/memory.js:139 src/prefs/storage.js:222
-#: src/prefs/network.js:202 src/prefs/gpu.js:189 src/prefs/processors.js:130
-msgid "Icon Alert Color"
-msgstr "Цвет значка предупреждения"
-
-#: src/prefs/sensors.js:136 src/prefs/memory.js:141 src/prefs/storage.js:224
-#: src/prefs/network.js:204 src/prefs/gpu.js:191 src/prefs/processors.js:132
-msgid "Icon Size"
-msgstr "Размер значка"
-
-#: src/prefs/sensors.js:137 src/prefs/memory.js:142 src/prefs/storage.js:225
-#: src/prefs/network.js:205 src/prefs/visualization.js:132
-#: src/prefs/visualization.js:140 src/prefs/visualization.js:148
-#: src/prefs/gpu.js:192 src/prefs/processors.js:133
-msgid "Experimental feature: may require to disable/enable the extension."
-msgstr ""
-"Экспериментальная функция: может потребоваться отключить/включить расширение."
-
-#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
-msgid "None"
-msgstr "Нет"
-
-#: src/prefs/sensors.js:149
-msgid "Sensor 1"
-msgstr "Датчик 1"
-
-#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
-#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
-#: src/prefs/sensors.js:247
-msgid "Source"
-msgstr "Источник"
-
-#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
-#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
-#: src/prefs/sensors.js:257
-msgid "Value Digits"
-msgstr "Значения цифр"
-
-#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
-#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
-#: src/prefs/sensors.js:258
-msgid "Set -1 to auto. Number of digits after the decimal point."
-msgstr "Установите -1 для авто. Количество цифр после десятичной точки."
-
-#: src/prefs/sensors.js:161
-msgid "Sensor 2"
-msgstr "Датчик 2"
-
-#: src/prefs/sensors.js:164 src/prefs/storage.js:284 src/prefs/network.js:238
-msgid "Vertical"
-msgstr ""
-
-#: src/prefs/sensors.js:165 src/prefs/storage.js:285 src/prefs/network.js:239
-msgid "Horizontal"
-msgstr ""
-
-#: src/prefs/sensors.js:167
-#, fuzzy
-msgid "Sensor 2 Layout"
-msgstr "Источник датчика 2"
-
-#: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
-#: src/prefs/network.js:245 src/prefs/gpu.js:241 src/prefs/processors.js:182
-msgid "Tooltip"
-msgstr "Подсказка"
-
-#: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
-#: src/prefs/network.js:246 src/prefs/gpu.js:242 src/prefs/processors.js:183
-msgid "Show Tooltip"
-msgstr "Показать подсказку"
-
-#: src/prefs/sensors.js:181
-#, fuzzy
-msgid "Tooltip Sensor 1"
-msgstr "Показать датчик 1"
-
-#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
-#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
-#, fuzzy
-msgid "Short Name"
-msgstr "Имя значка"
-
-#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
-#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
-msgid "Short name to display in the tooltip."
-msgstr ""
-
-#: src/prefs/sensors.js:197
-#, fuzzy
-msgid "Tooltip Sensor 2"
-msgstr "Показать датчик 2"
-
-#: src/prefs/sensors.js:213
-#, fuzzy
-msgid "Tooltip Sensor 3"
-msgstr "Показать датчик 1"
-
-#: src/prefs/sensors.js:229
-#, fuzzy
-msgid "Tooltip Sensor 4"
-msgstr "Показать датчик 1"
-
-#: src/prefs/sensors.js:245
-#, fuzzy
-msgid "Tooltip Sensor 5"
-msgstr "Показать датчик 1"
-
-#: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
-#: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
-#: src/prefs/processors.js:193 prefs.js:242 prefs.js:302 prefs.js:336
-#: prefs.js:370
-msgid "Menu"
-msgstr "Меню"
-
-#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
-msgid "Empty for now"
-msgstr ""
-
-#: src/prefs/utility.js:36 src/prefs/utility.js:49 src/prefs/utility.js:52
-#: prefs.js:412
-msgid "Utility"
-msgstr ""
-
-#: src/prefs/utility.js:54 src/prefs/utility.js:58
-msgid "Export Settings"
-msgstr ""
-
-#: src/prefs/utility.js:55
-msgid "Warning: this will export all profiles."
-msgstr ""
-
-#: src/prefs/utility.js:69
-msgid "Save"
-msgstr ""
-
-#: src/prefs/utility.js:70 src/prefs/utility.js:103
-msgid "Cancel"
-msgstr ""
-
-#: src/prefs/utility.js:88 src/prefs/utility.js:92
-msgid "Import Settings"
-msgstr ""
-
-#: src/prefs/utility.js:89
-msgid "Warning: this will overwrite all profiles."
-msgstr ""
-
-#: src/prefs/utility.js:102
-msgid "Open"
-msgstr ""
-
-#: src/prefs/utility.js:128 src/prefs/utility.js:132
-msgid "Reset Settings"
-msgstr ""
-
-#: src/prefs/utility.js:129
-msgid "Warning: this will reset all profiles."
-msgstr ""
-
-#: src/prefs/utility.js:133
-msgid "Are you sure you want to reset all preferences?"
-msgstr ""
-
-#: src/prefs/utility.js:148
-msgid "Debug Mode"
-msgstr "Режим отладки"
-
-#: src/prefs/utility.js:149
-msgid ""
-"Warning: may affect performance, use only if you know what you are doing."
-msgstr ""
-
-#: src/prefs/utility.js:152
-msgid "Experimental Features"
-msgstr ""
-
-#: src/prefs/utility.js:154
-#, fuzzy
-msgid "PosixSpawn Subprocess"
-msgstr "Наибольшие процессы"
-
-#: src/prefs/utility.js:155
-#, fuzzy
-msgid ""
-"Experimental posix_spawn() subprocess monitoring.\n"
-"This might help with UI performance issues."
-msgstr ""
-"Экспериментальная функция: может потребоваться отключить/включить расширение."
-
-#: src/prefs/memory.js:41 src/prefs/memory.js:54 src/prefs/memory.js:67
-#: src/prefs/memory.js:82 src/prefs/memory.js:205 src/memory/memoryMenu.js:34
-#: prefs.js:277
-msgid "Memory"
-msgstr "Память"
-
-#: src/prefs/memory.js:86
-#, fuzzy
-msgid "kB (as kiB)"
-msgstr "к (как кбайт/с)"
-
-#: src/prefs/memory.js:87
-#, fuzzy
-msgid "kB (as KB)"
-msgstr "к (как кбайт/с)"
-
-#: src/prefs/memory.js:88
-msgid "kiB"
-msgstr ""
-
-#: src/prefs/memory.js:89
-#, fuzzy
-msgid "KiB"
-msgstr "Кибайт/с"
-
-#: src/prefs/memory.js:90
-msgid "KB"
-msgstr ""
-
-#: src/prefs/memory.js:91
-#, fuzzy
-msgid "k (as kB)"
-msgstr "к (как кбайт/с)"
-
-#: src/prefs/memory.js:92
-#, fuzzy
-msgid "Ki (as Ki)"
-msgstr "Ки (как Кибайт/с)"
-
-#: src/prefs/memory.js:94 src/prefs/storage.js:100 src/prefs/network.js:100
-msgid "Data Unit"
-msgstr "Единица измерения данных"
-
-#: src/prefs/memory.js:98
-msgid "Used = Total - Free - Buffers - Cached"
-msgstr "Используется = Всего - Свободно - Буферы - Кэшировано"
-
-#: src/prefs/memory.js:100
-msgid "Used = Total - Free"
-msgstr "Используется = Всего - Свободно"
-
-#: src/prefs/memory.js:101
-msgid "Used = Total - Available"
-msgstr "Используется = Всего - Доступно"
-
-#: src/prefs/memory.js:102
-msgid "Used = Active"
-msgstr "Используется = Активно"
-
-#: src/prefs/memory.js:104
-msgid "Used Memory"
-msgstr "Используемая память"
-
-#: src/prefs/memory.js:111
-#, fuzzy
-msgid "Memory Usage"
-msgstr "Информация об использовании памяти"
-
-#: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
-#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
-#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:308
-#: src/gpu/gpuMenuComponent.js:1234
-msgid "Top Processes"
-msgstr "Наибольшие процессы"
-
-#: src/prefs/memory.js:133
-msgid "Set icon name (ie: 'memory-symbolic')"
-msgstr "Установите имя значка (например, 'memory-symbolic')"
-
-#: src/prefs/memory.js:146 src/prefs/memory.js:194 src/prefs/storage.js:237
-msgid "Usage Percentage"
-msgstr "Процент использования"
-
-#: src/prefs/memory.js:147
-msgid "Show Usage Percentage"
-msgstr "Показать процент использования"
-
-#: src/prefs/memory.js:149 src/prefs/memory.js:160 src/prefs/storage.js:240
-#: src/prefs/storage.js:251 src/prefs/gpu.js:200 src/prefs/gpu.js:222
-#: src/prefs/processors.js:141
-msgid "Icon Alert"
-msgstr "Значок предупреждения"
-
-#: src/prefs/memory.js:150
-msgid "Set 0 to disable. Value is percentage of ram usage."
-msgstr ""
-"Установите 0, чтобы отключить. Значение - процент использования оперативной "
-"памяти."
-
-#: src/prefs/memory.js:153 src/prefs/memory.js:195 src/prefs/storage.js:244
-msgid "Usage Value"
-msgstr "Значение использования"
-
-#: src/prefs/memory.js:154
-msgid "Show Usage Value"
-msgstr "Показать значение использования"
-
-#: src/prefs/memory.js:155 src/prefs/storage.js:246
-msgid "Usage Value Max Number of Figures"
-msgstr "Максимальное число значения использования"
-
-#: src/prefs/memory.js:156 src/prefs/memory.js:196 src/prefs/storage.js:247
-#, fuzzy
-msgid "Free Value"
-msgstr "Значение использования"
-
-#: src/prefs/memory.js:157
-#, fuzzy
-msgid "Show Free Value"
-msgstr "Показать значение использования"
-
-#: src/prefs/memory.js:158 src/prefs/storage.js:249
-#, fuzzy
-msgid "Free Value Max Number of Figures"
-msgstr "Максимальное число значения использования"
-
-#: src/prefs/memory.js:161
-#, fuzzy
-msgid "Set 0 to disable. Value is free MB of ram."
-msgstr ""
-"Установите 0, чтобы отключить. Значение - процент использования оперативной "
-"памяти."
-
-#: src/prefs/memory.js:164 src/prefs/processors.js:153
-msgid "History Graph"
-msgstr "График истории"
-
-#: src/prefs/memory.js:165 src/prefs/processors.js:154
-msgid "Show History Graph"
-msgstr "Показать график истории"
-
-#: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
-#: src/prefs/visualization.js:81 src/prefs/gpu.js:207 src/prefs/gpu.js:229
-#: src/prefs/processors.js:156 src/prefs/processors.js:171
-#, fuzzy
-msgid "Main Color"
-msgstr "Цвет значка"
-
-#: src/prefs/memory.js:168 src/prefs/memory.js:182
-msgid "<b>Used</b> memory color."
-msgstr ""
-
-#: src/prefs/memory.js:171 src/prefs/memory.js:206 src/prefs/processors.js:160
-#: src/prefs/processors.js:196
-msgid "History Graph Breakdown"
-msgstr "Разбивка графика истории"
-
-#: src/prefs/memory.js:173 src/prefs/memory.js:187
-#, fuzzy
-msgid "Alt Color"
-msgstr "Цвет значка предупреждения"
-
-#: src/prefs/memory.js:174 src/prefs/memory.js:188
-msgid "<b>Allocated <u>unused</u></b> memory color."
-msgstr ""
-
-#: src/prefs/memory.js:177 src/prefs/gpu.js:211 src/prefs/gpu.js:233
-#: src/prefs/processors.js:166
-msgid "History Graph Width"
-msgstr "Ширина графика истории"
-
-#: src/prefs/memory.js:178 src/prefs/processors.js:167
-msgid "Realtime Bar"
-msgstr "Панель в реальном времени"
-
-#: src/prefs/memory.js:179 src/prefs/processors.js:168
-msgid "Show Realtime Bar"
-msgstr "Показать панель в реальном времени"
-
-#: src/prefs/memory.js:185 src/prefs/processors.js:175
-msgid "Realtime Bar Breakdown"
-msgstr "Разбивка панели в реальном времени"
-
-#: src/prefs/memory.js:207 src/memory/memoryMenu.js:329
-msgid "Swap"
-msgstr "Подкачка"
-
-#: src/prefs/memory.js:209
-msgid "Swap Bar Color"
-msgstr ""
-
-#: src/prefs/memory.js:210
-msgid "Swap bar main color."
-msgstr ""
-
-#: src/prefs/about.js:32 src/prefs/about.js:45 prefs.js:420
-msgid "About"
-msgstr ""
-
-#: src/prefs/about.js:48 src/network/networkMenu.js:910
-msgid "Info"
-msgstr "Информация"
-
-#: src/prefs/about.js:57
-msgid "Version"
-msgstr "Версия"
-
-#: src/prefs/about.js:58
-msgid "GitHub"
-msgstr "GitHub"
-
-#: src/prefs/about.js:59
-msgid "Changelog"
-msgstr "Изменения"
-
-#: src/prefs/about.js:60
-msgid "Roadmap"
-msgstr ""
-
-#: src/prefs/about.js:61
-msgid "Report a bug or suggest new feature"
-msgstr "Сообщить об ошибке или предложить новую функцию"
-
-#: src/prefs/about.js:62
-msgid "GNOME Extensions page"
-msgstr "Страница GNOME Extensions"
-
-#: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:311
-msgid "Storage"
-msgstr "Хранилище"
 
 #: src/prefs/storage.js:88 src/prefs/network.js:88
 msgid "kB/s"
@@ -726,6 +793,10 @@ msgstr "к (как кбайт/с)"
 msgid "Ki (as KiB/s)"
 msgstr "Ки (как Кибайт/с)"
 
+#: src/prefs/storage.js:100 src/prefs/network.js:100 src/prefs/memory.js:94
+msgid "Data Unit"
+msgstr "Единица измерения данных"
+
 #: src/prefs/storage.js:121 src/prefs/storage.js:229
 msgid "Main Disk"
 msgstr "Главный диск"
@@ -764,6 +835,19 @@ msgstr "Главный"
 msgid "Main disk cannot be ignored"
 msgstr "Главный диск нельзя игнорировать"
 
+#: src/prefs/storage.js:184 src/prefs/network.js:153 src/prefs/processors.js:85
+#: src/prefs/sensors.js:106 src/prefs/memory.js:105
+msgid "Data Sources"
+msgstr "Источники данных"
+
+#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
+#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
+#: src/prefs/processors.js:87 src/prefs/processors.js:93
+#: src/prefs/processors.js:99 src/prefs/processors.js:105
+#: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
+msgid "Auto"
+msgstr "Авто"
+
 #: src/prefs/storage.js:190
 #, fuzzy
 msgid "Storage Usage"
@@ -774,9 +858,66 @@ msgstr "Показать панель использования хранили�
 msgid "Storage IO"
 msgstr "Хранилище"
 
+#: src/prefs/storage.js:209 src/prefs/network.js:189
+#: src/prefs/processors.js:117 src/prefs/sensors.js:121 src/prefs/gpu.js:176
+#: src/prefs/memory.js:126
+msgid "Indicators Order"
+msgstr "Порядок индикаторов"
+
+#: src/prefs/storage.js:212 src/prefs/network.js:192
+#: src/prefs/processors.js:120 src/prefs/sensors.js:124 src/prefs/gpu.js:179
+#: src/prefs/memory.js:129
+msgid "Icon"
+msgstr "Значок"
+
+#: src/prefs/storage.js:213 src/prefs/network.js:193
+#: src/prefs/processors.js:121 src/prefs/sensors.js:125 src/prefs/gpu.js:180
+#: src/prefs/memory.js:130
+msgid "Show Icon"
+msgstr "Показать значок"
+
+#: src/prefs/storage.js:215 src/prefs/network.js:195
+#: src/prefs/processors.js:123 src/prefs/sensors.js:127 src/prefs/gpu.js:182
+#: src/prefs/memory.js:132
+msgid "Icon Name"
+msgstr "Имя значка"
+
 #: src/prefs/storage.js:216
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr "Установите имя значка (например, 'drive-harddisk-symbolic')"
+
+#: src/prefs/storage.js:218 src/prefs/visualization.js:171
+#: src/prefs/visualization.js:178 src/prefs/network.js:198
+#: src/prefs/processors.js:126 src/prefs/sensors.js:130 src/prefs/gpu.js:185
+#: src/prefs/memory.js:135
+msgid "Set to empty to disable icon override"
+msgstr "Установите пустое значение, чтобы отключить переопределение значков"
+
+#: src/prefs/storage.js:221 src/prefs/network.js:201
+#: src/prefs/processors.js:129 src/prefs/sensors.js:133 src/prefs/gpu.js:188
+#: src/prefs/memory.js:138
+msgid "Icon Color"
+msgstr "Цвет значка"
+
+#: src/prefs/storage.js:222 src/prefs/network.js:202
+#: src/prefs/processors.js:130 src/prefs/sensors.js:134 src/prefs/gpu.js:189
+#: src/prefs/memory.js:139
+msgid "Icon Alert Color"
+msgstr "Цвет значка предупреждения"
+
+#: src/prefs/storage.js:224 src/prefs/network.js:204
+#: src/prefs/processors.js:132 src/prefs/sensors.js:136 src/prefs/gpu.js:191
+#: src/prefs/memory.js:141
+msgid "Icon Size"
+msgstr "Размер значка"
+
+#: src/prefs/storage.js:225 src/prefs/visualization.js:132
+#: src/prefs/visualization.js:140 src/prefs/visualization.js:148
+#: src/prefs/network.js:205 src/prefs/processors.js:133
+#: src/prefs/sensors.js:137 src/prefs/gpu.js:192 src/prefs/memory.js:142
+msgid "Experimental feature: may require to disable/enable the extension."
+msgstr ""
+"Экспериментальная функция: может потребоваться отключить/включить расширение."
 
 #: src/prefs/storage.js:230
 #, fuzzy
@@ -788,28 +929,63 @@ msgstr "Значение использования"
 msgid "Show Main Disk Usage Bar"
 msgstr "Показать панель использования сети"
 
+#: src/prefs/storage.js:233 src/prefs/visualization.js:81
+#: src/prefs/processors.js:156 src/prefs/processors.js:171 src/prefs/gpu.js:207
+#: src/prefs/gpu.js:229 src/prefs/memory.js:167 src/prefs/memory.js:181
+#, fuzzy
+msgid "Main Color"
+msgstr "Цвет значка"
+
 #: src/prefs/storage.js:234
 msgid "<b>Used</b> storage color."
 msgstr ""
+
+#: src/prefs/storage.js:237 src/prefs/memory.js:146 src/prefs/memory.js:194
+msgid "Usage Percentage"
+msgstr "Процент использования"
 
 #: src/prefs/storage.js:238
 #, fuzzy
 msgid "Show Main Disk Usage Percentage"
 msgstr "Показать процент использования"
 
+#: src/prefs/storage.js:240 src/prefs/storage.js:251
+#: src/prefs/processors.js:141 src/prefs/gpu.js:200 src/prefs/gpu.js:222
+#: src/prefs/memory.js:149 src/prefs/memory.js:160
+msgid "Icon Alert"
+msgstr "Значок предупреждения"
+
 #: src/prefs/storage.js:241
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr "Установите 0, чтобы отключить. Значение - процент использования диска."
+
+#: src/prefs/storage.js:244 src/prefs/memory.js:153 src/prefs/memory.js:195
+msgid "Usage Value"
+msgstr "Значение использования"
 
 #: src/prefs/storage.js:245
 #, fuzzy
 msgid "Show Main Disk Usage Value"
 msgstr "Показать значение использования"
 
+#: src/prefs/storage.js:246 src/prefs/memory.js:155
+msgid "Usage Value Max Number of Figures"
+msgstr "Максимальное число значения использования"
+
+#: src/prefs/storage.js:247 src/prefs/memory.js:156 src/prefs/memory.js:196
+#, fuzzy
+msgid "Free Value"
+msgstr "Значение использования"
+
 #: src/prefs/storage.js:248
 #, fuzzy
 msgid "Show Main Disk Free Value"
 msgstr "Показать значение использования"
+
+#: src/prefs/storage.js:249 src/prefs/memory.js:158
+#, fuzzy
+msgid "Free Value Max Number of Figures"
+msgstr "Максимальное число значения использования"
 
 #: src/prefs/storage.js:252
 #, fuzzy
@@ -880,6 +1056,14 @@ msgstr "Показать скорость ввода/вывода"
 msgid "Show IO Speed"
 msgstr "Показать скорость ввода/вывода"
 
+#: src/prefs/storage.js:284 src/prefs/network.js:238 src/prefs/sensors.js:164
+msgid "Vertical"
+msgstr ""
+
+#: src/prefs/storage.js:285 src/prefs/network.js:239 src/prefs/sensors.js:165
+msgid "Horizontal"
+msgstr ""
+
 #: src/prefs/storage.js:287 src/prefs/network.js:241
 #, fuzzy
 msgid "IO Speed Layout"
@@ -896,6 +1080,18 @@ msgstr "Порог скорости ввода/вывода"
 #: src/prefs/storage.js:289 src/prefs/network.js:243
 msgid "in kB/s"
 msgstr "в кбайт/с"
+
+#: src/prefs/storage.js:291 src/prefs/network.js:245
+#: src/prefs/processors.js:182 src/prefs/sensors.js:179 src/prefs/gpu.js:241
+#: src/prefs/memory.js:192
+msgid "Tooltip"
+msgstr "Подсказка"
+
+#: src/prefs/storage.js:292 src/prefs/network.js:246
+#: src/prefs/processors.js:183 src/prefs/sensors.js:180 src/prefs/gpu.js:242
+#: src/prefs/memory.js:193
+msgid "Show Tooltip"
+msgstr "Показать подсказку"
 
 #: src/prefs/storage.js:293
 #, fuzzy
@@ -931,295 +1127,6 @@ msgstr "Устройства"
 #: src/prefs/storage.js:318
 msgid "Device Usage Bar Color"
 msgstr ""
-
-#: src/prefs/prefsUtils.js:649
-msgid "Move up"
-msgstr ""
-
-#: src/prefs/prefsUtils.js:668
-msgid "Move down"
-msgstr ""
-
-#: src/prefs/profiles.js:36 src/prefs/profiles.js:49
-#: src/profiles/profilesMenu.js:32 prefs.js:184
-msgid "Profiles"
-msgstr ""
-
-#: src/prefs/profiles.js:62
-msgid "Current profile"
-msgstr ""
-
-#: src/prefs/profiles.js:98
-msgid "Rename profile"
-msgstr ""
-
-#: src/prefs/profiles.js:110
-msgid "Apply"
-msgstr ""
-
-#: src/prefs/profiles.js:133
-msgid "Reset profile"
-msgstr ""
-
-#: src/prefs/profiles.js:134
-msgid "Warning: this will reset the current profile to default settings."
-msgstr ""
-
-#: src/prefs/profiles.js:137
-msgid "Reset"
-msgstr ""
-
-#: src/prefs/profiles.js:147
-msgid "Clone profile"
-msgstr ""
-
-#: src/prefs/profiles.js:148
-msgid "Create a copy of the current profile."
-msgstr ""
-
-#: src/prefs/profiles.js:151
-msgid "Clone"
-msgstr ""
-
-#: src/prefs/profiles.js:176
-msgid "Delete profile"
-msgstr ""
-
-#: src/prefs/profiles.js:177
-msgid "Warning: this operation is irreversible."
-msgstr ""
-
-#: src/prefs/profiles.js:180
-msgid "Delete"
-msgstr ""
-
-#: src/prefs/welcome.js:33 prefs.js:168
-msgid "Overview"
-msgstr ""
-
-#: src/prefs/welcome.js:46 src/prefs/network.js:255
-msgid "Dependencies"
-msgstr "Зависимости"
-
-#: src/prefs/welcome.js:50
-msgid "Cannot access /proc/stat: this extension will not work!"
-msgstr ""
-"Невозможно получить доступ к /proc/stat: это расширение не будет работать!"
-
-#: src/prefs/welcome.js:54
-msgid "Cannot access /proc/cpuinfo: this extension will not work!"
-msgstr ""
-"Невозможно получить доступ к /proc/cpuinfo: это расширение не будет работать!"
-
-#: src/prefs/welcome.js:58
-msgid "Cannot access /proc/meminfo: this extension will not work!"
-msgstr ""
-"Невозможно получить доступ к /proc/meminfo: это расширение не будет работать!"
-
-#: src/prefs/welcome.js:62
-msgid "Cannot access /proc/diskstats: this extension will not work!"
-msgstr ""
-"Невозможно получить доступ к /proc/diskstats: это расширение не будет "
-"работать!"
-
-#: src/prefs/welcome.js:66
-msgid "Cannot access /proc/net/dev: this extension will not work!"
-msgstr ""
-"Невозможно получить доступ к /proc/net/dev: это расширение не будет работать!"
-
-#: src/prefs/welcome.js:70
-msgid "Cannot access 'ps': this extension will not work!"
-msgstr "Невозможно получить доступ к 'ps': это расширение не будет работать!"
-
-#: src/prefs/welcome.js:75
-#, fuzzy
-msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
-msgstr ""
-"Невозможно получить доступ к /proc/meminfo: это расширение не будет работать!"
-
-#: src/prefs/welcome.js:80
-msgid "'lscpu' not installed: some features will be disabled!"
-msgstr "'lscpu' не установлен: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:84
-msgid "'lspci' not installed: some features will be disabled!"
-msgstr "'lspci' не установлен: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:88
-msgid "'lsblk' not installed: some features will be disabled!"
-msgstr "'lsblk' не установлен: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:93
-msgid ""
-"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
-"features will be disabled!"
-msgstr ""
-"Невозможно получить доступ к /sys/devices/system/cpu/cpu*/cpufreq/"
-"scaling_cur_freq: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:98
-#, fuzzy
-msgid "'NetHogs' not installed: some optional features will be disabled!"
-msgstr "'lscpu' не установлен: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:102
-msgid "'iproute2' not installed: some features will be disabled!"
-msgstr "'iproute2' не установлен: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:107
-msgid ""
-"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
-"network info!"
-msgstr ""
-
-#: src/prefs/welcome.js:113
-#, fuzzy
-msgid "'iotop' not installed: some optional features will be disabled!"
-msgstr "'iproute2' не установлен: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:119
-msgid ""
-"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
-"be disabled!"
-msgstr ""
-"AMD GPU обнаружен, но 'amdgpu_top' не установлен: некоторые дополнительные "
-"функции будут отключены!"
-
-#: src/prefs/welcome.js:125
-msgid ""
-"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
-"will be disabled!"
-msgstr ""
-"NVidia GPU обнаружен, но 'nvidia-smi' не установлен: некоторые "
-"дополнительные функции будут отключены!"
-
-#: src/prefs/welcome.js:128
-msgid "Checking GTop dependency..."
-msgstr "Проверка зависимости от GTop..."
-
-#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
-#, fuzzy
-msgid ""
-"'GTop' not installed, some optional features will be disabled! For a better "
-"experience and performance, install it from your package manager."
-msgstr "'GTop' не установлен: некоторые функции будут отключены!"
-
-#: src/prefs/welcome.js:136
-msgid "'GTop' successfully detected and added to Data Sources list."
-msgstr "'GTop' успешно обнаружен и добавлен в список источников данных."
-
-#: src/prefs/welcome.js:146
-msgid "All other dependencies are met!"
-msgstr "Все остальные зависимости удовлетворены!"
-
-#: src/prefs/welcome.js:149
-#, fuzzy
-msgid "Support Us"
-msgstr "Поддержать нас на Ko-Fi"
-
-#: src/prefs/welcome.js:150
-msgid "Support us on Ko-Fi"
-msgstr "Поддержать нас на Ko-Fi"
-
-#: src/prefs/welcome.js:151
-msgid "Buy us a coffee"
-msgstr "Угостить нас кофе"
-
-#: src/prefs/welcome.js:152
-msgid "Become a patron"
-msgstr "Стать меценатом"
-
-#: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:42 prefs.js:345
-msgid "Network"
-msgstr "Сеть"
-
-#: src/prefs/network.js:101
-msgid "Ignored Network Interfaces"
-msgstr "Игнорируемые сетевые интерфейсы"
-
-#: src/prefs/network.js:104
-msgid "Interfaces matching this regex will be ignored."
-msgstr "Интерфейсы, соответствующие этому регламенту, будут игнорироваться."
-
-#: src/prefs/network.js:159
-#, fuzzy
-msgid "Network IO"
-msgstr "Сеть"
-
-#: src/prefs/network.js:164
-#, fuzzy
-msgid "Network Top Processes"
-msgstr "Наибольшие процессы"
-
-#: src/prefs/network.js:166
-msgid "Public IPv4 Address"
-msgstr ""
-
-#: src/prefs/network.js:167 src/prefs/network.js:172
-#, fuzzy
-msgid "Set to empty to disable. Address will be regex matched."
-msgstr "Установите пустое значение, чтобы отключить переопределение значков"
-
-#: src/prefs/network.js:171
-msgid "Public IPv6 Address"
-msgstr ""
-
-#: src/prefs/network.js:180
-msgid "Wireless Info"
-msgstr ""
-
-#: src/prefs/network.js:196
-msgid "Set icon name (ie: 'network-wired-symbolic')"
-msgstr "Установите имя значка (например, 'network-wired-symbolic')"
-
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
-#, fuzzy
-msgid "Upload Color"
-msgstr "Цвет значка"
-
-#: src/prefs/network.js:214
-msgid "<b>Upload</b> IO Bar color."
-msgstr ""
-
-#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
-#, fuzzy
-msgid "Download Color"
-msgstr "Цвет значка"
-
-#: src/prefs/network.js:219
-msgid "<b>Download</b> IO Bar color."
-msgstr ""
-
-#: src/prefs/network.js:226
-#, fuzzy
-msgid "<b>Upload</b> IO History Graph color."
-msgstr "Показать график истории ввода/вывода"
-
-#: src/prefs/network.js:231
-#, fuzzy
-msgid "<b>Download</b> IO History Graph color."
-msgstr "Показать график истории ввода/вывода"
-
-#: src/prefs/network.js:257
-msgid ""
-"'NetHogs' not installed or not configured appopriately: you won't be able to "
-"monitor process network activity! Check the documentation for more "
-"information."
-msgstr ""
-
-#: src/prefs/network.js:270
-msgid "<b>Upload</b> IO arrow color."
-msgstr ""
-
-#: src/prefs/network.js:275
-msgid "<b>Download</b> IO arrow color."
-msgstr ""
-
-#: src/prefs/visualization.js:40 src/prefs/visualization.js:53
-#: src/prefs/visualization.js:56 prefs.js:200
-msgid "Visualization"
-msgstr "Визуализация"
 
 #: src/prefs/visualization.js:57
 msgid "Theme"
@@ -1421,11 +1328,425 @@ msgstr "Установите имя значка (например, 'cpu-symboli
 msgid "Monitor Ordering"
 msgstr "Порядок мониторинга"
 
-#: src/prefs/gpu.js:42 src/prefs/gpu.js:55 src/prefs/gpu.js:68
-#: src/prefs/gpu.js:108 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:46 prefs.js:251
-msgid "GPU"
-msgstr "ГП"
+#: src/prefs/about.js:57
+msgid "Version"
+msgstr "Версия"
+
+#: src/prefs/about.js:58
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/about.js:59
+msgid "Changelog"
+msgstr "Изменения"
+
+#: src/prefs/about.js:60
+msgid "Roadmap"
+msgstr ""
+
+#: src/prefs/about.js:61
+msgid "Report a bug or suggest new feature"
+msgstr "Сообщить об ошибке или предложить новую функцию"
+
+#: src/prefs/about.js:62
+msgid "GNOME Extensions page"
+msgstr "Страница GNOME Extensions"
+
+#: src/prefs/network.js:101
+msgid "Ignored Network Interfaces"
+msgstr "Игнорируемые сетевые интерфейсы"
+
+#: src/prefs/network.js:104
+msgid "Interfaces matching this regex will be ignored."
+msgstr "Интерфейсы, соответствующие этому регламенту, будут игнорироваться."
+
+#: src/prefs/network.js:159
+#, fuzzy
+msgid "Network IO"
+msgstr "Сеть"
+
+#: src/prefs/network.js:164
+#, fuzzy
+msgid "Network Top Processes"
+msgstr "Наибольшие процессы"
+
+#: src/prefs/network.js:166
+msgid "Public IPv4 Address"
+msgstr ""
+
+#: src/prefs/network.js:167 src/prefs/network.js:172
+#, fuzzy
+msgid "Set to empty to disable. Address will be regex matched."
+msgstr "Установите пустое значение, чтобы отключить переопределение значков"
+
+#: src/prefs/network.js:171
+msgid "Public IPv6 Address"
+msgstr ""
+
+#: src/prefs/network.js:180
+msgid "Wireless Info"
+msgstr ""
+
+#: src/prefs/network.js:196
+msgid "Set icon name (ie: 'network-wired-symbolic')"
+msgstr "Установите имя значка (например, 'network-wired-symbolic')"
+
+#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
+#, fuzzy
+msgid "Upload Color"
+msgstr "Цвет значка"
+
+#: src/prefs/network.js:214
+msgid "<b>Upload</b> IO Bar color."
+msgstr ""
+
+#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
+#, fuzzy
+msgid "Download Color"
+msgstr "Цвет значка"
+
+#: src/prefs/network.js:219
+msgid "<b>Download</b> IO Bar color."
+msgstr ""
+
+#: src/prefs/network.js:226
+#, fuzzy
+msgid "<b>Upload</b> IO History Graph color."
+msgstr "Показать график истории ввода/вывода"
+
+#: src/prefs/network.js:231
+#, fuzzy
+msgid "<b>Download</b> IO History Graph color."
+msgstr "Показать график истории ввода/вывода"
+
+#: src/prefs/network.js:255 src/prefs/welcome.js:46
+msgid "Dependencies"
+msgstr "Зависимости"
+
+#: src/prefs/network.js:257
+msgid ""
+"'NetHogs' not installed or not configured appopriately: you won't be able to "
+"monitor process network activity! Check the documentation for more "
+"information."
+msgstr ""
+
+#: src/prefs/network.js:270
+msgid "<b>Upload</b> IO arrow color."
+msgstr ""
+
+#: src/prefs/network.js:275
+msgid "<b>Download</b> IO arrow color."
+msgstr ""
+
+#: src/prefs/processors.js:91
+msgid "Cpu Usage"
+msgstr "Использование ЦП"
+
+#: src/prefs/processors.js:97
+msgid "Cpu Cores Usage"
+msgstr "Использование ядер ЦП"
+
+#: src/prefs/processors.js:108
+msgid "Load Average"
+msgstr ""
+
+#: src/prefs/processors.js:124
+msgid "Set icon name (ie: 'cpu-symbolic')"
+msgstr "Установите имя значка (например, 'cpu-symbolic')"
+
+#: src/prefs/processors.js:137 src/prefs/processors.js:184
+msgid "Percentage"
+msgstr "Проценты"
+
+#: src/prefs/processors.js:138
+msgid "Show Percentage"
+msgstr "Показать проценты"
+
+#: src/prefs/processors.js:139 src/prefs/processors.js:185
+msgid "Single Core Percentage"
+msgstr "Проценты на одно ядро"
+
+#: src/prefs/processors.js:142
+#, fuzzy
+msgid "Set 0 to disable. Value is percentage of total cpu usage."
+msgstr ""
+"Установите 0, чтобы отключить. Значение - процент от общего использования "
+"процессора."
+
+#: src/prefs/processors.js:146
+#, fuzzy
+msgid "Show Frequency"
+msgstr "Показать значение использования"
+
+#: src/prefs/processors.js:147
+#, fuzzy
+msgid "Frequency Max Number of Figures"
+msgstr "Максимальное число значения использования"
+
+#: src/prefs/processors.js:149
+msgid "Average"
+msgstr ""
+
+#: src/prefs/processors.js:150
+msgid "Max"
+msgstr ""
+
+#: src/prefs/processors.js:152
+msgid "Frequency Mode"
+msgstr ""
+
+#: src/prefs/processors.js:153 src/prefs/memory.js:164
+msgid "History Graph"
+msgstr "График истории"
+
+#: src/prefs/processors.js:154 src/prefs/memory.js:165
+msgid "Show History Graph"
+msgstr "Показать график истории"
+
+#: src/prefs/processors.js:157 src/prefs/processors.js:172
+msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
+msgstr ""
+
+#: src/prefs/processors.js:160 src/prefs/processors.js:196
+#: src/prefs/memory.js:171 src/prefs/memory.js:206
+msgid "History Graph Breakdown"
+msgstr "Разбивка графика истории"
+
+#: src/prefs/processors.js:163 src/prefs/processors.js:178
+msgid "<b>System usage</b> color."
+msgstr ""
+
+#: src/prefs/processors.js:166 src/prefs/gpu.js:211 src/prefs/gpu.js:233
+#: src/prefs/memory.js:177
+msgid "History Graph Width"
+msgstr "Ширина графика истории"
+
+#: src/prefs/processors.js:167 src/prefs/memory.js:178
+msgid "Realtime Bar"
+msgstr "Панель в реальном времени"
+
+#: src/prefs/processors.js:168 src/prefs/memory.js:179
+msgid "Show Realtime Bar"
+msgstr "Показать панель в реальном времени"
+
+#: src/prefs/processors.js:169
+msgid "Realtime per-core Bars"
+msgstr "Панели в реальном времени для каждого ядра"
+
+#: src/prefs/processors.js:175 src/prefs/memory.js:185
+msgid "Realtime Bar Breakdown"
+msgstr "Разбивка панели в реальном времени"
+
+#: src/prefs/processors.js:195
+msgid "Realtime Bars Breakdown"
+msgstr "Разбивка панелей в реальном времени"
+
+#: src/prefs/processors.js:197
+msgid "Core Bars Breakdown"
+msgstr "Разбивка панелей ядер"
+
+#: src/prefs/processors.js:198
+msgid "Top Processes Single Core"
+msgstr "Наибольшие процессы на одно ядро"
+
+#: src/prefs/processors.js:201
+#, fuzzy
+msgid "Show GPU info"
+msgstr "Информация о ГП"
+
+#: src/prefs/processors.js:202
+msgid "Only works if GPU header is disabled."
+msgstr ""
+
+#: src/prefs/sensors.js:86
+msgctxt "Celsius unit measure choice"
+msgid "Celsius"
+msgstr "Цельсий"
+
+#: src/prefs/sensors.js:87
+msgctxt "Fahrenheit unit measure choice"
+msgid "Fahrenheit"
+msgstr "Фаренгейт"
+
+#: src/prefs/sensors.js:89
+msgid "Temperature Unit"
+msgstr "Единица измерения температуры"
+
+#: src/prefs/sensors.js:90
+#, fuzzy
+msgid "Ignored Sensors"
+msgstr "Датчики"
+
+#: src/prefs/sensors.js:92
+#, fuzzy
+msgid "Ignored Sensors Regex"
+msgstr "Игнорируемые устройства хранения"
+
+#: src/prefs/sensors.js:93
+msgid "Completely ignore sensors matching this regex"
+msgstr ""
+
+#: src/prefs/sensors.js:97
+#, fuzzy
+msgid "Ignored Sensors Category Regex"
+msgstr "Игнорируемые устройства хранения"
+
+#: src/prefs/sensors.js:98
+msgid "Categories are like \"Package\", \"Core\", \"Edge\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:102
+msgid "Ignored Sensors Attribute Regex"
+msgstr ""
+
+#: src/prefs/sensors.js:103
+msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
+msgstr ""
+
+#: src/prefs/sensors.js:128
+msgid "Set icon name (ie: 'temperature-symbolic')"
+msgstr "Установите имя значка (например, 'temperature-symbolic')"
+
+#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
+msgid "None"
+msgstr "Нет"
+
+#: src/prefs/sensors.js:149
+msgid "Sensor 1"
+msgstr "Датчик 1"
+
+#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
+#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
+#: src/prefs/sensors.js:247
+msgid "Source"
+msgstr "Источник"
+
+#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
+#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
+#: src/prefs/sensors.js:257
+msgid "Value Digits"
+msgstr "Значения цифр"
+
+#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
+#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
+#: src/prefs/sensors.js:258
+msgid "Set -1 to auto. Number of digits after the decimal point."
+msgstr "Установите -1 для авто. Количество цифр после десятичной точки."
+
+#: src/prefs/sensors.js:161
+msgid "Sensor 2"
+msgstr "Датчик 2"
+
+#: src/prefs/sensors.js:167
+#, fuzzy
+msgid "Sensor 2 Layout"
+msgstr "Источник датчика 2"
+
+#: src/prefs/sensors.js:181
+#, fuzzy
+msgid "Tooltip Sensor 1"
+msgstr "Показать датчик 1"
+
+#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
+#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
+#, fuzzy
+msgid "Short Name"
+msgstr "Имя значка"
+
+#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
+#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
+msgid "Short name to display in the tooltip."
+msgstr ""
+
+#: src/prefs/sensors.js:197
+#, fuzzy
+msgid "Tooltip Sensor 2"
+msgstr "Показать датчик 2"
+
+#: src/prefs/sensors.js:213
+#, fuzzy
+msgid "Tooltip Sensor 3"
+msgstr "Показать датчик 1"
+
+#: src/prefs/sensors.js:229
+#, fuzzy
+msgid "Tooltip Sensor 4"
+msgstr "Показать датчик 1"
+
+#: src/prefs/sensors.js:245
+#, fuzzy
+msgid "Tooltip Sensor 5"
+msgstr "Показать датчик 1"
+
+#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
+msgid "Empty for now"
+msgstr ""
+
+#: src/prefs/utility.js:54 src/prefs/utility.js:58
+msgid "Export Settings"
+msgstr ""
+
+#: src/prefs/utility.js:55
+msgid "Warning: this will export all profiles."
+msgstr ""
+
+#: src/prefs/utility.js:69
+msgid "Save"
+msgstr ""
+
+#: src/prefs/utility.js:70 src/prefs/utility.js:103
+msgid "Cancel"
+msgstr ""
+
+#: src/prefs/utility.js:88 src/prefs/utility.js:92
+msgid "Import Settings"
+msgstr ""
+
+#: src/prefs/utility.js:89
+msgid "Warning: this will overwrite all profiles."
+msgstr ""
+
+#: src/prefs/utility.js:102
+msgid "Open"
+msgstr ""
+
+#: src/prefs/utility.js:128 src/prefs/utility.js:132
+msgid "Reset Settings"
+msgstr ""
+
+#: src/prefs/utility.js:129
+msgid "Warning: this will reset all profiles."
+msgstr ""
+
+#: src/prefs/utility.js:133
+msgid "Are you sure you want to reset all preferences?"
+msgstr ""
+
+#: src/prefs/utility.js:148
+msgid "Debug Mode"
+msgstr "Режим отладки"
+
+#: src/prefs/utility.js:149
+msgid ""
+"Warning: may affect performance, use only if you know what you are doing."
+msgstr ""
+
+#: src/prefs/utility.js:152
+msgid "Experimental Features"
+msgstr ""
+
+#: src/prefs/utility.js:154
+#, fuzzy
+msgid "PosixSpawn Subprocess"
+msgstr "Наибольшие процессы"
+
+#: src/prefs/utility.js:155
+#, fuzzy
+msgid ""
+"Experimental posix_spawn() subprocess monitoring.\n"
+"This might help with UI performance issues."
+msgstr ""
+"Экспериментальная функция: может потребоваться отключить/включить расширение."
 
 #: src/prefs/gpu.js:86
 msgid "Showing GPU info in the panel requires continuous GPU monitoring."
@@ -1438,6 +1759,10 @@ msgstr ""
 #: src/prefs/gpu.js:106
 msgid "Main GPU"
 msgstr "Главный ГП"
+
+#: src/prefs/gpu.js:106
+msgid "May require a restart."
+msgstr ""
 
 #: src/prefs/gpu.js:113
 msgid "Monitoring of this GPU is not supported or a dependency is missing."
@@ -1545,378 +1870,297 @@ msgstr "Показать панель в реальном времени"
 msgid "Memory Value"
 msgstr "Информация об использовании памяти"
 
-#: src/prefs/processors.js:41 src/prefs/processors.js:54
-#: src/prefs/processors.js:67 prefs.js:217
-msgid "Processors"
-msgstr "Процессоры"
-
-#: src/prefs/processors.js:91
-msgid "Cpu Usage"
-msgstr "Использование ЦП"
-
-#: src/prefs/processors.js:97
-msgid "Cpu Cores Usage"
-msgstr "Использование ядер ЦП"
-
-#: src/prefs/processors.js:108
-msgid "Load Average"
+#: src/prefs/welcome.js:33
+msgid "Welcome"
 msgstr ""
 
-#: src/prefs/processors.js:124
-msgid "Set icon name (ie: 'cpu-symbolic')"
-msgstr "Установите имя значка (например, 'cpu-symbolic')"
+#: src/prefs/welcome.js:50
+msgid "Cannot access /proc/stat: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/stat: это расширение не будет работать!"
 
-#: src/prefs/processors.js:137 src/prefs/processors.js:184
-msgid "Percentage"
-msgstr "Проценты"
+#: src/prefs/welcome.js:54
+msgid "Cannot access /proc/cpuinfo: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/cpuinfo: это расширение не будет работать!"
 
-#: src/prefs/processors.js:138
-msgid "Show Percentage"
-msgstr "Показать проценты"
+#: src/prefs/welcome.js:58
+msgid "Cannot access /proc/meminfo: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/meminfo: это расширение не будет работать!"
 
-#: src/prefs/processors.js:139 src/prefs/processors.js:185
-msgid "Single Core Percentage"
-msgstr "Проценты на одно ядро"
+#: src/prefs/welcome.js:62
+msgid "Cannot access /proc/diskstats: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/diskstats: это расширение не будет "
+"работать!"
 
-#: src/prefs/processors.js:142
+#: src/prefs/welcome.js:66
+msgid "Cannot access /proc/net/dev: this extension will not work!"
+msgstr ""
+"Невозможно получить доступ к /proc/net/dev: это расширение не будет работать!"
+
+#: src/prefs/welcome.js:70
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr "Невозможно получить доступ к 'ps': это расширение не будет работать!"
+
+#: src/prefs/welcome.js:75
 #, fuzzy
-msgid "Set 0 to disable. Value is percentage of total cpu usage."
+msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
 msgstr ""
-"Установите 0, чтобы отключить. Значение - процент от общего использования "
-"процессора."
+"Невозможно получить доступ к /proc/meminfo: это расширение не будет работать!"
 
-#: src/prefs/processors.js:145 src/network/networkMenu.js:1191
-msgid "Frequency"
+#: src/prefs/welcome.js:80
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "'lscpu' не установлен: некоторые функции будут отключены!"
+
+#: src/prefs/welcome.js:84
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "'lspci' не установлен: некоторые функции будут отключены!"
+
+#: src/prefs/welcome.js:88
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "'lsblk' не установлен: некоторые функции будут отключены!"
+
+#: src/prefs/welcome.js:93
+msgid ""
+"Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
+"features will be disabled!"
 msgstr ""
+"Невозможно получить доступ к /sys/devices/system/cpu/cpu*/cpufreq/"
+"scaling_cur_freq: некоторые функции будут отключены!"
 
-#: src/prefs/processors.js:146
+#: src/prefs/welcome.js:98
 #, fuzzy
-msgid "Show Frequency"
+msgid "'NetHogs' not installed: some optional features will be disabled!"
+msgstr "'lscpu' не установлен: некоторые функции будут отключены!"
+
+#: src/prefs/welcome.js:102
+msgid "'iproute2' not installed: some features will be disabled!"
+msgstr "'iproute2' не установлен: некоторые функции будут отключены!"
+
+#: src/prefs/welcome.js:107
+msgid ""
+"'iwconfig' and 'iw' not installed: install one of them to enable wireless "
+"network info!"
+msgstr ""
+
+#: src/prefs/welcome.js:113
+#, fuzzy
+msgid "'iotop' not installed: some optional features will be disabled!"
+msgstr "'iproute2' не установлен: некоторые функции будут отключены!"
+
+#: src/prefs/welcome.js:119
+msgid ""
+"AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
+"be disabled!"
+msgstr ""
+"AMD GPU обнаружен, но 'amdgpu_top' не установлен: некоторые дополнительные "
+"функции будут отключены!"
+
+#: src/prefs/welcome.js:125
+msgid ""
+"NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
+"will be disabled!"
+msgstr ""
+"NVidia GPU обнаружен, но 'nvidia-smi' не установлен: некоторые "
+"дополнительные функции будут отключены!"
+
+#: src/prefs/welcome.js:128
+msgid "Checking GTop dependency..."
+msgstr "Проверка зависимости от GTop..."
+
+#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
+#, fuzzy
+msgid ""
+"'GTop' not installed, some optional features will be disabled! For a better "
+"experience and performance, install it from your package manager."
+msgstr "'GTop' не установлен: некоторые функции будут отключены!"
+
+#: src/prefs/welcome.js:136
+msgid "'GTop' successfully detected and added to Data Sources list."
+msgstr "'GTop' успешно обнаружен и добавлен в список источников данных."
+
+#: src/prefs/welcome.js:146
+msgid "All other dependencies are met!"
+msgstr "Все остальные зависимости удовлетворены!"
+
+#: src/prefs/welcome.js:149
+#, fuzzy
+msgid "Support Us"
+msgstr "Поддержать нас на Ko-Fi"
+
+#: src/prefs/welcome.js:150
+msgid "Support us on Ko-Fi"
+msgstr "Поддержать нас на Ko-Fi"
+
+#: src/prefs/welcome.js:151
+msgid "Buy us a coffee"
+msgstr "Угостить нас кофе"
+
+#: src/prefs/welcome.js:152
+msgid "Become a patron"
+msgstr "Стать меценатом"
+
+#: src/prefs/memory.js:86
+#, fuzzy
+msgid "kB (as kiB)"
+msgstr "к (как кбайт/с)"
+
+#: src/prefs/memory.js:87
+#, fuzzy
+msgid "kB (as KB)"
+msgstr "к (как кбайт/с)"
+
+#: src/prefs/memory.js:88
+msgid "kiB"
+msgstr ""
+
+#: src/prefs/memory.js:89
+#, fuzzy
+msgid "KiB"
+msgstr "Кибайт/с"
+
+#: src/prefs/memory.js:90
+msgid "KB"
+msgstr ""
+
+#: src/prefs/memory.js:91
+#, fuzzy
+msgid "k (as kB)"
+msgstr "к (как кбайт/с)"
+
+#: src/prefs/memory.js:92
+#, fuzzy
+msgid "Ki (as Ki)"
+msgstr "Ки (как Кибайт/с)"
+
+#: src/prefs/memory.js:98
+msgid "Used = Total - Free - Buffers - Cached"
+msgstr "Используется = Всего - Свободно - Буферы - Кэшировано"
+
+#: src/prefs/memory.js:100
+msgid "Used = Total - Free"
+msgstr "Используется = Всего - Свободно"
+
+#: src/prefs/memory.js:101
+msgid "Used = Total - Available"
+msgstr "Используется = Всего - Доступно"
+
+#: src/prefs/memory.js:102
+msgid "Used = Active"
+msgstr "Используется = Активно"
+
+#: src/prefs/memory.js:104
+msgid "Used Memory"
+msgstr "Используемая память"
+
+#: src/prefs/memory.js:111
+#, fuzzy
+msgid "Memory Usage"
+msgstr "Информация об использовании памяти"
+
+#: src/prefs/memory.js:133
+msgid "Set icon name (ie: 'memory-symbolic')"
+msgstr "Установите имя значка (например, 'memory-symbolic')"
+
+#: src/prefs/memory.js:147
+msgid "Show Usage Percentage"
+msgstr "Показать процент использования"
+
+#: src/prefs/memory.js:150
+msgid "Set 0 to disable. Value is percentage of ram usage."
+msgstr ""
+"Установите 0, чтобы отключить. Значение - процент использования оперативной "
+"памяти."
+
+#: src/prefs/memory.js:154
+msgid "Show Usage Value"
 msgstr "Показать значение использования"
 
-#: src/prefs/processors.js:147
+#: src/prefs/memory.js:157
 #, fuzzy
-msgid "Frequency Max Number of Figures"
-msgstr "Максимальное число значения использования"
+msgid "Show Free Value"
+msgstr "Показать значение использования"
 
-#: src/prefs/processors.js:149
-msgid "Average"
-msgstr ""
-
-#: src/prefs/processors.js:150
-msgid "Max"
-msgstr ""
-
-#: src/prefs/processors.js:152
-msgid "Frequency Mode"
-msgstr ""
-
-#: src/prefs/processors.js:157 src/prefs/processors.js:172
-msgid "<b>Total usage</b> color (<b>User usage</b> when breakdown is enabled)."
-msgstr ""
-
-#: src/prefs/processors.js:163 src/prefs/processors.js:178
-msgid "<b>System usage</b> color."
-msgstr ""
-
-#: src/prefs/processors.js:169
-msgid "Realtime per-core Bars"
-msgstr "Панели в реальном времени для каждого ядра"
-
-#: src/prefs/processors.js:195
-msgid "Realtime Bars Breakdown"
-msgstr "Разбивка панелей в реальном времени"
-
-#: src/prefs/processors.js:197
-msgid "Core Bars Breakdown"
-msgstr "Разбивка панелей ядер"
-
-#: src/prefs/processors.js:198
-msgid "Top Processes Single Core"
-msgstr "Наибольшие процессы на одно ядро"
-
-#: src/prefs/processors.js:201
+#: src/prefs/memory.js:161
 #, fuzzy
-msgid "Show GPU info"
-msgstr "Информация о ГП"
+msgid "Set 0 to disable. Value is free MB of ram."
+msgstr ""
+"Установите 0, чтобы отключить. Значение - процент использования оперативной "
+"памяти."
 
-#: src/prefs/processors.js:202
-msgid "Only works if GPU header is disabled."
+#: src/prefs/memory.js:168 src/prefs/memory.js:182
+msgid "<b>Used</b> memory color."
 msgstr ""
 
-#: src/sensors/sensorsMenu.js:50
-msgid "No sensor found"
-msgstr "Датчик не найден"
-
-#: src/sensors/sensorsMenu.js:225
-#, fuzzy, javascript-format
-msgid "%d sensor"
-msgid_plural "%d sensors"
-msgstr[0] "Датчики"
-msgstr[1] "Датчики"
-msgstr[2] "Датчики"
-
-#: src/network/networkMenu.js:77
-msgid "Global Upload:"
-msgstr "Глобальная выгрузка:"
-
-#: src/network/networkMenu.js:89
-msgid "Global Download:"
-msgstr "Глобальная загрузка:"
-
-#: src/network/networkMenu.js:114
+#: src/prefs/memory.js:173 src/prefs/memory.js:187
 #, fuzzy
-msgid "Upload Activity"
-msgstr "Активность"
+msgid "Alt Color"
+msgstr "Цвет значка предупреждения"
 
-#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
-#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
-#: src/memory/memoryMenu.js:144 src/memory/memoryMenu.js:398
-msgid "Total"
-msgstr "Всего"
-
-#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
-#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
-msgid "Packets"
+#: src/prefs/memory.js:174 src/prefs/memory.js:188
+msgid "<b>Allocated <u>unused</u></b> memory color."
 msgstr ""
 
-#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
-#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
-msgid "Errors/Dropped"
+#: src/prefs/memory.js:207 src/memory/memoryMenu.js:329
+msgid "Swap"
+msgstr "Подкачка"
+
+#: src/prefs/memory.js:209
+msgid "Swap Bar Color"
 msgstr ""
 
-#: src/network/networkMenu.js:136
-#, fuzzy
-msgid "Download Activity"
-msgstr "Активность"
-
-#: src/network/networkMenu.js:168
-msgid "(click to show)"
+#: src/prefs/memory.js:210
+msgid "Swap bar main color."
 msgstr ""
 
-#: src/network/networkMenu.js:381
-msgid "Public IP"
+#: src/prefs/profiles.js:62
+msgid "Current profile"
 msgstr ""
 
-#: src/network/networkMenu.js:391
-msgid "Public IPv4:"
+#: src/prefs/profiles.js:98
+msgid "Rename profile"
 msgstr ""
 
-#: src/network/networkMenu.js:408
-msgid "Public IPv6:"
+#: src/prefs/profiles.js:110
+msgid "Apply"
 msgstr ""
 
-#: src/network/networkMenu.js:455
-msgid "Updated a long time ago"
+#: src/prefs/profiles.js:133
+msgid "Reset profile"
 msgstr ""
 
-#: src/network/networkMenu.js:457
-#, fuzzy
-msgid "Updated a few seconds ago"
-msgstr "Частота обновления (в секундах)"
-
-#: src/network/networkMenu.js:459
-msgid "Updated less than a minute ago"
+#: src/prefs/profiles.js:134
+msgid "Warning: this will reset the current profile to default settings."
 msgstr ""
 
-#: src/network/networkMenu.js:461
-msgid "Updated about a minute ago"
+#: src/prefs/profiles.js:137
+msgid "Reset"
 msgstr ""
 
-#: src/network/networkMenu.js:463
-msgid "Updated about 2 minutes ago"
+#: src/prefs/profiles.js:147
+msgid "Clone profile"
 msgstr ""
 
-#: src/network/networkMenu.js:465
-msgid "Updated about 5 minutes ago"
+#: src/prefs/profiles.js:148
+msgid "Create a copy of the current profile."
 msgstr ""
 
-#: src/network/networkMenu.js:467
-msgid "Updated more than 5 minutes ago"
+#: src/prefs/profiles.js:151
+msgid "Clone"
 msgstr ""
 
-#: src/network/networkMenu.js:468
-msgid "Click to refresh"
+#: src/prefs/profiles.js:176
+msgid "Delete profile"
 msgstr ""
 
-#: src/network/networkMenu.js:470
-msgid "Refreshing..."
+#: src/prefs/profiles.js:177
+msgid "Warning: this operation is irreversible."
 msgstr ""
 
-#: src/network/networkMenu.js:472
-msgid "Done"
-msgstr ""
-
-#: src/network/networkMenu.js:476
-#, fuzzy
-msgid "Default Routes"
-msgstr "По умолчанию (Авто)"
-
-#: src/network/networkMenu.js:515
-msgid "Route"
-msgstr ""
-
-#: src/network/networkMenu.js:521
-msgid "Metric"
-msgstr ""
-
-#: src/network/networkMenu.js:528
-#, fuzzy
-msgid "Device"
-msgstr "Устройства"
-
-#: src/network/networkMenu.js:535
-msgid "Gateway"
-msgstr ""
-
-#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
-msgid "Type"
-msgstr ""
-
-#: src/network/networkMenu.js:549
-#, fuzzy
-msgid "Destination"
-msgstr "Положение"
-
-#: src/network/networkMenu.js:556
-msgid "Protocol"
-msgstr ""
-
-#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
-msgid "Scope"
-msgstr ""
-
-#: src/network/networkMenu.js:570
-msgid "Flags"
-msgstr ""
-
-#: src/network/networkMenu.js:599
-msgid "Interfaces"
-msgstr "Интерфейсы"
-
-#: src/network/networkMenu.js:602
-msgid "No network interface found"
-msgstr "Сетевой интерфейс не найден"
-
-#: src/network/networkMenu.js:810
-msgctxt "short for upload"
-msgid "U"
-msgstr "В"
-
-#: src/network/networkMenu.js:836
-msgctxt "short for download"
-msgid "D"
-msgstr "З"
-
-#: src/network/networkMenu.js:913 src/storage/storageMenu.js:600
-#: src/gpu/gpuMenuComponent.js:438 src/gpu/gpuMenuComponent.js:1246
-#: src/gpu/gpuMenuComponent.js:1277
-msgid "Name"
-msgstr "Название"
-
-#: src/network/networkMenu.js:920
-#, fuzzy
-msgid "Alt Names"
-msgstr "Имя значка"
-
-#: src/network/networkMenu.js:929
-#, fuzzy
-msgid "Interface Index"
-msgstr "Интерфейсы"
-
-#: src/network/networkMenu.js:938
-msgid "MAC Address"
-msgstr ""
-
-#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
-msgid "Group"
-msgstr ""
-
-#: src/network/networkMenu.js:956
-#, fuzzy
-msgid "Speed"
-msgstr "Показать скорость ввода/вывода"
-
-#: src/network/networkMenu.js:965
-msgid "Duplex"
-msgstr ""
-
-#: src/network/networkMenu.js:974
-msgid "MTU"
-msgstr ""
-
-#: src/network/networkMenu.js:983
-msgid "Tx Queue Length"
-msgstr ""
-
-#: src/network/networkMenu.js:992
-msgid "Link Type"
-msgstr ""
-
-#: src/network/networkMenu.js:1001
-msgid "Operative State"
-msgstr ""
-
-#: src/network/networkMenu.js:1010
-msgid "Qdisc"
-msgstr ""
-
-#: src/network/networkMenu.js:1043
-msgid "Family"
-msgstr ""
-
-#: src/network/networkMenu.js:1050
-msgid "Local"
-msgstr ""
-
-#: src/network/networkMenu.js:1057
-msgid "Prefix Length"
-msgstr ""
-
-#: src/network/networkMenu.js:1064
-msgid "Broadcast"
-msgstr ""
-
-#: src/network/networkMenu.js:1097
-#, fuzzy
-msgid "Upload"
-msgstr "Цвет значка"
-
-#: src/network/networkMenu.js:1121
-#, fuzzy
-msgid "Download"
-msgstr "Цвет значка"
-
-#: src/network/networkMenu.js:1155
-msgid "IEEE"
-msgstr ""
-
-#: src/network/networkMenu.js:1167
-msgid "SSID"
-msgstr ""
-
-#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
-msgid "Mode"
-msgstr ""
-
-#: src/network/networkMenu.js:1203
-msgid "Access Point"
-msgstr ""
-
-#: src/network/networkMenu.js:1215
-msgid "Bit Rate"
-msgstr ""
-
-#: src/network/networkMenu.js:1227
-msgid "TX Power"
-msgstr ""
-
-#: src/network/networkMenu.js:1239
-msgid "Link Quality"
-msgstr ""
-
-#: src/network/networkMenu.js:1251
-msgid "Signal Level"
+#: src/prefs/profiles.js:180
+msgid "Delete"
 msgstr ""
 
 #: src/storage/storageMenu.js:67
@@ -1966,10 +2210,6 @@ msgstr "Информация о подкачке"
 #: src/storage/storageMenu.js:602
 msgid "Model"
 msgstr ""
-
-#: src/storage/storageMenu.js:603 src/gpu/gpuMenuComponent.js:501
-msgid "Vendor"
-msgstr "Производитель"
 
 #: src/storage/storageMenu.js:604
 msgid "Serial"
@@ -2257,11 +2497,6 @@ msgstr ""
 msgid "Allocated:"
 msgstr "Выделено:"
 
-#: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:357
-#: src/gpu/gpuMenuComponent.js:249 src/gpu/gpuMenuComponent.js:1174
-msgid "Used:"
-msgstr "Используется:"
-
 #: src/memory/memoryMenu.js:86
 msgid "Free:"
 msgstr "Свободно:"
@@ -2313,217 +2548,6 @@ msgstr "Zswapped"
 #: src/memory/memoryMenu.js:457
 msgid "Swap Devices"
 msgstr "Устройства подкачки"
-
-#: src/gpu/gpuMenuComponent.js:57
-msgid "No GPU found"
-msgstr "ГП не найден"
-
-#: src/gpu/gpuMenuComponent.js:70
-msgid "GPUs"
-msgstr "ГП"
-
-#: src/gpu/gpuMenuComponent.js:129
-msgid "No Connected Display"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1084
-msgid "Activity"
-msgstr "Активность"
-
-#: src/gpu/gpuMenuComponent.js:206 src/gpu/gpuMenuComponent.js:1133
-msgid "VRAM"
-msgstr "VRAM"
-
-#: src/gpu/gpuMenuComponent.js:431
-msgid "GPU info"
-msgstr "Информация о ГП"
-
-#: src/gpu/gpuMenuComponent.js:468
-msgid "Subsystem"
-msgstr "Подсистема"
-
-#: src/gpu/gpuMenuComponent.js:509
-msgid "Vendor ID"
-msgstr "ID производителя"
-
-#: src/gpu/gpuMenuComponent.js:518
-msgid "Product ID"
-msgstr "ID товара"
-
-#: src/gpu/gpuMenuComponent.js:526
-msgid "PCI"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:538
-msgid "Drivers"
-msgstr "Драйвера"
-
-#: src/gpu/gpuMenuComponent.js:547
-msgid "Modules"
-msgstr "Модули"
-
-#: src/gpu/gpuMenuComponent.js:611
-msgid "Displays"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:613
-#, fuzzy
-msgid "No displays found"
-msgstr "Датчик не найден"
-
-#: src/gpu/gpuMenuComponent.js:644
-msgid "Status"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:656
-#, fuzzy
-msgid "Product Code"
-msgstr "ID товара"
-
-#: src/gpu/gpuMenuComponent.js:668
-msgid "Serial Number"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:680
-msgid "Manufacturer Date"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:692
-#, fuzzy
-msgid "EDID Version"
-msgstr "Версия"
-
-#: src/gpu/gpuMenuComponent.js:704
-msgid "Display Size"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:716 src/gpu/gpuMenuComponent.js:942
-msgid "Native Resolution"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:728 src/gpu/gpuMenuComponent.js:961
-msgid "Refresh Rate"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:740
-msgid "Display Gamma"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:752
-msgid "Display Type"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:764
-msgid "Capabilities"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:843
-msgid "Enabled"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:846
-msgid "Disabled"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:939
-msgid "Native Resolutions"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:958
-msgid "Refresh Rates"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:986
-msgid "RGB 4:4:4"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:990
-msgid "RGB 4:4:4 + YCrCb 4:4:4"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:994
-msgid "RGB 4:4:4 + YCrCb 4:2:2"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:997
-msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1005
-msgid "Monochrome or Grayscale"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1008
-#, fuzzy
-msgid "RGB color"
-msgstr "Цвет значка"
-
-#: src/gpu/gpuMenuComponent.js:1011
-#, fuzzy
-msgid "Non-RGB color"
-msgstr "Цвет значка"
-
-#: src/gpu/gpuMenuComponent.js:1026
-msgid "Digital Input"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1028
-msgid "VESA DFP"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1033
-msgid "White Sync Levels: "
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1036
-msgid "Blank to Black"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1039
-msgid "Separate Sync"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1042
-msgid "Composite Sync"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1045
-msgid "Sync on Green"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1048
-msgid "VSync Serrated"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1052
-msgid "DPMS Standby"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1055
-msgid "DPMS Suspend"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1058
-msgid "DPMS Active Off"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1061
-msgid "Standard sRGB"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1064
-msgid "Preferred Timing"
-msgstr ""
-
-#: src/gpu/gpuMenuComponent.js:1067
-#, fuzzy
-msgid "GTF Supported"
-msgstr "Поддержать нас на Ko-Fi"
-
-#: src/gpu/gpuMenuComponent.js:1546
-#, javascript-format
-msgid "%d/%d Displays Connected"
-msgstr ""
 
 #~ msgid "Domain"
 #~ msgstr "Домен"

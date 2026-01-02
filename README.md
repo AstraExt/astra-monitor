@@ -285,7 +285,7 @@ environment.systemPackages = with pkgs; [
 For NVIDIA GPUs, the `nvidia-smi` tool is required. This tool is typically included with the proprietary NVIDIA drivers.
 
 Please refer to the official documentation of your distribution for instructions on how to install the proprietary NVIDIA drivers.
-  
+
 # Usage
 
 Once installed, Astra Monitor can be accessed and configured directly from the GNOME extensions tool. You can customize what system resources to monitor and how the information is displayed, tailoring the experience to your need.

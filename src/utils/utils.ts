@@ -709,7 +709,9 @@ export default class Utils {
         if(fileContents && fileContents[0]) {
             const decoder = new TextDecoder('utf8');
             const topology = Utils.parseCpuPresentFile(decoder.decode(fileContents[1]));
-            const paths = topology.map(coreId => `/sys/devices/system/cpu/cpu${coreId}/cpufreq/scaling_cur_freq`);
+            const paths = topology.map(
+                coreId => `/sys/devices/system/cpu/cpu${coreId}/cpufreq/scaling_cur_freq`
+            );
             try {
                 for(const path of paths) {
                     fileContents = GLib.file_get_contents(path);
@@ -2840,16 +2842,15 @@ export default class Utils {
     static getGpuUUID(gpuInfo: GpuInfo): string {
         return `${gpuInfo.domain}:${gpuInfo.bus}.${gpuInfo.slot}`;
     }
-    
-    static parseCpuPresentFile(content:string): number[] {
+
+    static parseCpuPresentFile(content: string): number[] {
         const presentParts = content.trim().split(',');
         const presentCpus: number[] = [];
         for(const part of presentParts) {
             if(part.includes('-')) {
                 const [start, end] = part.split('-').map(n => parseInt(n, 10));
                 for(let i = start; i <= end; i++) presentCpus.push(i);
-            }
-            else {
+            } else {
                 presentCpus.push(parseInt(part, 10));
             }
         }

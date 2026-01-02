@@ -859,7 +859,9 @@ export default class ProcessorMenu extends MenuBase {
         this.menuUptimeTimer = Utils.getUptime(bootTime => {
             try {
                 this.menuUptime.text = Utils.formatUptime(bootTime);
-            } catch(e) { /* empty */ }
+            } catch(e) {
+                /* empty */
+            }
         });
 
         this.clear('gpuUpdate');
@@ -984,7 +986,7 @@ export default class ProcessorMenu extends MenuBase {
                 for(let i = 0; i < numCores; i++) {
                     const core = this.cpuCoresUsagePopup.cores?.get(i);
                     if(!core) continue;
-                    
+
                     if(!usage || !Array.isArray(usage) || usage.length < numCores) {
                         core.bar.setUsage([]);
                         core.percentage.text = '-';
@@ -1012,9 +1014,9 @@ export default class ProcessorMenu extends MenuBase {
         if(code === 'cpuCoresFrequency') {
             const frequencies = Utils.processorMonitor.getCurrentValue('cpuCoresFrequency');
             const numCores = Utils.processorMonitor.getCpuTopology().length;
-            
+
             const usage = Utils.processorMonitor.getCurrentValue('cpuCoresUsage');
-            
+
             if(!frequencies || !Array.isArray(frequencies) || frequencies.length === 0) {
                 for(let i = 0; i < numCores; i++) {
                     const core = this.cpuCoresUsagePopup.cores?.get(i);
@@ -1083,7 +1085,8 @@ export default class ProcessorMenu extends MenuBase {
                         this.topProcesses[i].label.text = process.exec;
 
                         if(perCore)
-                            this.topProcesses[i].percentage.text = (cpu * numCores).toFixed(1) + '%';
+                            this.topProcesses[i].percentage.text =
+                                (cpu * numCores).toFixed(1) + '%';
                         else this.topProcesses[i].percentage.text = cpu.toFixed(1) + '%';
                     }
                     if(this.topProcessesPopup) {
@@ -1092,8 +1095,7 @@ export default class ProcessorMenu extends MenuBase {
                         popup.label.text = process.exec;
                         popup.description.text = process.cmd;
 
-                        if(perCore)
-                            popup.percentage.text = (cpu * numCores).toFixed(1) + '%';
+                        if(perCore) popup.percentage.text = (cpu * numCores).toFixed(1) + '%';
                         else popup.percentage.text = cpu.toFixed(1) + '%';
                     }
                 }

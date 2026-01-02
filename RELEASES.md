@@ -1,15 +1,14 @@
-# Astra Monitor 37 - TO BE RELEASED
+# Astra Monitor 37 - January 2 2026
 
 ### New features
 
 -   **Offline CPU Cores**: Now, whenever a CPU core is offline, it will be handled correctly and shown as offline in the processor menu.<br>
-  *Note: Due to a [bug in libgtop](https://gitlab.gnome.org/GNOME/libgtop/-/issues/41#note_2641436), this feature requires `/proc/stat` as the source for "CPU cores usage". Unfortunately, libgtop currently truncates CPU usage data starting from the first offline core it encounters.*
-
+    _Note: Due to a [bug in libgtop](https://gitlab.gnome.org/GNOME/libgtop/-/issues/41#note_2641436), this feature requires `/proc/stat` as the source for "CPU cores usage". Unfortunately, libgtop currently truncates CPU usage data starting from the first offline core it encounters._
 
 ### Bug fixes
 
 -   Improved async command execution fixing a potential memory leak. [[#191](https://github.com/AstraExt/astra-monitor/issues/191)][[#181](https://github.com/AstraExt/astra-monitor/issues/181)]
--   Fixed a bug where continuous processeses were not triggering updates correctly. This was causing some features to not work correctly when using continuous processeses like `nethogs` and `iotop` for monitoring network and I/O activity of processes. [[#207](https://github.com/AstraExt/astra-monitor/issues/207)]
+-   Fixed a bug where continuous processes were not triggering updates correctly. This was causing some features to not work correctly when using continuous processes like `nethogs` and `iotop` for monitoring network and I/O activity of processes. [[#207](https://github.com/AstraExt/astra-monitor/issues/207)]
 -   Optimized command path lookup to improve performance trying to avoid spawning subprocesses when possible.
 -   Fixed GPU monitoring not showing in the processor menu when the GPU header is disabled. [[#189](https://github.com/AstraExt/astra-monitor/issues/189)]
 -   Fixed a bug where switches in preferences were not updating correctly when the value was changed. [[#201](https://github.com/AstraExt/astra-monitor/issues/201)]
