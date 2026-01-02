@@ -1,3 +1,9 @@
+# Astra Monitor 38 - TO BE RELEASED
+
+### Bug fixes
+
+-   Fixed a bug where sensors were not being updated correctly when using `lm-sensors` as the source. [[#209](https://github.com/AstraExt/astra-monitor/issues/209)]
+
 # Astra Monitor 37 - January 2 2026
 
 ### New features

@@ -316,7 +316,7 @@ export default class SensorsMonitor extends Monitor {
             if(this.prefSensorsSource === 'auto' || this.prefSensorsSource === 'hwmon') {
                 if(service === 'hwmon') return true;
             } else if(this.prefSensorsSource === 'lm-sensors') {
-                if(service === 'lm_sensors') return true;
+                if(service === 'lm-sensors') return true;
             }
         }
 
