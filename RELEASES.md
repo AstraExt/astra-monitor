@@ -1,4 +1,4 @@
-# Astra Monitor 38 - TO BE RELEASED
+# Astra Monitor 38 - January 3 2026
 
 ### Bug fixes
 
