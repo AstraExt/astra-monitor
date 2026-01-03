@@ -97,7 +97,7 @@ export default class Config {
 
         try {
             const value = Config.settings.get_string(key);
-            if(value !== null) return JSON.parse(value);
+            if(value !== null && value !== '') return JSON.parse(value);
         } catch(e) {
             /* empty */
         }

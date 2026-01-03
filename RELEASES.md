@@ -3,6 +3,7 @@
 ### Bug fixes
 
 -   Fixed a bug where sensors were not being updated correctly when using `lm-sensors` as the source. [[#209](https://github.com/AstraExt/astra-monitor/issues/209)]
+-   Improved settings persistence by ensuring that ignored devices and interfaces are properly saved and restored. [[#185](https://github.com/AstraExt/astra-monitor/issues/185)]
 
 # Astra Monitor 37 - January 2 2026
 
