@@ -143,7 +143,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryTotalQty = new St.Label({
             text: '',
             styleClass: 'astra-monitor-menu-value',
-            style: 'width:4em;',
+            style: 'width:4.2em;',
         });
         grid.addToGrid(this.memoryTotalQty);
 
@@ -157,7 +157,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryAllocatedQty = new St.Label({
             text: '',
             styleClass: 'astra-monitor-menu-value',
-            style: 'width:4em;',
+            style: 'width:4.2em;',
         });
         grid.addToGrid(this.memoryAllocatedQty);
 
@@ -171,7 +171,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryUsedQty = new St.Label({
             text: '',
             styleClass: 'astra-monitor-menu-value',
-            style: 'width:4em;',
+            style: 'width:4.2em;',
         });
         grid.addToGrid(this.memoryUsedQty);
         // Free Memory
@@ -184,7 +184,7 @@ export default class MemoryMenu extends MenuBase {
         this.memoryFreeQty = new St.Label({
             text: '',
             styleClass: 'astra-monitor-menu-value',
-            style: 'width:4em;',
+            style: 'width:4.2em;',
         });
         grid.addToGrid(this.memoryFreeQty);
 
@@ -546,7 +546,7 @@ export default class MemoryMenu extends MenuBase {
         this.swapUsedQty = new St.Label({
             text: '',
             styleClass: 'astra-monitor-menu-value',
-            style: 'width:4em;',
+            style: 'width:4.2em;',
         });
         grid.addToGrid(this.swapUsedQty);
 
@@ -560,7 +560,7 @@ export default class MemoryMenu extends MenuBase {
         this.swapTotalQty = new St.Label({
             text: '',
             styleClass: 'astra-monitor-menu-value',
-            style: 'width:4em;',
+            style: 'width:4.2em;',
         });
         grid.addToGrid(this.swapTotalQty);
 

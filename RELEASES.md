@@ -1,3 +1,9 @@
+# Astra Monitor 39 - TO BE RELEASED
+
+### Bug fixes
+
+-   Fixed memory units being truncated in the memory menu on some themes or configurations.
+
 # Astra Monitor 38 - January 3 2026
 
 ### Bug fixes
