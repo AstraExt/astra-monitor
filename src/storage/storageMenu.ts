@@ -706,7 +706,7 @@ export default class StorageMenu extends MenuBase {
 
         const barLabel = new St.Label({
             text: '0%',
-            yAlign: Clutter.ActorAlign.CENTER,
+            yAlign: Clutter.ActorAlign.END,
             style: 'width:2.7em;font-size:0.8em;text-align:right;margin-right:0.25em;margin-top:0.2em;',
         });
         (barGrid.layoutManager as any).attach(barLabel, 2, 0, 1, 1);

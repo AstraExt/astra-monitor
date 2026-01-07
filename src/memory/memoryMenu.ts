@@ -213,6 +213,7 @@ export default class MemoryMenu extends MenuBase {
             this.memoryUsagePercLabel = new St.Label({
                 text: '0%',
                 style: 'width:2.7em;font-size:0.8em;text-align:right;',
+                yAlign: Clutter.ActorAlign.END,
             });
             (barGrid.layoutManager as any).attach(this.memoryUsagePercLabel, 1, 0, 1, 1);
 
@@ -514,6 +515,7 @@ export default class MemoryMenu extends MenuBase {
         //{
         const swapGrid = new St.Widget({
             layoutManager: new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL }),
+            style: 'margin-bottom:0.3em;',
         });
 
         this.swapBar = new SwapBars({
@@ -530,6 +532,7 @@ export default class MemoryMenu extends MenuBase {
         this.swapPercLabel = new St.Label({
             text: '0%',
             style: 'width:2.7em;font-size:0.8em;text-align:right;',
+            yAlign: Clutter.ActorAlign.END,
         });
         (swapGrid.layoutManager as any).attach(this.swapPercLabel, 1, 0, 1, 1);
 

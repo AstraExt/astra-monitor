@@ -332,6 +332,7 @@ export default class GpuMenuComponent {
             const barUsagePercLabel = new St.Label({
                 text: '0%',
                 style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;',
+                yAlign: Clutter.ActorAlign.END,
             });
             barGrid.addToGrid(barUsagePercLabel);
 
@@ -392,6 +393,7 @@ export default class GpuMenuComponent {
             const barUsagePercLabel = new St.Label({
                 text: '0%',
                 style: 'margin-left:0.3em;margin-right:0.3em;padding-top:2px;width:2.8em;font-size:0.8em;text-align:right;',
+                yAlign: Clutter.ActorAlign.END,
             });
             barGrid.addToGrid(barUsagePercLabel);
 

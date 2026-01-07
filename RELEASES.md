@@ -3,6 +3,7 @@
 ### Bug fixes
 
 -   Fixed memory units being truncated in the memory menu on some themes or configurations.
+-   Minor improvements to menu styling and layout.
 
 # Astra Monitor 38 - January 3 2026
 
