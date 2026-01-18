@@ -52,6 +52,7 @@ export default class ContinuousTaskManager {
 
     private options?: Options;
     private timerId?: number;
+    private exited: boolean = false;
 
     public start(command: string, options?: Options) {
         this.stop();
@@ -59,9 +60,12 @@ export default class ContinuousTaskManager {
         this.command = command;
         this.options = options;
         this.output = '';
+        this.exited = false;
         this.currentTask
             .run(this.task.bind(this))
-            .catch(() => {})
+            .catch(() => {
+                this.exit();
+            })
             .finally(() => {
                 this.stop();
             });
@@ -69,6 +73,20 @@ export default class ContinuousTaskManager {
         if(this.options?.flush?.interval) {
             this.startTimer();
         }
+    }
+
+    private callback(data: ContinuousTaskManagerData) {
+        if(this.exited && !data.exit) return;
+        this.listeners.forEach((callback, _subject) => {
+            callback(data);
+        });
+    }
+
+    private exit() {
+        if(this.exited) return;
+        this.exited = true;
+        this.stopTimer();
+        this.callback({ exit: true });
     }
 
     private task(): Promise<boolean> {
@@ -131,21 +149,54 @@ export default class ContinuousTaskManager {
                 return;
             }
 
-            const stdinStream = proc.get_stdin_pipe();
+            const pipeErr = proc.get_stderr_pipe();
+            if(pipeErr) {
+                const stderrStream = new Gio.DataInputStream({
+                    baseStream: pipeErr,
+                    closeBaseStream: true,
+                });
+                this.drainStream(stderrStream);
+            }
+
             const stdoutStream = new Gio.DataInputStream({
                 baseStream: pipeOut,
                 closeBaseStream: true,
             });
 
-            this.readOutput(resolve, reject, stdoutStream, stdinStream);
+            this.readOutput(resolve, reject, stdoutStream);
         });
+    }
+
+    private drainStream(stream: Gio.DataInputStream) {
+        stream.read_line_async(
+            GLib.PRIORITY_LOW,
+            this.currentTask?.cancellable || null,
+            (s, result) => {
+                try {
+                    if(s === null) throw new Error('Stream invalid');
+                    const [line] = s.read_line_finish_utf8(result);
+                    if(line !== null) {
+                        // discard
+                        this.drainStream(stream);
+                        return;
+                    }
+                } catch(_) {
+                    /* EMPTY */
+                }
+
+                try {
+                    stream.close(null);
+                } catch(_) {
+                    /* EMPTY */
+                }
+            }
+        );
     }
 
     private readOutput(
         resolve: (value: boolean | PromiseLike<boolean>) => void,
         reject: (reason?: any) => void,
-        stdout: Gio.DataInputStream,
-        stdin: Gio.OutputStream | null
+        stdout: Gio.DataInputStream
     ) {
         stdout.read_line_async(
             GLib.PRIORITY_LOW,
@@ -159,46 +210,57 @@ export default class ContinuousTaskManager {
                     const [line] = stream.read_line_finish_utf8(result);
 
                     if(line !== null) {
+                        // 5MB limit to avoid memory leaks
+                        if(this.output.length + line.length > 5 *1024 * 1024) {
+                            if(this.output.length > 0) {
+                                this.callback({ result: this.output, exit: false });
+                            }
+                            this.output = '';
+                        }
+
                         if(this.output.length) this.output += '\n' + line;
                         else this.output += line;
 
                         if(this.options?.flush?.always) {
-                            this.listeners.forEach((callback, _subject) => {
-                                callback({ result: this.output, exit: false });
-                            });
+                            this.callback({ result: this.output, exit: false });
                             this.output = '';
                         } else if(
                             this.options?.flush?.match &&
-                            this.options.flush.match.test(line)
+                            (() => {
+                                // Avoid stateful RegExp (e.g. /.../g) causing missed matches
+                                // due to lastIndex advancing across calls.
+                                this.options!.flush.match!.lastIndex = 0;
+                                return this.options!.flush.match!.test(line);
+                            })()
                         ) {
-                            this.listeners.forEach((callback, _subject) => {
-                                callback({ result: this.output, exit: false });
-                            });
+                            this.callback({ result: this.output, exit: false });
                             this.output = '';
                         } else if(this.options?.flush?.idle) {
                             this.startTimer();
                         } else if(
                             this.options?.flush?.trigger &&
-                            line.lastIndexOf(this.options.flush.trigger) !== -1
+                            line.includes(this.options.flush.trigger)
                         ) {
-                            this.listeners.forEach((callback, _subject) => {
-                                callback({ result: this.output, exit: false });
-                            });
+                            this.callback({ result: this.output, exit: false });
                             this.output = '';
                         }
-                        this.readOutput(resolve, reject, stdout, stdin);
+                        this.readOutput(resolve, reject, stdout);
                     } else {
-                        this.stopTimer();
-                        this.listeners.forEach((callback, _subject) => {
-                            callback({ exit: true });
-                        });
+                        this.exit();
+                        try {
+                            stdout.close(null);
+                        } catch(e) {
+                            /* EMPTY */
+                        }
                         resolve(true);
                     }
                 } catch(e: any) {
-                    this.stopTimer();
-                    this.listeners.forEach((callback, _subject) => {
-                        callback({ exit: true });
-                    });
+                    this.exit();
+                    try {
+                        stdout.close(null);
+                    } catch(err) {
+                        /* EMPTY */
+                    }
                     resolve(false);
                 }
             }
@@ -221,11 +283,13 @@ export default class ContinuousTaskManager {
 
         const time = this.options?.flush?.idle ?? this.options?.flush?.interval ?? 1000;
         this.timerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, time, () => {
+            if(this.exited) {
+                this.timerId = undefined;
+                return GLib.SOURCE_REMOVE;
+            }
             // Flush output to listeners if there's any output
             if(this.output.length > 0) {
-                this.listeners.forEach((callback, _subject) => {
-                    callback({ result: this.output, exit: false });
-                });
+                this.callback({ result: this.output, exit: false });
                 this.output = '';
             }
 
@@ -238,7 +302,7 @@ export default class ContinuousTaskManager {
     }
 
     private stopTimer() {
-        if(this.timerId) {
+        if(this.timerId !== undefined) {
             GLib.source_remove(this.timerId);
             this.timerId = undefined;
         }

@@ -2,6 +2,7 @@
 
 ### Bug fixes
 
+-   Minor memory leak fixes and task management improvements.
 -   Fixed memory units being truncated in the memory menu on some themes or configurations.
 -   Minor improvements to menu styling and layout.
 

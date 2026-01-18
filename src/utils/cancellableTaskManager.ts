@@ -31,7 +31,17 @@ class CancellableTask<T> {
             this.rejectFn = reject;
 
             this.timeoutId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-                this.boundTask().then(resolve).catch(reject);
+                try {
+                this.boundTask()
+                    .then(resolve)
+                    .catch(reject)
+                    .finally(() => {
+                        this.rejectFn = undefined;
+                    });
+                } catch(e) {
+                    reject(e);
+                    this.rejectFn = undefined;
+                }
                 this.timeoutId = undefined;
                 return GLib.SOURCE_REMOVE;
             });
@@ -69,19 +79,33 @@ export default class CancellableTaskManager<T> {
 
     public run(boundTask: () => Promise<T>): Promise<T> {
         this.cancel();
-        this.currentTask = new CancellableTask<T>(boundTask);
-        return new Promise<T>((resolve, reject) => {
-            this.currentTask!.promise.then(resolve)
-                .catch(reject)
-                .finally(() => {
-                    this.cancel();
-                });
+        this.taskCancellable = new Gio.Cancellable();
+        const task = new CancellableTask<T>(boundTask);
+        this.currentTask = task;
+        
+        return task.promise.finally(() => {
+            if(this.currentTask === task) {
+                this.cancel();
+            }
         });
     }
 
     public setSubprocess(subprocess: Gio.Subprocess) {
+        if(this.cancelId !== undefined) {
+            try {
+                this.taskCancellable?.disconnect(this.cancelId);
+            } catch(_) {
+                /* empty */
+            }
+            this.cancelId = undefined;
+        }
+
         this.cancelId = this.cancellable.connect(() => {
-            subprocess.force_exit();
+            try {
+                subprocess.force_exit();
+            } catch(_) {
+                /* empty */
+            }
         });
     }
 
@@ -91,11 +115,23 @@ export default class CancellableTaskManager<T> {
             this.currentTask = undefined;
         }
 
-        if(this.cancelId) {
-            this.taskCancellable?.cancel();
-            this.taskCancellable?.disconnect(this.cancelId);
-            this.cancelId = undefined;
+        if(this.taskCancellable) {
+            try {
+                this.taskCancellable.cancel();
+            } catch(_) {
+                /* empty */
+            }
+
+            if(this.cancelId !== undefined) {
+                try {
+                    this.taskCancellable.disconnect(this.cancelId);
+                } catch(_) {
+                    /* empty */
+                }
+                this.cancelId = undefined;
+            }
         }
+
         this.taskCancellable = undefined;
     }
 
