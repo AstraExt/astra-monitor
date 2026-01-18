@@ -909,7 +909,9 @@ export default class GpuMenuComponent {
 
             const horizontalLine = new St.Widget({
                 reactive: false,
-                style: 'height:1px;width:100%;margin:0 8px;background-color:#888;opacity:0.5;',
+                xExpand: true,
+                xAlign: Clutter.ActorAlign.FILL,
+                style: 'height:1px;margin:0 8px;background-color:#888;opacity:0.5;',
             });
             displayContainer.addToGrid(horizontalLine, 2);
 
