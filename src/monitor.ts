@@ -235,7 +235,7 @@ export default class Monitor {
                     aliveListeners.push(listener);
                 } catch(e: any) {
                     Utils.error(`Error notifying listener for ${key}`, e);
-                    
+
                     const msg = e?.message ?? '';
                     if(typeof msg === 'string' && msg.includes('has been already disposed')) {
                         // dropped

@@ -211,7 +211,7 @@ export default class ContinuousTaskManager {
 
                     if(line !== null) {
                         // 5MB limit to avoid memory leaks
-                        if(this.output.length + line.length > 5 *1024 * 1024) {
+                        if(this.output.length + line.length > 5 * 1024 * 1024) {
                             if(this.output.length > 0) {
                                 this.callback({ result: this.output, exit: false });
                             }

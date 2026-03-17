@@ -32,12 +32,12 @@ class CancellableTask<T> {
 
             this.timeoutId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
                 try {
-                this.boundTask()
-                    .then(resolve)
-                    .catch(reject)
-                    .finally(() => {
-                        this.rejectFn = undefined;
-                    });
+                    this.boundTask()
+                        .then(resolve)
+                        .catch(reject)
+                        .finally(() => {
+                            this.rejectFn = undefined;
+                        });
                 } catch(e) {
                     reject(e);
                     this.rejectFn = undefined;
@@ -82,7 +82,7 @@ export default class CancellableTaskManager<T> {
         this.taskCancellable = new Gio.Cancellable();
         const task = new CancellableTask<T>(boundTask);
         this.currentTask = task;
-        
+
         return task.promise.finally(() => {
             if(this.currentTask === task) {
                 this.cancel();

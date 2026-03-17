@@ -1,4 +1,4 @@
-# Astra Monitor 39 - TO BE RELEASED
+# Astra Monitor 39 - March 17 2026
 
 ### Bug fixes
 
