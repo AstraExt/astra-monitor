@@ -2,6 +2,7 @@
 
 ### Bug fixes
 
+-   GNOME 50 support [[#214](https://github.com/AstraExt/astra-monitor/issues/214)]
 -   Minor memory leak fixes and task management improvements.
 -   Fixed memory units being truncated in the memory menu on some themes or configurations.
 -   Minor improvements to menu styling and layout.
