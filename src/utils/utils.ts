@@ -2810,7 +2810,8 @@ export default class Utils {
         if(Utils.nethogsCaps !== undefined)
             return (
                 Utils.nethogsCaps.includes('cap_net_admin') &&
-                Utils.nethogsCaps.includes('cap_net_raw=ep')
+                Utils.nethogsCaps.includes('cap_net_raw') &&
+                Utils.nethogsCaps.includes('ep')
             );
 
         let [result, stdout] = GLib.spawn_command_line_sync('which nethogs');
@@ -2832,10 +2833,11 @@ export default class Utils {
             return false;
         }
 
-        Utils.nethogsCaps = decoder.decode(stdout).split(/\s+|,/).slice(1);
+        Utils.nethogsCaps = decoder.decode(stdout).split(/\s+|,|=/).slice(1);
         return (
             Utils.nethogsCaps.includes('cap_net_admin') &&
-            Utils.nethogsCaps.includes('cap_net_raw=ep')
+            Utils.nethogsCaps.includes('cap_net_raw') &&
+            Utils.nethogsCaps.includes('ep')
         );
     }
 
