@@ -1,3 +1,10 @@
+# Astra Monitor 40 - TO BE RELEASED
+
+### Bug fixes
+
+-   Fixed NetHogs capability detection when the binary has additional capabilities configured. [[#218](https://github.com/AstraExt/astra-monitor/pull/218)] (Thanks to [@dantob](https://github.com/dantob))
+
+
 # Astra Monitor 39 - March 17 2026
 
 ### Bug fixes

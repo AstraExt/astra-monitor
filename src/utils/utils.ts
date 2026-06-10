@@ -2805,38 +2805,49 @@ export default class Utils {
         return true;
     }
 
-    private static nethogsCaps: string[] | undefined = undefined;
+    private static nethogsCaps: boolean | undefined = undefined;
     static nethogsHasCaps(): boolean {
-        if(Utils.nethogsCaps !== undefined)
-            return (
-                Utils.nethogsCaps.includes('cap_net_admin') &&
-                Utils.nethogsCaps.includes('cap_net_raw=ep')
-            );
+        if(Utils.nethogsCaps !== undefined) return Utils.nethogsCaps;
 
         let [result, stdout] = GLib.spawn_command_line_sync('which nethogs');
         if(result === false || !stdout) {
-            Utils.nethogsCaps = [];
+            Utils.nethogsCaps = false;
             return false;
         }
 
         const decoder = new TextDecoder();
         const nethogs = decoder.decode(stdout).trim();
         if(nethogs === '') {
-            Utils.nethogsCaps = [];
+            Utils.nethogsCaps = false;
             return false;
         }
 
         [result, stdout] = GLib.spawn_command_line_sync(`getcap ${nethogs}`);
         if(result === false || !stdout) {
-            Utils.nethogsCaps = [];
+            Utils.nethogsCaps = false;
             return false;
         }
 
-        Utils.nethogsCaps = decoder.decode(stdout).split(/\s+|,/).slice(1);
-        return (
-            Utils.nethogsCaps.includes('cap_net_admin') &&
-            Utils.nethogsCaps.includes('cap_net_raw=ep')
-        );
+        // skip the path token; handles both getcap output formats:
+        //   new (libcap >= 2.42): /usr/bin/nethogs cap_net_admin,cap_net_raw=ep
+        //   old:                  /usr/bin/nethogs = cap_net_admin,cap_net_raw+ep
+        const clauses = decoder.decode(stdout).trim().split(/\s+/).slice(1);
+
+        // a capability is granted if it appears in a clause whose flags
+        // include both 'e' (effective) and 'p' (permitted)
+        const hasCap = (cap: string) =>
+            clauses.some(clause => {
+                const [names, flags] = clause.split(/[=+]/, 2);
+                return (
+                    flags !== undefined &&
+                    names.split(',').includes(cap) &&
+                    flags.includes('e') &&
+                    flags.includes('p')
+                );
+            });
+
+        Utils.nethogsCaps = hasCap('cap_net_admin') && hasCap('cap_net_raw');
+        return Utils.nethogsCaps;
     }
 
     static getGpuUUID(gpuInfo: GpuInfo): string {
