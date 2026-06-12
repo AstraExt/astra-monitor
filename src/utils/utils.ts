@@ -176,6 +176,7 @@ export default class Utils {
 
     static lastCachedHwmonDevices: number = 0;
     static cachedHwmonDevices: HwMonDevices = new Map();
+    static hwmonCacheGeneration: number = 0;
     static explicitZero: boolean = false;
 
     static commandsPath: Map<string, string> | null = null;
@@ -201,6 +202,10 @@ export default class Utils {
         Config.settings = settings;
         Utils.xmlParser = new XMLParser();
         Utils.commandsPath = new Map();
+        Utils.hwmonCacheGeneration++;
+        Utils.lastCachedHwmonDevices = 0;
+        Utils.cachedHwmonDevices = new Map();
+        Utils.hwmonPromise = null;
 
         Utils.debug = Config.get_boolean('debug-mode');
         if(Utils.debug && service === 'astra-monitor') {
@@ -298,6 +303,8 @@ export default class Utils {
         Utils.performanceMap = null;
         Utils.commandsPath = null;
         Utils.lspciCached = undefined;
+        Utils.hwmonCacheGeneration++;
+        Utils.hwmonPromise = null;
         Utils.lastCachedHwmonDevices = 0;
         Utils.cachedHwmonDevices = undefined as any;
         Utils.processorMonitor = undefined as any;
@@ -943,14 +950,17 @@ export default class Utils {
             return Utils.hwmonPromise;
         }
 
+        const generation = Utils.hwmonCacheGeneration;
         Utils.hwmonPromise = (async () => {
             try {
                 const devices = await Utils.getHwmonDevices();
-                Utils.lastCachedHwmonDevices = Date.now();
-                Utils.cachedHwmonDevices = devices;
+                if(generation === Utils.hwmonCacheGeneration) {
+                    Utils.lastCachedHwmonDevices = Date.now();
+                    Utils.cachedHwmonDevices = devices;
+                }
                 return devices;
             } finally {
-                Utils.hwmonPromise = null;
+                if(generation === Utils.hwmonCacheGeneration) Utils.hwmonPromise = null;
             }
         })();
 
@@ -960,8 +970,10 @@ export default class Utils {
     static getCachedHwmonDevices(): HwMonDevices {
         // 5 minutes
         if(Utils.lastCachedHwmonDevices + 300000 < Date.now()) {
+            const generation = Utils.hwmonCacheGeneration;
             Utils.lastCachedHwmonDevices = Date.now();
             Utils.getHwmonDevices().then(devices => {
+                if(generation !== Utils.hwmonCacheGeneration) return;
                 Utils.cachedHwmonDevices = devices;
             });
         }
