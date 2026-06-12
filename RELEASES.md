@@ -1,3 +1,15 @@
+# Astra Monitor 40 - TO BE RELEASED
+
+### GPU monitoring
+
+-   Fixed a problem that caused some NVIDIA configurations to experience GNOME Shell stuttering every ~10 seconds when GPU monitoring was enabled, including when GPU stats were shown from the processor menu. [[#211](https://github.com/AstraExt/astra-monitor/issues/211)]
+
+_Note: This is an important change to GPU monitoring, so feedback is very welcome. If you notice any regression, please open an issue: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
+
+### Bug fixes
+
+-   Fixed NetHogs capability detection when the binary has additional capabilities configured. [[#218](https://github.com/AstraExt/astra-monitor/pull/218)] (Thanks to [@dantob](https://github.com/dantob))
+
 # Astra Monitor 39 - March 17 2026
 
 ### Bug fixes

@@ -66,14 +66,14 @@ cd - || { log_message "Error: Failed to change directory to $EXTENSION_DIR"; exi
 msguniq po/monitor@astraext.pot -o po/monitor@astraext.pot
 
 # Replace charset in the pot file
-sed -i 's/charset=CHARSET/charset=UTF-8/'
+sed -i 's/charset=CHARSET/charset=UTF-8/' po/monitor@astraext.pot
 
 # Replace plural forms in the pot file
-sed -i 's/nplurals=INTEGER/nplurals=2/'
-sed -i 's/plural=EXPRESSION/plural=(n != 1)/'
+sed -i 's/nplurals=INTEGER/nplurals=2/' po/monitor@astraext.pot
+sed -i 's/plural=EXPRESSION/plural=(n != 1)/' po/monitor@astraext.pot
 
 # Replace language in the pot file
-sed -i 's/Language: /Language: en_US/'
+sed -i 's/Language: /Language: en_US/' po/monitor@astraext.pot
 
 # Update all .po files with the new .pot file
 log_message "Updating PO files..."

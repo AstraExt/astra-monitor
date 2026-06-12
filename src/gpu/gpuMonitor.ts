@@ -364,14 +364,14 @@ export default class GpuMonitor extends Monitor {
     private status = false;
     private updateAmdGpuTask: ContinuousTaskManager;
     private updateNvidiaGpuTask: ContinuousTaskManager;
+    private nvidiaParsing = false;
 
     private updateDisplaysTask: CancellableTaskManager<boolean>;
 
-    private infoPipesCache?: {
-        name: string;
-        data: string;
-    }[];
-    private infoPipesCacheTime = 0;
+    private infoPipesCaches: Map<
+        string,
+        { pipes: { name: string; data: string }[]; time: number }
+    > = new Map();
 
     private mainGpu?: GpuInfo | undefined;
     private monitoredGPUs: GpuInfo[] | undefined = undefined;
@@ -437,8 +437,7 @@ export default class GpuMonitor extends Monitor {
     reset() {
         this.updateDisplaysTask?.cancel();
 
-        this.infoPipesCache = undefined;
-        this.infoPipesCacheTime = 0;
+        this.infoPipesCaches.clear();
     }
 
     override start() {
@@ -617,6 +616,22 @@ export default class GpuMonitor extends Monitor {
         return { text: nvidia['#text'] };
     }
 
+    /**
+     * Pushes the new sample to the usage history and notifies the listeners.
+     *
+     * The history retains up to `usageHistoryLength` (200) samples but only feeds the
+     * header graphs, which just need activity/vram percentages: the `raw` tree (the
+     * whole parsed nvidia-smi/amdgpu_top output) must NOT be retained there, or the
+     * live heap grows so much that GJS' periodic (10s) full garbage collection
+     * pauses the entire shell for a noticeable amount of time.
+     */
+    private pushGpuUpdate(gpus: Map<string, GenericGpuInfo>) {
+        const history = new Map<string, GenericGpuInfo>();
+        for(const [id, gpu] of gpus) history.set(id, { ...gpu, raw: undefined });
+        this.pushUsageHistory('gpu', history);
+        this.notify('gpuUpdate', gpus);
+    }
+
     updateAmdGpu(data: ContinuousTaskManagerData) {
         if(data.exit || !data.result) return;
 
@@ -640,12 +655,13 @@ export default class GpuMonitor extends Monitor {
                 };
 
                 //Info
-                // Use cache if it's been update in the last 10 minutes
+                // Use cache if it's been updated in the last 10 minutes
+                const infoPipesCache = this.infoPipesCaches.get(id);
                 if(
-                    this.infoPipesCache &&
-                    GLib.get_monotonic_time() - this.infoPipesCacheTime < 600000
+                    infoPipesCache &&
+                    GLib.get_monotonic_time() - infoPipesCache.time < 600_000_000
                 ) {
-                    gpu.info.pipes = this.infoPipesCache;
+                    gpu.info.pipes = infoPipesCache.pipes;
                 } else {
                     if(gpuInfo.Info) {
                         const asicName = gpuInfo.Info['ASIC Name'];
@@ -803,8 +819,10 @@ export default class GpuMonitor extends Monitor {
                             gpu.info.pipes.push({ name: 'Video Caps', data: caps.join('\n') });
                         }
 
-                        this.infoPipesCache = gpu.info.pipes;
-                        this.infoPipesCacheTime = GLib.get_monotonic_time();
+                        this.infoPipesCaches.set(id, {
+                            pipes: gpu.info.pipes,
+                            time: GLib.get_monotonic_time(),
+                        });
                     }
                 }
 
@@ -1212,18 +1230,30 @@ export default class GpuMonitor extends Monitor {
                 gpus.set(id, gpu);
             }
 
-            this.pushUsageHistory('gpu', gpus);
-            this.notify('gpuUpdate', gpus);
+            this.pushGpuUpdate(gpus);
         } catch(e: any) {
             Utils.error('Error updating AMD GPU', e);
         }
     }
 
-    updateNvidiaGpu(data: ContinuousTaskManagerData) {
+    async updateNvidiaGpu(data: ContinuousTaskManagerData) {
         if(data.exit || !data.result) return;
 
+        // The XML parse is async and time-sliced: drop incoming samples until the
+        // previous one has been fully processed
+        if(this.nvidiaParsing) return;
+        this.nvidiaParsing = true;
+
         try {
-            const xml = Utils.xmlParse(data.result, ['supported_clocks']);
+            const xml = await Utils.xmlParseAsync(data.result, [
+                'supported_clocks',
+                'applications_clocks',
+                'default_applications_clocks',
+                'retired_pages',
+                'remapped_rows',
+                'ecc_errors',
+                'voltage',
+            ]);
             if(!xml.nvidia_smi_log) return;
 
             let gpuInfoList: NvidiaInfoRaw[] = xml.nvidia_smi_log.gpu;
@@ -1251,12 +1281,13 @@ export default class GpuMonitor extends Monitor {
                 };
 
                 //Info
-                // Use cache if it's been update in the last 10 minutes
+                // Use cache if it's been updated in the last 10 minutes
+                const infoPipesCache = this.infoPipesCaches.get(id);
                 if(
-                    this.infoPipesCache &&
-                    GLib.get_monotonic_time() - this.infoPipesCacheTime < 600000
+                    infoPipesCache &&
+                    GLib.get_monotonic_time() - infoPipesCache.time < 600_000_000
                 ) {
-                    gpu.info.pipes = this.infoPipesCache;
+                    gpu.info.pipes = infoPipesCache.pipes;
                 } else {
                     const productName = GpuMonitor.nvidiaToGenericField(gpuInfo.product_name, true);
                     if(productName && productName.text)
@@ -1498,6 +1529,11 @@ export default class GpuMonitor extends Monitor {
                                 data: computeMode.text,
                             });
                     }
+
+                    this.infoPipesCaches.set(id, {
+                        pipes: gpu.info.pipes,
+                        time: GLib.get_monotonic_time(),
+                    });
                 }
 
                 // Vram
@@ -2098,10 +2134,11 @@ export default class GpuMonitor extends Monitor {
                 gpus.set(id, gpu);
             }
 
-            this.pushUsageHistory('gpu', gpus);
-            this.notify('gpuUpdate', gpus);
+            this.pushGpuUpdate(gpus);
         } catch(e: any) {
             Utils.error('Error updating Nvidia GPU', e);
+        } finally {
+            this.nvidiaParsing = false;
         }
     }
 

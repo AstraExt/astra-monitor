@@ -18,108 +18,167 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import GLib from 'gi://GLib';
+
 type XMLObject = {
     [key: string]: string | number | boolean | XMLObject | XMLObject[];
 };
 
 export default class XMLParser {
     private pos: number = 0; // Current position in the string
-    private stack: Array<{ tagName: string; obj: XMLObject }> = [];
+    private objStack: XMLObject[] = [];
     private currentObj: XMLObject | undefined = {};
     private currentTagName: string = '';
     private xml: string = '';
 
+    // The parsing state lives on the instance, so an async (time-sliced) parse must
+    // complete before the next one can safely start: concurrent calls are serialized
+    private parseQueue: Promise<unknown> = Promise.resolve();
+
     constructor() {}
 
-    public parse(xml: string, skips: string[] = []): XMLObject | undefined {
+    public parse(
+        xml: string,
+        skips: string[] = [],
+        maxLockMs: number = 1
+    ): Promise<XMLObject | undefined> {
+        const run = this.parseQueue.then(() => this.doParse(xml, skips, maxLockMs));
+        this.parseQueue = run.then(
+            () => undefined,
+            () => undefined
+        );
+        return run;
+    }
+
+    private async doParse(
+        xml: string,
+        skips: string[],
+        maxLockMs: number
+    ): Promise<XMLObject | undefined> {
         this.xml = xml;
         this.resetParser();
         this.skipDeclarations();
 
-        let rootObjName = '';
-        const rootObj: XMLObject = {};
+        // Time-slicing: periodically yield back to GNOME Shell's main loop so we don't
+        // block rendering/animations for too long. The clock is only checked once every
+        // 32 iterations because GLib.get_monotonic_time has a non-negligible cost itself.
+        const maxLockUs = Math.max(0, maxLockMs) * 1000;
+        let sliceStart = GLib.get_monotonic_time();
+        let iterations = 0;
 
-        while(this.pos < this.xml.length) {
-            const nextLessThan = this.xml.indexOf('<', this.pos);
-            if(nextLessThan === -1) break; // End of XML document
+        const yieldIfNeeded = (): Promise<void> | null => {
+            if(maxLockUs <= 0) return null;
+            if((++iterations & 31) !== 0) return null;
+            if(GLib.get_monotonic_time() - sliceStart < maxLockUs) return null;
+            return new Promise<void>(resolve => {
+                GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                    sliceStart = GLib.get_monotonic_time();
+                    resolve();
+                    return GLib.SOURCE_REMOVE;
+                });
+            });
+        };
 
-            // Parse any text content before the next '<'
-            if(nextLessThan !== this.pos) {
-                const textContent = this.parseTextContent(this.pos);
-                if(textContent && this.currentObj) {
-                    this.currentObj['#text'] = textContent;
+        try {
+            let rootObjName = '';
+            const rootObj: XMLObject = {};
+
+            while(this.pos < this.xml.length) {
+                const nextLessThan = this.xml.indexOf('<', this.pos);
+                if(nextLessThan === -1) break; // End of XML document
+
+                // Parse any text content before the next '<'
+                if(nextLessThan !== this.pos) {
+                    const textContent = this.parseTextContent(this.pos);
+                    if(textContent && this.currentObj) {
+                        this.currentObj['#text'] = textContent;
+                    }
                 }
-            }
 
-            this.pos = nextLessThan;
-            this.skipToNextImportantChar();
+                this.pos = nextLessThan;
+                this.skipToNextImportantChar();
 
-            if(this.xml[this.pos] === '<') {
-                if(this.xml[this.pos + 1] === '/') {
-                    // handle comments
-                    if (this.xml.startsWith('<!--', this.pos)) {
-                        const endComment = this.xml.indexOf('-->', this.pos);
-                        this.pos = endComment !== -1 ? endComment + 3 : this.xml.length;
-                        continue;
-                    }
-                    
-                    // Closing tag
-                    this.pos = this.xml.indexOf('>', this.pos) + 1;
-                    const finishedObject = this.stack.pop();
-                    if(this.stack.length === 0) {
-                        // We closed the root tag
-                        if(rootObjName) {
-                            rootObj[rootObjName] = finishedObject?.obj ?? {};
-                            return rootObj;
+                if(this.xml[this.pos] === '<') {
+                        if(this.xml[this.pos + 1] === '/') {
+                        // handle comments
+                        if(this.xml.startsWith('<!--', this.pos)) {
+                            const endComment = this.xml.indexOf('-->', this.pos);
+                            this.pos = endComment !== -1 ? endComment + 3 : this.xml.length;
+                            continue;
                         }
-                        return finishedObject?.obj;
-                    }
-                    // Update currentObj to the now-top of the stack
-                    this.currentObj = this.stack[this.stack.length - 1].obj;
-                } else {
-                    // Opening tag
-                    if(!this.parseTag()) break; // Could not find tag: malformed XML
-
-                    // Check if this tag should be skipped entirely
-                    if(skips.includes(this.currentTagName)) {
-                        // Skip attributes and the entire content until the matching closing tag
-                        this.skipAttributesAndBlock(this.currentTagName);
-                        continue; // Move to the next iteration
-                    }
-
-                    // Otherwise, parse the attributes
-                    const attributes = this.parseAttributes();
-                    const newObj: XMLObject = { ...attributes };
-
-                    // If there's no current object, this is the root object
-                    if(!this.currentObj) {
-                        rootObjName = this.currentTagName;
-                        this.currentObj = newObj;
+                        
+                        // Closing tag
+                        this.pos = this.xml.indexOf('>', this.pos) + 1;
+                        const finishedObject = this.objStack.pop();
+                        if(this.objStack.length === 0) {
+                            // We closed the root tag
+                            if(rootObjName) {
+                                rootObj[rootObjName] = finishedObject ?? {};
+                                return rootObj;
+                            }
+                            return finishedObject;
+                        }
+                        // Update currentObj to the now-top of the stack
+                        this.currentObj = this.objStack[this.objStack.length - 1];
                     } else {
-                        // Insert newObj under the current tag
-                        if(!this.currentObj[this.currentTagName]) {
-                            this.currentObj[this.currentTagName] = newObj;
-                        } else if(Array.isArray(this.currentObj[this.currentTagName])) {
-                            (this.currentObj[this.currentTagName] as Array<XMLObject>).push(newObj);
-                        } else {
-                            this.currentObj[this.currentTagName] = [
-                                this.currentObj[this.currentTagName] as XMLObject,
-                                newObj,
-                            ];
+                        // Opening tag
+                        if(!this.parseTag()) break; // Could not find tag: malformed XML
+
+                        // Check if this tag should be skipped entirely
+                        if(skips.includes(this.currentTagName)) {
+                            // Skip attributes and the entire content until the matching closing tag
+                            // eslint-disable-next-line no-await-in-loop
+                            await this.skipAttributesAndBlock(this.currentTagName, yieldIfNeeded);
+                            continue; // Move to the next iteration
                         }
+
+                        // Otherwise, parse the attributes
+                        const newObj: XMLObject = {};
+                        this.parseAttributesInto(newObj);
+
+                        // If there's no current object, this is the root object
+                        if(!this.currentObj) {
+                            rootObjName = this.currentTagName;
+                            this.currentObj = newObj;
+                        } else {
+                            // Insert newObj under the current tag
+                            if(!this.currentObj[this.currentTagName]) {
+                                this.currentObj[this.currentTagName] = newObj;
+                            } else if(Array.isArray(this.currentObj[this.currentTagName])) {
+                                (this.currentObj[this.currentTagName] as Array<XMLObject>).push(
+                                    newObj
+                                );
+                            } else {
+                                this.currentObj[this.currentTagName] = [
+                                    this.currentObj[this.currentTagName] as XMLObject,
+                                    newObj,
+                                ];
+                            }
+                        }
+
+                        // Push the new object onto the stack
+                        this.objStack.push(newObj);
+                        this.currentObj = newObj;
                     }
-
-                    // Push the new object onto the stack
-                    this.stack.push({ tagName: this.currentTagName, obj: newObj });
-                    this.currentObj = newObj;
+                } else {
+                    // Not a '<' for some reason—skip it
+                    this.pos++;
                 }
-            } else {
-                // Not a '<' for some reason—skip it
-                this.pos++;
-            }
-        }
 
-        return undefined; // No proper closing tag or empty XML
+                // Yield at the end of each main loop iteration if we've exceeded the time slice.
+                const yieldPromise = yieldIfNeeded();
+                if(yieldPromise) {
+                    // eslint-disable-next-line no-await-in-loop
+                    await yieldPromise;
+                }
+            }
+
+            return undefined; // No proper closing tag or empty XML
+        } finally {
+            // Don't retain the (possibly large) XML string and tree between parses
+            this.xml = '';
+            this.resetParser();
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -128,7 +187,7 @@ export default class XMLParser {
 
     private resetParser(): void {
         this.pos = 0;
-        this.stack = [];
+        this.objStack.length = 0;
         this.currentObj = undefined;
         this.currentTagName = '';
     }
@@ -196,16 +255,14 @@ export default class XMLParser {
         return true;
     }
 
-    private parseAttributes(): XMLObject {
-        const attrs: XMLObject = {};
-
+    private parseAttributesInto(attrs: XMLObject): void {
         // Skip any spaces between tag name and the first attribute or closing '>'
         while(this.xml[this.pos] === ' ') this.pos++;
 
         // If we reached '>' right away, no attributes
         if(this.xml[this.pos] === '>') {
             this.pos++; // Move past '>'
-            return attrs; // Return empty attributes
+            return;
         }
 
         while(this.pos < this.xml.length && this.xml[this.pos] !== '>') {
@@ -272,8 +329,6 @@ export default class XMLParser {
                 break;
             }
         }
-
-        return attrs;
     }
 
     private parseTextContent(startPos: number): string {
@@ -300,7 +355,13 @@ export default class XMLParser {
      * from <supported_clocks> to </supported_clocks>, including nested
      * <supported_clocks> if they occur.
      */
-    private skipAttributesAndBlock(tagName: string): void {
+    private async skipAttributesAndBlock(
+        tagName: string,
+        yieldIfNeeded: () => Promise<void> | null
+    ): Promise<void> {
+        const closePrefix = `</${tagName}`;
+        const openPrefix = `<${tagName}`;
+
         // First, move pos to the end of this opening tag ('>')
         const endOfTag = this.xml.indexOf('>', this.pos);
         if(endOfTag === -1) {
@@ -328,6 +389,11 @@ export default class XMLParser {
         // Now skip everything until we find the matching `</tagName>` (considering nesting)
         let level = 1;
         while(this.pos < this.xml.length && level > 0) {
+            const yieldPromise = yieldIfNeeded();
+            if(yieldPromise) {
+                // eslint-disable-next-line no-await-in-loop
+                await yieldPromise;
+            }
             const nextOpen = this.xml.indexOf('<', this.pos);
             if(nextOpen === -1) {
                 // No more tags, end of document
@@ -337,11 +403,11 @@ export default class XMLParser {
             this.pos = nextOpen;
 
             // Check if it's a closing tag for this element
-            if(this.xml.startsWith(`</${tagName}`, this.pos)) {
+            if(this.xml.startsWith(closePrefix, this.pos)) {
                 level--;
             }
             // Check if it's a nested opening tag of the same name
-            else if(this.xml.startsWith(`<${tagName}`, this.pos)) {
+            else if(this.xml.startsWith(openPrefix, this.pos)) {
                 level++;
             }
 
