@@ -70,11 +70,8 @@ export default class CancellableTaskManager<T> {
     private currentTask?: CancellableTask<T>;
 
     private taskCancellable?: Gio.Cancellable;
-    public get cancellable() {
-        if(!this.taskCancellable) {
-            this.taskCancellable = new Gio.Cancellable();
-        }
-        return this.taskCancellable;
+    public get cancellable(): Gio.Cancellable | null {
+        return this.taskCancellable ?? null;
     }
 
     public run(boundTask: () => Promise<T>): Promise<T> {
@@ -100,7 +97,17 @@ export default class CancellableTaskManager<T> {
             this.cancelId = undefined;
         }
 
-        this.cancelId = this.cancellable.connect(() => {
+        const cancellable = this.cancellable;
+        if(!this.currentTask || !cancellable) {
+            try {
+                subprocess.force_exit();
+            } catch(_) {
+                /* empty */
+            }
+            return;
+        }
+
+        this.cancelId = cancellable.connect(() => {
             try {
                 subprocess.force_exit();
             } catch(_) {
