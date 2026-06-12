@@ -53,6 +53,7 @@ export default GObject.registerClass(
         protected grid?: St.Widget;
         protected historyGrid?: Clutter.GridLayout;
         protected history?: T[];
+        private cleanedUp: boolean = false;
 
         constructor(params: GraphProps = {}) {
             //default params
@@ -101,6 +102,7 @@ export default GObject.registerClass(
 
             Signal.connect(this.historyChart, 'repaint', this.repaint.bind(this));
             Config.connect(this, 'changed::theme-style', this.setStyle.bind(this));
+            this.connect('destroy', this.cleanup.bind(this));
         }
 
         buildHistoryGrid() {
@@ -202,9 +204,16 @@ export default GObject.registerClass(
             this.historyChart.queue_repaint();
         }
 
-        override destroy() {
+        private cleanup() {
+            if(this.cleanedUp) return;
+            this.cleanedUp = true;
+
             Config.clear(this);
             Signal.clear(this.historyChart);
+        }
+
+        override destroy() {
+            this.cleanup();
 
             this.historyChart?.destroy();
             this.historyChart = undefined as any;

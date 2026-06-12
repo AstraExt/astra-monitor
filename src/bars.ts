@@ -55,7 +55,9 @@ export default GObject.registerClass(
         protected barSize: number;
         protected bars: St.Widget[][];
         protected hideEmpty: boolean;
+        protected themeContext?: St.ThemeContext;
         protected themeContextConnectId?: number;
+        private cleanedUp: boolean = false;
 
         constructor(params: BarProps) {
             //default params
@@ -155,12 +157,15 @@ export default GObject.registerClass(
             const themeContext = St.ThemeContext.get_for_stage(global.get_stage());
             if(themeContext.get_scale_factor) {
                 this.scaleFactor = themeContext.get_scale_factor();
+                this.themeContext = themeContext;
                 this.themeContextConnectId = themeContext.connect('notify::scale-factor', obj => {
                     this.scaleFactor = obj.get_scale_factor();
                 });
             } else {
                 this.scaleFactor = 1;
             }
+
+            this.connect('destroy', this.cleanup.bind(this));
         }
 
         setStyle() {
@@ -308,23 +313,23 @@ export default GObject.registerClass(
             return size;
         }
 
-        override destroy() {
+        private cleanup() {
+            if(this.cleanedUp) return;
+            this.cleanedUp = true;
+
             Config.clear(this);
 
-            if(this.themeContextConnectId) {
-                const themeContext = St.ThemeContext.get_for_stage(global.get_stage());
-                themeContext.disconnect(this.themeContextConnectId);
-                this.themeContextConnectId = undefined as any;
+            if(this.themeContext && this.themeContextConnectId) {
+                this.themeContext.disconnect(this.themeContextConnectId);
+                this.themeContext = undefined;
+                this.themeContextConnectId = undefined;
             }
 
-            for(let i = 0; i < this.bars.length; i++) {
-                for(let j = 0; j < this.bars[i].length; j++) {
-                    this.bars[i][j].destroy();
-                }
-            }
-            this.bars.length = 0;
+            if(this.bars) this.bars.length = 0;
+        }
 
-            this.remove_all_children();
+        override destroy() {
+            this.cleanup();
             super.destroy();
         }
     }
