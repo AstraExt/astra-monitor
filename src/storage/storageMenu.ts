@@ -1631,7 +1631,6 @@ export default class StorageMenu extends MenuBase {
             this.devicesTotalsPopup.delete(id);
         }
 
-        this.deviceSection.remove_all_children();
         this.deviceSection?.destroy();
         this.deviceSection = undefined as any;
 
