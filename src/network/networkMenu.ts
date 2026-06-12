@@ -566,9 +566,6 @@ export default class NetworkMenu extends MenuBase {
     }
 
     createTopProcessesPopup(sourceActor: St.Widget) {
-        this.topProcessesPopup = new MenuBase(sourceActor, 0.05, { numCols: 2 });
-        this.topProcessesPopup.addMenuSection(_('Top Processes'));
-
         this.topProcessesPopup = new MenuBase(sourceActor, 0.05);
         this.topProcessesPopup.section = this.topProcessesPopup.addMenuSection(_('Top Processes'));
         this.topProcessesPopup.section.style = 'min-width:500px;';
