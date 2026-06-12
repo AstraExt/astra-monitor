@@ -2831,6 +2831,9 @@ export default class NetworkMenu extends MenuBase {
         this.close(false);
         this.onClose();
 
+        this.stopPrivilegedTopProcesses();
+        Utils.networkMonitor.unlisten(this, 'topProcessesStop');
+
         Config.clear(this);
         Signal.clear(this.publicIPContainer);
 
