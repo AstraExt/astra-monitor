@@ -670,6 +670,8 @@ export default class NetworkMonitor extends Monitor {
     }
 
     private startPublicIpsUpdater() {
+        if(this.publicIpsUpdaterID !== null) return;
+
         this.publicIpsUpdaterID = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
             60 * 5, // 5 minute
