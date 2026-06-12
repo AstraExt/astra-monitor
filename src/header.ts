@@ -206,12 +206,35 @@ export default GObject.registerClass(
             if(open) {
                 this.add_style_pseudo_class('active');
                 Utils.lowPriorityTask(() => {
-                    this.menu?.onOpen();
+                    const menu = this.menu;
+                    if(!menu) return;
+                    try {
+                        menu.onOpen().catch(e => {
+                            Utils.error(
+                                'Error opening menu',
+                                e instanceof Error ? e : new Error(String(e))
+                            );
+                        });
+                    } catch(e) {
+                        Utils.error(
+                            'Error opening menu',
+                            e instanceof Error ? e : new Error(String(e))
+                        );
+                    }
                 });
             } else {
                 this.remove_style_pseudo_class('active');
                 Utils.lowPriorityTask(() => {
-                    this.menu?.onClose();
+                    const menu = this.menu;
+                    if(!menu) return;
+                    try {
+                        menu.onClose();
+                    } catch(e) {
+                        Utils.error(
+                            'Error closing menu',
+                            e instanceof Error ? e : new Error(String(e))
+                        );
+                    }
                 });
             }
 
