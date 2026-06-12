@@ -97,8 +97,7 @@ export default class SensorsMenu extends MenuBase {
 
     resetSensorsList() {
         for(const [id, sensor] of this.sensors.entries()) {
-            this.sensorsSection.remove_child(sensor.container);
-            this.sensors.delete(id);
+            this.destroySensor(id, sensor);
         }
         this.noSensorsLabel.show();
     }
@@ -110,8 +109,7 @@ export default class SensorsMenu extends MenuBase {
         // remove all sensors that are not present anymore
         for(const [id, sensor] of this.sensors.entries()) {
             if(!sensors.has(id)) {
-                this.sensorsSection.remove_child(sensor.container);
-                this.sensors.delete(id);
+                this.destroySensor(id, sensor);
             }
         }
 
@@ -274,6 +272,13 @@ export default class SensorsMenu extends MenuBase {
         };
     }
 
+    private destroySensor(id: string, sensor: SensorInfo) {
+        sensor.popup.close(false);
+        sensor.popup.destroy();
+        sensor.container.destroy();
+        this.sensors.delete(id);
+    }
+
     updateSensor(sensor: SensorInfo, sensorData: SensorNode) {
         sensor.data = sensorData;
         sensor.name.text = sensorData.name;
@@ -396,5 +401,10 @@ export default class SensorsMenu extends MenuBase {
             }
             return;
         }
+    }
+
+    override destroy() {
+        this.resetSensorsList();
+        super.destroy();
     }
 }
