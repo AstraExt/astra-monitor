@@ -2544,9 +2544,13 @@ export default class Utils {
         return (length *= 20);
     }
 
-    static xmlParse(xml: string, skips: string[] = []): any {
+    static async xmlParseAsync(
+        xml: string,
+        skips: string[] = [],
+        maxLockMs: number = 1
+    ): Promise<any> {
         if(!Utils.xmlParser) return undefined;
-        return Utils.xmlParser.parse(xml, skips);
+        return Utils.xmlParser.parse(xml, skips, maxLockMs);
     }
 
     static performanceStart(name: string) {
