@@ -563,10 +563,6 @@ export default class StorageMenu extends MenuBase {
         // remove all devices that are not present anymore
         for(const [id, device] of this.devices.entries()) {
             if(!devices.has(id)) {
-                this.deviceSection.remove_child(device.container);
-                this.devices.delete(id);
-                device.bar?.destroy();
-
                 this.devicesInfoPopup.get(id)?.close(true);
                 this.devicesInfoPopup.get(id)?.destroy();
                 this.devicesInfoPopup.delete(id);
@@ -574,6 +570,9 @@ export default class StorageMenu extends MenuBase {
                 this.devicesTotalsPopup.get(id)?.close(true);
                 this.devicesTotalsPopup.get(id)?.destroy();
                 this.devicesTotalsPopup.delete(id);
+
+                device.container.destroy();
+                this.devices.delete(id);
             }
         }
 
