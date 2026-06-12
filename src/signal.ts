@@ -21,6 +21,8 @@
 export default class Signal {
     static connectMap = new Map();
     static connectAfterMap = new Map();
+    static destroyMap = new Map();
+    static destroyingSubjects = new Set();
 
     static connect(subject: any, signal: string, callback: (...args: any[]) => any) {
         if(!Signal.connectMap) Signal.connectMap = new Map();
@@ -31,9 +33,7 @@ export default class Signal {
         }
         Signal.connectMap.get(subject).push({ id, signal });
 
-        subject.connect('destroy', () => {
-            Signal.disconnect(subject);
-        });
+        Signal.ensureDestroyHandler(subject);
         return id;
     }
 
@@ -44,9 +44,7 @@ export default class Signal {
         if(!Signal.connectAfterMap.has(subject)) Signal.connectAfterMap.set(subject, []);
         Signal.connectAfterMap.get(subject).push({ id, signal });
 
-        subject.connect('destroy', () => {
-            Signal.disconnectAfter(subject);
-        });
+        Signal.ensureDestroyHandler(subject);
         return id;
     }
 
@@ -70,6 +68,7 @@ export default class Signal {
         } else if(signal) {
             Signal.connectMap.set(subject, remainingConnections);
         }
+        Signal.clearDestroyHandler(subject);
     }
 
     static disconnectAfter(subject: any, signal: string | null = null) {
@@ -92,6 +91,7 @@ export default class Signal {
         } else if(signal) {
             Signal.connectAfterMap.set(subject, remainingConnections);
         }
+        Signal.clearDestroyHandler(subject);
     }
 
     static disconnectAll(subject: any) {
@@ -105,7 +105,40 @@ export default class Signal {
     }
 
     static clearAll() {
-        for(const subject of Signal.connectMap.keys()) Signal.clear(subject);
-        for(const subject of Signal.connectAfterMap.keys()) Signal.clear(subject);
+        for(const subject of [...Signal.connectMap.keys()]) Signal.clear(subject);
+        for(const subject of [...Signal.connectAfterMap.keys()]) Signal.clear(subject);
+    }
+
+    private static ensureDestroyHandler(subject: any) {
+        if(!Signal.destroyMap) Signal.destroyMap = new Map();
+        if(Signal.destroyMap.has(subject)) return;
+
+        const id = subject.connect('destroy', () => {
+            Signal.destroyingSubjects.add(subject);
+            try {
+                Signal.disconnect(subject);
+                Signal.disconnectAfter(subject);
+            } finally {
+                Signal.destroyingSubjects.delete(subject);
+                Signal.destroyMap.delete(subject);
+            }
+        });
+        Signal.destroyMap.set(subject, id);
+    }
+
+    private static clearDestroyHandler(subject: any) {
+        if(Signal.destroyingSubjects.has(subject)) return;
+        if(Signal.connectMap?.has(subject)) return;
+        if(Signal.connectAfterMap?.has(subject)) return;
+
+        const id = Signal.destroyMap?.get(subject);
+        if(id === undefined) return;
+
+        try {
+            subject.disconnect(id);
+        } catch(e) {
+            /* EMPTY */
+        }
+        Signal.destroyMap.delete(subject);
     }
 }
