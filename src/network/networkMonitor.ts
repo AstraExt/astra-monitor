@@ -19,6 +19,7 @@
  */
 
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
@@ -90,6 +91,7 @@ export default class NetworkMonitor extends Monitor {
     private updateNetworkIOTask: CancellableTaskManager<boolean>;
     private updateRoutesTask: CancellableTaskManager<boolean>;
     private updateWirelessTask: CancellableTaskManager<boolean>;
+    private updatePublicIpsTask: CancellableTaskManager<boolean>;
 
     private updateNethogsTask: ContinuousTaskManager;
 
@@ -116,6 +118,7 @@ export default class NetworkMonitor extends Monitor {
         this.updateNetworkIOTask = new CancellableTaskManager();
         this.updateRoutesTask = new CancellableTaskManager();
         this.updateWirelessTask = new CancellableTaskManager();
+        this.updatePublicIpsTask = new CancellableTaskManager();
 
         this.updateNethogsTask = new ContinuousTaskManager();
         this.updateNethogsTask.listen(this, this.updateNethogs.bind(this));
@@ -198,6 +201,7 @@ export default class NetworkMonitor extends Monitor {
         this.updateNetworkIOTask?.cancel();
         this.updateRoutesTask?.cancel();
         this.updateWirelessTask?.cancel();
+        this.updatePublicIpsTask?.cancel();
     }
 
     override start() {
@@ -691,16 +695,18 @@ export default class NetworkMonitor extends Monitor {
     }
 
     public updatePublicIps(force: boolean = false): boolean {
-        (async () => {
-            try {
-                this.lastIpsUpdate = GLib.get_monotonic_time();
-                const ipv4 = await this.updatePublicIpv4Address();
-                const ipv6 = await this.updatePublicIpv6Address();
-                if(ipv4 || ipv6 || force) this.notify('publicIps');
-            } catch(e) {
-                /* EMPTY */
-            }
-        })();
+        const task = this.updatePublicIpsTask;
+        task.run(async () => {
+            this.lastIpsUpdate = GLib.get_monotonic_time();
+            const cancellable = task.cancellable;
+            const ipv4 = await this.updatePublicIpv4Address(cancellable);
+            const ipv6 = await this.updatePublicIpv6Address(cancellable);
+            if(cancellable.is_cancelled()) return false;
+            if(ipv4 || ipv6 || force) this.notify('publicIps');
+            return true;
+        }).catch(() => {
+            /* EMPTY */
+        });
         return true;
     }
 
@@ -710,11 +716,13 @@ export default class NetworkMonitor extends Monitor {
         return true;
     }
 
-    private async updatePublicIpv4Address(): Promise<boolean> {
+    private async updatePublicIpv4Address(cancellable: Gio.Cancellable): Promise<boolean> {
+        if(cancellable.is_cancelled()) return false;
         const publicIpv4Address = Config.get_string('network-source-public-ipv4');
         if(!publicIpv4Address) return this.resetIPv4();
 
-        const value = await Utils.getUrlAsync(publicIpv4Address, true);
+        const value = await Utils.getUrlAsync(publicIpv4Address, true, cancellable);
+        if(cancellable.is_cancelled()) return false;
         if(!value) return this.resetIPv4();
 
         const regex =
@@ -738,11 +746,13 @@ export default class NetworkMonitor extends Monitor {
         return true;
     }
 
-    private async updatePublicIpv6Address(): Promise<boolean> {
+    private async updatePublicIpv6Address(cancellable: Gio.Cancellable): Promise<boolean> {
+        if(cancellable.is_cancelled()) return false;
         const publicIpv6Address = Config.get_string('network-source-public-ipv6');
         if(!publicIpv6Address) return this.resetIPv6();
 
-        const value = await Utils.getUrlAsync(publicIpv6Address, true);
+        const value = await Utils.getUrlAsync(publicIpv6Address, true, cancellable);
+        if(cancellable.is_cancelled()) return false;
         if(!value) return this.resetIPv6();
 
         const regex =
@@ -1019,6 +1029,9 @@ export default class NetworkMonitor extends Monitor {
 
         this.updateWirelessTask?.cancel();
         this.updateWirelessTask = undefined as any;
+
+        this.updatePublicIpsTask?.cancel();
+        this.updatePublicIpsTask = undefined as any;
 
         this.updateNethogsTask?.destroy();
         this.updateNethogsTask = undefined as any;

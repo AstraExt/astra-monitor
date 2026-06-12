@@ -2086,7 +2086,11 @@ export default class Utils {
         }
     }
 
-    static getUrlAsync(url: string, emptyOnFail: boolean = false): Promise<string> {
+    static getUrlAsync(
+        url: string,
+        emptyOnFail: boolean = false,
+        cancellable: Gio.Cancellable | null = null
+    ): Promise<string> {
         return new Promise((resolve, reject) => {
             // Check if the url is valid and not empty
             const urlRegex = /^(http|https|ftp):\/\/[^\s/$.?#].[^\s]*$/;
@@ -2105,7 +2109,7 @@ export default class Utils {
                 return;
             }
 
-            file.load_contents_async(null, (sourceObject, res) => {
+            file.load_contents_async(cancellable, (sourceObject, res) => {
                 if(!sourceObject) {
                     reject(new Error('Source object invalid'));
                     return;
