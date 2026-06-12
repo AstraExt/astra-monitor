@@ -1110,6 +1110,9 @@ export default class MemoryMenu extends MenuBase {
         this.topProcessesPopup?.destroy();
         this.topProcessesPopup = undefined as any;
 
+        this.swapBar?.destroy();
+        this.swapBar = undefined as any;
+
         this.memorySwapPopup?.destroy();
         this.memorySwapPopup = undefined as any;
 
