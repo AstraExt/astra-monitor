@@ -958,6 +958,10 @@ export default class ProcessorMonitor extends Monitor {
         topProcesses.sort((a, b) => b.cpu - a.cpu);
         topProcesses.splice(ProcessorMonitor.TOP_PROCESSES_LIMIT);
 
+        for(const pid of this.previousPidsCpuTime.keys()) {
+            if(!seenPids.includes(pid)) this.previousPidsCpuTime.delete(pid);
+        }
+
         this.topProcessesCache.updateNotSeen(seenPids);
         this.setUsageValue('topProcesses', topProcesses);
         return true;
