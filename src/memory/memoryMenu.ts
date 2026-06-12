@@ -1019,7 +1019,7 @@ export default class MemoryMenu extends MenuBase {
                         if(this.memorySwapPopup.devices !== hash) {
                             const devicesGrid = this.memorySwapPopup.devicesGrid;
                             if(devicesGrid) {
-                                devicesGrid.remove_all_children();
+                                devicesGrid.clear();
 
                                 for(let i = 0; i < swapUsage.devices.length; i++) {
                                     const device = swapUsage.devices[i];
@@ -1060,6 +1060,8 @@ export default class MemoryMenu extends MenuBase {
 
                                     devicesGrid.addToGrid(deviceGrid);
                                 }
+
+                                this.memorySwapPopup.devices = hash;
                             }
                         }
                     } else {
