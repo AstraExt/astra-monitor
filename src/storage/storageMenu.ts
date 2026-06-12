@@ -1605,6 +1605,9 @@ export default class StorageMenu extends MenuBase {
     }
 
     override destroy() {
+        this.stopPrivilegedTopProcesses();
+        Utils.storageMonitor.unlisten(this, 'topProcessesIOTopStop');
+
         Config.clear(this);
 
         this.storageActivityPopup?.destroy();
