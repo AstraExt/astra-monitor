@@ -9,6 +9,7 @@ _Note: This is an important change to GPU monitoring, so feedback is very welcom
 ### Bug fixes
 
 -   Fixed NetHogs capability detection when the binary has additional capabilities configured. [[#218](https://github.com/AstraExt/astra-monitor/pull/218)] (Thanks to [@dantob](https://github.com/dantob))
+-   Fixed NVIDIA `nvidia-smi -q -x` XML parsing when recent drivers include comment nodes in the output. [[#226](https://github.com/AstraExt/astra-monitor/issues/226)] [[#227](https://github.com/AstraExt/astra-monitor/pull/227)] (Thanks to [@MichaelNeys](https://github.com/MichaelNeys))
 
 # Astra Monitor 39 - March 17 2026
 

@@ -99,7 +99,7 @@ export default class XMLParser {
                 this.skipToNextImportantChar();
 
                 if(this.xml[this.pos] === '<') {
-                        if(this.xml[this.pos + 1] === '/') {
+                    if(this.xml[this.pos + 1] === '/') {
                         // handle comments
                         if(this.xml.startsWith('<!--', this.pos)) {
                             const endComment = this.xml.indexOf('-->', this.pos);
