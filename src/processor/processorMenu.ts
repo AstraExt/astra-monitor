@@ -94,6 +94,7 @@ export default class ProcessorMenu extends MenuBase {
     private processorBar!: InstanceType<typeof ProcessorBars>;
     private graph!: InstanceType<typeof ProcessorGraph>;
     private cpuCoresUsagePopup!: CpuCoresUsagePopup;
+    private cpuCoresHoverButton?: St.Button;
     private lazyCoresPopupTimer: number | null = null;
 
     private topProcesses!: TopProcess[];
@@ -426,6 +427,7 @@ export default class ProcessorMenu extends MenuBase {
             trackHover: true,
             style: defaultStyle,
         });
+        this.cpuCoresHoverButton = hoverButton;
 
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
         hoverButton.set_child(grid);
@@ -486,12 +488,17 @@ export default class ProcessorMenu extends MenuBase {
             hoverButton.style = defaultStyle;
             if(this.cpuCoresUsagePopup) {
                 this.cpuCoresUsagePopup.close(true);
-                Utils.processorMonitor.unlisten(hoverButton, 'cpuCoresUsage');
-                Utils.processorMonitor.unlisten(hoverButton, 'cpuCoresFrequency');
+                this.stopCoresPopupListeners();
             }
         });
 
         this.addToMenu(hoverButton, 2);
+    }
+
+    private stopCoresPopupListeners() {
+        if(!this.cpuCoresHoverButton) return;
+        Utils.processorMonitor.unlisten(this.cpuCoresHoverButton, 'cpuCoresUsage');
+        Utils.processorMonitor.unlisten(this.cpuCoresHoverButton, 'cpuCoresFrequency');
     }
 
     createCoresUsagePopup(sourceActor: St.Widget) {
@@ -884,6 +891,7 @@ export default class ProcessorMenu extends MenuBase {
             GLib.source_remove(this.lazyCoresPopupTimer);
             this.lazyCoresPopupTimer = null;
         }
+        this.stopCoresPopupListeners();
 
         Utils.processorMonitor.unlisten(this, 'cpuUsage');
         Utils.processorMonitor.unlisten(this.graph, 'cpuUsage');
@@ -1165,6 +1173,7 @@ export default class ProcessorMenu extends MenuBase {
 
         this.cpuCoresUsagePopup?.destroy();
         this.cpuCoresUsagePopup = undefined as any;
+        this.cpuCoresHoverButton = undefined;
 
         this.topProcessesPopup?.destroy();
         this.topProcessesPopup = undefined as any;
