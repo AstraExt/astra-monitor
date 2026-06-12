@@ -11,6 +11,7 @@ export default class CommandHelper {
         let proc: Gio.Subprocess | null = null;
         let stdoutStream: Gio.InputStream | null = null;
         let stderrStream: Gio.InputStream | null = null;
+        const cancellable = cancellableTaskManager?.cancellable || null;
 
         try {
             const [ok, argv] = GLib.shell_parse_argv(command);
@@ -23,7 +24,7 @@ export default class CommandHelper {
             proc = new Gio.Subprocess({ argv, flags });
 
             try {
-                const init = proc.init(cancellableTaskManager?.cancellable || null);
+                const init = proc.init(cancellable);
                 if(!init) {
                     throw new Error('Failed to initialize CommandHelper');
                 }
@@ -36,16 +37,18 @@ export default class CommandHelper {
             stdoutStream = proc.get_stdout_pipe();
             stderrStream = proc.get_stderr_pipe();
 
-            const stdoutPromise = CommandHelper.readAll(stdoutStream, cancellableTaskManager);
-            const stderrPromise = CommandHelper.readAll(stderrStream, cancellableTaskManager);
+            const stdoutPromise = CommandHelper.readAll(stdoutStream, cancellable);
+            const stderrPromise = CommandHelper.readAll(stderrStream, cancellable);
 
             const waitPromise = new Promise<number>((resolve, reject) => {
-                proc!.wait_async(cancellableTaskManager?.cancellable || null, (_source, res) => {
+                proc!.wait_async(cancellable, (_source, res) => {
                     try {
                         if(!proc!.wait_finish(res)) {
                             reject(new Error('Wait failed'));
-                        } else {
+                        } else if(proc!.get_if_exited()) {
                             resolve(proc!.get_exit_status());
+                        } else {
+                            reject(new Error('Command terminated before exiting normally'));
                         }
                     } catch(e) {
                         reject(e);
@@ -87,7 +90,7 @@ export default class CommandHelper {
 
     static async readAll(
         stream: Gio.InputStream | null,
-        cancellableTaskManager?: CancellableTaskManager<boolean>
+        cancellable: Gio.Cancellable | null
     ): Promise<string> {
         if(!stream) return '';
 
@@ -103,7 +106,7 @@ export default class CommandHelper {
                 stream.read_bytes_async(
                     bufferSize,
                     GLib.PRIORITY_LOW,
-                    cancellableTaskManager?.cancellable || null,
+                    cancellable,
                     (_stream, asyncResult) => {
                         try {
                             const result = stream.read_bytes_finish(asyncResult);

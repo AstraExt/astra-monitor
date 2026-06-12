@@ -96,6 +96,7 @@ export default class ContinuousTaskManager {
 
     private task(): Promise<boolean> {
         const generation = this.currentTask;
+        const cancellable = generation?.cancellable || null;
         return new Promise((resolve, reject) => {
             if(!this.command) {
                 reject('No command or script provided');
@@ -136,7 +137,7 @@ export default class ContinuousTaskManager {
 
             // Initialize the subprocess
             try {
-                const init = proc.init(generation?.cancellable || null);
+                const init = proc.init(cancellable);
                 if(!init) {
                     reject('Failed to initialize subprocess');
                     return;
@@ -161,7 +162,7 @@ export default class ContinuousTaskManager {
                     baseStream: pipeErr,
                     closeBaseStream: true,
                 });
-                this.drainStream(generation, stderrStream);
+                this.drainStream(cancellable, stderrStream);
             }
 
             const stdoutStream = new Gio.DataInputStream({
@@ -169,24 +170,24 @@ export default class ContinuousTaskManager {
                 closeBaseStream: true,
             });
 
-            this.readOutput(generation, resolve, reject, stdoutStream);
+            this.readOutput(generation, cancellable, resolve, reject, stdoutStream);
         });
     }
 
     private drainStream(
-        generation: CancellableTaskManager<boolean> | undefined,
+        cancellable: Gio.Cancellable | null,
         stream: Gio.DataInputStream
     ) {
         stream.read_line_async(
             GLib.PRIORITY_LOW,
-            generation?.cancellable || null,
+            cancellable,
             (s, result) => {
                 try {
                     if(s === null) throw new Error('Stream invalid');
                     const [line] = s.read_line_finish_utf8(result);
                     if(line !== null) {
                         // discard
-                        this.drainStream(generation, stream);
+                        this.drainStream(cancellable, stream);
                         return;
                     }
                 } catch(_) {
@@ -204,13 +205,14 @@ export default class ContinuousTaskManager {
 
     private readOutput(
         generation: CancellableTaskManager<boolean> | undefined,
+        cancellable: Gio.Cancellable | null,
         resolve: (value: boolean | PromiseLike<boolean>) => void,
         reject: (reason?: any) => void,
         stdout: Gio.DataInputStream
     ) {
         stdout.read_line_async(
             GLib.PRIORITY_LOW,
-            generation?.cancellable || null,
+            cancellable,
             (stream, result) => {
                 try {
                     if(stream === null) {
@@ -254,7 +256,7 @@ export default class ContinuousTaskManager {
                             this.callback({ result: this.output, exit: false });
                             this.output = '';
                         }
-                        this.readOutput(generation, resolve, reject, stdout);
+                        this.readOutput(generation, cancellable, resolve, reject, stdout);
                     } else {
                         this.exit(generation);
                         try {

@@ -25,6 +25,7 @@ export class CommandSubprocess {
         if(!ok || !argv || argv.length === 0) {
             throw new Error(`Failed to parse command: "${command}"`);
         }
+        const cancellable = cancellableTaskManager?.cancellable || null;
 
         const flags =
             Gio.SubprocessFlags.STDOUT_PIPE |
@@ -32,10 +33,9 @@ export class CommandSubprocess {
             Gio.SubprocessFlags.INHERIT_FDS;
 
         this.subprocess = new Gio.Subprocess({ argv, flags });
-        cancellableTaskManager?.setSubprocess(this.subprocess);
 
         try {
-            const init = this.subprocess.init(cancellableTaskManager?.cancellable || null);
+            const init = this.subprocess.init(cancellable);
             if(!init) {
                 throw new Error(`Failed to initialize CommandSubprocess: '${command}'`);
             }
@@ -43,6 +43,7 @@ export class CommandSubprocess {
             this.destroy();
             throw new Error(`Failed to initialize CommandSubprocess: '${command}' - ${e.message}`);
         }
+        cancellableTaskManager?.setSubprocess(this.subprocess);
 
         this.stdoutStream = this.subprocess.get_stdout_pipe();
         this.stderrStream = this.subprocess.get_stderr_pipe();
@@ -50,22 +51,24 @@ export class CommandSubprocess {
         try {
             const stdoutPromise = CommandSubprocess.readAll(
                 this.stdoutStream,
-                cancellableTaskManager
+                cancellable
             );
             const stderrPromise = CommandSubprocess.readAll(
                 this.stderrStream,
-                cancellableTaskManager
+                cancellable
             );
 
             const waitPromise = new Promise<number>((resolve, reject) => {
                 this.subprocess!.wait_async(
-                    cancellableTaskManager?.cancellable || null,
+                    cancellable,
                     (_source, res) => {
                         try {
                             if(!this.subprocess!.wait_finish(res)) {
                                 reject(new Error('Wait failed'));
-                            } else {
+                            } else if(this.subprocess!.get_if_exited()) {
                                 resolve(this.subprocess!.get_exit_status());
+                            } else {
+                                reject(new Error('CommandSubprocess terminated before exiting normally'));
                             }
                         } catch(e) {
                             reject(e);
@@ -100,7 +103,7 @@ export class CommandSubprocess {
 
     private static async readAll(
         stream: Gio.InputStream | null,
-        cancellableTaskManager?: CancellableTaskManager<boolean>
+        cancellable: Gio.Cancellable | null
     ): Promise<string> {
         if(!stream) return '';
 
@@ -116,7 +119,7 @@ export class CommandSubprocess {
                 stream.read_bytes_async(
                     bufferSize,
                     GLib.PRIORITY_LOW,
-                    cancellableTaskManager?.cancellable || null,
+                    cancellable,
                     (_stream, asyncResult) => {
                         try {
                             const result = stream.read_bytes_finish(asyncResult);
