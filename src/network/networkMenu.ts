@@ -2872,11 +2872,11 @@ export default class NetworkMenu extends MenuBase {
             }
             this.devicesTotalsPopup = undefined as any;
         }
-        if(this.devicesWirelessPopup) {
-            for(const popup of this.devicesWirelessPopup.values()) {
+        if(this.devicesAddressesPopup) {
+            for(const popup of this.devicesAddressesPopup.values()) {
                 popup.destroy();
             }
-            this.devicesWirelessPopup = undefined as any;
+            this.devicesAddressesPopup = undefined as any;
         }
 
         super.destroy();
