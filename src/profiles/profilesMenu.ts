@@ -29,6 +29,8 @@ import Utils from '../utils/utils.js';
 
 export default class ProfilesMenu extends PopupMenu.PopupMenu {
     private capturedEventId?: number;
+    private profileSourceActor?: St.Widget;
+    private sourceActorDestroyId?: number;
     private freed = false;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number) {
@@ -36,6 +38,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
         const openingSide = shellBarPosition === 'top' ? St.Side.TOP : St.Side.BOTTOM;
 
         super(sourceActor, arrowAlignment, openingSide);
+        this.profileSourceActor = sourceActor;
         this.actor.yExpand = true;
 
         Main.uiGroup.add_child(this.actor);
@@ -56,6 +59,10 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
                 }
             }
             return Clutter.EVENT_PROPAGATE;
+        });
+
+        this.sourceActorDestroyId = sourceActor.connect('destroy', () => {
+            this.close(false);
         });
     }
 
@@ -105,18 +112,36 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
     }
 
     public override close(animate: boolean): void {
-        super.close(animate);
+        if(!this.freed) super.close(animate);
+        this.destroy();
+    }
 
+    public override destroy(): void {
         if(this.capturedEventId) {
-            global.stage.disconnect(this.capturedEventId);
+            try {
+                global.stage.disconnect(this.capturedEventId);
+            } catch(e) {
+                /* EMPTY */
+            }
             this.capturedEventId = undefined;
         }
+
+        if(this.sourceActorDestroyId !== undefined) {
+            try {
+                this.profileSourceActor?.disconnect(this.sourceActorDestroyId);
+            } catch(e) {
+                /* EMPTY */
+            }
+            this.sourceActorDestroyId = undefined;
+        }
+        this.profileSourceActor = undefined;
 
         if(this.freed) return;
         this.freed = true;
 
         this.removeAll();
-        Main.uiGroup.remove_child(this.actor);
-        this.destroy();
+        const parent = this.actor.get_parent();
+        if(parent) parent.remove_child(this.actor);
+        super.destroy();
     }
 }
