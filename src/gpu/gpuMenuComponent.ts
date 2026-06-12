@@ -2044,7 +2044,6 @@ export default class GpuMenuComponent {
         this.topProcesses = undefined as any;
         this.mainSensors = undefined as any;
 
-        this.container?.remove_all_children();
         this.container?.destroy();
         this.container = undefined as any;
     }
