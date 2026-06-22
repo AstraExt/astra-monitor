@@ -147,6 +147,7 @@ export default class StorageMenu extends MenuBase {
     private devicesInfoPopup!: Map<string, DeviceInfoPopup>;
     private devicesTotalsPopup!: Map<string, DeviceTotalsPopup>;
     private updateTimer: number = 0;
+    private destroyed: boolean = false;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
         super(sourceActor, arrowAlignment, { name: 'Storage Menu', arrowSide });
@@ -532,6 +533,8 @@ export default class StorageMenu extends MenuBase {
 
     async updateDeviceList() {
         const devices = await Utils.getBlockDevicesAsync();
+        if(this.destroyed) return;
+
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
 
@@ -1215,6 +1218,7 @@ export default class StorageMenu extends MenuBase {
 
         if(code === 'deviceList') {
             Utils.lowPriorityTask(() => {
+                if(this.destroyed) return;
                 this.updateDeviceList();
             }, GLib.PRIORITY_DEFAULT);
             return;
@@ -1604,6 +1608,7 @@ export default class StorageMenu extends MenuBase {
     }
 
     override destroy() {
+        this.destroyed = true;
         this.stopPrivilegedTopProcesses();
         Utils.storageMonitor.unlisten(this, 'topProcessesIOTopStop');
 

@@ -227,6 +227,7 @@ export default class NetworkMenu extends MenuBase {
     private devicesWirelessPopup!: Map<string, DeviceWirelessPopup>;
 
     private updateTimer: number = 0;
+    private destroyed: boolean = false;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
         super(sourceActor, arrowAlignment, { name: 'Network Menu', arrowSide });
@@ -946,6 +947,8 @@ export default class NetworkMenu extends MenuBase {
 
     async updateDeviceList() {
         const devices = await Utils.getNetworkInterfacesAsync();
+        if(this.destroyed) return;
+
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
 
@@ -2107,6 +2110,7 @@ export default class NetworkMenu extends MenuBase {
 
         if(code === 'deviceList') {
             Utils.lowPriorityTask(() => {
+                if(this.destroyed) return;
                 this.updateDeviceList();
             }, GLib.PRIORITY_DEFAULT);
             return;
@@ -2828,6 +2832,7 @@ export default class NetworkMenu extends MenuBase {
     }
 
     override destroy() {
+        this.destroyed = true;
         this.close(false);
         this.onClose();
 
