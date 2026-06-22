@@ -671,12 +671,12 @@ export default GObject.registerClass(
             }
             if(this.value) {
                 Config.clear(this.value);
-                Utils.memoryMonitor.unlisten(this.value);
+                Utils.storageMonitor.unlisten(this.value);
                 this.value = undefined as any;
             }
             if(this.free) {
                 Config.clear(this.free);
-                Utils.memoryMonitor.unlisten(this.free);
+                Utils.storageMonitor.unlisten(this.free);
                 this.free = undefined as any;
             }
             if(this.ioBars) {
