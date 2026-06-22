@@ -20,29 +20,33 @@
 
 export default class PromiseValueHolder<T> {
     private promise: Promise<T>;
-    private isResolved: boolean = false;
+    private settled: boolean = false;
+    private rejected: boolean = false;
     private resolvedValue!: T;
+    private rejectedReason: any;
 
     constructor(promise: Promise<T>) {
-        this.promise = promise;
-
-        this.promise
-            .then((value: T) => {
+        this.promise = promise.then(
+            (value: T) => {
                 this.resolvedValue = value;
-                this.isResolved = true;
-            })
-            .catch(error => {
-                this.isResolved = true;
+                this.settled = true;
+                return value;
+            },
+            error => {
+                this.rejectedReason = error;
+                this.rejected = true;
+                this.settled = true;
                 throw error;
-            });
+            }
+        );
     }
 
     getValue(): Promise<T> {
-        if(this.isResolved) {
+        if(this.settled) {
+            if(this.rejected) return Promise.reject(this.rejectedReason);
             return Promise.resolve(this.resolvedValue);
-        } else {
-            return this.promise;
         }
+        return this.promise;
     }
 }
 
