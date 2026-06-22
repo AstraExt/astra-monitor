@@ -202,10 +202,14 @@ export default class Utils {
         Config.settings = settings;
         Utils.xmlParser = new XMLParser();
         Utils.commandsPath = new Map();
+        Utils.GTop = undefined;
         Utils.hwmonCacheGeneration++;
         Utils.lastCachedHwmonDevices = 0;
         Utils.cachedHwmonDevices = new Map();
         Utils.hwmonPromise = null;
+        Utils.cachedUptimeSeconds = 0;
+        Utils.uptimeTimer = 0;
+        Utils.nethogsCaps = undefined;
 
         Utils.debug = Config.get_boolean('debug-mode');
         if(Utils.debug && service === 'astra-monitor') {
@@ -299,14 +303,21 @@ export default class Utils {
             Utils.error('Error stopping or destroying monitor', e);
         }
 
+        Utils.ready = false;
+        Utils.debug = false;
+        Utils.GTop = undefined;
+        Utils.explicitZero = false;
+        Utils.experimentalPsSubprocess = undefined;
         Utils.xmlParser = null;
         Utils.performanceMap = null;
         Utils.commandsPath = null;
         Utils.lspciCached = undefined;
+        Utils.nethogsCaps = undefined;
         Utils.hwmonCacheGeneration++;
         Utils.hwmonPromise = null;
         Utils.lastCachedHwmonDevices = 0;
-        Utils.cachedHwmonDevices = undefined as any;
+        Utils.cachedHwmonDevices = new Map();
+        Utils.cachedUptimeSeconds = 0;
         Utils.processorMonitor = undefined as any;
         Utils.gpuMonitor = undefined as any;
         Utils.memoryMonitor = undefined as any;
