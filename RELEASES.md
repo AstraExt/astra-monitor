@@ -1,4 +1,4 @@
-# Astra Monitor 40 - TO BE RELEASED
+# Astra Monitor 40 - June 22 2026
 
 ### GPU monitoring
 
@@ -8,6 +8,7 @@ _Note: This is an important change to GPU monitoring, so feedback is very welcom
 
 ### Bug fixes
 
+-   Improved memory management and general cleanup across menus, monitors, and background tasks. [[#211](https://github.com/AstraExt/astra-monitor/pull/211)]
 -   Fixed NetHogs capability detection when the binary has additional capabilities configured. [[#218](https://github.com/AstraExt/astra-monitor/pull/218)] (Thanks to [@dantob](https://github.com/dantob))
 -   Fixed NVIDIA `nvidia-smi -q -x` XML parsing when recent drivers include comment nodes in the output. [[#226](https://github.com/AstraExt/astra-monitor/issues/226)] [[#227](https://github.com/AstraExt/astra-monitor/pull/227)] (Thanks to [@MichaelNeys](https://github.com/MichaelNeys))
 

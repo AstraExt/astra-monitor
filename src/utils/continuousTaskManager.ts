@@ -174,33 +174,26 @@ export default class ContinuousTaskManager {
         });
     }
 
-    private drainStream(
-        cancellable: Gio.Cancellable | null,
-        stream: Gio.DataInputStream
-    ) {
-        stream.read_line_async(
-            GLib.PRIORITY_LOW,
-            cancellable,
-            (s, result) => {
-                try {
-                    if(s === null) throw new Error('Stream invalid');
-                    const [line] = s.read_line_finish_utf8(result);
-                    if(line !== null) {
-                        // discard
-                        this.drainStream(cancellable, stream);
-                        return;
-                    }
-                } catch(_) {
-                    /* EMPTY */
+    private drainStream(cancellable: Gio.Cancellable | null, stream: Gio.DataInputStream) {
+        stream.read_line_async(GLib.PRIORITY_LOW, cancellable, (s, result) => {
+            try {
+                if(s === null) throw new Error('Stream invalid');
+                const [line] = s.read_line_finish_utf8(result);
+                if(line !== null) {
+                    // discard
+                    this.drainStream(cancellable, stream);
+                    return;
                 }
-
-                try {
-                    stream.close(null);
-                } catch(_) {
-                    /* EMPTY */
-                }
+            } catch(_) {
+                /* EMPTY */
             }
-        );
+
+            try {
+                stream.close(null);
+            } catch(_) {
+                /* EMPTY */
+            }
+        });
     }
 
     private readOutput(
@@ -210,73 +203,69 @@ export default class ContinuousTaskManager {
         reject: (reason?: any) => void,
         stdout: Gio.DataInputStream
     ) {
-        stdout.read_line_async(
-            GLib.PRIORITY_LOW,
-            cancellable,
-            (stream, result) => {
-                try {
-                    if(stream === null) {
-                        throw new Error('Stream invalid');
+        stdout.read_line_async(GLib.PRIORITY_LOW, cancellable, (stream, result) => {
+            try {
+                if(stream === null) {
+                    throw new Error('Stream invalid');
+                }
+
+                const [line] = stream.read_line_finish_utf8(result);
+
+                if(line !== null) {
+                    // 5MB limit to avoid memory leaks
+                    if(this.output.length + line.length > 5 * 1024 * 1024) {
+                        if(this.output.length > 0) {
+                            this.callback({ result: this.output, exit: false });
+                        }
+                        this.output = '';
                     }
 
-                    const [line] = stream.read_line_finish_utf8(result);
+                    if(this.output.length) this.output += '\n' + line;
+                    else this.output += line;
 
-                    if(line !== null) {
-                        // 5MB limit to avoid memory leaks
-                        if(this.output.length + line.length > 5 * 1024 * 1024) {
-                            if(this.output.length > 0) {
-                                this.callback({ result: this.output, exit: false });
-                            }
-                            this.output = '';
-                        }
-
-                        if(this.output.length) this.output += '\n' + line;
-                        else this.output += line;
-
-                        if(this.options?.flush?.always) {
-                            this.callback({ result: this.output, exit: false });
-                            this.output = '';
-                        } else if(
-                            this.options?.flush?.match &&
-                            (() => {
-                                // Avoid stateful RegExp (e.g. /.../g) causing missed matches
-                                // due to lastIndex advancing across calls.
-                                this.options!.flush.match!.lastIndex = 0;
-                                return this.options!.flush.match!.test(line);
-                            })()
-                        ) {
-                            this.callback({ result: this.output, exit: false });
-                            this.output = '';
-                        } else if(this.options?.flush?.idle) {
-                            this.startTimer();
-                        } else if(
-                            this.options?.flush?.trigger &&
-                            line.includes(this.options.flush.trigger)
-                        ) {
-                            this.callback({ result: this.output, exit: false });
-                            this.output = '';
-                        }
-                        this.readOutput(generation, cancellable, resolve, reject, stdout);
-                    } else {
-                        this.exit(generation);
-                        try {
-                            stdout.close(null);
-                        } catch(e) {
-                            /* EMPTY */
-                        }
-                        resolve(true);
+                    if(this.options?.flush?.always) {
+                        this.callback({ result: this.output, exit: false });
+                        this.output = '';
+                    } else if(
+                        this.options?.flush?.match &&
+                        (() => {
+                            // Avoid stateful RegExp (e.g. /.../g) causing missed matches
+                            // due to lastIndex advancing across calls.
+                            this.options!.flush.match!.lastIndex = 0;
+                            return this.options!.flush.match!.test(line);
+                        })()
+                    ) {
+                        this.callback({ result: this.output, exit: false });
+                        this.output = '';
+                    } else if(this.options?.flush?.idle) {
+                        this.startTimer();
+                    } else if(
+                        this.options?.flush?.trigger &&
+                        line.includes(this.options.flush.trigger)
+                    ) {
+                        this.callback({ result: this.output, exit: false });
+                        this.output = '';
                     }
-                } catch(e: any) {
+                    this.readOutput(generation, cancellable, resolve, reject, stdout);
+                } else {
                     this.exit(generation);
                     try {
                         stdout.close(null);
-                    } catch(err) {
+                    } catch(e) {
                         /* EMPTY */
                     }
-                    resolve(false);
+                    resolve(true);
                 }
+            } catch(e: any) {
+                this.exit(generation);
+                try {
+                    stdout.close(null);
+                } catch(err) {
+                    /* EMPTY */
+                }
+                resolve(false);
             }
-        );
+        });
     }
 
     public listen(subject: any, callback: ContinuousTaskManagerListener) {

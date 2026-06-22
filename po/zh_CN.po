@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 55\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-12 16:24+0200\n"
+"POT-Creation-Date: 2026-06-22 17:40+0200\n"
 "PO-Revision-Date: 2026-03-12 00:00+0800\n"
 "Last-Translator: Miles-yag <gqqbzl@outlook.com>\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -75,46 +75,46 @@ msgstr "软中断"
 msgid "Steal"
 msgstr "偷取"
 
-#: src/processor/processorMenu.js:338
+#: src/processor/processorMenu.js:344
 msgid "CPU Cores Usage Info"
 msgstr "CPU 核心使用信息"
 
-#: src/processor/processorMenu.js:380
+#: src/processor/processorMenu.js:386
 msgid "GHz"
 msgstr "GHz"
 
-#: src/processor/processorMenu.js:395 src/processor/processorMenu.js:437
-#: src/storage/storageMenu.js:121 src/storage/storageMenu.js:239
-#: src/storage/storageMenu.js:1179 src/storage/storageMenu.js:1180
-#: src/storage/storageMenu.js:1189 src/storage/storageMenu.js:1190
+#: src/processor/processorMenu.js:401 src/processor/processorMenu.js:443
+#: src/storage/storageMenu.js:122 src/storage/storageMenu.js:240
+#: src/storage/storageMenu.js:1183 src/storage/storageMenu.js:1184
+#: src/storage/storageMenu.js:1193 src/storage/storageMenu.js:1194
 #: src/memory/memoryMenu.js:248 src/memory/memoryMenu.js:295
 msgid "Top processes"
 msgstr "高占用进程"
 
-#: src/processor/processorMenu.js:470
+#: src/processor/processorMenu.js:476
 msgid "Load average"
 msgstr "负载平均"
 
-#: src/processor/processorMenu.js:490
+#: src/processor/processorMenu.js:496
 msgctxt "short for 1 minute"
 msgid "1m"
 msgstr "1分钟"
 
-#: src/processor/processorMenu.js:510
+#: src/processor/processorMenu.js:516
 msgctxt "short for 5 minutes"
 msgid "5m"
 msgstr "5分钟"
 
-#: src/processor/processorMenu.js:530
+#: src/processor/processorMenu.js:536
 msgctxt "short for 15 minutes"
 msgid "15m"
 msgstr "15分钟"
 
-#: src/processor/processorMenu.js:579
+#: src/processor/processorMenu.js:585
 msgid "System uptime"
 msgstr "系统运行时间"
 
-#: src/processor/processorMenu.js:723
+#: src/processor/processorMenu.js:730
 msgid "Offline"
 msgstr "离线"
 
@@ -500,9 +500,8 @@ msgid "Memory Usage"
 msgstr "内存使用"
 
 #: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
-#: src/network/networkMenu.js:162 src/network/networkMenu.js:297
-#: src/network/networkMenu.js:299 src/gpu/gpuMenuComponent.js:310
-#: src/gpu/gpuMenuComponent.js:1238
+#: src/network/networkMenu.js:163 src/network/networkMenu.js:298
+#: src/gpu/gpuMenuComponent.js:310 src/gpu/gpuMenuComponent.js:1238
 msgid "Top Processes"
 msgstr "高占用进程"
 
@@ -620,7 +619,7 @@ msgstr "交换空间条主颜色。"
 msgid "About"
 msgstr "关于"
 
-#: src/prefs/about.js:48 src/network/networkMenu.js:910
+#: src/prefs/about.js:48 src/network/networkMenu.js:911
 msgid "Info"
 msgstr "信息"
 
@@ -649,7 +648,7 @@ msgid "GNOME Extensions page"
 msgstr "GNOME 扩展页面"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:38 prefs.js:319
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:39 prefs.js:319
 msgid "Storage"
 msgstr "存储"
 
@@ -876,7 +875,7 @@ msgstr "<b>读取</b> IO 箭头颜色。"
 msgid "<b>Write</b> IO arrow color."
 msgstr "<b>写入</b> IO 箭头颜色。"
 
-#: src/prefs/storage.js:316 src/storage/storageMenu.js:318
+#: src/prefs/storage.js:316 src/storage/storageMenu.js:319
 msgid "Devices"
 msgstr "设备"
 
@@ -894,7 +893,7 @@ msgid "Move down"
 msgstr "下移"
 
 #: src/prefs/profiles.js:36 src/prefs/profiles.js:49
-#: src/profiles/profilesMenu.js:32 prefs.js:189
+#: src/profiles/profilesMenu.js:36 prefs.js:189
 msgid "Profiles"
 msgstr "配置"
 
@@ -1069,7 +1068,7 @@ msgid "Become a patron"
 msgstr "成为赞助者"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:42 prefs.js:354
+#: src/prefs/network.js:84 src/network/networkMenu.js:43 prefs.js:354
 msgid "Network"
 msgstr "网络"
 
@@ -1486,7 +1485,7 @@ msgstr "单核百分比"
 msgid "Set 0 to disable. Value is percentage of total cpu usage."
 msgstr "设为0以禁用。值为总 CPU 使用率百分比。"
 
-#: src/prefs/processors.js:145 src/network/networkMenu.js:1191
+#: src/prefs/processors.js:145 src/network/networkMenu.js:1192
 msgid "Frequency"
 msgstr "频率"
 
@@ -1546,579 +1545,579 @@ msgstr "仅在显卡标题禁用时有效。"
 msgid "No sensor found"
 msgstr "未找到传感器"
 
-#: src/sensors/sensorsMenu.js:225
+#: src/sensors/sensorsMenu.js:229
 #, fuzzy, javascript-format
 msgid "%d sensor"
 msgid_plural "%d sensors"
 msgstr[0] "%d 个传感器"
 
-#: src/network/networkMenu.js:77
+#: src/network/networkMenu.js:78
 msgid "Global Upload:"
 msgstr "总上传："
 
-#: src/network/networkMenu.js:89
+#: src/network/networkMenu.js:90
 msgid "Global Download:"
 msgstr "总下载："
 
-#: src/network/networkMenu.js:114
+#: src/network/networkMenu.js:115
 msgid "Upload Activity"
 msgstr "上传活动"
 
-#: src/network/networkMenu.js:116 src/network/networkMenu.js:138
-#: src/network/networkMenu.js:1100 src/network/networkMenu.js:1124
+#: src/network/networkMenu.js:117 src/network/networkMenu.js:139
+#: src/network/networkMenu.js:1101 src/network/networkMenu.js:1125
 #: src/memory/memoryMenu.js:145 src/memory/memoryMenu.js:401
 msgid "Total"
 msgstr "总计"
 
-#: src/network/networkMenu.js:123 src/network/networkMenu.js:145
-#: src/network/networkMenu.js:1107 src/network/networkMenu.js:1131
+#: src/network/networkMenu.js:124 src/network/networkMenu.js:146
+#: src/network/networkMenu.js:1108 src/network/networkMenu.js:1132
 msgid "Packets"
 msgstr "数据包"
 
-#: src/network/networkMenu.js:130 src/network/networkMenu.js:152
-#: src/network/networkMenu.js:1114 src/network/networkMenu.js:1141
+#: src/network/networkMenu.js:131 src/network/networkMenu.js:153
+#: src/network/networkMenu.js:1115 src/network/networkMenu.js:1142
 msgid "Errors/Dropped"
 msgstr "错误/丢包"
 
-#: src/network/networkMenu.js:136
+#: src/network/networkMenu.js:137
 msgid "Download Activity"
 msgstr "下载活动"
 
-#: src/network/networkMenu.js:168
+#: src/network/networkMenu.js:169
 msgid "(click to show)"
 msgstr "（点击展开）"
 
-#: src/network/networkMenu.js:381
+#: src/network/networkMenu.js:380
 msgid "Public IP"
 msgstr "公网 IP"
 
-#: src/network/networkMenu.js:391
+#: src/network/networkMenu.js:390
 msgid "Public IPv4:"
 msgstr "公网 IPv4："
 
-#: src/network/networkMenu.js:408
+#: src/network/networkMenu.js:407
 msgid "Public IPv6:"
 msgstr "公网 IPv6："
 
-#: src/network/networkMenu.js:455
+#: src/network/networkMenu.js:454
 msgid "Updated a long time ago"
 msgstr "很久前更新"
 
-#: src/network/networkMenu.js:457
+#: src/network/networkMenu.js:456
 msgid "Updated a few seconds ago"
 msgstr "几秒前更新"
 
-#: src/network/networkMenu.js:459
+#: src/network/networkMenu.js:458
 msgid "Updated less than a minute ago"
 msgstr "不到一分钟前更新"
 
-#: src/network/networkMenu.js:461
+#: src/network/networkMenu.js:460
 msgid "Updated about a minute ago"
 msgstr "约一分钟前更新"
 
-#: src/network/networkMenu.js:463
+#: src/network/networkMenu.js:462
 msgid "Updated about 2 minutes ago"
 msgstr "约2分钟前更新"
 
-#: src/network/networkMenu.js:465
+#: src/network/networkMenu.js:464
 msgid "Updated about 5 minutes ago"
 msgstr "约5分钟前更新"
 
-#: src/network/networkMenu.js:467
+#: src/network/networkMenu.js:466
 msgid "Updated more than 5 minutes ago"
 msgstr "5分钟前更新"
 
-#: src/network/networkMenu.js:468
+#: src/network/networkMenu.js:467
 msgid "Click to refresh"
 msgstr "点击刷新"
 
-#: src/network/networkMenu.js:470
+#: src/network/networkMenu.js:469
 msgid "Refreshing..."
 msgstr "刷新中..."
 
-#: src/network/networkMenu.js:472
+#: src/network/networkMenu.js:471
 msgid "Done"
 msgstr "完成"
 
-#: src/network/networkMenu.js:476
+#: src/network/networkMenu.js:475
 msgid "Default Routes"
 msgstr "默认路由"
 
-#: src/network/networkMenu.js:515
+#: src/network/networkMenu.js:514
 msgid "Route"
 msgstr "路由"
 
-#: src/network/networkMenu.js:521
+#: src/network/networkMenu.js:520
 msgid "Metric"
 msgstr "度量"
 
-#: src/network/networkMenu.js:528
+#: src/network/networkMenu.js:527
 msgid "Device"
 msgstr "设备"
 
-#: src/network/networkMenu.js:535
+#: src/network/networkMenu.js:534
 msgid "Gateway"
 msgstr "网关"
 
-#: src/network/networkMenu.js:542 src/storage/storageMenu.js:601
+#: src/network/networkMenu.js:541 src/storage/storageMenu.js:603
 msgid "Type"
 msgstr "类型"
 
-#: src/network/networkMenu.js:549
+#: src/network/networkMenu.js:548
 msgid "Destination"
 msgstr "目标"
 
-#: src/network/networkMenu.js:556
+#: src/network/networkMenu.js:555
 msgid "Protocol"
 msgstr "协议"
 
-#: src/network/networkMenu.js:563 src/network/networkMenu.js:1071
+#: src/network/networkMenu.js:562 src/network/networkMenu.js:1072
 msgid "Scope"
 msgstr "作用域"
 
-#: src/network/networkMenu.js:570
+#: src/network/networkMenu.js:569
 msgid "Flags"
 msgstr "标志"
 
-#: src/network/networkMenu.js:599
+#: src/network/networkMenu.js:598
 msgid "Interfaces"
 msgstr "接口"
 
-#: src/network/networkMenu.js:602
+#: src/network/networkMenu.js:601
 msgid "No network interface found"
 msgstr "未找到网络接口"
 
-#: src/network/networkMenu.js:810
+#: src/network/networkMenu.js:811
 msgctxt "short for upload"
 msgid "U"
 msgstr "上传"
 
-#: src/network/networkMenu.js:836
+#: src/network/networkMenu.js:837
 msgctxt "short for download"
 msgid "D"
 msgstr "下载"
 
-#: src/network/networkMenu.js:913 src/storage/storageMenu.js:600
+#: src/network/networkMenu.js:914 src/storage/storageMenu.js:602
 #: src/gpu/gpuMenuComponent.js:440 src/gpu/gpuMenuComponent.js:1250
 #: src/gpu/gpuMenuComponent.js:1281
 msgid "Name"
 msgstr "名称"
 
-#: src/network/networkMenu.js:920
+#: src/network/networkMenu.js:921
 msgid "Alt Names"
 msgstr "别名"
 
-#: src/network/networkMenu.js:929
+#: src/network/networkMenu.js:930
 msgid "Interface Index"
 msgstr "接口索引"
 
-#: src/network/networkMenu.js:938
+#: src/network/networkMenu.js:939
 msgid "MAC Address"
 msgstr "MAC 地址"
 
-#: src/network/networkMenu.js:947 src/storage/storageMenu.js:690
+#: src/network/networkMenu.js:948 src/storage/storageMenu.js:692
 msgid "Group"
 msgstr "分组"
 
-#: src/network/networkMenu.js:956
+#: src/network/networkMenu.js:957
 msgid "Speed"
 msgstr "速度"
 
-#: src/network/networkMenu.js:965
+#: src/network/networkMenu.js:966
 msgid "Duplex"
 msgstr "双工"
 
-#: src/network/networkMenu.js:974
+#: src/network/networkMenu.js:975
 msgid "MTU"
 msgstr "MTU"
 
-#: src/network/networkMenu.js:983
+#: src/network/networkMenu.js:984
 msgid "Tx Queue Length"
 msgstr "发送队列长度"
 
-#: src/network/networkMenu.js:992
+#: src/network/networkMenu.js:993
 msgid "Link Type"
 msgstr "链路类型"
 
-#: src/network/networkMenu.js:1001
+#: src/network/networkMenu.js:1002
 msgid "Operative State"
 msgstr "运行状态"
 
-#: src/network/networkMenu.js:1010
+#: src/network/networkMenu.js:1011
 msgid "Qdisc"
 msgstr "排队规则"
 
-#: src/network/networkMenu.js:1043
+#: src/network/networkMenu.js:1044
 msgid "Family"
 msgstr "协议族"
 
-#: src/network/networkMenu.js:1050
+#: src/network/networkMenu.js:1051
 msgid "Local"
 msgstr "本地"
 
-#: src/network/networkMenu.js:1057
+#: src/network/networkMenu.js:1058
 msgid "Prefix Length"
 msgstr "前缀长度"
 
-#: src/network/networkMenu.js:1064
+#: src/network/networkMenu.js:1065
 msgid "Broadcast"
 msgstr "广播"
 
-#: src/network/networkMenu.js:1097
+#: src/network/networkMenu.js:1098
 msgid "Upload"
 msgstr "上传"
 
-#: src/network/networkMenu.js:1121
+#: src/network/networkMenu.js:1122
 msgid "Download"
 msgstr "下载"
 
-#: src/network/networkMenu.js:1155
+#: src/network/networkMenu.js:1156
 msgid "IEEE"
 msgstr "IEEE"
 
-#: src/network/networkMenu.js:1167
+#: src/network/networkMenu.js:1168
 msgid "SSID"
 msgstr "SSID"
 
-#: src/network/networkMenu.js:1179 src/storage/storageMenu.js:692
+#: src/network/networkMenu.js:1180 src/storage/storageMenu.js:694
 msgid "Mode"
 msgstr "模式"
 
-#: src/network/networkMenu.js:1203
+#: src/network/networkMenu.js:1204
 msgid "Access Point"
 msgstr "接入点"
 
-#: src/network/networkMenu.js:1215
+#: src/network/networkMenu.js:1216
 msgid "Bit Rate"
 msgstr "比特率"
 
-#: src/network/networkMenu.js:1227
+#: src/network/networkMenu.js:1228
 msgid "TX Power"
 msgstr "发射功率"
 
-#: src/network/networkMenu.js:1239
+#: src/network/networkMenu.js:1240
 msgid "Link Quality"
 msgstr "连接质量"
 
-#: src/network/networkMenu.js:1251
+#: src/network/networkMenu.js:1252
 msgid "Signal Level"
 msgstr "信号强度"
 
-#: src/storage/storageMenu.js:67
+#: src/storage/storageMenu.js:68
 msgid "Global Read:"
 msgstr "总读取："
 
-#: src/storage/storageMenu.js:79
+#: src/storage/storageMenu.js:80
 msgid "Global Write:"
 msgstr "总写入："
 
-#: src/storage/storageMenu.js:104
+#: src/storage/storageMenu.js:105
 msgid "Total Activity"
 msgstr "总活动"
 
-#: src/storage/storageMenu.js:106 src/storage/storageMenu.js:737
+#: src/storage/storageMenu.js:107 src/storage/storageMenu.js:739
 msgid "Read"
 msgstr "读取"
 
-#: src/storage/storageMenu.js:113 src/storage/storageMenu.js:744
+#: src/storage/storageMenu.js:114 src/storage/storageMenu.js:746
 msgid "Write"
 msgstr "写入"
 
-#: src/storage/storageMenu.js:126 src/storage/storageMenu.js:1188
+#: src/storage/storageMenu.js:127 src/storage/storageMenu.js:1192
 msgid "(click to show all system processes)"
 msgstr "（点击显示所有系统进程）"
 
-#: src/storage/storageMenu.js:321
+#: src/storage/storageMenu.js:322
 msgid "No storage device found"
 msgstr "未找到存储设备"
 
-#: src/storage/storageMenu.js:519
+#: src/storage/storageMenu.js:521
 msgctxt "short for read"
 msgid "R"
 msgstr "读"
 
-#: src/storage/storageMenu.js:545
+#: src/storage/storageMenu.js:547
 msgctxt "short for write"
 msgid "W"
 msgstr "写"
 
-#: src/storage/storageMenu.js:595
+#: src/storage/storageMenu.js:597
 msgid "Basic Info"
 msgstr "基本信息"
 
-#: src/storage/storageMenu.js:602
+#: src/storage/storageMenu.js:604
 msgid "Model"
 msgstr "型号"
 
-#: src/storage/storageMenu.js:603 src/gpu/gpuMenuComponent.js:503
+#: src/storage/storageMenu.js:605 src/gpu/gpuMenuComponent.js:503
 msgid "Vendor"
 msgstr "厂商"
 
-#: src/storage/storageMenu.js:604
+#: src/storage/storageMenu.js:606
 msgid "Serial"
 msgstr "序列号"
 
-#: src/storage/storageMenu.js:605
+#: src/storage/storageMenu.js:607
 msgid "Size"
 msgstr "大小"
 
-#: src/storage/storageMenu.js:606
+#: src/storage/storageMenu.js:608
 msgid "State"
 msgstr "状态"
 
-#: src/storage/storageMenu.js:607
+#: src/storage/storageMenu.js:609
 msgid "Subsystems"
 msgstr "子系统"
 
-#: src/storage/storageMenu.js:611
+#: src/storage/storageMenu.js:613
 msgid "File System and Mounting Info"
 msgstr "文件系统与挂载信息"
 
-#: src/storage/storageMenu.js:616
+#: src/storage/storageMenu.js:618
 msgid "File System Type"
 msgstr "文件系统类型"
 
-#: src/storage/storageMenu.js:617
+#: src/storage/storageMenu.js:619
 msgid "Label"
 msgstr "标签"
 
-#: src/storage/storageMenu.js:618
+#: src/storage/storageMenu.js:620
 msgid "UUID"
 msgstr "UUID"
 
-#: src/storage/storageMenu.js:619
+#: src/storage/storageMenu.js:621
 msgid "Mount Points"
 msgstr "挂载点"
 
-#: src/storage/storageMenu.js:620
+#: src/storage/storageMenu.js:622
 msgid "Available Space"
 msgstr "可用空间"
 
-#: src/storage/storageMenu.js:621
+#: src/storage/storageMenu.js:623
 msgid "File System Size"
 msgstr "文件系统大小"
 
-#: src/storage/storageMenu.js:622
+#: src/storage/storageMenu.js:624
 msgid "Used Space"
 msgstr "已用空间"
 
-#: src/storage/storageMenu.js:623
+#: src/storage/storageMenu.js:625
 msgid "Used Space (%)"
 msgstr "已用空间（%）"
 
-#: src/storage/storageMenu.js:624
+#: src/storage/storageMenu.js:626
 msgid "File System Version"
 msgstr "文件系统版本"
 
-#: src/storage/storageMenu.js:625
+#: src/storage/storageMenu.js:627
 msgid "File System Roots"
 msgstr "文件系统根"
 
-#: src/storage/storageMenu.js:629
+#: src/storage/storageMenu.js:631
 msgid "Physical and Disk Details"
 msgstr "物理与磁盘详情"
 
-#: src/storage/storageMenu.js:634
+#: src/storage/storageMenu.js:636
 msgid "Physical Sector Size"
 msgstr "物理扇区大小"
 
-#: src/storage/storageMenu.js:635
+#: src/storage/storageMenu.js:637
 msgid "Logical Sector Size"
 msgstr "逻辑扇区大小"
 
-#: src/storage/storageMenu.js:636
+#: src/storage/storageMenu.js:638
 msgid "Minimum IO Size"
 msgstr "最小 IO 大小"
 
-#: src/storage/storageMenu.js:637
+#: src/storage/storageMenu.js:639
 msgid "Optimal IO Size"
 msgstr "最佳 IO 大小"
 
-#: src/storage/storageMenu.js:638
+#: src/storage/storageMenu.js:640
 msgid "Rotational"
 msgstr "旋转"
 
-#: src/storage/storageMenu.js:639
+#: src/storage/storageMenu.js:641
 msgid "Request Size"
 msgstr "请求大小"
 
-#: src/storage/storageMenu.js:640
+#: src/storage/storageMenu.js:642
 msgid "Alignment Offset"
 msgstr "对齐偏移"
 
-#: src/storage/storageMenu.js:641
+#: src/storage/storageMenu.js:643
 msgid "Discard Alignment"
 msgstr "丢弃对齐"
 
-#: src/storage/storageMenu.js:642
+#: src/storage/storageMenu.js:644
 msgid "Discard Granularity"
 msgstr "丢弃粒度"
 
-#: src/storage/storageMenu.js:643
+#: src/storage/storageMenu.js:645
 msgid "Discard Max Size"
 msgstr "丢弃最大大小"
 
-#: src/storage/storageMenu.js:644
+#: src/storage/storageMenu.js:646
 msgid "Discard Zeroes Data"
 msgstr "丢弃零数据"
 
-#: src/storage/storageMenu.js:648
+#: src/storage/storageMenu.js:650
 msgid "Partition Info"
 msgstr "分区信息"
 
-#: src/storage/storageMenu.js:653
+#: src/storage/storageMenu.js:655
 msgid "Partition Type"
 msgstr "分区类型"
 
-#: src/storage/storageMenu.js:654
+#: src/storage/storageMenu.js:656
 msgid "Partition Label"
 msgstr "分区标签"
 
-#: src/storage/storageMenu.js:655
+#: src/storage/storageMenu.js:657
 msgid "Partition UUID"
 msgstr "分区 UUID"
 
-#: src/storage/storageMenu.js:656
+#: src/storage/storageMenu.js:658
 msgid "Partition Number"
 msgstr "分区号"
 
-#: src/storage/storageMenu.js:657
+#: src/storage/storageMenu.js:659
 msgid "Partition Table Type"
 msgstr "分区表类型"
 
-#: src/storage/storageMenu.js:658
+#: src/storage/storageMenu.js:660
 msgid "Partition Table UUID"
 msgstr "分区表 UUID"
 
-#: src/storage/storageMenu.js:662
+#: src/storage/storageMenu.js:664
 msgid "Performance and Settings"
 msgstr "性能与设置"
 
-#: src/storage/storageMenu.js:667
+#: src/storage/storageMenu.js:669
 msgid "Read Ahead"
 msgstr "预读取"
 
-#: src/storage/storageMenu.js:668
+#: src/storage/storageMenu.js:670
 msgid "Scheduler"
 msgstr "调度器"
 
-#: src/storage/storageMenu.js:669
+#: src/storage/storageMenu.js:671
 msgid "Direct Access"
 msgstr "直接访问"
 
-#: src/storage/storageMenu.js:670
+#: src/storage/storageMenu.js:672
 msgid "Multiqueue"
 msgstr "多队列"
 
-#: src/storage/storageMenu.js:674
+#: src/storage/storageMenu.js:676
 msgid "Advanced Identifiers and States"
 msgstr "高级标识符与状态"
 
-#: src/storage/storageMenu.js:679
+#: src/storage/storageMenu.js:681
 msgid "ID Link"
 msgstr "ID 链接"
 
-#: src/storage/storageMenu.js:680
+#: src/storage/storageMenu.js:682
 msgid "ID"
 msgstr "ID"
 
-#: src/storage/storageMenu.js:681
+#: src/storage/storageMenu.js:683
 msgid "Major:Minor"
 msgstr "主设备号：次设备号"
 
-#: src/storage/storageMenu.js:682
+#: src/storage/storageMenu.js:684
 msgid "HCTL"
 msgstr "HCTL"
 
-#: src/storage/storageMenu.js:683
+#: src/storage/storageMenu.js:685
 msgid "Kernel Name"
 msgstr "内核名称"
 
-#: src/storage/storageMenu.js:684
+#: src/storage/storageMenu.js:686
 msgid "Path"
 msgstr "路径"
 
-#: src/storage/storageMenu.js:685
+#: src/storage/storageMenu.js:687
 msgid "Revision"
 msgstr "修订版本"
 
-#: src/storage/storageMenu.js:686
+#: src/storage/storageMenu.js:688
 msgid "World Wide Name"
 msgstr "全球名称"
 
-#: src/storage/storageMenu.js:687
+#: src/storage/storageMenu.js:689
 msgid "Transport"
 msgstr "传输"
 
-#: src/storage/storageMenu.js:688
+#: src/storage/storageMenu.js:690
 msgid "Hotplug"
 msgstr "热插拔"
 
-#: src/storage/storageMenu.js:689
+#: src/storage/storageMenu.js:691
 msgid "Random"
 msgstr "随机"
 
-#: src/storage/storageMenu.js:691
+#: src/storage/storageMenu.js:693
 msgid "Owner"
 msgstr "所有者"
 
-#: src/storage/storageMenu.js:693
+#: src/storage/storageMenu.js:695
 msgid "Read Only"
 msgstr "只读"
 
-#: src/storage/storageMenu.js:694
+#: src/storage/storageMenu.js:696
 msgid "Removable"
 msgstr "可移动"
 
-#: src/storage/storageMenu.js:695
+#: src/storage/storageMenu.js:697
 msgid "Write Same"
 msgstr "写入相同"
 
-#: src/storage/storageMenu.js:696
+#: src/storage/storageMenu.js:698
 msgid "Zoned"
 msgstr "分区"
 
-#: src/storage/storageMenu.js:697
+#: src/storage/storageMenu.js:699
 msgid "Zone Size"
 msgstr "区域大小"
 
-#: src/storage/storageMenu.js:698
+#: src/storage/storageMenu.js:700
 msgid "Zone Write Granularity"
 msgstr "区域写入粒度"
 
-#: src/storage/storageMenu.js:699
+#: src/storage/storageMenu.js:701
 msgid "Zone Append"
 msgstr "区域追加"
 
-#: src/storage/storageMenu.js:700
+#: src/storage/storageMenu.js:702
 msgid "Zone Number"
 msgstr "区域号"
 
-#: src/storage/storageMenu.js:701
+#: src/storage/storageMenu.js:703
 msgid "Zone Open Max"
 msgstr "区域最大打开数"
 
-#: src/storage/storageMenu.js:702
+#: src/storage/storageMenu.js:704
 msgid "Zone Active Max"
 msgstr "区域最大活动数"
 
-#: src/storage/storageMenu.js:735
+#: src/storage/storageMenu.js:737
 msgid "Total Device Activity"
 msgstr "总设备活动"
 
-#: src/storage/storageMenu.js:792
+#: src/storage/storageMenu.js:794
 msgid "Disk"
 msgstr "磁盘"
 
-#: src/storage/storageMenu.js:1124
+#: src/storage/storageMenu.js:1128
 msgid "Yes"
 msgstr "是"
 
-#: src/storage/storageMenu.js:1124
+#: src/storage/storageMenu.js:1128
 msgid "No"
 msgstr "否"
 
-#: src/storage/storageMenu.js:1178
+#: src/storage/storageMenu.js:1182
 msgid "(showing all system processes)"
 msgstr "（显示所有系统进程）"
 

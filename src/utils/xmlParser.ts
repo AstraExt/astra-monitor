@@ -106,7 +106,7 @@ export default class XMLParser {
                             this.pos = endComment !== -1 ? endComment + 3 : this.xml.length;
                             continue;
                         }
-                        
+
                         // Closing tag
                         this.pos = this.xml.indexOf('>', this.pos) + 1;
                         const finishedObject = this.objStack.pop();

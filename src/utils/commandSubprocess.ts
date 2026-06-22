@@ -49,32 +49,25 @@ export class CommandSubprocess {
         this.stderrStream = this.subprocess.get_stderr_pipe();
 
         try {
-            const stdoutPromise = CommandSubprocess.readAll(
-                this.stdoutStream,
-                cancellable
-            );
-            const stderrPromise = CommandSubprocess.readAll(
-                this.stderrStream,
-                cancellable
-            );
+            const stdoutPromise = CommandSubprocess.readAll(this.stdoutStream, cancellable);
+            const stderrPromise = CommandSubprocess.readAll(this.stderrStream, cancellable);
 
             const waitPromise = new Promise<number>((resolve, reject) => {
-                this.subprocess!.wait_async(
-                    cancellable,
-                    (_source, res) => {
-                        try {
-                            if(!this.subprocess!.wait_finish(res)) {
-                                reject(new Error('Wait failed'));
-                            } else if(this.subprocess!.get_if_exited()) {
-                                resolve(this.subprocess!.get_exit_status());
-                            } else {
-                                reject(new Error('CommandSubprocess terminated before exiting normally'));
-                            }
-                        } catch(e) {
-                            reject(e);
+                this.subprocess!.wait_async(cancellable, (_source, res) => {
+                    try {
+                        if(!this.subprocess!.wait_finish(res)) {
+                            reject(new Error('Wait failed'));
+                        } else if(this.subprocess!.get_if_exited()) {
+                            resolve(this.subprocess!.get_exit_status());
+                        } else {
+                            reject(
+                                new Error('CommandSubprocess terminated before exiting normally')
+                            );
                         }
+                    } catch(e) {
+                        reject(e);
                     }
-                );
+                });
             });
 
             const [exitStatus, stdoutContent, stderrContent] = await Promise.all([

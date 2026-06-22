@@ -892,8 +892,7 @@ export default class NetworkMonitor extends Monitor {
 
     private usesNethogsTopProcesses(): boolean {
         return (
-            this.dataSources.topProcesses === 'nethogs' ||
-            this.dataSources.topProcesses === 'auto'
+            this.dataSources.topProcesses === 'nethogs' || this.dataSources.topProcesses === 'auto'
         );
     }
 
