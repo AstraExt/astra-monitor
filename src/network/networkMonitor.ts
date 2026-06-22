@@ -260,13 +260,8 @@ export default class NetworkMonitor extends Monitor {
         super.startListeningFor(key);
 
         if(key === 'topProcesses') {
-            if(Utils.nethogsHasCaps()) {
-                if(
-                    this.dataSources.networkIO === 'nethogs' ||
-                    this.dataSources.networkIO === 'auto'
-                ) {
-                    this.startNethogs();
-                }
+            if(Utils.nethogsHasCaps() && this.usesNethogsTopProcesses()) {
+                this.startNethogs();
             }
         }
     }
@@ -286,13 +281,8 @@ export default class NetworkMonitor extends Monitor {
             this.previousDetailedNetworkIO.time = -1;
         }
         if(key === 'topProcesses') {
-            if(Utils.nethogsHasCaps()) {
-                if(
-                    this.dataSources.networkIO === 'nethogs' ||
-                    this.dataSources.networkIO === 'auto'
-                ) {
-                    this.stopNethogs();
-                }
+            if(Utils.nethogsHasCaps() && this.usesNethogsTopProcesses()) {
+                this.stopNethogs();
             }
         }
     }
@@ -900,12 +890,18 @@ export default class NetworkMonitor extends Monitor {
         return true;
     }
 
-    topProcessesSourceChanged() {
-        if(
+    private usesNethogsTopProcesses(): boolean {
+        return (
             this.dataSources.topProcesses === 'nethogs' ||
             this.dataSources.topProcesses === 'auto'
-        ) {
-            //TODO: for continuous monitoring, start nethogs
+        );
+    }
+
+    private topProcessesSourceChanged() {
+        if(this.usesNethogsTopProcesses()) {
+            if(Utils.nethogsHasCaps() && this.isListeningFor('topProcesses')) {
+                this.startNethogs();
+            }
         } else {
             this.stopNethogs();
         }
@@ -915,14 +911,16 @@ export default class NetworkMonitor extends Monitor {
         if(this.updateNethogsTask.isRunning) return;
         const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 15));
         const path = Utils.commandPathLookup('nethogs -V');
+        if(path === false) {
+            Utils.error('nethogs not found');
+            return;
+        }
 
         if(Utils.nethogsHasCaps()) {
-            if(path !== false) {
-                const command = `nethogs -tb -d ${interval}`;
-                this.updateNethogsTask.start(command, {
-                    flush: { idle: 100 },
-                });
-            }
+            const command = `nethogs -tb -d ${interval}`;
+            this.updateNethogsTask.start(command, {
+                flush: { idle: 100 },
+            });
         } else {
             const pkexecPath = Utils.commandPathLookup('pkexec --version');
             if(pkexecPath === false) {
