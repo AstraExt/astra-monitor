@@ -145,6 +145,19 @@ export default class ProcessorMenu extends MenuBase {
         hoverButton.set_child(hoverLabel);
 
         this.createCPUInfoPopup(hoverButton, cpuInfo, cpuName);
+        Utils.processorMonitor
+            .getCpuInfoAsync()
+            .then(updatedCpuInfo => {
+                if(!this.cpuInfoPopup) return;
+                const updatedCpuName = updatedCpuInfo['Model name'] || '';
+                hoverLabel.text = Utils.getCPUModelShortify(updatedCpuName);
+                this.cpuInfoPopup.close(false);
+                this.cpuInfoPopup.destroy();
+                this.createCPUInfoPopup(hoverButton, updatedCpuInfo, updatedCpuName);
+            })
+            .catch(e => {
+                Utils.error('Error updating CPU info menu', e);
+            });
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
@@ -454,6 +467,26 @@ export default class ProcessorMenu extends MenuBase {
         grid.addGrid(this.graph, 0, 1, 2, 1);
 
         this.createCoresUsagePopup(hoverButton);
+        Utils.processorMonitor
+            .getCpuTopologyAsync()
+            .then(topology => {
+                if(!this.cpuCoresUsagePopup) return;
+                const currentCores = this.cpuCoresUsagePopup.cores?.size ?? 0;
+                if(currentCores === topology.length) return;
+
+                if(this.cpuCoresUsagePopup.cores) {
+                    for(const core of this.cpuCoresUsagePopup.cores.values()) {
+                        core.bar?.destroy();
+                        core.bar = undefined as any;
+                    }
+                }
+                this.cpuCoresUsagePopup.close(false);
+                this.cpuCoresUsagePopup.destroy();
+                this.createCoresUsagePopup(hoverButton);
+            })
+            .catch(e => {
+                Utils.error('Error updating CPU cores popup', e);
+            });
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
@@ -510,6 +543,7 @@ export default class ProcessorMenu extends MenuBase {
         this.cpuCoresUsagePopup.cores = new Map();
 
         const numCores = Utils.processorMonitor.getCpuTopology().length;
+        if(numCores === 0) return;
         let numRows = 1;
         if(numCores > 16) numRows = Math.ceil(numCores / 32) * 2;
         const numCols = Math.ceil(numCores / numRows);
@@ -1087,7 +1121,7 @@ export default class ProcessorMenu extends MenuBase {
                     const topProcess = topProcesses[i];
                     const process = topProcess.process;
                     const cpu = topProcess.cpu;
-                    const numCores = Utils.processorMonitor.getCpuTopology().length;
+                    const numCores = Utils.processorMonitor.getCpuTopology().length || 1;
 
                     if(this.topProcesses[i]) {
                         this.topProcesses[i].label.text = process.exec;

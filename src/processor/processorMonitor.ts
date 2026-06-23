@@ -83,8 +83,10 @@ export default class ProcessorMonitor extends Monitor {
     private previousPidsCpuTime!: Map<number, CpuTime>;
 
     private cpuPresent: number[] | null;
+    private cpuPresentPromise?: Promise<number[]>;
     private dataSources!: ProcessorDataSources;
     private cpuInfo?: CpuInfo;
+    private cpuInfoPromise?: Promise<CpuInfo>;
 
     constructor() {
         super('Processor Monitor');
@@ -99,9 +101,12 @@ export default class ProcessorMonitor extends Monitor {
         this.updateLoadAvgTask = new CancellableTaskManager();
 
         this.cpuPresent = null;
-        this.getCpuTopology();
-
-        this.getCpuInfoSync();
+        this.getCpuTopologyAsync().catch(e => {
+            Utils.error('Error loading CPU topology', e);
+        });
+        this.getCpuInfoAsync().catch(e => {
+            Utils.error('Error loading CPU info', e);
+        });
 
         this.reset();
         this.dataSourcesInit();
@@ -128,16 +133,7 @@ export default class ProcessorMonitor extends Monitor {
             system: -1,
             total: -1,
         };
-        const numCores = this.getCpuTopology().length;
-        this.previousCpuCoresUsage = new Array(numCores);
-        for(let i = 0; i < numCores || 0; i++) {
-            this.previousCpuCoresUsage[i] = {
-                idle: -1,
-                user: -1,
-                system: -1,
-                total: -1,
-            };
-        }
+        this.resetCpuCoresUsage();
 
         this.topProcessesCache?.reset();
         this.topProcessesTime = -1;
@@ -185,16 +181,7 @@ export default class ProcessorMonitor extends Monitor {
             this.dataSources.cpuCoresUsage =
                 Config.get_string('processor-source-cpu-cores-usage') ?? undefined;
             this.updateCoresUsageTask.cancel();
-            const numCores = this.getCpuTopology().length;
-            this.previousCpuCoresUsage = new Array(numCores);
-            for(let i = 0; i < numCores; i++) {
-                this.previousCpuCoresUsage[i] = {
-                    idle: -1,
-                    user: -1,
-                    system: -1,
-                    total: -1,
-                };
-            }
+            this.resetCpuCoresUsage();
             this.resetUsageHistory('cpuCoresUsage');
         });
 
@@ -386,24 +373,41 @@ export default class ProcessorMonitor extends Monitor {
         );
     }
 
-    getCpuPresentSync(): number[] {
-        // this is used very rarely, only on first setup
-        // takes ~0.02ms but could be more on slower systems
-        const fileContents = GLib.file_get_contents('/sys/devices/system/cpu/present');
-        if(fileContents && fileContents[0]) {
-            const decoder = new TextDecoder('utf8');
-            return Utils.parseCpuPresentFile(decoder.decode(fileContents[1]));
+    resetCpuCoresUsage(topology: number[] = this.getCpuTopology()) {
+        const numCores = topology.length;
+        this.previousCpuCoresUsage = new Array(numCores);
+        for(let i = 0; i < numCores; i++) {
+            this.previousCpuCoresUsage[i] = {
+                idle: -1,
+                user: -1,
+                system: -1,
+                total: -1,
+            };
         }
-        return [];
     }
 
     /**
-     * This is a sync function but caches the result
+     * Sync cache-only accessor. Use getCpuTopologyAsync() when an update needs a fresh value.
      */
     getCpuTopology(): number[] {
-        if(this.cpuPresent !== null) return this.cpuPresent;
-        this.cpuPresent = this.getCpuPresentSync();
-        return this.cpuPresent;
+        return this.cpuPresent ?? [];
+    }
+
+    getCpuTopologyAsync(): Promise<number[]> {
+        if(this.cpuPresent !== null) return Promise.resolve(this.cpuPresent);
+        if(this.cpuPresentPromise) return this.cpuPresentPromise;
+
+        this.cpuPresentPromise = Utils.readFileAsync('/sys/devices/system/cpu/present', true)
+            .then(fileContent => {
+                this.cpuPresent = fileContent ? Utils.parseCpuPresentFile(fileContent) : [];
+                this.resetCpuCoresUsage(this.cpuPresent);
+                return this.cpuPresent;
+            })
+            .finally(() => {
+                this.cpuPresentPromise = undefined;
+            });
+
+        return this.cpuPresentPromise;
     }
 
     /**
@@ -412,21 +416,30 @@ export default class ProcessorMonitor extends Monitor {
     getCpuInfoSync(): CpuInfo {
         if(this.cpuInfo !== undefined) return this.cpuInfo;
 
-        this.cpuInfo = {};
+        this.cpuInfo = this.getCpuInfoFromLscpuSync();
+        if(!this.cpuInfo['Model name']) {
+            this.getCpuInfoAsync().catch(e => {
+                Utils.error('Error loading CPU info fallback', e);
+            });
+        }
 
+        return this.cpuInfo;
+    }
+
+    private getCpuInfoFromLscpuSync(): CpuInfo {
         try {
-            if(!Utils.hasLscpu()) return this.cpuInfo;
+            if(!Utils.hasLscpu()) return {};
 
             //TODO: switch to lscpu --json!?
             const path = Utils.commandPathLookup('lscpu --version');
             const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}lscpu`);
 
-            if(!result || !stdout) return this.cpuInfo;
+            if(!result || !stdout) return {};
 
             const decoder = new TextDecoder('utf8');
             const output = decoder.decode(stdout);
 
-            let lines = output.split('\n');
+            const lines = output.split('\n');
             const cpuInfo: CpuInfo = {};
             let currentCategory = cpuInfo;
             let lastKey: string | null = null;
@@ -460,16 +473,24 @@ export default class ProcessorMonitor extends Monitor {
                 }
             }
 
-            this.cpuInfo = cpuInfo;
+            return cpuInfo;
+        } catch(e) {
+            return {};
+        }
+    }
 
-            if(!this.cpuInfo['Model name']) {
-                // lscpu is localized, so we need to fallback to /proc/cpuinfo
-                // TODO: fix flags too
+    getCpuInfoAsync(): Promise<CpuInfo> {
+        if(this.cpuInfo !== undefined && this.cpuInfo['Model name'])
+            return Promise.resolve(this.cpuInfo);
+        if(this.cpuInfoPromise) return this.cpuInfoPromise;
 
-                const fileContents = GLib.file_get_contents('/proc/cpuinfo');
-                if(fileContents && fileContents[0]) {
-                    lines = decoder.decode(fileContents[1]).split('\n');
+        if(this.cpuInfo === undefined) this.cpuInfo = this.getCpuInfoFromLscpuSync();
+        if(this.cpuInfo['Model name']) return Promise.resolve(this.cpuInfo);
 
+        this.cpuInfoPromise = Utils.readFileAsync('/proc/cpuinfo', true)
+            .then(fileContent => {
+                if(fileContent && this.cpuInfo && !this.cpuInfo['Model name']) {
+                    const lines = fileContent.split('\n');
                     for(const line of lines) {
                         if(line.startsWith('model name')) {
                             const [, value] = line.split(':').map(s => s.trim());
@@ -478,12 +499,13 @@ export default class ProcessorMonitor extends Monitor {
                         }
                     }
                 }
-            }
-        } catch(e) {
-            this.cpuInfo = {};
-        }
+                return this.cpuInfo ?? {};
+            })
+            .finally(() => {
+                this.cpuInfoPromise = undefined;
+            });
 
-        return this.cpuInfo;
+        return this.cpuInfoPromise;
     }
 
     updateCpuUsageAuto(procStat: PromiseValueHolderStore<string[]>): Promise<boolean> {
@@ -667,7 +689,7 @@ export default class ProcessorMonitor extends Monitor {
             }
         }
 
-        const topology = this.getCpuTopology();
+        const topology = await this.getCpuTopologyAsync();
         const cpuCoresUsage: any[] = [];
 
         for(let i = 0; i < topology.length; i++) {
@@ -718,7 +740,7 @@ export default class ProcessorMonitor extends Monitor {
         GTop.glibtop_get_cpu(cpu);
 
         const cpuCoresUsage = [];
-        const topology = this.getCpuTopology();
+        const topology = await this.getCpuTopologyAsync();
 
         for(let i = 0; i < topology.length; i++) {
             const coreId = topology[i];
@@ -830,7 +852,7 @@ export default class ProcessorMonitor extends Monitor {
      *
      */
     async updateCpuCoresFrequencyProc(): Promise<boolean> {
-        const topology = this.getCpuTopology();
+        const topology = await this.getCpuTopologyAsync();
 
         if(this.isListeningFor('cpuCoresFrequency')) {
             try {

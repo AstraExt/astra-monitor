@@ -625,20 +625,14 @@ export default class StorageMonitor extends Monitor {
         return false;
     }
 
-    /**
-     * This function is Sync but it caches the result
-     */
-    getSectorSize(device: string): number {
+    async getSectorSizeAsync(device: string): Promise<number> {
         if(this.sectorSizes[device] === undefined) {
-            const fileContents = GLib.file_get_contents(
-                `/sys/block/${device}/queue/hw_sector_size`
+            const fileContents = await Utils.readFileAsync(
+                `/sys/block/${device}/queue/hw_sector_size`,
+                true
             );
-            if(fileContents && fileContents[0]) {
-                const decoder = new TextDecoder('utf8');
-                this.sectorSizes[device] = parseInt(decoder.decode(fileContents[1]));
-            } else {
-                this.sectorSizes[device] = 512;
-            }
+            const sectorSize = parseInt(fileContents, 10);
+            this.sectorSizes[device] = isNaN(sectorSize) ? 512 : sectorSize;
         }
         return this.sectorSizes[device];
     }
@@ -686,6 +680,26 @@ export default class StorageMonitor extends Monitor {
         if(detailed) devices = new Map();
 
         let lastSectorSize = -1;
+        const sectorSizePromises: Promise<number>[] = [];
+
+        for(const device of procDiskstatsValue) {
+            const fields = device.trim().split(/\s+/);
+            if(fields.length < 10) continue;
+
+            const deviceName = fields[2];
+
+            if(deviceName.startsWith('loop')) continue;
+
+            if(this.ignored.includes(deviceName)) continue;
+
+            if(this.ignoredRegex !== null && this.ignoredRegex.test(deviceName)) continue;
+
+            const isPartition = !this.isDisk(deviceName);
+            if(!isPartition && this.sectorSizes[deviceName] === undefined)
+                sectorSizePromises.push(this.getSectorSizeAsync(deviceName));
+        }
+
+        await Promise.all(sectorSizePromises);
 
         for(const device of procDiskstatsValue) {
             const fields = device.trim().split(/\s+/);
@@ -705,7 +719,7 @@ export default class StorageMonitor extends Monitor {
             const writtenSectors = parseInt(fields[9]);
 
             // TODO: Ugly hack to get the sector size of a partition
-            if(!isPartition) lastSectorSize = this.getSectorSize(deviceName);
+            if(!isPartition) lastSectorSize = this.sectorSizes[deviceName] ?? 512;
 
             if(detailed && devices !== null) {
                 devices.set(deviceName, {

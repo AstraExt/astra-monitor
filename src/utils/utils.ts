@@ -502,49 +502,28 @@ export default class Utils {
         return false;
     }
 
-    static hasProcStat(): boolean {
-        try {
-            const fileContents = GLib.file_get_contents('/proc/stat');
-            return fileContents && fileContents[0];
-        } catch(e: any) {
-            return false;
-        }
+    static async canReadFileAsync(path: string): Promise<boolean> {
+        return (await Utils.readFileAsync(path, true)) !== '';
     }
 
-    static hasProcCpuinfo(): boolean {
-        try {
-            const fileContents = GLib.file_get_contents('/proc/cpuinfo');
-            return fileContents && fileContents[0];
-        } catch(e: any) {
-            return false;
-        }
+    static hasProcStat(): Promise<boolean> {
+        return Utils.canReadFileAsync('/proc/stat');
     }
 
-    static hasProcMeminfo(): boolean {
-        try {
-            const fileContents = GLib.file_get_contents('/proc/meminfo');
-            return fileContents && fileContents[0];
-        } catch(e: any) {
-            return false;
-        }
+    static hasProcCpuinfo(): Promise<boolean> {
+        return Utils.canReadFileAsync('/proc/cpuinfo');
     }
 
-    static hasProcDiskstats(): boolean {
-        try {
-            const fileContents = GLib.file_get_contents('/proc/diskstats');
-            return fileContents && fileContents[0];
-        } catch(e: any) {
-            return false;
-        }
+    static hasProcMeminfo(): Promise<boolean> {
+        return Utils.canReadFileAsync('/proc/meminfo');
     }
 
-    static hasProcNetDev(): boolean {
-        try {
-            const fileContents = GLib.file_get_contents('/proc/net/dev');
-            return fileContents && fileContents[0];
-        } catch(e: any) {
-            return false;
-        }
+    static hasProcDiskstats(): Promise<boolean> {
+        return Utils.canReadFileAsync('/proc/diskstats');
+    }
+
+    static hasProcNetDev(): Promise<boolean> {
+        return Utils.canReadFileAsync('/proc/net/dev');
     }
 
     static hasLmSensors(): boolean {
@@ -722,25 +701,16 @@ export default class Utils {
         return Utils.commandPathLookup('intel_gpu_top -h') !== false;
     }
 
-    static hasCoresFrequency(): boolean {
-        let fileContents = GLib.file_get_contents('/sys/devices/system/cpu/present');
-        if(fileContents && fileContents[0]) {
-            const decoder = new TextDecoder('utf8');
-            const topology = Utils.parseCpuPresentFile(decoder.decode(fileContents[1]));
-            const paths = topology.map(
-                coreId => `/sys/devices/system/cpu/cpu${coreId}/cpufreq/scaling_cur_freq`
-            );
-            try {
-                for(const path of paths) {
-                    fileContents = GLib.file_get_contents(path);
-                    if(!fileContents || !fileContents[0]) return false;
-                }
-            } catch(e) {
-                return false;
-            }
-            return true;
-        }
-        return false;
+    static async hasCoresFrequency(): Promise<boolean> {
+        const cpuPresent = await Utils.readFileAsync('/sys/devices/system/cpu/present', true);
+        if(!cpuPresent) return false;
+
+        const topology = Utils.parseCpuPresentFile(cpuPresent);
+        const paths = topology.map(
+            coreId => `/sys/devices/system/cpu/cpu${coreId}/cpufreq/scaling_cur_freq`
+        );
+        const results = await Promise.all(paths.map(path => Utils.canReadFileAsync(path)));
+        return results.every(result => result);
     }
 
     static hasPs(): boolean {
@@ -1642,22 +1612,10 @@ export default class Utils {
     static cachedUptimeSeconds: number = 0;
     static uptimeTimer: number = 0;
     static getUptime(callback: (uptime: number) => void): UptimeTimer {
-        const syncTime = () => {
+        let stopped = false;
+        const startTimer = () => {
             if(Utils.uptimeTimer) {
                 GLib.source_remove(Utils.uptimeTimer);
-            }
-            Utils.cachedUptimeSeconds = 0;
-
-            try {
-                const fileContents = GLib.file_get_contents('/proc/uptime');
-                if(fileContents && fileContents[0]) {
-                    const decoder = new TextDecoder('utf8');
-                    const uptimeString = decoder.decode(fileContents[1]);
-                    const uptimeSeconds = parseFloat(uptimeString.split(' ')[0]);
-                    Utils.cachedUptimeSeconds = uptimeSeconds;
-                }
-            } catch(e) {
-                /* empty */
             }
 
             callback(Utils.cachedUptimeSeconds);
@@ -1668,10 +1626,24 @@ export default class Utils {
                 return true;
             });
         };
-        syncTime();
+
+        Utils.cachedUptimeSeconds = 0;
+        Utils.readFileAsync('/proc/uptime', true)
+            .then(fileContent => {
+                if(stopped) return;
+                if(fileContent) {
+                    const uptimeSeconds = parseFloat(fileContent.split(' ')[0]);
+                    if(!isNaN(uptimeSeconds)) Utils.cachedUptimeSeconds = uptimeSeconds;
+                }
+                startTimer();
+            })
+            .catch(() => {
+                if(!stopped) startTimer();
+            });
 
         return {
             stop: () => {
+                stopped = true;
                 if(Utils.uptimeTimer) {
                     GLib.source_remove(Utils.uptimeTimer);
                     Utils.uptimeTimer = 0;

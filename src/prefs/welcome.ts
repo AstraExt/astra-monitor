@@ -57,48 +57,43 @@ export default class Welcome {
         const visualizationPage = new Adw.PreferencesPage({});
 
         let group = new Adw.PreferencesGroup({ title: _('Dependencies') });
+        const dependenciesGroup = group;
 
         let check = true;
-        if(!Utils.hasProcStat()) {
-            check = false;
-            PrefsUtils.addStatusLabel(
-                { title: _('Cannot access /proc/stat: this extension will not work!') },
-                'am-dialog-error-symbolic',
-                group
-            );
-        }
-        if(!Utils.hasProcCpuinfo()) {
-            check = false;
-            PrefsUtils.addStatusLabel(
-                { title: _('Cannot access /proc/cpuinfo: this extension will not work!') },
-                'am-dialog-error-symbolic',
-                group
-            );
-        }
-        if(!Utils.hasProcMeminfo()) {
-            check = false;
-            PrefsUtils.addStatusLabel(
-                { title: _('Cannot access /proc/meminfo: this extension will not work!') },
-                'am-dialog-error-symbolic',
-                group
-            );
-        }
-        if(!Utils.hasProcDiskstats()) {
-            check = false;
-            PrefsUtils.addStatusLabel(
-                { title: _('Cannot access /proc/diskstats: this extension will not work!') },
-                'am-dialog-error-symbolic',
-                group
-            );
-        }
-        if(!Utils.hasProcNetDev()) {
-            check = false;
-            PrefsUtils.addStatusLabel(
-                { title: _('Cannot access /proc/net/dev: this extension will not work!') },
-                'am-dialog-error-symbolic',
-                group
-            );
-        }
+        const asyncDependencyChecks = [
+            {
+                check: Utils.hasProcStat(),
+                title: _('Cannot access /proc/stat: this extension will not work!'),
+                icon: 'am-dialog-error-symbolic',
+            },
+            {
+                check: Utils.hasProcCpuinfo(),
+                title: _('Cannot access /proc/cpuinfo: this extension will not work!'),
+                icon: 'am-dialog-error-symbolic',
+            },
+            {
+                check: Utils.hasProcMeminfo(),
+                title: _('Cannot access /proc/meminfo: this extension will not work!'),
+                icon: 'am-dialog-error-symbolic',
+            },
+            {
+                check: Utils.hasProcDiskstats(),
+                title: _('Cannot access /proc/diskstats: this extension will not work!'),
+                icon: 'am-dialog-error-symbolic',
+            },
+            {
+                check: Utils.hasProcNetDev(),
+                title: _('Cannot access /proc/net/dev: this extension will not work!'),
+                icon: 'am-dialog-error-symbolic',
+            },
+            {
+                check: Utils.hasCoresFrequency(),
+                title: _(
+                    'Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!'
+                ),
+                icon: 'am-dialog-warning-symbolic',
+            },
+        ];
         if(!Utils.hasPs()) {
             check = false;
             PrefsUtils.addStatusLabel(
@@ -137,18 +132,6 @@ export default class Welcome {
             check = false;
             PrefsUtils.addStatusLabel(
                 { title: _("'lsblk' not installed: some features will be disabled!") },
-                'am-dialog-warning-symbolic',
-                group
-            );
-        }
-        if(!Utils.hasCoresFrequency()) {
-            check = false;
-            PrefsUtils.addStatusLabel(
-                {
-                    title: _(
-                        'Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some features will be disabled!'
-                    ),
-                },
                 'am-dialog-warning-symbolic',
                 group
             );
@@ -247,13 +230,30 @@ export default class Welcome {
                 statusLabel.icon.set_from_icon_name('am-dialog-warning-symbolic');
             });
 
-        if(check) {
-            PrefsUtils.addStatusLabel(
-                { title: _('All other dependencies are met!') },
-                'am-dialog-ok-symbolic',
-                group
-            );
-        }
+        Promise.all(asyncDependencyChecks.map(dependency => dependency.check))
+            .then(results => {
+                for(let i = 0; i < results.length; i++) {
+                    if(results[i]) continue;
+                    check = false;
+                    const dependency = asyncDependencyChecks[i];
+                    PrefsUtils.addStatusLabel(
+                        { title: dependency.title },
+                        dependency.icon,
+                        dependenciesGroup
+                    );
+                }
+
+                if(check) {
+                    PrefsUtils.addStatusLabel(
+                        { title: _('All other dependencies are met!') },
+                        'am-dialog-ok-symbolic',
+                        dependenciesGroup
+                    );
+                }
+            })
+            .catch((e: any) => {
+                Utils.error('Error checking file dependencies', e);
+            });
         visualizationPage.add(group);
 
         group = new Adw.PreferencesGroup({ title: _('Support Us') });
