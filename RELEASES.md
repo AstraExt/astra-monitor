@@ -4,6 +4,10 @@
 
 -   Removed synchronous file reads and command probes from the extension code to comply with the latest requirements from extensions.gnome.org. Most of these operations were already limited to extension startup, but they have now been moved to asynchronous flows.
 
+### Menu behavior
+
+-   Improved menu loading states and first-update behavior to reduce stale values, avoid misleading empty rows, and keep popups consistent while data is being refreshed.
+
 _Note: This is a significant internal change, so feedback is very welcome. If you notice any regression, please open an issue: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
 
 # Astra Monitor 40 - June 22 2026

@@ -98,7 +98,6 @@ export default class ProcessorMenu extends MenuBase {
     private lazyCoresPopupTimer: number | null = null;
 
     private topProcesses!: TopProcess[];
-    private queueTopProcessesUpdate!: boolean;
     private topProcessesPopup!: TopProcessesPopup;
 
     private loadAverageValues!: St.Label[];
@@ -300,7 +299,7 @@ export default class ProcessorMenu extends MenuBase {
             styleClass: 'astra-monitor-menu-value',
             xExpand: true,
         });
-        grid.addToGrid(this.cpuTotalPerc);
+        grid.addToGrid(MenuBase.createLoadingValue(this.cpuTotalPerc));
 
         // User CPU usage percentage
         label = new St.Label({ text: _('User:'), styleClass: 'astra-monitor-menu-label' });
@@ -310,7 +309,7 @@ export default class ProcessorMenu extends MenuBase {
             styleClass: 'astra-monitor-menu-value',
             xExpand: true,
         });
-        grid.addToGrid(this.cpuUserPerc);
+        grid.addToGrid(MenuBase.createLoadingValue(this.cpuUserPerc));
 
         // System CPU usage percentage
         label = new St.Label({ text: _('System:'), styleClass: 'astra-monitor-menu-label' });
@@ -320,7 +319,7 @@ export default class ProcessorMenu extends MenuBase {
             styleClass: 'astra-monitor-menu-value',
             xExpand: true,
         });
-        grid.addToGrid(this.cpuSystemPerc);
+        grid.addToGrid(MenuBase.createLoadingValue(this.cpuSystemPerc));
 
         const hoverButton = new St.Button({
             reactive: true,
@@ -614,7 +613,6 @@ export default class ProcessorMenu extends MenuBase {
         const grid = new Grid({ styleClass: 'astra-monitor-menu-subgrid' });
 
         this.topProcesses = [];
-        this.queueTopProcessesUpdate = false;
 
         //TODO: allow to customize number of processes to show in the menu
         const numProcesses = 5;
@@ -624,7 +622,7 @@ export default class ProcessorMenu extends MenuBase {
                 styleClass: 'astra-monitor-menu-cmd-name',
                 xExpand: true,
             });
-            grid.addToGrid(label);
+            grid.addToGrid(MenuBase.createLoadingValue(label));
             const percentage = new St.Label({
                 text: '',
                 styleClass: 'astra-monitor-menu-cmd-usage',
@@ -732,7 +730,9 @@ export default class ProcessorMenu extends MenuBase {
             xExpand: true,
             styleClass: 'astra-monitor-menu-key-mid',
         });
-        oneMinuteContainer.add_child(oneMinuteValueLabel);
+        oneMinuteContainer.add_child(
+            MenuBase.createLoadingValue(oneMinuteValueLabel)
+        );
         oneMinuteContainer.set_width(50);
 
         this.loadAverageValues.push(oneMinuteValueLabel);
@@ -760,7 +760,9 @@ export default class ProcessorMenu extends MenuBase {
             xExpand: true,
             styleClass: 'astra-monitor-menu-key-mid',
         });
-        fiveMinutesContainer.add_child(fiveMinutesValueLabel);
+        fiveMinutesContainer.add_child(
+            MenuBase.createLoadingValue(fiveMinutesValueLabel)
+        );
         fiveMinutesContainer.set_width(50);
 
         this.loadAverageValues.push(fiveMinutesValueLabel);
@@ -788,7 +790,9 @@ export default class ProcessorMenu extends MenuBase {
             xExpand: true,
             styleClass: 'astra-monitor-menu-key-mid',
         });
-        fifteenMinutesContainer.add_child(fifteenMinutesValueLabel);
+        fifteenMinutesContainer.add_child(
+            MenuBase.createLoadingValue(fifteenMinutesValueLabel)
+        );
         fifteenMinutesContainer.set_width(50);
 
         this.loadAverageValues.push(fifteenMinutesValueLabel);
@@ -865,34 +869,58 @@ export default class ProcessorMenu extends MenuBase {
         }
 
         //Update cpu usage percentage label
-        this.clear('cpuUsage');
-        this.update('cpuUsage', true);
-        Utils.processorMonitor.listen(this, 'cpuUsage', this.update.bind(this, 'cpuUsage', false));
+        this.updateFreshOrShowLoading(
+            Utils.processorMonitor,
+            'cpuUsage',
+            'cpuUsage',
+            this.showCpuUsageLoading.bind(this)
+        );
+        Utils.processorMonitor.listen(
+            this,
+            'cpuUsage',
+            this.bindOpenUpdate('cpuUsage', this.update.bind(this, 'cpuUsage', false))
+        );
+        this.scheduleTwoSampleOpenUpdate('cpuUsage', Utils.processorMonitor, () => {
+            Utils.processorMonitor.requestUpdate('cpuUsage');
+        });
 
         //Update graph history
-        this.update('graph', true);
+        if(this.canUseCachedValue(Utils.processorMonitor, 'cpuUsage')) this.update('graph', true);
         Utils.processorMonitor.listen(
             this.graph,
             'cpuUsage',
             this.update.bind(this, 'graph', false)
         );
 
-        this.update('topProcesses', true);
+        this.updateFreshOrShowLoading(
+            Utils.processorMonitor,
+            'topProcesses',
+            'topProcesses',
+            this.clear.bind(this, 'topProcesses')
+        );
         Utils.processorMonitor.listen(
             this,
             'topProcesses',
-            this.update.bind(this, 'topProcesses', false)
+            this.bindOpenUpdate('topProcesses', this.update.bind(this, 'topProcesses', false))
         );
-        Utils.processorMonitor.requestUpdate('topProcesses');
-        this.queueTopProcessesUpdate = true;
+        this.scheduleTwoSampleOpenUpdate('topProcesses', Utils.processorMonitor, () => {
+            Utils.processorMonitor.requestUpdate('topProcesses');
+        });
 
-        this.update('loadAverage', true);
+        this.updateFreshOrShowLoading(
+            Utils.processorMonitor,
+            'loadAverage',
+            'loadAverage',
+            this.showLoadAverageLoading.bind(this)
+        );
         Utils.processorMonitor.listen(
             this,
             'loadAverage',
             this.update.bind(this, 'loadAverage', false)
         );
-        Utils.processorMonitor.requestUpdate('loadAverage');
+        this.scheduleOpenUpdate('loadAverage', Utils.processorMonitor, () => {
+            Utils.processorMonitor.requestUpdate('loadAverage');
+        });
 
         this.menuUptimeTimer = Utils.getUptime(bootTime => {
             try {
@@ -902,8 +930,6 @@ export default class ProcessorMenu extends MenuBase {
             }
         });
 
-        this.clear('gpuUpdate');
-        this.update('gpuUpdate', true);
         const processorGpuShow = Config.get_boolean('processor-gpu');
         const gpuHeaderShow = Config.get_boolean('gpu-header-show');
         if(processorGpuShow && !gpuHeaderShow) {
@@ -913,6 +939,7 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     onClose() {
+        super.onClose();
         this.menuUptimeTimer?.stop();
         this.menuUptimeTimer = null;
 
@@ -931,8 +958,17 @@ export default class ProcessorMenu extends MenuBase {
 
         Utils.gpuMonitor?.unlisten(this, 'gpuUpdate');
         Utils.gpuMonitor?.unlisten(this, 'gpuUpdateProcessor');
+    }
 
-        this.queueTopProcessesUpdate = false;
+    private showCpuUsageLoading() {
+        this.processorBar.setUsage([]);
+        for(const label of [this.cpuTotalPerc, this.cpuUserPerc, this.cpuSystemPerc]) {
+            MenuBase.setLoading(label, true);
+        }
+    }
+
+    private showLoadAverageLoading() {
+        for(const label of this.loadAverageValues) MenuBase.setLoading(label, true);
     }
 
     clear(code: string = 'all') {
@@ -946,6 +982,7 @@ export default class ProcessorMenu extends MenuBase {
 
         if(code === 'all' || code === 'topProcesses') {
             for(let i = 0; i < this.topProcesses.length; i++) {
+                MenuBase.setLoading(this.topProcesses[i].label, true);
                 this.topProcesses[i].label.text = '';
                 this.topProcesses[i].percentage.text = '';
             }
@@ -953,6 +990,7 @@ export default class ProcessorMenu extends MenuBase {
             for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
                 const popup = this.topProcessesPopup?.processes?.get(i);
                 if(!popup) continue;
+                popup.label.text = '';
                 popup.percentage.text = '';
                 popup.description.text = '';
             }
@@ -972,14 +1010,6 @@ export default class ProcessorMenu extends MenuBase {
         }
     }
 
-    protected override needsUpdate(code: string, forced: boolean = false) {
-        if(forced) {
-            const valueTime = Utils.processorMonitor.getCurrentValueTime(code);
-            return !(valueTime && Date.now() - valueTime > Utils.processorMonitor.updateFrequency);
-        }
-        return super.needsUpdate(code, forced);
-    }
-
     update(code: string, forced: boolean = false, ...args: any[]) {
         if(!this.needsUpdate(code, forced)) {
             return;
@@ -989,19 +1019,22 @@ export default class ProcessorMenu extends MenuBase {
             const cpuUsage = Utils.processorMonitor.getCurrentValue('cpuUsage');
 
             //TODO: optionally multiply by number of cores
-            if(!cpuUsage || !cpuUsage.total || isNaN(cpuUsage.total)) {
-                this.cpuTotalPerc.text = '0%';
-                this.processorBar.setUsage([]);
+            if(!cpuUsage || cpuUsage.total === undefined || isNaN(cpuUsage.total)) {
+                this.showCpuUsageLoading();
             } else {
+                for(const label of [this.cpuTotalPerc, this.cpuUserPerc, this.cpuSystemPerc]) {
+                    MenuBase.setLoading(label, false);
+                }
                 this.cpuTotalPerc.text = cpuUsage.total.toFixed(0) + '%';
                 this.processorBar.setUsage([cpuUsage]);
             }
 
-            if(!cpuUsage || !cpuUsage.user || isNaN(cpuUsage.user)) this.cpuUserPerc.text = '0%';
+            if(!cpuUsage || cpuUsage.user === undefined || isNaN(cpuUsage.user))
+                this.cpuUserPerc.text = '';
             else this.cpuUserPerc.text = cpuUsage.user.toFixed(0) + '%';
 
-            if(!cpuUsage || !cpuUsage.system || isNaN(cpuUsage.system))
-                this.cpuSystemPerc.text = '0%';
+            if(!cpuUsage || cpuUsage.system === undefined || isNaN(cpuUsage.system))
+                this.cpuSystemPerc.text = '';
             else this.cpuSystemPerc.text = cpuUsage.system.toFixed(0) + '%';
 
             if(this.cpuCategoryUsagePopup && cpuUsage && cpuUsage.raw) {
@@ -1086,18 +1119,12 @@ export default class ProcessorMenu extends MenuBase {
             return;
         }
         if(code === 'topProcesses') {
-            if(this.queueTopProcessesUpdate) {
-                if(Utils.processorMonitor.dueIn >= 300)
-                    Utils.processorMonitor.requestUpdate('topProcesses');
-                this.queueTopProcessesUpdate = false;
-                return;
-            }
-
             const topProcesses = Utils.processorMonitor.getCurrentValue('topProcesses');
             if(!topProcesses || !Array.isArray(topProcesses)) {
                 for(let i = 0; i < this.topProcesses.length; i++) {
                     const topProcess = this.topProcesses[i];
                     if(topProcess) {
+                        MenuBase.setLoading(topProcess.label, true);
                         topProcess.label.text = '';
                         topProcess.percentage.text = '';
                     }
@@ -1110,7 +1137,24 @@ export default class ProcessorMenu extends MenuBase {
                     }
                 }
             } else {
-                for(let i = 0; i < topProcesses.length; i++) {
+                const loading = this.isOpenUpdatePending('topProcesses');
+                for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
+                    if(!topProcesses[i]) {
+                        if(this.topProcesses[i]) {
+                            MenuBase.setLoading(this.topProcesses[i].label, loading);
+                            this.topProcesses[i].label.text = loading ? '' : '-';
+                            this.topProcesses[i].percentage.text = '';
+                        }
+                        if(this.topProcessesPopup) {
+                            const popup = this.topProcessesPopup.processes?.get(i);
+                            if(!popup) continue;
+                            popup.label.text = '';
+                            popup.description.text = '';
+                            popup.percentage.text = '';
+                        }
+                        continue;
+                    }
+
                     const perCore = Config.get_boolean(
                         'processor-menu-top-processes-percentage-core'
                     );
@@ -1121,6 +1165,7 @@ export default class ProcessorMenu extends MenuBase {
                     const numCores = Utils.processorMonitor.getCpuTopology().length || 1;
 
                     if(this.topProcesses[i]) {
+                        MenuBase.setLoading(this.topProcesses[i].label, false);
                         this.topProcesses[i].label.text = process.exec;
 
                         if(perCore)
@@ -1148,19 +1193,19 @@ export default class ProcessorMenu extends MenuBase {
 
             const loadAverage = Utils.processorMonitor.getCurrentValue('loadAverage');
             if(!loadAverage) {
-                for(let i = 0; i < this.loadAverageValues.length; i++)
-                    this.loadAverageValues[i].text = '-';
+                this.showLoadAverageLoading();
             } else {
+                for(const label of this.loadAverageValues) MenuBase.setLoading(label, false);
                 if(!Object.hasOwnProperty.call(loadAverage, 'load1m'))
-                    this.loadAverageValues[0].text = '-';
+                    this.loadAverageValues[0].text = '';
                 else this.loadAverageValues[0].text = loadAverage.load1m.toFixed(2);
 
                 if(!Object.hasOwnProperty.call(loadAverage, 'load5m'))
-                    this.loadAverageValues[1].text = '-';
+                    this.loadAverageValues[1].text = '';
                 else this.loadAverageValues[1].text = loadAverage.load5m.toFixed(2);
 
                 if(!Object.hasOwnProperty.call(loadAverage, 'load15m'))
-                    this.loadAverageValues[2].text = '-';
+                    this.loadAverageValues[2].text = '';
                 else this.loadAverageValues[2].text = loadAverage.load15m.toFixed(2);
             }
             return;

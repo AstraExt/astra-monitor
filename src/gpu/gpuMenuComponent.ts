@@ -21,6 +21,7 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import Pango from 'gi://Pango';
+import GLib from 'gi://GLib';
 import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import MenuBase from '../menu.js';
@@ -158,6 +159,8 @@ export default class GpuMenuComponent {
 
     public container!: InstanceType<typeof Grid>;
     private noGPULabel: St.Label | undefined;
+    private loadingIcon: St.Icon | undefined;
+    private displayUpdateTimer: number = 0;
 
     private topProcesses!: Map<string, TopProcess[]>;
     private mainSensors!: Map<string, Sensor[]>;
@@ -187,6 +190,17 @@ export default class GpuMenuComponent {
         }
 
         this.container = new Grid({ numCols: 2, styleClass: 'astra-monitor-menu-subgrid' });
+        this.loadingIcon = new St.Icon({
+            gicon: Utils.getLocalIcon('am-loading-symbolic'),
+            fallbackIconName: 'dialog-information-symbolic',
+            style: 'icon-size:1.3em;min-height:1.3em;',
+            xExpand: true,
+            xAlign: Clutter.ActorAlign.CENTER,
+            yAlign: Clutter.ActorAlign.CENTER,
+        });
+        this.loadingIcon.set_pivot_point(0.5, 0.5);
+        this.loadingIcon.hide();
+        this.container.addToGrid(this.loadingIcon, 2);
 
         const populateGpuSections = (GPUsList: GpuInfo[]) => {
             if(this.destroyed || !this.container || this.sections.length > 0) return;
@@ -208,7 +222,7 @@ export default class GpuMenuComponent {
         const GPUsList = Utils.getGPUsList();
         if(!GPUsList || GPUsList.length === 0) {
             this.noGPULabel = new St.Label({
-                text: _('Loading GPU...'),
+                text: '',
                 styleClass: 'astra-monitor-menu-label-warning',
                 style: 'font-style:italic;',
             });
@@ -1830,6 +1844,8 @@ export default class GpuMenuComponent {
             return;
         }
 
+        this.loadingIcon?.hide();
+
         for(const section of this.sections) {
             const gpuData: GenericGpuInfo | undefined = data.get(section.uuid);
             if(!gpuData) {
@@ -1992,22 +2008,50 @@ export default class GpuMenuComponent {
         this.clear();
         this.shown = true;
 
-        Utils.gpuMonitor.requestUpdate('displays');
         Utils.gpuMonitor.listen(this, 'displays', this.updateDisplays.bind(this));
 
-        try {
-            this.update(this.lastData);
-        } catch(e: any) {
-            Utils.error('Error updating gpu menu', e);
+        const gpuData = Utils.gpuMonitor.getCurrentValue('gpu') as Map<string, GenericGpuInfo> | null;
+        if(Utils.gpuMonitor.hasFreshValue('gpu', Utils.gpuMonitor.updateFrequencyMs * 3)) {
+            try {
+                this.update(gpuData ?? this.lastData);
+            } catch(e: any) {
+                Utils.error('Error updating gpu menu', e);
+            }
+        } else {
+            if(this.loadingIcon) MenuBase.startLoadingIcon(this.loadingIcon);
         }
+
+        this.scheduleDisplayUpdate();
+    }
+
+    private scheduleDisplayUpdate() {
+        this.cancelDisplayUpdate();
+        const dueIn = Utils.gpuMonitor.dueIn;
+        const openDelayMs = 100;
+        if(dueIn >= 0 && dueIn - openDelayMs <= Utils.gpuMonitor.updateFrequencyMs / 2) return;
+
+        this.displayUpdateTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, openDelayMs, () => {
+            this.displayUpdateTimer = 0;
+            if(this.shown) Utils.gpuMonitor.requestUpdate('displays');
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    private cancelDisplayUpdate() {
+        if(this.displayUpdateTimer === 0) return;
+        GLib.source_remove(this.displayUpdateTimer);
+        this.displayUpdateTimer = 0;
     }
 
     public onClose() {
         this.shown = false;
+        this.cancelDisplayUpdate();
         Utils.gpuMonitor.unlisten(this, 'displays');
     }
 
-    public clear() {}
+    public clear() {
+        if(this.loadingIcon) MenuBase.stopLoadingIcon(this.loadingIcon);
+    }
 
     public destroy() {
         this.destroyed = true;

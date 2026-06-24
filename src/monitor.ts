@@ -59,6 +59,10 @@ export default class Monitor {
         return dueInMicroseconds / 1000;
     }
 
+    get updateFrequencyMs(): number {
+        return this.updateFrequency * 1000;
+    }
+
     get historyLength(): number {
         return this.usageHistoryLength;
     }
@@ -181,6 +185,25 @@ export default class Monitor {
         const times = this.usageHistoryTime.get(key);
         if(times === undefined) return 0;
         return times[0];
+    }
+
+    getValueAgeMs(key: string): number | null {
+        const valueTime = this.getCurrentValueTime(key);
+        if(!valueTime) return null;
+        return Date.now() - valueTime;
+    }
+
+    hasFreshValue(key: string, maxAgeMs: number): boolean {
+        const value = this.getCurrentValue(key);
+        if(value === null || value === undefined) return false;
+
+        const valueAge = this.getValueAgeMs(key);
+        return valueAge !== null && valueAge <= maxAgeMs;
+    }
+
+    isDueWithin(ms: number): boolean {
+        const dueIn = this.dueIn;
+        return dueIn >= 0 && dueIn <= ms;
     }
 
     resetUsageHistory(key: string) {

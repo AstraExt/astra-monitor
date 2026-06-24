@@ -55,6 +55,7 @@ export default class SensorsMenu extends MenuBase {
 
     private sensorsSection!: InstanceType<typeof Grid>;
     private noSensorsLabel!: St.Label;
+    private sensorsLoadingIcon!: St.Icon;
 
     private sensors!: Map<string, SensorInfo>;
 
@@ -90,6 +91,17 @@ export default class SensorsMenu extends MenuBase {
                 xExpand: true,
             });
             this.sensorsSection.addToGrid(this.noSensorsLabel, 2);
+            this.sensorsLoadingIcon = new St.Icon({
+                gicon: Utils.getLocalIcon('am-loading-symbolic'),
+                fallbackIconName: 'dialog-information-symbolic',
+                style: 'icon-size:1.3em;min-height:1.3em;',
+                xExpand: true,
+                xAlign: Clutter.ActorAlign.CENTER,
+                yAlign: Clutter.ActorAlign.CENTER,
+            });
+            this.sensorsLoadingIcon.set_pivot_point(0.5, 0.5);
+            this.sensorsLoadingIcon.hide();
+            this.sensorsSection.addToGrid(this.sensorsLoadingIcon, 2);
             this.sensors = new Map();
             this.addToMenu(this.sensorsSection, 2);
         }
@@ -353,17 +365,31 @@ export default class SensorsMenu extends MenuBase {
     async onOpen() {
         Utils.sensorsMonitor.listen(this, 'sensorsDataAll', () => {});
 
+        this.updateFreshOrShowLoading(
+            Utils.sensorsMonitor,
+            'sensorsData',
+            'sensorsData',
+            this.showSensorsLoading.bind(this)
+        );
         Utils.sensorsMonitor.listen(
             this,
             'sensorsData',
             this.update.bind(this, 'sensorsData', false)
         );
-        Utils.sensorsMonitor.requestUpdate('sensorsData');
+        this.scheduleOpenUpdate('sensorsData', Utils.sensorsMonitor, () => {
+            Utils.sensorsMonitor.requestUpdate('sensorsData');
+        });
     }
 
     onClose() {
+        super.onClose();
         Utils.sensorsMonitor.unlisten(this, 'sensorsDataAll');
         Utils.sensorsMonitor.unlisten(this, 'sensorsData');
+    }
+
+    private showSensorsLoading() {
+        this.noSensorsLabel.hide();
+        MenuBase.startLoadingIcon(this.sensorsLoadingIcon);
     }
 
     update(code: string, forced: boolean = false) {
@@ -372,6 +398,7 @@ export default class SensorsMenu extends MenuBase {
         if(code === 'sensorsData') {
             const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
             if(sensorsData) {
+                MenuBase.stopLoadingIcon(this.sensorsLoadingIcon);
                 const sensorsList: Map<string, SensorNode> = new Map();
 
                 //list all by "lm-sensors" provider

@@ -207,7 +207,7 @@ export default GObject.registerClass(
                 this.add_style_pseudo_class('active');
                 Utils.lowPriorityTask(() => {
                     const menu = this.menu;
-                    if(!menu) return;
+                    if(!menu || !menu.isOpen) return;
                     try {
                         menu.onOpen().catch(e => {
                             Utils.error(
@@ -226,7 +226,7 @@ export default GObject.registerClass(
                 this.remove_style_pseudo_class('active');
                 Utils.lowPriorityTask(() => {
                     const menu = this.menu;
-                    if(!menu) return;
+                    if(!menu || menu.isOpen) return;
                     try {
                         menu.onClose();
                     } catch(e) {

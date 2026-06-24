@@ -291,7 +291,7 @@ export default class NetworkMenu extends MenuBase {
             text: '-',
             xExpand: true,
         });
-        grid.addToGrid(this.totalUploadSpeedValueLabel);
+        grid.addToGrid(MenuBase.createLoadingValue(this.totalUploadSpeedValueLabel));
 
         const totalDownloadSpeedLabel = new St.Label({
             text: _('Global Download:'),
@@ -304,7 +304,7 @@ export default class NetworkMenu extends MenuBase {
             text: '-',
             xExpand: true,
         });
-        grid.addToGrid(this.totalDownloadSpeedValueLabel);
+        grid.addToGrid(MenuBase.createLoadingValue(this.totalDownloadSpeedValueLabel));
 
         this.createActivityPopup(hoverButton);
 
@@ -475,7 +475,7 @@ export default class NetworkMenu extends MenuBase {
                 style: 'max-width:85px;',
                 xExpand: true,
             });
-            grid.addToGrid(label);
+            grid.addToGrid(MenuBase.createLoadingValue(label));
 
             // UPLOAD
             const uploadContainer = new St.Widget({
@@ -719,7 +719,7 @@ export default class NetworkMenu extends MenuBase {
             text: '-',
             xExpand: true,
         });
-        grid.addToGrid(publicIPv4Value);
+        grid.addToGrid(MenuBase.createLoadingValue(publicIPv4Value));
 
         this.publicIPv4 = {
             label: publicIPv4Label,
@@ -740,7 +740,13 @@ export default class NetworkMenu extends MenuBase {
             xExpand: true,
             style: 'font-size: 1em;',
         });
-        publicIpv6Grid.addGrid(publicIpv6Value1, 2, 1, 1, 1);
+        publicIpv6Grid.addGrid(
+            MenuBase.createLoadingValue(publicIpv6Value1),
+            2,
+            1,
+            1,
+            1
+        );
 
         const publicIpv6Value2 = new St.Label({
             text: '-',
@@ -828,7 +834,7 @@ export default class NetworkMenu extends MenuBase {
             text: '-',
             xExpand: true,
         });
-        grid.addToGrid(this.defaultRouteGateway);
+        grid.addToGrid(MenuBase.createLoadingValue(this.defaultRouteGateway));
 
         this.createRoutesPopup(hoverButton);
 
@@ -2061,19 +2067,38 @@ export default class NetworkMenu extends MenuBase {
             }
         }
 
-        this.update('networkIO', true);
+        this.updateFreshOrShowLoading(
+            Utils.networkMonitor,
+            'networkIO',
+            'networkIO',
+            this.showNetworkIOLoading.bind(this)
+        );
         Utils.networkMonitor.listen(this, 'networkIO', this.update.bind(this, 'networkIO', false));
 
-        this.update('detailedNetworkIO', true);
+        this.updateFreshOrShowLoading(
+            Utils.networkMonitor,
+            'detailedNetworkIO',
+            'detailedNetworkIO',
+            this.clear.bind(this, 'devices')
+        );
         Utils.networkMonitor.listen(
             this,
             'detailedNetworkIO',
-            this.update.bind(this, 'detailedNetworkIO', false)
+            this.bindOpenUpdate(
+                'detailedNetworkIO',
+                this.update.bind(this, 'detailedNetworkIO', false)
+            )
         );
-        Utils.networkMonitor.requestUpdate('detailedNetworkIO');
+        this.scheduleTwoSampleOpenUpdate('detailedNetworkIO', Utils.networkMonitor, () => {
+            Utils.networkMonitor.requestUpdate('detailedNetworkIO');
+        });
 
-        this.clear('topProcesses');
-        this.update('topProcesses', true);
+        this.updateFreshOrShowLoading(
+            Utils.networkMonitor,
+            'topProcesses',
+            'topProcesses',
+            this.clear.bind(this, 'topProcesses')
+        );
         Utils.networkMonitor.listen(
             this,
             'topProcesses',
@@ -2085,27 +2110,38 @@ export default class NetworkMenu extends MenuBase {
             this.update.bind(this, 'topProcessesStop', false)
         );
 
-        this.clear('publicIps');
-        this.update('publicIps');
+        const publicIpsFresh =
+            Utils.networkMonitor.secondsSinceLastIpsUpdate <= 60 * 5 * 3 &&
+            (Utils.networkMonitor.getCurrentValue('publicIpv4Address') ||
+                Utils.networkMonitor.getCurrentValue('publicIpv6Address'));
+        if(publicIpsFresh) this.update('publicIps');
+        else this.showPublicIpsLoading();
         Utils.networkMonitor.listen(this, 'publicIps', this.update.bind(this, 'publicIps', false));
 
-        if(this.publicIpv6.refreshStatus === RefreshStatus.IDLE) {
-            const updateSeconds = Utils.networkMonitor.secondsSinceLastIpsUpdate;
-            if(updateSeconds > 60 && updateSeconds < 60 * 5 - 30) {
+        if(!publicIpsFresh && this.publicIpv6.refreshStatus === RefreshStatus.IDLE) {
+            this.scheduleOpenUpdate('publicIps', Utils.networkMonitor, () => {
                 this.publicIpv6.refreshStatus = RefreshStatus.REFRESHING;
                 this.updateIpsFooterLablel();
                 Utils.networkMonitor.updatePublicIps(true);
-            }
+            });
         }
 
-        this.clear('routes');
-        this.update('routes');
+        this.updateFreshOrShowLoading(
+            Utils.networkMonitor,
+            'routes',
+            'routes',
+            this.showRoutesLoading.bind(this)
+        );
         Utils.networkMonitor.listen(this, 'routes', this.update.bind(this, 'routes', false));
-        Utils.networkMonitor.requestUpdate('routes');
+        this.scheduleOpenUpdate('routes', Utils.networkMonitor, () => {
+            Utils.networkMonitor.requestUpdate('routes');
+        });
 
-        this.update('wireless', true);
+        if(this.canUseCachedValue(Utils.networkMonitor, 'wireless')) this.update('wireless', true);
         Utils.networkMonitor.listen(this, 'wireless', this.update.bind(this, 'wireless', false));
-        Utils.networkMonitor.requestUpdate('wireless');
+        this.scheduleOpenUpdate('wireless', Utils.networkMonitor, () => {
+            Utils.networkMonitor.requestUpdate('wireless');
+        });
 
         this.update('deviceList', true);
         if(!this.updateTimer) {
@@ -2121,6 +2157,7 @@ export default class NetworkMenu extends MenuBase {
     }
 
     onClose() {
+        super.onClose();
         Utils.networkMonitor.unlisten(this, 'networkIO');
         Utils.networkMonitor.unlisten(this, 'detailedNetworkIO');
         Utils.networkMonitor.unlisten(this, 'publicIps');
@@ -2136,6 +2173,58 @@ export default class NetworkMenu extends MenuBase {
             GLib.source_remove(this.publicIpv6.refreshTimer);
             this.publicIpv6.refreshTimer = 0;
         }
+    }
+
+    private showNetworkIOLoading() {
+        this.graph.setUsageHistory([]);
+        MenuBase.setLoading(this.totalUploadSpeedValueLabel, true);
+        MenuBase.setLoading(this.totalDownloadSpeedValueLabel, true);
+    }
+
+    private showPublicIpsLoading() {
+        this.publicIPLabel.show();
+        this.publicIPContainer.show();
+        this.publicIPv4.label.show();
+        this.publicIPv4.value.show();
+        this.publicIpv6.label.show();
+        this.publicIpv6.value1.show();
+        this.publicIpv6.value2.hide();
+        MenuBase.setLoading(this.publicIPv4.value, true);
+        MenuBase.setLoading(this.publicIpv6.value1, true);
+        this.updateIpsFooterLablel();
+    }
+
+    private showRoutesLoading() {
+        this.defaultRouteDevice.text = '';
+        this.routesPopup?.close(true);
+        for(const popupRoute of this.routesPopup.routes) {
+            popupRoute.titleLabel.hide();
+            popupRoute.metricLabel.hide();
+            popupRoute.metricValue.text = '';
+            popupRoute.metricValue.hide();
+            popupRoute.typeLabel.hide();
+            popupRoute.typeValue.text = '';
+            popupRoute.typeValue.hide();
+            popupRoute.deviceLabel.hide();
+            popupRoute.deviceValue.text = '';
+            popupRoute.deviceValue.hide();
+            popupRoute.destinationLabel.hide();
+            popupRoute.destinationValue.text = '';
+            popupRoute.destinationValue.hide();
+            popupRoute.gatewayLabel.hide();
+            popupRoute.gatewayValue.text = '';
+            popupRoute.gatewayValue.hide();
+            popupRoute.protocolLabel.hide();
+            popupRoute.protocolValue.text = '';
+            popupRoute.protocolValue.hide();
+            popupRoute.scopeLabel.hide();
+            popupRoute.scopeValue.text = '';
+            popupRoute.scopeValue.hide();
+            popupRoute.flagsLabel.hide();
+            popupRoute.flagsValue.text = '';
+            popupRoute.flagsValue.hide();
+        }
+        MenuBase.setLoading(this.defaultRouteGateway, true);
     }
 
     update(code: string, forced: boolean = false) {
@@ -2154,6 +2243,9 @@ export default class NetworkMenu extends MenuBase {
 
             const current = Utils.networkMonitor.getCurrentValue('networkIO');
             if(current) {
+                MenuBase.setLoading(this.totalUploadSpeedValueLabel, false);
+                MenuBase.setLoading(this.totalDownloadSpeedValueLabel, false);
+
                 const unit = Config.get_string('network-io-unit');
 
                 if(current.bytesUploadedPerSec)
@@ -2211,8 +2303,7 @@ export default class NetworkMenu extends MenuBase {
                     }
                 }
             } else {
-                this.totalUploadSpeedValueLabel.text = '-';
-                this.totalDownloadSpeedValueLabel.text = '-';
+                this.showNetworkIOLoading();
 
                 if(this.networkActivityPopup) {
                     if(this.networkActivityPopup.totalUploadedValueLabel)
@@ -2353,19 +2444,19 @@ export default class NetworkMenu extends MenuBase {
                 this.startPrivilegedTopProcesses();
             }
 
+            const loading =
+                !topProcesses ||
+                !Array.isArray(topProcesses) ||
+                this.isOpenUpdatePending('topProcesses');
             for(let i = 0; i < NetworkMonitor.TOP_PROCESSES_LIMIT; i++) {
-                if(
-                    !topProcesses ||
-                    !Array.isArray(topProcesses) ||
-                    !topProcesses[i] ||
-                    !topProcesses[i].process
-                ) {
+                if(loading || !topProcesses[i] || !topProcesses[i].process) {
                     if(i < 3) {
-                        this.topProcesses.labels[i].label.text = '-';
-                        this.topProcesses.labels[i].upload.value.text = '-';
+                        MenuBase.setLoading(this.topProcesses.labels[i].label, loading);
+                        this.topProcesses.labels[i].label.text = loading ? '' : '-';
+                        this.topProcesses.labels[i].upload.value.text = '';
                         this.topProcesses.labels[i].upload.icon.style =
                             'color:rgba(255,255,255,0.5);';
-                        this.topProcesses.labels[i].download.value.text = '-';
+                        this.topProcesses.labels[i].download.value.text = '';
                         this.topProcesses.labels[i].download.icon.style =
                             'color:rgba(255,255,255,0.5);';
                     }
@@ -2373,6 +2464,9 @@ export default class NetworkMenu extends MenuBase {
                     if(this.topProcessesPopup && this.topProcessesPopup.processes) {
                         const popupElement = this.topProcessesPopup.processes.get(i);
                         if(popupElement) {
+                            popupElement.label.text = '';
+                            popupElement.upload.value.text = '';
+                            popupElement.download.value.text = '';
                             popupElement.label.hide();
                             popupElement.description?.hide();
                             popupElement.upload.container.hide();
@@ -2388,6 +2482,7 @@ export default class NetworkMenu extends MenuBase {
                     const download = topProcess.download;
 
                     if(i < 3) {
+                        MenuBase.setLoading(this.topProcesses.labels[i].label, false);
                         this.topProcesses.labels[i].label.text = process.exec;
 
                         if(upload > 0) {
@@ -2470,6 +2565,9 @@ export default class NetworkMenu extends MenuBase {
             return;
         }
         if(code === 'publicIps') {
+            MenuBase.setLoading(this.publicIPv4.value, false);
+            MenuBase.setLoading(this.publicIpv6.value1, false);
+
             if(this.publicIpv6.refreshStatus === RefreshStatus.REFRESHING) {
                 this.publicIpv6.refreshStatus = RefreshStatus.DONE;
                 this.updateIpsFooterLablel();
@@ -2534,6 +2632,7 @@ export default class NetworkMenu extends MenuBase {
         if(code === 'routes') {
             const routes: RouteInfo[] = Utils.networkMonitor.getCurrentValue('routes');
             if(routes && routes.length > 0) {
+                MenuBase.setLoading(this.defaultRouteGateway, false);
                 for(let i = 0; i < 5; i++) {
                     const route = routes[i];
 
@@ -2606,26 +2705,35 @@ export default class NetworkMenu extends MenuBase {
                     }
                 }
             } else {
+                MenuBase.setLoading(this.defaultRouteGateway, false);
                 this.defaultRouteDevice.text = '-';
                 this.defaultRouteGateway.text = '-';
 
                 for(const popupRoute of this.routesPopup.routes) {
                     popupRoute.titleLabel.hide();
                     popupRoute.metricLabel.hide();
+                    popupRoute.metricValue.text = '';
                     popupRoute.metricValue.hide();
                     popupRoute.typeLabel.hide();
+                    popupRoute.typeValue.text = '';
                     popupRoute.typeValue.hide();
                     popupRoute.deviceLabel.hide();
+                    popupRoute.deviceValue.text = '';
                     popupRoute.deviceValue.hide();
                     popupRoute.destinationLabel.hide();
+                    popupRoute.destinationValue.text = '';
                     popupRoute.destinationValue.hide();
                     popupRoute.gatewayLabel.hide();
+                    popupRoute.gatewayValue.text = '';
                     popupRoute.gatewayValue.hide();
                     popupRoute.protocolLabel.hide();
+                    popupRoute.protocolValue.text = '';
                     popupRoute.protocolValue.hide();
                     popupRoute.scopeLabel.hide();
+                    popupRoute.scopeValue.text = '';
                     popupRoute.scopeValue.hide();
                     popupRoute.flagsLabel.hide();
+                    popupRoute.flagsValue.text = '';
                     popupRoute.flagsValue.hide();
                 }
             }
@@ -2771,9 +2879,9 @@ export default class NetworkMenu extends MenuBase {
 
         if(code === 'all' || code === 'devices') {
             for(const [_id, device] of this.devices.entries()) {
-                device.uploadValueLabel.text = '-';
+                device.uploadValueLabel.text = '';
                 device.uploadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
-                device.downloadValueLabel.text = '-';
+                device.downloadValueLabel.text = '';
                 device.downloadActivityIcon.style = 'color:rgba(255,255,255,0.5);';
             }
 
@@ -2814,17 +2922,21 @@ export default class NetworkMenu extends MenuBase {
             if(this.topProcesses) {
                 for(let i = 0; i < NetworkMonitor.TOP_PROCESSES_LIMIT; i++) {
                     if(this.topProcesses.labels && i < 3) {
-                        this.topProcesses.labels[i].label.text = '-';
-                        this.topProcesses.labels[i].upload.value.text = '-';
+                        MenuBase.setLoading(this.topProcesses.labels[i].label, true);
+                        this.topProcesses.labels[i].label.text = '';
+                        this.topProcesses.labels[i].upload.value.text = '';
                         this.topProcesses.labels[i].upload.icon.style =
                             'color:rgba(255,255,255,0.5);';
-                        this.topProcesses.labels[i].download.value.text = '-';
+                        this.topProcesses.labels[i].download.value.text = '';
                         this.topProcesses.labels[i].download.icon.style =
                             'color:rgba(255,255,255,0.5);';
                     }
                     if(this.topProcessesPopup && this.topProcessesPopup.processes) {
                         const popupElement = this.topProcessesPopup.processes.get(i);
                         if(popupElement) {
+                            popupElement.label.text = '';
+                            popupElement.upload.value.text = '';
+                            popupElement.download.value.text = '';
                             popupElement.label.hide();
                             popupElement.description?.hide();
                             popupElement.upload.container.hide();
@@ -2836,30 +2948,42 @@ export default class NetworkMenu extends MenuBase {
         }
 
         if(code === 'all' || code === 'publicIps') {
-            this.publicIPv4.value.text = '-';
-            this.publicIpv6.value1.text = '-';
+            this.publicIPv4.value.text = '';
+            this.publicIpv6.value1.text = '';
             this.publicIpv6.value2.hide();
             this.publicIpv6.refreshStatus = RefreshStatus.IDLE;
             this.updateIpsFooterLablel();
         }
 
         if(code === 'all' || code === 'routes') {
-            this.defaultRouteDevice.text = '-';
-            this.defaultRouteGateway.text = '-';
+            this.defaultRouteDevice.text = '';
+            this.defaultRouteGateway.text = '';
             for(const popupRoute of this.routesPopup.routes) {
                 popupRoute.titleLabel.hide();
                 popupRoute.metricLabel.hide();
+                popupRoute.metricValue.text = '';
                 popupRoute.metricValue.hide();
                 popupRoute.typeLabel.hide();
+                popupRoute.typeValue.text = '';
                 popupRoute.typeValue.hide();
                 popupRoute.deviceLabel.hide();
+                popupRoute.deviceValue.text = '';
                 popupRoute.deviceValue.hide();
                 popupRoute.destinationLabel.hide();
+                popupRoute.destinationValue.text = '';
                 popupRoute.destinationValue.hide();
                 popupRoute.gatewayLabel.hide();
+                popupRoute.gatewayValue.text = '';
                 popupRoute.gatewayValue.hide();
                 popupRoute.protocolLabel.hide();
+                popupRoute.protocolValue.text = '';
                 popupRoute.protocolValue.hide();
+                popupRoute.scopeLabel.hide();
+                popupRoute.scopeValue.text = '';
+                popupRoute.scopeValue.hide();
+                popupRoute.flagsLabel.hide();
+                popupRoute.flagsValue.text = '';
+                popupRoute.flagsValue.hide();
             }
         }
     }
