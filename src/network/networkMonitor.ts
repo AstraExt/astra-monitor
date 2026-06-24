@@ -94,6 +94,8 @@ export default class NetworkMonitor extends Monitor {
     private updatePublicIpsTask: CancellableTaskManager<boolean>;
 
     private updateNethogsTask: ContinuousTaskManager;
+    private nethogsStarting: boolean = false;
+    private nethogsRunHasCaps: boolean = false;
 
     private previousNetworkIO!: PreviousNetworkIO;
     private previousDetailedNetworkIO!: PreviousDetailedNetworkIO;
@@ -260,8 +262,20 @@ export default class NetworkMonitor extends Monitor {
         super.startListeningFor(key);
 
         if(key === 'topProcesses') {
-            if(Utils.nethogsHasCaps() && this.usesNethogsTopProcesses()) {
-                this.startNethogs();
+            if(this.usesNethogsTopProcesses()) {
+                Utils.nethogsHasCapsAsync()
+                    .then(hasCaps => {
+                        if(
+                            hasCaps &&
+                            this.isListeningFor('topProcesses') &&
+                            this.usesNethogsTopProcesses()
+                        ) {
+                            this.startNethogs();
+                        }
+                    })
+                    .catch((e: any) => {
+                        Utils.error('Error checking NetHogs capabilities', e);
+                    });
             }
         }
     }
@@ -281,9 +295,7 @@ export default class NetworkMonitor extends Monitor {
             this.previousDetailedNetworkIO.time = -1;
         }
         if(key === 'topProcesses') {
-            if(Utils.nethogsHasCaps() && this.usesNethogsTopProcesses()) {
-                this.stopNethogs();
-            }
+            this.stopNethogs();
         }
     }
 
@@ -768,13 +780,14 @@ export default class NetworkMonitor extends Monitor {
     }
 
     private async updateWirelessAuto(): Promise<boolean> {
-        if(Utils.hasIwconfig()) return this.updateWirelessIwconfig();
-        if(Utils.hasIw()) return this.updateWirelessIw();
+        if(await Utils.hasIwconfigAsync()) return this.updateWirelessIwconfig();
+        if(await Utils.hasIwAsync()) return this.updateWirelessIw();
         return false;
     }
 
     private async updateWirelessIwconfig(): Promise<boolean> {
-        const path = Utils.commandPathLookup('iwconfig --version');
+        const path = await Utils.getIwconfigPathAsync();
+        if(path === false) return false;
 
         let result = '';
         try {
@@ -847,7 +860,8 @@ export default class NetworkMonitor extends Monitor {
             devicePromises.push(
                 (async () => {
                     try {
-                        const path = Utils.commandPathLookup('iw --version');
+                        const path = await Utils.getIwPathAsync();
+                        if(path === false) return;
                         const str = await Utils.runAsyncCommand(`${path}iw dev ${dev} link`);
                         if(!str) return;
 
@@ -898,7 +912,7 @@ export default class NetworkMonitor extends Monitor {
 
     private topProcessesSourceChanged() {
         if(this.usesNethogsTopProcesses()) {
-            if(Utils.nethogsHasCaps() && this.isListeningFor('topProcesses')) {
+            if(this.isListeningFor('topProcesses')) {
                 this.startNethogs();
             }
         } else {
@@ -906,43 +920,54 @@ export default class NetworkMonitor extends Monitor {
         }
     }
 
-    startNethogs() {
-        if(this.updateNethogsTask.isRunning) return;
-        const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 15));
-        const path = Utils.commandPathLookup('nethogs -V');
-        if(path === false) {
-            Utils.error('nethogs not found');
-            return;
-        }
+    async startNethogs() {
+        if(this.updateNethogsTask.isRunning || this.nethogsStarting) return;
 
-        if(Utils.nethogsHasCaps()) {
-            const command = `nethogs -tb -d ${interval}`;
-            this.updateNethogsTask.start(command, {
-                flush: { idle: 100 },
-            });
-        } else {
-            const pkexecPath = Utils.commandPathLookup('pkexec --version');
-            if(pkexecPath === false) {
-                Utils.error('pkexec not found');
+        this.nethogsStarting = true;
+        try {
+            const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 15));
+            const path = await Utils.getNethogsPathAsync();
+            if(path === false) {
+                Utils.error('nethogs not found');
                 return;
             }
-            const num = Math.max(1, Math.round(60 / interval));
 
-            const command = `${pkexecPath}pkexec ${path}nethogs -tb -d ${interval} -c ${num}`;
-            this.updateNethogsTask.start(command, {
-                flush: { idle: 100 },
-            });
+            const hasCaps = await Utils.nethogsHasCapsAsync();
+            if(!this.isListeningFor('topProcesses') || !this.usesNethogsTopProcesses()) return;
+            if(this.updateNethogsTask.isRunning) return;
+
+            this.nethogsRunHasCaps = hasCaps;
+            if(hasCaps) {
+                const command = `${path}nethogs -tb -d ${interval}`;
+                this.updateNethogsTask.start(command, {
+                    flush: { idle: 100 },
+                });
+            } else {
+                const pkexecPath = await Utils.getPkexecPathAsync();
+                if(pkexecPath === false) {
+                    Utils.error('pkexec not found');
+                    return;
+                }
+                const num = Math.max(1, Math.round(60 / interval));
+
+                const command = `${pkexecPath}pkexec ${path}nethogs -tb -d ${interval} -c ${num}`;
+                this.updateNethogsTask.start(command, {
+                    flush: { idle: 100 },
+                });
+            }
+        } finally {
+            this.nethogsStarting = false;
         }
     }
 
     stopNethogs() {
-        if(!this.updateNethogsTask.isRunning) return;
-        this.updateNethogsTask.stop();
+        this.nethogsStarting = false;
+        if(this.updateNethogsTask.isRunning) this.updateNethogsTask.stop();
     }
 
     async updateNethogs(data: ContinuousTaskManagerData) {
         if(data.exit) {
-            if(!Utils.nethogsHasCaps()) {
+            if(!this.nethogsRunHasCaps) {
                 this.notify('topProcessesStop');
             }
             return;

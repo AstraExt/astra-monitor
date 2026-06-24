@@ -154,6 +154,7 @@ export default class GpuMenuComponent {
     private parent: InstanceType<typeof MenuBase>;
     private title: St.Label | undefined;
     private compact: boolean = false;
+    private destroyed: boolean = false;
 
     public container!: InstanceType<typeof Grid>;
     private noGPULabel: St.Label | undefined;
@@ -187,11 +188,27 @@ export default class GpuMenuComponent {
 
         this.container = new Grid({ numCols: 2, styleClass: 'astra-monitor-menu-subgrid' });
 
+        const populateGpuSections = (GPUsList: GpuInfo[]) => {
+            if(this.destroyed || !this.container || this.sections.length > 0) return;
+            if(!GPUsList || GPUsList.length === 0) {
+                if(this.noGPULabel) this.noGPULabel.text = _('No GPU found');
+                return;
+            }
+
+            this.noGPULabel?.hide();
+            if(GPUsList.length > 1 && this.title) this.title.text = _('GPUs');
+
+            for(let i = 0; i < GPUsList.length; i++) {
+                const gpu = GPUsList[i];
+                const section = this.createSection(gpu);
+                this.sections.push(section);
+            }
+        };
+
         const GPUsList = Utils.getGPUsList();
         if(!GPUsList || GPUsList.length === 0) {
-            // Print No GPU found
             this.noGPULabel = new St.Label({
-                text: _('No GPU found'),
+                text: _('Loading GPU...'),
                 styleClass: 'astra-monitor-menu-label-warning',
                 style: 'font-style:italic;',
             });
@@ -201,15 +218,14 @@ export default class GpuMenuComponent {
                 if(this.noGPULabel) this.noGPULabel.visible = !gpus || gpus.length === 0;
             });
             this.container.addToGrid(this.noGPULabel, 2);
-            return;
-        }
-
-        if(GPUsList.length > 1 && this.title) this.title.text = _('GPUs');
-
-        for(let i = 0; i < GPUsList.length; i++) {
-            const gpu = GPUsList[i];
-            const section = this.createSection(gpu);
-            this.sections.push(section);
+            Utils.getGPUsListAsync()
+                .then(populateGpuSections)
+                .catch((e: any) => {
+                    Utils.error('Error loading GPU menu', e);
+                    if(!this.destroyed && this.noGPULabel) this.noGPULabel.text = _('No GPU found');
+                });
+        } else {
+            populateGpuSections(GPUsList);
         }
     }
 
@@ -1994,6 +2010,7 @@ export default class GpuMenuComponent {
     public clear() {}
 
     public destroy() {
+        this.destroyed = true;
         this.onClose();
         Config.clear(this);
 

@@ -1,3 +1,11 @@
+# Astra Monitor 41 - TO BE RELESED
+
+### EGO compliance
+
+-   Removed synchronous file reads and command probes from the extension code to comply with the latest requirements from extensions.gnome.org. Most of these operations were already limited to extension startup, but they have now been moved to asynchronous flows.
+
+_Note: This is a significant internal change, so feedback is very welcome. If you notice any regression, please open an issue: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
+
 # Astra Monitor 40 - June 22 2026
 
 ### GPU monitoring

@@ -135,26 +135,37 @@ export default class Storage {
             'kB/s'
         );
 
-        const storageMain = Config.get_string('storage-main');
-        const disks = Utils.listDisksSync();
+        const generateStorageMainChoices = async () => {
+            const disks = await Utils.listDisksAsync();
+            const storageMain = Config.get_string('storage-main');
 
-        if(storageMain === '[default]' || !storageMain || !disks.has(storageMain)) {
-            const defaultId = Utils.findDefaultDisk(disks);
-            if(defaultId !== null) Config.set('storage-main', defaultId, 'string');
-        }
+            if(storageMain === '[default]' || !storageMain || !disks.has(storageMain)) {
+                const defaultId = Utils.findDefaultDisk(disks);
+                const currentStorageMain = Config.get_string('storage-main');
+                if(
+                    defaultId !== null &&
+                    (currentStorageMain === '[default]' ||
+                        !currentStorageMain ||
+                        !disks.has(currentStorageMain))
+                ) {
+                    Config.set('storage-main', defaultId, 'string');
+                }
+            }
 
-        const choicesSource = [];
-        for(const [id, disk] of disks) {
-            let text;
-            if(disk.label && disk.name) text = disk.label + ' (' + disk.name + ')';
-            else if(disk.label) text = disk.label;
-            else if(disk.name) text = disk.name;
-            else text = id;
-            choicesSource.push({ value: id, text: text });
-        }
+            const choicesSource = [];
+            for(const [id, disk] of disks) {
+                let text;
+                if(disk.label && disk.name) text = disk.label + ' (' + disk.name + ')';
+                else if(disk.label) text = disk.label;
+                else if(disk.name) text = disk.name;
+                else text = id;
+                choicesSource.push({ value: id, text: text });
+            }
+            return choicesSource;
+        };
         PrefsUtils.addDropRow(
             { title: _('Main Disk') },
-            choicesSource,
+            generateStorageMainChoices,
             'storage-main',
             group,
             'string'
@@ -181,66 +192,75 @@ export default class Storage {
             ''
         );
 
-        const devices = Utils.getBlockDevicesSync();
-        let ignoredDevices = Config.get_json('storage-ignored');
-        if(!Array.isArray(ignoredDevices)) ignoredDevices = [];
+        const populateIgnoredDevices = (devices: Awaited<
+            ReturnType<typeof Utils.getBlockDevicesAsync>
+        >) => {
+            let ignoredDevices = Config.get_json('storage-ignored');
+            if(!Array.isArray(ignoredDevices)) ignoredDevices = [];
 
-        const main = Config.get_string('storage-main');
-        for(const [id, device] of devices.entries()) {
-            const name = device.kname;
-            const status = !ignoredDevices.includes(name);
+            const main = Config.get_string('storage-main');
+            for(const [id, device] of devices.entries()) {
+                const name = device.kname;
+                const status = !ignoredDevices.includes(name);
 
-            let subtitle = status ? _('Active') : _('Ignored');
-            if(id === main) subtitle = _('Main');
+                let subtitle = status ? _('Active') : _('Ignored');
+                if(id === main) subtitle = _('Main');
 
-            const row = new Adw.ActionRow({ title: name, subtitle });
-            ignoredSection.add_row(row);
+                const row = new Adw.ActionRow({ title: name, subtitle });
+                ignoredSection.add_row(row);
 
-            let iconName = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
-            if(id === main) iconName = 'am-star-symbolic';
+                let iconName = status ? 'am-dialog-ok-symbolic' : 'am-dialog-error-symbolic';
+                if(id === main) iconName = 'am-star-symbolic';
 
-            const icon = new Gtk.Image({ iconName: iconName });
-            icon.set_margin_start(15);
-            icon.set_margin_end(10);
-            row.add_prefix(icon);
+                const icon = new Gtk.Image({ iconName: iconName });
+                icon.set_margin_start(15);
+                icon.set_margin_end(10);
+                row.add_prefix(icon);
 
-            const toggle = new Gtk.Switch({
-                active: !status,
-                halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER,
-            });
+                const toggle = new Gtk.Switch({
+                    active: !status,
+                    halign: Gtk.Align.END,
+                    valign: Gtk.Align.CENTER,
+                });
 
-            if(id === main) {
-                toggle.sensitive = false;
-                toggle.tooltipText = _('Main disk cannot be ignored');
-            }
-
-            toggle.connect('state-set', (_switchObj, state) => {
-                let ignored = Config.get_json('storage-ignored');
-                if(!Array.isArray(ignored)) ignored = [];
-
-                if(state) {
-                    row.subtitle = _('Ignored');
-                    icon.iconName = 'am-dialog-error-symbolic';
-
-                    if(!ignored.includes(name)) {
-                        ignored.push(name);
-                    }
-                    Config.set('storage-ignored', ignored, 'json');
-                } else {
-                    row.subtitle = _('Active');
-                    icon.iconName = 'am-dialog-ok-symbolic';
-
-                    if(ignored.includes(name)) {
-                        ignored = ignored.filter((deviceName: string) => deviceName !== name);
-                    }
-                    Config.set('storage-ignored', ignored, 'json');
+                if(id === main) {
+                    toggle.sensitive = false;
+                    toggle.tooltipText = _('Main disk cannot be ignored');
                 }
-            });
 
-            row.add_suffix(toggle);
-            row.activatableWidget = toggle;
-        }
+                toggle.connect('state-set', (_switchObj, state) => {
+                    let ignored = Config.get_json('storage-ignored');
+                    if(!Array.isArray(ignored)) ignored = [];
+
+                    if(state) {
+                        row.subtitle = _('Ignored');
+                        icon.iconName = 'am-dialog-error-symbolic';
+
+                        if(!ignored.includes(name)) {
+                            ignored.push(name);
+                        }
+                        Config.set('storage-ignored', ignored, 'json');
+                    } else {
+                        row.subtitle = _('Active');
+                        icon.iconName = 'am-dialog-ok-symbolic';
+
+                        if(ignored.includes(name)) {
+                            ignored = ignored.filter((deviceName: string) => deviceName !== name);
+                        }
+                        Config.set('storage-ignored', ignored, 'json');
+                    }
+                });
+
+                row.add_suffix(toggle);
+                row.activatableWidget = toggle;
+            }
+        };
+
+        Utils.getBlockDevicesAsync()
+            .then(populateIgnoredDevices)
+            .catch((e: any) => {
+                Utils.error('Error loading storage devices preferences', e);
+            });
 
         const sourcesSection = PrefsUtils.addExpanderRow(
             { title: _('Data Sources') },

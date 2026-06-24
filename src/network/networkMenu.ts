@@ -228,6 +228,7 @@ export default class NetworkMenu extends MenuBase {
 
     private updateTimer: number = 0;
     private destroyed: boolean = false;
+    private deviceListGeneration: number = 0;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
         super(sourceActor, arrowAlignment, { name: 'Network Menu', arrowSide });
@@ -408,7 +409,7 @@ export default class NetworkMenu extends MenuBase {
 
         let subSeparator: St.Label | undefined;
 
-        if(!Utils.nethogsHasCaps()) {
+        if(Utils.nethogsHasCapsCached() !== true) {
             separator.style = 'padding-top:0.15em;margin-bottom:0;padding-bottom:0;';
 
             subSeparator = new St.Label({
@@ -434,7 +435,7 @@ export default class NetworkMenu extends MenuBase {
             });
             separatorButton.set_child(separatorGrid);
             separatorButton.connect('clicked', () => {
-                if(!Utils.nethogsHasCaps()) {
+                if(Utils.nethogsHasCapsCached() !== true) {
                     Utils.networkMonitor.startNethogs();
                 }
             });
@@ -564,6 +565,32 @@ export default class NetworkMenu extends MenuBase {
             labels,
             hoverButton,
         };
+        this.refreshNethogsCapsUi();
+    }
+
+    private refreshNethogsCapsUi() {
+        const applyCaps = (hasCaps: boolean) => {
+            if(this.destroyed || !this.topProcesses) return;
+            if(hasCaps) {
+                this.privilegedTopProcesses = false;
+                this.topProcesses.subSeparator?.hide();
+            } else if(!this.privilegedTopProcesses) {
+                this.topProcesses.subSeparator?.show();
+                this.topProcesses.hoverButton.hide();
+            }
+        };
+
+        const cachedCaps = Utils.nethogsHasCapsCached();
+        if(cachedCaps !== undefined) {
+            applyCaps(cachedCaps);
+            return;
+        }
+
+        Utils.nethogsHasCapsAsync()
+            .then(applyCaps)
+            .catch((e: any) => {
+                Utils.error('Error checking NetHogs capabilities', e);
+            });
     }
 
     createTopProcessesPopup(sourceActor: St.Widget) {
@@ -946,8 +973,9 @@ export default class NetworkMenu extends MenuBase {
     }
 
     async updateDeviceList() {
+        const generation = ++this.deviceListGeneration;
         const devices = await Utils.getNetworkInterfacesAsync();
-        if(this.destroyed) return;
+        if(this.destroyed || generation !== this.deviceListGeneration) return;
 
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
@@ -2021,10 +2049,15 @@ export default class NetworkMenu extends MenuBase {
     }
 
     async onOpen() {
-        if(Utils.hasNethogs()) {
+        const hasNethogs = await Utils.hasNethogsAsync();
+        if(this.destroyed) return;
+
+        if(hasNethogs) {
             this.topProcesses.container.show();
-            if(Utils.nethogsHasCaps()) {
+            if(Utils.nethogsHasCapsCached() === true) {
                 this.topProcesses.hoverButton.show();
+            } else {
+                this.refreshNethogsCapsUi();
             }
         }
 
@@ -2316,7 +2349,7 @@ export default class NetworkMenu extends MenuBase {
         if(code === 'topProcesses') {
             const topProcesses = Utils.networkMonitor.getCurrentValue('topProcesses');
 
-            if(!Utils.nethogsHasCaps()) {
+            if(Utils.nethogsHasCapsCached() !== true) {
                 this.startPrivilegedTopProcesses();
             }
 
@@ -2706,7 +2739,7 @@ export default class NetworkMenu extends MenuBase {
     }
 
     startPrivilegedTopProcesses() {
-        if(Utils.nethogsHasCaps() || this.privilegedTopProcesses) {
+        if(Utils.nethogsHasCapsCached() === true || this.privilegedTopProcesses) {
             return;
         }
 
@@ -2718,7 +2751,7 @@ export default class NetworkMenu extends MenuBase {
     }
 
     stopPrivilegedTopProcesses() {
-        if(Utils.nethogsHasCaps() || !this.privilegedTopProcesses) {
+        if(Utils.nethogsHasCapsCached() === true || !this.privilegedTopProcesses) {
             return;
         }
 

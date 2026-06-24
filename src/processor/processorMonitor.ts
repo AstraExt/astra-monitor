@@ -410,35 +410,8 @@ export default class ProcessorMonitor extends Monitor {
         return this.cpuPresentPromise;
     }
 
-    /**
-     * This is a sync function but caches the result
-     */
-    getCpuInfoSync(): CpuInfo {
-        if(this.cpuInfo !== undefined) return this.cpuInfo;
-
-        this.cpuInfo = this.getCpuInfoFromLscpuSync();
-        if(!this.cpuInfo['Model name']) {
-            this.getCpuInfoAsync().catch(e => {
-                Utils.error('Error loading CPU info fallback', e);
-            });
-        }
-
-        return this.cpuInfo;
-    }
-
-    private getCpuInfoFromLscpuSync(): CpuInfo {
+    private parseCpuInfoFromLscpu(output: string): CpuInfo {
         try {
-            if(!Utils.hasLscpu()) return {};
-
-            //TODO: switch to lscpu --json!?
-            const path = Utils.commandPathLookup('lscpu --version');
-            const [result, stdout, _stderr] = GLib.spawn_command_line_sync(`${path}lscpu`);
-
-            if(!result || !stdout) return {};
-
-            const decoder = new TextDecoder('utf8');
-            const output = decoder.decode(stdout);
-
             const lines = output.split('\n');
             const cpuInfo: CpuInfo = {};
             let currentCategory = cpuInfo;
@@ -484,12 +457,23 @@ export default class ProcessorMonitor extends Monitor {
             return Promise.resolve(this.cpuInfo);
         if(this.cpuInfoPromise) return this.cpuInfoPromise;
 
-        if(this.cpuInfo === undefined) this.cpuInfo = this.getCpuInfoFromLscpuSync();
-        if(this.cpuInfo['Model name']) return Promise.resolve(this.cpuInfo);
+        this.cpuInfoPromise = (async () => {
+            if(this.cpuInfo === undefined) this.cpuInfo = {};
 
-        this.cpuInfoPromise = Utils.readFileAsync('/proc/cpuinfo', true)
-            .then(fileContent => {
-                if(fileContent && this.cpuInfo && !this.cpuInfo['Model name']) {
+            try {
+                const path = await Utils.getLscpuPathAsync();
+                if(path !== false) {
+                    //TODO: switch to lscpu --json!?
+                    const output = await Utils.runAsyncCommand(`${path}lscpu`);
+                    this.cpuInfo = this.parseCpuInfoFromLscpu(output);
+                }
+            } catch(e) {
+                this.cpuInfo = this.cpuInfo ?? {};
+            }
+
+            if(!this.cpuInfo['Model name']) {
+                const fileContent = await Utils.readFileAsync('/proc/cpuinfo', true);
+                if(fileContent && this.cpuInfo) {
                     const lines = fileContent.split('\n');
                     for(const line of lines) {
                         if(line.startsWith('model name')) {
@@ -499,11 +483,12 @@ export default class ProcessorMonitor extends Monitor {
                         }
                     }
                 }
-                return this.cpuInfo ?? {};
-            })
-            .finally(() => {
-                this.cpuInfoPromise = undefined;
-            });
+            }
+
+            return this.cpuInfo ?? {};
+        })().finally(() => {
+            this.cpuInfoPromise = undefined;
+        });
 
         return this.cpuInfoPromise;
     }

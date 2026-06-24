@@ -249,13 +249,14 @@ export default class Sensors {
         );
 
         const generateSensorSources = async () => {
-            // wait for the hwmon devices to be cached
-            await Utils.getCachedHwmonDevicesAsync();
-
-            const sources = Utils.getSensorSources();
             const choicesSource = [{ value: '', text: _('None') }];
-            for(const source of sources)
-                choicesSource.push({ value: source.value, text: source.text });
+            try {
+                const sources = await Utils.getSensorSourcesAsync();
+                for(const source of sources)
+                    choicesSource.push({ value: source.value, text: source.text });
+            } catch(e: any) {
+                Utils.error('Error generating sensor sources', e);
+            }
             return choicesSource;
         };
 

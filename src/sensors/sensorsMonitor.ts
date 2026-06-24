@@ -290,23 +290,20 @@ export default class SensorsMonitor extends Monitor {
     getLmSensorsDataAsync(): PromiseValueHolder<string | null> {
         return new PromiseValueHolder(
             new Promise((resolve, reject) => {
-                if(!Utils.hasLmSensors()) {
-                    resolve(null);
-                    return;
-                }
-
-                try {
-                    const path = Utils.commandPathLookup('sensors -v');
-                    Utils.runAsyncCommand(`${path}sensors -j`, this.updateSensorsDataTask)
-                        .then(result => {
-                            resolve(result);
-                        })
-                        .catch(e => {
-                            reject(e);
-                        });
-                } catch(e) {
+                (async () => {
+                    const path = await Utils.getLmSensorsPathAsync();
+                    if(path === false) {
+                        resolve(null);
+                        return;
+                    }
+                    const result = await Utils.runAsyncCommand(
+                        `${path}sensors -j`,
+                        this.updateSensorsDataTask
+                    );
+                    resolve(result);
+                })().catch(e => {
                     reject(e);
-                }
+                });
             })
         );
     }

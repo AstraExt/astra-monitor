@@ -128,9 +128,6 @@ export default class ProcessorMenu extends MenuBase {
             throw new Error('Critical: Utils.processorMonitor is not valid');
 
         // Name
-        const cpuInfo = Utils.processorMonitor.getCpuInfoSync();
-        const cpuName = cpuInfo['Model name'] || '';
-
         const defaultStyle = 'max-width: 150px;';
 
         const hoverButton = new St.Button({
@@ -140,11 +137,11 @@ export default class ProcessorMenu extends MenuBase {
             style: defaultStyle,
         });
         const hoverLabel = new St.Label({
-            text: Utils.getCPUModelShortify(cpuName),
+            text: _('Loading CPU info...'),
         });
         hoverButton.set_child(hoverLabel);
 
-        this.createCPUInfoPopup(hoverButton, cpuInfo, cpuName);
+        this.createCPUInfoPopup(hoverButton, {}, _('Loading CPU info...'));
         Utils.processorMonitor
             .getCpuInfoAsync()
             .then(updatedCpuInfo => {

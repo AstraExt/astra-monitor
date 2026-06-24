@@ -364,6 +364,7 @@ export default class GpuMonitor extends Monitor {
     private status = false;
     private updateAmdGpuTask: ContinuousTaskManager;
     private updateNvidiaGpuTask: ContinuousTaskManager;
+    private gpuTaskStarting = false;
     private nvidiaParsing = false;
 
     private updateDisplaysTask: CancellableTaskManager<boolean>;
@@ -404,6 +405,14 @@ export default class GpuMonitor extends Monitor {
         };
         Config.connect(this, 'changed::gpu-data', updateMonitoredGPUs.bind(this));
         updateMonitoredGPUs();
+        Utils.getGPUsListAsync()
+            .then(() => {
+                updateMainGpu();
+                updateMonitoredGPUs();
+            })
+            .catch((e: any) => {
+                Utils.error('Error loading GPUs list', e);
+            });
 
         this.updateMonitorStatus();
     }
@@ -441,11 +450,12 @@ export default class GpuMonitor extends Monitor {
     }
 
     override start() {
-        this.startGpuTask();
-
         if(this.status) return;
         this.status = true;
         super.start();
+        this.startGpuTask().catch((e: any) => {
+            Utils.error('Error starting GPU task', e);
+        });
     }
 
     override stop() {
@@ -454,6 +464,7 @@ export default class GpuMonitor extends Monitor {
 
         super.stop();
         this.stopGpuTask();
+        this.gpuTaskStarting = false;
         this.reset();
     }
 
@@ -471,7 +482,17 @@ export default class GpuMonitor extends Monitor {
         }
     }
 
-    private startGpuTask() {
+    private async startGpuTask() {
+        if(this.gpuTaskStarting) return;
+
+        this.gpuTaskStarting = true;
+        try {
+            await Utils.getGPUsListAsync();
+        } finally {
+            this.gpuTaskStarting = false;
+        }
+        if(!this.status) return;
+
         const monitoredGPUs = Utils.getMonitoredGPUs();
         if(!monitoredGPUs) return;
 
@@ -483,10 +504,10 @@ export default class GpuMonitor extends Monitor {
             }
         }
 
-        if(hasAMD && Utils.hasAmdGpuTop() && !this.updateAmdGpuTask.isRunning) {
+        if(hasAMD && (await Utils.hasAmdGpuTopAsync()) && !this.updateAmdGpuTask.isRunning) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
-            const path = Utils.commandPathLookup('amdgpu_top --version');
+            const path = await Utils.getAmdGpuTopPathAsync();
 
             if(path === false) {
                 Utils.error('Failed to find amdgpu_top');
@@ -506,7 +527,7 @@ export default class GpuMonitor extends Monitor {
             }
         }
 
-        if(hasNvidia && Utils.hasNvidiaSmi() && !this.updateNvidiaGpuTask.isRunning) {
+        if(hasNvidia && (await Utils.hasNvidiaSmiAsync()) && !this.updateNvidiaGpuTask.isRunning) {
             // Max 2 updates per second
             const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
             /**
@@ -515,7 +536,11 @@ export default class GpuMonitor extends Monitor {
              * It also doesn't support processes monitoring and other features we might want
              * to add in the future.
              */
-            const path = Utils.commandPathLookup('nvidia-smi --version');
+            const path = await Utils.getNvidiaSmiPathAsync();
+            if(path === false) {
+                Utils.error('Failed to find nvidia-smi');
+                return;
+            }
             this.updateNvidiaGpuTask.start(`${path}nvidia-smi -q -x -lms ${timer}`, {
                 flush: { trigger: '</nvidia_smi_log>' },
             });

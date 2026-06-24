@@ -147,6 +147,7 @@ export default class StorageMenu extends MenuBase {
     private devicesInfoPopup!: Map<string, DeviceInfoPopup>;
     private devicesTotalsPopup!: Map<string, DeviceTotalsPopup>;
     private updateTimer: number = 0;
+    private deviceListGeneration: number = 0;
     private destroyed: boolean = false;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
@@ -291,7 +292,9 @@ export default class StorageMenu extends MenuBase {
         separatorButton.set_child(separatorGrid);
         separatorButton.connect('clicked', () => {
             if(Utils.hasIotop()) {
-                Utils.storageMonitor.startIOTop();
+                Utils.storageMonitor.startIOTop().catch((e: any) => {
+                    Utils.error('Error starting IOTop', e);
+                });
             }
         });
         this.addToMenu(separatorButton, 2);
@@ -532,8 +535,9 @@ export default class StorageMenu extends MenuBase {
     }
 
     async updateDeviceList() {
+        const generation = ++this.deviceListGeneration;
         const devices = await Utils.getBlockDevicesAsync();
-        if(this.destroyed) return;
+        if(this.destroyed || generation !== this.deviceListGeneration) return;
 
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
