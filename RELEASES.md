@@ -8,6 +8,10 @@
 
 -   Improved menu loading states and first-update behavior to reduce stale values, avoid misleading empty rows, and keep popups consistent while data is being refreshed.
 
+### Bug fixes
+
+-   Fixed load average values being truncated in the processor menu when wider values are shown.
+
 _Note: This is a significant internal change, so feedback is very welcome. If you notice any regression, please open an issue: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
 
 # Astra Monitor 40 - June 22 2026

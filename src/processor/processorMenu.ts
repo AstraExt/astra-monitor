@@ -690,7 +690,12 @@ export default class ProcessorMenu extends MenuBase {
     addLoadAverage() {
         this.addMenuSection(_('Load average'));
 
-        const defaultStyle = 'max-width:150px;';
+        const defaultStyle = 'width:200px;';
+        const loadAverageLabelStyle = 'padding:0.05em 0.3em 0 0;';
+        const loadAverageValueStyle =
+            'width:3.4em;margin-right:0.4em;padding-top:0.05em;text-align:left;';
+        const lastLoadAverageValueStyle =
+            'width:3.4em;margin-right:0;padding-top:0.05em;text-align:left;';
 
         const hoverButton = new St.Button({
             reactive: true,
@@ -721,7 +726,7 @@ export default class ProcessorMenu extends MenuBase {
         const oneMinuteLabel = new St.Label({
             text: pgettext('short for 1 minute', '1m'),
             styleClass: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;',
+            style: loadAverageLabelStyle,
         });
         oneMinuteContainer.add_child(oneMinuteLabel);
 
@@ -729,11 +734,9 @@ export default class ProcessorMenu extends MenuBase {
             text: '-',
             xExpand: true,
             styleClass: 'astra-monitor-menu-key-mid',
+            style: loadAverageValueStyle,
         });
-        oneMinuteContainer.add_child(
-            MenuBase.createLoadingValue(oneMinuteValueLabel)
-        );
-        oneMinuteContainer.set_width(50);
+        oneMinuteContainer.add_child(MenuBase.createLoadingValue(oneMinuteValueLabel));
 
         this.loadAverageValues.push(oneMinuteValueLabel);
 
@@ -751,7 +754,7 @@ export default class ProcessorMenu extends MenuBase {
         const fiveMinutesLabel = new St.Label({
             text: pgettext('short for 5 minutes', '5m'),
             styleClass: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;',
+            style: loadAverageLabelStyle,
         });
         fiveMinutesContainer.add_child(fiveMinutesLabel);
 
@@ -759,11 +762,9 @@ export default class ProcessorMenu extends MenuBase {
             text: '-',
             xExpand: true,
             styleClass: 'astra-monitor-menu-key-mid',
+            style: loadAverageValueStyle,
         });
-        fiveMinutesContainer.add_child(
-            MenuBase.createLoadingValue(fiveMinutesValueLabel)
-        );
-        fiveMinutesContainer.set_width(50);
+        fiveMinutesContainer.add_child(MenuBase.createLoadingValue(fiveMinutesValueLabel));
 
         this.loadAverageValues.push(fiveMinutesValueLabel);
 
@@ -781,7 +782,7 @@ export default class ProcessorMenu extends MenuBase {
         const fifteenMinutesLabel = new St.Label({
             text: pgettext('short for 15 minutes', '15m'),
             styleClass: 'astra-monitor-menu-label',
-            style: 'padding-right:0.15em;',
+            style: loadAverageLabelStyle,
         });
         fifteenMinutesContainer.add_child(fifteenMinutesLabel);
 
@@ -789,11 +790,9 @@ export default class ProcessorMenu extends MenuBase {
             text: '-',
             xExpand: true,
             styleClass: 'astra-monitor-menu-key-mid',
+            style: lastLoadAverageValueStyle,
         });
-        fifteenMinutesContainer.add_child(
-            MenuBase.createLoadingValue(fifteenMinutesValueLabel)
-        );
-        fifteenMinutesContainer.set_width(50);
+        fifteenMinutesContainer.add_child(MenuBase.createLoadingValue(fifteenMinutesValueLabel));
 
         this.loadAverageValues.push(fifteenMinutesValueLabel);
 
