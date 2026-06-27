@@ -99,14 +99,14 @@ export default class XMLParser {
                 this.skipToNextImportantChar();
 
                 if(this.xml[this.pos] === '<') {
-                    if(this.xml[this.pos + 1] === '/') {
-                        // handle comments
-                        if(this.xml.startsWith('<!--', this.pos)) {
-                            const endComment = this.xml.indexOf('-->', this.pos);
-                            this.pos = endComment !== -1 ? endComment + 3 : this.xml.length;
-                            continue;
-                        }
+                    // handle comments
+                    if(this.xml.startsWith('<!--', this.pos)) {
+                        const endComment = this.xml.indexOf('-->', this.pos);
+                        this.pos = endComment !== -1 ? endComment + 3 : this.xml.length;
+                        continue;
+                    }
 
+                    if(this.xml[this.pos + 1] === '/') {
                         // Closing tag
                         this.pos = this.xml.indexOf('>', this.pos) + 1;
                         const finishedObject = this.objStack.pop();
