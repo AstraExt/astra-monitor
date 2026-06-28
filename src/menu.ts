@@ -52,6 +52,7 @@ type OpenUpdateResponseHandler = {
     waitingForFirstResponse: boolean;
     waitingForSecondResponse: boolean;
     followUp: boolean;
+    lifecycleGeneration: number;
 };
 
 const LOADING_ICON_STYLE =
@@ -81,6 +82,11 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     private lastForcedUpdate: Map<string, number> = new Map();
     private openUpdateTimers: Map<string, number> = new Map();
     private openUpdateResponseHandlers: Map<string, OpenUpdateResponseHandler> = new Map();
+
+    private loadingIcons: Set<St.Icon> = new Set();
+    private lifecycleGeneration: number = 0;
+    private openLifecycleGeneration: number = 0;
+    private lifecycleActive: boolean = false;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, params: MenuProps = {}) {
         super(sourceActor, arrowAlignment, params.arrowSide ?? MenuBase.openingSide);
@@ -242,6 +248,42 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         if(MenuBase.spinningLoadingIcons.size === 0) MenuBase.stopLoadingSpinTimer();
     }
 
+    protected setLoading(label: St.Label, loading: boolean) {
+        const loadingData = MenuBase.loadingLabels.get(label);
+        if(loading && !this.isOpen) {
+            label.text = '';
+            if(loadingData) {
+                this.loadingIcons.delete(loadingData.icon);
+                MenuBase.stopLoadingIcon(loadingData.icon);
+            }
+            return;
+        }
+
+        if(loadingData) {
+            if(loading) this.loadingIcons.add(loadingData.icon);
+            else this.loadingIcons.delete(loadingData.icon);
+        }
+
+        MenuBase.setLoading(label, loading);
+    }
+
+    protected startLoadingIcon(icon: St.Icon) {
+        this.loadingIcons.add(icon);
+        MenuBase.startLoadingIcon(icon);
+    }
+
+    protected stopLoadingIcon(icon: St.Icon) {
+        this.loadingIcons.delete(icon);
+        MenuBase.stopLoadingIcon(icon);
+    }
+
+    protected stopLoadingIndicators() {
+        for(const icon of this.loadingIcons) {
+            MenuBase.stopLoadingIcon(icon);
+        }
+        this.loadingIcons.clear();
+    }
+
     private static removeLoadingIcon(icon: St.Icon, reset: boolean) {
         MenuBase.spinningLoadingIcons.delete(icon);
 
@@ -365,10 +407,67 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         this.addToMenu(this.utilityBox, this.grid.getNumCols());
     }
 
+    queueOpenLifecycle() {
+        const generation = ++this.lifecycleGeneration;
+        Utils.lowPriorityTask(() => {
+            if(!this.isLifecycleCurrent(generation, true)) return;
+            this.runOpenLifecycle(generation);
+        });
+    }
+
+    queueCloseLifecycle() {
+        const generation = ++this.lifecycleGeneration;
+        Utils.lowPriorityTask(() => {
+            if(!this.isLifecycleCurrent(generation, false)) return;
+            this.runCloseLifecycle();
+        });
+    }
+
+    private isLifecycleCurrent(generation: number, open: boolean): boolean {
+        return this.lifecycleGeneration === generation && this.isOpen === open;
+    }
+
+    private runOpenLifecycle(generation: number) {
+        if(this.lifecycleActive) {
+            if(this.openLifecycleGeneration === generation) return;
+            this.runCloseLifecycle();
+        }
+
+        this.lifecycleActive = true;
+        this.openLifecycleGeneration = generation;
+
+        try {
+            this.onOpen().catch(e => {
+                Utils.error('Error opening menu', e instanceof Error ? e : new Error(String(e)));
+            });
+        } catch(e) {
+            Utils.error('Error opening menu', e instanceof Error ? e : new Error(String(e)));
+            this.runCloseLifecycle();
+        }
+    }
+
+    private runCloseLifecycle() {
+        if(!this.lifecycleActive) {
+            this.cancelOpenUpdates();
+            this.stopLoadingIndicators();
+            return;
+        }
+
+        this.lifecycleActive = false;
+        this.openLifecycleGeneration = 0;
+
+        try {
+            this.onClose();
+        } catch(e) {
+            Utils.error('Error closing menu', e instanceof Error ? e : new Error(String(e)));
+        }
+    }
+
     async onOpen() {}
 
     onClose() {
         this.cancelOpenUpdates();
+        this.stopLoadingIndicators();
     }
 
     protected canUseCachedValue(
@@ -396,9 +495,10 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         this.cancelOpenUpdate(code);
         if(!this.shouldRequestOpenUpdate(monitor, openDelayMs)) return;
 
+        const lifecycleGeneration = this.lifecycleGeneration;
         const timerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, openDelayMs, () => {
             this.openUpdateTimers.delete(code);
-            if(this.isOpen) requestUpdate();
+            if(this.isLifecycleCurrent(lifecycleGeneration, true)) requestUpdate();
             return GLib.SOURCE_REMOVE;
         });
         this.openUpdateTimers.set(code, timerId);
@@ -420,11 +520,13 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             waitingForFirstResponse: true,
             waitingForSecondResponse: false,
             followUp,
+            lifecycleGeneration: this.lifecycleGeneration,
         });
 
+        const lifecycleGeneration = this.lifecycleGeneration;
         const timerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, openDelayMs, () => {
             this.openUpdateTimers.delete(code);
-            if(this.isOpen) {
+            if(this.isLifecycleCurrent(lifecycleGeneration, true)) {
                 const handler = this.openUpdateResponseHandlers.get(code);
                 if(handler) handler.requestStarted = true;
                 requestUpdate();
@@ -441,32 +543,37 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         callback: (...args: any[]) => void
     ): (...args: any[]) => void {
         return (...args: any[]) => {
-            this.handleOpenUpdateResponse(code);
+            if(!this.handleOpenUpdateResponse(code)) return;
             callback(...args);
         };
     }
 
-    private handleOpenUpdateResponse(code: string) {
+    private handleOpenUpdateResponse(code: string): boolean {
         const handler = this.openUpdateResponseHandlers.get(code);
-        if(!handler || !handler.requestStarted) return;
+        if(!handler) return this.isOpen;
+        if(!this.isLifecycleCurrent(handler.lifecycleGeneration, true)) {
+            this.openUpdateResponseHandlers.delete(code);
+            return false;
+        }
+        if(!handler.requestStarted) return true;
 
         if(handler.waitingForSecondResponse) {
             this.openUpdateResponseHandlers.delete(code);
-            return;
+            return true;
         }
 
-        if(!handler.waitingForFirstResponse) return;
+        if(!handler.waitingForFirstResponse) return true;
         handler.waitingForFirstResponse = false;
 
         if(!handler.followUp) {
             handler.waitingForSecondResponse = true;
-            return;
+            return true;
         }
 
         const followUpCode = `${code}:follow-up`;
         const timerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => {
             this.openUpdateTimers.delete(followUpCode);
-            if(this.isOpen) {
+            if(this.isLifecycleCurrent(handler.lifecycleGeneration, true)) {
                 handler.waitingForSecondResponse = true;
                 handler.requestUpdate();
             } else {
@@ -475,6 +582,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             return GLib.SOURCE_REMOVE;
         });
         this.openUpdateTimers.set(followUpCode, timerId);
+        return true;
     }
 
     protected isOpenUpdatePending(code: string): boolean {

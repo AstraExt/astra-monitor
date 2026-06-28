@@ -205,37 +205,10 @@ export default GObject.registerClass(
         onOpenMenu(_menu: any, open: boolean) {
             if(open) {
                 this.add_style_pseudo_class('active');
-                Utils.lowPriorityTask(() => {
-                    const menu = this.menu;
-                    if(!menu || !menu.isOpen) return;
-                    try {
-                        menu.onOpen().catch(e => {
-                            Utils.error(
-                                'Error opening menu',
-                                e instanceof Error ? e : new Error(String(e))
-                            );
-                        });
-                    } catch(e) {
-                        Utils.error(
-                            'Error opening menu',
-                            e instanceof Error ? e : new Error(String(e))
-                        );
-                    }
-                });
+                this.menu?.queueOpenLifecycle();
             } else {
                 this.remove_style_pseudo_class('active');
-                Utils.lowPriorityTask(() => {
-                    const menu = this.menu;
-                    if(!menu || menu.isOpen) return;
-                    try {
-                        menu.onClose();
-                    } catch(e) {
-                        Utils.error(
-                            'Error closing menu',
-                            e instanceof Error ? e : new Error(String(e))
-                        );
-                    }
-                });
+                this.menu?.queueCloseLifecycle();
             }
 
             return;

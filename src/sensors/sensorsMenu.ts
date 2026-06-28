@@ -67,15 +67,15 @@ export default class SensorsMenu extends MenuBase {
 
         Config.connect(this, 'changed::sensors-ignored-regex', () => {
             this.resetSensorsList();
-            Utils.sensorsMonitor.requestUpdate('sensorsData');
+            if(this.isOpen) Utils.sensorsMonitor.requestUpdate('sensorsData');
         });
         Config.connect(this, 'changed::sensors-ignored-category-regex', () => {
             this.resetSensorsList();
-            Utils.sensorsMonitor.requestUpdate('sensorsData');
+            if(this.isOpen) Utils.sensorsMonitor.requestUpdate('sensorsData');
         });
         Config.connect(this, 'changed::sensors-ignored-attribute-regex', () => {
             this.resetSensorsList();
-            Utils.sensorsMonitor.requestUpdate('sensorsData');
+            if(this.isOpen) Utils.sensorsMonitor.requestUpdate('sensorsData');
         });
     }
 
@@ -389,7 +389,7 @@ export default class SensorsMenu extends MenuBase {
 
     private showSensorsLoading() {
         this.noSensorsLabel.hide();
-        MenuBase.startLoadingIcon(this.sensorsLoadingIcon);
+        this.startLoadingIcon(this.sensorsLoadingIcon);
     }
 
     update(code: string, forced: boolean = false) {
@@ -398,7 +398,7 @@ export default class SensorsMenu extends MenuBase {
         if(code === 'sensorsData') {
             const sensorsData = Utils.sensorsMonitor.getCurrentValue('sensorsData');
             if(sensorsData) {
-                MenuBase.stopLoadingIcon(this.sensorsLoadingIcon);
+                this.stopLoadingIcon(this.sensorsLoadingIcon);
                 const sensorsList: Map<string, SensorNode> = new Map();
 
                 //list all by "lm-sensors" provider

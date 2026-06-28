@@ -833,6 +833,7 @@ export default class ProcessorMenu extends MenuBase {
         this.addToMenu(this.gpuSection.container, 2);
 
         const updateGpuVisibility = () => {
+            const wasVisible = this.gpuSection.container.visible;
             const processorShow = Config.get_boolean('processor-gpu');
             const gpuHeaderShow = Config.get_boolean('gpu-header-show');
 
@@ -842,6 +843,11 @@ export default class ProcessorMenu extends MenuBase {
             } else {
                 label?.show();
                 this.gpuSection.container.show();
+            }
+
+            if(this.isOpen && wasVisible !== this.gpuSection.container.visible) {
+                if(this.gpuSection.container.visible) this.gpuSection.onOpen();
+                else this.gpuSection.onClose();
             }
         };
 
@@ -962,12 +968,12 @@ export default class ProcessorMenu extends MenuBase {
     private showCpuUsageLoading() {
         this.processorBar.setUsage([]);
         for(const label of [this.cpuTotalPerc, this.cpuUserPerc, this.cpuSystemPerc]) {
-            MenuBase.setLoading(label, true);
+            this.setLoading(label, true);
         }
     }
 
     private showLoadAverageLoading() {
-        for(const label of this.loadAverageValues) MenuBase.setLoading(label, true);
+        for(const label of this.loadAverageValues) this.setLoading(label, true);
     }
 
     clear(code: string = 'all') {
@@ -981,7 +987,7 @@ export default class ProcessorMenu extends MenuBase {
 
         if(code === 'all' || code === 'topProcesses') {
             for(let i = 0; i < this.topProcesses.length; i++) {
-                MenuBase.setLoading(this.topProcesses[i].label, true);
+                this.setLoading(this.topProcesses[i].label, true);
                 this.topProcesses[i].label.text = '';
                 this.topProcesses[i].percentage.text = '';
             }
@@ -1022,7 +1028,7 @@ export default class ProcessorMenu extends MenuBase {
                 this.showCpuUsageLoading();
             } else {
                 for(const label of [this.cpuTotalPerc, this.cpuUserPerc, this.cpuSystemPerc]) {
-                    MenuBase.setLoading(label, false);
+                    this.setLoading(label, false);
                 }
                 this.cpuTotalPerc.text = cpuUsage.total.toFixed(0) + '%';
                 this.processorBar.setUsage([cpuUsage]);
@@ -1091,8 +1097,9 @@ export default class ProcessorMenu extends MenuBase {
             if(!frequencies || !Array.isArray(frequencies) || frequencies.length === 0) {
                 for(let i = 0; i < numCores; i++) {
                     const core = this.cpuCoresUsagePopup.cores?.get(i);
-                    core!.value.text = '-';
-                    core!.value.show();
+                    if(!core) continue;
+                    core.value.text = '-';
+                    core.value.show();
                 }
             } else {
                 for(let i = 0; i < numCores; i++) {
@@ -1101,13 +1108,13 @@ export default class ProcessorMenu extends MenuBase {
 
                     // If core is offline (checked via usage array), don't update frequency
                     if(usage && Array.isArray(usage) && usage[i] && usage[i].offline) {
-                        core!.value.hide();
+                        core.value.hide();
                         continue;
                     }
 
                     if(!frequencies[i] || isNaN(frequencies[i])) core.value.text = '-';
                     else core.value.text = (frequencies[i] / 1000).toFixed(2);
-                    core!.value.show();
+                    core.value.show();
                 }
             }
             return;
@@ -1123,7 +1130,7 @@ export default class ProcessorMenu extends MenuBase {
                 for(let i = 0; i < this.topProcesses.length; i++) {
                     const topProcess = this.topProcesses[i];
                     if(topProcess) {
-                        MenuBase.setLoading(topProcess.label, true);
+                        this.setLoading(topProcess.label, true);
                         topProcess.label.text = '';
                         topProcess.percentage.text = '';
                     }
@@ -1140,7 +1147,7 @@ export default class ProcessorMenu extends MenuBase {
                 for(let i = 0; i < ProcessorMonitor.TOP_PROCESSES_LIMIT; i++) {
                     if(!topProcesses[i]) {
                         if(this.topProcesses[i]) {
-                            MenuBase.setLoading(this.topProcesses[i].label, loading);
+                            this.setLoading(this.topProcesses[i].label, loading);
                             this.topProcesses[i].label.text = loading ? '' : '-';
                             this.topProcesses[i].percentage.text = '';
                         }
@@ -1164,7 +1171,7 @@ export default class ProcessorMenu extends MenuBase {
                     const numCores = Utils.processorMonitor.getCpuTopology().length || 1;
 
                     if(this.topProcesses[i]) {
-                        MenuBase.setLoading(this.topProcesses[i].label, false);
+                        this.setLoading(this.topProcesses[i].label, false);
                         this.topProcesses[i].label.text = process.exec;
 
                         if(perCore)
@@ -1194,7 +1201,7 @@ export default class ProcessorMenu extends MenuBase {
             if(!loadAverage) {
                 this.showLoadAverageLoading();
             } else {
-                for(const label of this.loadAverageValues) MenuBase.setLoading(label, false);
+                for(const label of this.loadAverageValues) this.setLoading(label, false);
                 if(!Object.hasOwnProperty.call(loadAverage, 'load1m'))
                     this.loadAverageValues[0].text = '';
                 else this.loadAverageValues[0].text = loadAverage.load1m.toFixed(2);

@@ -535,9 +535,11 @@ export default class StorageMenu extends MenuBase {
     }
 
     async updateDeviceList() {
+        if(this.destroyed || !this.isOpen) return;
+
         const generation = ++this.deviceListGeneration;
         const devices = await Utils.getBlockDevicesAsync();
-        if(this.destroyed || generation !== this.deviceListGeneration) return;
+        if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration) return;
 
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
@@ -1221,10 +1223,13 @@ export default class StorageMenu extends MenuBase {
 
     onClose() {
         super.onClose();
+        this.deviceListGeneration++;
+        this.stopPrivilegedTopProcesses();
         Utils.storageMonitor.unlisten(this, 'storageIO');
         Utils.storageMonitor.unlisten(this, 'detailedStorageIO');
         Utils.storageMonitor.unlisten(this, 'topProcesses');
         Utils.storageMonitor.unlisten(this, 'topProcessesIOTop');
+        Utils.storageMonitor.unlisten(this, 'topProcessesIOTopStop');
         Utils.storageMonitor.unlisten(this, 'storageInfo');
 
         if(this.updateTimer) {
@@ -1235,8 +1240,8 @@ export default class StorageMenu extends MenuBase {
 
     private showStorageIOLoading() {
         this.graph.setUsageHistory([]);
-        MenuBase.setLoading(this.totalReadSpeedValueLabel, true);
-        MenuBase.setLoading(this.totalWriteSpeedValueLabel, true);
+        this.setLoading(this.totalReadSpeedValueLabel, true);
+        this.setLoading(this.totalWriteSpeedValueLabel, true);
     }
 
     update(code: string, forced: boolean = false) {
@@ -1245,8 +1250,9 @@ export default class StorageMenu extends MenuBase {
         }
 
         if(code === 'deviceList') {
+            const generation = ++this.deviceListGeneration;
             Utils.lowPriorityTask(() => {
-                if(this.destroyed) return;
+                if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration) return;
                 this.updateDeviceList();
             }, GLib.PRIORITY_DEFAULT);
             return;
@@ -1257,8 +1263,8 @@ export default class StorageMenu extends MenuBase {
 
             const current = Utils.storageMonitor.getCurrentValue('storageIO');
             if(current) {
-                MenuBase.setLoading(this.totalReadSpeedValueLabel, false);
-                MenuBase.setLoading(this.totalWriteSpeedValueLabel, false);
+                this.setLoading(this.totalReadSpeedValueLabel, false);
+                this.setLoading(this.totalWriteSpeedValueLabel, false);
 
                 const unit = Config.get_string('storage-io-unit');
 
@@ -1413,7 +1419,7 @@ export default class StorageMenu extends MenuBase {
             for(let i = 0; i < StorageMonitor.TOP_PROCESSES_LIMIT; i++) {
                 if(loading || !topProcesses[i] || !topProcesses[i].process) {
                     if(i < 3) {
-                        MenuBase.setLoading(this.topProcesses.labels[i].label, loading);
+                        this.setLoading(this.topProcesses.labels[i].label, loading);
                         this.topProcesses.labels[i].label.text = loading ? '' : '-';
                         this.topProcesses.labels[i].read.value.text = '';
                         this.topProcesses.labels[i].read.icon.style =
@@ -1444,7 +1450,7 @@ export default class StorageMenu extends MenuBase {
                     const write = topProcess.write;
 
                     if(i < 3) {
-                        MenuBase.setLoading(this.topProcesses.labels[i].label, false);
+                        this.setLoading(this.topProcesses.labels[i].label, false);
                         this.topProcesses.labels[i].label.text = process.exec;
 
                         if(read > 0) {
@@ -1529,8 +1535,8 @@ export default class StorageMenu extends MenuBase {
             return;
         }
         if(code === 'storageInfo') {
-            const storageInfo: Map<string, BlockDeviceData> =
-                Utils.storageMonitor.getCurrentValue('storageInfo');
+            const storageInfo = Utils.storageMonitor.getCurrentValue('storageInfo');
+            if(!(storageInfo instanceof Map)) return;
 
             const formatValue = (value: any, isBytes: boolean = false) => {
                 if(Array.isArray(value)) return value.join('\n');
@@ -1630,7 +1636,7 @@ export default class StorageMenu extends MenuBase {
 
         if(code === 'all' || code === 'topProcesses') {
             for(const process of this.topProcesses.labels) {
-                MenuBase.setLoading(process.label, true);
+                this.setLoading(process.label, true);
                 process.label.text = '';
                 process.read.value.text = '';
                 process.read.icon.style = 'color:rgba(255,255,255,0.5);';

@@ -767,7 +767,7 @@ export default class MemoryMenu extends MenuBase {
             this.memoryAllocatedQty,
             this.memoryFreeQty,
         ]) {
-            MenuBase.setLoading(label, true);
+            this.setLoading(label, true);
         }
     }
 
@@ -783,7 +783,7 @@ export default class MemoryMenu extends MenuBase {
 
         if(code === 'all' || code === 'topProcesses') {
             for(let i = 0; i < this.topProcesses.length; i++) {
-                MenuBase.setLoading(this.topProcesses[i].label, true);
+                this.setLoading(this.topProcesses[i].label, true);
                 this.topProcesses[i].label.text = '';
                 this.topProcesses[i].usage.text = '';
                 this.topProcesses[i].percentage.text = '';
@@ -822,7 +822,7 @@ export default class MemoryMenu extends MenuBase {
                     this.memoryAllocatedQty,
                     this.memoryFreeQty,
                 ]) {
-                    MenuBase.setLoading(label, false);
+                    this.setLoading(label, false);
                 }
 
                 this.memoryBar.setUsage([memoryUsage]);
@@ -939,7 +939,7 @@ export default class MemoryMenu extends MenuBase {
                 for(let i = 0; i < this.topProcesses.length; i++) {
                     const topProcess = this.topProcesses[i];
                     if(topProcess) {
-                        MenuBase.setLoading(topProcess.label, true);
+                        this.setLoading(topProcess.label, true);
                         topProcess.label.text = '';
                         topProcess.usage.text = '';
                         topProcess.percentage.text = '';
@@ -960,7 +960,7 @@ export default class MemoryMenu extends MenuBase {
                 for(let i = 0; i < MemoryMonitor.TOP_PROCESSES_LIMIT; i++) {
                     if(!topProcesses[i]) {
                         if(this.topProcesses[i]) {
-                            MenuBase.setLoading(this.topProcesses[i].label, loading);
+                            this.setLoading(this.topProcesses[i].label, loading);
                             this.topProcesses[i].label.text = loading ? '' : '-';
                             this.topProcesses[i].usage.text = '';
                             this.topProcesses[i].percentage.text = '';
@@ -982,7 +982,7 @@ export default class MemoryMenu extends MenuBase {
                     const percentage = topProcess.percentage;
 
                     if(this.topProcesses[i]) {
-                        MenuBase.setLoading(this.topProcesses[i].label, false);
+                        this.setLoading(this.topProcesses[i].label, false);
                         this.topProcesses[i].label.text = process.exec;
                         this.topProcesses[i].usage.text = Utils.formatBytes(usage, unit as any, 3);
                         this.topProcesses[i].percentage.text = percentage.toFixed(1) + '%';

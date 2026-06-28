@@ -1000,9 +1000,11 @@ export default class NetworkMenu extends MenuBase {
     }
 
     async updateDeviceList() {
+        if(this.destroyed || !this.isOpen) return;
+
         const generation = ++this.deviceListGeneration;
         const devices = await Utils.getNetworkInterfacesAsync();
-        if(this.destroyed || generation !== this.deviceListGeneration) return;
+        if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration) return;
 
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
@@ -2175,12 +2177,15 @@ export default class NetworkMenu extends MenuBase {
 
     onClose() {
         super.onClose();
+        this.deviceListGeneration++;
+        this.stopPrivilegedTopProcesses();
         Utils.networkMonitor.unlisten(this, 'networkIO');
         Utils.networkMonitor.unlisten(this, 'detailedNetworkIO');
         Utils.networkMonitor.unlisten(this, 'publicIps');
         Utils.networkMonitor.unlisten(this, 'routes');
         Utils.networkMonitor.unlisten(this, 'wireless');
         Utils.networkMonitor.unlisten(this, 'topProcesses');
+        Utils.networkMonitor.unlisten(this, 'topProcessesStop');
 
         if(this.updateTimer) {
             GLib.source_remove(this.updateTimer);
@@ -2190,12 +2195,16 @@ export default class NetworkMenu extends MenuBase {
             GLib.source_remove(this.publicIpv6.refreshTimer);
             this.publicIpv6.refreshTimer = 0;
         }
+        this.publicIpv6.refreshStatus = RefreshStatus.IDLE;
+        this.setLoading(this.publicIPv4.value, false);
+        this.setLoading(this.publicIpv6.value1, false);
+        this.updateIpsFooterLablel();
     }
 
     private showNetworkIOLoading() {
         this.graph.setUsageHistory([]);
-        MenuBase.setLoading(this.totalUploadSpeedValueLabel, true);
-        MenuBase.setLoading(this.totalDownloadSpeedValueLabel, true);
+        this.setLoading(this.totalUploadSpeedValueLabel, true);
+        this.setLoading(this.totalDownloadSpeedValueLabel, true);
     }
 
     private showPublicIpsLoading() {
@@ -2206,8 +2215,8 @@ export default class NetworkMenu extends MenuBase {
         this.publicIpv6.label.show();
         this.publicIpv6.value1.show();
         this.publicIpv6.value2.hide();
-        MenuBase.setLoading(this.publicIPv4.value, true);
-        MenuBase.setLoading(this.publicIpv6.value1, true);
+        this.setLoading(this.publicIPv4.value, true);
+        this.setLoading(this.publicIpv6.value1, true);
         this.updateIpsFooterLablel();
     }
 
@@ -2241,15 +2250,16 @@ export default class NetworkMenu extends MenuBase {
             popupRoute.flagsValue.text = '';
             popupRoute.flagsValue.hide();
         }
-        MenuBase.setLoading(this.defaultRouteGateway, true);
+        this.setLoading(this.defaultRouteGateway, true);
     }
 
     update(code: string, forced: boolean = false) {
         if(!this.needsUpdate(code, forced)) return;
 
         if(code === 'deviceList') {
+            const generation = ++this.deviceListGeneration;
             Utils.lowPriorityTask(() => {
-                if(this.destroyed) return;
+                if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration) return;
                 this.updateDeviceList();
             }, GLib.PRIORITY_DEFAULT);
             return;
@@ -2260,8 +2270,8 @@ export default class NetworkMenu extends MenuBase {
 
             const current = Utils.networkMonitor.getCurrentValue('networkIO');
             if(current) {
-                MenuBase.setLoading(this.totalUploadSpeedValueLabel, false);
-                MenuBase.setLoading(this.totalDownloadSpeedValueLabel, false);
+                this.setLoading(this.totalUploadSpeedValueLabel, false);
+                this.setLoading(this.totalDownloadSpeedValueLabel, false);
 
                 const unit = Config.get_string('network-io-unit');
 
@@ -2468,7 +2478,7 @@ export default class NetworkMenu extends MenuBase {
             for(let i = 0; i < NetworkMonitor.TOP_PROCESSES_LIMIT; i++) {
                 if(loading || !topProcesses[i] || !topProcesses[i].process) {
                     if(i < 3) {
-                        MenuBase.setLoading(this.topProcesses.labels[i].label, loading);
+                        this.setLoading(this.topProcesses.labels[i].label, loading);
                         this.topProcesses.labels[i].label.text = loading ? '' : '-';
                         this.topProcesses.labels[i].upload.value.text = '';
                         this.topProcesses.labels[i].upload.icon.style =
@@ -2499,7 +2509,7 @@ export default class NetworkMenu extends MenuBase {
                     const download = topProcess.download;
 
                     if(i < 3) {
-                        MenuBase.setLoading(this.topProcesses.labels[i].label, false);
+                        this.setLoading(this.topProcesses.labels[i].label, false);
                         this.topProcesses.labels[i].label.text = process.exec;
 
                         if(upload > 0) {
@@ -2582,8 +2592,8 @@ export default class NetworkMenu extends MenuBase {
             return;
         }
         if(code === 'publicIps') {
-            MenuBase.setLoading(this.publicIPv4.value, false);
-            MenuBase.setLoading(this.publicIpv6.value1, false);
+            this.setLoading(this.publicIPv4.value, false);
+            this.setLoading(this.publicIpv6.value1, false);
 
             if(this.publicIpv6.refreshStatus === RefreshStatus.REFRESHING) {
                 this.publicIpv6.refreshStatus = RefreshStatus.DONE;
@@ -2649,7 +2659,7 @@ export default class NetworkMenu extends MenuBase {
         if(code === 'routes') {
             const routes: RouteInfo[] = Utils.networkMonitor.getCurrentValue('routes');
             if(routes && routes.length > 0) {
-                MenuBase.setLoading(this.defaultRouteGateway, false);
+                this.setLoading(this.defaultRouteGateway, false);
                 for(let i = 0; i < 5; i++) {
                     const route = routes[i];
 
@@ -2722,7 +2732,7 @@ export default class NetworkMenu extends MenuBase {
                     }
                 }
             } else {
-                MenuBase.setLoading(this.defaultRouteGateway, false);
+                this.setLoading(this.defaultRouteGateway, false);
                 this.defaultRouteDevice.text = '-';
                 this.defaultRouteGateway.text = '-';
 
@@ -2939,7 +2949,7 @@ export default class NetworkMenu extends MenuBase {
             if(this.topProcesses) {
                 for(let i = 0; i < NetworkMonitor.TOP_PROCESSES_LIMIT; i++) {
                     if(this.topProcesses.labels && i < 3) {
-                        MenuBase.setLoading(this.topProcesses.labels[i].label, true);
+                        this.setLoading(this.topProcesses.labels[i].label, true);
                         this.topProcesses.labels[i].label.text = '';
                         this.topProcesses.labels[i].upload.value.text = '';
                         this.topProcesses.labels[i].upload.icon.style =

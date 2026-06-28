@@ -1837,6 +1837,7 @@ export default class GpuMenuComponent {
     }
 
     public update(data?: Map<string, GenericGpuInfo>) {
+        if(this.destroyed || !this.container) return;
         if(!data) return;
 
         if(!this.shown) {
@@ -1973,7 +1974,11 @@ export default class GpuMenuComponent {
     }
 
     public updateDisplays() {
-        let displaysData = Utils.gpuMonitor.getCurrentValue('displays') as DisplayData[];
+        if(this.destroyed || !this.shown || !this.container) return;
+
+        let displaysData = Utils.gpuMonitor.getCurrentValue('displays') as DisplayData[] | null;
+        if(!Array.isArray(displaysData)) return;
+
         displaysData = displaysData.filter(d => !d.connector.toLowerCase().includes('writeback'));
         if(!displaysData || displaysData.length === 0) {
             return;
@@ -2005,6 +2010,8 @@ export default class GpuMenuComponent {
     }
 
     public onOpen() {
+        if(this.destroyed || !this.container) return;
+
         this.clear();
         this.shown = true;
 
@@ -2046,6 +2053,7 @@ export default class GpuMenuComponent {
     public onClose() {
         this.shown = false;
         this.cancelDisplayUpdate();
+        this.clear();
         Utils.gpuMonitor.unlisten(this, 'displays');
     }
 
