@@ -62,6 +62,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
         });
 
         this.sourceActorDestroyId = sourceActor.connect('destroy', () => {
+            this.sourceActorDestroyId = undefined;
             this.close(false);
         });
     }
@@ -118,20 +119,12 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
 
     public override destroy(): void {
         if(this.capturedEventId) {
-            try {
-                global.stage.disconnect(this.capturedEventId);
-            } catch(e) {
-                /* EMPTY */
-            }
+            global.stage.disconnect(this.capturedEventId);
             this.capturedEventId = undefined;
         }
 
-        if(this.sourceActorDestroyId !== undefined) {
-            try {
-                this.profileSourceActor?.disconnect(this.sourceActorDestroyId);
-            } catch(e) {
-                /* EMPTY */
-            }
+        if(this.sourceActorDestroyId !== undefined && this.profileSourceActor) {
+            this.profileSourceActor.disconnect(this.sourceActorDestroyId);
             this.sourceActorDestroyId = undefined;
         }
         this.profileSourceActor = undefined;

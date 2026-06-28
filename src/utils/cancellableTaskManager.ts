@@ -92,16 +92,13 @@ export default class CancellableTaskManager<T> {
 
     public setSubprocess(subprocess: Gio.Subprocess) {
         if(this.cancelId !== undefined) {
-            try {
-                this.taskCancellable?.disconnect(this.cancelId);
-            } catch(_) {
-                /* empty */
-            }
+            this.taskCancellable?.disconnect(this.cancelId);
             this.cancelId = undefined;
         }
 
         const cancellable = this.taskCancellable;
         if(!cancellable || cancellable.is_cancelled()) {
+            /*! Cancellation can arrive after the subprocess has already finished; killing it is best-effort cleanup and should not surface an expected race. */
             try {
                 subprocess.force_exit();
             } catch(_) {
@@ -111,6 +108,7 @@ export default class CancellableTaskManager<T> {
         }
 
         this.cancelId = cancellable.connect(() => {
+            /*! Cancellation can arrive after the subprocess has already finished; killing it is best-effort cleanup and should not surface an expected race. */
             try {
                 subprocess.force_exit();
             } catch(_) {
@@ -133,11 +131,7 @@ export default class CancellableTaskManager<T> {
             }
 
             if(this.cancelId !== undefined) {
-                try {
-                    this.taskCancellable.disconnect(this.cancelId);
-                } catch(_) {
-                    /* empty */
-                }
+                this.taskCancellable.disconnect(this.cancelId);
                 this.cancelId = undefined;
             }
         }

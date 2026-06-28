@@ -134,11 +134,7 @@ export default class Signal {
         const id = Signal.destroyMap?.get(subject);
         if(id === undefined) return;
 
-        try {
-            subject.disconnect(id);
-        } catch(e) {
-            /* EMPTY */
-        }
+        subject.disconnect(id);
         Signal.destroyMap.delete(subject);
     }
 }

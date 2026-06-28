@@ -289,10 +289,11 @@ export default class MenuBase extends PopupMenu.PopupMenu {
 
         const destroyId = MenuBase.loadingIconDestroySignals.get(icon);
         if(destroyId !== undefined) {
+            /*! Loading icons can be removed while their destroy signal is already being emitted; disconnecting the handler is best-effort cleanup for the normal stop path. */
             try {
                 icon.disconnect(destroyId);
             } catch(e) {
-                /* icon is already being destroyed */
+                /* empty */
             }
             MenuBase.loadingIconDestroySignals.delete(icon);
         }

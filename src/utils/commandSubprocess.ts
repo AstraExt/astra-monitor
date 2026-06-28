@@ -150,6 +150,7 @@ export class CommandSubprocess {
         }
         this.destroyed = true;
 
+        /*! The subprocess may already have exited or been cancelled before cleanup; force_exit() is best-effort so teardown does not turn that race into user-visible log noise. */
         try {
             this.subprocess?.force_exit();
         } catch(e: any) {
