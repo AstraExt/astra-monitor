@@ -761,13 +761,7 @@ export default class NetworkMenu extends MenuBase {
             xExpand: true,
             style: 'font-size: 1em;',
         });
-        publicIpv6Grid.addGrid(
-            MenuBase.createLoadingValue(publicIpv6Value1),
-            2,
-            1,
-            1,
-            1
-        );
+        publicIpv6Grid.addGrid(MenuBase.createLoadingValue(publicIpv6Value1), 2, 1, 1, 1);
 
         const publicIpv6Value2 = new St.Label({
             text: '-',
@@ -2259,7 +2253,8 @@ export default class NetworkMenu extends MenuBase {
         if(code === 'deviceList') {
             const generation = ++this.deviceListGeneration;
             Utils.lowPriorityTask(() => {
-                if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration) return;
+                if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration)
+                    return;
                 this.updateDeviceList();
             }, GLib.PRIORITY_DEFAULT);
             return;

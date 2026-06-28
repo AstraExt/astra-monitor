@@ -192,9 +192,9 @@ export default class Storage {
             ''
         );
 
-        const populateIgnoredDevices = (devices: Awaited<
-            ReturnType<typeof Utils.getBlockDevicesAsync>
-        >) => {
+        const populateIgnoredDevices = (
+            devices: Awaited<ReturnType<typeof Utils.getBlockDevicesAsync>>
+        ) => {
             let ignoredDevices = Config.get_json('storage-ignored');
             if(!Array.isArray(ignoredDevices)) ignoredDevices = [];
 

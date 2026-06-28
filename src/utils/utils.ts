@@ -329,11 +329,11 @@ export default class Utils {
         Utils.experimentalPsSubprocess = undefined;
         Utils.xmlParser = null;
         Utils.performanceMap = null;
-        
+
         Utils.resetCommandCaches(null);
         Utils.resetHwmonCache();
         Utils.resetUptimeCache();
-        
+
         Utils.processorMonitor = undefined as any;
         Utils.gpuMonitor = undefined as any;
         Utils.memoryMonitor = undefined as any;
@@ -2382,7 +2382,6 @@ export default class Utils {
             return routes;
         }
     }
-
 
     static async getBlockDevicesAsync(
         task?: CancellableTaskManager<boolean>

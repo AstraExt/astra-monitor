@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Astra Monitor 51\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-22 17:40+0200\n"
+"POT-Creation-Date: 2026-06-28 13:27+0200\n"
 "PO-Revision-Date: 2025-11-08 20:56-0300\n"
 "Last-Translator: cogumi <yunurix@pm.me>\n"
 "Language-Team: cogumi <yunurix@pm.me>\n"
@@ -23,100 +23,104 @@ msgstr ""
 msgid "CPU"
 msgstr "CPU"
 
-#: src/processor/processorMenu.js:100
+#: src/processor/processorMenu.js:58 src/processor/processorMenu.js:61
+msgid "Loading CPU info..."
+msgstr ""
+
+#: src/processor/processorMenu.js:112
 msgid "CPU info"
 msgstr "Informações da CPU"
 
-#: src/processor/processorMenu.js:180 src/memory/memoryMenu.js:50
-#: src/memory/memoryMenu.js:372 src/gpu/gpuMenuComponent.js:272
-#: src/gpu/gpuMenuComponent.js:1199
+#: src/processor/processorMenu.js:192 src/memory/memoryMenu.js:50
+#: src/memory/memoryMenu.js:372 src/gpu/gpuMenuComponent.js:305
+#: src/gpu/gpuMenuComponent.js:1232
 msgid "Total:"
 msgstr "Total:"
 
-#: src/processor/processorMenu.js:188
+#: src/processor/processorMenu.js:200
 msgid "User:"
 msgstr "Usuário:"
 
-#: src/processor/processorMenu.js:196
+#: src/processor/processorMenu.js:208
 msgid "System:"
 msgstr "Sistema:"
 
-#: src/processor/processorMenu.js:225
+#: src/processor/processorMenu.js:237
 msgid "CPU Category Usage Raw Info"
 msgstr "Informações brutas sobre o uso da categoria da CPU"
 
-#: src/processor/processorMenu.js:227
+#: src/processor/processorMenu.js:239
 msgid "User"
 msgstr "Usuário"
 
-#: src/processor/processorMenu.js:234
+#: src/processor/processorMenu.js:246
 msgid "Nice"
 msgstr "Legal"
 
-#: src/processor/processorMenu.js:241
+#: src/processor/processorMenu.js:253
 msgid "System"
 msgstr "Sistema"
 
-#: src/processor/processorMenu.js:248
+#: src/processor/processorMenu.js:260
 msgid "Idle"
 msgstr "Ocioso"
 
-#: src/processor/processorMenu.js:255
+#: src/processor/processorMenu.js:267
 msgid "I/O wait"
 msgstr "Espera E/S"
 
-#: src/processor/processorMenu.js:262
+#: src/processor/processorMenu.js:274
 msgid "IRQ"
 msgstr "PDI"
 
-#: src/processor/processorMenu.js:269
+#: src/processor/processorMenu.js:281
 msgid "Soft IRQ"
 msgstr "Soft PDI"
 
-#: src/processor/processorMenu.js:276
+#: src/processor/processorMenu.js:288
 msgid "Steal"
 msgstr "Tempo roubado"
 
-#: src/processor/processorMenu.js:344
+#: src/processor/processorMenu.js:377
 msgid "CPU Cores Usage Info"
 msgstr "Informação de uso dos núcleos da CPU"
 
-#: src/processor/processorMenu.js:386
+#: src/processor/processorMenu.js:421
 msgid "GHz"
 msgstr "GHz"
 
-#: src/processor/processorMenu.js:401 src/processor/processorMenu.js:443
-#: src/storage/storageMenu.js:122 src/storage/storageMenu.js:240
-#: src/storage/storageMenu.js:1183 src/storage/storageMenu.js:1184
-#: src/storage/storageMenu.js:1193 src/storage/storageMenu.js:1194
+#: src/processor/processorMenu.js:436 src/processor/processorMenu.js:477
+#: src/storage/storageMenu.js:123 src/storage/storageMenu.js:243
+#: src/storage/storageMenu.js:1206 src/storage/storageMenu.js:1207
+#: src/storage/storageMenu.js:1216 src/storage/storageMenu.js:1217
 #: src/memory/memoryMenu.js:248 src/memory/memoryMenu.js:295
 msgid "Top processes"
 msgstr "Processos principais"
 
-#: src/processor/processorMenu.js:476
+#: src/processor/processorMenu.js:510
 msgid "Load average"
 msgstr "Carga média"
 
-#: src/processor/processorMenu.js:496
+#: src/processor/processorMenu.js:533
 msgctxt "short for 1 minute"
 msgid "1m"
 msgstr "1m"
 
-#: src/processor/processorMenu.js:516
+#: src/processor/processorMenu.js:553
 msgctxt "short for 5 minutes"
 msgid "5m"
 msgstr "5m"
 
-#: src/processor/processorMenu.js:536
+#: src/processor/processorMenu.js:573
 msgctxt "short for 15 minutes"
 msgid "15m"
 msgstr "15m"
 
-#: src/processor/processorMenu.js:585
+#: src/processor/processorMenu.js:629
 msgid "System uptime"
 msgstr "Tempo do sistema ligado"
 
-#: src/processor/processorMenu.js:730
+#: src/processor/processorMenu.js:785
 msgid "Offline"
 msgstr ""
 
@@ -137,8 +141,8 @@ msgstr "agora"
 
 #: src/prefs/sensors.js:41 src/prefs/sensors.js:54 src/prefs/sensors.js:67
 #: src/prefs/sensors.js:82 src/prefs/sensors.js:112
-#: src/sensors/sensorsMenu.js:47 src/gpu/gpuMenuComponent.js:367
-#: src/gpu/gpuMenuComponent.js:1324 prefs.js:389
+#: src/sensors/sensorsMenu.js:50 src/gpu/gpuMenuComponent.js:400
+#: src/gpu/gpuMenuComponent.js:1357 prefs.js:389
 msgid "Sensors"
 msgstr "Sensores"
 
@@ -149,7 +153,7 @@ msgstr "Sensores"
 msgid "General"
 msgstr "Geral"
 
-#: src/prefs/sensors.js:83 src/prefs/sensors.js:150 src/prefs/sensors.js:162
+#: src/prefs/sensors.js:83 src/prefs/sensors.js:154 src/prefs/sensors.js:166
 #: src/prefs/memory.js:83 src/prefs/storage.js:85 src/prefs/network.js:85
 #: src/prefs/gpu.js:85 src/prefs/processors.js:83
 msgid "Show"
@@ -202,44 +206,44 @@ msgstr "Sensores ignorados do atributo Regex"
 msgid "Attributes are like \"Alarm\", \"Min\", \"Max\", \"Crit\", etc."
 msgstr "Os atributos são \"Alarme\", \"Min\", \"Max\", \"Crit\", etc."
 
-#: src/prefs/sensors.js:106 src/prefs/memory.js:105 src/prefs/storage.js:184
-#: src/prefs/network.js:153 src/prefs/processors.js:85
+#: src/prefs/sensors.js:106 src/prefs/memory.js:105 src/prefs/storage.js:198
+#: src/prefs/network.js:159 src/prefs/processors.js:85
 msgid "Data Sources"
 msgstr "Fontes dos dados"
 
 #: src/prefs/sensors.js:108 src/prefs/memory.js:107 src/prefs/memory.js:113
-#: src/prefs/storage.js:186 src/prefs/storage.js:192 src/prefs/storage.js:197
-#: src/prefs/network.js:155 src/prefs/network.js:161 src/prefs/network.js:176
+#: src/prefs/storage.js:200 src/prefs/storage.js:206 src/prefs/storage.js:211
+#: src/prefs/network.js:161 src/prefs/network.js:167 src/prefs/network.js:182
 #: src/prefs/processors.js:87 src/prefs/processors.js:93
 #: src/prefs/processors.js:99 src/prefs/processors.js:105
 msgid "Auto"
 msgstr "Auto"
 
 #: src/prefs/sensors.js:118 src/prefs/sensors.js:120 src/prefs/memory.js:123
-#: src/prefs/memory.js:125 src/prefs/storage.js:206 src/prefs/storage.js:208
-#: src/prefs/network.js:186 src/prefs/gpu.js:173 src/prefs/gpu.js:175
+#: src/prefs/memory.js:125 src/prefs/storage.js:220 src/prefs/storage.js:222
+#: src/prefs/network.js:192 src/prefs/gpu.js:184 src/prefs/gpu.js:186
 #: src/prefs/processors.js:114 src/prefs/processors.js:116 prefs.js:240
 #: prefs.js:275 prefs.js:302 prefs.js:337 prefs.js:372 prefs.js:407
 msgid "Header"
 msgstr "Cabeçalho"
 
-#: src/prefs/sensors.js:121 src/prefs/memory.js:126 src/prefs/storage.js:209
-#: src/prefs/network.js:189 src/prefs/gpu.js:176 src/prefs/processors.js:117
+#: src/prefs/sensors.js:121 src/prefs/memory.js:126 src/prefs/storage.js:223
+#: src/prefs/network.js:195 src/prefs/gpu.js:187 src/prefs/processors.js:117
 msgid "Indicators Order"
 msgstr "Ordem dos indicadores"
 
-#: src/prefs/sensors.js:124 src/prefs/memory.js:129 src/prefs/storage.js:212
-#: src/prefs/network.js:192 src/prefs/gpu.js:179 src/prefs/processors.js:120
+#: src/prefs/sensors.js:124 src/prefs/memory.js:129 src/prefs/storage.js:226
+#: src/prefs/network.js:198 src/prefs/gpu.js:190 src/prefs/processors.js:120
 msgid "Icon"
 msgstr "Ícone"
 
-#: src/prefs/sensors.js:125 src/prefs/memory.js:130 src/prefs/storage.js:213
-#: src/prefs/network.js:193 src/prefs/gpu.js:180 src/prefs/processors.js:121
+#: src/prefs/sensors.js:125 src/prefs/memory.js:130 src/prefs/storage.js:227
+#: src/prefs/network.js:199 src/prefs/gpu.js:191 src/prefs/processors.js:121
 msgid "Show Icon"
 msgstr "Exibir ícone"
 
-#: src/prefs/sensors.js:127 src/prefs/memory.js:132 src/prefs/storage.js:215
-#: src/prefs/network.js:195 src/prefs/gpu.js:182 src/prefs/processors.js:123
+#: src/prefs/sensors.js:127 src/prefs/memory.js:132 src/prefs/storage.js:229
+#: src/prefs/network.js:201 src/prefs/gpu.js:193 src/prefs/processors.js:123
 msgid "Icon Name"
 msgstr "Nome do ícone"
 
@@ -247,126 +251,126 @@ msgstr "Nome do ícone"
 msgid "Set icon name (ie: 'temperature-symbolic')"
 msgstr "Definir nome do ícone"
 
-#: src/prefs/sensors.js:130 src/prefs/memory.js:135 src/prefs/storage.js:218
-#: src/prefs/network.js:198 src/prefs/visualization.js:171
-#: src/prefs/visualization.js:178 src/prefs/gpu.js:185
+#: src/prefs/sensors.js:130 src/prefs/memory.js:135 src/prefs/storage.js:232
+#: src/prefs/network.js:204 src/prefs/visualization.js:171
+#: src/prefs/visualization.js:178 src/prefs/gpu.js:196
 #: src/prefs/processors.js:126
 msgid "Set to empty to disable icon override"
 msgstr "Deixe vazio para desativar a substituição de ícones"
 
-#: src/prefs/sensors.js:133 src/prefs/memory.js:138 src/prefs/storage.js:221
-#: src/prefs/network.js:201 src/prefs/gpu.js:188 src/prefs/processors.js:129
+#: src/prefs/sensors.js:133 src/prefs/memory.js:138 src/prefs/storage.js:235
+#: src/prefs/network.js:207 src/prefs/gpu.js:199 src/prefs/processors.js:129
 msgid "Icon Color"
 msgstr "Cor do ícone"
 
-#: src/prefs/sensors.js:134 src/prefs/memory.js:139 src/prefs/storage.js:222
-#: src/prefs/network.js:202 src/prefs/gpu.js:189 src/prefs/processors.js:130
+#: src/prefs/sensors.js:134 src/prefs/memory.js:139 src/prefs/storage.js:236
+#: src/prefs/network.js:208 src/prefs/gpu.js:200 src/prefs/processors.js:130
 msgid "Icon Alert Color"
 msgstr "Cor de alerta do ícone"
 
-#: src/prefs/sensors.js:136 src/prefs/memory.js:141 src/prefs/storage.js:224
-#: src/prefs/network.js:204 src/prefs/gpu.js:191 src/prefs/processors.js:132
+#: src/prefs/sensors.js:136 src/prefs/memory.js:141 src/prefs/storage.js:238
+#: src/prefs/network.js:210 src/prefs/gpu.js:202 src/prefs/processors.js:132
 msgid "Icon Size"
 msgstr "Tamanho do ícone"
 
-#: src/prefs/sensors.js:137 src/prefs/memory.js:142 src/prefs/storage.js:225
-#: src/prefs/network.js:205 src/prefs/visualization.js:132
+#: src/prefs/sensors.js:137 src/prefs/memory.js:142 src/prefs/storage.js:239
+#: src/prefs/network.js:211 src/prefs/visualization.js:132
 #: src/prefs/visualization.js:140 src/prefs/visualization.js:148
-#: src/prefs/gpu.js:192 src/prefs/processors.js:133
+#: src/prefs/gpu.js:203 src/prefs/processors.js:133
 msgid "Experimental feature: may require to disable/enable the extension."
 msgstr "Recurso experimental: Vai precisar de desativar/ativar a extensão."
 
-#: src/prefs/sensors.js:144 src/prefs/gpu.js:95
+#: src/prefs/sensors.js:142 src/prefs/gpu.js:96
 msgid "None"
 msgstr "Nenhum"
 
-#: src/prefs/sensors.js:149
+#: src/prefs/sensors.js:153
 msgid "Sensor 1"
 msgstr "Sensor 1"
 
-#: src/prefs/sensors.js:152 src/prefs/sensors.js:169 src/prefs/sensors.js:183
-#: src/prefs/sensors.js:199 src/prefs/sensors.js:215 src/prefs/sensors.js:231
-#: src/prefs/sensors.js:247
+#: src/prefs/sensors.js:156 src/prefs/sensors.js:173 src/prefs/sensors.js:187
+#: src/prefs/sensors.js:203 src/prefs/sensors.js:219 src/prefs/sensors.js:235
+#: src/prefs/sensors.js:251
 msgid "Source"
 msgstr "Fonte"
 
-#: src/prefs/sensors.js:157 src/prefs/sensors.js:174 src/prefs/sensors.js:193
-#: src/prefs/sensors.js:209 src/prefs/sensors.js:225 src/prefs/sensors.js:241
-#: src/prefs/sensors.js:257
+#: src/prefs/sensors.js:161 src/prefs/sensors.js:178 src/prefs/sensors.js:197
+#: src/prefs/sensors.js:213 src/prefs/sensors.js:229 src/prefs/sensors.js:245
+#: src/prefs/sensors.js:261
 msgid "Value Digits"
 msgstr "Valor dos dígitos"
 
-#: src/prefs/sensors.js:158 src/prefs/sensors.js:175 src/prefs/sensors.js:194
-#: src/prefs/sensors.js:210 src/prefs/sensors.js:226 src/prefs/sensors.js:242
-#: src/prefs/sensors.js:258
+#: src/prefs/sensors.js:162 src/prefs/sensors.js:179 src/prefs/sensors.js:198
+#: src/prefs/sensors.js:214 src/prefs/sensors.js:230 src/prefs/sensors.js:246
+#: src/prefs/sensors.js:262
 msgid "Set -1 to auto. Number of digits after the decimal point."
 msgstr "Defina como -1 para auto. Número de dígitos depois do ponto decimal."
 
-#: src/prefs/sensors.js:161
+#: src/prefs/sensors.js:165
 msgid "Sensor 2"
 msgstr "Sensor 2"
 
-#: src/prefs/sensors.js:164 src/prefs/storage.js:284 src/prefs/network.js:238
+#: src/prefs/sensors.js:168 src/prefs/storage.js:298 src/prefs/network.js:244
 msgid "Vertical"
 msgstr "Vertical"
 
-#: src/prefs/sensors.js:165 src/prefs/storage.js:285 src/prefs/network.js:239
+#: src/prefs/sensors.js:169 src/prefs/storage.js:299 src/prefs/network.js:245
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: src/prefs/sensors.js:167
+#: src/prefs/sensors.js:171
 msgid "Sensor 2 Layout"
 msgstr "Layout do sensor 2"
 
-#: src/prefs/sensors.js:179 src/prefs/memory.js:192 src/prefs/storage.js:291
-#: src/prefs/network.js:245 src/prefs/gpu.js:241 src/prefs/processors.js:182
+#: src/prefs/sensors.js:183 src/prefs/memory.js:192 src/prefs/storage.js:305
+#: src/prefs/network.js:251 src/prefs/gpu.js:252 src/prefs/processors.js:182
 msgid "Tooltip"
 msgstr "Dica de ferramenta"
 
-#: src/prefs/sensors.js:180 src/prefs/memory.js:193 src/prefs/storage.js:292
-#: src/prefs/network.js:246 src/prefs/gpu.js:242 src/prefs/processors.js:183
+#: src/prefs/sensors.js:184 src/prefs/memory.js:193 src/prefs/storage.js:306
+#: src/prefs/network.js:252 src/prefs/gpu.js:253 src/prefs/processors.js:183
 msgid "Show Tooltip"
 msgstr "Exibir dica de ferramenta"
 
-#: src/prefs/sensors.js:181
+#: src/prefs/sensors.js:185
 msgid "Tooltip Sensor 1"
 msgstr "Sensor de dica de ferramenta 1"
 
-#: src/prefs/sensors.js:188 src/prefs/sensors.js:204 src/prefs/sensors.js:220
-#: src/prefs/sensors.js:236 src/prefs/sensors.js:252
+#: src/prefs/sensors.js:192 src/prefs/sensors.js:208 src/prefs/sensors.js:224
+#: src/prefs/sensors.js:240 src/prefs/sensors.js:256
 msgid "Short Name"
 msgstr "Nome curto"
 
-#: src/prefs/sensors.js:189 src/prefs/sensors.js:205 src/prefs/sensors.js:221
-#: src/prefs/sensors.js:237 src/prefs/sensors.js:253
+#: src/prefs/sensors.js:193 src/prefs/sensors.js:209 src/prefs/sensors.js:225
+#: src/prefs/sensors.js:241 src/prefs/sensors.js:257
 msgid "Short name to display in the tooltip."
 msgstr "Nome curto para exibir na dica de ferramenta."
 
-#: src/prefs/sensors.js:197
+#: src/prefs/sensors.js:201
 msgid "Tooltip Sensor 2"
 msgstr "Dica de ferramenta do sensor 2"
 
-#: src/prefs/sensors.js:213
+#: src/prefs/sensors.js:217
 msgid "Tooltip Sensor 3"
 msgstr "Dica de ferramenta do sensor 3"
 
-#: src/prefs/sensors.js:229
+#: src/prefs/sensors.js:233
 msgid "Tooltip Sensor 4"
 msgstr "Dica de ferramenta do sensor 4"
 
-#: src/prefs/sensors.js:245
+#: src/prefs/sensors.js:249
 msgid "Tooltip Sensor 5"
 msgstr "Dica de ferramenta do sensor 5"
 
-#: src/prefs/sensors.js:266 src/prefs/memory.js:202 src/prefs/memory.js:204
-#: src/prefs/storage.js:302 src/prefs/storage.js:304 src/prefs/network.js:253
-#: src/prefs/network.js:266 src/prefs/gpu.js:251 src/prefs/processors.js:191
+#: src/prefs/sensors.js:270 src/prefs/memory.js:202 src/prefs/memory.js:204
+#: src/prefs/storage.js:316 src/prefs/storage.js:318 src/prefs/network.js:259
+#: src/prefs/network.js:274 src/prefs/gpu.js:262 src/prefs/processors.js:191
 #: src/prefs/processors.js:193 prefs.js:248 prefs.js:310 prefs.js:345
 #: prefs.js:380
 msgid "Menu"
 msgstr "Menu"
 
-#: src/prefs/sensors.js:271 src/prefs/gpu.js:256
+#: src/prefs/sensors.js:275 src/prefs/gpu.js:267
 msgid "Empty for now"
 msgstr "Vazio por agora"
 
@@ -504,9 +508,9 @@ msgstr "Memória usada"
 msgid "Memory Usage"
 msgstr "Uso da memória"
 
-#: src/prefs/memory.js:117 src/prefs/storage.js:195 src/prefs/processors.js:103
-#: src/network/networkMenu.js:163 src/network/networkMenu.js:298
-#: src/gpu/gpuMenuComponent.js:310 src/gpu/gpuMenuComponent.js:1238
+#: src/prefs/memory.js:117 src/prefs/storage.js:209 src/prefs/processors.js:103
+#: src/network/networkMenu.js:164 src/network/networkMenu.js:344
+#: src/gpu/gpuMenuComponent.js:343 src/gpu/gpuMenuComponent.js:1271
 msgid "Top Processes"
 msgstr "Processos principais"
 
@@ -514,7 +518,7 @@ msgstr "Processos principais"
 msgid "Set icon name (ie: 'memory-symbolic')"
 msgstr "Definir nome do ícone"
 
-#: src/prefs/memory.js:146 src/prefs/memory.js:194 src/prefs/storage.js:237
+#: src/prefs/memory.js:146 src/prefs/memory.js:194 src/prefs/storage.js:251
 msgid "Usage Percentage"
 msgstr "Porcentagem de uso"
 
@@ -522,8 +526,8 @@ msgstr "Porcentagem de uso"
 msgid "Show Usage Percentage"
 msgstr "Exibir porcentagem de uso"
 
-#: src/prefs/memory.js:149 src/prefs/memory.js:160 src/prefs/storage.js:240
-#: src/prefs/storage.js:251 src/prefs/gpu.js:200 src/prefs/gpu.js:222
+#: src/prefs/memory.js:149 src/prefs/memory.js:160 src/prefs/storage.js:254
+#: src/prefs/storage.js:265 src/prefs/gpu.js:211 src/prefs/gpu.js:233
 #: src/prefs/processors.js:141
 msgid "Icon Alert"
 msgstr "Cor de alerta do ícone"
@@ -532,7 +536,7 @@ msgstr "Cor de alerta do ícone"
 msgid "Set 0 to disable. Value is percentage of ram usage."
 msgstr "Defina como 0 para desativar. O valor é a porcentagem do uso de ram."
 
-#: src/prefs/memory.js:153 src/prefs/memory.js:195 src/prefs/storage.js:244
+#: src/prefs/memory.js:153 src/prefs/memory.js:195 src/prefs/storage.js:258
 msgid "Usage Value"
 msgstr "Valor de uso"
 
@@ -540,11 +544,11 @@ msgstr "Valor de uso"
 msgid "Show Usage Value"
 msgstr "Exibir valor de uso"
 
-#: src/prefs/memory.js:155 src/prefs/storage.js:246
+#: src/prefs/memory.js:155 src/prefs/storage.js:260
 msgid "Usage Value Max Number of Figures"
 msgstr "Valor de uso do número máximo de figuras"
 
-#: src/prefs/memory.js:156 src/prefs/memory.js:196 src/prefs/storage.js:247
+#: src/prefs/memory.js:156 src/prefs/memory.js:196 src/prefs/storage.js:261
 msgid "Free Value"
 msgstr "Valor livre"
 
@@ -552,7 +556,7 @@ msgstr "Valor livre"
 msgid "Show Free Value"
 msgstr "Mostrar valor livre"
 
-#: src/prefs/memory.js:158 src/prefs/storage.js:249
+#: src/prefs/memory.js:158 src/prefs/storage.js:263
 msgid "Free Value Max Number of Figures"
 msgstr "Valor livre do número máximo de figuras"
 
@@ -568,8 +572,8 @@ msgstr "Histórico Gráfico"
 msgid "Show History Graph"
 msgstr "Exibir histórico gráfico"
 
-#: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:233
-#: src/prefs/visualization.js:81 src/prefs/gpu.js:207 src/prefs/gpu.js:229
+#: src/prefs/memory.js:167 src/prefs/memory.js:181 src/prefs/storage.js:247
+#: src/prefs/visualization.js:81 src/prefs/gpu.js:218 src/prefs/gpu.js:240
 #: src/prefs/processors.js:156 src/prefs/processors.js:171
 msgid "Main Color"
 msgstr "Cor principal"
@@ -591,7 +595,7 @@ msgstr "Cor alternativa"
 msgid "<b>Allocated <u>unused</u></b> memory color."
 msgstr "Cor da memória <b>alocada <u>não utilizada</u></b>."
 
-#: src/prefs/memory.js:177 src/prefs/gpu.js:211 src/prefs/gpu.js:233
+#: src/prefs/memory.js:177 src/prefs/gpu.js:222 src/prefs/gpu.js:244
 #: src/prefs/processors.js:166
 msgid "History Graph Width"
 msgstr "Largura do histórico gráfico"
@@ -624,7 +628,7 @@ msgstr "Cor principal da barra Swap."
 msgid "About"
 msgstr "Sobre"
 
-#: src/prefs/about.js:48 src/network/networkMenu.js:911
+#: src/prefs/about.js:48 src/network/networkMenu.js:963
 msgid "Info"
 msgstr "Informação"
 
@@ -653,7 +657,7 @@ msgid "GNOME Extensions page"
 msgstr "Página do GNOME Extensões"
 
 #: src/prefs/storage.js:43 src/prefs/storage.js:56 src/prefs/storage.js:69
-#: src/prefs/storage.js:84 src/storage/storageMenu.js:39 prefs.js:319
+#: src/prefs/storage.js:84 src/storage/storageMenu.js:40 prefs.js:319
 msgid "Storage"
 msgstr "Armazenamento"
 
@@ -701,190 +705,190 @@ msgstr "k (como kB/s)"
 msgid "Ki (as KiB/s)"
 msgstr "Ki (como kB/s)"
 
-#: src/prefs/storage.js:121 src/prefs/storage.js:229
+#: src/prefs/storage.js:129 src/prefs/storage.js:243
 msgid "Main Disk"
 msgstr "Disco principal"
 
-#: src/prefs/storage.js:122
+#: src/prefs/storage.js:130
 msgid "Ignored Storage Devices"
 msgstr "Dispositivos de armazenamento ignorados"
 
-#: src/prefs/storage.js:124 src/prefs/network.js:103
+#: src/prefs/storage.js:132 src/prefs/network.js:103
 msgid "Regex"
 msgstr "Regex"
 
-#: src/prefs/storage.js:125
+#: src/prefs/storage.js:133
 msgid "Devices matching this regex will be ignored."
 msgstr "Dispositivos combinando com esse regex vão ser ignorados."
 
-#: src/prefs/storage.js:127 src/prefs/network.js:106
+#: src/prefs/storage.js:135 src/prefs/network.js:106
 msgid "Leave empty to disable. Usage example: "
 msgstr "Deixe vazio para desativar. Exemplo de uso:"
 
-#: src/prefs/storage.js:139 src/prefs/storage.js:173 src/prefs/network.js:116
+#: src/prefs/storage.js:147 src/prefs/storage.js:181 src/prefs/network.js:116
 #: src/prefs/network.js:142 src/memory/memoryMenu.js:217
 msgid "Active"
 msgstr "Ativo"
 
-#: src/prefs/storage.js:139 src/prefs/storage.js:165 src/prefs/network.js:116
+#: src/prefs/storage.js:147 src/prefs/storage.js:173 src/prefs/network.js:116
 #: src/prefs/network.js:134
 msgid "Ignored"
 msgstr "Ignorado"
 
-#: src/prefs/storage.js:141
+#: src/prefs/storage.js:149
 msgid "Main"
 msgstr "Principal"
 
-#: src/prefs/storage.js:158
+#: src/prefs/storage.js:166
 msgid "Main disk cannot be ignored"
 msgstr "O disco principal não pode ser ignorado"
 
-#: src/prefs/storage.js:190
+#: src/prefs/storage.js:204
 msgid "Storage Usage"
 msgstr "Uso de armazenamento"
 
-#: src/prefs/storage.js:200
+#: src/prefs/storage.js:214
 msgid "Storage IO"
 msgstr "E/S do armazenamento"
 
-#: src/prefs/storage.js:216
+#: src/prefs/storage.js:230
 msgid "Set icon name (ie: 'drive-harddisk-symbolic')"
 msgstr "Definir nome do ícone"
 
-#: src/prefs/storage.js:230
+#: src/prefs/storage.js:244
 msgid "Usage Bar"
 msgstr "Barra de uso"
 
-#: src/prefs/storage.js:231
+#: src/prefs/storage.js:245
 msgid "Show Main Disk Usage Bar"
 msgstr "Exibir a barra de uso do disco principal"
 
-#: src/prefs/storage.js:234
+#: src/prefs/storage.js:248
 msgid "<b>Used</b> storage color."
 msgstr "Cor do armazenamento <b>usado</b>."
 
-#: src/prefs/storage.js:238
+#: src/prefs/storage.js:252
 msgid "Show Main Disk Usage Percentage"
 msgstr "Exibir a barra de porcentagem do disco principal"
 
-#: src/prefs/storage.js:241
+#: src/prefs/storage.js:255
 msgid "Set 0 to disable. Value is percentage of disk usage."
 msgstr "Defina como 0 para desativar. O valor é a porcentagem do uso do disco."
 
-#: src/prefs/storage.js:245
+#: src/prefs/storage.js:259
 msgid "Show Main Disk Usage Value"
 msgstr "Exibir o valor de uso do disco principal"
 
-#: src/prefs/storage.js:248
+#: src/prefs/storage.js:262
 msgid "Show Main Disk Free Value"
 msgstr "Exibir valor livre do disco principal"
 
-#: src/prefs/storage.js:252
+#: src/prefs/storage.js:266
 msgid "Set 0 to disable. Value is free MB of storage."
 msgstr "Defina 0 para desativar. O valor em MB de armazenamento está livre."
 
-#: src/prefs/storage.js:255 src/prefs/network.js:209
+#: src/prefs/storage.js:269 src/prefs/network.js:215
 msgid "IO"
 msgstr "E/S"
 
-#: src/prefs/storage.js:256 src/prefs/network.js:210
+#: src/prefs/storage.js:270 src/prefs/network.js:216
 msgid "Realtime IO Bar"
 msgstr "Barra de E/S em tempo real"
 
-#: src/prefs/storage.js:257 src/prefs/network.js:211
+#: src/prefs/storage.js:271 src/prefs/network.js:217
 msgid "Show Realtime IO Bar"
 msgstr "Exibir barra de E/S em tempo real"
 
-#: src/prefs/storage.js:259 src/prefs/storage.js:271 src/prefs/storage.js:307
+#: src/prefs/storage.js:273 src/prefs/storage.js:285 src/prefs/storage.js:321
 msgid "Read Color"
 msgstr "Cor de leitura"
 
-#: src/prefs/storage.js:260
+#: src/prefs/storage.js:274
 msgid "<b>Read</b> IO Bar color."
 msgstr "Cor da barra de <b>leitura</b> de E/S."
 
-#: src/prefs/storage.js:264 src/prefs/storage.js:276 src/prefs/storage.js:312
+#: src/prefs/storage.js:278 src/prefs/storage.js:290 src/prefs/storage.js:326
 msgid "Write Color"
 msgstr "Cor de escrita"
 
-#: src/prefs/storage.js:265
+#: src/prefs/storage.js:279
 msgid "<b>Write</b> IO Bar color."
 msgstr "<b>Escrita</b> cor da barra de E/S."
 
-#: src/prefs/storage.js:268 src/prefs/network.js:222
+#: src/prefs/storage.js:282 src/prefs/network.js:228
 msgid "IO History Graph"
 msgstr "Histórico gráfico de E/S"
 
-#: src/prefs/storage.js:269 src/prefs/network.js:223
+#: src/prefs/storage.js:283 src/prefs/network.js:229
 msgid "Show IO History Graph"
 msgstr "Exibir histórico gráfico de E/S"
 
-#: src/prefs/storage.js:272
+#: src/prefs/storage.js:286
 msgid "<b>Read</b> IO History Graph color."
 msgstr "Cor do histórico gráfico de <b>leitura</b> de E/S."
 
-#: src/prefs/storage.js:277
+#: src/prefs/storage.js:291
 msgid "<b>Write</b> IO History Graph color."
 msgstr "Cor do histórico gráfico de <b>escrita</b> da E/S."
 
-#: src/prefs/storage.js:280 src/prefs/network.js:234
+#: src/prefs/storage.js:294 src/prefs/network.js:240
 msgid "IO History Graph Width"
 msgstr "Largura do histórico gráfico de E/S"
 
-#: src/prefs/storage.js:281 src/prefs/storage.js:296 src/prefs/network.js:235
-#: src/prefs/network.js:247
+#: src/prefs/storage.js:295 src/prefs/storage.js:310 src/prefs/network.js:241
+#: src/prefs/network.js:253
 msgid "IO Speed"
 msgstr "Velocidade de E/S"
 
-#: src/prefs/storage.js:282 src/prefs/network.js:236
+#: src/prefs/storage.js:296 src/prefs/network.js:242
 msgid "Show IO Speed"
 msgstr "Exibir velocidade de E/S"
 
-#: src/prefs/storage.js:287 src/prefs/network.js:241
+#: src/prefs/storage.js:301 src/prefs/network.js:247
 msgid "IO Speed Layout"
 msgstr "Layout da velocidade de E/S"
 
-#: src/prefs/storage.js:288 src/prefs/network.js:242
+#: src/prefs/storage.js:302 src/prefs/network.js:248
 msgid "IO Speed Max Number of Figures"
 msgstr "Número máximo de dígitos na velocidade de E/S"
 
-#: src/prefs/storage.js:289 src/prefs/network.js:243
+#: src/prefs/storage.js:303 src/prefs/network.js:249
 msgid "IO Speed Threshold"
 msgstr "Limiar de velocidade de E/S"
 
-#: src/prefs/storage.js:289 src/prefs/network.js:243
+#: src/prefs/storage.js:303 src/prefs/network.js:249
 msgid "in kB/s"
 msgstr "em kB/s"
 
-#: src/prefs/storage.js:293
+#: src/prefs/storage.js:307
 msgid "Main Disk Usage Percentage"
 msgstr "Percentual de uso do disco principal"
 
-#: src/prefs/storage.js:294
+#: src/prefs/storage.js:308
 msgid "Main Disk Usage Value"
 msgstr "Uso do disco principal"
 
-#: src/prefs/storage.js:295
+#: src/prefs/storage.js:309
 msgid "Main Disk Free Value"
 msgstr "Espaço livre no disco principal"
 
-#: src/prefs/storage.js:305 src/prefs/network.js:267
+#: src/prefs/storage.js:319 src/prefs/network.js:275
 msgid "IO Arrows"
 msgstr "Setas de E/S"
 
-#: src/prefs/storage.js:308
+#: src/prefs/storage.js:322
 msgid "<b>Read</b> IO arrow color."
 msgstr "Cor da seta de <b>leitura</b> de E/S."
 
-#: src/prefs/storage.js:313
+#: src/prefs/storage.js:327
 msgid "<b>Write</b> IO arrow color."
 msgstr "Cor da seta de <b>escrita</b> de E/S."
 
-#: src/prefs/storage.js:316 src/storage/storageMenu.js:319
+#: src/prefs/storage.js:330 src/storage/storageMenu.js:322
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: src/prefs/storage.js:318
+#: src/prefs/storage.js:332
 msgid "Device Usage Bar Color"
 msgstr "Cor da barra de uso do dispositivo"
 
@@ -897,7 +901,7 @@ msgid "Move down"
 msgstr "Mover para baixo"
 
 #: src/prefs/profiles.js:36 src/prefs/profiles.js:49
-#: src/profiles/profilesMenu.js:36 prefs.js:189
+#: src/profiles/profilesMenu.js:37 prefs.js:189
 msgid "Profiles"
 msgstr "Perfis"
 
@@ -953,54 +957,32 @@ msgstr "Apagar"
 msgid "Welcome"
 msgstr ""
 
-#: src/prefs/welcome.js:46 src/prefs/network.js:255
+#: src/prefs/welcome.js:46 src/prefs/network.js:261
 msgid "Dependencies"
 msgstr "Dependências"
 
-#: src/prefs/welcome.js:50
+#: src/prefs/welcome.js:52
 msgid "Cannot access /proc/stat: this extension will not work!"
 msgstr "Não foi possível acessar /proc/stat: esta extensão não funcionará!"
 
-#: src/prefs/welcome.js:54
+#: src/prefs/welcome.js:57
 msgid "Cannot access /proc/cpuinfo: this extension will not work!"
 msgstr "Não foi possível acessar /proc/cpuinfo: esta extensão não funcionará!"
 
-#: src/prefs/welcome.js:58
+#: src/prefs/welcome.js:62
 msgid "Cannot access /proc/meminfo: this extension will not work!"
 msgstr "Não foi possível acessar /proc/meminfo: esta extensão não funcionará!"
 
-#: src/prefs/welcome.js:62
+#: src/prefs/welcome.js:67
 msgid "Cannot access /proc/diskstats: this extension will not work!"
 msgstr ""
 "Não foi possível acessar /proc/diskstats: esta extensão não funcionará!"
 
-#: src/prefs/welcome.js:66
+#: src/prefs/welcome.js:72
 msgid "Cannot access /proc/net/dev: this extension will not work!"
 msgstr "Não foi possível acessar /proc/net/dev: esta extensão não funcionará!"
 
-#: src/prefs/welcome.js:70
-msgid "Cannot access 'ps': this extension will not work!"
-msgstr "Não foi possível acessar 'ps': esta extensão não funcionará!"
-
-#: src/prefs/welcome.js:75
-msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
-msgstr ""
-"Não foi possível acessar /sys/class/hwmon: o monitoramento de sensores não "
-"funcionará!"
-
-#: src/prefs/welcome.js:80
-msgid "'lscpu' not installed: some features will be disabled!"
-msgstr "'lscpu' não instalado: alguns recursos serão desativados!"
-
-#: src/prefs/welcome.js:84
-msgid "'lspci' not installed: some features will be disabled!"
-msgstr "'lspci' não instalado: alguns recursos serão desativados!"
-
-#: src/prefs/welcome.js:88
-msgid "'lsblk' not installed: some features will be disabled!"
-msgstr "'lsblk' não instalado: alguns recursos serão desativados!"
-
-#: src/prefs/welcome.js:93
+#: src/prefs/welcome.js:77
 msgid ""
 "Cannot access /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq: some "
 "features will be disabled!"
@@ -1008,15 +990,31 @@ msgstr ""
 "Não foi possível acessar /sys/devices/system/cpu/cpu*/cpufreq/"
 "scaling_cur_freq: alguns recursos serão desativados!"
 
-#: src/prefs/welcome.js:98
+#: src/prefs/welcome.js:82
+msgid "Cannot access 'ps': this extension will not work!"
+msgstr "Não foi possível acessar 'ps': esta extensão não funcionará!"
+
+#: src/prefs/welcome.js:87
+msgid "'lscpu' not installed: some features will be disabled!"
+msgstr "'lscpu' não instalado: alguns recursos serão desativados!"
+
+#: src/prefs/welcome.js:92
+msgid "'lspci' not installed: some features will be disabled!"
+msgstr "'lspci' não instalado: alguns recursos serão desativados!"
+
+#: src/prefs/welcome.js:97
+msgid "'lsblk' not installed: some features will be disabled!"
+msgstr "'lsblk' não instalado: alguns recursos serão desativados!"
+
+#: src/prefs/welcome.js:102
 msgid "'NetHogs' not installed: some optional features will be disabled!"
 msgstr "'NetHogs' não instalado: alguns recursos opcionais serão desativados!"
 
-#: src/prefs/welcome.js:102
+#: src/prefs/welcome.js:107
 msgid "'iproute2' not installed: some features will be disabled!"
 msgstr "'iproute2' não instalado: alguns recursos serão desativados!"
 
-#: src/prefs/welcome.js:107
+#: src/prefs/welcome.js:112
 msgid ""
 "'iwconfig' and 'iw' not installed: install one of them to enable wireless "
 "network info!"
@@ -1024,11 +1022,11 @@ msgstr ""
 "'iwconfig' e 'iw' não instalados: instale um deles para ativar informações "
 "de rede sem fio!"
 
-#: src/prefs/welcome.js:113
+#: src/prefs/welcome.js:117
 msgid "'iotop' not installed: some optional features will be disabled!"
 msgstr "'iotop' não instalado: alguns recursos opcionais serão desativados!"
 
-#: src/prefs/welcome.js:119
+#: src/prefs/welcome.js:122
 msgid ""
 "AMD GPU detected but 'amdgpu_top' not installed: some optional features will "
 "be disabled!"
@@ -1036,7 +1034,7 @@ msgstr ""
 "GPU AMD detectada, mas 'amdgpu_top' não está instalado: alguns recursos "
 "opcionais serão desativados!"
 
-#: src/prefs/welcome.js:125
+#: src/prefs/welcome.js:128
 msgid ""
 "NVidia GPU detected but 'nvidia-smi' not installed: some optional features "
 "will be disabled!"
@@ -1044,11 +1042,17 @@ msgstr ""
 "GPU NVidia detectada, mas 'nvidia-smi' não está instalado: alguns recursos "
 "opcionais serão desativados!"
 
-#: src/prefs/welcome.js:128
+#: src/prefs/welcome.js:135
+msgid "Cannot access /sys/class/hwmon: sensors monitoring will not work!"
+msgstr ""
+"Não foi possível acessar /sys/class/hwmon: o monitoramento de sensores não "
+"funcionará!"
+
+#: src/prefs/welcome.js:138
 msgid "Checking GTop dependency..."
 msgstr "Verificando dependência GTop..."
 
-#: src/prefs/welcome.js:132 src/prefs/welcome.js:142
+#: src/prefs/welcome.js:142 src/prefs/welcome.js:152
 msgid ""
 "'GTop' not installed, some optional features will be disabled! For a better "
 "experience and performance, install it from your package manager."
@@ -1057,32 +1061,32 @@ msgstr ""
 "melhor experiência e desempenho, instale-o através do seu gerenciador de "
 "pacotes."
 
-#: src/prefs/welcome.js:136
+#: src/prefs/welcome.js:146
 msgid "'GTop' successfully detected and added to Data Sources list."
 msgstr "'GTop' detectado com sucesso e adicionado à lista de Fontes de Dados."
 
-#: src/prefs/welcome.js:146
+#: src/prefs/welcome.js:165
 msgid "All other dependencies are met!"
 msgstr "Todas as outras dependências foram satisfeitas!"
 
-#: src/prefs/welcome.js:149
+#: src/prefs/welcome.js:172
 msgid "Support Us"
 msgstr "Apoie-nos"
 
-#: src/prefs/welcome.js:150
+#: src/prefs/welcome.js:173
 msgid "Support us on Ko-Fi"
 msgstr "Apoie-nos no Ko-Fi"
 
-#: src/prefs/welcome.js:151
+#: src/prefs/welcome.js:174
 msgid "Buy us a coffee"
 msgstr "Compre-nos um café"
 
-#: src/prefs/welcome.js:152
+#: src/prefs/welcome.js:175
 msgid "Become a patron"
 msgstr "Seja um Patreon"
 
 #: src/prefs/network.js:43 src/prefs/network.js:56 src/prefs/network.js:69
-#: src/prefs/network.js:84 src/network/networkMenu.js:43 prefs.js:354
+#: src/prefs/network.js:84 src/network/networkMenu.js:44 prefs.js:354
 msgid "Network"
 msgstr "Rede"
 
@@ -1094,59 +1098,59 @@ msgstr "Interfaces de rede ignoradas"
 msgid "Interfaces matching this regex will be ignored."
 msgstr "Interfaces que corresponderem a esta expressão regex serão ignoradas."
 
-#: src/prefs/network.js:159
+#: src/prefs/network.js:165
 msgid "Network IO"
 msgstr "E/S de Rede"
 
-#: src/prefs/network.js:164
+#: src/prefs/network.js:170
 msgid "Network Top Processes"
 msgstr "Processos que mais usam rede"
 
-#: src/prefs/network.js:166
+#: src/prefs/network.js:172
 msgid "Public IPv4 Address"
 msgstr "Endereços IPv4 públicos"
 
-#: src/prefs/network.js:167 src/prefs/network.js:172
+#: src/prefs/network.js:173 src/prefs/network.js:178
 msgid "Set to empty to disable. Address will be regex matched."
 msgstr "Deixe vazio para desabilitar a substituição de ícone."
 
-#: src/prefs/network.js:171
+#: src/prefs/network.js:177
 msgid "Public IPv6 Address"
 msgstr "Endereços IPv6 públicos"
 
-#: src/prefs/network.js:180
+#: src/prefs/network.js:186
 msgid "Wireless Info"
 msgstr "Informações de rede sem fio"
 
-#: src/prefs/network.js:196
+#: src/prefs/network.js:202
 msgid "Set icon name (ie: 'network-wired-symbolic')"
 msgstr "Definir nome do ícone (ex: 'network-wired-symbolic')"
 
-#: src/prefs/network.js:213 src/prefs/network.js:225 src/prefs/network.js:269
+#: src/prefs/network.js:219 src/prefs/network.js:231 src/prefs/network.js:277
 msgid "Upload Color"
 msgstr "Cor de Upload"
 
-#: src/prefs/network.js:214
+#: src/prefs/network.js:220
 msgid "<b>Upload</b> IO Bar color."
 msgstr "Cor da barra de <b>upload</b> de E/S."
 
-#: src/prefs/network.js:218 src/prefs/network.js:230 src/prefs/network.js:274
+#: src/prefs/network.js:224 src/prefs/network.js:236 src/prefs/network.js:282
 msgid "Download Color"
 msgstr "Cor de Download"
 
-#: src/prefs/network.js:219
+#: src/prefs/network.js:225
 msgid "<b>Download</b> IO Bar color."
 msgstr "Cor da barra de <b>download</b> de E/S."
 
-#: src/prefs/network.js:226
+#: src/prefs/network.js:232
 msgid "<b>Upload</b> IO History Graph color."
 msgstr "Cor do gráfico de histórico de <b>upload</b> de E/S."
 
-#: src/prefs/network.js:231
+#: src/prefs/network.js:237
 msgid "<b>Download</b> IO History Graph color."
 msgstr "Cor do gráfico de histórico de <b>download</b> de E/S."
 
-#: src/prefs/network.js:257
+#: src/prefs/network.js:263
 msgid ""
 "'NetHogs' not installed or not configured appopriately: you won't be able to "
 "monitor process network activity! Check the documentation for more "
@@ -1156,11 +1160,11 @@ msgstr ""
 "monitorar atividade de rede por processo! Consulte a documentação para mais "
 "informações."
 
-#: src/prefs/network.js:270
+#: src/prefs/network.js:278
 msgid "<b>Upload</b> IO arrow color."
 msgstr "Cor da seta de <b>upload</b> de E/S"
 
-#: src/prefs/network.js:275
+#: src/prefs/network.js:283
 msgid "<b>Download</b> IO arrow color."
 msgstr "Cor da seta de <b>download</b> de E/S."
 
@@ -1362,8 +1366,8 @@ msgid "Monitor Ordering"
 msgstr "Ordenação de monitores"
 
 #: src/prefs/gpu.js:42 src/prefs/gpu.js:55 src/prefs/gpu.js:68
-#: src/prefs/gpu.js:108 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
-#: src/gpu/gpuMenuComponent.js:46 prefs.js:257
+#: src/prefs/gpu.js:111 src/prefs/processors.js:199 src/gpu/gpuMenu.js:28
+#: src/gpu/gpuMenuComponent.js:49 prefs.js:257
 msgid "GPU"
 msgstr "GPU"
 
@@ -1378,98 +1382,98 @@ msgstr ""
 "Dica: Você pode optar por mostrar estatísticas da GPU no menu de "
 "Processadores."
 
-#: src/prefs/gpu.js:106
+#: src/prefs/gpu.js:109
 msgid "Main GPU"
 msgstr "GPU Principal"
 
-#: src/prefs/gpu.js:106
+#: src/prefs/gpu.js:109
 msgid "May require a restart."
 msgstr ""
 
-#: src/prefs/gpu.js:113
+#: src/prefs/gpu.js:118
 msgid "Monitoring of this GPU is not supported or a dependency is missing."
 msgstr "Monitoramento não suportado para esta GPU ou falta uma dependência."
 
-#: src/prefs/gpu.js:166
+#: src/prefs/gpu.js:171
 msgid "Monitor"
 msgstr "Monitor"
 
-#: src/prefs/gpu.js:183
+#: src/prefs/gpu.js:194
 msgid "Set icon name (ie: 'gpu-symbolic')"
 msgstr "Definir nome do ícone (ex: 'gpu-symbolic')"
 
-#: src/prefs/gpu.js:197 src/prefs/gpu.js:243
+#: src/prefs/gpu.js:208 src/prefs/gpu.js:254
 msgid "Activity Percentage"
 msgstr "Porcentagem de atividade"
 
-#: src/prefs/gpu.js:198
+#: src/prefs/gpu.js:209
 msgid "Show Activity Percentage"
 msgstr "Mostrar porcentagem de atividade"
 
-#: src/prefs/gpu.js:201
+#: src/prefs/gpu.js:212
 msgid "Set 0 to disable. Value is percentage of total GPU Activity usage."
 msgstr ""
 "O monitoramento desta GPU não é suportado ou há uma dependência faltando."
 
-#: src/prefs/gpu.js:204
+#: src/prefs/gpu.js:215
 msgid "Activity History Graph"
 msgstr "Porcentagem de atividade"
 
-#: src/prefs/gpu.js:205
+#: src/prefs/gpu.js:216
 msgid "Show Activity History Graph"
 msgstr "Mostrar porcentagem de atividade"
 
-#: src/prefs/gpu.js:208 src/prefs/gpu.js:230
+#: src/prefs/gpu.js:219 src/prefs/gpu.js:241
 msgid "<b>Total usage</b> color."
 msgstr "Cor do <b>uso total</b>."
 
-#: src/prefs/gpu.js:212
+#: src/prefs/gpu.js:223
 msgid "Realtime Activity Bar"
 msgstr "Barra de atividade em tempo real"
 
-#: src/prefs/gpu.js:213
+#: src/prefs/gpu.js:224
 msgid "Show Activity Bar"
 msgstr "Mostrar barra de atividade"
 
-#: src/prefs/gpu.js:215 src/prefs/gpu.js:237
+#: src/prefs/gpu.js:226 src/prefs/gpu.js:248
 msgid "Bar Color"
 msgstr "Cor da barra"
 
-#: src/prefs/gpu.js:216 src/prefs/gpu.js:238
+#: src/prefs/gpu.js:227 src/prefs/gpu.js:249
 msgid "GPU bar main color."
 msgstr "Cor principal da barra da GPU."
 
-#: src/prefs/gpu.js:219 src/prefs/gpu.js:244
+#: src/prefs/gpu.js:230 src/prefs/gpu.js:255
 msgid "Memory Percentage"
 msgstr "Porcentagem de memória"
 
-#: src/prefs/gpu.js:220
+#: src/prefs/gpu.js:231
 msgid "Show Memory Percentage"
 msgstr "Mostrar porcentagem de memória"
 
-#: src/prefs/gpu.js:223
+#: src/prefs/gpu.js:234
 msgid "Set 0 to disable. Value is percentage of total GPU Memory usage."
 msgstr ""
 "Defina 0 para desativar. O valor é a porcentagem do uso total de memória da "
 "GPU."
 
-#: src/prefs/gpu.js:226
+#: src/prefs/gpu.js:237
 msgid "Memory History Graph"
 msgstr "Histórico gráfico de memória"
 
-#: src/prefs/gpu.js:227
+#: src/prefs/gpu.js:238
 msgid "Show Memory History Graph"
 msgstr "Mostrar histórico gráfico de Memória"
 
-#: src/prefs/gpu.js:234
+#: src/prefs/gpu.js:245
 msgid "Realtime Memory Bar"
 msgstr "Barra de memória em tempo real"
 
-#: src/prefs/gpu.js:235
+#: src/prefs/gpu.js:246
 msgid "Show Memory Bar"
 msgstr "Exibir barra de memória"
 
-#: src/prefs/gpu.js:245
+#: src/prefs/gpu.js:256
 msgid "Memory Value"
 msgstr "Valor de memória"
 
@@ -1510,7 +1514,7 @@ msgstr "Percentual de núcleo único"
 msgid "Set 0 to disable. Value is percentage of total cpu usage."
 msgstr "Defina 0 para desativar. O valor é a porcentagem do uso total da CPU."
 
-#: src/prefs/processors.js:145 src/network/networkMenu.js:1192
+#: src/prefs/processors.js:145 src/network/networkMenu.js:1244
 msgid "Frequency"
 msgstr "Frequência"
 
@@ -1568,584 +1572,584 @@ msgstr "Exibir informações da GPU"
 msgid "Only works if GPU header is disabled."
 msgstr "Só funciona se o cabeçalho da GPU estiver desativado."
 
-#: src/sensors/sensorsMenu.js:50
+#: src/sensors/sensorsMenu.js:53
 msgid "No sensor found"
 msgstr "Nenhum sensor encontrado"
 
-#: src/sensors/sensorsMenu.js:229
+#: src/sensors/sensorsMenu.js:243
 #, javascript-format
 msgid "%d sensor"
 msgid_plural "%d sensors"
 msgstr[0] "%d sensor"
 msgstr[1] "%d sensores"
 
-#: src/network/networkMenu.js:78
+#: src/network/networkMenu.js:79
 msgid "Global Upload:"
 msgstr "Upload Global:"
 
-#: src/network/networkMenu.js:90
+#: src/network/networkMenu.js:91
 msgid "Global Download:"
 msgstr "Download Global:"
 
-#: src/network/networkMenu.js:115
+#: src/network/networkMenu.js:116
 msgid "Upload Activity"
 msgstr "Atividade de Upload"
 
-#: src/network/networkMenu.js:117 src/network/networkMenu.js:139
-#: src/network/networkMenu.js:1101 src/network/networkMenu.js:1125
+#: src/network/networkMenu.js:118 src/network/networkMenu.js:140
+#: src/network/networkMenu.js:1153 src/network/networkMenu.js:1177
 #: src/memory/memoryMenu.js:145 src/memory/memoryMenu.js:401
 msgid "Total"
 msgstr "Total"
 
-#: src/network/networkMenu.js:124 src/network/networkMenu.js:146
-#: src/network/networkMenu.js:1108 src/network/networkMenu.js:1132
+#: src/network/networkMenu.js:125 src/network/networkMenu.js:147
+#: src/network/networkMenu.js:1160 src/network/networkMenu.js:1184
 msgid "Packets"
 msgstr "Pacotes"
 
-#: src/network/networkMenu.js:131 src/network/networkMenu.js:153
-#: src/network/networkMenu.js:1115 src/network/networkMenu.js:1142
+#: src/network/networkMenu.js:132 src/network/networkMenu.js:154
+#: src/network/networkMenu.js:1167 src/network/networkMenu.js:1194
 msgid "Errors/Dropped"
 msgstr "Erros/Perdidos"
 
-#: src/network/networkMenu.js:137
+#: src/network/networkMenu.js:138
 msgid "Download Activity"
 msgstr "Atividade de Download"
 
-#: src/network/networkMenu.js:169
+#: src/network/networkMenu.js:168
 msgid "(click to show)"
 msgstr "(clique para exibir)"
 
-#: src/network/networkMenu.js:380
+#: src/network/networkMenu.js:426
 msgid "Public IP"
 msgstr "IP Público"
 
-#: src/network/networkMenu.js:390
+#: src/network/networkMenu.js:436
 msgid "Public IPv4:"
 msgstr "IPv4 Público:"
 
-#: src/network/networkMenu.js:407
+#: src/network/networkMenu.js:453
 msgid "Public IPv6:"
 msgstr "IPv6 Público:"
 
-#: src/network/networkMenu.js:454
+#: src/network/networkMenu.js:500
 msgid "Updated a long time ago"
 msgstr "Atualizado há muito tempo"
 
-#: src/network/networkMenu.js:456
+#: src/network/networkMenu.js:502
 msgid "Updated a few seconds ago"
 msgstr "Atualizado há alguns segundos"
 
-#: src/network/networkMenu.js:458
+#: src/network/networkMenu.js:504
 msgid "Updated less than a minute ago"
 msgstr "Atualizado há menos de um minuto"
 
-#: src/network/networkMenu.js:460
+#: src/network/networkMenu.js:506
 msgid "Updated about a minute ago"
 msgstr "Atualizado há cerca de um minuto"
 
-#: src/network/networkMenu.js:462
+#: src/network/networkMenu.js:508
 msgid "Updated about 2 minutes ago"
 msgstr "Atualizado há cerca de 2 minutos"
 
-#: src/network/networkMenu.js:464
+#: src/network/networkMenu.js:510
 msgid "Updated about 5 minutes ago"
 msgstr "Atualizado há cerca de 5 minutos"
 
-#: src/network/networkMenu.js:466
+#: src/network/networkMenu.js:512
 msgid "Updated more than 5 minutes ago"
 msgstr "Atualizado há mais de 5 minutos"
 
-#: src/network/networkMenu.js:467
+#: src/network/networkMenu.js:513
 msgid "Click to refresh"
 msgstr "Clique para atualizar"
 
-#: src/network/networkMenu.js:469
+#: src/network/networkMenu.js:515
 msgid "Refreshing..."
 msgstr "Atualizando..."
 
-#: src/network/networkMenu.js:471
+#: src/network/networkMenu.js:517
 msgid "Done"
 msgstr "Concluído"
 
-#: src/network/networkMenu.js:475
+#: src/network/networkMenu.js:521
 msgid "Default Routes"
 msgstr "Rotas padrão"
 
-#: src/network/networkMenu.js:514
+#: src/network/networkMenu.js:560
 msgid "Route"
 msgstr "Rota"
 
-#: src/network/networkMenu.js:520
+#: src/network/networkMenu.js:566
 msgid "Metric"
 msgstr "Métrica"
 
-#: src/network/networkMenu.js:527
+#: src/network/networkMenu.js:573
 msgid "Device"
 msgstr "Dispositivo"
 
-#: src/network/networkMenu.js:534
+#: src/network/networkMenu.js:580
 msgid "Gateway"
 msgstr "Gateway"
 
-#: src/network/networkMenu.js:541 src/storage/storageMenu.js:603
+#: src/network/networkMenu.js:587 src/storage/storageMenu.js:609
 msgid "Type"
 msgstr "Tipo"
 
-#: src/network/networkMenu.js:548
+#: src/network/networkMenu.js:594
 msgid "Destination"
 msgstr "Destino"
 
-#: src/network/networkMenu.js:555
+#: src/network/networkMenu.js:601
 msgid "Protocol"
 msgstr "Protocolo"
 
-#: src/network/networkMenu.js:562 src/network/networkMenu.js:1072
+#: src/network/networkMenu.js:608 src/network/networkMenu.js:1124
 msgid "Scope"
 msgstr "Escopo"
 
-#: src/network/networkMenu.js:569
+#: src/network/networkMenu.js:615
 msgid "Flags"
 msgstr "Sinalizações"
 
-#: src/network/networkMenu.js:598
+#: src/network/networkMenu.js:644
 msgid "Interfaces"
 msgstr "Interfaces"
 
-#: src/network/networkMenu.js:601
+#: src/network/networkMenu.js:647
 msgid "No network interface found"
 msgstr "Nenhuma interface de rede encontrada"
 
-#: src/network/networkMenu.js:811
+#: src/network/networkMenu.js:863
 msgctxt "short for upload"
 msgid "U"
 msgstr "U"
 
-#: src/network/networkMenu.js:837
+#: src/network/networkMenu.js:889
 msgctxt "short for download"
 msgid "D"
 msgstr "D"
 
-#: src/network/networkMenu.js:914 src/storage/storageMenu.js:602
-#: src/gpu/gpuMenuComponent.js:440 src/gpu/gpuMenuComponent.js:1250
-#: src/gpu/gpuMenuComponent.js:1281
+#: src/network/networkMenu.js:966 src/storage/storageMenu.js:608
+#: src/gpu/gpuMenuComponent.js:473 src/gpu/gpuMenuComponent.js:1283
+#: src/gpu/gpuMenuComponent.js:1314
 msgid "Name"
 msgstr "Nome"
 
-#: src/network/networkMenu.js:921
+#: src/network/networkMenu.js:973
 msgid "Alt Names"
 msgstr "Nomes alternativos"
 
-#: src/network/networkMenu.js:930
+#: src/network/networkMenu.js:982
 msgid "Interface Index"
 msgstr "Índice da interface"
 
-#: src/network/networkMenu.js:939
+#: src/network/networkMenu.js:991
 msgid "MAC Address"
 msgstr "Endereço MAC"
 
-#: src/network/networkMenu.js:948 src/storage/storageMenu.js:692
+#: src/network/networkMenu.js:1000 src/storage/storageMenu.js:698
 msgid "Group"
 msgstr "Grupo"
 
-#: src/network/networkMenu.js:957
+#: src/network/networkMenu.js:1009
 msgid "Speed"
 msgstr "Velocidade"
 
-#: src/network/networkMenu.js:966
+#: src/network/networkMenu.js:1018
 msgid "Duplex"
 msgstr "Duplex"
 
-#: src/network/networkMenu.js:975
+#: src/network/networkMenu.js:1027
 msgid "MTU"
 msgstr "MTU"
 
-#: src/network/networkMenu.js:984
+#: src/network/networkMenu.js:1036
 msgid "Tx Queue Length"
 msgstr "Tamanho da Fila de Tx"
 
-#: src/network/networkMenu.js:993
+#: src/network/networkMenu.js:1045
 msgid "Link Type"
 msgstr "Tipo de Link"
 
-#: src/network/networkMenu.js:1002
+#: src/network/networkMenu.js:1054
 msgid "Operative State"
 msgstr "Estado Operacional"
 
-#: src/network/networkMenu.js:1011
+#: src/network/networkMenu.js:1063
 msgid "Qdisc"
 msgstr "Qdisc"
 
-#: src/network/networkMenu.js:1044
+#: src/network/networkMenu.js:1096
 msgid "Family"
 msgstr "Família"
 
-#: src/network/networkMenu.js:1051
+#: src/network/networkMenu.js:1103
 msgid "Local"
 msgstr "Local"
 
-#: src/network/networkMenu.js:1058
+#: src/network/networkMenu.js:1110
 msgid "Prefix Length"
 msgstr "Comprimento do prefixo"
 
-#: src/network/networkMenu.js:1065
+#: src/network/networkMenu.js:1117
 msgid "Broadcast"
 msgstr "Broadcast"
 
-#: src/network/networkMenu.js:1098
+#: src/network/networkMenu.js:1150
 msgid "Upload"
 msgstr "Upload"
 
-#: src/network/networkMenu.js:1122
+#: src/network/networkMenu.js:1174
 msgid "Download"
 msgstr "Download"
 
-#: src/network/networkMenu.js:1156
+#: src/network/networkMenu.js:1208
 msgid "IEEE"
 msgstr "IEEE"
 
-#: src/network/networkMenu.js:1168
+#: src/network/networkMenu.js:1220
 msgid "SSID"
 msgstr "SSID"
 
-#: src/network/networkMenu.js:1180 src/storage/storageMenu.js:694
+#: src/network/networkMenu.js:1232 src/storage/storageMenu.js:700
 msgid "Mode"
 msgstr "Modo"
 
-#: src/network/networkMenu.js:1204
+#: src/network/networkMenu.js:1256
 msgid "Access Point"
 msgstr "Ponto de Acesso"
 
-#: src/network/networkMenu.js:1216
+#: src/network/networkMenu.js:1268
 msgid "Bit Rate"
 msgstr "Taxa de Bits"
 
-#: src/network/networkMenu.js:1228
+#: src/network/networkMenu.js:1280
 msgid "TX Power"
 msgstr "Potência de transmissão"
 
-#: src/network/networkMenu.js:1240
+#: src/network/networkMenu.js:1292
 msgid "Link Quality"
 msgstr "Qualidade do Link"
 
-#: src/network/networkMenu.js:1252
+#: src/network/networkMenu.js:1304
 msgid "Signal Level"
 msgstr "Nível de sinal"
 
-#: src/storage/storageMenu.js:68
+#: src/storage/storageMenu.js:69
 msgid "Global Read:"
 msgstr "Leitura Global:"
 
-#: src/storage/storageMenu.js:80
+#: src/storage/storageMenu.js:81
 msgid "Global Write:"
 msgstr "Escrita Global:"
 
-#: src/storage/storageMenu.js:105
+#: src/storage/storageMenu.js:106
 msgid "Total Activity"
 msgstr "Atividade Total"
 
-#: src/storage/storageMenu.js:107 src/storage/storageMenu.js:739
+#: src/storage/storageMenu.js:108 src/storage/storageMenu.js:745
 msgid "Read"
 msgstr "Leitura"
 
-#: src/storage/storageMenu.js:114 src/storage/storageMenu.js:746
+#: src/storage/storageMenu.js:115 src/storage/storageMenu.js:752
 msgid "Write"
 msgstr "Escrita"
 
-#: src/storage/storageMenu.js:127 src/storage/storageMenu.js:1192
+#: src/storage/storageMenu.js:128 src/storage/storageMenu.js:1215
 msgid "(click to show all system processes)"
 msgstr "(clique para exibir todos os processos do sistema)"
 
-#: src/storage/storageMenu.js:322
+#: src/storage/storageMenu.js:325
 msgid "No storage device found"
 msgstr "Nenhum dispositivo de armazenamento encontrado"
 
-#: src/storage/storageMenu.js:521
+#: src/storage/storageMenu.js:527
 msgctxt "short for read"
 msgid "R"
 msgstr "L"
 
-#: src/storage/storageMenu.js:547
+#: src/storage/storageMenu.js:553
 msgctxt "short for write"
 msgid "W"
 msgstr "E"
 
-#: src/storage/storageMenu.js:597
+#: src/storage/storageMenu.js:603
 msgid "Basic Info"
 msgstr "Informações Básicas"
 
-#: src/storage/storageMenu.js:604
+#: src/storage/storageMenu.js:610
 msgid "Model"
 msgstr "Modelo"
 
-#: src/storage/storageMenu.js:605 src/gpu/gpuMenuComponent.js:503
+#: src/storage/storageMenu.js:611 src/gpu/gpuMenuComponent.js:536
 msgid "Vendor"
 msgstr "Fabricante"
 
-#: src/storage/storageMenu.js:606
+#: src/storage/storageMenu.js:612
 msgid "Serial"
 msgstr "Série"
 
-#: src/storage/storageMenu.js:607
+#: src/storage/storageMenu.js:613
 msgid "Size"
 msgstr "Tamanho"
 
-#: src/storage/storageMenu.js:608
+#: src/storage/storageMenu.js:614
 msgid "State"
 msgstr "Estado"
 
-#: src/storage/storageMenu.js:609
+#: src/storage/storageMenu.js:615
 msgid "Subsystems"
 msgstr "Subsistemas"
 
-#: src/storage/storageMenu.js:613
+#: src/storage/storageMenu.js:619
 msgid "File System and Mounting Info"
 msgstr "Informações de sistema de arquivos e montagem"
 
-#: src/storage/storageMenu.js:618
+#: src/storage/storageMenu.js:624
 msgid "File System Type"
 msgstr "Tipo de sistema de arquivos"
 
-#: src/storage/storageMenu.js:619
+#: src/storage/storageMenu.js:625
 msgid "Label"
 msgstr "Rótulo"
 
-#: src/storage/storageMenu.js:620
+#: src/storage/storageMenu.js:626
 msgid "UUID"
 msgstr "UUID"
 
-#: src/storage/storageMenu.js:621
+#: src/storage/storageMenu.js:627
 msgid "Mount Points"
 msgstr "Pontos de montagem"
 
-#: src/storage/storageMenu.js:622
+#: src/storage/storageMenu.js:628
 msgid "Available Space"
 msgstr "Espaço disponível"
 
-#: src/storage/storageMenu.js:623
+#: src/storage/storageMenu.js:629
 msgid "File System Size"
 msgstr "Tamanho do sistema de arquivos"
 
-#: src/storage/storageMenu.js:624
+#: src/storage/storageMenu.js:630
 msgid "Used Space"
 msgstr "Espaço usado"
 
-#: src/storage/storageMenu.js:625
+#: src/storage/storageMenu.js:631
 msgid "Used Space (%)"
 msgstr "Espaço usado (%)"
 
-#: src/storage/storageMenu.js:626
+#: src/storage/storageMenu.js:632
 msgid "File System Version"
 msgstr "Versão do sistema de arquivos"
 
-#: src/storage/storageMenu.js:627
+#: src/storage/storageMenu.js:633
 msgid "File System Roots"
 msgstr "Raízes do sistema de arquivos"
 
-#: src/storage/storageMenu.js:631
+#: src/storage/storageMenu.js:637
 msgid "Physical and Disk Details"
 msgstr "Detalhes físicos e do disco"
 
-#: src/storage/storageMenu.js:636
+#: src/storage/storageMenu.js:642
 msgid "Physical Sector Size"
 msgstr "Tamanho do setor físico"
 
-#: src/storage/storageMenu.js:637
+#: src/storage/storageMenu.js:643
 msgid "Logical Sector Size"
 msgstr "Tamanho do setor lógico"
 
-#: src/storage/storageMenu.js:638
+#: src/storage/storageMenu.js:644
 msgid "Minimum IO Size"
 msgstr "Tamanho mínimo de E/S"
 
-#: src/storage/storageMenu.js:639
+#: src/storage/storageMenu.js:645
 msgid "Optimal IO Size"
 msgstr "Tamanho ideal de E/S"
 
-#: src/storage/storageMenu.js:640
+#: src/storage/storageMenu.js:646
 msgid "Rotational"
 msgstr "Rotacional"
 
-#: src/storage/storageMenu.js:641
+#: src/storage/storageMenu.js:647
 msgid "Request Size"
 msgstr "Tamanho da requisição"
 
-#: src/storage/storageMenu.js:642
+#: src/storage/storageMenu.js:648
 msgid "Alignment Offset"
 msgstr "Offset de alinhamento"
 
-#: src/storage/storageMenu.js:643
+#: src/storage/storageMenu.js:649
 msgid "Discard Alignment"
 msgstr "Alinhamento de descarte"
 
-#: src/storage/storageMenu.js:644
+#: src/storage/storageMenu.js:650
 msgid "Discard Granularity"
 msgstr "Granularidade de descarte"
 
-#: src/storage/storageMenu.js:645
+#: src/storage/storageMenu.js:651
 msgid "Discard Max Size"
 msgstr "Tamanho máximo de descarte"
 
-#: src/storage/storageMenu.js:646
+#: src/storage/storageMenu.js:652
 msgid "Discard Zeroes Data"
 msgstr "Descarte zera dados"
 
-#: src/storage/storageMenu.js:650
+#: src/storage/storageMenu.js:656
 msgid "Partition Info"
 msgstr "Informações de partição"
 
-#: src/storage/storageMenu.js:655
+#: src/storage/storageMenu.js:661
 msgid "Partition Type"
 msgstr "Tipo de partição"
 
-#: src/storage/storageMenu.js:656
+#: src/storage/storageMenu.js:662
 msgid "Partition Label"
 msgstr "Rótulo da partição"
 
-#: src/storage/storageMenu.js:657
+#: src/storage/storageMenu.js:663
 msgid "Partition UUID"
 msgstr "UUID da partição"
 
-#: src/storage/storageMenu.js:658
+#: src/storage/storageMenu.js:664
 msgid "Partition Number"
 msgstr "Número da partição"
 
-#: src/storage/storageMenu.js:659
+#: src/storage/storageMenu.js:665
 msgid "Partition Table Type"
 msgstr "Tipo de tabela de partição"
 
-#: src/storage/storageMenu.js:660
+#: src/storage/storageMenu.js:666
 msgid "Partition Table UUID"
 msgstr "UUID da tabela de partição"
 
-#: src/storage/storageMenu.js:664
+#: src/storage/storageMenu.js:670
 msgid "Performance and Settings"
 msgstr "Desempenho e configurações"
 
-#: src/storage/storageMenu.js:669
+#: src/storage/storageMenu.js:675
 msgid "Read Ahead"
 msgstr "Leitura antecipada"
 
-#: src/storage/storageMenu.js:670
+#: src/storage/storageMenu.js:676
 msgid "Scheduler"
 msgstr "Escalonador"
 
-#: src/storage/storageMenu.js:671
+#: src/storage/storageMenu.js:677
 msgid "Direct Access"
 msgstr "Acesso direto"
 
-#: src/storage/storageMenu.js:672
+#: src/storage/storageMenu.js:678
 msgid "Multiqueue"
 msgstr "Multifila"
 
-#: src/storage/storageMenu.js:676
+#: src/storage/storageMenu.js:682
 msgid "Advanced Identifiers and States"
 msgstr "Identificadores e estados avançados"
 
-#: src/storage/storageMenu.js:681
+#: src/storage/storageMenu.js:687
 msgid "ID Link"
 msgstr "ID do link"
 
-#: src/storage/storageMenu.js:682
+#: src/storage/storageMenu.js:688
 msgid "ID"
 msgstr "ID"
 
-#: src/storage/storageMenu.js:683
+#: src/storage/storageMenu.js:689
 msgid "Major:Minor"
 msgstr "Major:Minor"
 
-#: src/storage/storageMenu.js:684
+#: src/storage/storageMenu.js:690
 msgid "HCTL"
 msgstr "HCTL"
 
-#: src/storage/storageMenu.js:685
+#: src/storage/storageMenu.js:691
 msgid "Kernel Name"
 msgstr "Nome do kernel"
 
-#: src/storage/storageMenu.js:686
+#: src/storage/storageMenu.js:692
 msgid "Path"
 msgstr "Caminho"
 
-#: src/storage/storageMenu.js:687
+#: src/storage/storageMenu.js:693
 msgid "Revision"
 msgstr "Revisão"
 
-#: src/storage/storageMenu.js:688
+#: src/storage/storageMenu.js:694
 msgid "World Wide Name"
 msgstr "Nome mundial"
 
-#: src/storage/storageMenu.js:689
+#: src/storage/storageMenu.js:695
 msgid "Transport"
 msgstr "Transporte"
 
-#: src/storage/storageMenu.js:690
+#: src/storage/storageMenu.js:696
 msgid "Hotplug"
 msgstr "Hotplug"
 
-#: src/storage/storageMenu.js:691
+#: src/storage/storageMenu.js:697
 msgid "Random"
 msgstr "Aleatório"
 
-#: src/storage/storageMenu.js:693
+#: src/storage/storageMenu.js:699
 msgid "Owner"
 msgstr "Proprietário"
 
-#: src/storage/storageMenu.js:695
+#: src/storage/storageMenu.js:701
 msgid "Read Only"
 msgstr "Somente leitura"
 
-#: src/storage/storageMenu.js:696
+#: src/storage/storageMenu.js:702
 msgid "Removable"
 msgstr "Removível"
 
-#: src/storage/storageMenu.js:697
+#: src/storage/storageMenu.js:703
 msgid "Write Same"
 msgstr "Escrita idêntica"
 
-#: src/storage/storageMenu.js:698
+#: src/storage/storageMenu.js:704
 msgid "Zoned"
 msgstr "Zonado"
 
-#: src/storage/storageMenu.js:699
+#: src/storage/storageMenu.js:705
 msgid "Zone Size"
 msgstr "Tamanho da zona"
 
-#: src/storage/storageMenu.js:700
+#: src/storage/storageMenu.js:706
 msgid "Zone Write Granularity"
 msgstr "Granularidade de escrita de zona"
 
-#: src/storage/storageMenu.js:701
+#: src/storage/storageMenu.js:707
 msgid "Zone Append"
 msgstr "Anexo de zona"
 
-#: src/storage/storageMenu.js:702
+#: src/storage/storageMenu.js:708
 msgid "Zone Number"
 msgstr "Número da zona"
 
-#: src/storage/storageMenu.js:703
+#: src/storage/storageMenu.js:709
 msgid "Zone Open Max"
 msgstr "Zona aberta máxima"
 
-#: src/storage/storageMenu.js:704
+#: src/storage/storageMenu.js:710
 msgid "Zone Active Max"
 msgstr "Zona ativa máxima"
 
-#: src/storage/storageMenu.js:737
+#: src/storage/storageMenu.js:743
 msgid "Total Device Activity"
 msgstr "Atividade total do dispositivo"
 
-#: src/storage/storageMenu.js:794
+#: src/storage/storageMenu.js:800
 msgid "Disk"
 msgstr "Disco"
 
-#: src/storage/storageMenu.js:1128
+#: src/storage/storageMenu.js:1151
 msgid "Yes"
 msgstr "Sim"
 
-#: src/storage/storageMenu.js:1128
+#: src/storage/storageMenu.js:1151
 msgid "No"
 msgstr "Não"
 
-#: src/storage/storageMenu.js:1182
+#: src/storage/storageMenu.js:1205
 msgid "(showing all system processes)"
 msgstr "(exibindo todos os processos do sistema)"
 
@@ -2154,7 +2158,7 @@ msgid "Allocated:"
 msgstr "Alocada:"
 
 #: src/memory/memoryMenu.js:74 src/memory/memoryMenu.js:360
-#: src/gpu/gpuMenuComponent.js:251 src/gpu/gpuMenuComponent.js:1178
+#: src/gpu/gpuMenuComponent.js:284 src/gpu/gpuMenuComponent.js:1211
 msgid "Used:"
 msgstr "Usada:"
 
@@ -2210,207 +2214,207 @@ msgstr "Zswapped"
 msgid "Swap Devices"
 msgstr "Dispositivos de Swap"
 
-#: src/gpu/gpuMenuComponent.js:57
+#: src/gpu/gpuMenuComponent.js:73 src/gpu/gpuMenuComponent.js:103
 msgid "No GPU found"
 msgstr "Nenhuma GPU encontrada"
 
-#: src/gpu/gpuMenuComponent.js:70
+#: src/gpu/gpuMenuComponent.js:78
 msgid "GPUs"
 msgstr "GPUs"
 
-#: src/gpu/gpuMenuComponent.js:129
+#: src/gpu/gpuMenuComponent.js:162
 msgid "No Connected Display"
 msgstr "Nenhum display conectado"
 
-#: src/gpu/gpuMenuComponent.js:157 src/gpu/gpuMenuComponent.js:1088
+#: src/gpu/gpuMenuComponent.js:190 src/gpu/gpuMenuComponent.js:1121
 msgid "Activity"
 msgstr "Atividade"
 
-#: src/gpu/gpuMenuComponent.js:207 src/gpu/gpuMenuComponent.js:1137
+#: src/gpu/gpuMenuComponent.js:240 src/gpu/gpuMenuComponent.js:1170
 msgid "VRAM"
 msgstr "VRAM"
 
-#: src/gpu/gpuMenuComponent.js:433
+#: src/gpu/gpuMenuComponent.js:466
 msgid "GPU info"
 msgstr "Informações da GPU"
 
-#: src/gpu/gpuMenuComponent.js:470
+#: src/gpu/gpuMenuComponent.js:503
 msgid "Subsystem"
 msgstr "Subsistema"
 
-#: src/gpu/gpuMenuComponent.js:511
+#: src/gpu/gpuMenuComponent.js:544
 msgid "Vendor ID"
 msgstr "ID do fabricante"
 
-#: src/gpu/gpuMenuComponent.js:520
+#: src/gpu/gpuMenuComponent.js:553
 msgid "Product ID"
 msgstr "ID do produto"
 
-#: src/gpu/gpuMenuComponent.js:528
+#: src/gpu/gpuMenuComponent.js:561
 msgid "PCI"
 msgstr "PCI"
 
-#: src/gpu/gpuMenuComponent.js:540
+#: src/gpu/gpuMenuComponent.js:573
 msgid "Drivers"
 msgstr "Drivers"
 
-#: src/gpu/gpuMenuComponent.js:549
+#: src/gpu/gpuMenuComponent.js:582
 msgid "Modules"
 msgstr "Módulos"
 
-#: src/gpu/gpuMenuComponent.js:613
+#: src/gpu/gpuMenuComponent.js:646
 msgid "Displays"
 msgstr "Monitores"
 
-#: src/gpu/gpuMenuComponent.js:615
+#: src/gpu/gpuMenuComponent.js:648
 msgid "No displays found"
 msgstr "Nenhum monitor encontrado"
 
-#: src/gpu/gpuMenuComponent.js:648
+#: src/gpu/gpuMenuComponent.js:681
 msgid "Status"
 msgstr "Status"
 
-#: src/gpu/gpuMenuComponent.js:660
+#: src/gpu/gpuMenuComponent.js:693
 msgid "Product Code"
 msgstr "Código do produto"
 
-#: src/gpu/gpuMenuComponent.js:672
+#: src/gpu/gpuMenuComponent.js:705
 msgid "Serial Number"
 msgstr "Número de série"
 
-#: src/gpu/gpuMenuComponent.js:684
+#: src/gpu/gpuMenuComponent.js:717
 msgid "Manufacturer Date"
 msgstr "Data de fabricação"
 
-#: src/gpu/gpuMenuComponent.js:696
+#: src/gpu/gpuMenuComponent.js:729
 msgid "EDID Version"
 msgstr "Versão EDID"
 
-#: src/gpu/gpuMenuComponent.js:708
+#: src/gpu/gpuMenuComponent.js:741
 msgid "Display Size"
 msgstr "Tamanho do monitor"
 
-#: src/gpu/gpuMenuComponent.js:720 src/gpu/gpuMenuComponent.js:946
+#: src/gpu/gpuMenuComponent.js:753 src/gpu/gpuMenuComponent.js:979
 msgid "Native Resolution"
 msgstr "Resolução nativa"
 
-#: src/gpu/gpuMenuComponent.js:732 src/gpu/gpuMenuComponent.js:965
+#: src/gpu/gpuMenuComponent.js:765 src/gpu/gpuMenuComponent.js:998
 msgid "Refresh Rate"
 msgstr "Taxa de atualização"
 
-#: src/gpu/gpuMenuComponent.js:744
+#: src/gpu/gpuMenuComponent.js:777
 msgid "Display Gamma"
 msgstr "Gamma do monitor"
 
-#: src/gpu/gpuMenuComponent.js:756
+#: src/gpu/gpuMenuComponent.js:789
 msgid "Display Type"
 msgstr "Tipo de monitor"
 
-#: src/gpu/gpuMenuComponent.js:768
+#: src/gpu/gpuMenuComponent.js:801
 msgid "Capabilities"
 msgstr "Recursos"
 
-#: src/gpu/gpuMenuComponent.js:847
+#: src/gpu/gpuMenuComponent.js:880
 msgid "Enabled"
 msgstr "Ativado"
 
-#: src/gpu/gpuMenuComponent.js:850
+#: src/gpu/gpuMenuComponent.js:883
 msgid "Disabled"
 msgstr "Desativado"
 
-#: src/gpu/gpuMenuComponent.js:943
+#: src/gpu/gpuMenuComponent.js:976
 msgid "Native Resolutions"
 msgstr "Resoluções nativas"
 
-#: src/gpu/gpuMenuComponent.js:962
+#: src/gpu/gpuMenuComponent.js:995
 msgid "Refresh Rates"
 msgstr "Taxas de atualização"
 
-#: src/gpu/gpuMenuComponent.js:990
+#: src/gpu/gpuMenuComponent.js:1023
 msgid "RGB 4:4:4"
 msgstr "RGB 4:4:4"
 
-#: src/gpu/gpuMenuComponent.js:994
+#: src/gpu/gpuMenuComponent.js:1027
 msgid "RGB 4:4:4 + YCrCb 4:4:4"
 msgstr "RGB 4:4:4 + YCrCb 4:4:4"
 
-#: src/gpu/gpuMenuComponent.js:998
+#: src/gpu/gpuMenuComponent.js:1031
 msgid "RGB 4:4:4 + YCrCb 4:2:2"
 msgstr "RGB 4:4:4 + YCrCb 4:2:2"
 
-#: src/gpu/gpuMenuComponent.js:1001
+#: src/gpu/gpuMenuComponent.js:1034
 msgid "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
 msgstr "RGB 4:4:4 + YCrCb 4:4:4 + YCrCb 4:2:2"
 
-#: src/gpu/gpuMenuComponent.js:1009
+#: src/gpu/gpuMenuComponent.js:1042
 msgid "Monochrome or Grayscale"
 msgstr "Monocromático ou Escala de cinza"
 
-#: src/gpu/gpuMenuComponent.js:1012
+#: src/gpu/gpuMenuComponent.js:1045
 msgid "RGB color"
 msgstr "Cor RGB"
 
-#: src/gpu/gpuMenuComponent.js:1015
+#: src/gpu/gpuMenuComponent.js:1048
 msgid "Non-RGB color"
 msgstr "Cor não-RGB"
 
-#: src/gpu/gpuMenuComponent.js:1030
+#: src/gpu/gpuMenuComponent.js:1063
 msgid "Digital Input"
 msgstr "Entrada digital"
 
-#: src/gpu/gpuMenuComponent.js:1032
+#: src/gpu/gpuMenuComponent.js:1065
 msgid "VESA DFP"
 msgstr "VESA DFP"
 
-#: src/gpu/gpuMenuComponent.js:1037
+#: src/gpu/gpuMenuComponent.js:1070
 msgid "White Sync Levels: "
 msgstr "Níveis de sincronização branca:"
 
-#: src/gpu/gpuMenuComponent.js:1040
+#: src/gpu/gpuMenuComponent.js:1073
 msgid "Blank to Black"
 msgstr "Branco para preto"
 
-#: src/gpu/gpuMenuComponent.js:1043
+#: src/gpu/gpuMenuComponent.js:1076
 msgid "Separate Sync"
 msgstr "Sincronização separada"
 
-#: src/gpu/gpuMenuComponent.js:1046
+#: src/gpu/gpuMenuComponent.js:1079
 msgid "Composite Sync"
 msgstr "Sincronização composta"
 
-#: src/gpu/gpuMenuComponent.js:1049
+#: src/gpu/gpuMenuComponent.js:1082
 msgid "Sync on Green"
 msgstr "Sincronização no verde"
 
-#: src/gpu/gpuMenuComponent.js:1052
+#: src/gpu/gpuMenuComponent.js:1085
 msgid "VSync Serrated"
 msgstr "VSync Serrilhado"
 
-#: src/gpu/gpuMenuComponent.js:1056
+#: src/gpu/gpuMenuComponent.js:1089
 msgid "DPMS Standby"
 msgstr "DPMS em espera"
 
-#: src/gpu/gpuMenuComponent.js:1059
+#: src/gpu/gpuMenuComponent.js:1092
 msgid "DPMS Suspend"
 msgstr "DPMS suspenso"
 
-#: src/gpu/gpuMenuComponent.js:1062
+#: src/gpu/gpuMenuComponent.js:1095
 msgid "DPMS Active Off"
 msgstr "DPMS desligado ativo"
 
-#: src/gpu/gpuMenuComponent.js:1065
+#: src/gpu/gpuMenuComponent.js:1098
 msgid "Standard sRGB"
 msgstr "Padrão sRGB"
 
-#: src/gpu/gpuMenuComponent.js:1068
+#: src/gpu/gpuMenuComponent.js:1101
 msgid "Preferred Timing"
 msgstr "Temporização preferencial"
 
-#: src/gpu/gpuMenuComponent.js:1071
+#: src/gpu/gpuMenuComponent.js:1104
 msgid "GTF Supported"
 msgstr "GTF suportado"
 
-#: src/gpu/gpuMenuComponent.js:1550
+#: src/gpu/gpuMenuComponent.js:1590
 #, javascript-format
 msgid "%d/%d Displays Connected"
 msgstr "%d/%d Monitores conectados"

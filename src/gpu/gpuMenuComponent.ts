@@ -236,7 +236,8 @@ export default class GpuMenuComponent {
                 .then(populateGpuSections)
                 .catch((e: any) => {
                     Utils.error('Error loading GPU menu', e);
-                    if(!this.destroyed && this.noGPULabel) this.noGPULabel.text = _('No GPU found');
+                    if(!this.destroyed && this.noGPULabel)
+                        this.noGPULabel.text = _('No GPU found');
                 });
         } else {
             populateGpuSections(GPUsList);
@@ -2017,7 +2018,10 @@ export default class GpuMenuComponent {
 
         Utils.gpuMonitor.listen(this, 'displays', this.updateDisplays.bind(this));
 
-        const gpuData = Utils.gpuMonitor.getCurrentValue('gpu') as Map<string, GenericGpuInfo> | null;
+        const gpuData = Utils.gpuMonitor.getCurrentValue('gpu') as Map<
+            string,
+            GenericGpuInfo
+        > | null;
         if(Utils.gpuMonitor.hasFreshValue('gpu', Utils.gpuMonitor.updateFrequencyMs * 3)) {
             try {
                 this.update(gpuData ?? this.lastData);

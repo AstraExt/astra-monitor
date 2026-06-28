@@ -55,8 +55,7 @@ type OpenUpdateResponseHandler = {
     lifecycleGeneration: number;
 };
 
-const LOADING_ICON_STYLE =
-    'icon-size:1em;min-width:1.2em;margin-right:0.25em;';
+const LOADING_ICON_STYLE = 'icon-size:1em;min-width:1.2em;margin-right:0.25em;';
 
 export default class MenuBase extends PopupMenu.PopupMenu {
     public static openingSide: St.Side = St.Side.RIGHT;
@@ -479,10 +478,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         return monitor.hasFreshValue(key, monitor.updateFrequencyMs * maxAgeMultiplier);
     }
 
-    protected shouldRequestOpenUpdate(
-        monitor: Monitor,
-        openDelayMs: number = 100
-    ): boolean {
+    protected shouldRequestOpenUpdate(monitor: Monitor, openDelayMs: number = 100): boolean {
         const dueIn = monitor.dueIn;
         return dueIn < 0 || dueIn - openDelayMs > monitor.updateFrequencyMs / 2;
     }

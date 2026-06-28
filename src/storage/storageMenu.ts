@@ -1210,7 +1210,8 @@ export default class StorageMenu extends MenuBase {
             );
         }
 
-        if(this.canUseCachedValue(Utils.storageMonitor, 'storageInfo')) this.update('storageInfo', true);
+        if(this.canUseCachedValue(Utils.storageMonitor, 'storageInfo'))
+            this.update('storageInfo', true);
         Utils.storageMonitor.listen(
             this,
             'storageInfo',
@@ -1252,7 +1253,8 @@ export default class StorageMenu extends MenuBase {
         if(code === 'deviceList') {
             const generation = ++this.deviceListGeneration;
             Utils.lowPriorityTask(() => {
-                if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration) return;
+                if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration)
+                    return;
                 this.updateDeviceList();
             }, GLib.PRIORITY_DEFAULT);
             return;

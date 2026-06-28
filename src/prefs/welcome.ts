@@ -140,8 +140,7 @@ export default class Welcome {
             {
                 check: Utils.getGPUsListAsync().then(
                     async gpus =>
-                        !gpus.some(gpu => Utils.isAmdGpu(gpu)) ||
-                        (await Utils.hasAmdGpuTopAsync())
+                        !gpus.some(gpu => Utils.isAmdGpu(gpu)) || (await Utils.hasAmdGpuTopAsync())
                 ),
                 title: _(
                     "AMD GPU detected but 'amdgpu_top' not installed: some optional features will be disabled!"

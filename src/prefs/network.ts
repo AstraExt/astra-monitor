@@ -156,9 +156,9 @@ export default class Network {
             ''
         );
 
-        const populateIgnoredInterfaces = (devices: Awaited<
-            ReturnType<typeof Utils.getNetworkInterfacesAsync>
-        >) => {
+        const populateIgnoredInterfaces = (
+            devices: Awaited<ReturnType<typeof Utils.getNetworkInterfacesAsync>>
+        ) => {
             let ignoredDevices = Config.get_json('network-ignored');
             if(!Array.isArray(ignoredDevices)) ignoredDevices = [];
 
