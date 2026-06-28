@@ -4,6 +4,8 @@
 
 -   Removed synchronous file reads and command probes from the extension code to comply with the latest requirements from extensions.gnome.org. Most of these operations were already limited to extension startup, but they have now been moved to asynchronous flows.
 
+_Note: This is a significant internal change, so feedback is very welcome. If you notice any regression, please open an issue: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
+
 ### Menu behavior
 
 -   Improved menu loading states and first-update behavior to reduce stale values, avoid misleading empty rows, and keep popups consistent while data is being refreshed.
@@ -11,8 +13,7 @@
 ### Bug fixes
 
 -   Fixed load average values being truncated in the processor menu when wider values are shown.
-
-_Note: This is a significant internal change, so feedback is very welcome. If you notice any regression, please open an issue: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
+-   Fixed NVIDIA `nvidia-smi -q -x` XML comment parsing after the recent parser performance optimization. [[#229](https://github.com/AstraExt/astra-monitor/pull/229)] (Thanks to [@MichaelNeys](https://github.com/MichaelNeys))
 
 # Astra Monitor 40 - June 22 2026
 
