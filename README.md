@@ -316,7 +316,7 @@ Various scripts are provided to facilitate packing and testing of the extension.
 
 ### Scripts
 
--   **`test.sh`:** Compile, pack, install, and run the extension in a Xephyr session with a GNOME nested Wayland session, allowing for easy testing without restarting your own GNOME Shell session. It can be run with the following command:
+-   **`test.sh`:** Compile, pack, install, and run the extension in an isolated GNOME Shell test session, allowing for easy testing without restarting your own GNOME Shell session. On GNOME Shell 49 and newer it uses `gnome-shell --devkit`; older versions use a Xephyr-backed nested Wayland session. It can be run with the following command:
 
     ```
     bash ./test.sh
