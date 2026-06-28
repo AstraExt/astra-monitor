@@ -2189,52 +2189,6 @@ export default class Utils {
         });
     }
 
-    static readFileSync(path: string, emptyOnFail: boolean = false): string {
-        // Check if the path is valid and not empty
-        if(!path || typeof path !== 'string') {
-            if(emptyOnFail) return '';
-            throw new Error('Invalid file path');
-        }
-
-        let file;
-        try {
-            file = Gio.File.new_for_path(path);
-
-            // Check if the file exists
-            // This is blocking, no need to check
-            /*if(!file.query_exists(null)) {
-                if(emptyOnFail)
-                    return '';
-                throw new Error('File does not exist');
-            }*/
-        } catch(e: any) {
-            if(emptyOnFail) return '';
-            throw new Error(`Error creating file object: ${e.message}`);
-        }
-
-        try {
-            const fileContent = file.load_contents(null);
-
-            // Check if the file read was successful
-            if(!fileContent[0]) {
-                if(emptyOnFail) return '';
-                throw new Error('Failed to read file');
-            }
-
-            if(fileContent[1].length === 0) {
-                if(emptyOnFail) return '';
-                throw new Error('File is empty');
-            }
-
-            // Decode the file content
-            const decoder = new TextDecoder('utf8');
-            return decoder.decode(fileContent[1]);
-        } catch(e: any) {
-            if(emptyOnFail) return '';
-            throw new Error(`Error reading file: ${e.message}`);
-        }
-    }
-
     static getUrlAsync(
         url: string,
         emptyOnFail: boolean = false,

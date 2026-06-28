@@ -17,6 +17,9 @@ monitor@astraext*.zip
 # Ignore node_modules folder
 node_modules/
 
+# Ignore Python virtualenv folder
+venv/
+
 # Ignore package-lock.json file
 package-lock.json
 

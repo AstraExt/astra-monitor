@@ -340,6 +340,12 @@ Various scripts are provided to facilitate packing and testing of the extension.
     bash ./pack.sh
     ```
 
+-   **`ego.sh`:** This script builds, packs, and validates the extension with `shexli`, matching the checks used for uploads to [extensions.gnome.org](https://extensions.gnome.org/upload/). It can be run with the following command:
+
+    ```
+    bash ./ego.sh
+    ```
+
 -   **`compile.sh`:** This script compiles the TypeScript source code into JavaScript; the output is placed in the `dist` directory. It can be run with the following command:
 
     ```

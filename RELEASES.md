@@ -16,6 +16,10 @@ _Note: This is a significant internal change, so feedback is very welcome. If yo
 -   Fixed load average values being truncated in the processor menu when wider values are shown.
 -   Fixed NVIDIA `nvidia-smi -q -x` XML comment parsing after the recent parser performance optimization. [[#229](https://github.com/AstraExt/astra-monitor/pull/229)] (Thanks to [@MichaelNeys](https://github.com/MichaelNeys))
 
+### Developers and contributors
+
+-   Added `ego.sh` to build, pack, and validate the extension with `shexli` before uploading to [extensions.gnome.org](https://extensions.gnome.org/upload/).
+
 # Astra Monitor 40 - June 22 2026
 
 ### GPU monitoring

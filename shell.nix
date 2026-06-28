@@ -12,11 +12,17 @@ pkgs.mkShell {
   ];
 
   buildInputs = with pkgs; [
+    gnome-shell
     mutter
     mutterDevkitShim
+    nodejs
+    typescript
+    python3
+    python3Packages.virtualenv
   ];
 
   shellHook = ''
-    echo "Environment loaded with mutter-devkit shim."
+    echo "Environment loaded with GNOME, TypeScript, and Python virtualenv support."
   '';
 }
+ 
