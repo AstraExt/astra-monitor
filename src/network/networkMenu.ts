@@ -407,53 +407,47 @@ export default class NetworkMenu extends MenuBase {
         const separator = this.addMenuSection(_('Top Processes'), false, false);
         separator.xExpand = true;
 
-        let subSeparator: St.Label | undefined;
+        separator.style = 'padding-top:0.15em;margin-bottom:0;padding-bottom:0;';
 
-        if(Utils.nethogsHasCapsCached() !== true) {
-            separator.style = 'padding-top:0.15em;margin-bottom:0;padding-bottom:0;';
+        const subSeparator = new St.Label({
+            text: _('(click to show)'),
+            styleClass: 'astra-monitor-menu-key-mid-center',
+            xExpand: true,
+        });
 
-            subSeparator = new St.Label({
-                text: _('(click to show)'),
-                styleClass: 'astra-monitor-menu-key-mid-center',
-                xExpand: true,
-            });
+        const separatorGrid = new Grid({
+            numCols: 1,
+            styleClass: 'astra-monitor-menu-subgrid',
+        });
+        separatorGrid.addToGrid(separator);
+        separatorGrid.addToGrid(subSeparator);
 
-            const separatorGrid = new Grid({
-                numCols: 1,
-                styleClass: 'astra-monitor-menu-subgrid',
-            });
-            separatorGrid.addToGrid(separator);
-            separatorGrid.addToGrid(subSeparator);
+        const btnDefaultStyle = 'margin-top:0.1em;';
 
-            const btnDefaultStyle = 'margin-top:0.1em;';
+        const separatorButton = new St.Button({
+            reactive: true,
+            trackHover: true,
+            xExpand: true,
+            style: btnDefaultStyle,
+        });
+        separatorButton.set_child(separatorGrid);
+        separatorButton.connect('clicked', () => {
+            if(Utils.nethogsHasCapsCached() !== true) {
+                Utils.networkMonitor.startNethogs(true).catch((e: any) => {
+                    Utils.error('Error starting NetHogs', e);
+                });
+            }
+        });
 
-            const separatorButton = new St.Button({
-                reactive: true,
-                trackHover: true,
-                xExpand: true,
-                style: btnDefaultStyle,
-            });
-            separatorButton.set_child(separatorGrid);
-            separatorButton.connect('clicked', () => {
-                if(Utils.nethogsHasCapsCached() !== true) {
-                    Utils.networkMonitor.startNethogs(true).catch((e: any) => {
-                        Utils.error('Error starting NetHogs', e);
-                    });
-                }
-            });
+        separatorButton.connect('enter-event', () => {
+            separatorButton.style = btnDefaultStyle + this.selectionStyle;
+        });
 
-            separatorButton.connect('enter-event', () => {
-                separatorButton.style = btnDefaultStyle + this.selectionStyle;
-            });
+        separatorButton.connect('leave-event', () => {
+            separatorButton.style = btnDefaultStyle;
+        });
 
-            separatorButton.connect('leave-event', () => {
-                separatorButton.style = btnDefaultStyle;
-            });
-
-            container.addToGrid(separatorButton);
-        } else {
-            container.addToGrid(separator);
-        }
+        container.addToGrid(separatorButton);
 
         const defaultStyle = '';
 
@@ -576,6 +570,12 @@ export default class NetworkMenu extends MenuBase {
             if(hasCaps) {
                 this.privilegedTopProcesses = false;
                 this.topProcesses.subSeparator?.hide();
+                this.topProcesses.hoverButton.show();
+                if(Utils.networkMonitor.isListeningFor('topProcesses')) {
+                    Utils.networkMonitor.startNethogs().catch((e: any) => {
+                        Utils.error('Error starting NetHogs', e);
+                    });
+                }
             } else if(!this.privilegedTopProcesses) {
                 this.topProcesses.subSeparator?.show();
                 this.topProcesses.hoverButton.hide();
@@ -589,9 +589,28 @@ export default class NetworkMenu extends MenuBase {
         }
 
         Utils.nethogsHasCapsAsync()
-            .then(applyCaps)
+            .then(hasCaps => {
+                applyCaps(hasCaps);
+            })
             .catch((e: any) => {
                 Utils.error('Error checking NetHogs capabilities', e);
+            });
+    }
+
+    private refreshNethogsAvailability() {
+        Utils.hasNethogsAsync()
+            .then(hasNethogs => {
+                if(this.destroyed || !this.topProcesses) return;
+                if(!hasNethogs) {
+                    this.topProcesses.container.hide();
+                    return;
+                }
+
+                this.topProcesses.container.show();
+                this.refreshNethogsCapsUi();
+            })
+            .catch((e: any) => {
+                Utils.error('Error checking NetHogs availability', e);
             });
     }
 
@@ -2060,18 +2079,6 @@ export default class NetworkMenu extends MenuBase {
     }
 
     async onOpen() {
-        const hasNethogs = await Utils.hasNethogsAsync();
-        if(this.destroyed) return;
-
-        if(hasNethogs) {
-            this.topProcesses.container.show();
-            if(Utils.nethogsHasCapsCached() === true) {
-                this.topProcesses.hoverButton.show();
-            } else {
-                this.refreshNethogsCapsUi();
-            }
-        }
-
         this.updateFreshOrShowLoading(
             Utils.networkMonitor,
             'networkIO',
@@ -2114,6 +2121,7 @@ export default class NetworkMenu extends MenuBase {
             'topProcessesStop',
             this.update.bind(this, 'topProcessesStop', false)
         );
+        this.refreshNethogsAvailability();
 
         const publicIpsFresh =
             Utils.networkMonitor.secondsSinceLastIpsUpdate <= 60 * 5 * 3 &&

@@ -499,8 +499,9 @@ export default class Utils {
                 const fullPath = path + command;
                 const program = GLib.find_program_in_path(fullPath);
                 if(program) {
-                    Utils.commandsPath!.set(command, path);
-                    return path;
+                    const commandPath = path || Utils.getCommandPathFromProgram(command, program);
+                    Utils.commandsPath!.set(command, commandPath);
+                    return commandPath;
                 }
                 if(GLib.file_test(fullPath, GLib.FileTest.IS_EXECUTABLE)) {
                     Utils.commandsPath!.set(command, path);
@@ -511,6 +512,13 @@ export default class Utils {
             }
         }
         return false;
+    }
+
+    private static getCommandPathFromProgram(command: string, program: string): string {
+        if(program.endsWith(`/${command}`)) {
+            return program.slice(0, -command.length);
+        }
+        return '';
     }
 
     static async commandPathLookupAsync(fullCommand: string): Promise<string | false> {
@@ -540,8 +548,11 @@ export default class Utils {
             try {
                 const result = await Utils.runAsyncCommandOptional(path + fullCommand);
                 if(result !== null) {
-                    Utils.commandsPath!.set(command, path);
-                    return path;
+                    const program = path ? null : GLib.find_program_in_path(command);
+                    const commandPath =
+                        path || (program ? Utils.getCommandPathFromProgram(command, program) : '');
+                    Utils.commandsPath!.set(command, commandPath);
+                    return commandPath;
                 }
             } catch(e: any) {
                 /* EMPTY */
