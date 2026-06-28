@@ -294,7 +294,7 @@ export default class NetworkMonitor extends Monitor {
             this.previousDetailedNetworkIO.devices = null;
             this.previousDetailedNetworkIO.time = -1;
         }
-        if(key === 'topProcesses') {
+        if(key === 'topProcesses' && this.nethogsRunHasCaps) {
             this.stopNethogs();
         }
     }
@@ -920,7 +920,7 @@ export default class NetworkMonitor extends Monitor {
         }
     }
 
-    async startNethogs() {
+    async startNethogs(force: boolean = false) {
         if(this.updateNethogsTask.isRunning || this.nethogsStarting) return;
 
         this.nethogsStarting = true;
@@ -933,7 +933,8 @@ export default class NetworkMonitor extends Monitor {
             }
 
             const hasCaps = await Utils.nethogsHasCapsAsync();
-            if(!this.isListeningFor('topProcesses') || !this.usesNethogsTopProcesses()) return;
+            if((!force && !this.isListeningFor('topProcesses')) || !this.usesNethogsTopProcesses())
+                return;
             if(this.updateNethogsTask.isRunning) return;
 
             this.nethogsRunHasCaps = hasCaps;

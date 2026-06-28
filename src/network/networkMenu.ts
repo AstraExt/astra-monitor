@@ -436,7 +436,9 @@ export default class NetworkMenu extends MenuBase {
             separatorButton.set_child(separatorGrid);
             separatorButton.connect('clicked', () => {
                 if(Utils.nethogsHasCapsCached() !== true) {
-                    Utils.networkMonitor.startNethogs();
+                    Utils.networkMonitor.startNethogs(true).catch((e: any) => {
+                        Utils.error('Error starting NetHogs', e);
+                    });
                 }
             });
 
