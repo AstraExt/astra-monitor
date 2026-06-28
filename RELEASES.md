@@ -1,4 +1,4 @@
-# Astra Monitor 41 - TO BE RELESED
+# Astra Monitor 41 - TO BE RELEASED
 
 ### EGO compliance
 
