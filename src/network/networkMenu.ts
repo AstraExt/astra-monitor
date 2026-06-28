@@ -1124,7 +1124,8 @@ export default class NetworkMenu extends MenuBase {
         const nameGrid = new Grid({
             numCols: 2,
             styleClass: 'astra-monitor-menu-subgrid',
-            style: 'backgrund-color:red;',
+            style: 'margin-bottom:0;',
+            yAlign: Clutter.ActorAlign.CENTER,
         });
 
         const nameButton = new St.Button({
@@ -1153,12 +1154,14 @@ export default class NetworkMenu extends MenuBase {
         const icon = new St.Icon({
             styleClass: 'astra-monitor-menu-icon',
             style: 'padding-left:0.25em;',
+            yAlign: Clutter.ActorAlign.CENTER,
         });
         nameGrid.addToGrid(icon);
 
         const label = new St.Label({
             text: '',
             styleClass: 'astra-monitor-menu-label',
+            yAlign: Clutter.ActorAlign.CENTER,
         });
         nameGrid.addToGrid(label);
 
