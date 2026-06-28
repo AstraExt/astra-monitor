@@ -773,7 +773,7 @@ export default class NetworkMonitor extends Monitor {
     }
 
     private async updateRoutes(): Promise<boolean> {
-        const routes = await Utils.getNetworkRoutesAsync();
+        const routes = await Utils.getNetworkRoutesAsync(this.updateRoutesTask);
         if(!routes) return false;
         this.setUsageValue('routes', routes);
         return true;

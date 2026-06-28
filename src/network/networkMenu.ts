@@ -2129,16 +2129,20 @@ export default class NetworkMenu extends MenuBase {
             });
         }
 
-        this.updateFreshOrShowLoading(
+        const routesFresh = this.updateFreshOrShowLoading(
             Utils.networkMonitor,
             'routes',
             'routes',
             this.showRoutesLoading.bind(this)
         );
         Utils.networkMonitor.listen(this, 'routes', this.update.bind(this, 'routes', false));
-        this.scheduleOpenUpdate('routes', Utils.networkMonitor, () => {
+        if(routesFresh) {
+            this.scheduleOpenUpdate('routes', Utils.networkMonitor, () => {
+                Utils.networkMonitor.requestUpdate('routes');
+            });
+        } else {
             Utils.networkMonitor.requestUpdate('routes');
-        });
+        }
 
         if(this.canUseCachedValue(Utils.networkMonitor, 'wireless')) this.update('wireless', true);
         Utils.networkMonitor.listen(this, 'wireless', this.update.bind(this, 'wireless', false));
