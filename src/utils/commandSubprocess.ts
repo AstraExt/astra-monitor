@@ -7,7 +7,6 @@ export class CommandSubprocess {
     private subprocess: Gio.Subprocess | null = null;
     private stdoutStream: Gio.InputStream | null = null;
     private stderrStream: Gio.InputStream | null = null;
-    private destroyed: boolean = false;
 
     static async run(
         command: string,
@@ -145,10 +144,9 @@ export class CommandSubprocess {
     }
 
     private destroy() {
-        if(this.destroyed) {
+        if(!this.subprocess && !this.stdoutStream && !this.stderrStream) {
             return;
         }
-        this.destroyed = true;
 
         /*! The subprocess may already have exited or been cancelled before cleanup; force_exit() is best-effort so teardown does not turn that race into user-visible log noise. */
         try {

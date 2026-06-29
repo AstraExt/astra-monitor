@@ -155,7 +155,6 @@ export default class GpuMenuComponent {
     private parent: InstanceType<typeof MenuBase>;
     private title: St.Label | undefined;
     private compact: boolean = false;
-    private destroyed: boolean = false;
 
     public container!: InstanceType<typeof Grid>;
     private noGPULabel: St.Label | undefined;
@@ -203,7 +202,7 @@ export default class GpuMenuComponent {
         this.container.addToGrid(this.loadingIcon, 2);
 
         const populateGpuSections = (GPUsList: GpuInfo[]) => {
-            if(this.destroyed || !this.container || this.sections.length > 0) return;
+            if(!this.container || this.sections.length > 0) return;
             if(!GPUsList || GPUsList.length === 0) {
                 if(this.noGPULabel) this.noGPULabel.text = _('No GPU found');
                 return;
@@ -236,8 +235,7 @@ export default class GpuMenuComponent {
                 .then(populateGpuSections)
                 .catch((e: any) => {
                     Utils.error('Error loading GPU menu', e);
-                    if(!this.destroyed && this.noGPULabel)
-                        this.noGPULabel.text = _('No GPU found');
+                    if(this.noGPULabel) this.noGPULabel.text = _('No GPU found');
                 });
         } else {
             populateGpuSections(GPUsList);
@@ -1838,7 +1836,7 @@ export default class GpuMenuComponent {
     }
 
     public update(data?: Map<string, GenericGpuInfo>) {
-        if(this.destroyed || !this.container) return;
+        if(!this.container) return;
         if(!data) return;
 
         if(!this.shown) {
@@ -1975,7 +1973,7 @@ export default class GpuMenuComponent {
     }
 
     public updateDisplays() {
-        if(this.destroyed || !this.shown || !this.container) return;
+        if(!this.shown || !this.container) return;
 
         let displaysData = Utils.gpuMonitor.getCurrentValue('displays') as DisplayData[] | null;
         if(!Array.isArray(displaysData)) return;
@@ -2011,7 +2009,7 @@ export default class GpuMenuComponent {
     }
 
     public onOpen() {
-        if(this.destroyed || !this.container) return;
+        if(!this.container) return;
 
         this.clear();
         this.shown = true;
@@ -2066,12 +2064,12 @@ export default class GpuMenuComponent {
     }
 
     public destroy() {
-        this.destroyed = true;
         this.onClose();
         Config.clear(this);
 
         if(this.title) Config.clear(this.title);
         if(this.noGPULabel) Config.clear(this.noGPULabel);
+        this.noGPULabel = undefined;
 
         if(this.sections) {
             for(const section of this.sections) {
@@ -2119,5 +2117,6 @@ export default class GpuMenuComponent {
 
         this.container?.destroy();
         this.container = undefined as any;
+        this.loadingIcon = undefined;
     }
 }

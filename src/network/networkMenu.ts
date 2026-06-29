@@ -227,7 +227,6 @@ export default class NetworkMenu extends MenuBase {
     private devicesWirelessPopup!: Map<string, DeviceWirelessPopup>;
 
     private updateTimer: number = 0;
-    private destroyed: boolean = false;
     private deviceListGeneration: number = 0;
 
     constructor(sourceActor: St.Widget, arrowAlignment: number, arrowSide: St.Side) {
@@ -566,7 +565,7 @@ export default class NetworkMenu extends MenuBase {
 
     private refreshNethogsCapsUi() {
         const applyCaps = (hasCaps: boolean) => {
-            if(this.destroyed || !this.topProcesses) return;
+            if(!this.topProcesses) return;
             if(hasCaps) {
                 this.privilegedTopProcesses = false;
                 this.topProcesses.subSeparator?.hide();
@@ -600,7 +599,7 @@ export default class NetworkMenu extends MenuBase {
     private refreshNethogsAvailability() {
         Utils.hasNethogsAsync()
             .then(hasNethogs => {
-                if(this.destroyed || !this.topProcesses) return;
+                if(!this.topProcesses) return;
                 if(!hasNethogs) {
                     this.topProcesses.container.hide();
                     return;
@@ -994,11 +993,11 @@ export default class NetworkMenu extends MenuBase {
     }
 
     async updateDeviceList() {
-        if(this.destroyed || !this.isOpen) return;
+        if(!this.isOpen) return;
 
         const generation = ++this.deviceListGeneration;
         const devices = await Utils.getNetworkInterfacesAsync();
-        if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration) return;
+        if(!this.isOpen || generation !== this.deviceListGeneration) return;
 
         if(devices.size > 0) this.noDevicesLabel.hide();
         else this.noDevicesLabel.show();
@@ -2253,8 +2252,7 @@ export default class NetworkMenu extends MenuBase {
         if(code === 'deviceList') {
             const generation = ++this.deviceListGeneration;
             Utils.lowPriorityTask(() => {
-                if(this.destroyed || !this.isOpen || generation !== this.deviceListGeneration)
-                    return;
+                if(!this.isOpen || generation !== this.deviceListGeneration) return;
                 this.updateDeviceList();
             }, GLib.PRIORITY_DEFAULT);
             return;
@@ -3011,7 +3009,7 @@ export default class NetworkMenu extends MenuBase {
     }
 
     override destroy() {
-        this.destroyed = true;
+        this.deviceListGeneration++;
         this.close(false);
         this.onClose();
 
@@ -3034,6 +3032,7 @@ export default class NetworkMenu extends MenuBase {
 
         this.topProcessesPopup?.destroy();
         this.topProcessesPopup = undefined as any;
+        this.topProcesses = undefined as any;
 
         this.routesPopup?.destroy();
         this.routesPopup = undefined as any;
