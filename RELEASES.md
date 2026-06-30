@@ -1,4 +1,4 @@
-# Astra Monitor 41 - TO BE RELEASED
+# Astra Monitor 41 - June 28 2026
 
 ### Menu behavior
 
