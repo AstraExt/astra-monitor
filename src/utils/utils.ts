@@ -138,6 +138,11 @@ interface IconData {
 
 export default class Utils {
     static debug = false;
+    static logFile: Gio.File | null = null;
+    static logOutputStream: Gio.FileOutputStream | null = null;
+    static logEncoder: TextEncoder | null = null;
+    static truncateLogOnOpen = false;
+
     static defaultMonitors = ['processor', 'gpu', 'memory', 'storage', 'network', 'sensors'];
     static defaultIndicators = {
         processor: ['icon', 'bar', 'graph', 'percentage', 'frequency'],
@@ -208,18 +213,9 @@ export default class Utils {
         Utils.resetUptimeCache();
 
         Utils.debug = Config.get_boolean('debug-mode');
+        Utils.truncateLogOnOpen = Utils.debug && service === 'astra-monitor';
         if(Utils.debug && service === 'astra-monitor') {
             Utils.performanceMap = new Map();
-
-            try {
-                const log = Utils.getLogFile();
-                if(log) {
-                    if(log.query_exists(null)) log.delete(null);
-                    log.create_readwrite(Gio.FileCreateFlags.REPLACE_DESTINATION, null);
-                }
-            } catch(e) {
-                console.error(e);
-            }
         }
 
         Utils.configUpdateFixes();
@@ -322,6 +318,7 @@ export default class Utils {
             Utils.error('Error stopping or destroying monitor', e);
         }
 
+        Utils.clearLogResources();
         Utils.ready = false;
         Utils.debug = false;
         Utils.GTop = undefined;
@@ -406,6 +403,8 @@ export default class Utils {
     }
 
     static getLogFile(): Gio.File | null {
+        if(Utils.logFile) return Utils.logFile;
+
         try {
             const dataDir = GLib.get_user_cache_dir();
             const destination = GLib.build_filenamev([dataDir, 'astra-monitor', 'debug.log']);
@@ -413,27 +412,64 @@ export default class Utils {
             if(
                 destinationFile &&
                 GLib.mkdir_with_parents(destinationFile.get_parent()!.get_path()!, 0o755) === 0
-            )
-                return destinationFile;
+            ) {
+                Utils.logFile = destinationFile;
+                return Utils.logFile;
+            }
         } catch(e: any) {
             console.error(e);
         }
         return null;
     }
 
-    static logToFile(message: string) {
-        const log = Utils.getLogFile();
-        if(log) {
-            try {
-                const date = new Date();
-                const time = date.toISOString().split('T')[1].slice(0, -1);
+    private static getLogOutputStream(): Gio.FileOutputStream | null {
+        if(Utils.logOutputStream) return Utils.logOutputStream;
 
-                const outputStream = log.append_to(Gio.FileCreateFlags.NONE, null);
-                const buffer: Uint8Array = new TextEncoder().encode(`${time} - ${message}\n`);
-                outputStream.write_all(buffer, null);
-            } catch(e: any) {
-                console.error(e);
-            }
+        const log = Utils.getLogFile();
+        if(!log) return null;
+
+        if(Utils.truncateLogOnOpen && log.query_exists(null)) log.delete(null);
+
+        Utils.logOutputStream = log.append_to(Gio.FileCreateFlags.NONE, null);
+        Utils.truncateLogOnOpen = false;
+        return Utils.logOutputStream;
+    }
+
+    private static closeLogOutputStream() {
+        const outputStream = Utils.logOutputStream;
+        Utils.logOutputStream = null;
+        if(!outputStream) return;
+
+        try {
+            outputStream.close(null);
+        } catch(e: any) {
+            console.error(e);
+        }
+    }
+
+    private static clearLogResources() {
+        Utils.closeLogOutputStream();
+        Utils.logFile = null;
+        Utils.logEncoder = null;
+        Utils.truncateLogOnOpen = false;
+    }
+
+    static logToFile(message: string) {
+        if(!Utils.debug) return;
+
+        try {
+            const outputStream = Utils.getLogOutputStream();
+            if(!outputStream) return;
+
+            if(!Utils.logEncoder) Utils.logEncoder = new TextEncoder();
+
+            const date = new Date();
+            const time = date.toISOString().split('T')[1].slice(0, -1);
+            const buffer: Uint8Array = Utils.logEncoder.encode(`${time} - ${message}\n`);
+            outputStream.write_all(buffer, null);
+        } catch(e: any) {
+            console.error(e);
+            Utils.closeLogOutputStream();
         }
     }
 

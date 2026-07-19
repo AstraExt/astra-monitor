@@ -1,3 +1,9 @@
+# Astra Monitor 42 - TO BE RELEASED
+
+### Bug fixes
+
+-   Optimized debug file logging by lazily creating and reusing its file resources, then releasing them during extension teardown. [[#230](https://github.com/AstraExt/astra-monitor/issues/230)]
+
 # Astra Monitor 41 - June 28 2026
 
 ### Menu behavior
