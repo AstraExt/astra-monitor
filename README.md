@@ -388,10 +388,10 @@ Astra Monitor is a project inspired by the concepts of [iStat Menus](https://bja
 
 ## Star History
 
-<a href="https://star-history.com/#AstraExt/astra-monitor&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=AstraExt/astra-monitor&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=AstraExt/astra-monitor&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=AstraExt/astra-monitor&type=Date" />
-  </picture>
+<a href="https://www.star-history.com/?type=date&repos=AstraExt%2Fastra-monitor">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=AstraExt/astra-monitor&type=date&theme=dark&legend=top-left&sealed_token=1jni0Iu5BHiR-V7-znixAJ7232nQMQgcqhERowKFmVxooXcUALqnooOoQT4erRknPE8pJvL2hCBlnxaWlRv6krHW8Y5J8DjxsqzOT-q3_iMaTpL-aA_BT3QC9s7IcULU8pe1cuurZtf4pZGejTh2UhiunLFzGn__ZL_1AYoE05xUiL6q4EFeclLra5JR" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=AstraExt/astra-monitor&type=date&legend=top-left&sealed_token=1jni0Iu5BHiR-V7-znixAJ7232nQMQgcqhERowKFmVxooXcUALqnooOoQT4erRknPE8pJvL2hCBlnxaWlRv6krHW8Y5J8DjxsqzOT-q3_iMaTpL-aA_BT3QC9s7IcULU8pe1cuurZtf4pZGejTh2UhiunLFzGn__ZL_1AYoE05xUiL6q4EFeclLra5JR" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=AstraExt/astra-monitor&type=date&legend=top-left&sealed_token=1jni0Iu5BHiR-V7-znixAJ7232nQMQgcqhERowKFmVxooXcUALqnooOoQT4erRknPE8pJvL2hCBlnxaWlRv6krHW8Y5J8DjxsqzOT-q3_iMaTpL-aA_BT3QC9s7IcULU8pe1cuurZtf4pZGejTh2UhiunLFzGn__ZL_1AYoE05xUiL6q4EFeclLra5JR" />
+ </picture>
 </a>
