@@ -864,6 +864,9 @@ export default class Utils {
             collecting = collect;
             collecting--;
         }
+
+        if(result.length > 0) results.push(result.join('\n'));
+
         return results;
     }
 
