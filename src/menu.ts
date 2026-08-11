@@ -237,9 +237,9 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         }
         (icon as any).remove_all_transitions?.();
         icon.set_pivot_point(0.5, 0.5);
-        icon.rotation_angle_z = MenuBase.loadingSpinAngle;
+        icon.rotation_angle_z = Utils.reducedMotion ? 0 : MenuBase.loadingSpinAngle;
         icon.show();
-        MenuBase.startLoadingSpinTimer();
+        if(!Utils.reducedMotion) MenuBase.startLoadingSpinTimer();
     }
 
     static stopLoadingIcon(icon: St.Icon) {
@@ -309,10 +309,19 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     }
 
     private static startLoadingSpinTimer() {
-        if(MenuBase.loadingSpinTimer !== 0) return;
+        if(MenuBase.loadingSpinTimer !== 0 || Utils.reducedMotion) return;
 
         MenuBase.loadingSpinTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, () => {
-            if(MenuBase.spinningLoadingIcons.size === 0) {
+            if(MenuBase.spinningLoadingIcons.size === 0 || Utils.reducedMotion) {
+                if(Utils.reducedMotion) {
+                    for(const icon of MenuBase.spinningLoadingIcons) {
+                        try {
+                            icon.rotation_angle_z = 0;
+                        } catch(e) {
+                            MenuBase.removeLoadingIcon(icon, false);
+                        }
+                    }
+                }
                 MenuBase.loadingSpinTimer = 0;
                 return GLib.SOURCE_REMOVE;
             }
@@ -364,7 +373,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             });
 
             Signal.connect(this.systemMonitorButton, 'clicked', () => {
-                this.close(true);
+                this.close(Utils.menuAnimateParams(true));
                 app.activate();
             });
             this.utilityBox.add_child(this.systemMonitorButton);
@@ -379,7 +388,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
                 });
 
                 Signal.connect(this.systemMonitorButton, 'clicked', () => {
-                    this.close(true);
+                    this.close(Utils.menuAnimateParams(true));
                     app.activate();
                 });
                 this.utilityBox.add_child(this.systemMonitorButton);
@@ -393,7 +402,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             fallbackIconName: 'preferences-system-symbolic',
         });
         Signal.connect(this.preferencesButton, 'clicked', () => {
-            this.close(true);
+            this.close(Utils.menuAnimateParams(true));
             try {
                 if(category) Config.set('queued-pref-category', category, 'string');
                 if(!Utils.extension) throw new Error('Extension not found');
@@ -643,7 +652,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     }
 
     override destroy(): void {
-        this.close(false);
+        this.close(Utils.menuAnimateParams(false));
         Config.clear(this);
         Signal.clear(this);
         Signal.clear(this.systemMonitorButton);

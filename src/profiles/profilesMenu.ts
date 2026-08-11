@@ -54,7 +54,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
 
                 // Check if the click is outside the bounds of the menu
                 if(x < menuX || x > menuX + menuWidth || y < menuY || y > menuY + menuHeight) {
-                    this.close(true);
+                    this.close(Utils.menuAnimateParams(true));
                     return Clutter.EVENT_STOP;
                 }
             }
@@ -63,7 +63,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
 
         this.sourceActorDestroyId = sourceActor.connect('destroy', () => {
             this.sourceActorDestroyId = undefined;
-            this.close(false);
+            this.close(Utils.menuAnimateParams(false));
         });
     }
 
@@ -85,7 +85,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
                 /* EMPTY */
             }
 
-            this.close(true);
+            this.close(Utils.menuAnimateParams(true));
         });
     }
 
@@ -107,13 +107,14 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
             item.connect('activate', () => {
                 Config.set('current-profile', profile, 'string');
                 Utils.lowPriorityTask(Config.syncCurrentProfile);
-                this.close(true);
+                this.close(Utils.menuAnimateParams(true));
             });
         }
     }
 
-    public override close(animate: boolean): void {
-        if(!this.freed) super.close(animate);
+    // Accept boolean (Shell <=50) or `{animate}` (Shell >=51)
+    public override close(params?: any): void {
+        if(!this.freed) super.close(params);
         this.destroy();
     }
 

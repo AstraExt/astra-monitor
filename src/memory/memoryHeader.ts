@@ -404,7 +404,7 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::memory-header-tooltip', () => {
-                if(!Config.get_boolean('memory-header-tooltip')) this.tooltipMenu.close(true);
+                if(!Config.get_boolean('memory-header-tooltip')) this.tooltipMenu.close(Utils.menuAnimateParams(true));
             });
 
             Utils.memoryMonitor.listen(this.tooltipMenu, 'memoryUsage', () => {
@@ -452,13 +452,13 @@ export default GObject.registerClass(
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('memory-header-tooltip')) return;
 
-            this.tooltipMenu.open(false);
+            this.tooltipMenu.open(Utils.menuAnimateParams(false));
         }
 
         hideTooltip() {
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('memory-header-tooltip')) return;
-            this.tooltipMenu.close(false);
+            this.tooltipMenu.close(Utils.menuAnimateParams(false));
         }
 
         override destroy() {
@@ -507,7 +507,7 @@ export default GObject.registerClass(
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.memoryMonitor.unlisten(this.tooltipMenu);
-                this.tooltipMenu.close(false);
+                this.tooltipMenu.close(Utils.menuAnimateParams(false));
                 Main.uiGroup.remove_child(this.tooltipMenu.actor);
                 this.tooltipMenu.destroy();
                 this.tooltipMenu = undefined as any;

@@ -268,12 +268,12 @@ export default class GpuMenuComponent {
 
         infoButton.connect('enter-event', () => {
             infoButton.style = defaultStyle + this.parent.selectionStyle;
-            if(infoPopup) infoPopup.open(true);
+            if(infoPopup) infoPopup.open(Utils.menuAnimateParams(true));
         });
 
         infoButton.connect('leave-event', () => {
             infoButton.style = defaultStyle;
-            if(infoPopup) infoPopup.close(true);
+            if(infoPopup) infoPopup.close(Utils.menuAnimateParams(true));
         });
         grid.addToGrid(infoButton);
 
@@ -293,12 +293,12 @@ export default class GpuMenuComponent {
 
         displaysButton.connect('enter-event', () => {
             displaysButton.style = defaultStyle + this.parent.selectionStyle;
-            if(displaysPopup) displaysPopup.open(true);
+            if(displaysPopup) displaysPopup.open(Utils.menuAnimateParams(true));
         });
 
         displaysButton.connect('leave-event', () => {
             displaysButton.style = defaultStyle;
-            if(displaysPopup) displaysPopup.close(true);
+            if(displaysPopup) displaysPopup.close(Utils.menuAnimateParams(true));
         });
         grid.addToGrid(displaysButton);
 
@@ -326,12 +326,12 @@ export default class GpuMenuComponent {
 
         activityButton.connect('enter-event', () => {
             activityButton.style = defaultStyle + this.parent.selectionStyle;
-            if(activityPopup) activityPopup.open(true);
+            if(activityPopup) activityPopup.open(Utils.menuAnimateParams(true));
         });
 
         activityButton.connect('leave-event', () => {
             activityButton.style = defaultStyle;
-            if(activityPopup) activityPopup.close(true);
+            if(activityPopup) activityPopup.close(Utils.menuAnimateParams(true));
         });
         grid.addToGrid(activityButton);
 
@@ -387,12 +387,12 @@ export default class GpuMenuComponent {
 
         vramButton.connect('enter-event', () => {
             vramButton.style = defaultStyle + this.parent.selectionStyle;
-            if(vramPopup) vramPopup.open(true);
+            if(vramPopup) vramPopup.open(Utils.menuAnimateParams(true));
         });
 
         vramButton.connect('leave-event', () => {
             vramButton.style = defaultStyle;
-            if(vramPopup) vramPopup.close(true);
+            if(vramPopup) vramPopup.close(Utils.menuAnimateParams(true));
         });
         grid.addToGrid(vramButton);
 
@@ -514,12 +514,12 @@ export default class GpuMenuComponent {
 
         topProcessesButton.connect('enter-event', () => {
             topProcessesButton.style = defaultStyle + this.parent.selectionStyle;
-            if(topProcessesPopup) topProcessesPopup.open(true);
+            if(topProcessesPopup) topProcessesPopup.open(Utils.menuAnimateParams(true));
         });
 
         topProcessesButton.connect('leave-event', () => {
             topProcessesButton.style = defaultStyle;
-            if(topProcessesPopup) topProcessesPopup.close(true);
+            if(topProcessesPopup) topProcessesPopup.close(Utils.menuAnimateParams(true));
         });
 
         const topProcessesTitle = new St.Label({
@@ -578,12 +578,12 @@ export default class GpuMenuComponent {
 
         sensorsButton.connect('enter-event', () => {
             sensorsButton.style = defaultStyle + this.parent.selectionStyle;
-            if(sensorsPopup) sensorsPopup.open(true);
+            if(sensorsPopup) sensorsPopup.open(Utils.menuAnimateParams(true));
         });
 
         sensorsButton.connect('leave-event', () => {
             sensorsButton.style = defaultStyle;
-            if(sensorsPopup) sensorsPopup.close(true);
+            if(sensorsPopup) sensorsPopup.close(Utils.menuAnimateParams(true));
         });
 
         const sensorsGrid = new Grid({ numCols: 1 });

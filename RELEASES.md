@@ -1,5 +1,10 @@
 # Astra Monitor 42 - TO BE RELEASED
 
+### Compatibility
+
+-   GNOME 51 support.
+-   Respects the system reduced motion setting by disabling all animations when enabled.
+
 ### Bug fixes
 
 -   Optimized debug file logging by lazily creating and reusing its file resources, then releasing them during extension teardown. [[#230](https://github.com/AstraExt/astra-monitor/issues/230)]

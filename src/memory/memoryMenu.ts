@@ -232,12 +232,12 @@ export default class MemoryMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.memoryUsagePopup) this.memoryUsagePopup.open(true);
+            if(this.memoryUsagePopup) this.memoryUsagePopup.open(Utils.menuAnimateParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.memoryUsagePopup) this.memoryUsagePopup.close(true);
+            if(this.memoryUsagePopup) this.memoryUsagePopup.close(Utils.menuAnimateParams(true));
         });
 
         this.addToMenu(hoverButton, 2);
@@ -449,12 +449,12 @@ export default class MemoryMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.open(true);
+            if(this.topProcessesPopup) this.topProcessesPopup.open(Utils.menuAnimateParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.close(true);
+            if(this.topProcessesPopup) this.topProcessesPopup.close(Utils.menuAnimateParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }
@@ -573,12 +573,12 @@ export default class MemoryMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.memorySwapPopup) this.memorySwapPopup.open(true);
+            if(this.memorySwapPopup) this.memorySwapPopup.open(Utils.menuAnimateParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.memorySwapPopup) this.memorySwapPopup.close(true);
+            if(this.memorySwapPopup) this.memorySwapPopup.close(Utils.menuAnimateParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }
@@ -1155,7 +1155,7 @@ export default class MemoryMenu extends MenuBase {
     }
 
     override destroy() {
-        this.close(false);
+        this.close(Utils.menuAnimateParams(false));
         this.onClose();
 
         Config.clear(this);

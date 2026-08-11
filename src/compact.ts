@@ -102,7 +102,7 @@ export default GObject.registerClass(
 
         clickAlt() {
             const profilesMenu = new ProfilesMenu(this, 0.5);
-            profilesMenu.open(true);
+            profilesMenu.open(Utils.menuAnimateParams(true));
         }
 
         start_hover() {

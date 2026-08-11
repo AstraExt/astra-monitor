@@ -223,12 +223,12 @@ export default class StorageMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.storageActivityPopup) this.storageActivityPopup.open(true);
+            if(this.storageActivityPopup) this.storageActivityPopup.open(Utils.menuAnimateParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.storageActivityPopup) this.storageActivityPopup.close(true);
+            if(this.storageActivityPopup) this.storageActivityPopup.close(Utils.menuAnimateParams(true));
         });
 
         this.addToMenu(hoverButton, 2);
@@ -393,12 +393,12 @@ export default class StorageMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.open(true);
+            if(this.topProcessesPopup) this.topProcessesPopup.open(Utils.menuAnimateParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.close(true);
+            if(this.topProcessesPopup) this.topProcessesPopup.close(Utils.menuAnimateParams(true));
         });
         this.addToMenu(hoverButton, 2);
 
@@ -571,11 +571,11 @@ export default class StorageMenu extends MenuBase {
         // remove all devices that are not present anymore
         for(const [id, device] of this.devices.entries()) {
             if(!devices.has(id)) {
-                this.devicesInfoPopup.get(id)?.close(true);
+                this.devicesInfoPopup.get(id)?.close(Utils.menuAnimateParams(true));
                 this.devicesInfoPopup.get(id)?.destroy();
                 this.devicesInfoPopup.delete(id);
 
-                this.devicesTotalsPopup.get(id)?.close(true);
+                this.devicesTotalsPopup.get(id)?.close(Utils.menuAnimateParams(true));
                 this.devicesTotalsPopup.get(id)?.destroy();
                 this.devicesTotalsPopup.delete(id);
 
@@ -727,14 +727,14 @@ export default class StorageMenu extends MenuBase {
             topInfoButton.style = this.selectionStyle;
 
             const popup = this.devicesInfoPopup.get(id);
-            if(popup?.empty === false) popup?.open(true);
+            if(popup?.empty === false) popup?.open(Utils.menuAnimateParams(true));
         });
 
         topInfoButton.connect('leave-event', () => {
             topInfoButton.style = '';
 
             const popup = this.devicesInfoPopup.get(id);
-            popup?.close(true);
+            popup?.close(Utils.menuAnimateParams(true));
         });
 
         // Read/Write Speed
@@ -819,14 +819,14 @@ export default class StorageMenu extends MenuBase {
             rwButton.style = this.selectionStyle;
 
             const popup = this.devicesTotalsPopup.get(id);
-            popup?.open(true);
+            popup?.open(Utils.menuAnimateParams(true));
         });
 
         rwButton.connect('leave-event', () => {
             rwButton.style = '';
 
             const popup = this.devicesTotalsPopup.get(id);
-            popup?.close(true);
+            popup?.close(Utils.menuAnimateParams(true));
         });
 
         container.addToGrid(rwButton, 2);
@@ -1108,7 +1108,7 @@ export default class StorageMenu extends MenuBase {
                 });
 
                 button.connect('clicked', () => {
-                    this.close(true);
+                    this.close(Utils.menuAnimateParams(true));
                     baobabApp.activate();
                 });
                 box.add_child(button);
@@ -1124,7 +1124,7 @@ export default class StorageMenu extends MenuBase {
                 });
 
                 button.connect('clicked', () => {
-                    this.close(true);
+                    this.close(Utils.menuAnimateParams(true));
                     diskApp.activate();
                 });
                 box.add_child(button);
@@ -1557,7 +1557,7 @@ export default class StorageMenu extends MenuBase {
 
                 if(!info) {
                     popup.empty = true;
-                    popup.close(true);
+                    popup.close(Utils.menuAnimateParams(true));
                     continue;
                 }
                 popup.empty = false;
@@ -1678,11 +1678,11 @@ export default class StorageMenu extends MenuBase {
             device.bar?.destroy();
             device.bar = undefined as any;
 
-            this.devicesInfoPopup.get(id)?.close(true);
+            this.devicesInfoPopup.get(id)?.close(Utils.menuAnimateParams(true));
             this.devicesInfoPopup.get(id)?.destroy();
             this.devicesInfoPopup.delete(id);
 
-            this.devicesTotalsPopup.get(id)?.close(true);
+            this.devicesTotalsPopup.get(id)?.close(Utils.menuAnimateParams(true));
             this.devicesTotalsPopup.get(id)?.destroy();
             this.devicesTotalsPopup.delete(id);
         }

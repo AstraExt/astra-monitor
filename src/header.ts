@@ -85,7 +85,7 @@ export default GObject.registerClass(
             });
 
             Signal.connect(this, 'hide', () => {
-                if(this.menu) this.menu.close(true);
+                if(this.menu) this.menu.close(Utils.menuAnimateParams(true));
             });
 
             Signal.connect(this, 'enter-event', () => {
@@ -171,7 +171,7 @@ export default GObject.registerClass(
 
         clickAlt() {
             const profilesMenu = new ProfilesMenu(this, 0.5);
-            profilesMenu.open(true);
+            profilesMenu.open(Utils.menuAnimateParams(true));
         }
 
         setCompacted(compacted: boolean) {

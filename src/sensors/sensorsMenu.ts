@@ -265,13 +265,13 @@ export default class SensorsMenu extends MenuBase {
         container.connect('enter-event', () => {
             container.style = defaultStyle + this.selectionStyle;
 
-            popup.open(true);
+            popup.open(Utils.menuAnimateParams(true));
         });
 
         container.connect('leave-event', () => {
             container.style = defaultStyle;
 
-            popup.close(true);
+            popup.close(Utils.menuAnimateParams(true));
         });
 
         return {
@@ -285,7 +285,7 @@ export default class SensorsMenu extends MenuBase {
     }
 
     private destroySensor(id: string, sensor: SensorInfo) {
-        sensor.popup.close(false);
+        sensor.popup.close(Utils.menuAnimateParams(false));
         sensor.popup.destroy();
         sensor.container.destroy();
         this.sensors.delete(id);

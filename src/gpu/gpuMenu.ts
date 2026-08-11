@@ -69,7 +69,7 @@ export default class GpuMenu extends MenuBase {
     }
 
     override destroy() {
-        this.close(false);
+        this.close(Utils.menuAnimateParams(false));
         this.onClose();
 
         Config.clear(this);

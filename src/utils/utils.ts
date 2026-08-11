@@ -20,6 +20,7 @@
 
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
+import St from 'gi://St';
 
 import Config from '../config.js';
 import Signal from '../signal.js';
@@ -46,6 +47,7 @@ type UtilsInitProps = {
     extension?: Extension;
     metadata?: ExtensionMetadata;
     settings: Gio.Settings;
+    shellVersion?: string;
 
     ProcessorMonitor?: typeof ProcessorMonitor;
     GpuMonitor?: typeof GpuMonitor;
@@ -187,12 +189,24 @@ export default class Utils {
     static commandsPath: Map<string, string> | null = null;
     static commandsPathAsync: Map<string, Promise<string | false>> | null = null;
 
+    /**
+     * PopupMenu.open()/close() params adapter.
+     * Shell 45-50 expect a boolean; Shell 51+ expect `{animate: boolean}`.
+     * Also forces animation off when reduced motion is enabled.
+     * Set in init(), reset in clear(). Typed as `any` because @girs still
+     * declares the pre-51 signature.
+     */
+    static menuAnimateParams: (animate: boolean) => any = (animate: boolean) => animate;
+    static reducedMotion = false;
+    private static reducedMotionSignalId: number | undefined;
+
     static init({
         service,
 
         extension,
         metadata,
         settings,
+        shellVersion,
 
         /* eslint-disable no-shadow */
         ProcessorMonitor,
@@ -211,6 +225,7 @@ export default class Utils {
         Utils.resetCommandCaches(new Map());
         Utils.resetHwmonCache();
         Utils.resetUptimeCache();
+        Utils.initMenuAnimateParams(shellVersion);
 
         Utils.debug = Config.get_boolean('debug-mode');
         Utils.truncateLogOnOpen = Utils.debug && service === 'astra-monitor';
@@ -330,6 +345,8 @@ export default class Utils {
         Utils.resetCommandCaches(null);
         Utils.resetHwmonCache();
         Utils.resetUptimeCache();
+        Utils.clearReducedMotionWatch();
+        Utils.menuAnimateParams = (animate: boolean) => animate;
 
         Utils.processorMonitor = undefined as any;
         Utils.gpuMonitor = undefined as any;
@@ -2923,4 +2940,58 @@ export default class Utils {
         }
         return presentCpus;
     }
+    
+    private static initMenuAnimateParams(shellVersion?: string) {
+        const shellMajor = Number.parseInt((shellVersion ?? '0').split('.')[0], 10);
+        const useParamsObject = !Number.isNaN(shellMajor) && shellMajor >= 51;
+
+        Utils.clearReducedMotionWatch();
+        if(useParamsObject) {
+            Utils.updateReducedMotion();
+            Utils.watchReducedMotion();
+        }
+
+        Utils.menuAnimateParams = useParamsObject
+            ? (animate: boolean) => ({animate: animate && !Utils.reducedMotion})
+            : (animate: boolean) => animate && !Utils.reducedMotion;
+    }
+
+    private static updateReducedMotion() {
+        try {
+            const reduce = (St as any).ReducedMotion?.REDUCE;
+            if(reduce === undefined) {
+                Utils.reducedMotion = false;
+                return;
+            }
+            // reducedMotion is available since St/GNOME 51; @girs typings lag behind
+            Utils.reducedMotion = (St.Settings.get() as any).reducedMotion === reduce;
+        } catch(e) {
+            Utils.reducedMotion = false;
+        }
+    }
+
+    private static watchReducedMotion() {
+        try {
+            if((St as any).ReducedMotion === undefined) return;
+            Utils.reducedMotionSignalId = St.Settings.get().connect(
+                'notify::reduced-motion',
+                () => Utils.updateReducedMotion()
+            );
+        } catch(e) {
+            Utils.reducedMotionSignalId = undefined;
+        }
+    }
+
+    private static clearReducedMotionWatch() {
+        if(Utils.reducedMotionSignalId !== undefined) {
+            try {
+                St.Settings.get().disconnect(Utils.reducedMotionSignalId);
+            } catch(e) {
+                /* Settings may already be unavailable during teardown */
+            }
+            Utils.reducedMotionSignalId = undefined;
+        }
+        Utils.reducedMotion = false;
+    }
+
 }

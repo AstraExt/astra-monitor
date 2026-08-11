@@ -478,7 +478,7 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::processor-header-tooltip', () => {
-                if(!Config.get_boolean('processor-header-tooltip')) this.tooltipMenu.close(true);
+                if(!Config.get_boolean('processor-header-tooltip')) this.tooltipMenu.close(Utils.menuAnimateParams(true));
             });
 
             Utils.processorMonitor.listen(this.tooltipMenu, 'cpuUsage', () => {
@@ -509,13 +509,13 @@ export default GObject.registerClass(
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('processor-header-tooltip')) return;
 
-            this.tooltipMenu.open(false);
+            this.tooltipMenu.open(Utils.menuAnimateParams(false));
         }
 
         hideTooltip() {
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('processor-header-tooltip')) return;
-            this.tooltipMenu.close(false);
+            this.tooltipMenu.close(Utils.menuAnimateParams(false));
         }
 
         override destroy() {
@@ -559,7 +559,7 @@ export default GObject.registerClass(
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.processorMonitor.unlisten(this.tooltipMenu);
-                this.tooltipMenu.close(false);
+                this.tooltipMenu.close(Utils.menuAnimateParams(false));
                 Main.uiGroup.remove_child(this.tooltipMenu.actor);
                 this.tooltipMenu.destroy();
                 this.tooltipMenu = undefined as any;
