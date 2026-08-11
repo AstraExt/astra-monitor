@@ -310,12 +310,8 @@ export default class Utils {
         Config.settings = undefined;
 
         if(Utils.uptimeTimer) {
-            try {
-                GLib.source_remove(Utils.uptimeTimer);
-                Utils.uptimeTimer = 0;
-            } catch(e) {
-                Utils.warn('Error removing uptime timer', e instanceof Error ? e : undefined);
-            }
+            GLib.source_remove(Utils.uptimeTimer);
+            Utils.uptimeTimer = 0;
         }
     }
 
@@ -324,20 +320,12 @@ export default class Utils {
         Utils.runtimeStopped = true;
 
         for(const task of Utils.lowPriorityTasks) {
-            try {
-                GLib.source_remove(task);
-            } catch(e) {
-                Utils.warn('Error removing lowPriorityTask', e instanceof Error ? e : undefined);
-            }
+            GLib.source_remove(task);
         }
         Utils.lowPriorityTasks = [];
 
         for(const task of Utils.timeoutTasks) {
-            try {
-                GLib.source_remove(task);
-            } catch(e) {
-                Utils.warn('Error removing timeoutTask', e instanceof Error ? e : undefined);
-            }
+            GLib.source_remove(task);
         }
         Utils.timeoutTasks = [];
 
@@ -350,12 +338,7 @@ export default class Utils {
             Utils.sensorsMonitor,
         ];
         for(const monitor of monitors) {
-            try {
-                monitor?.stop();
-                monitor?.destroy();
-            } catch(e: any) {
-                Utils.error('Error stopping or destroying monitor', e);
-            }
+            monitor?.destroy();
         }
     }
 
