@@ -39,6 +39,9 @@ export default class Config {
         'current-profile',
         'profiles',
 
+        //Subprocess
+        'legacy-subprocess',
+
         //Deprecated keys
         'processor-menu-gpu',
         'processor-menu-gpu-color',
@@ -49,7 +52,7 @@ export default class Config {
         'experimental-features',
     ];
 
-    static readonly experimentalFeatures = ['ps_subprocess'];
+    static readonly experimentalFeatures: string[] = [];
 
     static set(key: string, value: any, type: TypeEnumStr = 'any') {
         if(!Config.settings) throw new Error('Critical: Config.settings is not valid');

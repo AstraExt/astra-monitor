@@ -5,6 +5,13 @@
 -   GNOME 51 support.
 -   Respects the system reduced motion setting by disabling all animations when enabled.
 
+### Subprocess management
+
+-   **POSIX Subprocess**: posix_spawn() is now the default subprocess backend for everyone (new installs and upgrades). It is mature and well tested and improves UI responsiveness when running commands. The old experimental opt-in has been removed.
+-   **Fallback**: If needed, you can revert to the previous backend from **Preferences → Utility → Subprocess** by enabling **Legacy Subprocess**.
+
+_Note: This is an important change to subprocess management, so feedback is very welcome. If you notice any regression, please open an issue: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
+
 ### Bug fixes
 
 -   Optimized debug file logging by lazily creating and reusing its file resources, then releasing them during extension teardown. [[#230](https://github.com/AstraExt/astra-monitor/issues/230)]

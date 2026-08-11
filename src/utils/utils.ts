@@ -234,12 +234,11 @@ export default class Utils {
         Config.connect(this, 'changed::explicit-zero', updateExplicitZero);
         updateExplicitZero();
 
-        const updateExperimentalPsSubprocess = () => {
-            const features = Config.get_json('experimental-features');
-            Utils.experimentalPsSubprocess = features?.includes('ps_subprocess') ?? false;
+        const updateLegacySubprocess = () => {
+            Utils.useLegacySubprocess = Config.get_boolean('legacy-subprocess');
         };
-        Config.connect(this, 'changed::experimental-features', updateExperimentalPsSubprocess);
-        updateExperimentalPsSubprocess();
+        Config.connect(this, 'changed::legacy-subprocess', updateLegacySubprocess);
+        updateLegacySubprocess();
     }
 
     private static resetCommandCaches(commandsPath: Map<string, string> | null) {
@@ -323,7 +322,7 @@ export default class Utils {
         Utils.debug = false;
         Utils.GTop = undefined;
         Utils.explicitZero = false;
-        Utils.experimentalPsSubprocess = undefined;
+        Utils.useLegacySubprocess = undefined;
         Utils.xmlParser = null;
         Utils.performanceMap = null;
 
@@ -2284,15 +2283,15 @@ export default class Utils {
         });
     }
 
-    static experimentalPsSubprocess: boolean | undefined = undefined;
+    static useLegacySubprocess: boolean | undefined = undefined;
     static runAsyncCommand(
         command: string,
         task?: CancellableTaskManager<boolean>
     ): Promise<string> {
-        if(Utils.experimentalPsSubprocess) {
-            return CommandSubprocess.run(command, task);
+        if(Utils.useLegacySubprocess) {
+            return CommandHelper.runCommand(command, task);
         }
-        return CommandHelper.runCommand(command, task);
+        return CommandSubprocess.run(command, task);
     }
 
     static async runAsyncCommandOptional(
@@ -2774,10 +2773,9 @@ export default class Utils {
             Config.set('profiles', profiles, 'json');
         }
 
-        //Fix experimental-features (v31 => v32)
+        //migrate/clean experimental-features (v41 => v42)
         let experimentalFeatures = Config.get_json('experimental-features');
         if(!experimentalFeatures) {
-            Config.set('experimental-features', [], 'json');
             experimentalFeatures = [];
         }
 

@@ -196,37 +196,51 @@ export default class Utility {
         );
         utilityPage.add(group);
 
-        group = new Adw.PreferencesGroup({ title: _('Experimental Features') });
+        group = new Adw.PreferencesGroup({ title: _('Subprocess') });
         PrefsUtils.addSwitchRow(
             {
-                title: _('PosixSpawn Subprocess'),
+                title: _('Legacy Subprocess'),
                 subtitle: _(
-                    'Experimental posix_spawn() subprocess monitoring.\n' +
-                        'This might help with UI performance issues.'
+                    'Use the legacy subprocess backend instead of posix_spawn().\n' +
+                        'Enable only if you experience issues with the preferred posix_spawn() backend.'
                 ),
             },
-            {
-                watch: 'experimental-features',
-                get: () => {
-                    const features = Config.get_json('experimental-features');
-                    return features?.includes('ps_subprocess') ?? false;
-                },
-                set: (value: boolean) => {
-                    const features = Config.get_json('experimental-features');
-                    if(value) {
-                        if(!features?.includes('ps_subprocess')) {
-                            features.push('ps_subprocess');
-                        }
-                    } else {
-                        if(features?.includes('ps_subprocess')) {
-                            features.splice(features.indexOf('ps_subprocess'), 1);
-                        }
-                    }
-                    Config.set('experimental-features', features, 'json');
-                },
-            },
+            'legacy-subprocess',
             group
         );
+        utilityPage.add(group);
+
+        group = new Adw.PreferencesGroup({ title: _('Experimental Features') });
+        // PrefsUtils.addSwitchRow(
+        //     {
+        //         title: _('PosixSpawn Subprocess'),
+        //         subtitle: _(
+        //             'Experimental posix_spawn() subprocess monitoring.\n' +
+        //                 'This might help with UI performance issues.'
+        //         ),
+        //     },
+        //     {
+        //         watch: 'experimental-features',
+        //         get: () => {
+        //             const features = Config.get_json('experimental-features');
+        //             return features?.includes('ps_subprocess') ?? false;
+        //         },
+        //         set: (value: boolean) => {
+        //             const features = Config.get_json('experimental-features');
+        //             if(value) {
+        //                 if(!features?.includes('ps_subprocess')) {
+        //                     features.push('ps_subprocess');
+        //                 }
+        //             } else {
+        //                 if(features?.includes('ps_subprocess')) {
+        //                     features.splice(features.indexOf('ps_subprocess'), 1);
+        //                 }
+        //             }
+        //             Config.set('experimental-features', features, 'json');
+        //         },
+        //     },
+        //     group
+        // );
         utilityPage.add(group);
 
         return utilityPage;
