@@ -1,4 +1,4 @@
-# Astra Monitor 42 - TO BE RELEASED
+# Astra Monitor 42 - August 11 2026
 
 ### Compatibility
 
