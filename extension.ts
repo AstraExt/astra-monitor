@@ -73,6 +73,8 @@ export default class AstraMonitorExtension extends Extension {
             this.timeout = 0;
         }
 
+        Utils.stopRuntime();
+
         try {
             this.container?.destroy();
         } catch(e: any) {

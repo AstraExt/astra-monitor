@@ -246,31 +246,27 @@ export default class Monitor {
         this.startListeningFor(key);
     }
 
-    async notify(key: string, value?: any) {
+    notify(key: string, value?: any) {
         if(!Utils.ready) return;
 
-        const listeners = this.listeners.get(key);
-        if(listeners) {
-            const aliveListeners = [];
-            for(const listener of listeners) {
-                try {
-                    listener.callback(value);
-                    aliveListeners.push(listener);
-                } catch(e: any) {
-                    Utils.error(`Error notifying listener for ${key}`, e);
+        const registered = this.listeners.get(key);
+        if(!registered || registered.length === 0) return;
 
-                    const msg = e?.message ?? '';
-                    if(typeof msg === 'string' && msg.includes('has been already disposed')) {
-                        // dropped
-                    } else {
-                        aliveListeners.push(listener);
-                    }
+        for(const listener of [...registered]) {
+            if(!Utils.ready) return;
+
+            const currentListeners = this.listeners.get(key);
+            if(!currentListeners?.includes(listener)) continue;
+
+            try {
+                listener.callback(value);
+            } catch(e: any) {
+                Utils.error(`Error notifying listener for ${key}`, e);
+
+                const msg = e?.message ?? '';
+                if(typeof msg === 'string' && msg.includes('has been already disposed')) {
+                    this.unlisten(listener.subject, key);
                 }
-            }
-
-            if(aliveListeners.length !== listeners.length) {
-                this.listeners.set(key, aliveListeners);
-                if(aliveListeners.length === 0) this.stopListeningFor(key);
             }
         }
     }

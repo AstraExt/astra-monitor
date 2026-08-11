@@ -73,6 +73,7 @@ export default GObject.registerClass(
             Utils.processorMonitor
                 .getCpuTopologyAsync()
                 .then(() => {
+                    if(!Utils.runtimeActive) return;
                     if(this.bars && Config.get_boolean('processor-header-bars-core'))
                         this.rebuildBars();
                 })

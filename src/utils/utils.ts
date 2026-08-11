@@ -175,6 +175,11 @@ export default class Utils {
     static xmlParser: XMLParser | null = null;
 
     static ready = false;
+    private static runtimeStopped = true;
+
+    static get runtimeActive() {
+        return !Utils.runtimeStopped;
+    }
 
     static performanceMap: Map<string, { start: number; mean: number; count: number }> | null =
         null;
@@ -211,6 +216,7 @@ export default class Utils {
         Utils.resetCommandCaches(new Map());
         Utils.resetHwmonCache();
         Utils.resetUptimeCache();
+        Utils.runtimeStopped = false;
 
         Utils.debug = Config.get_boolean('debug-mode');
         Utils.truncateLogOnOpen = Utils.debug && service === 'astra-monitor';
@@ -265,23 +271,7 @@ export default class Utils {
     }
 
     static clear() {
-        for(const task of Utils.lowPriorityTasks) {
-            try {
-                GLib.source_remove(task);
-            } catch(e) {
-                Utils.warn('Error removing lowPriorityTask', e instanceof Error ? e : undefined);
-            }
-        }
-        Utils.lowPriorityTasks = [];
-
-        for(const task of Utils.timeoutTasks) {
-            try {
-                GLib.source_remove(task);
-            } catch(e) {
-                Utils.warn('Error removing timeoutTask', e instanceof Error ? e : undefined);
-            }
-        }
-        Utils.timeoutTasks = [];
+        Utils.stopRuntime();
 
         try {
             Config.clearAll();
@@ -293,28 +283,6 @@ export default class Utils {
             Signal.clearAll();
         } catch(e: any) {
             Utils.error('Error clearing signal', e);
-        }
-
-        try {
-            Utils.processorMonitor?.stop();
-            Utils.processorMonitor?.destroy();
-
-            Utils.gpuMonitor?.stop();
-            Utils.gpuMonitor?.destroy();
-
-            Utils.memoryMonitor?.stop();
-            Utils.memoryMonitor?.destroy();
-
-            Utils.storageMonitor?.stop();
-            Utils.storageMonitor?.destroy();
-
-            Utils.networkMonitor?.stop();
-            Utils.networkMonitor?.destroy();
-
-            Utils.sensorsMonitor?.stop();
-            Utils.sensorsMonitor?.destroy();
-        } catch(e: any) {
-            Utils.error('Error stopping or destroying monitor', e);
         }
 
         Utils.clearLogResources();
@@ -347,6 +315,46 @@ export default class Utils {
                 Utils.uptimeTimer = 0;
             } catch(e) {
                 Utils.warn('Error removing uptime timer', e instanceof Error ? e : undefined);
+            }
+        }
+    }
+
+    static stopRuntime() {
+        if(Utils.runtimeStopped) return;
+        Utils.runtimeStopped = true;
+
+        for(const task of Utils.lowPriorityTasks) {
+            try {
+                GLib.source_remove(task);
+            } catch(e) {
+                Utils.warn('Error removing lowPriorityTask', e instanceof Error ? e : undefined);
+            }
+        }
+        Utils.lowPriorityTasks = [];
+
+        for(const task of Utils.timeoutTasks) {
+            try {
+                GLib.source_remove(task);
+            } catch(e) {
+                Utils.warn('Error removing timeoutTask', e instanceof Error ? e : undefined);
+            }
+        }
+        Utils.timeoutTasks = [];
+
+        const monitors = [
+            Utils.processorMonitor,
+            Utils.gpuMonitor,
+            Utils.memoryMonitor,
+            Utils.storageMonitor,
+            Utils.networkMonitor,
+            Utils.sensorsMonitor,
+        ];
+        for(const monitor of monitors) {
+            try {
+                monitor?.stop();
+                monitor?.destroy();
+            } catch(e: any) {
+                Utils.error('Error stopping or destroying monitor', e);
             }
         }
     }
@@ -2667,8 +2675,9 @@ export default class Utils {
         priority: number = GLib.PRIORITY_DEFAULT_IDLE
     ): void {
         const task = GLib.idle_add(priority, () => {
-            callback();
             Utils.lowPriorityTasks = Utils.lowPriorityTasks.filter(id => id !== task);
+            if(!Utils.runtimeActive) return GLib.SOURCE_REMOVE;
+            callback();
             return GLib.SOURCE_REMOVE;
         });
         Utils.lowPriorityTasks.push(task);
@@ -2681,8 +2690,9 @@ export default class Utils {
         priority: number = GLib.PRIORITY_DEFAULT
     ): void {
         const task = GLib.timeout_add(priority, timeout, () => {
-            callback();
             Utils.timeoutTasks = Utils.timeoutTasks.filter(id => id !== task);
+            if(!Utils.runtimeActive) return GLib.SOURCE_REMOVE;
+            callback();
             return GLib.SOURCE_REMOVE;
         });
         Utils.timeoutTasks.push(task);
