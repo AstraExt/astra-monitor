@@ -27,6 +27,7 @@ import { gettext as _, pgettext } from 'resource:///org/gnome/shell/extensions/e
 
 import Grid from '../grid.js';
 import Utils from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import Config from '../config.js';
 import MenuBase from '../menu.js';
 import StorageBars from './storageBars.js';
@@ -223,12 +224,12 @@ export default class StorageMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.storageActivityPopup) this.storageActivityPopup.open(Utils.menuAnimateParams(true));
+            if(this.storageActivityPopup) this.storageActivityPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.storageActivityPopup) this.storageActivityPopup.close(Utils.menuAnimateParams(true));
+            if(this.storageActivityPopup) this.storageActivityPopup.close(AnimationUtils.getMenuParams(true));
         });
 
         this.addToMenu(hoverButton, 2);
@@ -393,12 +394,12 @@ export default class StorageMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.open(Utils.menuAnimateParams(true));
+            if(this.topProcessesPopup) this.topProcessesPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.close(Utils.menuAnimateParams(true));
+            if(this.topProcessesPopup) this.topProcessesPopup.close(AnimationUtils.getMenuParams(true));
         });
         this.addToMenu(hoverButton, 2);
 
@@ -571,11 +572,11 @@ export default class StorageMenu extends MenuBase {
         // remove all devices that are not present anymore
         for(const [id, device] of this.devices.entries()) {
             if(!devices.has(id)) {
-                this.devicesInfoPopup.get(id)?.close(Utils.menuAnimateParams(true));
+                this.devicesInfoPopup.get(id)?.close(AnimationUtils.getMenuParams(true));
                 this.devicesInfoPopup.get(id)?.destroy();
                 this.devicesInfoPopup.delete(id);
 
-                this.devicesTotalsPopup.get(id)?.close(Utils.menuAnimateParams(true));
+                this.devicesTotalsPopup.get(id)?.close(AnimationUtils.getMenuParams(true));
                 this.devicesTotalsPopup.get(id)?.destroy();
                 this.devicesTotalsPopup.delete(id);
 
@@ -727,14 +728,14 @@ export default class StorageMenu extends MenuBase {
             topInfoButton.style = this.selectionStyle;
 
             const popup = this.devicesInfoPopup.get(id);
-            if(popup?.empty === false) popup?.open(Utils.menuAnimateParams(true));
+            if(popup?.empty === false) popup?.open(AnimationUtils.getMenuParams(true));
         });
 
         topInfoButton.connect('leave-event', () => {
             topInfoButton.style = '';
 
             const popup = this.devicesInfoPopup.get(id);
-            popup?.close(Utils.menuAnimateParams(true));
+            popup?.close(AnimationUtils.getMenuParams(true));
         });
 
         // Read/Write Speed
@@ -819,14 +820,14 @@ export default class StorageMenu extends MenuBase {
             rwButton.style = this.selectionStyle;
 
             const popup = this.devicesTotalsPopup.get(id);
-            popup?.open(Utils.menuAnimateParams(true));
+            popup?.open(AnimationUtils.getMenuParams(true));
         });
 
         rwButton.connect('leave-event', () => {
             rwButton.style = '';
 
             const popup = this.devicesTotalsPopup.get(id);
-            popup?.close(Utils.menuAnimateParams(true));
+            popup?.close(AnimationUtils.getMenuParams(true));
         });
 
         container.addToGrid(rwButton, 2);
@@ -1108,7 +1109,7 @@ export default class StorageMenu extends MenuBase {
                 });
 
                 button.connect('clicked', () => {
-                    this.close(Utils.menuAnimateParams(true));
+                    this.close(AnimationUtils.getMenuParams(true));
                     baobabApp.activate();
                 });
                 box.add_child(button);
@@ -1124,7 +1125,7 @@ export default class StorageMenu extends MenuBase {
                 });
 
                 button.connect('clicked', () => {
-                    this.close(Utils.menuAnimateParams(true));
+                    this.close(AnimationUtils.getMenuParams(true));
                     diskApp.activate();
                 });
                 box.add_child(button);
@@ -1557,7 +1558,7 @@ export default class StorageMenu extends MenuBase {
 
                 if(!info) {
                     popup.empty = true;
-                    popup.close(Utils.menuAnimateParams(true));
+                    popup.close(AnimationUtils.getMenuParams(true));
                     continue;
                 }
                 popup.empty = false;
@@ -1678,11 +1679,11 @@ export default class StorageMenu extends MenuBase {
             device.bar?.destroy();
             device.bar = undefined as any;
 
-            this.devicesInfoPopup.get(id)?.close(Utils.menuAnimateParams(true));
+            this.devicesInfoPopup.get(id)?.close(AnimationUtils.getMenuParams(true));
             this.devicesInfoPopup.get(id)?.destroy();
             this.devicesInfoPopup.delete(id);
 
-            this.devicesTotalsPopup.get(id)?.close(Utils.menuAnimateParams(true));
+            this.devicesTotalsPopup.get(id)?.close(AnimationUtils.getMenuParams(true));
             this.devicesTotalsPopup.get(id)?.destroy();
             this.devicesTotalsPopup.delete(id);
         }

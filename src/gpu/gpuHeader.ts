@@ -29,6 +29,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Header from '../header.js';
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import GpuMenu from './gpuMenu.js';
 import GpuActivityGraph from './gpuActivityGraph.js';
 import GpuMemoryGraph from './gpuMemoryGraph.js';
@@ -549,7 +550,7 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::gpu-header-tooltip', () => {
-                if(!Config.get_boolean('gpu-header-tooltip')) this.tooltipMenu.close(Utils.menuAnimateParams(true));
+                if(!Config.get_boolean('gpu-header-tooltip')) this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
             });
 
             Utils.gpuMonitor.listen(
@@ -608,13 +609,13 @@ export default GObject.registerClass(
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('gpu-header-tooltip')) return;
 
-            this.tooltipMenu.open(Utils.menuAnimateParams(false));
+            this.tooltipMenu.open(AnimationUtils.getMenuParams(false));
         }
 
         hideTooltip() {
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('gpu-header-tooltip')) return;
-            this.tooltipMenu.close(Utils.menuAnimateParams(false));
+            this.tooltipMenu.close(AnimationUtils.getMenuParams(false));
         }
 
         override destroy() {
@@ -685,7 +686,7 @@ export default GObject.registerClass(
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.gpuMonitor.unlisten(this.tooltipMenu);
-                this.tooltipMenu.close(Utils.menuAnimateParams(false));
+                this.tooltipMenu.close(AnimationUtils.getMenuParams(false));
                 Main.uiGroup.remove_child(this.tooltipMenu.actor);
                 this.tooltipMenu.destroy();
                 this.tooltipMenu = undefined as any;

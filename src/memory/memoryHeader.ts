@@ -29,6 +29,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Header from '../header.js';
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import MemoryMenu from './memoryMenu.js';
 import MemoryGraph from './memoryGraph.js';
 import MemoryBars from './memoryBars.js';
@@ -404,7 +405,7 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::memory-header-tooltip', () => {
-                if(!Config.get_boolean('memory-header-tooltip')) this.tooltipMenu.close(Utils.menuAnimateParams(true));
+                if(!Config.get_boolean('memory-header-tooltip')) this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
             });
 
             Utils.memoryMonitor.listen(this.tooltipMenu, 'memoryUsage', () => {
@@ -452,13 +453,13 @@ export default GObject.registerClass(
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('memory-header-tooltip')) return;
 
-            this.tooltipMenu.open(Utils.menuAnimateParams(false));
+            this.tooltipMenu.open(AnimationUtils.getMenuParams(false));
         }
 
         hideTooltip() {
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('memory-header-tooltip')) return;
-            this.tooltipMenu.close(Utils.menuAnimateParams(false));
+            this.tooltipMenu.close(AnimationUtils.getMenuParams(false));
         }
 
         override destroy() {
@@ -507,7 +508,7 @@ export default GObject.registerClass(
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.memoryMonitor.unlisten(this.tooltipMenu);
-                this.tooltipMenu.close(Utils.menuAnimateParams(false));
+                this.tooltipMenu.close(AnimationUtils.getMenuParams(false));
                 Main.uiGroup.remove_child(this.tooltipMenu.actor);
                 this.tooltipMenu.destroy();
                 this.tooltipMenu = undefined as any;

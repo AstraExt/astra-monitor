@@ -25,6 +25,7 @@ import { gettext as _, ngettext } from 'resource:///org/gnome/shell/extensions/e
 import MenuBase from '../menu.js';
 import Grid from '../grid.js';
 import Utils from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import Config from '../config.js';
 import { SensorNode } from './sensorsMonitor.js';
 
@@ -265,13 +266,13 @@ export default class SensorsMenu extends MenuBase {
         container.connect('enter-event', () => {
             container.style = defaultStyle + this.selectionStyle;
 
-            popup.open(Utils.menuAnimateParams(true));
+            popup.open(AnimationUtils.getMenuParams(true));
         });
 
         container.connect('leave-event', () => {
             container.style = defaultStyle;
 
-            popup.close(Utils.menuAnimateParams(true));
+            popup.close(AnimationUtils.getMenuParams(true));
         });
 
         return {
@@ -285,7 +286,7 @@ export default class SensorsMenu extends MenuBase {
     }
 
     private destroySensor(id: string, sensor: SensorInfo) {
-        sensor.popup.close(Utils.menuAnimateParams(false));
+        sensor.popup.close(AnimationUtils.getMenuParams(false));
         sensor.popup.destroy();
         sensor.container.destroy();
         this.sensors.delete(id);

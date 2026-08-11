@@ -30,6 +30,7 @@ import Header from '../header.js';
 import Config from '../config.js';
 import Signal from '../signal.js';
 import Utils from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import StorageMenu from './storageMenu.js';
 import StorageGraph from './storageGraph.js';
 import StorageBars from './storageBars.js';
@@ -565,7 +566,7 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::storage-header-tooltip', () => {
-                if(!Config.get_boolean('storage-header-tooltip')) this.tooltipMenu.close(Utils.menuAnimateParams(true));
+                if(!Config.get_boolean('storage-header-tooltip')) this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
             });
 
             const updateTooltip = () => {
@@ -640,13 +641,13 @@ export default GObject.registerClass(
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('storage-header-tooltip')) return;
 
-            this.tooltipMenu.open(Utils.menuAnimateParams(false));
+            this.tooltipMenu.open(AnimationUtils.getMenuParams(false));
         }
 
         hideTooltip() {
             if(!this.tooltipMenu) return;
             if(!Config.get_boolean('storage-header-tooltip')) return;
-            this.tooltipMenu.close(Utils.menuAnimateParams(false));
+            this.tooltipMenu.close(AnimationUtils.getMenuParams(false));
         }
 
         override destroy() {
@@ -713,7 +714,7 @@ export default GObject.registerClass(
             if(this.tooltipMenu) {
                 Config.clear(this.tooltipMenu);
                 Utils.storageMonitor.unlisten(this.tooltipMenu);
-                this.tooltipMenu.close(Utils.menuAnimateParams(false));
+                this.tooltipMenu.close(AnimationUtils.getMenuParams(false));
                 Main.uiGroup.remove_child(this.tooltipMenu.actor);
                 this.tooltipMenu.destroy();
                 this.tooltipMenu = undefined as any;

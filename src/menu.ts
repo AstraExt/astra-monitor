@@ -30,6 +30,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import Signal from './signal.js';
 import Utils from './utils/utils.js';
+import AnimationUtils from './utils/animationUtils.js';
 import Grid from './grid.js';
 import Config from './config.js';
 import Monitor from './monitor.js';
@@ -237,9 +238,9 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         }
         (icon as any).remove_all_transitions?.();
         icon.set_pivot_point(0.5, 0.5);
-        icon.rotation_angle_z = Utils.reducedMotion ? 0 : MenuBase.loadingSpinAngle;
+        icon.rotation_angle_z = AnimationUtils.reducedMotion ? 0 : MenuBase.loadingSpinAngle;
         icon.show();
-        if(!Utils.reducedMotion) MenuBase.startLoadingSpinTimer();
+        if(!AnimationUtils.reducedMotion) MenuBase.startLoadingSpinTimer();
     }
 
     static stopLoadingIcon(icon: St.Icon) {
@@ -309,11 +310,11 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     }
 
     private static startLoadingSpinTimer() {
-        if(MenuBase.loadingSpinTimer !== 0 || Utils.reducedMotion) return;
+        if(MenuBase.loadingSpinTimer !== 0 || AnimationUtils.reducedMotion) return;
 
         MenuBase.loadingSpinTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, () => {
-            if(MenuBase.spinningLoadingIcons.size === 0 || Utils.reducedMotion) {
-                if(Utils.reducedMotion) {
+            if(MenuBase.spinningLoadingIcons.size === 0 || AnimationUtils.reducedMotion) {
+                if(AnimationUtils.reducedMotion) {
                     for(const icon of MenuBase.spinningLoadingIcons) {
                         try {
                             icon.rotation_angle_z = 0;
@@ -373,7 +374,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             });
 
             Signal.connect(this.systemMonitorButton, 'clicked', () => {
-                this.close(Utils.menuAnimateParams(true));
+                this.close(AnimationUtils.getMenuParams(true));
                 app.activate();
             });
             this.utilityBox.add_child(this.systemMonitorButton);
@@ -388,7 +389,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
                 });
 
                 Signal.connect(this.systemMonitorButton, 'clicked', () => {
-                    this.close(Utils.menuAnimateParams(true));
+                    this.close(AnimationUtils.getMenuParams(true));
                     app.activate();
                 });
                 this.utilityBox.add_child(this.systemMonitorButton);
@@ -402,7 +403,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             fallbackIconName: 'preferences-system-symbolic',
         });
         Signal.connect(this.preferencesButton, 'clicked', () => {
-            this.close(Utils.menuAnimateParams(true));
+            this.close(AnimationUtils.getMenuParams(true));
             try {
                 if(category) Config.set('queued-pref-category', category, 'string');
                 if(!Utils.extension) throw new Error('Extension not found');
@@ -652,7 +653,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
     }
 
     override destroy(): void {
-        this.close(Utils.menuAnimateParams(false));
+        this.close(AnimationUtils.getMenuParams(false));
         Config.clear(this);
         Signal.clear(this);
         Signal.clear(this.systemMonitorButton);

@@ -26,6 +26,7 @@ import Clutter from 'gi://Clutter';
 
 import Signal from './signal.js';
 import Utils from './utils/utils.js';
+import AnimationUtils from './utils/animationUtils.js';
 import Config from './config.js';
 import MenuBase from './menu.js';
 import ProfilesMenu from './profiles/profilesMenu.js';
@@ -85,7 +86,7 @@ export default GObject.registerClass(
             });
 
             Signal.connect(this, 'hide', () => {
-                if(this.menu) this.menu.close(Utils.menuAnimateParams(true));
+                if(this.menu) this.menu.close(AnimationUtils.getMenuParams(true));
             });
 
             Signal.connect(this, 'enter-event', () => {
@@ -171,7 +172,7 @@ export default GObject.registerClass(
 
         clickAlt() {
             const profilesMenu = new ProfilesMenu(this, 0.5);
-            profilesMenu.open(Utils.menuAnimateParams(true));
+            profilesMenu.open(AnimationUtils.getMenuParams(true));
         }
 
         setCompacted(compacted: boolean) {

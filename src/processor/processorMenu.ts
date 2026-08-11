@@ -26,6 +26,7 @@ import { gettext as _, pgettext } from 'resource:///org/gnome/shell/extensions/e
 
 import MenuBase from '../menu.js';
 import Utils, { UptimeTimer } from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import Grid from '../grid.js';
 import Config from '../config.js';
 
@@ -147,7 +148,7 @@ export default class ProcessorMenu extends MenuBase {
                 if(!this.cpuInfoPopup) return;
                 const updatedCpuName = updatedCpuInfo['Model name'] || '';
                 hoverLabel.text = Utils.getCPUModelShortify(updatedCpuName);
-                this.cpuInfoPopup.close(Utils.menuAnimateParams(false));
+                this.cpuInfoPopup.close(AnimationUtils.getMenuParams(false));
                 this.cpuInfoPopup.destroy();
                 this.createCPUInfoPopup(hoverButton, updatedCpuInfo, updatedCpuName);
             })
@@ -158,7 +159,7 @@ export default class ProcessorMenu extends MenuBase {
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
             if(this.cpuInfoPopup) {
-                this.cpuInfoPopup.open(Utils.menuAnimateParams(true));
+                this.cpuInfoPopup.open(AnimationUtils.getMenuParams(true));
 
                 const actorBox = this.cpuInfoPopup.box.get_allocation_box();
                 const monitorSize = MenuBase.getMonitorSize(actorBox);
@@ -190,7 +191,7 @@ export default class ProcessorMenu extends MenuBase {
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.cpuInfoPopup) this.cpuInfoPopup.close(Utils.menuAnimateParams(true));
+            if(this.cpuInfoPopup) this.cpuInfoPopup.close(AnimationUtils.getMenuParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }
@@ -332,12 +333,12 @@ export default class ProcessorMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.cpuCategoryUsagePopup) this.cpuCategoryUsagePopup.open(Utils.menuAnimateParams(true));
+            if(this.cpuCategoryUsagePopup) this.cpuCategoryUsagePopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.cpuCategoryUsagePopup) this.cpuCategoryUsagePopup.close(Utils.menuAnimateParams(true));
+            if(this.cpuCategoryUsagePopup) this.cpuCategoryUsagePopup.close(AnimationUtils.getMenuParams(true));
         });
 
         this.addToMenu(hoverButton, 2);
@@ -476,7 +477,7 @@ export default class ProcessorMenu extends MenuBase {
                         core.bar = undefined as any;
                     }
                 }
-                this.cpuCoresUsagePopup.close(Utils.menuAnimateParams(false));
+                this.cpuCoresUsagePopup.close(AnimationUtils.getMenuParams(false));
                 this.cpuCoresUsagePopup.destroy();
                 this.createCoresUsagePopup(hoverButton);
             })
@@ -488,7 +489,7 @@ export default class ProcessorMenu extends MenuBase {
             hoverButton.style = defaultStyle + this.selectionStyle;
 
             if(this.cpuCoresUsagePopup) {
-                this.cpuCoresUsagePopup.open(Utils.menuAnimateParams(false));
+                this.cpuCoresUsagePopup.open(AnimationUtils.getMenuParams(false));
 
                 Utils.processorMonitor.listen(
                     hoverButton,
@@ -516,7 +517,7 @@ export default class ProcessorMenu extends MenuBase {
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
             if(this.cpuCoresUsagePopup) {
-                this.cpuCoresUsagePopup.close(Utils.menuAnimateParams(true));
+                this.cpuCoresUsagePopup.close(AnimationUtils.getMenuParams(true));
                 this.stopCoresPopupListeners();
             }
         });
@@ -639,12 +640,12 @@ export default class ProcessorMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.open(Utils.menuAnimateParams(true));
+            if(this.topProcessesPopup) this.topProcessesPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.close(Utils.menuAnimateParams(true));
+            if(this.topProcessesPopup) this.topProcessesPopup.close(AnimationUtils.getMenuParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }
@@ -810,14 +811,14 @@ export default class ProcessorMenu extends MenuBase {
             hoverButton.style = defaultStyle + this.selectionStyle;
 
             //if(this.cpuLoadAveragePopup) {
-            //    this.cpuLoadAveragePopup.open(Utils.menuAnimateParams(true));
+            //    this.cpuLoadAveragePopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
 
             //if(this.cpuLoadAveragePopup)
-            //    this.cpuLoadAveragePopup.close(Utils.menuAnimateParams(true));
+            //    this.cpuLoadAveragePopup.close(AnimationUtils.getMenuParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }
@@ -1223,7 +1224,7 @@ export default class ProcessorMenu extends MenuBase {
     }
 
     override destroy() {
-        this.close(Utils.menuAnimateParams(false));
+        this.close(AnimationUtils.getMenuParams(false));
         this.onClose();
 
         Config.clear(this);

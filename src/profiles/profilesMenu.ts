@@ -26,6 +26,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import Config from '../config.js';
 import Utils from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 
 export default class ProfilesMenu extends PopupMenu.PopupMenu {
     private capturedEventId?: number;
@@ -54,7 +55,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
 
                 // Check if the click is outside the bounds of the menu
                 if(x < menuX || x > menuX + menuWidth || y < menuY || y > menuY + menuHeight) {
-                    this.close(Utils.menuAnimateParams(true));
+                    this.close(AnimationUtils.getMenuParams(true));
                     return Clutter.EVENT_STOP;
                 }
             }
@@ -63,7 +64,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
 
         this.sourceActorDestroyId = sourceActor.connect('destroy', () => {
             this.sourceActorDestroyId = undefined;
-            this.close(Utils.menuAnimateParams(false));
+            this.close(AnimationUtils.getMenuParams(false));
         });
     }
 
@@ -85,7 +86,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
                 /* EMPTY */
             }
 
-            this.close(Utils.menuAnimateParams(true));
+            this.close(AnimationUtils.getMenuParams(true));
         });
     }
 
@@ -107,7 +108,7 @@ export default class ProfilesMenu extends PopupMenu.PopupMenu {
             item.connect('activate', () => {
                 Config.set('current-profile', profile, 'string');
                 Utils.lowPriorityTask(Config.syncCurrentProfile);
-                this.close(Utils.menuAnimateParams(true));
+                this.close(AnimationUtils.getMenuParams(true));
             });
         }
     }

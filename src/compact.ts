@@ -27,6 +27,7 @@ import Signal from './signal.js';
 import Header from './header.js';
 import Config from './config.js';
 import Utils from './utils/utils.js';
+import AnimationUtils from './utils/animationUtils.js';
 import ProfilesMenu from './profiles/profilesMenu.js';
 
 export default GObject.registerClass(
@@ -102,7 +103,7 @@ export default GObject.registerClass(
 
         clickAlt() {
             const profilesMenu = new ProfilesMenu(this, 0.5);
-            profilesMenu.open(Utils.menuAnimateParams(true));
+            profilesMenu.open(AnimationUtils.getMenuParams(true));
         }
 
         start_hover() {

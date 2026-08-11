@@ -21,7 +21,6 @@
 import GLib from 'gi://GLib';
 
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
-import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 
 import AstraMonitorContainer from './src/container.js';
 import Utils from './src/utils/utils.js';
@@ -43,7 +42,6 @@ export default class AstraMonitorExtension extends Extension {
             extension: this,
             metadata: this.metadata,
             settings: this.getSettings(),
-            shellVersion: Config.PACKAGE_VERSION,
 
             ProcessorMonitor,
             GpuMonitor,

@@ -26,6 +26,7 @@ import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.j
 
 import MenuBase from '../menu.js';
 import Utils, { GpuInfo } from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import Grid from '../grid.js';
 import Config from '../config.js';
 import { DisplayData, GenericGpuInfo } from '../gpu/gpuMonitor.js';
@@ -268,12 +269,12 @@ export default class GpuMenuComponent {
 
         infoButton.connect('enter-event', () => {
             infoButton.style = defaultStyle + this.parent.selectionStyle;
-            if(infoPopup) infoPopup.open(Utils.menuAnimateParams(true));
+            if(infoPopup) infoPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         infoButton.connect('leave-event', () => {
             infoButton.style = defaultStyle;
-            if(infoPopup) infoPopup.close(Utils.menuAnimateParams(true));
+            if(infoPopup) infoPopup.close(AnimationUtils.getMenuParams(true));
         });
         grid.addToGrid(infoButton);
 
@@ -293,12 +294,12 @@ export default class GpuMenuComponent {
 
         displaysButton.connect('enter-event', () => {
             displaysButton.style = defaultStyle + this.parent.selectionStyle;
-            if(displaysPopup) displaysPopup.open(Utils.menuAnimateParams(true));
+            if(displaysPopup) displaysPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         displaysButton.connect('leave-event', () => {
             displaysButton.style = defaultStyle;
-            if(displaysPopup) displaysPopup.close(Utils.menuAnimateParams(true));
+            if(displaysPopup) displaysPopup.close(AnimationUtils.getMenuParams(true));
         });
         grid.addToGrid(displaysButton);
 
@@ -326,12 +327,12 @@ export default class GpuMenuComponent {
 
         activityButton.connect('enter-event', () => {
             activityButton.style = defaultStyle + this.parent.selectionStyle;
-            if(activityPopup) activityPopup.open(Utils.menuAnimateParams(true));
+            if(activityPopup) activityPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         activityButton.connect('leave-event', () => {
             activityButton.style = defaultStyle;
-            if(activityPopup) activityPopup.close(Utils.menuAnimateParams(true));
+            if(activityPopup) activityPopup.close(AnimationUtils.getMenuParams(true));
         });
         grid.addToGrid(activityButton);
 
@@ -387,12 +388,12 @@ export default class GpuMenuComponent {
 
         vramButton.connect('enter-event', () => {
             vramButton.style = defaultStyle + this.parent.selectionStyle;
-            if(vramPopup) vramPopup.open(Utils.menuAnimateParams(true));
+            if(vramPopup) vramPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         vramButton.connect('leave-event', () => {
             vramButton.style = defaultStyle;
-            if(vramPopup) vramPopup.close(Utils.menuAnimateParams(true));
+            if(vramPopup) vramPopup.close(AnimationUtils.getMenuParams(true));
         });
         grid.addToGrid(vramButton);
 
@@ -514,12 +515,12 @@ export default class GpuMenuComponent {
 
         topProcessesButton.connect('enter-event', () => {
             topProcessesButton.style = defaultStyle + this.parent.selectionStyle;
-            if(topProcessesPopup) topProcessesPopup.open(Utils.menuAnimateParams(true));
+            if(topProcessesPopup) topProcessesPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         topProcessesButton.connect('leave-event', () => {
             topProcessesButton.style = defaultStyle;
-            if(topProcessesPopup) topProcessesPopup.close(Utils.menuAnimateParams(true));
+            if(topProcessesPopup) topProcessesPopup.close(AnimationUtils.getMenuParams(true));
         });
 
         const topProcessesTitle = new St.Label({
@@ -578,12 +579,12 @@ export default class GpuMenuComponent {
 
         sensorsButton.connect('enter-event', () => {
             sensorsButton.style = defaultStyle + this.parent.selectionStyle;
-            if(sensorsPopup) sensorsPopup.open(Utils.menuAnimateParams(true));
+            if(sensorsPopup) sensorsPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         sensorsButton.connect('leave-event', () => {
             sensorsButton.style = defaultStyle;
-            if(sensorsPopup) sensorsPopup.close(Utils.menuAnimateParams(true));
+            if(sensorsPopup) sensorsPopup.close(AnimationUtils.getMenuParams(true));
         });
 
         const sensorsGrid = new Grid({ numCols: 1 });

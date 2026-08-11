@@ -26,6 +26,7 @@ import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.j
 import MenuBase from '../menu.js';
 import Grid from '../grid.js';
 import Utils from '../utils/utils.js';
+import AnimationUtils from '../utils/animationUtils.js';
 import MemoryGraph from './memoryGraph.js';
 import MemoryMonitor from './memoryMonitor.js';
 import MemoryBars from './memoryBars.js';
@@ -232,12 +233,12 @@ export default class MemoryMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.memoryUsagePopup) this.memoryUsagePopup.open(Utils.menuAnimateParams(true));
+            if(this.memoryUsagePopup) this.memoryUsagePopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.memoryUsagePopup) this.memoryUsagePopup.close(Utils.menuAnimateParams(true));
+            if(this.memoryUsagePopup) this.memoryUsagePopup.close(AnimationUtils.getMenuParams(true));
         });
 
         this.addToMenu(hoverButton, 2);
@@ -449,12 +450,12 @@ export default class MemoryMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.open(Utils.menuAnimateParams(true));
+            if(this.topProcessesPopup) this.topProcessesPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.close(Utils.menuAnimateParams(true));
+            if(this.topProcessesPopup) this.topProcessesPopup.close(AnimationUtils.getMenuParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }
@@ -573,12 +574,12 @@ export default class MemoryMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.memorySwapPopup) this.memorySwapPopup.open(Utils.menuAnimateParams(true));
+            if(this.memorySwapPopup) this.memorySwapPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.memorySwapPopup) this.memorySwapPopup.close(Utils.menuAnimateParams(true));
+            if(this.memorySwapPopup) this.memorySwapPopup.close(AnimationUtils.getMenuParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }
@@ -1155,7 +1156,7 @@ export default class MemoryMenu extends MenuBase {
     }
 
     override destroy() {
-        this.close(Utils.menuAnimateParams(false));
+        this.close(AnimationUtils.getMenuParams(false));
         this.onClose();
 
         Config.clear(this);
