@@ -8,6 +8,8 @@
 ### Bug fixes
 
 -   Optimized debug file logging by lazily creating and reusing its file resources, then releasing them during extension teardown. [[#230](https://github.com/AstraExt/astra-monitor/issues/230)]
+-   Fixed GPU detection failing with "No GPU found" when the GPU was the last device in `lspci` output, by flushing the final parsed device block. [[#235](https://github.com/AstraExt/astra-monitor/issues/235)] [[#236](https://github.com/AstraExt/astra-monitor/pull/236)] (Thanks to [@bioarchitectonic](https://github.com/bioarchitectonic))
+-   Fixed NVIDIA GPU stats showing `-%` on hosts with a non-zero PCI domain (e.g. DGX Spark / GB10), by normalizing the 8-digit domain padding from `nvidia-smi` to match `lspci`. [[#235](https://github.com/AstraExt/astra-monitor/issues/235)] [[#236](https://github.com/AstraExt/astra-monitor/pull/236)] (Thanks to [@bioarchitectonic](https://github.com/bioarchitectonic))
 
 # Astra Monitor 41 - June 28 2026
 
