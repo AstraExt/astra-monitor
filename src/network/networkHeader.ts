@@ -381,7 +381,8 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::network-header-tooltip', () => {
-                if(!Config.get_boolean('network-header-tooltip')) this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
+                if(!Config.get_boolean('network-header-tooltip'))
+                    this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
             });
 
             Utils.networkMonitor.listen(this.tooltipMenu, 'networkIO', () => {

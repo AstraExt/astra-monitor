@@ -333,12 +333,14 @@ export default class ProcessorMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.cpuCategoryUsagePopup) this.cpuCategoryUsagePopup.open(AnimationUtils.getMenuParams(true));
+            if(this.cpuCategoryUsagePopup)
+                this.cpuCategoryUsagePopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.cpuCategoryUsagePopup) this.cpuCategoryUsagePopup.close(AnimationUtils.getMenuParams(true));
+            if(this.cpuCategoryUsagePopup)
+                this.cpuCategoryUsagePopup.close(AnimationUtils.getMenuParams(true));
         });
 
         this.addToMenu(hoverButton, 2);
@@ -640,12 +642,14 @@ export default class ProcessorMenu extends MenuBase {
 
         hoverButton.connect('enter-event', () => {
             hoverButton.style = defaultStyle + this.selectionStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.open(AnimationUtils.getMenuParams(true));
+            if(this.topProcessesPopup)
+                this.topProcessesPopup.open(AnimationUtils.getMenuParams(true));
         });
 
         hoverButton.connect('leave-event', () => {
             hoverButton.style = defaultStyle;
-            if(this.topProcessesPopup) this.topProcessesPopup.close(AnimationUtils.getMenuParams(true));
+            if(this.topProcessesPopup)
+                this.topProcessesPopup.close(AnimationUtils.getMenuParams(true));
         });
         this.addToMenu(hoverButton, 2);
     }

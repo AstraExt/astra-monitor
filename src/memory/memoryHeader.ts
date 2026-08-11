@@ -405,7 +405,8 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::memory-header-tooltip', () => {
-                if(!Config.get_boolean('memory-header-tooltip')) this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
+                if(!Config.get_boolean('memory-header-tooltip'))
+                    this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
             });
 
             Utils.memoryMonitor.listen(this.tooltipMenu, 'memoryUsage', () => {

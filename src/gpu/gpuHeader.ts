@@ -550,7 +550,8 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::gpu-header-tooltip', () => {
-                if(!Config.get_boolean('gpu-header-tooltip')) this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
+                if(!Config.get_boolean('gpu-header-tooltip'))
+                    this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
             });
 
             Utils.gpuMonitor.listen(

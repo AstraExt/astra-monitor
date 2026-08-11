@@ -1434,13 +1434,8 @@ class Edid {
 
             const dtdStart = this.exts[extIndex].dtdStart;
             const hasValidDtdStart = dtdStart >= 4 && dtdStart <= 127;
-            if(
-                this.exts[extIndex].revisionNumber >= 3 &&
-                hasValidDtdStart &&
-                dtdStart > 4
-            ) {
-                this.exts[extIndex].dataBlockCollection =
-                    this.parseDataBlockCollection(extIndex);
+            if(this.exts[extIndex].revisionNumber >= 3 && hasValidDtdStart && dtdStart > 4) {
+                this.exts[extIndex].dataBlockCollection = this.parseDataBlockCollection(extIndex);
             }
             if(hasValidDtdStart) {
                 this.exts[extIndex].dtds = this.getExtDtds(extIndex, dtdStart);

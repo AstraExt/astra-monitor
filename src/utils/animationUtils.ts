@@ -55,6 +55,6 @@ export default class AnimationUtils {
      */
     static getMenuParams(animate: boolean): any {
         const shouldAnimate = animate && !AnimationUtils.reducedMotion;
-        return AnimationUtils.useParamsObject ? {animate: shouldAnimate} : shouldAnimate;
+        return AnimationUtils.useParamsObject ? { animate: shouldAnimate } : shouldAnimate;
     }
 }

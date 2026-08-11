@@ -480,7 +480,8 @@ export default GObject.registerClass(
             this.tooltipMenu.addMenuItem(this.tooltipItem);
 
             Config.connect(this.tooltipMenu, 'changed::processor-header-tooltip', () => {
-                if(!Config.get_boolean('processor-header-tooltip')) this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
+                if(!Config.get_boolean('processor-header-tooltip'))
+                    this.tooltipMenu.close(AnimationUtils.getMenuParams(true));
             });
 
             Utils.processorMonitor.listen(this.tooltipMenu, 'cpuUsage', () => {
