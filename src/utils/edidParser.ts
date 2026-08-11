@@ -524,6 +524,8 @@ class Edid {
         '1152x870 @ 75 Hz',
     ];
     public DTD_LENGTH = 18;
+    /** CTA-861 / CEA extension block tag (EDID extension byte 0). */
+    public CTA_EXT_TAG = 0x02;
 
     public xyPixelRatioEnum = [
         { string: '16:10' },
@@ -1412,21 +1414,37 @@ class Edid {
             this.exts[extIndex].blockNumber = extIndex + 1;
             this.exts[extIndex].extTag = this.getExtTag(extIndex);
             this.exts[extIndex].revisionNumber = this.getRevisionNumber(extIndex);
+            this.exts[extIndex].checksum = this.getExtChecksum(extIndex);
+
+            // Only CTA-861 (0x02) has DTD offset / data-block collection / CTA DTDs.
+            // Other tags (e.g. DisplayID 0x70, block map 0xF0) use different layouts;
+            // interpreting them as CTA-861 manufactures garbage and can throw.
+            if(this.exts[extIndex].extTag !== this.CTA_EXT_TAG) {
+                this.exts[extIndex].dtds = [];
+                continue;
+            }
+
             this.exts[extIndex].dtdStart = this.getDtdStart(extIndex);
             this.exts[extIndex].numDtds = this.getNumberExtDtds(extIndex);
             this.exts[extIndex].underscan = this.getUnderscan(extIndex);
             this.exts[extIndex].basicAudio = this.getBasicAudio(extIndex);
             this.exts[extIndex].ycbcr444 = this.getYcBcR444(extIndex);
             this.exts[extIndex].ycbcr422 = this.getYcBcR422(extIndex);
+            this.exts[extIndex].dtds = [];
 
-            // data block collection
-            if(this.exts[extIndex].dtdStart !== 4) {
-                this.exts[extIndex].dataBlockCollection = this.parseDataBlockCollection(extIndex);
+            const dtdStart = this.exts[extIndex].dtdStart;
+            const hasValidDtdStart = dtdStart >= 4 && dtdStart <= 127;
+            if(
+                this.exts[extIndex].revisionNumber >= 3 &&
+                hasValidDtdStart &&
+                dtdStart > 4
+            ) {
+                this.exts[extIndex].dataBlockCollection =
+                    this.parseDataBlockCollection(extIndex);
             }
-            // DTDs
-            this.exts[extIndex].dtds = this.getExtDtds(extIndex, this.exts[extIndex].dtdStart);
-            // extension block checksum
-            this.exts[extIndex].checksum = this.getExtChecksum(extIndex);
+            if(hasValidDtdStart) {
+                this.exts[extIndex].dtds = this.getExtDtds(extIndex, dtdStart);
+            }
         }
     }
 
@@ -1973,6 +1991,8 @@ class Edid {
         while(index < endAddress) {
             const blockTagCode = (this.edidData[index] >> TAG_CODE_OFFSET) & TAG_CODE_MASK;
             const blockLength = this.edidData[index] & DATA_BLOCK_LENGTH_MASK;
+            if(index + blockLength + 1 > endAddress) break;
+
             let dataBlock;
 
             if(blockTagCode === this.dataBlockType.AUDIO.value) {
@@ -1995,9 +2015,10 @@ class Edid {
     }
 
     public parseAudioDataBlock(startAddress: number, blockLength: number): any {
-        const audioBlock: any = [];
+        const audioBlock: any = {};
         const SHORT_AUDIO_DESC_LENGTH = 3;
-        const numberShortAudioDescriptors = blockLength / SHORT_AUDIO_DESC_LENGTH;
+        // blockLength is untrusted EDID bits; truncate incomplete trailing descriptors
+        const numberShortAudioDescriptors = Math.floor(blockLength / SHORT_AUDIO_DESC_LENGTH);
         let shortAudDescIndex = 0;
         let index = startAddress;
 
@@ -2458,11 +2479,11 @@ class Edid {
         const dtdArray: any[] = [];
         let dtdCounter = 0;
         let dtdIndex = startAddress + BLOCK_OFFSET;
-        const endAddress = this.EDID_BLOCK_LENGTH * (extIndex + 2) - 2;
+        const checksumAddress = this.EDID_BLOCK_LENGTH * (extIndex + 2) - 1;
 
         while(
-            (this.edidData[dtdIndex] !== 0 || this.edidData[dtdIndex + 1] !== 0) &&
-            dtdIndex < endAddress
+            dtdIndex + this.DTD_LENGTH <= checksumAddress &&
+            (this.edidData[dtdIndex] !== 0 || this.edidData[dtdIndex + 1] !== 0)
         ) {
             const dtd = this.parseDtd(dtdIndex);
             dtdArray[dtdCounter] = dtd;
@@ -2721,12 +2742,18 @@ export interface EdidExtension {
     blockNumber: number;
     extTag: number;
     revisionNumber: number;
-    dtdStart: number;
-    numDtds: number;
-    underscan: boolean;
-    basicAudio: boolean;
-    ycbcr444: boolean;
-    ycbcr422: boolean;
+    /** CTA-861 only — DTD offset within the extension block. */
+    dtdStart?: number;
+    /** CTA-861 only. */
+    numDtds?: number;
+    /** CTA-861 only. */
+    underscan?: boolean;
+    /** CTA-861 only. */
+    basicAudio?: boolean;
+    /** CTA-861 only. */
+    ycbcr444?: boolean;
+    /** CTA-861 only. */
+    ycbcr422?: boolean;
     dataBlockCollection?: DataBlock[];
     dtds: DetailedTimingDescriptor[];
     checksum: number;
