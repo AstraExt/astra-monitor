@@ -408,7 +408,7 @@
       <description>Main GPU</description>
     </key>
     <key name="gpu-data" type="s">
-      <default>'""'</default>
+      <default>'[]'</default>
       <summary>GPU Data</summary>
       <description>GPU Data</description>
     </key>

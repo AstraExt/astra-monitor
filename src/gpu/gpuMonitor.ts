@@ -401,7 +401,14 @@ export default class GpuMonitor extends Monitor {
 
         const updateMonitoredGPUs = () => {
             this.monitoredGPUs = Utils.getMonitoredGPUs();
-            this.updateMonitorStatus();
+            if(this.status) {
+                this.stopGpuTask();
+                this.startGpuTask().catch((e: any) => {
+                    Utils.error('Error restarting GPU task', e);
+                });
+            } else {
+                this.updateMonitorStatus();
+            }
         };
         Config.connect(this, 'changed::gpu-data', updateMonitoredGPUs.bind(this));
         updateMonitoredGPUs();

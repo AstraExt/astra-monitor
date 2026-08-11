@@ -11,6 +11,7 @@
 -   Fixed GPU detection failing with "No GPU found" when the GPU was the last device in `lspci` output, by flushing the final parsed device block. [[#235](https://github.com/AstraExt/astra-monitor/issues/235)] [[#236](https://github.com/AstraExt/astra-monitor/pull/236)] (Thanks to [@bioarchitectonic](https://github.com/bioarchitectonic))
 -   Fixed NVIDIA GPU stats showing `-%` on hosts with a non-zero PCI domain (e.g. DGX Spark / GB10), by normalizing the 8-digit domain padding from `nvidia-smi` to match `lspci`. [[#235](https://github.com/AstraExt/astra-monitor/issues/235)] [[#236](https://github.com/AstraExt/astra-monitor/pull/236)] (Thanks to [@bioarchitectonic](https://github.com/bioarchitectonic))
 -   Fixed EDID parsing failing with `RangeError: Invalid array length` on displays that carry DisplayID extension blocks (e.g. Dell Alienware AW2725DM), by only walking CTA-861 data blocks and hardening audio descriptor length handling. [[#234](https://github.com/AstraExt/astra-monitor/issues/234)] (Thanks to [@6Woo](https://github.com/6Woo))
+-   Fixed GPU monitoring stuck on the loading spinner when `gpu-data` held the string `""` instead of an array, which also broke the Preferences → GPU Monitor toggle with `gpusData.push is not a function`. [[#233](https://github.com/AstraExt/astra-monitor/issues/233)] (Thanks to [@OozoraAhiru](https://github.com/OozoraAhiru))
 
 # Astra Monitor 41 - June 28 2026
 

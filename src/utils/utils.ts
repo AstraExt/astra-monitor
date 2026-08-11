@@ -1839,7 +1839,7 @@ export default class Utils {
 
     static getMonitoredGPUs(): GpuInfo[] {
         const gpusData = Config.get_json('gpu-data');
-        if(!gpusData) return [];
+        if(!Array.isArray(gpusData)) return [];
 
         const gpus = Utils.getGPUsList();
         return gpusData.filter((gpuData: any) =>
@@ -2750,28 +2750,45 @@ export default class Utils {
             Config.set('headers-height', 0, 'int');
         }
 
-        //Fix profiles missing (v24 => v25)
+        //Fix GPU data default / migrate from gpu-main (v29 => v30, #233)
+        //Must run before profiles snapshot so a new profile does not freeze '""'.
+        gpuMain = Config.get_json('gpu-main');
+        let gpuData = Config.get_json('gpu-data');
+        if(!Array.isArray(gpuData)) {
+            gpuData = [];
+            if(gpuMain && gpuMain.domain) {
+                if(!gpuMain.domain.includes(':')) gpuMain.domain = '0000:' + gpuMain.domain;
+                gpuMain.monitor = true;
+                gpuData.push(gpuMain);
+            }
+            Config.set('gpu-data', gpuData, 'json');
+        }
+
+        //Heal stale gpu-data frozen into an existing profile snapshot (#233)
         let profiles = Config.get_json('profiles');
+        if(profiles) {
+            const currentProfile = Config.get_string('current-profile') || 'default';
+            const profile = profiles[currentProfile];
+            if(profile && Object.prototype.hasOwnProperty.call(profile, 'gpu-data')) {
+                let profileGpuData: any = null;
+                try {
+                    profileGpuData = JSON.parse(profile['gpu-data']);
+                } catch(_e) {
+                    profileGpuData = null;
+                }
+                if(!Array.isArray(profileGpuData)) {
+                    profile['gpu-data'] = Config.get_string('gpu-data');
+                    Config.set('profiles', profiles, 'json');
+                }
+            }
+        }
+
+        //Fix profiles missing (v24 => v25)
         if(!profiles) {
             profiles = {};
             const currentProfile = Config.get_string('current-profile') || 'default';
             profiles[currentProfile] = Config.getCurrentSettingsData(Config.globalSettingsKeys);
             Config.set('profiles', profiles, 'json');
-        }
-
-        //Fix GPU moved from processor (v29 => v30)
-        gpuMain = Config.get_json('gpu-main');
-        if(gpuMain && gpuMain.domain) {
-            let gpuData = Config.get_json('gpu-data');
-            if(!gpuData) {
-                gpuData = [];
-                if(!gpuMain.domain.includes(':')) gpuMain.domain = '0000:' + gpuMain.domain;
-
-                gpuMain.monitor = true;
-                gpuData.push(gpuMain);
-                Config.set('gpu-data', gpuData, 'json');
-                //Config.set('gpu-main', '""', 'string');
-            }
         }
 
         //Fix experimental-features (v31 => v32)

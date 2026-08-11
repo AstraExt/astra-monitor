@@ -176,7 +176,8 @@ export default class Gpu {
                 const gpuMonitorValue = {
                     watch: 'gpu-data',
                     get: () => {
-                        const gpusData = Config.get_json('gpu-data');
+                        let gpusData = Config.get_json('gpu-data');
+                        if(!Array.isArray(gpusData)) gpusData = [];
                         for(const gpuData of gpusData) {
                             if(Utils.isSameGpu(gpu, gpuData)) {
                                 return gpuData.monitor;
@@ -187,7 +188,8 @@ export default class Gpu {
                     set: (value: boolean) => {
                         let changed = false;
 
-                        const gpusData = Config.get_json('gpu-data');
+                        let gpusData = Config.get_json('gpu-data');
+                        if(!Array.isArray(gpusData)) gpusData = [];
                         if(value) {
                             let found = false;
                             for(const gpuData of gpusData) {
