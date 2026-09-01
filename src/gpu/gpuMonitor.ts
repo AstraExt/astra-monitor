@@ -360,12 +360,51 @@ export type DisplayData = {
     edid: EDID | null;
 };
 
+type IntelEngine = {
+    busy?: number;
+    sema?: number;
+    wait?: number;
+    unit?: string;
+};
+
+type IntelInfoRaw = {
+    period?: { duration?: number; unit?: string };
+    frequency?: { requested?: number; actual?: number; unit?: string };
+    interrupts?: { count?: number; unit?: string };
+    rc6?: { value?: number; unit?: string };
+    power?: { GPU?: number; Package?: number; unit?: string };
+    'imc-bandwidth'?: { reads?: number; writes?: number; unit?: string };
+    engines?: { [key: string]: IntelEngine };
+    clients?: {
+        [key: string]: {
+            name?: string;
+            pid?: string;
+            memory?: { [region: string]: { [field: string]: string } };
+            'engine-classes'?: { [key: string]: { busy?: string; unit?: string } };
+        };
+    };
+};
+
+type IntelDevice = {
+    gpu: GpuInfo;
+    card: string;
+    cardPath: string;
+};
+
 export default class GpuMonitor extends Monitor {
     private status = false;
     private updateAmdGpuTask: ContinuousTaskManager;
     private updateNvidiaGpuTask: ContinuousTaskManager;
+    private updateIntelGpuTasks: Map<string, ContinuousTaskManager> = new Map();
+    private updateIntelGpuTask: CancellableTaskManager<boolean>;
     private gpuTaskStarting = false;
     private nvidiaParsing = false;
+
+    private intelGpus: Map<string, IntelDevice> = new Map();
+    private intelSamples: Map<string, IntelInfoRaw> = new Map();
+    private intelPrevious: Map<string, { time: number; rc6?: number; energy?: number }> = new Map();
+    private intelRaplPath?: string | null;
+    private intelCpuTempPath?: string | null;
 
     private updateDisplaysTask: CancellableTaskManager<boolean>;
 
@@ -387,6 +426,8 @@ export default class GpuMonitor extends Monitor {
 
         this.updateNvidiaGpuTask = new ContinuousTaskManager();
         this.updateNvidiaGpuTask.listen(this, this.updateNvidiaGpu.bind(this));
+
+        this.updateIntelGpuTask = new CancellableTaskManager();
 
         this.reset();
 
@@ -452,8 +493,11 @@ export default class GpuMonitor extends Monitor {
 
     reset() {
         this.updateDisplaysTask?.cancel();
+        this.updateIntelGpuTask?.cancel();
 
         this.infoPipesCaches.clear();
+        this.intelSamples.clear();
+        this.intelPrevious.clear();
     }
 
     override start() {
@@ -502,6 +546,8 @@ export default class GpuMonitor extends Monitor {
 
         const monitoredGPUs = Utils.getMonitoredGPUs();
         if(!monitoredGPUs) return;
+
+        await this.startIntelGpuTasks();
 
         let hasAMD = false;
         for(const gpu of monitoredGPUs) {
@@ -557,6 +603,12 @@ export default class GpuMonitor extends Monitor {
     private stopGpuTask() {
         if(this.updateAmdGpuTask?.isRunning) this.updateAmdGpuTask.stop();
         if(this.updateNvidiaGpuTask?.isRunning) this.updateNvidiaGpuTask.stop();
+
+        for(const task of this.updateIntelGpuTasks.values()) task.destroy();
+        this.updateIntelGpuTasks.clear();
+        this.intelGpus.clear();
+        this.intelSamples.clear();
+        this.intelPrevious.clear();
     }
 
     update(): boolean {
@@ -564,6 +616,10 @@ export default class GpuMonitor extends Monitor {
 
         if(this.isListeningFor('displays')) {
             this.runUpdate('displays');
+        }
+
+        if(this.intelGpus.size > 0 && !this.updateIntelGpuTask.isRunning) {
+            this.runUpdate('intelGpu');
         }
 
         return true;
@@ -579,6 +635,16 @@ export default class GpuMonitor extends Monitor {
     }
 
     runUpdate(key: string, ...params: any[]) {
+        if(key === 'intelGpu') {
+            this.runTask({
+                key,
+                task: this.updateIntelGpuTask,
+                run: this.updateIntelGpu.bind(this),
+                callback: () => {},
+            });
+            return;
+        }
+
         if(key === 'displays') {
             this.runTask({
                 key,
@@ -2174,6 +2240,454 @@ export default class GpuMonitor extends Monitor {
         }
     }
 
+    /**
+     * Intel GPUs are monitored through 'intel_gpu_top -J' when available: it's the only
+     * source for engines activity and per-client usage. Everything it doesn't provide
+     * (and everything at all, when it's not installed) comes from sysfs: frequencies from
+     * the drm card node, activity from the rc6 residency counter, power from the RAPL
+     * uncore domain and temperature from the CPU package (integrated GPUs share it).
+     */
+    private async startIntelGpuTasks() {
+        const monitoredGPUs = Utils.getMonitoredGPUs() ?? [];
+        const intelGPUs = monitoredGPUs.filter(gpu => Utils.isIntelGpu(gpu));
+        if(intelGPUs.length === 0) return;
+
+        const devices = await Promise.all(
+            intelGPUs.map(async gpu => {
+                const uuid = Utils.getGpuUUID(gpu);
+                try {
+                    const nodes = await Utils.listDirAsync(`/sys/bus/pci/devices/${uuid}/drm`, {
+                        folders: true,
+                        files: false,
+                    });
+                    const card = nodes.find(node => /^card\d+$/.test(node.name));
+                    if(!card) return undefined;
+                    return {
+                        uuid,
+                        device: {
+                            gpu,
+                            card: card.name,
+                            cardPath: `/sys/class/drm/${card.name}`,
+                        } as IntelDevice,
+                    };
+                } catch(e: any) {
+                    Utils.warn(`Failed to find the drm node of the Intel GPU ${uuid}`);
+                    return undefined;
+                }
+            })
+        );
+
+        for(const device of devices) {
+            if(!device) continue;
+            this.intelGpus.set(device.uuid, device.device);
+        }
+        if(this.intelGpus.size === 0) return;
+
+        const path = await Utils.getIntelGpuTopPathAsync();
+        if(path === false) return;
+
+        // Max 2 updates per second
+        const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
+
+        for(const [uuid, device] of this.intelGpus) {
+            if(this.updateIntelGpuTasks.get(uuid)?.isRunning) continue;
+
+            const task = new ContinuousTaskManager();
+            task.listen(this, this.updateIntelGpuSample.bind(this, uuid));
+            // Every sample is a top-level JSON object of the stream: flush on its
+            // closing brace, the only one at the beginning of a line
+            task.start(`${path}intel_gpu_top -J -s ${timer} -d drm:/dev/dri/${device.card}`, {
+                flush: { match: /^\},?\s*$/ },
+            });
+            this.updateIntelGpuTasks.set(uuid, task);
+        }
+    }
+
+    private updateIntelGpuSample(uuid: string, data: ContinuousTaskManagerData) {
+        if(data.exit) {
+            // Do not keep feeding a dead process' last sample to the UI
+            this.intelSamples.delete(uuid);
+            return;
+        }
+        if(!data.result) return;
+
+        try {
+            // Strip the JSON stream framing: the opening '[' and the samples separators
+            let result = data.result.trim();
+            if(result.startsWith('[')) result = result.substring(1).trim();
+            if(result.startsWith(',')) result = result.substring(1).trim();
+            if(result.endsWith(',')) result = result.substring(0, result.length - 1).trim();
+            if(!result.startsWith('{')) return;
+
+            this.intelSamples.set(uuid, JSON.parse(result) as IntelInfoRaw);
+        } catch(e: any) {
+            Utils.error('Error parsing intel_gpu_top output', e);
+        }
+    }
+
+    private async getIntelRaplPath(): Promise<string | null> {
+        if(this.intelRaplPath !== undefined) return this.intelRaplPath;
+        this.intelRaplPath = null;
+
+        try {
+            const packages = (
+                await Utils.listDirAsync('/sys/class/powercap', { folders: true, files: false })
+            )
+                .filter(entry => /^intel-rapl:\d+$/.test(entry.name))
+                .map(entry => `/sys/class/powercap/${entry.name}`);
+
+            const domains = (
+                await Promise.all(
+                    packages.map(packagePath =>
+                        Utils.listDirAsync(packagePath, { folders: true, files: false })
+                            .then(entries =>
+                                entries
+                                    .filter(entry => /^intel-rapl:\d+:\d+$/.test(entry.name))
+                                    .map(entry => `${packagePath}/${entry.name}`)
+                            )
+                            .catch(() => [] as string[])
+                    )
+                )
+            ).flat();
+
+            const names = await Promise.all(
+                domains.map(domain => Utils.readFileAsync(`${domain}/name`, true))
+            );
+            const uncore = domains.find((_domain, index) => names[index].trim() === 'uncore');
+            if(!uncore) return this.intelRaplPath;
+
+            // energy_uj is root-only on kernels mitigating CVE-2020-8694
+            const energyPath = `${uncore}/energy_uj`;
+            if(await Utils.canReadFileAsync(energyPath)) this.intelRaplPath = energyPath;
+        } catch(e: any) {
+            Utils.warn('Failed to look up the Intel RAPL uncore domain');
+        }
+        return this.intelRaplPath;
+    }
+
+    private async getIntelCpuTempPath(): Promise<string | null> {
+        if(this.intelCpuTempPath !== undefined) return this.intelCpuTempPath;
+        this.intelCpuTempPath = null;
+
+        const devices = await Utils.getCachedHwmonDevicesAsync();
+        for(const [deviceName, device] of devices) {
+            if(!deviceName.startsWith('coretemp')) continue;
+            for(const [sensorName, sensor] of device) {
+                if(!sensorName.startsWith('Package id')) continue;
+                const attribute = sensor.get('input');
+                if(!attribute) continue;
+                this.intelCpuTempPath = `/sys/class/hwmon/${attribute.path}`;
+                return this.intelCpuTempPath;
+            }
+        }
+        return this.intelCpuTempPath;
+    }
+
+    private async updateIntelGpu(): Promise<boolean> {
+        if(this.intelGpus.size === 0) return false;
+
+        const [raplPath, tempPath] = await Promise.all([
+            this.getIntelRaplPath(),
+            this.getIntelCpuTempPath(),
+        ]);
+
+        const gpus = new Map<string, GenericGpuInfo>();
+
+        await Promise.all(
+            Array.from(this.intelGpus.entries()).map(async ([uuid, device]) => {
+                const sample = this.intelSamples.get(uuid);
+                const cardPath = device.cardPath;
+
+                const [curFreq, maxFreq, minFreq, rc6Residency, energy, temperature] =
+                    await Promise.all([
+                        Utils.readFileAsync(`${cardPath}/gt_cur_freq_mhz`, true),
+                        Utils.readFileAsync(`${cardPath}/gt_max_freq_mhz`, true),
+                        Utils.readFileAsync(`${cardPath}/gt_min_freq_mhz`, true),
+                        Utils.readFileAsync(`${cardPath}/power/rc6_residency_ms`, true),
+                        raplPath ? Utils.readFileAsync(raplPath, true) : Promise.resolve(''),
+                        tempPath ? Utils.readFileAsync(tempPath, true) : Promise.resolve(''),
+                    ]);
+
+                const gpu: GenericGpuInfo = {
+                    id: uuid,
+                    family: 'Intel',
+                    info: { pipes: [] },
+                    vram: { pipes: [] },
+                    activity: { pipes: [] },
+                    topProcesses: [],
+                    sensors: { categories: [], list: [] },
+                    raw: sample,
+                };
+
+                //Info
+                // Use cache if it's been updated in the last 10 minutes
+                const infoPipesCache = this.infoPipesCaches.get(uuid);
+                if(
+                    infoPipesCache &&
+                    GLib.get_monotonic_time() - infoPipesCache.time < 600_000_000
+                ) {
+                    gpu.info.pipes = infoPipesCache.pipes;
+                } else {
+                    gpu.info.pipes.push({
+                        name: 'Device Name',
+                        data: Utils.getGPUModelName(device.gpu),
+                    });
+                    if(device.gpu.vendor)
+                        gpu.info.pipes.push({ name: 'Vendor', data: device.gpu.vendor });
+                    if(device.gpu.drivers?.length)
+                        gpu.info.pipes.push({
+                            name: 'Driver',
+                            data: device.gpu.drivers.join(', '),
+                        });
+                    gpu.info.pipes.push({ name: 'PCI', data: uuid });
+                    gpu.info.pipes.push({ name: 'DRM Card', data: device.card });
+
+                    this.infoPipesCaches.set(uuid, {
+                        pipes: gpu.info.pipes,
+                        time: GLib.get_monotonic_time(),
+                    });
+                }
+
+                // Counters deltas
+                const now = GLib.get_monotonic_time();
+                const previous = this.intelPrevious.get(uuid);
+                const elapsed = previous ? (now - previous.time) / 1000000 : 0;
+                const rc6Value = Utils.isNumeric(rc6Residency.trim())
+                    ? parseFloat(rc6Residency)
+                    : undefined;
+                const energyValue = Utils.isNumeric(energy.trim()) ? parseFloat(energy) : undefined;
+                this.intelPrevious.set(uuid, { time: now, rc6: rc6Value, energy: energyValue });
+
+                //Activity
+                if(sample?.engines) {
+                    for(const name in sample.engines) {
+                        const busy = sample.engines[name]?.busy;
+                        if(busy == null || isNaN(busy)) continue;
+                        gpu.activity.pipes.push({ name, percent: busy });
+                    }
+
+                    const render = Object.keys(sample.engines).find(name =>
+                        name.startsWith('Render/3D')
+                    );
+                    if(render && sample.engines[render].busy != null)
+                        gpu.activity.GFX = sample.engines[render].busy;
+                    else if(gpu.activity.pipes.length > 0)
+                        gpu.activity.GFX = Math.max(...gpu.activity.pipes.map(p => p.percent));
+                } else if(rc6Value != null && previous?.rc6 != null && elapsed > 0) {
+                    // No intel_gpu_top: the time the GPU didn't spend in the rc6 sleep
+                    // state is a good enough approximation of its activity
+                    const rc6Percent = ((rc6Value - previous.rc6) / (elapsed * 1000)) * 100;
+                    if(rc6Percent >= 0)
+                        gpu.activity.GFX = Math.min(100, Math.max(0, 100 - rc6Percent));
+                }
+
+                //Top Processes
+                if(sample?.clients) {
+                    for(const id in sample.clients) {
+                        const client = sample.clients[id];
+                        if(!client?.name) continue;
+
+                        const engines = client['engine-classes'] ?? {};
+                        const enginePipes = [];
+                        for(const name in engines) {
+                            const busy = parseFloat(engines[name]?.busy ?? '');
+                            if(isNaN(busy)) continue;
+                            enginePipes.push({ name, value: busy, unit: '%' });
+                        }
+                        enginePipes.sort((a, b) => b.value - a.value);
+
+                        const pipes = enginePipes.slice(0, 1);
+
+                        let memory = 0;
+                        for(const region in client.memory) {
+                            const resident = parseFloat(client.memory[region]?.resident ?? '');
+                            if(!isNaN(resident)) memory += resident;
+                        }
+                        if(memory > 0) pipes.push({ name: 'Memory', value: memory, unit: 'B' });
+
+                        const pid = parseInt(client.pid ?? '', 10);
+                        gpu.topProcesses.push({
+                            name: client.name,
+                            pid: isNaN(pid) ? 0 : pid,
+                            pipes,
+                        });
+                    }
+
+                    gpu.topProcesses.sort((a, b) => {
+                        const busy = (process: (typeof gpu.topProcesses)[0]) =>
+                            process.pipes.reduce(
+                                (points, pipe) => points + (pipe.unit === '%' ? pipe.value : 0),
+                                0
+                            );
+                        return busy(b) - busy(a);
+                    });
+                }
+
+                // Sensors
+                const getOrAddCategory = (name: string) => {
+                    let category = gpu.sensors.categories.find(c => c.name === name);
+                    if(category) return category;
+
+                    category = { name, sensors: [] };
+                    gpu.sensors.categories.push(category);
+                    return category;
+                };
+                const addSensor = ({
+                    category,
+                    name,
+                    value,
+                    unit,
+                    priority,
+                }: { category: string } & GpuSensor) => {
+                    const sensor = { name, value, unit, priority };
+                    getOrAddCategory(category).sensors.push(sensor);
+                    gpu.sensors.list?.push(sensor);
+                };
+
+                const currentFreq =
+                    sample?.frequency?.actual ??
+                    (Utils.isNumeric(curFreq.trim()) ? parseFloat(curFreq) : undefined);
+                if(currentFreq != null && !isNaN(currentFreq))
+                    addSensor({
+                        category: 'Frequency',
+                        name: 'Current Frequency',
+                        value: Math.round(currentFreq),
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.MAX,
+                    });
+
+                const requestedFreq = sample?.frequency?.requested;
+                if(requestedFreq != null && !isNaN(requestedFreq))
+                    addSensor({
+                        category: 'Frequency',
+                        name: 'Requested Frequency',
+                        value: Math.round(requestedFreq),
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.LOW,
+                    });
+
+                if(Utils.isNumeric(maxFreq.trim()))
+                    addSensor({
+                        category: 'Frequency',
+                        name: 'Max Frequency',
+                        value: parseFloat(maxFreq),
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                if(Utils.isNumeric(minFreq.trim()))
+                    addSensor({
+                        category: 'Frequency',
+                        name: 'Min Frequency',
+                        value: parseFloat(minFreq),
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                const gpuPower = sample?.power?.GPU;
+                if(gpuPower != null && !isNaN(gpuPower)) {
+                    addSensor({
+                        category: 'Power',
+                        name: 'GPU Power',
+                        value: parseFloat(gpuPower.toFixed(2)),
+                        unit: sample?.power?.unit ?? 'W',
+                        priority: GpuSensorPriority.HIGH,
+                    });
+                } else if(energyValue != null && previous?.energy != null && elapsed > 0) {
+                    // Counters wrap around: a negative delta is not a usable sample
+                    const delta = energyValue - previous.energy;
+                    if(delta >= 0)
+                        addSensor({
+                            category: 'Power',
+                            name: 'GPU Power',
+                            value: parseFloat((delta / 1000000 / elapsed).toFixed(2)),
+                            unit: 'W',
+                            priority: GpuSensorPriority.HIGH,
+                        });
+                }
+
+                const packagePower = sample?.power?.Package;
+                if(packagePower != null && !isNaN(packagePower))
+                    addSensor({
+                        category: 'Power',
+                        name: 'Package Power',
+                        value: parseFloat(packagePower.toFixed(2)),
+                        unit: sample?.power?.unit ?? 'W',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                if(temperature && Utils.isNumeric(temperature.trim()))
+                    addSensor({
+                        category: 'Temperature',
+                        name: 'CPU Package',
+                        value: Math.round(parseFloat(temperature) / 1000),
+                        unit: '°C',
+                        priority: GpuSensorPriority.MEDIUM,
+                    });
+
+                if(sample?.rc6?.value != null && !isNaN(sample.rc6.value))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'RC6',
+                        value: parseFloat(sample.rc6.value.toFixed(1)),
+                        unit: sample.rc6.unit ?? '%',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                if(sample?.interrupts?.count != null && !isNaN(sample.interrupts.count))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'Interrupts',
+                        value: Math.round(sample.interrupts.count),
+                        unit: sample.interrupts.unit ?? 'irq/s',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                const bandwidth = sample?.['imc-bandwidth'];
+                if(bandwidth?.reads != null && !isNaN(bandwidth.reads))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'IMC Reads',
+                        value: Math.round(bandwidth.reads),
+                        unit: bandwidth.unit ?? 'MiB/s',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                if(bandwidth?.writes != null && !isNaN(bandwidth.writes))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'IMC Writes',
+                        value: Math.round(bandwidth.writes),
+                        unit: bandwidth.unit ?? 'MiB/s',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                // Sensors Sorting
+                for(const category of gpu.sensors.categories) {
+                    category.sensors.sort((a, b) => {
+                        if(a.priority === b.priority) return 0;
+                        return a.priority > b.priority ? -1 : 1;
+                    });
+                }
+                gpu.sensors.list?.sort((a, b) => {
+                    if(a.priority === b.priority) return 0;
+                    return a.priority > b.priority ? -1 : 1;
+                });
+                gpu.sensors.categories.sort((a, b) => {
+                    const maxPriorityA = a.sensors.length ? a.sensors[0].priority : 0;
+                    const maxPriorityB = b.sensors.length ? b.sensors[0].priority : 0;
+                    if(maxPriorityA === maxPriorityB) return 0;
+                    return maxPriorityA > maxPriorityB ? -1 : 1;
+                });
+
+                gpus.set(uuid, gpu);
+            })
+        );
+
+        this.pushGpuUpdate(gpus);
+        return true;
+    }
+
     async updateDisplays(): Promise<boolean> {
         const data: DisplayData[] = [];
 
@@ -2274,6 +2788,10 @@ export default class GpuMonitor extends Monitor {
         this.updateAmdGpuTask = undefined as any;
         this.updateNvidiaGpuTask?.destroy();
         this.updateNvidiaGpuTask = undefined as any;
+        for(const task of this.updateIntelGpuTasks.values()) task.destroy();
+        this.updateIntelGpuTasks.clear();
+        this.updateIntelGpuTask?.cancel();
+        this.updateIntelGpuTask = undefined as any;
 
         super.destroy();
     }

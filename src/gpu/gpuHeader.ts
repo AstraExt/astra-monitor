@@ -379,7 +379,7 @@ export default GObject.registerClass(
 
             if(!gpuData.activity || gpuData.activity.GFX === undefined)
                 this.activityPercentage.text = Utils.zeroStr + '%';
-            else this.activityPercentage.text = gpuData.activity.GFX + '%';
+            else this.activityPercentage.text = Math.round(gpuData.activity.GFX) + '%'; // Without rounding, it can show numbers like 3.456734% instead of wanted 3% or 4%
         }
 
         buildMemoryBar() {
