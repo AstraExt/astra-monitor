@@ -42,7 +42,9 @@ import {
     intelActivityFromRc6,
     intelFrequency,
     intelPower,
+    intelVram,
     parseIntelGpuSample,
+    parseMemTotal,
     parseSysfsNumber,
 } from '../src/gpu/intelGpuUtils.ts';
 
@@ -64,6 +66,9 @@ const STREAM_FIXTURE = new URL('./fixtures/intel_gpu_top-i915-hd630.json', impor
  */
 const SYSFS_FIXTURE = new URL('./fixtures/sysfs-i915-hd630/', import.meta.url);
 const sysfs = path => readFileSync(new URL(path, SYSFS_FIXTURE), 'utf8');
+
+/** First lines of /proc/meminfo of the same machine, the total the iGPU allocates from */
+const MEMINFO_FIXTURE = new URL('./fixtures/proc-meminfo-hd630', import.meta.url);
 
 /** Cuts a stream into samples the way ContinuousTaskManager's flush.match does */
 function flushStream(stream) {
@@ -152,7 +157,10 @@ describe(`Intel GPU, ${HARDWARE.driver} driver`, { concurrency: false }, () => {
         // in millidegrees, from the coretemp hwmon device
         assert.equal(sysfs('class/hwmon/hwmon1/name').trim(), 'coretemp');
         assert.equal(sysfs('class/hwmon/hwmon1/temp1_label').trim(), 'Package id 0');
-        assert.equal(Math.round(parseSysfsNumber(sysfs('class/hwmon/hwmon1/temp1_input')) / 1000), 46);
+        assert.equal(
+            Math.round(parseSysfsNumber(sysfs('class/hwmon/hwmon1/temp1_input')) / 1000),
+            46
+        );
 
         // The RAPL domain is located by its name, which is a word and not a number,
         // and its energy_uj is unreadable: neither may turn into NaN and reach the UI
@@ -206,6 +214,35 @@ describe(`Intel GPU, ${HARDWARE.driver} driver`, { concurrency: false }, () => {
 
         // A RAPL counter that wrapped around is not turned into a negative power
         assert.equal(intelPower(unhealthy, 5_000_000, 0, 1), undefined);
+    });
+
+    test('vram is the resident memory of every client, out of the system memory', () => {
+        const sample = flushStream(readFileSync(STREAM_FIXTURE, 'utf8'))
+            .map(chunk => parseIntelGpuSample(chunk))
+            .shift();
+
+        // An iGPU has a single 'system' region: its memory is a share of the RAM
+        const vram = intelVram(sample);
+        assert.deepEqual(vram.regions, [{ name: 'system', used: 525291520 }]);
+        assert.equal(vram.used, 525291520);
+
+        // Every client of the sample is summed, buffers shared between them included:
+        // ghostty alone holds 65150976 of the total
+        assert.equal(Object.keys(sample.clients).length, 9);
+        assert.ok(vram.used > parseFloat(sample.clients['4294952744'].memory.system.resident));
+
+        const total = parseMemTotal(readFileSync(MEMINFO_FIXTURE, 'utf8'));
+        assert.equal(total, 7484408 * 1024);
+        assert.equal(Math.round((vram.used / total) * 100), 7);
+
+        // Without intel_gpu_top, or before its first sample, there is nothing to sum
+        assert.equal(intelVram(undefined), undefined);
+        assert.equal(intelVram({ engines: {} }), undefined);
+        assert.equal(intelVram({ clients: { 1: { name: 'x', memory: {} } } }), undefined);
+
+        // A total that isn't there must not turn into a NaN denominator
+        assert.equal(parseMemTotal(''), undefined);
+        assert.equal(parseMemTotal('MemFree:          232516 kB\n'), undefined);
     });
 
     test('activity falls back to the time not spent in rc6', () => {

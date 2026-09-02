@@ -35,7 +35,9 @@ import {
     intelActivity,
     intelFrequency,
     intelPower,
+    intelVram,
     parseIntelGpuSample,
+    parseMemTotal,
     parseSysfsNumber,
 } from './intelGpuUtils.js';
 
@@ -389,6 +391,7 @@ export default class GpuMonitor extends Monitor {
     private intelPrevious: Map<string, { time: number; rc6?: number; energy?: number }> = new Map();
     private intelRaplPath?: string | null;
     private intelCpuTempPath?: string | null;
+    private systemMemoryTotal?: number | null;
 
     private updateDisplaysTask: CancellableTaskManager<boolean>;
 
@@ -2359,12 +2362,26 @@ export default class GpuMonitor extends Monitor {
         return this.intelCpuTempPath;
     }
 
+    private async getSystemMemoryTotal(): Promise<number | null> {
+        if(this.systemMemoryTotal !== undefined) return this.systemMemoryTotal;
+        this.systemMemoryTotal = null;
+
+        try {
+            const total = parseMemTotal(await Utils.readFileAsync('/proc/meminfo', true));
+            if(total) this.systemMemoryTotal = total;
+        } catch(e: any) {
+            Utils.warn('Failed to read the total system memory');
+        }
+        return this.systemMemoryTotal;
+    }
+
     private async updateIntelGpu(): Promise<boolean> {
         if(this.intelGpus.size === 0) return false;
 
-        const [raplPath, tempPath] = await Promise.all([
+        const [raplPath, tempPath, memoryTotal] = await Promise.all([
             this.getIntelRaplPath(),
             this.getIntelCpuTempPath(),
+            this.getSystemMemoryTotal(),
         ]);
 
         const gpus = new Map<string, GenericGpuInfo>();
@@ -2436,6 +2453,24 @@ export default class GpuMonitor extends Monitor {
                 const activity = intelActivity(sample, previous?.rc6, rc6Value, elapsed);
                 gpu.activity.pipes = activity.pipes;
                 if(activity.GFX != null) gpu.activity.GFX = activity.GFX;
+
+                //Vram: an integrated GPU allocates from system memory, so the memory of
+                //its clients is a share of it and not of a VRAM of its own
+                const vram = intelVram(sample);
+                if(vram) {
+                    gpu.vram.used = vram.used;
+                    if(memoryTotal) {
+                        gpu.vram.total = memoryTotal;
+                        gpu.vram.percent = (vram.used / memoryTotal) * 100;
+                        for(const region of vram.regions)
+                            gpu.vram.pipes.push({
+                                name: region.name,
+                                percent: (region.used / memoryTotal) * 100,
+                                used: region.used,
+                                total: memoryTotal,
+                            });
+                    }
+                }
 
                 //Top Processes
                 if(sample?.clients) {

@@ -167,3 +167,47 @@ export function intelFrequency(
     if(frequency == null || isNaN(frequency)) return undefined;
     return Math.round(frequency);
 }
+
+export type IntelVram = { used: number; regions: { name: string; used: number }[] };
+
+/**
+ * Memory of an integrated GPU: the resident bytes every client of a sample holds, per
+ * memory region ('system' on an iGPU). Buffers shared between clients are resident for
+ * each of them, so the sum is an upper bound rather than an exact figure; the JSON of
+ * intel_gpu_top carries no buffer id to deduplicate them with.
+ * Returns undefined when the sample carries no client memory at all.
+ */
+export function intelVram(sample: IntelInfoRaw | undefined): IntelVram | undefined {
+    const regions = new Map<string, number>();
+
+    for(const id in sample?.clients) {
+        const memory = sample?.clients?.[id]?.memory;
+        for(const region in memory) {
+            const resident = parseFloat(memory[region]?.resident ?? '');
+            if(isNaN(resident)) continue;
+            regions.set(region, (regions.get(region) ?? 0) + resident);
+        }
+    }
+    if(regions.size === 0) return undefined;
+
+    let used = 0;
+    const list = [];
+    for(const [name, value] of regions) {
+        used += value;
+        list.push({ name, used: value });
+    }
+    return { used, regions: list };
+}
+
+/**
+ * Total system memory in bytes, from the first line of /proc/meminfo, which holds it in
+ * kibibytes. An integrated GPU has no memory of its own: it is the only total its usage
+ * can be a percentage of. Returns undefined when the line is missing or not a number.
+ */
+export function parseMemTotal(content: string): number | undefined {
+    const match = /^MemTotal:\s+(\d+)\s*kB/m.exec(content);
+    if(!match) return undefined;
+    const value = parseInt(match[1], 10);
+    if(isNaN(value)) return undefined;
+    return value * 1024;
+}
