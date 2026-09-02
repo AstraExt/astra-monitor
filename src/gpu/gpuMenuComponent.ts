@@ -1494,6 +1494,8 @@ export default class GpuMenuComponent {
                 const pipe = popup.pipes[i];
                 if(i < pipeCount) {
                     const pipeData = data.activity.pipes![i];
+                    pipe.title.show();
+                    pipe.grid.show();
                     pipe.title.text = pipeData.name;
                     pipe.bar.setUsage([{ percent: pipeData.percent }]);
                     pipe.barLabel.text = pipeData.percent.toFixed(0) + '%';
@@ -1611,6 +1613,8 @@ export default class GpuMenuComponent {
                 const pipe = popup.pipes[i];
                 if(i < pipeCount) {
                     const pipeData = data.vram.pipes![i];
+                    pipe.title.show();
+                    pipe.grid.show();
                     pipe.title.text = pipeData.name;
                     pipe.bar.setUsage([{ percent: pipeData.percent }]);
                     pipe.barLabel.text = pipeData.percent.toFixed(0) + '%';
@@ -1706,6 +1710,7 @@ export default class GpuMenuComponent {
                 }
 
                 const processValues = popup.processes[processNum].values;
+                processValues[0].show();
                 processValues[0].text = processData.name;
 
                 for(let i = 1; i < numValues; i++) {
@@ -1795,6 +1800,7 @@ export default class GpuMenuComponent {
                     }
                     continue;
                 } else {
+                    category.name.show();
                     category.name.text = categoryData.name;
                 }
 
@@ -1803,6 +1809,10 @@ export default class GpuMenuComponent {
                     const sensorData = categoryData.sensors[k];
 
                     if(sensorData) {
+                        sensor.icon.show();
+                        sensor.label.show();
+                        sensor.value.show();
+
                         const icon = Utils.unitToIcon(sensorData.unit);
                         if(icon.gicon) sensor.icon.gicon = icon.gicon;
                         sensor.icon.fallbackIconName = icon.fallbackIconName;
