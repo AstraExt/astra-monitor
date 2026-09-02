@@ -23,11 +23,12 @@
  * intel_gpu_top stream framing, the sysfs values and the rc6 activity fallback. The
  * helpers come from src/gpu/intelGpuUtils.ts, the same ones the monitor uses.
  *
- * ALL THE DATA HERE WAS CAPTURED FROM ONE MACHINE, described by HARDWARE below:
- * an Intel Kaby Lake-S GT2 running the i915 driver. Other GPUs and other drivers
- * (notably xe, which lays out its sysfs attributes differently) are NOT covered.
- * To add one, capture its own data into test/fixtures/ the way this one did, put it in
- * a second describe() block and leave the existing one untouched.
+ * EVERY describe() BLOCK HOLDS THE DATA OF ONE MACHINE, described by the constant
+ * above it: an Intel Kaby Lake-S GT2 running the i915 driver, and an Arc contributed
+ * by a user. Other GPUs and other drivers (notably xe, which lays out its sysfs
+ * attributes differently) are NOT covered. To add one, capture its own data into
+ * test/fixtures/ the way these did, put it in a new describe() block and leave the
+ * existing ones untouched.
  *
  * Run: npm test
  */
@@ -254,5 +255,83 @@ describe(`Intel GPU, ${HARDWARE.driver} driver`, { concurrency: false }, () => {
         assert.equal(intelActivityFromRc6(previous, previous + 500, 0.5), 0); // always asleep
         assert.equal(intelActivityFromRc6(previous, previous + 2000, 1), 0); // clamped
         assert.equal(intelActivityFromRc6(previous, previous - 1000, 1), undefined); // wrapped
+    });
+});
+
+/**
+ * A second capture, contributed by a user running an Intel Arc GPU. Only the
+ * intel_gpu_top stream was captured: there is no sysfs, no /proc/meminfo and no record
+ * of the driver, so the expectations below cover the stream and the fallbacks the
+ * monitor takes when sysfs has nothing to offer.
+ */
+const ARC = {
+    gpu: 'Intel Arc (exact model not recorded)',
+    driver: 'not recorded',
+    contributor: 'silentsudin',
+};
+
+/** Captured with intel_gpu_top -J, ~1 s apart, no sysfs alongside it */
+const ARC_FIXTURE = new URL('./fixtures/intel_gpu_top-unknown-arc-silentsudin.json', import.meta.url);
+
+describe(`Intel GPU, ${ARC.gpu}, contributed by ${ARC.contributor}`, { concurrency: false }, () => {
+    const samples = flushStream(readFileSync(ARC_FIXTURE, 'utf8')).map(chunk =>
+        parseIntelGpuSample(chunk)
+    );
+
+    test('a stream that never opened its array is cut into samples all the same', () => {
+        // This capture holds no '[' at all: it starts on a blank line followed by the
+        // first sample, and the last one has no trailing comma, so the framing the
+        // hd630 capture exercises must not be a requirement
+        assert.equal(samples.length, 8);
+        assert.equal(samples[0].period.unit, 'ms');
+        assert.equal(samples[0].period.duration, 49.738576);
+
+        // The first sample of intel_gpu_top covers a fraction of the interval: the
+        // engines had nothing to report yet, and the second one is the first real one
+        assert.equal(samples[1].period.duration, 1034.131974);
+        assert.equal(samples[1].engines['Render/3D/0'].busy, 0.909035);
+        assert.equal(samples[1].engines['Blitter/0'].busy, 0.009005);
+    });
+
+    test('an idle sample reports no activity instead of falling back to rc6', () => {
+        // Every engine of the first sample is at 0: the pipes are still there, so the
+        // rc6 fallback is not taken and the GPU is reported idle rather than 39% busy
+        const idle = intelActivity(samples[0], undefined, undefined, 1);
+        assert.equal(idle.GFX, 0);
+        assert.equal(idle.pipes.length, 6);
+        assert.equal(samples[0].rc6.value, 61.276543);
+
+        const busy = intelActivity(samples[5], undefined, undefined, 1);
+        assert.equal(busy.GFX, 1.070172); // Render/3D/0, the busiest engine of the capture
+    });
+
+    test('a GPU power meter reporting zero is still a reading', () => {
+        // This GPU reports no power of its own, only the package one: 0 W is a number
+        // and is reported as it is, the RAPL fallback is only for a missing reading
+        assert.equal(samples[1].power.GPU, 0);
+        assert.equal(samples[1].power.Package, 4.579177);
+        assert.deepEqual(intelPower(samples[1], 0, 5_000_000, 1), { value: 0, unit: 'W' });
+    });
+
+    test('the frequency comes from the sample even when sysfs is not readable', () => {
+        // No sysfs was captured with this stream, which is also what the monitor sees
+        // when the card exposes no gt_cur_freq_mhz: the sample carries the frequency
+        assert.equal(intelFrequency(samples[1], ''), 14); // 13.537924 MHz, rounded
+        assert.equal(intelFrequency(samples[5], ''), 17);
+
+        // The first sample measured no actual frequency: 0 is reported, not the 784 MHz
+        // the driver was asked for
+        assert.equal(samples[0].frequency.requested, 784.099649);
+        assert.equal(intelFrequency(samples[0], ''), 0);
+    });
+
+    test('clients without memory report no vram at all', () => {
+        // intel_gpu_top only reports client memory when the driver exposes it: here it
+        // does not, for any of the 10 clients, and no total may be invented from that
+        assert.equal(Object.keys(samples[0].clients).length, 10);
+        assert.equal(samples[0].clients['4294948298'].name, 'nautilus');
+        assert.equal(samples[0].clients['4294948298'].memory, undefined);
+
+        for(const sample of samples) assert.equal(intelVram(sample), undefined);
     });
 });
