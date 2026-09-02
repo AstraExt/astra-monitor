@@ -29,6 +29,12 @@ import ContinuousTaskManager, {
 } from '../utils/continuousTaskManager.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import { EDID, EdidParser } from '../utils/edidParser.js';
+import {
+    INTEL_SAMPLE_FLUSH,
+    IntelInfoRaw,
+    intelActivityFromRc6,
+    parseIntelGpuSample,
+} from './intelGpuUtils.js';
 
 // eslint-disable-next-line no-shadow
 enum GpuSensorPriority {
@@ -358,31 +364,6 @@ export type DisplayData = {
     status: string;
     enabled: boolean;
     edid: EDID | null;
-};
-
-type IntelEngine = {
-    busy?: number;
-    sema?: number;
-    wait?: number;
-    unit?: string;
-};
-
-type IntelInfoRaw = {
-    period?: { duration?: number; unit?: string };
-    frequency?: { requested?: number; actual?: number; unit?: string };
-    interrupts?: { count?: number; unit?: string };
-    rc6?: { value?: number; unit?: string };
-    power?: { GPU?: number; Package?: number; unit?: string };
-    'imc-bandwidth'?: { reads?: number; writes?: number; unit?: string };
-    engines?: { [key: string]: IntelEngine };
-    clients?: {
-        [key: string]: {
-            name?: string;
-            pid?: string;
-            memory?: { [region: string]: { [field: string]: string } };
-            'engine-classes'?: { [key: string]: { busy?: string; unit?: string } };
-        };
-    };
 };
 
 type IntelDevice = {
@@ -2294,10 +2275,8 @@ export default class GpuMonitor extends Monitor {
 
             const task = new ContinuousTaskManager();
             task.listen(this, this.updateIntelGpuSample.bind(this, uuid));
-            // Every sample is a top-level JSON object of the stream: flush on its
-            // closing brace, the only one at the beginning of a line
             task.start(`${path}intel_gpu_top -J -s ${timer} -d drm:/dev/dri/${device.card}`, {
-                flush: { match: /^\},?\s*$/ },
+                flush: { match: INTEL_SAMPLE_FLUSH },
             });
             this.updateIntelGpuTasks.set(uuid, task);
         }
@@ -2312,14 +2291,8 @@ export default class GpuMonitor extends Monitor {
         if(!data.result) return;
 
         try {
-            // Strip the JSON stream framing: the opening '[' and the samples separators
-            let result = data.result.trim();
-            if(result.startsWith('[')) result = result.substring(1).trim();
-            if(result.startsWith(',')) result = result.substring(1).trim();
-            if(result.endsWith(',')) result = result.substring(0, result.length - 1).trim();
-            if(!result.startsWith('{')) return;
-
-            this.intelSamples.set(uuid, JSON.parse(result) as IntelInfoRaw);
+            const sample = parseIntelGpuSample(data.result);
+            if(sample) this.intelSamples.set(uuid, sample);
         } catch(e: any) {
             Utils.error('Error parsing intel_gpu_top output', e);
         }
@@ -2474,11 +2447,8 @@ export default class GpuMonitor extends Monitor {
                     else if(gpu.activity.pipes.length > 0)
                         gpu.activity.GFX = Math.max(...gpu.activity.pipes.map(p => p.percent));
                 } else if(rc6Value != null && previous?.rc6 != null && elapsed > 0) {
-                    // No intel_gpu_top: the time the GPU didn't spend in the rc6 sleep
-                    // state is a good enough approximation of its activity
-                    const rc6Percent = ((rc6Value - previous.rc6) / (elapsed * 1000)) * 100;
-                    if(rc6Percent >= 0)
-                        gpu.activity.GFX = Math.min(100, Math.max(0, 100 - rc6Percent));
+                    const activity = intelActivityFromRc6(previous.rc6, rc6Value, elapsed);
+                    if(activity != null) gpu.activity.GFX = activity;
                 }
 
                 //Top Processes
