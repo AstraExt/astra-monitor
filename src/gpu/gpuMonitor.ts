@@ -32,7 +32,9 @@ import { EDID, EdidParser } from '../utils/edidParser.js';
 import {
     INTEL_SAMPLE_FLUSH,
     IntelInfoRaw,
-    intelActivityFromRc6,
+    intelActivity,
+    intelFrequency,
+    intelPower,
     parseIntelGpuSample,
     parseSysfsNumber,
 } from './intelGpuUtils.js';
@@ -2431,24 +2433,9 @@ export default class GpuMonitor extends Monitor {
                 this.intelPrevious.set(uuid, { time: now, rc6: rc6Value, energy: energyValue });
 
                 //Activity
-                if(sample?.engines) {
-                    for(const name in sample.engines) {
-                        const busy = sample.engines[name]?.busy;
-                        if(busy == null || isNaN(busy)) continue;
-                        gpu.activity.pipes.push({ name, percent: busy });
-                    }
-
-                    const render = Object.keys(sample.engines).find(name =>
-                        name.startsWith('Render/3D')
-                    );
-                    if(render && sample.engines[render].busy != null)
-                        gpu.activity.GFX = sample.engines[render].busy;
-                    else if(gpu.activity.pipes.length > 0)
-                        gpu.activity.GFX = Math.max(...gpu.activity.pipes.map(p => p.percent));
-                } else if(rc6Value != null && previous?.rc6 != null && elapsed > 0) {
-                    const activity = intelActivityFromRc6(previous.rc6, rc6Value, elapsed);
-                    if(activity != null) gpu.activity.GFX = activity;
-                }
+                const activity = intelActivity(sample, previous?.rc6, rc6Value, elapsed);
+                gpu.activity.pipes = activity.pipes;
+                if(activity.GFX != null) gpu.activity.GFX = activity.GFX;
 
                 //Top Processes
                 if(sample?.clients) {
@@ -2513,12 +2500,12 @@ export default class GpuMonitor extends Monitor {
                     gpu.sensors.list?.push(sensor);
                 };
 
-                const currentFreq = sample?.frequency?.actual ?? parseSysfsNumber(curFreq);
-                if(currentFreq != null && !isNaN(currentFreq))
+                const currentFreq = intelFrequency(sample, curFreq);
+                if(currentFreq != null)
                     addSensor({
                         category: 'Frequency',
                         name: 'Current Frequency',
-                        value: Math.round(currentFreq),
+                        value: currentFreq,
                         unit: 'MHz',
                         priority: GpuSensorPriority.MAX,
                     });
@@ -2553,27 +2540,15 @@ export default class GpuMonitor extends Monitor {
                         priority: GpuSensorPriority.NONE,
                     });
 
-                const gpuPower = sample?.power?.GPU;
-                if(gpuPower != null && !isNaN(gpuPower)) {
+                const gpuPower = intelPower(sample, previous?.energy, energyValue, elapsed);
+                if(gpuPower)
                     addSensor({
                         category: 'Power',
                         name: 'GPU Power',
-                        value: parseFloat(gpuPower.toFixed(2)),
-                        unit: sample?.power?.unit ?? 'W',
+                        value: gpuPower.value,
+                        unit: gpuPower.unit,
                         priority: GpuSensorPriority.HIGH,
                     });
-                } else if(energyValue != null && previous?.energy != null && elapsed > 0) {
-                    // Counters wrap around: a negative delta is not a usable sample
-                    const delta = energyValue - previous.energy;
-                    if(delta >= 0)
-                        addSensor({
-                            category: 'Power',
-                            name: 'GPU Power',
-                            value: parseFloat((delta / 1000000 / elapsed).toFixed(2)),
-                            unit: 'W',
-                            priority: GpuSensorPriority.HIGH,
-                        });
-                }
 
                 const packagePower = sample?.power?.Package;
                 if(packagePower != null && !isNaN(packagePower))

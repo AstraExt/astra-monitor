@@ -38,7 +38,10 @@ import { readFileSync } from 'node:fs';
 
 import {
     INTEL_SAMPLE_FLUSH,
+    intelActivity,
     intelActivityFromRc6,
+    intelFrequency,
+    intelPower,
     parseIntelGpuSample,
     parseSysfsNumber,
 } from '../src/gpu/intelGpuUtils.ts';
@@ -156,6 +159,53 @@ describe(`Intel GPU, ${HARDWARE.driver} driver`, { concurrency: false }, () => {
         assert.equal(sysfs('class/powercap/intel-rapl:0:1/name').trim(), 'uncore');
         assert.equal(parseSysfsNumber(sysfs('class/powercap/intel-rapl:0:1/name')), undefined);
         assert.equal(parseSysfsNumber(sysfs('class/powercap/intel-rapl:0:1/energy_uj')), undefined);
+    });
+
+    test('a sample of intel_gpu_top wins over sysfs', () => {
+        const sample = flushStream(readFileSync(STREAM_FIXTURE, 'utf8'))
+            .map(chunk => parseIntelGpuSample(chunk))
+            .shift();
+        const rc6 = parseSysfsNumber(sysfs('class/drm/card1/power/rc6_residency_ms'));
+
+        const activity = intelActivity(sample, rc6, rc6 + 950, 1);
+        assert.equal(activity.GFX, 54.033823); // Render/3D of the sample, not the 5% of rc6
+        assert.equal(activity.pipes.length, 4);
+
+        assert.deepEqual(intelPower(sample, 0, 5_000_000, 1), { value: 1.37, unit: 'W' });
+        assert.equal(intelFrequency(sample, sysfs('class/drm/card1/gt_cur_freq_mhz')), 247);
+    });
+
+    test('without intel_gpu_top everything comes from sysfs', () => {
+        // No sample at all: the binary is missing, or was killed, or reported nothing yet
+        const rc6 = parseSysfsNumber(sysfs('class/drm/card1/power/rc6_residency_ms'));
+
+        const activity = intelActivity(undefined, rc6, rc6 + 950, 1);
+        assert.equal(activity.GFX, 5);
+        assert.deepEqual(activity.pipes, []);
+
+        // 5 J over 1 s, read from the RAPL counter in microjoules
+        assert.deepEqual(intelPower(undefined, 0, 5_000_000, 1), { value: 5, unit: 'W' });
+        assert.equal(intelFrequency(undefined, sysfs('class/drm/card1/gt_cur_freq_mhz')), 400);
+    });
+
+    test('a sample that reports nothing falls back to sysfs as well', () => {
+        // intel_gpu_top keeps running but its sample is empty or partial: without a
+        // permission to read the engines it emits them empty, and without a supported
+        // power meter it omits the power entirely
+        const rc6 = parseSysfsNumber(sysfs('class/drm/card1/power/rc6_residency_ms'));
+        const unhealthy = { engines: {}, frequency: {}, power: {} };
+
+        assert.equal(intelActivity(unhealthy, rc6, rc6 + 950, 1).GFX, 5);
+        assert.deepEqual(intelPower(unhealthy, 0, 5_000_000, 1), { value: 5, unit: 'W' });
+        assert.equal(intelFrequency(unhealthy, sysfs('class/drm/card1/gt_cur_freq_mhz')), 400);
+
+        // And when sysfs has nothing either, nothing is reported instead of a NaN
+        assert.deepEqual(intelActivity(unhealthy, undefined, undefined, 1), { pipes: [] });
+        assert.equal(intelPower(unhealthy, undefined, undefined, 1), undefined);
+        assert.equal(intelFrequency(unhealthy, ''), undefined);
+
+        // A RAPL counter that wrapped around is not turned into a negative power
+        assert.equal(intelPower(unhealthy, 5_000_000, 0, 1), undefined);
     });
 
     test('activity falls back to the time not spent in rc6', () => {

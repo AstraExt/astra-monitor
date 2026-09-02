@@ -95,3 +95,75 @@ export function intelActivityFromRc6(
     if(rc6Percent < 0) return undefined;
     return Math.min(100, Math.max(0, 100 - rc6Percent));
 }
+
+export type IntelActivity = { GFX?: number; pipes: { name: string; percent: number }[] };
+
+/**
+ * Activity of the GPU: the per engine numbers when intel_gpu_top is running, the rc6
+ * residency delta when it is absent or its sample carries no engine at all. Takes the
+ * residency counter in milliseconds and the elapsed time in seconds, and reports no
+ * activity at all rather than a wrong one when neither source is usable.
+ */
+export function intelActivity(
+    sample: IntelInfoRaw | undefined,
+    previousResidency: number | undefined,
+    currentResidency: number | undefined,
+    elapsed: number
+): IntelActivity {
+    const pipes: { name: string; percent: number }[] = [];
+    const engines = sample?.engines ?? {};
+    for(const name in engines) {
+        const busy = engines[name]?.busy;
+        if(busy == null || isNaN(busy)) continue;
+        pipes.push({ name, percent: busy });
+    }
+
+    if(pipes.length > 0) {
+        const render = pipes.find(pipe => pipe.name.startsWith('Render/3D'));
+        return {
+            GFX: render ? render.percent : Math.max(...pipes.map(pipe => pipe.percent)),
+            pipes,
+        };
+    }
+
+    if(previousResidency == null || currentResidency == null || elapsed <= 0) return { pipes };
+
+    const GFX = intelActivityFromRc6(previousResidency, currentResidency, elapsed);
+    return GFX == null ? { pipes } : { GFX, pipes };
+}
+
+/**
+ * Power drawn by the GPU: the number of a sample when intel_gpu_top is running, the
+ * delta of the RAPL energy counter when it is absent or doesn't report power. Takes the
+ * counter in microjoules and the elapsed time in seconds, and returns undefined when the
+ * counter wrapped around, since a negative delta is not a usable sample.
+ */
+export function intelPower(
+    sample: IntelInfoRaw | undefined,
+    previousEnergy: number | undefined,
+    currentEnergy: number | undefined,
+    elapsed: number
+): { value: number; unit: string } | undefined {
+    const power = sample?.power?.GPU;
+    if(power != null && !isNaN(power))
+        return { value: parseFloat(power.toFixed(2)), unit: sample?.power?.unit ?? 'W' };
+
+    if(previousEnergy == null || currentEnergy == null || elapsed <= 0) return undefined;
+
+    const delta = currentEnergy - previousEnergy;
+    if(delta < 0) return undefined;
+    return { value: parseFloat((delta / 1000000 / elapsed).toFixed(2)), unit: 'W' };
+}
+
+/**
+ * Current frequency in MHz, rounded for display: the number of a sample when
+ * intel_gpu_top is running, the contents of gt_cur_freq_mhz when it is absent.
+ */
+export function intelFrequency(
+    sample: IntelInfoRaw | undefined,
+    curFreq: string
+): number | undefined {
+    const frequency = sample?.frequency?.actual ?? parseSysfsNumber(curFreq);
+    if(frequency == null || isNaN(frequency)) return undefined;
+    return Math.round(frequency);
+}
