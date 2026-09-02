@@ -71,6 +71,17 @@ export function parseIntelGpuSample(data: string): IntelInfoRaw | undefined {
 }
 
 /**
+ * Reads one of the single value files of the i915 sysfs interface: they hold a plain
+ * integer followed by a newline. Returns undefined when the file is empty or not a
+ * number, which happens when the driver doesn't expose that attribute.
+ */
+export function parseSysfsNumber(content: string): number | undefined {
+    const value = parseFloat(content.trim());
+    if(isNaN(value) || !isFinite(value)) return undefined;
+    return value;
+}
+
+/**
  * Activity of a GPU without intel_gpu_top: the time it didn't spend in the rc6 sleep
  * state is a good enough approximation. Takes the residency counter in milliseconds
  * and the elapsed time in seconds, returns undefined when the counter wrapped around.

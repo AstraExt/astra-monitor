@@ -34,6 +34,7 @@ import {
     IntelInfoRaw,
     intelActivityFromRc6,
     parseIntelGpuSample,
+    parseSysfsNumber,
 } from './intelGpuUtils.js';
 
 // eslint-disable-next-line no-shadow
@@ -2425,10 +2426,8 @@ export default class GpuMonitor extends Monitor {
                 const now = GLib.get_monotonic_time();
                 const previous = this.intelPrevious.get(uuid);
                 const elapsed = previous ? (now - previous.time) / 1000000 : 0;
-                const rc6Value = Utils.isNumeric(rc6Residency.trim())
-                    ? parseFloat(rc6Residency)
-                    : undefined;
-                const energyValue = Utils.isNumeric(energy.trim()) ? parseFloat(energy) : undefined;
+                const rc6Value = parseSysfsNumber(rc6Residency);
+                const energyValue = parseSysfsNumber(energy);
                 this.intelPrevious.set(uuid, { time: now, rc6: rc6Value, energy: energyValue });
 
                 //Activity
@@ -2514,9 +2513,7 @@ export default class GpuMonitor extends Monitor {
                     gpu.sensors.list?.push(sensor);
                 };
 
-                const currentFreq =
-                    sample?.frequency?.actual ??
-                    (Utils.isNumeric(curFreq.trim()) ? parseFloat(curFreq) : undefined);
+                const currentFreq = sample?.frequency?.actual ?? parseSysfsNumber(curFreq);
                 if(currentFreq != null && !isNaN(currentFreq))
                     addSensor({
                         category: 'Frequency',
@@ -2536,20 +2533,22 @@ export default class GpuMonitor extends Monitor {
                         priority: GpuSensorPriority.LOW,
                     });
 
-                if(Utils.isNumeric(maxFreq.trim()))
+                const maxFreqValue = parseSysfsNumber(maxFreq);
+                if(maxFreqValue != null)
                     addSensor({
                         category: 'Frequency',
                         name: 'Max Frequency',
-                        value: parseFloat(maxFreq),
+                        value: maxFreqValue,
                         unit: 'MHz',
                         priority: GpuSensorPriority.NONE,
                     });
 
-                if(Utils.isNumeric(minFreq.trim()))
+                const minFreqValue = parseSysfsNumber(minFreq);
+                if(minFreqValue != null)
                     addSensor({
                         category: 'Frequency',
                         name: 'Min Frequency',
-                        value: parseFloat(minFreq),
+                        value: minFreqValue,
                         unit: 'MHz',
                         priority: GpuSensorPriority.NONE,
                     });
@@ -2586,11 +2585,12 @@ export default class GpuMonitor extends Monitor {
                         priority: GpuSensorPriority.NONE,
                     });
 
-                if(temperature && Utils.isNumeric(temperature.trim()))
+                const temperatureValue = parseSysfsNumber(temperature);
+                if(temperatureValue != null)
                     addSensor({
                         category: 'Temperature',
                         name: 'CPU Package',
-                        value: Math.round(parseFloat(temperature) / 1000),
+                        value: Math.round(temperatureValue / 1000),
                         unit: '°C',
                         priority: GpuSensorPriority.MEDIUM,
                     });
