@@ -335,12 +335,6 @@ export default class StorageMonitor extends Monitor {
 
         this.storageIOTopStarting = true;
         try {
-            const pkexecPath = await Utils.getPkexecPathAsync();
-            if(pkexecPath === false) {
-                Utils.error('pkexec not found');
-                return;
-            }
-
             const iotopPath = await Utils.getIotopPathAsync();
             if(iotopPath === false) {
                 Utils.error('iotop not found');
@@ -352,7 +346,17 @@ export default class StorageMonitor extends Monitor {
             const interval = Math.max(1, Math.min(Math.round(this.updateFrequency), 15));
             const num = Math.max(1, Math.round(60 / interval));
 
-            const command = `${pkexecPath}pkexec ${iotopPath}iotop -bPokq -d ${interval} -n ${num}`;
+            let command: string;
+            if(await Utils.iotopHasCapsAsync(true)) {
+                command = `${iotopPath}iotop -bPokq -d ${interval} -n ${num}`;
+            } else {
+                const pkexecPath = await Utils.getPkexecPathAsync();
+                if(pkexecPath === false) {
+                    Utils.error('pkexec not found');
+                    return;
+                }
+                command = `${pkexecPath}pkexec ${iotopPath}iotop -bPokq -d ${interval} -n ${num}`;
+            }
             this.updateStorageIOTopTask.start(command, {
                 flush: { idle: 100 },
             });
@@ -1057,28 +1061,47 @@ export default class StorageMonitor extends Monitor {
             const lines = output.split('\n');
             const topProcesses = [];
 
+            // iotop runs in the user's locale, so decimal values may use a comma
+            // as the decimal separator (e.g. "270,79").
+            const parseIotopNumber = (value: string) => parseFloat(String(value).replace(',', '.'));
+
             for(const line of lines) {
                 const fields = line.trim().split(/\s+/);
-                if(fields.length < 9 || !Utils.isNumeric(fields[0])) {
+                if(fields.length < 8 || !Utils.isNumeric(fields[0])) {
                     continue;
                 }
 
                 const pid = parseInt(fields[0]);
                 //const priority = parseInt(fields[1]);
                 //const user = fields[2];
-                const read = parseFloat(fields[3]) * 1024;
+                const read = parseIotopNumber(fields[3]) * 1024;
                 //const readUnit = fields[4];
-                const write = parseFloat(fields[5]) * 1024;
+                const write = parseIotopNumber(fields[5]) * 1024;
                 //const writeUnit = fields[6];
-                const swapin = fields[7];
 
-                let io = 1;
-                if(swapin === '?unavailable?') {
-                    // skip io if swapin is unavailable
-                    io--;
+                if(Number.isNaN(read) || Number.isNaN(write)) {
+                    continue;
                 }
 
-                const command = fields.slice(8 + io).join(' ');
+                // After the DISK READ/WRITE columns (each is a value followed by
+                // its unit) come the SWAPIN and IO columns. Depending on the iotop
+                // implementation and whether delay accounting is available, each of
+                // them is either a percentage value followed by a separate '%'
+                // token, or a single '?unavailable?' token. The position of the
+                // command depends on those columns, so skip them instead of
+                // assuming a fixed index.
+                let cmdIndex = 7;
+                for(let col = 0; col < 2 && cmdIndex < fields.length; col++) {
+                    if(fields[cmdIndex] === '?unavailable?') {
+                        cmdIndex++;
+                        continue;
+                    }
+                    cmdIndex++;
+                    if(fields[cmdIndex] === '%') cmdIndex++;
+                }
+
+                const command = fields.slice(cmdIndex).join(' ');
+                if(!command) continue;
 
                 topProcesses.push({
                     process: {

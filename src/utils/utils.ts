@@ -254,6 +254,10 @@ export default class Utils {
         Utils.lspciPromise = undefined;
         Utils.nethogsCaps = undefined;
         Utils.nethogsCapsPromise = undefined;
+        Utils.nethogsCapsTime = undefined;
+        Utils.iotopCaps = undefined;
+        Utils.iotopCapsPromise = undefined;
+        Utils.iotopCapsTime = undefined;
         Utils.cachedLmSensorSources = undefined;
         Utils.sensorSourcesPromise = undefined;
     }
@@ -338,6 +342,7 @@ export default class Utils {
             Utils.sensorsMonitor,
         ];
         for(const monitor of monitors) {
+            monitor?.stop();
             monitor?.destroy();
         }
     }
@@ -790,7 +795,7 @@ export default class Utils {
     static canMonitorGpu(gpu: GpuInfo): boolean {
         if(Utils.isAmdGpu(gpu)) return Utils.hasAmdGpuTop();
         if(Utils.isNvidiaGpu(gpu)) return Utils.hasNvidiaSmi();
-        //if(Utils.isIntelGpu(gpu)) return Utils.hasIntelGpuTop();
+        if(Utils.isIntelGpu(gpu)) return Utils.hasIntelGpuTop();
         return false;
     }
 
@@ -2864,6 +2869,19 @@ export default class Utils {
 
     private static nethogsCaps: boolean | undefined = undefined;
     private static nethogsCapsPromise: Promise<boolean> | undefined = undefined;
+    private static nethogsCapsTime: number | undefined = undefined;
+    private static iotopCaps: boolean | undefined = undefined;
+    private static iotopCapsPromise: Promise<boolean> | undefined = undefined;
+    private static iotopCapsTime: number | undefined = undefined;
+    static capsCheckTTLMs = 30_000;
+
+    static nethogsCapsFresh(): boolean {
+        return (
+            Utils.nethogsCapsTime !== undefined &&
+            Date.now() - Utils.nethogsCapsTime < Utils.capsCheckTTLMs
+        );
+    }
+
     static nethogsHasCapsCached(): boolean | undefined {
         return Utils.nethogsCaps;
     }
@@ -2872,14 +2890,19 @@ export default class Utils {
         return Utils.nethogsCaps ?? false;
     }
 
-    static async nethogsHasCapsAsync(): Promise<boolean> {
-        if(Utils.nethogsCaps !== undefined) return Utils.nethogsCaps;
-        if(Utils.nethogsCapsPromise) return Utils.nethogsCapsPromise;
+    static async nethogsHasCapsAsync(force: boolean = false): Promise<boolean> {
+        if(!force && Utils.nethogsCaps !== undefined && Utils.nethogsCapsFresh()) {
+            return Utils.nethogsCaps;
+        }
+        if(!force && Utils.nethogsCapsPromise) {
+            return Utils.nethogsCapsPromise;
+        }
 
         Utils.nethogsCapsPromise = (async () => {
             const nethogsPath = await Utils.getNethogsPathAsync();
             if(nethogsPath === false) {
                 Utils.nethogsCaps = false;
+                Utils.nethogsCapsTime = Date.now();
                 return false;
             }
 
@@ -2887,6 +2910,7 @@ export default class Utils {
             const stdout = await Utils.runAsyncCommandOptional(`getcap ${nethogs}`);
             if(stdout === null) {
                 Utils.nethogsCaps = false;
+                Utils.nethogsCapsTime = Date.now();
                 return false;
             }
 
@@ -2909,12 +2933,80 @@ export default class Utils {
                 });
 
             Utils.nethogsCaps = hasCap('cap_net_admin') && hasCap('cap_net_raw');
+            Utils.nethogsCapsTime = Date.now();
             return Utils.nethogsCaps;
         })().finally(() => {
             Utils.nethogsCapsPromise = undefined;
         });
 
         return Utils.nethogsCapsPromise;
+    }
+
+    static iotopCapsFresh(): boolean {
+        return (
+            Utils.iotopCapsTime !== undefined &&
+            Date.now() - Utils.iotopCapsTime < Utils.capsCheckTTLMs
+        );
+    }
+
+    static iotopHasCapsCached(): boolean | undefined {
+        return Utils.iotopCaps;
+    }
+
+    static iotopHasCaps(): boolean {
+        return Utils.iotopCaps ?? false;
+    }
+
+    static async iotopHasCapsAsync(force: boolean = false): Promise<boolean> {
+        if(!force && Utils.iotopCaps !== undefined && Utils.iotopCapsFresh()) {
+            return Utils.iotopCaps;
+        }
+        if(!force && Utils.iotopCapsPromise) {
+            return Utils.iotopCapsPromise;
+        }
+
+        Utils.iotopCapsPromise = (async () => {
+            const iotopPath = await Utils.getIotopPathAsync();
+            if(iotopPath === false) {
+                Utils.iotopCaps = false;
+                Utils.iotopCapsTime = Date.now();
+                return false;
+            }
+
+            const iotop = `${iotopPath}iotop`;
+            const stdout = await Utils.runAsyncCommandOptional(`getcap ${iotop}`);
+            if(stdout === null) {
+                Utils.iotopCaps = false;
+                Utils.iotopCapsTime = Date.now();
+                return false;
+            }
+
+            // skip the path token; handles both getcap output formats:
+            //   new (libcap >= 2.42): /usr/bin/iotop cap_net_admin=ep
+            //   old:                  /usr/bin/iotop = cap_net_admin+ep
+            const clauses = stdout.trim().split(/\s+/).slice(1);
+
+            // a capability is granted if it appears in a clause whose flags
+            // include both 'e' (effective) and 'p' (permitted)
+            const hasCap = (cap: string) =>
+                clauses.some(clause => {
+                    const [names, flags] = clause.split(/[=+]/, 2);
+                    return (
+                        flags !== undefined &&
+                        names.split(',').includes(cap) &&
+                        flags.includes('e') &&
+                        flags.includes('p')
+                    );
+                });
+
+            Utils.iotopCaps = hasCap('cap_net_admin');
+            Utils.iotopCapsTime = Date.now();
+            return Utils.iotopCaps;
+        })().finally(() => {
+            Utils.iotopCapsPromise = undefined;
+        });
+
+        return Utils.iotopCapsPromise;
     }
 
     static getGpuUUID(gpuInfo: GpuInfo): string {

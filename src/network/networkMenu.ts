@@ -198,6 +198,7 @@ export default class NetworkMenu extends MenuBase {
     private topProcesses!: TopProcesses;
     private topProcessesPopup!: TopProcessesPopup;
     private privilegedTopProcesses: boolean = false;
+    private capsRetryId: number | undefined = undefined;
 
     private publicIPLabel!: St.Label;
     private publicIPContainer!: St.Button;
@@ -584,15 +585,21 @@ export default class NetworkMenu extends MenuBase {
                 this.topProcesses.subSeparator?.show();
                 this.topProcesses.hoverButton.hide();
             }
+
+            if(!hasCaps && this.capsRetryId === undefined) {
+                this.capsRetryId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, Utils.capsCheckTTLMs, () => {
+                    this.capsRetryId = undefined;
+                    this.refreshNethogsCapsUi();
+                    return GLib.SOURCE_REMOVE;
+                });
+            }
         };
 
-        const cachedCaps = Utils.nethogsHasCapsCached();
-        if(cachedCaps !== undefined) {
-            applyCaps(cachedCaps);
+        if(Utils.nethogsCapsFresh()) {
+            applyCaps(Utils.nethogsHasCapsCached() as boolean);
             return;
         }
-
-        Utils.nethogsHasCapsAsync()
+        Utils.nethogsHasCapsAsync(true)
             .then(hasCaps => {
                 applyCaps(hasCaps);
             })
@@ -3019,6 +3026,10 @@ export default class NetworkMenu extends MenuBase {
         this.onClose();
 
         this.stopPrivilegedTopProcesses();
+        if(this.capsRetryId !== undefined) {
+            GLib.source_remove(this.capsRetryId);
+            this.capsRetryId = undefined;
+        }
         Utils.networkMonitor.unlisten(this, 'topProcessesStop');
 
         Config.clear(this);

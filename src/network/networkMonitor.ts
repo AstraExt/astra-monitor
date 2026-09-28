@@ -932,7 +932,7 @@ export default class NetworkMonitor extends Monitor {
                 return;
             }
 
-            const hasCaps = await Utils.nethogsHasCapsAsync();
+            const hasCaps = await Utils.nethogsHasCapsAsync(true);
             if(
                 (!force && !this.isListeningFor('topProcesses')) ||
                 !this.usesNethogsTopProcesses()

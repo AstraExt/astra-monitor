@@ -240,7 +240,7 @@ export default GObject.registerClass(
                 xAlign: Clutter.ActorAlign.START,
                 yAlign: Clutter.ActorAlign.FILL,
                 yExpand: true,
-                vertical: true,
+                orientation: Clutter.Orientation.VERTICAL,
                 width: 1,
             });
 

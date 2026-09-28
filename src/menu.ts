@@ -104,7 +104,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
             const boxLayout = new St.BoxLayout({
-                vertical: true,
+                orientation: Clutter.Orientation.VERTICAL,
             });
             scrollView.add_child(boxLayout);
 

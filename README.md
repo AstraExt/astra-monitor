@@ -238,7 +238,7 @@ _Note: This is an example configuration and may vary depending on your specific 
 
 ### GPUs
 
-GPU monitoring is supported for AMD and NVIDIA GPUs. Intel integrated GPUs are not currently supported.
+GPU monitoring is supported for AMD, NVIDIA and Intel GPUs.
 
 #### AMD GPUs
 
@@ -285,6 +285,28 @@ environment.systemPackages = with pkgs; [
 For NVIDIA GPUs, the `nvidia-smi` tool is required. This tool is typically included with the proprietary NVIDIA drivers.
 
 Please refer to the official documentation of your distribution for instructions on how to install the proprietary NVIDIA drivers.
+
+#### Intel GPUs
+
+For Intel GPUs (Integrated or Discrete), the `intel_gpu_top` tool (part of `intel-gpu-tools`) is required to enable monitoring.
+
+##### Ubuntu / Debian
+
+```bash
+sudo apt install intel-gpu-tools
+```
+
+##### Fedora
+
+```bash
+sudo dnf install igt-gpu-tools
+```
+
+##### Arch Linux / Manjaro
+
+```bash
+sudo pacman -S intel-gpu-tools
+```
 
 # Usage
 
