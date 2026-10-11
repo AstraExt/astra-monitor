@@ -1057,28 +1057,32 @@ export default class StorageMonitor extends Monitor {
             const lines = output.split('\n');
             const topProcesses = [];
 
+            // iotop-c prints the numbers in the user's locale, e.g. '270,79'
+            const parseNumber = (value: string) => parseFloat(value.replace(',', '.'));
+
             for(const line of lines) {
                 const fields = line.trim().split(/\s+/);
                 if(fields.length < 9 || !Utils.isNumeric(fields[0])) {
                     continue;
                 }
 
+                // SWAPIN and IO are a value followed by '%' each, or a single '?unavailable?'
+                // when the Python iotop finds no delay accounting
+                let commandIndex;
+                if(fields[7] === '?unavailable?') commandIndex = 8;
+                else if(fields[8] === '%' && fields[10] === '%') commandIndex = 11;
+                else continue;
+                if(fields.length <= commandIndex) continue;
+
                 const pid = parseInt(fields[0]);
                 //const priority = parseInt(fields[1]);
                 //const user = fields[2];
-                const read = parseFloat(fields[3]) * 1024;
+                const read = parseNumber(fields[3]) * 1024;
                 //const readUnit = fields[4];
-                const write = parseFloat(fields[5]) * 1024;
+                const write = parseNumber(fields[5]) * 1024;
                 //const writeUnit = fields[6];
-                const swapin = fields[7];
 
-                let io = 1;
-                if(swapin === '?unavailable?') {
-                    // skip io if swapin is unavailable
-                    io--;
-                }
-
-                const command = fields.slice(8 + io).join(' ');
+                const command = fields.slice(commandIndex).join(' ');
 
                 topProcesses.push({
                     process: {
