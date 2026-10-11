@@ -2429,18 +2429,7 @@ export default class GpuMonitor extends Monitor {
                 ) {
                     gpu.info.pipes = infoPipesCache.pipes;
                 } else {
-                    gpu.info.pipes.push({
-                        name: 'Device Name',
-                        data: Utils.getGPUModelName(device.gpu),
-                    });
-                    if(device.gpu.vendor)
-                        gpu.info.pipes.push({ name: 'Vendor', data: device.gpu.vendor });
-                    if(device.gpu.drivers?.length)
-                        gpu.info.pipes.push({
-                            name: 'Driver',
-                            data: device.gpu.drivers.join(', '),
-                        });
-                    gpu.info.pipes.push({ name: 'PCI', data: uuid });
+                    // Name, vendor, PCI address and drivers are in the info popup already
                     gpu.info.pipes.push({ name: 'DRM Card', data: device.card });
 
                     this.infoPipesCaches.set(uuid, {
@@ -2473,7 +2462,7 @@ export default class GpuMonitor extends Monitor {
                         gpu.vram.percent = (vram.used / memoryTotal) * 100;
                         for(const region of vram.regions)
                             gpu.vram.pipes.push({
-                                name: region.name,
+                                name: region.name === 'system' ? 'System Memory' : region.name,
                                 percent: (region.used / memoryTotal) * 100,
                                 used: region.used,
                                 total: memoryTotal,
@@ -2483,27 +2472,54 @@ export default class GpuMonitor extends Monitor {
 
                 //Top Processes
                 if(sample?.clients) {
+                    // The same columns for every process, as the headers come from the
+                    // first one: Render/3D and the memory first, since the compact menu
+                    // only shows the first two values. A client seen for the first time
+                    // has no engine-classes yet, so the columns are those of all clients
+                    const columns: string[] = [];
+                    let hasMemory = false;
+                    for(const id in sample.clients) {
+                        const client = sample.clients[id];
+                        for(const name in client?.['engine-classes'])
+                            if(!columns.includes(name)) columns.push(name);
+                        if(client?.memory) hasMemory = true;
+                    }
+                    if(hasMemory) columns.push('Memory');
+
+                    const defaultOrder = [
+                        'Render/3D',
+                        'Memory',
+                        'Video',
+                        'VideoEnhance',
+                        'Blitter',
+                        'Compute',
+                    ];
+                    columns.sort((a, b) => {
+                        let aIndex = defaultOrder.indexOf(a);
+                        if(aIndex < 0) aIndex = defaultOrder.length;
+                        let bIndex = defaultOrder.indexOf(b);
+                        if(bIndex < 0) bIndex = defaultOrder.length;
+                        return aIndex - bIndex;
+                    });
+
                     for(const id in sample.clients) {
                         const client = sample.clients[id];
                         if(!client?.name) continue;
 
-                        const engines = client['engine-classes'] ?? {};
-                        const enginePipes = [];
-                        for(const name in engines) {
-                            const busy = parseFloat(engines[name]?.busy ?? '');
-                            if(isNaN(busy)) continue;
-                            enginePipes.push({ name, value: busy, unit: '%' });
-                        }
-                        enginePipes.sort((a, b) => b.value - a.value);
-
-                        const pipes = enginePipes.slice(0, 1);
-
-                        let memory = 0;
-                        for(const region in client.memory) {
-                            const resident = parseFloat(client.memory[region]?.resident ?? '');
-                            if(!isNaN(resident)) memory += resident;
-                        }
-                        if(memory > 0) pipes.push({ name: 'Memory', value: memory, unit: 'B' });
+                        const pipes = columns.map(name => {
+                            if(name === 'Memory') {
+                                let memory = 0;
+                                for(const region in client.memory) {
+                                    const resident = parseFloat(
+                                        client.memory[region]?.resident ?? ''
+                                    );
+                                    if(!isNaN(resident)) memory += resident;
+                                }
+                                return { name, value: memory, unit: 'B' };
+                            }
+                            const busy = parseFloat(client['engine-classes']?.[name]?.busy ?? '');
+                            return { name, value: isNaN(busy) ? 0 : busy, unit: '%' };
+                        });
 
                         const pid = parseInt(client.pid ?? '', 10);
                         gpu.topProcesses.push({
@@ -2513,14 +2529,16 @@ export default class GpuMonitor extends Monitor {
                         });
                     }
 
-                    gpu.topProcesses.sort((a, b) => {
-                        const busy = (process: (typeof gpu.topProcesses)[0]) =>
-                            process.pipes.reduce(
-                                (points, pipe) => points + (pipe.unit === '%' ? pipe.value : 0),
-                                0
-                            );
-                        return busy(b) - busy(a);
-                    });
+                    // The busiest engine first, then the memory, which orders the idle ones
+                    type TopProcess = (typeof gpu.topProcesses)[0];
+                    const busy = (process: TopProcess) =>
+                        Math.max(
+                            0,
+                            ...process.pipes.map(pipe => (pipe.unit === '%' ? pipe.value : 0))
+                        );
+                    const memory = (process: TopProcess) =>
+                        process.pipes.find(pipe => pipe.name === 'Memory')?.value ?? 0;
+                    gpu.topProcesses.sort((a, b) => busy(b) - busy(a) || memory(b) - memory(a));
                 }
 
                 // Sensors
@@ -2547,7 +2565,7 @@ export default class GpuMonitor extends Monitor {
                 const currentFreq = intelFrequency(sample, curFreq);
                 if(currentFreq != null)
                     addSensor({
-                        category: 'Frequency',
+                        category: 'Clocks',
                         name: 'Current Frequency',
                         value: currentFreq,
                         unit: 'MHz',
@@ -2557,7 +2575,7 @@ export default class GpuMonitor extends Monitor {
                 const requestedFreq = sample?.frequency?.requested;
                 if(requestedFreq != null && !isNaN(requestedFreq))
                     addSensor({
-                        category: 'Frequency',
+                        category: 'Clocks',
                         name: 'Requested Frequency',
                         value: Math.round(requestedFreq),
                         unit: 'MHz',
@@ -2567,7 +2585,7 @@ export default class GpuMonitor extends Monitor {
                 const maxFreqValue = parseSysfsNumber(maxFreq);
                 if(maxFreqValue != null)
                     addSensor({
-                        category: 'Frequency',
+                        category: 'Clocks',
                         name: 'Max Frequency',
                         value: maxFreqValue,
                         unit: 'MHz',
@@ -2577,7 +2595,7 @@ export default class GpuMonitor extends Monitor {
                 const minFreqValue = parseSysfsNumber(minFreq);
                 if(minFreqValue != null)
                     addSensor({
-                        category: 'Frequency',
+                        category: 'Clocks',
                         name: 'Min Frequency',
                         value: minFreqValue,
                         unit: 'MHz',
