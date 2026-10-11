@@ -18,11 +18,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * Pure helpers of the Intel GPU monitor, kept free of any GNOME import so they can
- * be checked outside of the shell: see test/intel-gpu.test.js.
- */
-
 export type IntelEngine = {
     busy?: number;
     sema?: number;

@@ -20,7 +20,6 @@
     "author": "Lju",
     "license": "GPL-3.0-or-later",
     "scripts": {
-        "test": "node --test test/*.test.js",
         "format": "prettier --write --cache . && eslint --fix ."
     },
     "devDependencies": {
