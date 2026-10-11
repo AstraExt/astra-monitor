@@ -32,6 +32,7 @@ import Config from '../config.js';
 import Signal from '../signal.js';
 import Utils from '../utils/utils.js';
 import AnimationUtils from '../utils/animationUtils.js';
+import ShellCompat from '../utils/shellCompat.js';
 import Grid from '../grid.js';
 import SensorsMenu from './sensorsMenu.js';
 import { SensorsData } from './sensorsMonitor.js';
@@ -201,7 +202,7 @@ export default GObject.registerClass(
                 xAlign: Clutter.ActorAlign.START,
                 yAlign: Clutter.ActorAlign.FILL,
                 yExpand: true,
-                vertical: true,
+                ...ShellCompat.getBoxLayoutParams(true),
                 width: 1,
             });
 

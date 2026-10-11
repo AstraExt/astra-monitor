@@ -31,6 +31,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Signal from './signal.js';
 import Utils from './utils/utils.js';
 import AnimationUtils from './utils/animationUtils.js';
+import ShellCompat from './utils/shellCompat.js';
 import Grid from './grid.js';
 import Config from './config.js';
 import Monitor from './monitor.js';
@@ -104,7 +105,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
             const boxLayout = new St.BoxLayout({
-                vertical: true,
+                ...ShellCompat.getBoxLayoutParams(true)
             });
             scrollView.add_child(boxLayout);
 

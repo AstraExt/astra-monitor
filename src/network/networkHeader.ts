@@ -31,6 +31,7 @@ import Config from '../config.js';
 import Signal from '../signal.js';
 import Utils from '../utils/utils.js';
 import AnimationUtils from '../utils/animationUtils.js';
+import ShellCompat from '../utils/shellCompat.js';
 import NetworkMenu from './networkMenu.js';
 import NetworkGraph from './networkGraph.js';
 import NetworkBars from './networkBars.js';
@@ -240,7 +241,7 @@ export default GObject.registerClass(
                 xAlign: Clutter.ActorAlign.START,
                 yAlign: Clutter.ActorAlign.FILL,
                 yExpand: true,
-                vertical: true,
+                ...ShellCompat.getBoxLayoutParams(true),
                 width: 1,
             });
 

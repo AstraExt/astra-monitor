@@ -63,7 +63,6 @@ export default GObject.registerClass(
             this.headers = new Map();
 
             this.box = new St.BoxLayout({
-                vertical: false,
                 xExpand: true,
                 yExpand: true,
                 xAlign: Clutter.ActorAlign.START,
