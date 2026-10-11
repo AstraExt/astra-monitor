@@ -1,3 +1,9 @@
+# Astra Monitor 43 - TO BE RELEASED
+
+### Bug fixes
+
+-   Fixed the extension failing to load on GNOME 51 with `Error: No property vertical on StBoxLayout`, by using the `orientation` property on GNOME 48+ in place of the removed `vertical` property. [[#240](https://github.com/AstraExt/astra-monitor/issues/240)] [[#246](https://github.com/AstraExt/astra-monitor/pull/246)] (Thanks to [@domotick](https://github.com/domotick))
+
 # Astra Monitor 42 - August 11 2026
 
 ### Compatibility
