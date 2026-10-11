@@ -169,6 +169,17 @@ export default class Welcome {
                 ),
                 icon: 'am-dialog-warning-symbolic',
             },
+            {
+                check: Utils.getGPUsListAsync().then(
+                    async gpus =>
+                        !gpus.some(gpu => Utils.isIntelGpu(gpu)) ||
+                        (await Utils.intelGpuTopCanReadCountersAsync())
+                ),
+                title: _(
+                    "Intel GPU detected but 'intel_gpu_top' can't access the GPU counters: some optional features will be disabled!"
+                ),
+                icon: 'am-dialog-warning-symbolic',
+            },
         ];
         if(!Utils.hasHwmon()) {
             check = false;

@@ -902,6 +902,69 @@ export default class Utils {
         return (await Utils.getIntelGpuTopPathAsync()) !== false;
     }
 
+    /**
+     * intel_gpu_top reads the GPU performance counters, which most kernels keep from
+     * normal users: what grants them depends on the distribution (cap_perfmon is not
+     * enough on Debian), so intel_gpu_top itself is run to tell. It prints its first
+     * sample right after opening them, or stops at once when it isn't allowed to.
+     * Resolves to false only in the latter case.
+     */
+    static async intelGpuTopCanReadCountersAsync(): Promise<boolean> {
+        const path = await Utils.getIntelGpuTopPathAsync();
+        if(path === false) return true;
+
+        let proc: Gio.Subprocess;
+        try {
+            proc = Gio.Subprocess.new(
+                [`${path}intel_gpu_top`, '-J', '-s', '100'],
+                Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
+            );
+        } catch(e: any) {
+            return true;
+        }
+
+        const read = (stream: Gio.InputStream | null, count: number) =>
+            new Promise<string>(resolve => {
+                if(!stream) {
+                    resolve('');
+                    return;
+                }
+                stream.read_bytes_async(count, GLib.PRIORITY_DEFAULT, null, (_source, result) => {
+                    try {
+                        const bytes = stream.read_bytes_finish(result);
+                        resolve(new TextDecoder('utf-8').decode(bytes.toArray()));
+                    } catch(e: any) {
+                        resolve('');
+                    }
+                });
+            });
+        const stop = () => {
+            try {
+                proc.force_exit();
+            } catch(e: any) {
+                /* empty */
+            }
+        };
+
+        // Neither a sample nor an error after a while: nothing to tell
+        let timeoutId: number | undefined = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, () => {
+            timeoutId = undefined;
+            stop();
+            return GLib.SOURCE_REMOVE;
+        });
+
+        const started = (await read(proc.get_stdout_pipe(), 1)) !== '';
+        if(timeoutId !== undefined) GLib.source_remove(timeoutId);
+        stop();
+        if(started) return true;
+
+        // It stopped without printing a sample: its error tells whether it wasn't allowed
+        const error = await read(proc.get_stderr_pipe(), 4096);
+        return !/Failed to initialize PMU! \((Permission denied|Operation not permitted)\)/.test(
+            error
+        );
+    }
+
     static async hasCoresFrequency(): Promise<boolean> {
         const cpuPresent = await Utils.readFileAsync('/sys/devices/system/cpu/present', true);
         if(!cpuPresent) return false;

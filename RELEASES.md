@@ -10,7 +10,7 @@ To start monitoring your Intel GPU, switch on its **Monitor** option in **Prefer
 
 -   **Out of the box**: with the `i915` driver, both Discrete and Integrated GPUs show their frequency and an estimate of their activity, without any additional package. Integrated GPUs also show the CPU package temperature, since they share the CPU die.
 
--   **With `intel_gpu_top`**: installing `intel-gpu-tools` adds the activity of every engine (Render/3D, Video, Blitter...), the top processes with the memory they use and, on integrated GPUs, the memory usage and the power. To read the GPU counters as a normal user, `intel_gpu_top` needs the `cap_perfmon` capability.
+-   **With `intel_gpu_top`**: installing `intel-gpu-tools` adds the activity of every engine (Render/3D, Video, Blitter...), the top processes with the memory they use and, on integrated GPUs, the memory usage and the power. To read the GPU counters as a normal user, `intel_gpu_top` needs the `cap_perfmon` capability (not enough on Debian): the Welcome page of the preferences warns when it can't access them.
 
     _Check the [documentation](https://github.com/AstraExt/astra-monitor/blob/main/README.md#intel-gpus) for more details._
 

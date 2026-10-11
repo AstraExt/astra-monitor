@@ -312,7 +312,7 @@ sudo pacman -S intel-gpu-tools
 
 ##### Granting access to the GPU counters
 
-`intel_gpu_top` reads the performance counters of the GPU, which a normal user cannot access on most distros: without access it stops right away, and Astra Monitor shows only the basic data described above. To allow it, grant `intel_gpu_top` the `cap_perfmon` capability (Linux 5.8 or newer):
+`intel_gpu_top` reads the performance counters of the GPU, which a normal user cannot access on most distros: without access it stops right away, Astra Monitor shows only the basic data described above, and the Welcome page of the preferences warns about it. To allow it, grant `intel_gpu_top` the `cap_perfmon` capability (Linux 5.8 or newer):
 
 1. Grant the capability using `setcap`:
 
@@ -330,6 +330,8 @@ sudo pacman -S intel-gpu-tools
     ```
 
 _Note: With this capability, any user who can run `intel_gpu_top` can read the performance counters of the system. A package update may replace the binary and drop the capability: in that case, run `setcap` again._
+
+_Note: Debian and Ubuntu restrict the performance counters further than other distros. On Ubuntu, `cap_perfmon` is enough with a kernel updated since November 2025; on Debian, with its default `kernel.perf_event_paranoid` value (3), it is not, and Astra Monitor keeps showing only the basic data._
 
 After granting the capability, disable and enable Astra Monitor again (or log out and back in) to restart `intel_gpu_top`.
 
