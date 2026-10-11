@@ -238,7 +238,7 @@ _Note: This is an example configuration and may vary depending on your specific 
 
 ### GPUs
 
-GPU monitoring is supported for AMD and NVIDIA GPUs. Intel integrated GPUs are not currently supported.
+GPU monitoring is supported for AMD, NVIDIA and Intel GPUs.
 
 #### AMD GPUs
 
@@ -285,6 +285,81 @@ environment.systemPackages = with pkgs; [
 For NVIDIA GPUs, the `nvidia-smi` tool is required. This tool is typically included with the proprietary NVIDIA drivers.
 
 Please refer to the official documentation of your distribution for instructions on how to install the proprietary NVIDIA drivers.
+
+#### Intel GPUs
+
+Intel GPUs (Discrete or Integrated) using the `i915` driver work out of the box: their frequency and an estimate of their activity are read from the driver, and integrated GPUs also show the CPU package temperature, since they share the CPU die.
+
+For the full picture, install `intel_gpu_top` (part of `intel-gpu-tools`): it adds the activity of every engine (Render/3D, Video, Blitter...), the top processes with the memory they use and, on integrated GPUs, the memory usage and the power.
+
+##### Ubuntu / Debian
+
+```bash
+sudo apt install intel-gpu-tools
+```
+
+##### Fedora
+
+```bash
+sudo dnf install igt-gpu-tools
+```
+
+##### Arch Linux / Manjaro
+
+```bash
+sudo pacman -S intel-gpu-tools
+```
+
+##### Granting access to the GPU counters
+
+`intel_gpu_top` reads the performance counters of the GPU, which a normal user cannot access on most distros: without access it stops right away, and Astra Monitor shows only the basic data described above. To allow it, grant `intel_gpu_top` the `cap_perfmon` capability (Linux 5.8 or newer):
+
+1. Grant the capability using `setcap`:
+
+    ```bash
+    sudo setcap cap_perfmon=ep $(which intel_gpu_top)
+    ```
+
+2. Verify the capability was set correctly:
+    ```bash
+    getcap $(which intel_gpu_top)
+    ```
+    You should see output similar to:
+    ```
+    /usr/bin/intel_gpu_top cap_perfmon=ep
+    ```
+
+_Note: With this capability, any user who can run `intel_gpu_top` can read the performance counters of the system. A package update may replace the binary and drop the capability: in that case, run `setcap` again._
+
+After granting the capability, disable and enable Astra Monitor again (or log out and back in) to restart `intel_gpu_top`.
+
+##### NixOS
+
+On NixOS, add `intel-gpu-tools` to your `configuration.nix` and grant the capability through a wrapper:
+
+```nix
+environment.systemPackages = with pkgs; [
+    intel-gpu-tools
+];
+
+security.wrappers = {
+    intel_gpu_top = {
+        source = "${pkgs.intel-gpu-tools}/bin/intel_gpu_top";
+        capabilities = "cap_perfmon=ep";
+        owner = "root";
+        group = "root";
+        permissions = "u+rx,g+x,o+x";
+    };
+};
+```
+
+_Note: This is an example configuration and may vary depending on your specific NixOS setup. Adjust the configuration as needed for your system._
+
+##### Limitations
+
+-   GPUs using the newer `xe` driver (such as Lunar Lake and Battlemage) are not supported yet: `intel_gpu_top` does not support them, and they expose their data differently.
+-   On integrated GPUs, the memory shown is the system memory used by the processes on the GPU. Buffers shared between processes are counted for each of them, so it can be higher than the actual usage.
+-   On discrete GPUs, memory usage, temperature and power are not shown yet.
 
 # Usage
 
