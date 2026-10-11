@@ -1,8 +1,25 @@
 # Astra Monitor 43 - TO BE RELEASED
 
+### Intel GPU Monitoring
+
+Intel GPUs are finally supported! This long-requested feature had been on hold for a lack of hardware to test on: a huge thanks to [@Kseen715](https://github.com/Kseen715) for implementing and testing it. [[#123](https://github.com/AstraExt/astra-monitor/issues/123)] [[#192](https://github.com/AstraExt/astra-monitor/issues/192)] [[#228](https://github.com/AstraExt/astra-monitor/issues/228)] [[#239](https://github.com/AstraExt/astra-monitor/pull/239)]
+
+To start monitoring your Intel GPU, switch on its **Monitor** option in **Preferences → GPU → General**. Here's what you get:
+
+-   **Out of the box**: with the `i915` driver, both Discrete and Integrated GPUs show their frequency and an estimate of their activity, without any additional package. Integrated GPUs also show the CPU package temperature, since they share the CPU die.
+
+-   **With `intel_gpu_top`**: installing `intel-gpu-tools` adds the activity of every engine (Render/3D, Video, Blitter...), the top processes with the memory they use and, on integrated GPUs, the memory usage and the power. To read the GPU counters as a normal user, `intel_gpu_top` needs the `cap_perfmon` capability.
+
+    _Check the [documentation](https://github.com/AstraExt/astra-monitor/blob/main/README.md#intel-gpus) for more details._
+
+-   **Not supported yet**: GPUs using the newer `xe` driver, such as Lunar Lake, Battlemage and Panther Lake. [[#222](https://github.com/AstraExt/astra-monitor/issues/222)]
+
+_Since this is a major change and it could only be tested on a limited set of hardware, we recommend you to test and report any issues you may encounter: [Astra Monitor issues](https://github.com/AstraExt/astra-monitor/issues)._
+
 ### Bug fixes
 
 -   Fixed the extension failing to load on GNOME 51 with `Error: No property vertical on StBoxLayout`, by using the `orientation` property on GNOME 48+ in place of the removed `vertical` property. [[#240](https://github.com/AstraExt/astra-monitor/issues/240)] [[#246](https://github.com/AstraExt/astra-monitor/pull/246)] (Thanks to [@domotick](https://github.com/domotick))
+-   Fixed the GPU popups (activity, VRAM, top processes and sensors) losing rows: once the number of entries went down, the hidden rows were not shown again when it grew back. [[#239](https://github.com/AstraExt/astra-monitor/pull/239)] (Thanks to [@Kseen715](https://github.com/Kseen715))
 
 # Astra Monitor 42 - August 11 2026
 
