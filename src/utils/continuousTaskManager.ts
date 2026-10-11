@@ -80,7 +80,20 @@ export default class ContinuousTaskManager {
     private callback(data: ContinuousTaskManagerData) {
         if(this.exited && !data.exit) return;
         this.listeners.forEach((callback, _subject) => {
-            callback(data);
+            try {
+                const result: unknown = callback(data);
+                // Listeners may be async: a rejected promise is an unhandled
+                // rejection, which GJS in the shell treats as fatal (SIGABRT).
+                if(result instanceof Promise) {
+                    result.catch((e: any) => {
+                        // eslint-disable-next-line no-console
+                        console.error('astra-monitor: Error in continuous task listener', e);
+                    });
+                }
+            } catch(e: any) {
+                // eslint-disable-next-line no-console
+                console.error('astra-monitor: Error in continuous task listener', e);
+            }
         });
     }
 

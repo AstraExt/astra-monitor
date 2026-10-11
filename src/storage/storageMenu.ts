@@ -1258,7 +1258,9 @@ export default class StorageMenu extends MenuBase {
             const generation = ++this.deviceListGeneration;
             Utils.lowPriorityTask(() => {
                 if(!this.isOpen || generation !== this.deviceListGeneration) return;
-                this.updateDeviceList();
+                this.updateDeviceList().catch((e: any) => {
+                    Utils.error('Error updating storage device list', e);
+                });
             }, GLib.PRIORITY_DEFAULT);
             return;
         }

@@ -506,7 +506,15 @@ export default class MenuBase extends PopupMenu.PopupMenu {
         const lifecycleGeneration = this.lifecycleGeneration;
         const timerId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, openDelayMs, () => {
             this.openUpdateTimers.delete(code);
-            if(this.isLifecycleCurrent(lifecycleGeneration, true)) requestUpdate();
+            // Guard against stale/destroyed state: an exception here would be
+            // fatal (SIGABRT) under GJS in the shell.
+            if(this.isLifecycleCurrent(lifecycleGeneration, true)) {
+                try {
+                    requestUpdate();
+                } catch(e: any) {
+                    Utils.error(`Error requesting open update for ${code}`, e);
+                }
+            }
             return GLib.SOURCE_REMOVE;
         });
         this.openUpdateTimers.set(code, timerId);
@@ -537,7 +545,13 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             if(this.isLifecycleCurrent(lifecycleGeneration, true)) {
                 const handler = this.openUpdateResponseHandlers.get(code);
                 if(handler) handler.requestStarted = true;
-                requestUpdate();
+                // Guard against stale/destroyed state: an exception here would
+                // be fatal (SIGABRT) under GJS in the shell.
+                try {
+                    requestUpdate();
+                } catch(e: any) {
+                    Utils.error(`Error requesting open update for ${code}`, e);
+                }
             } else {
                 this.openUpdateResponseHandlers.delete(code);
             }
@@ -583,7 +597,13 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             this.openUpdateTimers.delete(followUpCode);
             if(this.isLifecycleCurrent(handler.lifecycleGeneration, true)) {
                 handler.waitingForSecondResponse = true;
-                handler.requestUpdate();
+                // Guard against stale/destroyed state: an exception here would
+                // be fatal (SIGABRT) under GJS in the shell.
+                try {
+                    handler.requestUpdate();
+                } catch(e: any) {
+                    Utils.error(`Error requesting follow-up open update for ${code}`, e);
+                }
             } else {
                 this.openUpdateResponseHandlers.delete(code);
             }

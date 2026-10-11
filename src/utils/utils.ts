@@ -2761,7 +2761,19 @@ export default class Utils {
         const task = GLib.idle_add(priority, () => {
             Utils.lowPriorityTasks = Utils.lowPriorityTasks.filter(id => id !== task);
             if(!Utils.runtimeActive) return GLib.SOURCE_REMOVE;
-            callback();
+            // GJS treats unhandled exceptions/rejections in source callbacks as
+            // fatal (shell SIGABRT), so a failing task must never escape the
+            // source. Handle both sync throws and async (Promise) rejections.
+            try {
+                const result: unknown = callback();
+                if(result instanceof Promise) {
+                    result.catch((e: any) => {
+                        Utils.error('Error in lowPriorityTask callback (async)', e);
+                    });
+                }
+            } catch(e: any) {
+                Utils.error('Error in lowPriorityTask callback', e);
+            }
             return GLib.SOURCE_REMOVE;
         });
         Utils.lowPriorityTasks.push(task);
@@ -2776,7 +2788,19 @@ export default class Utils {
         const task = GLib.timeout_add(priority, timeout, () => {
             Utils.timeoutTasks = Utils.timeoutTasks.filter(id => id !== task);
             if(!Utils.runtimeActive) return GLib.SOURCE_REMOVE;
-            callback();
+            // GJS treats unhandled exceptions/rejections in source callbacks as
+            // fatal (shell SIGABRT), so a failing task must never escape the
+            // source. Handle both sync throws and async (Promise) rejections.
+            try {
+                const result: unknown = callback();
+                if(result instanceof Promise) {
+                    result.catch((e: any) => {
+                        Utils.error('Error in timeoutTask callback (async)', e);
+                    });
+                }
+            } catch(e: any) {
+                Utils.error('Error in timeoutTask callback', e);
+            }
             return GLib.SOURCE_REMOVE;
         });
         Utils.timeoutTasks.push(task);

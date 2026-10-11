@@ -2256,7 +2256,9 @@ export default class NetworkMenu extends MenuBase {
             const generation = ++this.deviceListGeneration;
             Utils.lowPriorityTask(() => {
                 if(!this.isOpen || generation !== this.deviceListGeneration) return;
-                this.updateDeviceList();
+                this.updateDeviceList().catch((e: any) => {
+                    Utils.error('Error updating network device list', e);
+                });
             }, GLib.PRIORITY_DEFAULT);
             return;
         }
