@@ -2546,16 +2546,52 @@ export default class GpuMonitor extends Monitor {
                         });
                     }
 
-                    // The busiest engine first, then the memory, which orders the idle ones
+                    // Order by points giving for every % usage these points, as for AMD:
+                    // Render/3D: 10, Memory: 5, Compute: 2, Video: 2, VideoEnhance: 1, Blitter: 1
+                    // The memory only scores when its total is known (the system memory of an
+                    // integrated GPU): with the same points, the processes go by memory then
+
                     type TopProcess = (typeof gpu.topProcesses)[0];
-                    const busy = (process: TopProcess) =>
-                        Math.max(
-                            0,
-                            ...process.pipes.map(pipe => (pipe.unit === '%' ? pipe.value : 0))
-                        );
+                    const totalMemory = gpu.vram.total;
                     const memory = (process: TopProcess) =>
                         process.pipes.find(pipe => pipe.name === 'Memory')?.value ?? 0;
-                    gpu.topProcesses.sort((a, b) => busy(b) - busy(a) || memory(b) - memory(a));
+
+                    gpu.topProcesses.sort((a, b) => {
+                        let aPoints = 0;
+                        let bPoints = 0;
+
+                        const calculatePoints = (pipe: TopProcess['pipes'][0]) => {
+                            if(pipe.name === 'Render/3D' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 10;
+                            if(
+                                pipe.name === 'Memory' &&
+                                pipe.unit !== '%' &&
+                                pipe.value &&
+                                totalMemory
+                            )
+                                return (pipe.value / totalMemory) * 5;
+                            if(pipe.name === 'Compute' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 2;
+                            if(pipe.name === 'Video' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 2;
+                            if(pipe.name === 'VideoEnhance' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 1;
+                            if(pipe.name === 'Blitter' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 1;
+                            return 0;
+                        };
+
+                        for(const pipe of a.pipes) {
+                            aPoints += calculatePoints(pipe);
+                        }
+
+                        for(const pipe of b.pipes) {
+                            bPoints += calculatePoints(pipe);
+                        }
+
+                        if(aPoints !== bPoints) return bPoints - aPoints;
+                        return memory(b) - memory(a);
+                    });
                 }
 
                 // Sensors
@@ -2583,7 +2619,7 @@ export default class GpuMonitor extends Monitor {
                 if(currentFreq != null)
                     addSensor({
                         category: 'Clocks',
-                        name: 'Current Frequency',
+                        name: 'GPU Clock',
                         value: currentFreq,
                         unit: 'MHz',
                         priority: GpuSensorPriority.MAX,
@@ -2593,7 +2629,7 @@ export default class GpuMonitor extends Monitor {
                 if(requestedFreq != null && !isNaN(requestedFreq))
                     addSensor({
                         category: 'Clocks',
-                        name: 'Requested Frequency',
+                        name: 'GPU Clock Requested',
                         value: Math.round(requestedFreq),
                         unit: 'MHz',
                         priority: GpuSensorPriority.LOW,
@@ -2603,7 +2639,7 @@ export default class GpuMonitor extends Monitor {
                 if(maxFreqValue != null)
                     addSensor({
                         category: 'Clocks',
-                        name: 'Max Frequency',
+                        name: 'GPU Clock Max',
                         value: maxFreqValue,
                         unit: 'MHz',
                         priority: GpuSensorPriority.NONE,
@@ -2613,7 +2649,7 @@ export default class GpuMonitor extends Monitor {
                 if(minFreqValue != null)
                     addSensor({
                         category: 'Clocks',
-                        name: 'Min Frequency',
+                        name: 'GPU Clock Min',
                         value: minFreqValue,
                         unit: 'MHz',
                         priority: GpuSensorPriority.NONE,
