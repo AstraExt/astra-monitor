@@ -790,7 +790,8 @@ export default class Utils {
     static canMonitorGpu(gpu: GpuInfo): boolean {
         if(Utils.isAmdGpu(gpu)) return Utils.hasAmdGpuTop();
         if(Utils.isNvidiaGpu(gpu)) return Utils.hasNvidiaSmi();
-        //if(Utils.isIntelGpu(gpu)) return Utils.hasIntelGpuTop();
+        // Intel GPUs always have a sysfs fallback: intel_gpu_top only adds activity and processes
+        if(Utils.isIntelGpu(gpu)) return true;
         return false;
     }
 
@@ -1702,6 +1703,8 @@ export default class Utils {
     }
 
     static GPUModelShortify(model: string): string {
+        if(!model) return '';
+
         // replace ','
         model = model.replace(',', '');
 
@@ -1814,9 +1817,11 @@ export default class Utils {
         const gpusData = Config.get_json('gpu-data');
         if(!Array.isArray(gpusData)) return [];
 
+        // Return the full GpuInfo, not the stripped config entry: consumers expect
+        // model/vendor/drivers to be present
         const gpus = Utils.getGPUsList();
-        return gpusData.filter((gpuData: any) =>
-            gpus.some((gpu: any) => Utils.isSameGpu(gpu, gpuData))
+        return gpus.filter((gpu: any) =>
+            gpusData.some((gpuData: any) => Utils.isSameGpu(gpu, gpuData))
         );
     }
 

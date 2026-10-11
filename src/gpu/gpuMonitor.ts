@@ -29,6 +29,18 @@ import ContinuousTaskManager, {
 } from '../utils/continuousTaskManager.js';
 import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import { EDID, EdidParser } from '../utils/edidParser.js';
+import {
+    INTEL_SAMPLE_FLUSH,
+    IntelInfoRaw,
+    intelActivity,
+    intelFrequency,
+    intelPower,
+    intelVram,
+    isIntegratedIntelGpu,
+    parseIntelGpuSample,
+    parseMemTotal,
+    parseSysfsNumber,
+} from './intelGpuUtils.js';
 
 // eslint-disable-next-line no-shadow
 enum GpuSensorPriority {
@@ -360,12 +372,29 @@ export type DisplayData = {
     edid: EDID | null;
 };
 
+type IntelDevice = {
+    gpu: GpuInfo;
+    card: string;
+    cardPath: string;
+    integrated: boolean;
+};
+
 export default class GpuMonitor extends Monitor {
     private status = false;
     private updateAmdGpuTask: ContinuousTaskManager;
     private updateNvidiaGpuTask: ContinuousTaskManager;
+    private updateIntelGpuTasks: Map<string, ContinuousTaskManager> = new Map();
+    private updateIntelGpuTask: CancellableTaskManager<boolean>;
     private gpuTaskStarting = false;
+    private gpuTaskGeneration = 0;
     private nvidiaParsing = false;
+
+    private intelGpus: Map<string, IntelDevice> = new Map();
+    private intelSamples: Map<string, IntelInfoRaw> = new Map();
+    private intelPrevious: Map<string, { time: number; rc6?: number; energy?: number }> = new Map();
+    private intelRaplPath?: string | null;
+    private intelCpuTempPath?: string | null;
+    private systemMemoryTotal?: number | null;
 
     private updateDisplaysTask: CancellableTaskManager<boolean>;
 
@@ -387,6 +416,8 @@ export default class GpuMonitor extends Monitor {
 
         this.updateNvidiaGpuTask = new ContinuousTaskManager();
         this.updateNvidiaGpuTask.listen(this, this.updateNvidiaGpu.bind(this));
+
+        this.updateIntelGpuTask = new CancellableTaskManager();
 
         this.reset();
 
@@ -452,8 +483,11 @@ export default class GpuMonitor extends Monitor {
 
     reset() {
         this.updateDisplaysTask?.cancel();
+        this.updateIntelGpuTask?.cancel();
 
         this.infoPipesCaches.clear();
+        this.intelSamples.clear();
+        this.intelPrevious.clear();
     }
 
     override start() {
@@ -502,6 +536,11 @@ export default class GpuMonitor extends Monitor {
 
         const monitoredGPUs = Utils.getMonitoredGPUs();
         if(!monitoredGPUs) return;
+
+        // The Intel lookups read sysfs: the tasks may be stopped meanwhile
+        const generation = this.gpuTaskGeneration;
+        await this.startIntelGpuTasks();
+        if(this.isGpuTaskStale(generation)) return;
 
         let hasAMD = false;
         for(const gpu of monitoredGPUs) {
@@ -554,9 +593,25 @@ export default class GpuMonitor extends Monitor {
         }
     }
 
+    /**
+     * stopGpuTask() bumps the generation: a start that was still awaiting when the tasks
+     * got stopped, or restarted with other GPUs, is stale and must not start anything
+     */
+    private isGpuTaskStale(generation: number) {
+        return !this.status || generation !== this.gpuTaskGeneration;
+    }
+
     private stopGpuTask() {
+        this.gpuTaskGeneration++;
+
         if(this.updateAmdGpuTask?.isRunning) this.updateAmdGpuTask.stop();
         if(this.updateNvidiaGpuTask?.isRunning) this.updateNvidiaGpuTask.stop();
+
+        for(const task of this.updateIntelGpuTasks.values()) task.destroy();
+        this.updateIntelGpuTasks.clear();
+        this.intelGpus.clear();
+        this.intelSamples.clear();
+        this.intelPrevious.clear();
     }
 
     update(): boolean {
@@ -564,6 +619,10 @@ export default class GpuMonitor extends Monitor {
 
         if(this.isListeningFor('displays')) {
             this.runUpdate('displays');
+        }
+
+        if(this.intelGpus.size > 0 && !this.updateIntelGpuTask.isRunning) {
+            this.runUpdate('intelGpu');
         }
 
         return true;
@@ -579,6 +638,16 @@ export default class GpuMonitor extends Monitor {
     }
 
     runUpdate(key: string, ...params: any[]) {
+        if(key === 'intelGpu') {
+            this.runTask({
+                key,
+                task: this.updateIntelGpuTask,
+                run: this.updateIntelGpu.bind(this),
+                callback: () => {},
+            });
+            return;
+        }
+
         if(key === 'displays') {
             this.runTask({
                 key,
@@ -2174,6 +2243,516 @@ export default class GpuMonitor extends Monitor {
         }
     }
 
+    /**
+     * Intel GPUs are monitored through 'intel_gpu_top -J' when available: it's the only
+     * source for engines activity and per-client usage. Everything it doesn't provide
+     * (and everything at all, when it's not installed) comes from sysfs: frequencies from
+     * the drm card node, activity from the rc6 residency counter and, for the integrated
+     * GPU only, power from the RAPL uncore domain and temperature from the CPU package it
+     * shares: for a discrete GPU those would be readings of the CPU.
+     */
+    private async startIntelGpuTasks() {
+        const generation = this.gpuTaskGeneration;
+
+        const monitoredGPUs = Utils.getMonitoredGPUs() ?? [];
+        const intelGPUs = monitoredGPUs.filter(gpu => Utils.isIntelGpu(gpu));
+        if(intelGPUs.length === 0) return;
+
+        const devices = await Promise.all(
+            intelGPUs.map(async gpu => {
+                const uuid = Utils.getGpuUUID(gpu);
+                try {
+                    const nodes = await Utils.listDirAsync(`/sys/bus/pci/devices/${uuid}/drm`, {
+                        folders: true,
+                        files: false,
+                    });
+                    const card = nodes.find(node => /^card\d+$/.test(node.name));
+                    if(!card) return undefined;
+                    return {
+                        uuid,
+                        device: {
+                            gpu,
+                            card: card.name,
+                            cardPath: `/sys/class/drm/${card.name}`,
+                            integrated: isIntegratedIntelGpu(uuid),
+                        } as IntelDevice,
+                    };
+                } catch(e: any) {
+                    Utils.warn(`Failed to find the drm node of the Intel GPU ${uuid}`);
+                    return undefined;
+                }
+            })
+        );
+        if(this.isGpuTaskStale(generation)) return;
+
+        for(const device of devices) {
+            if(!device) continue;
+            this.intelGpus.set(device.uuid, device.device);
+        }
+        if(this.intelGpus.size === 0) return;
+
+        const path = await Utils.getIntelGpuTopPathAsync();
+        if(path === false || this.isGpuTaskStale(generation)) return;
+
+        // Max 2 updates per second
+        const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
+
+        for(const [uuid, device] of this.intelGpus) {
+            if(this.updateIntelGpuTasks.get(uuid)?.isRunning) continue;
+
+            const task = new ContinuousTaskManager();
+            task.listen(this, this.updateIntelGpuSample.bind(this, uuid));
+            task.start(`${path}intel_gpu_top -J -s ${timer} -d drm:/dev/dri/${device.card}`, {
+                flush: { match: INTEL_SAMPLE_FLUSH },
+            });
+            this.updateIntelGpuTasks.set(uuid, task);
+        }
+    }
+
+    private updateIntelGpuSample(uuid: string, data: ContinuousTaskManagerData) {
+        if(data.exit) {
+            // Do not keep feeding a dead process' last sample to the UI
+            this.intelSamples.delete(uuid);
+            return;
+        }
+        if(!data.result) return;
+
+        try {
+            const sample = parseIntelGpuSample(data.result);
+            if(sample) this.intelSamples.set(uuid, sample);
+        } catch(e: any) {
+            Utils.error('Error parsing intel_gpu_top output', e);
+        }
+    }
+
+    private async getIntelRaplPath(): Promise<string | null> {
+        if(this.intelRaplPath !== undefined) return this.intelRaplPath;
+        this.intelRaplPath = null;
+
+        try {
+            const packages = (
+                await Utils.listDirAsync('/sys/class/powercap', { folders: true, files: false })
+            )
+                .filter(entry => /^intel-rapl:\d+$/.test(entry.name))
+                .map(entry => `/sys/class/powercap/${entry.name}`);
+
+            const domains = (
+                await Promise.all(
+                    packages.map(packagePath =>
+                        Utils.listDirAsync(packagePath, { folders: true, files: false })
+                            .then(entries =>
+                                entries
+                                    .filter(entry => /^intel-rapl:\d+:\d+$/.test(entry.name))
+                                    .map(entry => `${packagePath}/${entry.name}`)
+                            )
+                            .catch(() => [] as string[])
+                    )
+                )
+            ).flat();
+
+            const names = await Promise.all(
+                domains.map(domain => Utils.readFileAsync(`${domain}/name`, true))
+            );
+            const uncore = domains.find((_domain, index) => names[index].trim() === 'uncore');
+            if(!uncore) return this.intelRaplPath;
+
+            // energy_uj is root-only on kernels mitigating CVE-2020-8694
+            const energyPath = `${uncore}/energy_uj`;
+            if(await Utils.canReadFileAsync(energyPath)) this.intelRaplPath = energyPath;
+        } catch(e: any) {
+            Utils.warn('Failed to look up the Intel RAPL uncore domain');
+        }
+        return this.intelRaplPath;
+    }
+
+    private async getIntelCpuTempPath(): Promise<string | null> {
+        if(this.intelCpuTempPath !== undefined) return this.intelCpuTempPath;
+        this.intelCpuTempPath = null;
+
+        const devices = await Utils.getCachedHwmonDevicesAsync();
+        for(const [deviceName, device] of devices) {
+            if(!deviceName.startsWith('coretemp')) continue;
+            for(const [sensorName, sensor] of device) {
+                if(!sensorName.startsWith('Package id')) continue;
+                const attribute = sensor.get('input');
+                if(!attribute) continue;
+                this.intelCpuTempPath = `/sys/class/hwmon/${attribute.path}`;
+                return this.intelCpuTempPath;
+            }
+        }
+        return this.intelCpuTempPath;
+    }
+
+    private async getSystemMemoryTotal(): Promise<number | null> {
+        if(this.systemMemoryTotal !== undefined) return this.systemMemoryTotal;
+        this.systemMemoryTotal = null;
+
+        try {
+            const total = parseMemTotal(await Utils.readFileAsync('/proc/meminfo', true));
+            if(total) this.systemMemoryTotal = total;
+        } catch(e: any) {
+            Utils.warn('Failed to read the total system memory');
+        }
+        return this.systemMemoryTotal;
+    }
+
+    private async updateIntelGpu(): Promise<boolean> {
+        if(this.intelGpus.size === 0) return false;
+
+        const [raplPath, tempPath, memoryTotal] = await Promise.all([
+            this.getIntelRaplPath(),
+            this.getIntelCpuTempPath(),
+            this.getSystemMemoryTotal(),
+        ]);
+
+        const gpus = new Map<string, GenericGpuInfo>();
+
+        await Promise.all(
+            Array.from(this.intelGpus.entries()).map(async ([uuid, device]) => {
+                const sample = this.intelSamples.get(uuid);
+                const cardPath = device.cardPath;
+
+                // The CPU package is shared by the integrated GPU only
+                const energyPath = device.integrated ? raplPath : null;
+                const cpuTempPath = device.integrated ? tempPath : null;
+
+                const [curFreq, maxFreq, minFreq, rc6Residency, energy, temperature] =
+                    await Promise.all([
+                        Utils.readFileAsync(`${cardPath}/gt_cur_freq_mhz`, true),
+                        Utils.readFileAsync(`${cardPath}/gt_max_freq_mhz`, true),
+                        Utils.readFileAsync(`${cardPath}/gt_min_freq_mhz`, true),
+                        Utils.readFileAsync(`${cardPath}/power/rc6_residency_ms`, true),
+                        energyPath ? Utils.readFileAsync(energyPath, true) : Promise.resolve(''),
+                        cpuTempPath ? Utils.readFileAsync(cpuTempPath, true) : Promise.resolve(''),
+                    ]);
+
+                const gpu: GenericGpuInfo = {
+                    id: uuid,
+                    family: 'Intel',
+                    info: { pipes: [] },
+                    vram: { pipes: [] },
+                    activity: { pipes: [] },
+                    topProcesses: [],
+                    sensors: { categories: [], list: [] },
+                    raw: sample,
+                };
+
+                //Info
+                // Use cache if it's been updated in the last 10 minutes
+                const infoPipesCache = this.infoPipesCaches.get(uuid);
+                if(
+                    infoPipesCache &&
+                    GLib.get_monotonic_time() - infoPipesCache.time < 600_000_000
+                ) {
+                    gpu.info.pipes = infoPipesCache.pipes;
+                } else {
+                    // Name, vendor, PCI address and drivers are in the info popup already
+                    gpu.info.pipes.push({ name: 'DRM Card', data: device.card });
+
+                    this.infoPipesCaches.set(uuid, {
+                        pipes: gpu.info.pipes,
+                        time: GLib.get_monotonic_time(),
+                    });
+                }
+
+                // Counters deltas
+                const now = GLib.get_monotonic_time();
+                const previous = this.intelPrevious.get(uuid);
+                const elapsed = previous ? (now - previous.time) / 1000000 : 0;
+                const rc6Value = parseSysfsNumber(rc6Residency);
+                const energyValue = parseSysfsNumber(energy);
+                this.intelPrevious.set(uuid, { time: now, rc6: rc6Value, energy: energyValue });
+
+                //Activity
+                const activity = intelActivity(sample, previous?.rc6, rc6Value, elapsed);
+                gpu.activity.pipes = activity.pipes;
+                if(activity.GFX != null) gpu.activity.GFX = activity.GFX;
+
+                //Vram: an integrated GPU allocates from system memory, so the memory of
+                //its clients is a share of it and not of a VRAM of its own. A discrete GPU
+                //has a VRAM of its own, whose size isn't known here: nothing is reported
+                const vram = device.integrated ? intelVram(sample) : undefined;
+                if(vram) {
+                    gpu.vram.used = vram.used;
+                    if(memoryTotal) {
+                        gpu.vram.total = memoryTotal;
+                        gpu.vram.percent = (vram.used / memoryTotal) * 100;
+                        for(const region of vram.regions)
+                            gpu.vram.pipes.push({
+                                name: region.name === 'system' ? 'System Memory' : region.name,
+                                percent: (region.used / memoryTotal) * 100,
+                                used: region.used,
+                                total: memoryTotal,
+                            });
+                    }
+                }
+
+                //Top Processes
+                if(sample?.clients) {
+                    // The same columns for every process, as the headers come from the
+                    // first one: Render/3D and the memory first, since the compact menu
+                    // only shows the first two values. A client seen for the first time
+                    // has no engine-classes yet, so the columns are those of all clients
+                    const columns: string[] = [];
+                    let hasMemory = false;
+                    for(const id in sample.clients) {
+                        const client = sample.clients[id];
+                        for(const name in client?.['engine-classes'])
+                            if(!columns.includes(name)) columns.push(name);
+                        if(client?.memory) hasMemory = true;
+                    }
+                    if(hasMemory) columns.push('Memory');
+
+                    const defaultOrder = [
+                        'Render/3D',
+                        'Memory',
+                        'Video',
+                        'VideoEnhance',
+                        'Blitter',
+                        'Compute',
+                    ];
+                    columns.sort((a, b) => {
+                        let aIndex = defaultOrder.indexOf(a);
+                        if(aIndex < 0) aIndex = defaultOrder.length;
+                        let bIndex = defaultOrder.indexOf(b);
+                        if(bIndex < 0) bIndex = defaultOrder.length;
+                        return aIndex - bIndex;
+                    });
+
+                    for(const id in sample.clients) {
+                        const client = sample.clients[id];
+                        if(!client?.name) continue;
+
+                        const pipes = columns.map(name => {
+                            if(name === 'Memory') {
+                                let memory = 0;
+                                for(const region in client.memory) {
+                                    const resident = parseFloat(
+                                        client.memory[region]?.resident ?? ''
+                                    );
+                                    if(!isNaN(resident)) memory += resident;
+                                }
+                                return { name, value: memory, unit: 'B' };
+                            }
+                            const busy = parseFloat(client['engine-classes']?.[name]?.busy ?? '');
+                            return { name, value: isNaN(busy) ? 0 : busy, unit: '%' };
+                        });
+
+                        const pid = parseInt(client.pid ?? '', 10);
+                        gpu.topProcesses.push({
+                            name: client.name,
+                            pid: isNaN(pid) ? 0 : pid,
+                            pipes,
+                        });
+                    }
+
+                    // Order by points giving for every % usage these points, as for AMD:
+                    // Render/3D: 10, Memory: 5, Compute: 2, Video: 2, VideoEnhance: 1, Blitter: 1
+                    // The memory only scores when its total is known (the system memory of an
+                    // integrated GPU): with the same points, the processes go by memory then
+
+                    type TopProcess = (typeof gpu.topProcesses)[0];
+                    const totalMemory = gpu.vram.total;
+                    const memory = (process: TopProcess) =>
+                        process.pipes.find(pipe => pipe.name === 'Memory')?.value ?? 0;
+
+                    gpu.topProcesses.sort((a, b) => {
+                        let aPoints = 0;
+                        let bPoints = 0;
+
+                        const calculatePoints = (pipe: TopProcess['pipes'][0]) => {
+                            if(pipe.name === 'Render/3D' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 10;
+                            if(
+                                pipe.name === 'Memory' &&
+                                pipe.unit !== '%' &&
+                                pipe.value &&
+                                totalMemory
+                            )
+                                return (pipe.value / totalMemory) * 5;
+                            if(pipe.name === 'Compute' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 2;
+                            if(pipe.name === 'Video' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 2;
+                            if(pipe.name === 'VideoEnhance' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 1;
+                            if(pipe.name === 'Blitter' && pipe.unit === '%' && pipe.value)
+                                return pipe.value * 1;
+                            return 0;
+                        };
+
+                        for(const pipe of a.pipes) {
+                            aPoints += calculatePoints(pipe);
+                        }
+
+                        for(const pipe of b.pipes) {
+                            bPoints += calculatePoints(pipe);
+                        }
+
+                        if(aPoints !== bPoints) return bPoints - aPoints;
+                        return memory(b) - memory(a);
+                    });
+                }
+
+                // Sensors
+                const getOrAddCategory = (name: string) => {
+                    let category = gpu.sensors.categories.find(c => c.name === name);
+                    if(category) return category;
+
+                    category = { name, sensors: [] };
+                    gpu.sensors.categories.push(category);
+                    return category;
+                };
+                const addSensor = ({
+                    category,
+                    name,
+                    value,
+                    unit,
+                    priority,
+                }: { category: string } & GpuSensor) => {
+                    const sensor = { name, value, unit, priority };
+                    getOrAddCategory(category).sensors.push(sensor);
+                    gpu.sensors.list?.push(sensor);
+                };
+
+                const currentFreq = intelFrequency(sample, curFreq);
+                if(currentFreq != null)
+                    addSensor({
+                        category: 'Clocks',
+                        name: 'GPU Clock',
+                        value: currentFreq,
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.MAX,
+                    });
+
+                const requestedFreq = sample?.frequency?.requested;
+                if(requestedFreq != null && !isNaN(requestedFreq))
+                    addSensor({
+                        category: 'Clocks',
+                        name: 'GPU Clock Requested',
+                        value: Math.round(requestedFreq),
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.LOW,
+                    });
+
+                const maxFreqValue = parseSysfsNumber(maxFreq);
+                if(maxFreqValue != null)
+                    addSensor({
+                        category: 'Clocks',
+                        name: 'GPU Clock Max',
+                        value: maxFreqValue,
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                const minFreqValue = parseSysfsNumber(minFreq);
+                if(minFreqValue != null)
+                    addSensor({
+                        category: 'Clocks',
+                        name: 'GPU Clock Min',
+                        value: minFreqValue,
+                        unit: 'MHz',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                // intel_gpu_top reads both powers from the RAPL counters of the CPU: for a
+                // discrete GPU they would be the CPU's
+                const gpuPower = device.integrated
+                    ? intelPower(sample, previous?.energy, energyValue, elapsed)
+                    : undefined;
+                if(gpuPower)
+                    addSensor({
+                        category: 'Power',
+                        name: 'GPU Power',
+                        value: gpuPower.value,
+                        unit: gpuPower.unit,
+                        priority: GpuSensorPriority.HIGH,
+                    });
+
+                const packagePower = device.integrated ? sample?.power?.Package : undefined;
+                if(packagePower != null && !isNaN(packagePower))
+                    addSensor({
+                        category: 'Power',
+                        name: 'Package Power',
+                        value: parseFloat(packagePower.toFixed(2)),
+                        unit: sample?.power?.unit ?? 'W',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                const temperatureValue = parseSysfsNumber(temperature);
+                if(temperatureValue != null)
+                    addSensor({
+                        category: 'Temperature',
+                        name: 'CPU Package',
+                        value: Math.round(temperatureValue / 1000),
+                        unit: '°C',
+                        priority: GpuSensorPriority.MEDIUM,
+                    });
+
+                if(sample?.rc6?.value != null && !isNaN(sample.rc6.value))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'RC6',
+                        value: parseFloat(sample.rc6.value.toFixed(1)),
+                        unit: sample.rc6.unit ?? '%',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                if(sample?.interrupts?.count != null && !isNaN(sample.interrupts.count))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'Interrupts',
+                        value: Math.round(sample.interrupts.count),
+                        unit: sample.interrupts.unit ?? 'irq/s',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                // The memory controller is the CPU's: it only relates to the integrated GPU
+                const bandwidth = device.integrated ? sample?.['imc-bandwidth'] : undefined;
+                if(bandwidth?.reads != null && !isNaN(bandwidth.reads))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'IMC Reads',
+                        value: Math.round(bandwidth.reads),
+                        unit: bandwidth.unit ?? 'MiB/s',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                if(bandwidth?.writes != null && !isNaN(bandwidth.writes))
+                    addSensor({
+                        category: 'Generic',
+                        name: 'IMC Writes',
+                        value: Math.round(bandwidth.writes),
+                        unit: bandwidth.unit ?? 'MiB/s',
+                        priority: GpuSensorPriority.NONE,
+                    });
+
+                // Sensors Sorting
+                for(const category of gpu.sensors.categories) {
+                    category.sensors.sort((a, b) => {
+                        if(a.priority === b.priority) return 0;
+                        return a.priority > b.priority ? -1 : 1;
+                    });
+                }
+                gpu.sensors.list?.sort((a, b) => {
+                    if(a.priority === b.priority) return 0;
+                    return a.priority > b.priority ? -1 : 1;
+                });
+                gpu.sensors.categories.sort((a, b) => {
+                    const maxPriorityA = a.sensors.length ? a.sensors[0].priority : 0;
+                    const maxPriorityB = b.sensors.length ? b.sensors[0].priority : 0;
+                    if(maxPriorityA === maxPriorityB) return 0;
+                    return maxPriorityA > maxPriorityB ? -1 : 1;
+                });
+
+                gpus.set(uuid, gpu);
+            })
+        );
+
+        this.pushGpuUpdate(gpus);
+        return true;
+    }
+
     async updateDisplays(): Promise<boolean> {
         const data: DisplayData[] = [];
 
@@ -2274,6 +2853,10 @@ export default class GpuMonitor extends Monitor {
         this.updateAmdGpuTask = undefined as any;
         this.updateNvidiaGpuTask?.destroy();
         this.updateNvidiaGpuTask = undefined as any;
+        for(const task of this.updateIntelGpuTasks.values()) task.destroy();
+        this.updateIntelGpuTasks.clear();
+        this.updateIntelGpuTask?.cancel();
+        this.updateIntelGpuTask = undefined as any;
 
         super.destroy();
     }
