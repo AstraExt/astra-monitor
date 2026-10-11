@@ -105,7 +105,7 @@ export default class MenuBase extends PopupMenu.PopupMenu {
             scrollView.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
             const boxLayout = new St.BoxLayout({
-                ...ShellCompat.getBoxLayoutParams(true)
+                ...ShellCompat.getBoxLayoutParams(true),
             });
             scrollView.add_child(boxLayout);
 

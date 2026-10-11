@@ -1,4 +1,4 @@
-# Astra Monitor 43 - TO BE RELEASED
+# Astra Monitor 43 - October 11 2026
 
 ### Intel GPU Monitoring
 
