@@ -252,9 +252,9 @@ export default class Utils {
         Utils.commandsPathAsync = commandsPath ? new Map() : null;
         Utils.lspciCached = undefined;
         Utils.lspciPromise = undefined;
+        Utils.binaryCaps = new Map();
+        Utils.binaryCapsPromises = new Map();
         Utils.nethogsCaps = undefined;
-        Utils.nethogsCapsStamp = undefined;
-        Utils.nethogsCapsPromise = undefined;
         Utils.cachedLmSensorSources = undefined;
         Utils.sensorSourcesPromise = undefined;
     }
@@ -2900,9 +2900,56 @@ export default class Utils {
         return true;
     }
 
+    private static binaryCaps: Map<string, { caps: string[]; stamp: string | null }> = new Map();
+    private static binaryCapsPromises: Map<string, Promise<string[]>> = new Map();
+
+    /**
+     * Capabilities granted to a binary (setcap), both effective and permitted.
+     * They can be granted (setcap) or lost (package update) while the extension runs:
+     * the last check holds as long as the binary is the same, so getcap only runs again
+     * when its stamp changes.
+     */
+    static getBinaryCapsAsync(path: string): Promise<string[]> {
+        const pending = Utils.binaryCapsPromises.get(path);
+        if(pending) return pending;
+
+        const promise = (async () => {
+            const stamp = await Utils.getFileStampAsync(path);
+            const cached = Utils.binaryCaps.get(path);
+            if(cached && cached.stamp === stamp) return cached.caps;
+
+            const caps: string[] = [];
+            const stdout = await Utils.runAsyncCommandOptional(`getcap ${path}`);
+            if(stdout !== null) {
+                // skip the path token; handles both getcap output formats:
+                //   new (libcap >= 2.42): /usr/bin/nethogs cap_net_admin,cap_net_raw=ep
+                //   old:                  /usr/bin/nethogs = cap_net_admin,cap_net_raw+ep
+                for(const clause of stdout.trim().split(/\s+/).slice(1)) {
+                    // a capability is granted if it appears in a clause whose flags
+                    // include both 'e' (effective) and 'p' (permitted)
+                    const [names, flags] = clause.split(/[=+]/, 2);
+                    if(flags === undefined || !flags.includes('e') || !flags.includes('p'))
+                        continue;
+                    caps.push(...names.split(',').filter(name => name));
+                }
+            }
+
+            Utils.binaryCaps.set(path, { caps, stamp });
+            return caps;
+        })().finally(() => {
+            Utils.binaryCapsPromises.delete(path);
+        });
+
+        Utils.binaryCapsPromises.set(path, promise);
+        return promise;
+    }
+
+    static async binaryHasCapsAsync(path: string, caps: string[]): Promise<boolean> {
+        const granted = await Utils.getBinaryCapsAsync(path);
+        return caps.every(cap => granted.includes(cap));
+    }
+
     private static nethogsCaps: boolean | undefined = undefined;
-    private static nethogsCapsStamp: string | null | undefined = undefined;
-    private static nethogsCapsPromise: Promise<boolean> | undefined = undefined;
     static nethogsHasCapsCached(): boolean | undefined {
         return Utils.nethogsCaps;
     }
@@ -2912,56 +2959,14 @@ export default class Utils {
     }
 
     static async nethogsHasCapsAsync(): Promise<boolean> {
-        if(Utils.nethogsCapsPromise) return Utils.nethogsCapsPromise;
-
-        Utils.nethogsCapsPromise = (async () => {
-            const nethogsPath = await Utils.getNethogsPathAsync();
-            if(nethogsPath === false) {
-                Utils.nethogsCaps = false;
-                return false;
-            }
-
-            const nethogs = `${nethogsPath}nethogs`;
-
-            // Capabilities can be granted (setcap) or lost (package update) while the
-            // extension runs: the last check holds as long as the binary is the same
-            const stamp = await Utils.getFileStampAsync(nethogs);
-            if(Utils.nethogsCaps !== undefined && stamp === Utils.nethogsCapsStamp)
-                return Utils.nethogsCaps;
-
-            const setCaps = (caps: boolean) => {
-                Utils.nethogsCaps = caps;
-                Utils.nethogsCapsStamp = stamp;
-                return caps;
-            };
-
-            const stdout = await Utils.runAsyncCommandOptional(`getcap ${nethogs}`);
-            if(stdout === null) return setCaps(false);
-
-            // skip the path token; handles both getcap output formats:
-            //   new (libcap >= 2.42): /usr/bin/nethogs cap_net_admin,cap_net_raw=ep
-            //   old:                  /usr/bin/nethogs = cap_net_admin,cap_net_raw+ep
-            const clauses = stdout.trim().split(/\s+/).slice(1);
-
-            // a capability is granted if it appears in a clause whose flags
-            // include both 'e' (effective) and 'p' (permitted)
-            const hasCap = (cap: string) =>
-                clauses.some(clause => {
-                    const [names, flags] = clause.split(/[=+]/, 2);
-                    return (
-                        flags !== undefined &&
-                        names.split(',').includes(cap) &&
-                        flags.includes('e') &&
-                        flags.includes('p')
-                    );
-                });
-
-            return setCaps(hasCap('cap_net_admin') && hasCap('cap_net_raw'));
-        })().finally(() => {
-            Utils.nethogsCapsPromise = undefined;
-        });
-
-        return Utils.nethogsCapsPromise;
+        const nethogsPath = await Utils.getNethogsPathAsync();
+        Utils.nethogsCaps =
+            nethogsPath !== false &&
+            (await Utils.binaryHasCapsAsync(`${nethogsPath}nethogs`, [
+                'cap_net_admin',
+                'cap_net_raw',
+            ]));
+        return Utils.nethogsCaps;
     }
 
     static getGpuUUID(gpuInfo: GpuInfo): string {
