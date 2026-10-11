@@ -36,6 +36,7 @@ import {
     intelFrequency,
     intelPower,
     intelVram,
+    isIntegratedIntelGpu,
     parseIntelGpuSample,
     parseMemTotal,
     parseSysfsNumber,
@@ -375,6 +376,7 @@ type IntelDevice = {
     gpu: GpuInfo;
     card: string;
     cardPath: string;
+    integrated: boolean;
 };
 
 export default class GpuMonitor extends Monitor {
@@ -2231,8 +2233,9 @@ export default class GpuMonitor extends Monitor {
      * Intel GPUs are monitored through 'intel_gpu_top -J' when available: it's the only
      * source for engines activity and per-client usage. Everything it doesn't provide
      * (and everything at all, when it's not installed) comes from sysfs: frequencies from
-     * the drm card node, activity from the rc6 residency counter, power from the RAPL
-     * uncore domain and temperature from the CPU package (integrated GPUs share it).
+     * the drm card node, activity from the rc6 residency counter and, for the integrated
+     * GPU only, power from the RAPL uncore domain and temperature from the CPU package it
+     * shares: for a discrete GPU those would be readings of the CPU.
      */
     private async startIntelGpuTasks() {
         const monitoredGPUs = Utils.getMonitoredGPUs() ?? [];
@@ -2255,6 +2258,7 @@ export default class GpuMonitor extends Monitor {
                             gpu,
                             card: card.name,
                             cardPath: `/sys/class/drm/${card.name}`,
+                            integrated: isIntegratedIntelGpu(uuid),
                         } as IntelDevice,
                     };
                 } catch(e: any) {
@@ -2391,14 +2395,18 @@ export default class GpuMonitor extends Monitor {
                 const sample = this.intelSamples.get(uuid);
                 const cardPath = device.cardPath;
 
+                // The CPU package is shared by the integrated GPU only
+                const energyPath = device.integrated ? raplPath : null;
+                const cpuTempPath = device.integrated ? tempPath : null;
+
                 const [curFreq, maxFreq, minFreq, rc6Residency, energy, temperature] =
                     await Promise.all([
                         Utils.readFileAsync(`${cardPath}/gt_cur_freq_mhz`, true),
                         Utils.readFileAsync(`${cardPath}/gt_max_freq_mhz`, true),
                         Utils.readFileAsync(`${cardPath}/gt_min_freq_mhz`, true),
                         Utils.readFileAsync(`${cardPath}/power/rc6_residency_ms`, true),
-                        raplPath ? Utils.readFileAsync(raplPath, true) : Promise.resolve(''),
-                        tempPath ? Utils.readFileAsync(tempPath, true) : Promise.resolve(''),
+                        energyPath ? Utils.readFileAsync(energyPath, true) : Promise.resolve(''),
+                        cpuTempPath ? Utils.readFileAsync(cpuTempPath, true) : Promise.resolve(''),
                     ]);
 
                 const gpu: GenericGpuInfo = {
@@ -2455,8 +2463,9 @@ export default class GpuMonitor extends Monitor {
                 if(activity.GFX != null) gpu.activity.GFX = activity.GFX;
 
                 //Vram: an integrated GPU allocates from system memory, so the memory of
-                //its clients is a share of it and not of a VRAM of its own
-                const vram = intelVram(sample);
+                //its clients is a share of it and not of a VRAM of its own. A discrete GPU
+                //has a VRAM of its own, whose size isn't known here: nothing is reported
+                const vram = device.integrated ? intelVram(sample) : undefined;
                 if(vram) {
                     gpu.vram.used = vram.used;
                     if(memoryTotal) {
@@ -2575,7 +2584,11 @@ export default class GpuMonitor extends Monitor {
                         priority: GpuSensorPriority.NONE,
                     });
 
-                const gpuPower = intelPower(sample, previous?.energy, energyValue, elapsed);
+                // intel_gpu_top reads both powers from the RAPL counters of the CPU: for a
+                // discrete GPU they would be the CPU's
+                const gpuPower = device.integrated
+                    ? intelPower(sample, previous?.energy, energyValue, elapsed)
+                    : undefined;
                 if(gpuPower)
                     addSensor({
                         category: 'Power',
@@ -2585,7 +2598,7 @@ export default class GpuMonitor extends Monitor {
                         priority: GpuSensorPriority.HIGH,
                     });
 
-                const packagePower = sample?.power?.Package;
+                const packagePower = device.integrated ? sample?.power?.Package : undefined;
                 if(packagePower != null && !isNaN(packagePower))
                     addSensor({
                         category: 'Power',
@@ -2623,7 +2636,8 @@ export default class GpuMonitor extends Monitor {
                         priority: GpuSensorPriority.NONE,
                     });
 
-                const bandwidth = sample?.['imc-bandwidth'];
+                // The memory controller is the CPU's: it only relates to the integrated GPU
+                const bandwidth = device.integrated ? sample?.['imc-bandwidth'] : undefined;
                 if(bandwidth?.reads != null && !isNaN(bandwidth.reads))
                     addSensor({
                         category: 'Generic',

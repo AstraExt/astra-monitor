@@ -51,6 +51,18 @@ export type IntelInfoRaw = {
 export const INTEL_SAMPLE_FLUSH = /^\},?\s*$/;
 
 /**
+ * The integrated GPU always sits at 0000:00:02.0, while a discrete one is a PCIe endpoint
+ * behind a root port: igt-gpu-tools tells them apart the very same way
+ * (INTEGRATED_I915_GPU_PCI_ID). Only the integrated GPU shares the CPU package, its memory
+ * controller and the system memory, so only for it are those readings its own.
+ */
+const INTEL_INTEGRATED_GPU_PCI_ID = '0000:00:02.0';
+
+export function isIntegratedIntelGpu(pciAddress: string): boolean {
+    return pciAddress.toLowerCase() === INTEL_INTEGRATED_GPU_PCI_ID;
+}
+
+/**
  * Turns one flushed chunk of the stream into a sample, stripping the array framing:
  * the opening '[' and the ',' separating the samples.
  * Returns undefined when the chunk isn't an object, throws when it isn't valid JSON.
