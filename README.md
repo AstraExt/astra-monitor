@@ -212,7 +212,7 @@ Here's how to grant the necessary capabilities to `nethogs` on most distros:
 
 _Note: The exact path to `nethogs` may vary depending on your system. Adjust the commands accordingly if `which nethogs` returns a different path._
 
-After granting these capabilities, restart GNOME Shell and Astra Monitor will automatically detect and use `nethogs` without requiring elevated privileges each time.
+After granting these capabilities, open the network menu again: Astra Monitor will detect them and use `nethogs` without requiring elevated privileges each time.
 
 #### NixOS
 

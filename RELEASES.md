@@ -4,6 +4,8 @@
 
 Intel GPUs are finally supported! This long-requested feature had been on hold for a lack of hardware to test on: a huge thanks to [@Kseen715](https://github.com/Kseen715) for implementing and testing it. [[#123](https://github.com/AstraExt/astra-monitor/issues/123)] [[#192](https://github.com/AstraExt/astra-monitor/issues/192)] [[#228](https://github.com/AstraExt/astra-monitor/issues/228)] [[#239](https://github.com/AstraExt/astra-monitor/pull/239)]
 
+Thanks also to [@psychaos999](https://github.com/psychaos999), whose [#244](https://github.com/AstraExt/astra-monitor/pull/244) inspired the setup instructions and the warning shown when `intel_gpu_top` is missing.
+
 To start monitoring your Intel GPU, switch on its **Monitor** option in **Preferences → GPU → General**. Here's what you get:
 
 -   **Out of the box**: with the `i915` driver, both Discrete and Integrated GPUs show their frequency and an estimate of their activity, without any additional package. Integrated GPUs also show the CPU package temperature, since they share the CPU die.
@@ -20,6 +22,7 @@ _Since this is a major change and it could only be tested on a limited set of ha
 
 -   Fixed the extension failing to load on GNOME 51 with `Error: No property vertical on StBoxLayout`, by using the `orientation` property on GNOME 48+ in place of the removed `vertical` property. [[#240](https://github.com/AstraExt/astra-monitor/issues/240)] [[#246](https://github.com/AstraExt/astra-monitor/pull/246)] (Thanks to [@domotick](https://github.com/domotick))
 -   Fixed the GPU popups (activity, VRAM, top processes and sensors) losing rows: once the number of entries went down, the hidden rows were not shown again when it grew back. [[#239](https://github.com/AstraExt/astra-monitor/pull/239)] (Thanks to [@Kseen715](https://github.com/Kseen715))
+-   Fixed the network top processes not noticing the `nethogs` capabilities granted with `setcap`, or lost after a package update, until the extension was restarted: they are now checked again when the network menu opens, only if the `nethogs` binary has changed. [[#244](https://github.com/AstraExt/astra-monitor/pull/244)] (Thanks to [@psychaos999](https://github.com/psychaos999))
 
 # Astra Monitor 42 - August 11 2026
 

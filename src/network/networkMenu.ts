@@ -587,14 +587,12 @@ export default class NetworkMenu extends MenuBase {
         };
 
         const cachedCaps = Utils.nethogsHasCapsCached();
-        if(cachedCaps !== undefined) {
-            applyCaps(cachedCaps);
-            return;
-        }
+        if(cachedCaps !== undefined) applyCaps(cachedCaps);
 
+        // The capabilities may have been granted or lost since the last check
         Utils.nethogsHasCapsAsync()
             .then(hasCaps => {
-                applyCaps(hasCaps);
+                if(hasCaps !== cachedCaps) applyCaps(hasCaps);
             })
             .catch((e: any) => {
                 Utils.error('Error checking NetHogs capabilities', e);

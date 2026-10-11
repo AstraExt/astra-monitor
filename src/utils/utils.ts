@@ -253,6 +253,7 @@ export default class Utils {
         Utils.lspciCached = undefined;
         Utils.lspciPromise = undefined;
         Utils.nethogsCaps = undefined;
+        Utils.nethogsCapsStamp = undefined;
         Utils.nethogsCapsPromise = undefined;
         Utils.cachedLmSensorSources = undefined;
         Utils.sensorSourcesPromise = undefined;
@@ -2150,6 +2151,38 @@ export default class Utils {
         }
     }
 
+    /**
+     * Stamp of the current state of a file: it changes when the file is replaced (inode)
+     * or when its metadata, extended attributes included, change (ctime).
+     * Resolves to null when the file can't be queried.
+     */
+    static getFileStampAsync(path: string): Promise<string | null> {
+        return new Promise(resolve => {
+            Gio.File.new_for_path(path).query_info_async(
+                'unix::inode,time::changed,time::changed-usec',
+                Gio.FileQueryInfoFlags.NONE,
+                GLib.PRIORITY_DEFAULT,
+                null,
+                (sourceObject, result) => {
+                    if(!sourceObject) {
+                        resolve(null);
+                        return;
+                    }
+
+                    try {
+                        const info = sourceObject.query_info_finish(result);
+                        const inode = info.get_attribute_uint64('unix::inode');
+                        const changed = info.get_attribute_uint64('time::changed');
+                        const changedUsec = info.get_attribute_uint32('time::changed-usec');
+                        resolve(`${inode}:${changed}.${changedUsec}`);
+                    } catch(e: any) {
+                        resolve(null);
+                    }
+                }
+            );
+        });
+    }
+
     static readFileAsync(
         path: string,
         emptyOnFail: boolean = false,
@@ -2868,6 +2901,7 @@ export default class Utils {
     }
 
     private static nethogsCaps: boolean | undefined = undefined;
+    private static nethogsCapsStamp: string | null | undefined = undefined;
     private static nethogsCapsPromise: Promise<boolean> | undefined = undefined;
     static nethogsHasCapsCached(): boolean | undefined {
         return Utils.nethogsCaps;
@@ -2878,7 +2912,6 @@ export default class Utils {
     }
 
     static async nethogsHasCapsAsync(): Promise<boolean> {
-        if(Utils.nethogsCaps !== undefined) return Utils.nethogsCaps;
         if(Utils.nethogsCapsPromise) return Utils.nethogsCapsPromise;
 
         Utils.nethogsCapsPromise = (async () => {
@@ -2889,11 +2922,21 @@ export default class Utils {
             }
 
             const nethogs = `${nethogsPath}nethogs`;
+
+            // Capabilities can be granted (setcap) or lost (package update) while the
+            // extension runs: the last check holds as long as the binary is the same
+            const stamp = await Utils.getFileStampAsync(nethogs);
+            if(Utils.nethogsCaps !== undefined && stamp === Utils.nethogsCapsStamp)
+                return Utils.nethogsCaps;
+
+            const setCaps = (caps: boolean) => {
+                Utils.nethogsCaps = caps;
+                Utils.nethogsCapsStamp = stamp;
+                return caps;
+            };
+
             const stdout = await Utils.runAsyncCommandOptional(`getcap ${nethogs}`);
-            if(stdout === null) {
-                Utils.nethogsCaps = false;
-                return false;
-            }
+            if(stdout === null) return setCaps(false);
 
             // skip the path token; handles both getcap output formats:
             //   new (libcap >= 2.42): /usr/bin/nethogs cap_net_admin,cap_net_raw=ep
@@ -2913,8 +2956,7 @@ export default class Utils {
                     );
                 });
 
-            Utils.nethogsCaps = hasCap('cap_net_admin') && hasCap('cap_net_raw');
-            return Utils.nethogsCaps;
+            return setCaps(hasCap('cap_net_admin') && hasCap('cap_net_raw'));
         })().finally(() => {
             Utils.nethogsCapsPromise = undefined;
         });
