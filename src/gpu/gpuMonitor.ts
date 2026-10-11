@@ -386,6 +386,7 @@ export default class GpuMonitor extends Monitor {
     private updateIntelGpuTasks: Map<string, ContinuousTaskManager> = new Map();
     private updateIntelGpuTask: CancellableTaskManager<boolean>;
     private gpuTaskStarting = false;
+    private gpuTaskGeneration = 0;
     private nvidiaParsing = false;
 
     private intelGpus: Map<string, IntelDevice> = new Map();
@@ -536,7 +537,10 @@ export default class GpuMonitor extends Monitor {
         const monitoredGPUs = Utils.getMonitoredGPUs();
         if(!monitoredGPUs) return;
 
+        // The Intel lookups read sysfs: the tasks may be stopped meanwhile
+        const generation = this.gpuTaskGeneration;
         await this.startIntelGpuTasks();
+        if(this.isGpuTaskStale(generation)) return;
 
         let hasAMD = false;
         for(const gpu of monitoredGPUs) {
@@ -589,7 +593,17 @@ export default class GpuMonitor extends Monitor {
         }
     }
 
+    /**
+     * stopGpuTask() bumps the generation: a start that was still awaiting when the tasks
+     * got stopped, or restarted with other GPUs, is stale and must not start anything
+     */
+    private isGpuTaskStale(generation: number) {
+        return !this.status || generation !== this.gpuTaskGeneration;
+    }
+
     private stopGpuTask() {
+        this.gpuTaskGeneration++;
+
         if(this.updateAmdGpuTask?.isRunning) this.updateAmdGpuTask.stop();
         if(this.updateNvidiaGpuTask?.isRunning) this.updateNvidiaGpuTask.stop();
 
@@ -2238,6 +2252,8 @@ export default class GpuMonitor extends Monitor {
      * shares: for a discrete GPU those would be readings of the CPU.
      */
     private async startIntelGpuTasks() {
+        const generation = this.gpuTaskGeneration;
+
         const monitoredGPUs = Utils.getMonitoredGPUs() ?? [];
         const intelGPUs = monitoredGPUs.filter(gpu => Utils.isIntelGpu(gpu));
         if(intelGPUs.length === 0) return;
@@ -2267,6 +2283,7 @@ export default class GpuMonitor extends Monitor {
                 }
             })
         );
+        if(this.isGpuTaskStale(generation)) return;
 
         for(const device of devices) {
             if(!device) continue;
@@ -2275,7 +2292,7 @@ export default class GpuMonitor extends Monitor {
         if(this.intelGpus.size === 0) return;
 
         const path = await Utils.getIntelGpuTopPathAsync();
-        if(path === false) return;
+        if(path === false || this.isGpuTaskStale(generation)) return;
 
         // Max 2 updates per second
         const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
