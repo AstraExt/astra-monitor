@@ -314,6 +314,8 @@ export default class Utils {
             GLib.source_remove(Utils.uptimeTimer);
             Utils.uptimeTimer = 0;
         }
+
+        Utils.stopIntelGpuTopCheck();
     }
 
     static stopRuntime() {
@@ -902,6 +904,9 @@ export default class Utils {
         return (await Utils.getIntelGpuTopPathAsync()) !== false;
     }
 
+    static intelGpuTopCheckTimer: number = 0;
+    static intelGpuTopCheckProc: Gio.Subprocess | null = null;
+
     /**
      * intel_gpu_top reads the GPU performance counters, which most kernels keep from
      * normal users: what grants them depends on the distribution (cap_perfmon is not
@@ -913,6 +918,8 @@ export default class Utils {
         const path = await Utils.getIntelGpuTopPathAsync();
         if(path === false) return true;
 
+        Utils.stopIntelGpuTopCheck();
+
         let proc: Gio.Subprocess;
         try {
             proc = Gio.Subprocess.new(
@@ -922,6 +929,7 @@ export default class Utils {
         } catch(e: any) {
             return true;
         }
+        Utils.intelGpuTopCheckProc = proc;
 
         const read = (stream: Gio.InputStream | null, count: number) =>
             new Promise<string>(resolve => {
@@ -938,24 +946,17 @@ export default class Utils {
                     }
                 });
             });
-        const stop = () => {
-            try {
-                proc.force_exit();
-            } catch(e: any) {
-                /* empty */
-            }
-        };
 
         // Neither a sample nor an error after a while: nothing to tell
-        let timeoutId: number | undefined = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, () => {
-            timeoutId = undefined;
-            stop();
+        Utils.intelGpuTopCheckTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 5000, () => {
+            Utils.intelGpuTopCheckTimer = 0;
+            Utils.stopIntelGpuTopCheck();
             return GLib.SOURCE_REMOVE;
         });
 
         const started = (await read(proc.get_stdout_pipe(), 1)) !== '';
-        if(timeoutId !== undefined) GLib.source_remove(timeoutId);
-        stop();
+        // A newer check or Utils.clear() may have stopped this one already
+        if(Utils.intelGpuTopCheckProc === proc) Utils.stopIntelGpuTopCheck();
         if(started) return true;
 
         // It stopped without printing a sample: its error tells whether it wasn't allowed
@@ -963,6 +964,15 @@ export default class Utils {
         return !/Failed to initialize PMU! \((Permission denied|Operation not permitted)\)/.test(
             error
         );
+    }
+
+    static stopIntelGpuTopCheck() {
+        if(Utils.intelGpuTopCheckTimer) {
+            GLib.source_remove(Utils.intelGpuTopCheckTimer);
+            Utils.intelGpuTopCheckTimer = 0;
+        }
+        Utils.intelGpuTopCheckProc?.force_exit();
+        Utils.intelGpuTopCheckProc = null;
     }
 
     static async hasCoresFrequency(): Promise<boolean> {
