@@ -259,7 +259,14 @@ export default class Monitor {
             if(!currentListeners?.includes(listener)) continue;
 
             try {
-                listener.callback(value);
+                const result: unknown = listener.callback(value);
+                // Some listeners are async: a rejected promise is an unhandled
+                // rejection, which GJS in the shell treats as fatal (SIGABRT).
+                if(result instanceof Promise) {
+                    result.catch((e: any) => {
+                        Utils.error(`Error notifying listener for ${key}`, e);
+                    });
+                }
             } catch(e: any) {
                 Utils.error(`Error notifying listener for ${key}`, e);
 
