@@ -2162,8 +2162,11 @@ export default class Utils {
 
     static listDirAsync(
         path: string,
-        options: { folders: boolean; files: boolean } = { folders: true, files: true }
-    ): Promise<{ name: string; isFolder: boolean }[]> {
+        options: { folders: boolean; files: boolean; symlinks?: boolean } = {
+            folders: true,
+            files: true,
+        }
+    ): Promise<{ name: string; isFolder: boolean; target?: string }[]> {
         return new Promise((resolve, reject) => {
             // Check if the path is valid and not empty
             if(!path || typeof path !== 'string') {
@@ -2179,9 +2182,14 @@ export default class Utils {
                 return;
             }
 
+            // With symlinks, the targets are read as written rather than followed and stat()ed
             dir.enumerate_children_async(
-                'standard::name,standard::type',
-                Gio.FileQueryInfoFlags.NONE,
+                options.symlinks
+                    ? 'standard::name,standard::type,standard::symlink-target'
+                    : 'standard::name,standard::type',
+                options.symlinks
+                    ? Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS
+                    : Gio.FileQueryInfoFlags.NONE,
                 0,
                 null,
                 (sourceObject, result) => {
@@ -2204,7 +2212,11 @@ export default class Utils {
                             if(options.files === false && !isFolder) continue;
 
                             const name = fileInfo.get_name();
-                            files.push({ name, isFolder });
+                            // get_symlink_target() is a critical on entries without the attribute
+                            const target = fileInfo.has_attribute('standard::symlink-target')
+                                ? (fileInfo.get_symlink_target() ?? undefined)
+                                : undefined;
+                            files.push({ name, isFolder, target });
                         }
                         resolve(files);
                     } catch(e: any) {
@@ -3044,6 +3056,41 @@ export default class Utils {
 
     static getGpuUUID(gpuInfo: GpuInfo): string {
         return `${gpuInfo.domain}:${gpuInfo.bus}.${gpuInfo.slot}`;
+    }
+
+    /** Whether any Intel GPU is not on xe, the driver intel_gpu_top refuses */
+    static async intelGpuTopAppliesAsync(gpus: GpuInfo[]): Promise<boolean> {
+        const drivers = await Promise.all(
+            gpus
+                .filter(gpu => Utils.isIntelGpu(gpu))
+                .map(gpu => Utils.getPciDriverAsync(Utils.getGpuUUID(gpu)))
+        );
+        return drivers.some(driver => driver !== 'xe');
+    }
+
+    /** Driver bound to a PCI device, from its sysfs driver symlink; undefined when none is */
+    static getPciDriverAsync(pciAddress: string): Promise<string | undefined> {
+        return new Promise(resolve => {
+            try {
+                const link = Gio.File.new_for_path(`/sys/bus/pci/devices/${pciAddress}/driver`);
+                link.query_info_async(
+                    'standard::symlink-target',
+                    Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+                    GLib.PRIORITY_DEFAULT,
+                    null,
+                    (file, result) => {
+                        try {
+                            const target = file?.query_info_finish(result).get_symlink_target();
+                            resolve(target ? GLib.path_get_basename(target) : undefined);
+                        } catch(_e) {
+                            resolve(undefined);
+                        }
+                    }
+                );
+            } catch(_e) {
+                resolve(undefined);
+            }
+        });
     }
 
     static parseCpuPresentFile(content: string): number[] {

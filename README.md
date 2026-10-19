@@ -288,9 +288,11 @@ Please refer to the official documentation of your distribution for instructions
 
 #### Intel GPUs
 
-Intel GPUs (Discrete or Integrated) using the `i915` driver work out of the box: their frequency and an estimate of their activity are read from the driver, and integrated GPUs also show the CPU package temperature, since they share the CPU die.
+Intel GPUs (Discrete or Integrated) work out of the box: their frequency and an estimate of their activity are read from the driver, and integrated GPUs also show the CPU package temperature, since they share the CPU die.
 
-For the full picture, install `intel_gpu_top` (part of `intel-gpu-tools`): it adds the activity of every engine (Render/3D, Video, Blitter...), the top processes with the memory they use and, on integrated GPUs, the memory usage and the power.
+**On the `xe` driver** (Lunar Lake, Battlemage, Panther Lake and every GPU `xe` claims) that is the whole story: `intel_gpu_top` refuses these GPUs, so everything comes from the driver instead. The activity of every engine (Render/3D, Video, Blitter...), the top processes and the memory they use are read from the DRM clients of the GPU, which is where `intel_gpu_top` reads them from itself, and the activity of the GPU is its Render/3D engine's, as on `i915`. Nothing has to be installed and no privilege is needed, and the installation and capability sections below do not apply.
+
+**On the `i915` driver**, for the full picture, install `intel_gpu_top` (part of `intel-gpu-tools`): it adds the activity of every engine (Render/3D, Video, Blitter...), the top processes with the memory they use and, on integrated GPUs, the memory usage and the power.
 
 ##### Ubuntu / Debian
 
@@ -311,6 +313,8 @@ sudo pacman -S intel-gpu-tools
 ```
 
 ##### Granting access to the GPU counters
+
+_These instructions are for the `i915` driver only: on `xe` the data does not come from `intel_gpu_top` and no capability is needed._
 
 `intel_gpu_top` reads the performance counters of the GPU, which a normal user cannot access on most distros: without access it stops right away, Astra Monitor shows only the basic data described above, and the Welcome page of the preferences warns about it. To allow it, grant `intel_gpu_top` the `cap_perfmon` capability (Linux 5.8 or newer):
 
@@ -359,7 +363,9 @@ _Note: This is an example configuration and may vary depending on your specific 
 
 ##### Limitations
 
--   GPUs using the newer `xe` driver (such as Lunar Lake and Battlemage) are not supported yet: `intel_gpu_top` does not support them, and they expose their data differently.
+-   On the `xe` driver, the clock shown is the render GT's, so a video decode, which runs on the media GT, moves the Video engine but not the clock.
+-   On the `xe` driver, the DRM clients of other users and of root cannot be read, so their work is missing from the activity.
+-   On the `xe` driver, power is not shown: `intel_gpu_top`, which reads it on `i915`, refuses these GPUs, and the RAPL counter it would come from instead is readable by root only on kernels carrying the mitigation for CVE-2020-8694.
 -   On integrated GPUs, the memory shown is the system memory used by the processes on the GPU. Buffers shared between processes are counted for each of them, so it can be higher than the actual usage.
 -   On discrete GPUs, memory usage, temperature and power are not shown yet.
 

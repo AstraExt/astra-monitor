@@ -161,7 +161,7 @@ export default class Welcome {
             {
                 check: Utils.getGPUsListAsync().then(
                     async gpus =>
-                        !gpus.some(gpu => Utils.isIntelGpu(gpu)) ||
+                        !(await Utils.intelGpuTopAppliesAsync(gpus)) ||
                         (await Utils.hasIntelGpuTopAsync())
                 ),
                 title: _(
@@ -172,7 +172,7 @@ export default class Welcome {
             {
                 check: Utils.getGPUsListAsync().then(
                     async gpus =>
-                        !gpus.some(gpu => Utils.isIntelGpu(gpu)) ||
+                        !(await Utils.intelGpuTopAppliesAsync(gpus)) ||
                         (await Utils.intelGpuTopCanReadCountersAsync())
                 ),
                 title: _(

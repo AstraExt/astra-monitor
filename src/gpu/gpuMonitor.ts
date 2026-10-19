@@ -31,10 +31,16 @@ import CancellableTaskManager from '../utils/cancellableTaskManager.js';
 import { EDID, EdidParser } from '../utils/edidParser.js';
 import {
     INTEL_SAMPLE_FLUSH,
+    IntelFdinfo,
     IntelInfoRaw,
     intelActivity,
+    intelActivityFromRates,
+    intelActivityFromRc6,
+    intelFdinfoSample,
     intelFrequency,
+    intelMaxRates,
     intelPower,
+    intelResidencyRates,
     intelVram,
     isIntegratedIntelGpu,
     parseIntelGpuSample,
@@ -372,14 +378,33 @@ export type DisplayData = {
     edid: EDID | null;
 };
 
+/** The memory regions of an Intel GPU under the names the menu shows ('gtt' on xe) */
+const INTEL_VRAM_REGIONS: { [region: string]: string } = {
+    system: 'System Memory',
+    gtt: 'System Memory',
+};
+
 type IntelDevice = {
     gpu: GpuInfo;
     card: string;
     cardPath: string;
     integrated: boolean;
+    // xe only: the GTs of the GPU and the render one among them
+    gts: string[];
+    renderGt?: string;
 };
 
 export default class GpuMonitor extends Monitor {
+    /** Descriptors read in one fdinfo scan: a process can open the render node many times */
+    private static get INTEL_FDINFO_LIMIT() {
+        return 512;
+    }
+
+    /** Processes listed before the main loop is given back, so the shell can draw between them */
+    private static get INTEL_FDINFO_SLICE() {
+        return 8;
+    }
+
     private status = false;
     private updateAmdGpuTask: ContinuousTaskManager;
     private updateNvidiaGpuTask: ContinuousTaskManager;
@@ -391,7 +416,19 @@ export default class GpuMonitor extends Monitor {
 
     private intelGpus: Map<string, IntelDevice> = new Map();
     private intelSamples: Map<string, IntelInfoRaw> = new Map();
-    private intelPrevious: Map<string, { time: number; rc6?: number; energy?: number }> = new Map();
+    private intelPrevious: Map<
+        string,
+        {
+            time: number;
+            rc6?: number;
+            energy?: number;
+            residencies?: { [gt: string]: number };
+            // The fastest rate every GT's sleep counter has been seen to advance at
+            maxRates?: { [gt: string]: number };
+        }
+    > = new Map();
+    private intelFdinfo: Map<string, Map<string, IntelFdinfo>> = new Map();
+    private intelWarned: Set<string> = new Set();
     private intelRaplPath?: string | null;
     private intelCpuTempPath?: string | null;
     private systemMemoryTotal?: number | null;
@@ -488,6 +525,8 @@ export default class GpuMonitor extends Monitor {
         this.infoPipesCaches.clear();
         this.intelSamples.clear();
         this.intelPrevious.clear();
+        this.intelFdinfo.clear();
+        this.intelWarned.clear();
     }
 
     override start() {
@@ -612,6 +651,8 @@ export default class GpuMonitor extends Monitor {
         this.intelGpus.clear();
         this.intelSamples.clear();
         this.intelPrevious.clear();
+        this.intelFdinfo.clear();
+        this.intelWarned.clear();
     }
 
     update(): boolean {
@@ -2268,13 +2309,26 @@ export default class GpuMonitor extends Monitor {
                     });
                     const card = nodes.find(node => /^card\d+$/.test(node.name));
                     if(!card) return undefined;
+
+                    // The driver symlink of the sysfs node decides where everything is read from
+                    const cardPath = `/sys/class/drm/${card.name}`;
+                    const driver = await Utils.getPciDriverAsync(uuid);
+                    const { gts, render } =
+                        driver === 'xe'
+                            ? await this.findIntelGts(cardPath)
+                            : { gts: [] as string[], render: undefined };
+                    if(driver === 'xe' && gts.length === 0)
+                        Utils.warn(`Found no GT of the Intel GPU ${uuid}, which xe drives`);
+
                     return {
                         uuid,
                         device: {
                             gpu,
                             card: card.name,
-                            cardPath: `/sys/class/drm/${card.name}`,
+                            cardPath,
                             integrated: isIntegratedIntelGpu(uuid),
+                            gts,
+                            renderGt: render,
                         } as IntelDevice,
                     };
                 } catch(e: any) {
@@ -2298,6 +2352,8 @@ export default class GpuMonitor extends Monitor {
         const timer = Math.round(Math.max(500, this.updateFrequency * 1000));
 
         for(const [uuid, device] of this.intelGpus) {
+            // intel_gpu_top refuses xe GPUs
+            if(device.gts.length > 0) continue;
             if(this.updateIntelGpuTasks.get(uuid)?.isRunning) continue;
 
             const task = new ContinuousTaskManager();
@@ -2307,6 +2363,115 @@ export default class GpuMonitor extends Monitor {
             });
             this.updateIntelGpuTasks.set(uuid, task);
         }
+    }
+
+    /** Logs once per subject: a layout that cannot be read stays broken every tick */
+    private warnIntelOnce(key: string, message: string) {
+        if(this.intelWarned.has(key)) return;
+        this.intelWarned.add(key);
+        Utils.warn(message);
+    }
+
+    /**
+     * The GTs of an xe GPU and the render one among them, told apart by gtidle/name
+     * ('gt0-rc', 'gt1-mc') since their numbers are not fixed.
+     */
+    private async findIntelGts(cardPath: string): Promise<{ gts: string[]; render?: string }> {
+        try {
+            const devicePath = `${cardPath}/device`;
+            const tiles = (await Utils.listDirAsync(devicePath, { folders: true, files: false }))
+                .filter(node => /^tile\d+$/.test(node.name))
+                .map(node => `${devicePath}/${node.name}`)
+                .sort();
+
+            const gts = (
+                await Promise.all(
+                    tiles.map(tile =>
+                        Utils.listDirAsync(tile, { folders: true, files: false })
+                            .then(nodes =>
+                                nodes
+                                    .filter(node => /^gt\d+$/.test(node.name))
+                                    .map(node => `${tile}/${node.name}`)
+                            )
+                            .catch(() => [] as string[])
+                    )
+                )
+            )
+                .flat()
+                .sort();
+
+            const names = await Promise.all(
+                gts.map(gt =>
+                    Utils.readFileAsync(`${gt}/gtidle/name`, true).then(name => name.trim())
+                )
+            );
+            const render = names.findIndex(name => name.endsWith('-rc'));
+            if(render === -1 && gts.length > 0)
+                this.warnIntelOnce(
+                    `${cardPath}:render`,
+                    `Found no render GT of the Intel GPU at ${cardPath}, reading ${gts[0]}`
+                );
+            return { gts, render: gts[render === -1 ? 0 : render] };
+        } catch(e: any) {
+            Utils.warn(`Failed to list the GTs of the Intel GPU at ${cardPath}`);
+            return { gts: [] };
+        }
+    }
+
+    /**
+     * The fdinfo of every descriptor open on /dev/dri, the files intel_gpu_top and gputop
+     * read their clients from. Processes of other users and gone ones are skipped.
+     */
+    private async scanIntelFdinfo(): Promise<Map<string, IntelFdinfo>> {
+        const descriptors = new Map<string, IntelFdinfo>();
+        // Names only, as asking for the type would stat() every entry. Sorted, so that a
+        // machine over the budget keeps the same processes from one scan to the next
+        const pids = (await Utils.readDirAsync('/proc'))
+            .filter(name => /^\d+$/.test(name))
+            .sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+
+        // Spent before the reads, since every task starts before the first one resolves
+        let budget = GpuMonitor.INTEL_FDINFO_LIMIT;
+
+        const readProcess = async (pid: string) => {
+            try {
+                // The targets as written, so filtering them doesn't stat every open file
+                const fds = (
+                    await Utils.listDirAsync(`/proc/${pid}/fd`, {
+                        folders: true,
+                        files: true,
+                        symlinks: true,
+                    })
+                ).filter(fd => fd.target?.startsWith('/dev/dri/'));
+                if(fds.length === 0 || budget <= 0) return;
+
+                const taken = fds.slice(0, budget);
+                budget -= taken.length;
+
+                const name = (await Utils.readFileAsync(`/proc/${pid}/comm`, true)).trim();
+                await Promise.all(
+                    taken.map(async fd =>
+                        descriptors.set(`${pid}/${fd.name}`, {
+                            pid: parseInt(pid, 10),
+                            name,
+                            content: await Utils.readFileAsync(
+                                `/proc/${pid}/fdinfo/${fd.name}`,
+                                true
+                            ),
+                        })
+                    )
+                );
+            } catch(_e) {
+                // Avoid logging errors for gone processes
+            }
+        };
+
+        // In slices, so the shell gets to draw a frame between them
+        for(let i = 0; i < pids.length; i += GpuMonitor.INTEL_FDINFO_SLICE) {
+            // eslint-disable-next-line no-await-in-loop
+            await Promise.all(pids.slice(i, i + GpuMonitor.INTEL_FDINFO_SLICE).map(readProcess));
+        }
+        return descriptors;
     }
 
     private updateIntelGpuSample(uuid: string, data: ContinuousTaskManagerData) {
@@ -2407,24 +2572,82 @@ export default class GpuMonitor extends Monitor {
 
         const gpus = new Map<string, GenericGpuInfo>();
 
+        //Fdinfo: intel_gpu_top refuses xe GPUs, so its sample is built from the DRM clients
+        const generation = this.gpuTaskGeneration;
+        const wantsFdinfo = Array.from(this.intelGpus.entries()).some(
+            ([uuid, device]) => device.gts.length > 0 && !this.intelSamples.has(uuid)
+        );
+        let descriptors: Map<string, IntelFdinfo> | undefined;
+        if(wantsFdinfo) {
+            descriptors = await this.scanIntelFdinfo();
+            if(this.isGpuTaskStale(generation)) return false;
+        }
+
         await Promise.all(
             Array.from(this.intelGpus.entries()).map(async ([uuid, device]) => {
-                const sample = this.intelSamples.get(uuid);
+                let sample = this.intelSamples.get(uuid);
                 const cardPath = device.cardPath;
+                const xe = device.gts.length > 0;
+
+                if(!sample && xe && descriptors) {
+                    const last = this.intelFdinfo.get(uuid);
+                    this.intelFdinfo.set(uuid, descriptors);
+                    // Resident memory needs no previous scan
+                    sample = intelFdinfoSample(last ?? new Map(), descriptors, uuid);
+
+                    if(descriptors.size > 0 && Object.keys(sample.clients ?? {}).length === 0)
+                        this.warnIntelOnce(
+                            `${uuid}:clients`,
+                            `Matched none of the ${descriptors.size} DRM descriptors to ` +
+                                `the Intel GPU ${uuid}`
+                        );
+                }
 
                 // The CPU package is shared by the integrated GPU only
                 const energyPath = device.integrated ? raplPath : null;
                 const cpuTempPath = device.integrated ? tempPath : null;
 
-                const [curFreq, maxFreq, minFreq, rc6Residency, energy, temperature] =
-                    await Promise.all([
-                        Utils.readFileAsync(`${cardPath}/gt_cur_freq_mhz`, true),
-                        Utils.readFileAsync(`${cardPath}/gt_max_freq_mhz`, true),
-                        Utils.readFileAsync(`${cardPath}/gt_min_freq_mhz`, true),
-                        Utils.readFileAsync(`${cardPath}/power/rc6_residency_ms`, true),
-                        energyPath ? Utils.readFileAsync(energyPath, true) : Promise.resolve(''),
-                        cpuTempPath ? Utils.readFileAsync(cpuTempPath, true) : Promise.resolve(''),
-                    ]);
+                // xe reports the frequencies per GT: act_freq is the actual one, cur_freq the
+                // requested one, which stands in when act_freq reads 0
+                const render = device.renderGt;
+                const actPath = xe ? `${render}/freq0/act_freq` : null;
+                const curPath = xe ? `${render}/freq0/cur_freq` : `${cardPath}/gt_cur_freq_mhz`;
+                const maxPath = xe ? `${render}/freq0/max_freq` : `${cardPath}/gt_max_freq_mhz`;
+                const minPath = xe ? `${render}/freq0/min_freq` : `${cardPath}/gt_min_freq_mhz`;
+                const rc6Path = xe ? null : `${cardPath}/power/rc6_residency_ms`;
+
+                const [
+                    actFreq,
+                    curFreq,
+                    maxFreq,
+                    minFreq,
+                    rc6Residency,
+                    energy,
+                    temperature,
+                    gtResidencies,
+                ] = await Promise.all([
+                    actPath ? Utils.readFileAsync(actPath, true) : Promise.resolve(''),
+                    Utils.readFileAsync(curPath, true),
+                    Utils.readFileAsync(maxPath, true),
+                    Utils.readFileAsync(minPath, true),
+                    rc6Path ? Utils.readFileAsync(rc6Path, true) : Promise.resolve(''),
+                    energyPath ? Utils.readFileAsync(energyPath, true) : Promise.resolve(''),
+                    cpuTempPath ? Utils.readFileAsync(cpuTempPath, true) : Promise.resolve(''),
+                    // Every xe GT sleeps on its own: the activity is the one that is awake
+                    Promise.all(
+                        device.gts.map(gt =>
+                            Utils.readFileAsync(`${gt}/gtidle/idle_residency_ms`, true)
+                        )
+                    ),
+                ]);
+                // Stamped right after the counters it is the interval of
+                const now = GLib.get_monotonic_time();
+
+                const residencies: { [gt: string]: number } = {};
+                device.gts.forEach((gt, index) => {
+                    const value = parseSysfsNumber(gtResidencies[index]);
+                    if(value != null) residencies[gt] = value;
+                });
 
                 const gpu: GenericGpuInfo = {
                     id: uuid,
@@ -2456,15 +2679,28 @@ export default class GpuMonitor extends Monitor {
                 }
 
                 // Counters deltas
-                const now = GLib.get_monotonic_time();
                 const previous = this.intelPrevious.get(uuid);
                 const elapsed = previous ? (now - previous.time) / 1000000 : 0;
                 const rc6Value = parseSysfsNumber(rc6Residency);
                 const energyValue = parseSysfsNumber(energy);
-                this.intelPrevious.set(uuid, { time: now, rc6: rc6Value, energy: energyValue });
+
+                const rates = intelResidencyRates(previous?.residencies, residencies, elapsed);
+                const maxRates = intelMaxRates(previous?.maxRates, rates);
+
+                this.intelPrevious.set(uuid, {
+                    time: now,
+                    rc6: rc6Value,
+                    energy: energyValue,
+                    residencies,
+                    maxRates,
+                });
 
                 //Activity
-                const activity = intelActivity(sample, previous?.rc6, rc6Value, elapsed);
+                // Against the mark before this interval: the first one has none
+                const residency = xe
+                    ? intelActivityFromRates(rates, previous?.maxRates)
+                    : intelActivityFromRc6(previous?.rc6, rc6Value, elapsed);
+                const activity = intelActivity(sample, residency);
                 gpu.activity.pipes = activity.pipes;
                 if(activity.GFX != null) gpu.activity.GFX = activity.GFX;
 
@@ -2479,7 +2715,7 @@ export default class GpuMonitor extends Monitor {
                         gpu.vram.percent = (vram.used / memoryTotal) * 100;
                         for(const region of vram.regions)
                             gpu.vram.pipes.push({
-                                name: region.name === 'system' ? 'System Memory' : region.name,
+                                name: INTEL_VRAM_REGIONS[region.name] ?? region.name,
                                 percent: (region.used / memoryTotal) * 100,
                                 used: region.used,
                                 total: memoryTotal,
@@ -2615,7 +2851,15 @@ export default class GpuMonitor extends Monitor {
                     gpu.sensors.list?.push(sensor);
                 };
 
-                const currentFreq = intelFrequency(sample, curFreq);
+                const currentFreq = intelFrequency(sample, curFreq, actFreq);
+
+                // Nothing read at all: the layout of the driver may have changed
+                if(xe && elapsed > 0 && currentFreq == null && residency == null)
+                    this.warnIntelOnce(
+                        uuid,
+                        `Read no frequency and no sleep residency of the Intel GPU ${uuid} ` +
+                            `under ${render}`
+                    );
                 if(currentFreq != null)
                     addSensor({
                         category: 'Clocks',
@@ -2625,7 +2869,8 @@ export default class GpuMonitor extends Monitor {
                         priority: GpuSensorPriority.MAX,
                     });
 
-                const requestedFreq = sample?.frequency?.requested;
+                const requestedFreq =
+                    sample?.frequency?.requested ?? (xe ? parseSysfsNumber(curFreq) : undefined);
                 if(requestedFreq != null && !isNaN(requestedFreq))
                     addSensor({
                         category: 'Clocks',
