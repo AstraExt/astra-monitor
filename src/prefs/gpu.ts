@@ -210,17 +210,12 @@ export default class Gpu {
                                 changed = true;
                             }
                         } else {
-                            for(const gpuData of gpusData) {
-                                if(
-                                    gpuData.domain === gpu.domain &&
-                                    gpuData.bus === gpu.bus &&
-                                    gpuData.slot === gpu.slot
-                                ) {
-                                    gpusData.splice(gpusData.indexOf(gpuData), 1);
-                                    changed = true;
-                                    break;
-                                }
-                            }
+                            // Every entry: a GPU swap can leave a stale one for this address
+                            const kept = gpusData.filter(
+                                (gpuData: any) => !Utils.isSameGpu(gpu, gpuData)
+                            );
+                            changed = kept.length !== gpusData.length;
+                            gpusData = kept;
                         }
                         if(changed) Config.set('gpu-data', gpusData, 'json');
                     },
