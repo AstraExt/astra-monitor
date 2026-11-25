@@ -1875,6 +1875,8 @@ export default class Utils {
         return model;
     }
 
+    // productId is left out on purpose: a CPU/GPU swap keeps the PCI address, and the saved
+    // product id would hide the new GPU from monitoring until it's re-selected in prefs
     static isSameGpu(gpu1: GpuInfo, gpu2: GpuInfo): boolean {
         if(!gpu1 || !gpu2) return false;
 
@@ -1882,8 +1884,7 @@ export default class Utils {
             gpu1.domain === gpu2.domain &&
             gpu1.bus === gpu2.bus &&
             gpu1.slot === gpu2.slot &&
-            gpu1.vendorId === gpu2.vendorId &&
-            gpu1.productId === gpu2.productId
+            gpu1.vendorId === gpu2.vendorId
         );
     }
 
